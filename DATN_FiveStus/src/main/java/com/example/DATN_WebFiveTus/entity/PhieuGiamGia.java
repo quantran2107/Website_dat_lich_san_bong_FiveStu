@@ -42,7 +42,7 @@ public class PhieuGiamGia {
     private int soLuong;
 
     @Column(name = "muc_giam", length = 100)
-    private Float mucGiam;
+    private String mucGiam;
 
     @Column(name = "hinh_thuc_giam_gia")
     private Float hinhThucGiamGia;
