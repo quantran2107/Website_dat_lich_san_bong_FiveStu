@@ -31,7 +31,7 @@ public class PhieuGiamGiaDTO {
     private int soLuong;
 
 
-    private Float mucGiam;
+    private String mucGiam;
 
 
     private Float hinhThucGiamGia;
