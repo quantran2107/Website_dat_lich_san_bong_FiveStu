@@ -53,7 +53,7 @@ public class HoaDon {
     @Column(name = "email", nullable = false, length = 100)
     private String email;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ngay_tao")
     private Date ngayTao;
 
@@ -81,11 +81,11 @@ public class HoaDon {
     @Column(name = "trang_thai", nullable = false, length = 100)
     private String trangThai;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ngay_den_san")
     private Date ngayDenSan;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ngay_thanh_toan")
     private Date ngayThanhToan;
 

@@ -14,9 +14,7 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
-        <datasource-mapping>
-          <factory-entry name="DATN_WebFiveTus" />
-        </datasource-mapping>
+        <datasource-mapping />
         <naming-strategy-map />
       </configuration>
     </facet>
@@ -129,6 +127,11 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:6.1.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:6.1.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.9.1" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-thymeleaf:3.3.1" level="project" />
+    <orderEntry type="library" name="Maven: org.thymeleaf:thymeleaf-spring6:3.1.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.thymeleaf:thymeleaf:3.1.2.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.attoparser:attoparser:2.0.7.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.unbescape:unbescape:1.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.modelmapper:modelmapper:3.2.0" level="project" />
   </component>
 </module>
