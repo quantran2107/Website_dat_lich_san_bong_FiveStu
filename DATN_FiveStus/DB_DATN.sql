@@ -79,7 +79,7 @@ CREATE TABLE phieu_giam_gia (
   ten_phieu_giam_gia VARCHAR(100),
   so_luong INT,
   muc_giam float,
-  hinh_thuc_giam_gia FLOAT,
+  hinh_thuc_giam_gia bit,
   dieu_kien_su_dung VARCHAR(100),
   ngay_bat_dau DATETIME,
   ngay_ket_thuc DATETIME,
@@ -397,11 +397,11 @@ VALUES
 
 INSERT INTO phieu_giam_gia (ma_phieu_giam_gia, ten_phieu_giam_gia, so_luong, muc_giam, hinh_thuc_giam_gia, dieu_kien_su_dung, ngay_bat_dau, ngay_ket_thuc, trang_thai, created_at, updated_at, deleted_at)
 VALUES
-  ('PGG001', 'Phieu giam gia 1', 10, 10000, 0.1, 'Dieu kien 1', NOW(), NOW(), 1, NOW(), NOW(), 1),
-  ('PGG002', 'Phieu giam gia 2', 20, 20000, 0.2, 'Dieu kien 2', NOW(), NOW(), 1, NOW(), NOW(), 1),
-  ('PGG003', 'Phieu giam gia 3', 30, 30000, 0.3, 'Dieu kien 3', NOW(), NOW(), 1, NOW(), NOW(), 1),
-  ('PGG004', 'Phieu giam gia 4', 40, 50000, 0.4, 'Dieu kien 4', NOW(), NOW(), 0, NOW(), NOW(), 0),
-  ('PGG005', 'Phieu giam gia 5', 50, 70000, 0.5, 'Dieu kien 5', NOW(), NOW(), 0, NOW(), NOW(), 0);
+  ('PGG001', 'Phieu giam gia 1', 10, 10000,1, 'Dieu kien 1', NOW(), NOW(), 1, NOW(), NOW(), 1),
+  ('PGG002', 'Phieu giam gia 2', 20, 20000,0, 'Dieu kien 2', NOW(), NOW(), 1, NOW(), NOW(), 1),
+  ('PGG003', 'Phieu giam gia 3', 30, 30000,1, 'Dieu kien 3', NOW(), NOW(), 1, NOW(), NOW(), 1),
+  ('PGG004', 'Phieu giam gia 4', 40, 50000,0, 'Dieu kien 4', NOW(), NOW(), 0, NOW(), NOW(), 0),
+  ('PGG005', 'Phieu giam gia 5', 50, 70000,1, 'Dieu kien 5', NOW(), NOW(), 0, NOW(), NOW(), 0);
 
 
 INSERT INTO hoa_don (id_nhan_vien, id_phieu_giam_gia, id_khach_hang, ma_hoa_don, email, ngay_tao, so_dien_thoai_nguoi_dat, ten_nguoi_dat, tong_tien, tien_coc, tien_con_lai, tien_thua, ghi_chu, trang_thai, ngay_den_san, ngay_thanh_toan, created_at, updated_at, deleted_at)
