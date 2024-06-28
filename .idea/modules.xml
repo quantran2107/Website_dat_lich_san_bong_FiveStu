@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DATN_FiveStus/DATN_WebFiveTus.iml" filepath="$PROJECT_DIR$/DATN_FiveStus/DATN_WebFiveTus.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/Website_dat_lich_san_bong_FiveStu.iml" filepath="$PROJECT_DIR$/.idea/Website_dat_lich_san_bong_FiveStu.iml" />
     </modules>
   </component>
 </project>
