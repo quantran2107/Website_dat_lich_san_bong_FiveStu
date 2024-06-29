@@ -19,7 +19,10 @@ import java.util.Date;
 @ToString
 @Builder
 public class PhieuGiamGiaDTO {
+
     private int id;
+
+    private Integer idKhachHang;
 
 
     private String maPhieuGiamGia;
@@ -34,7 +37,7 @@ public class PhieuGiamGiaDTO {
     private String mucGiam;
 
 
-    private Float hinhThucGiamGia;
+    private Boolean hinhThucGiamGia;
 
 
     private String dieuKienSuDung;
@@ -46,5 +49,5 @@ public class PhieuGiamGiaDTO {
     private Date ngayKetThuc;
 
 
-    private String trangThai;
+    private Boolean trangThai;
 }
