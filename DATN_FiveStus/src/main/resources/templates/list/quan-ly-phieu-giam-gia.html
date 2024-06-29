@@ -101,16 +101,15 @@
                                             <td th:text="${pgg.tenPhieuGiamGia}"></td>
                                             <td th:text="${pgg.soLuong}"></td>
                                             <td th:text="${pgg.mucGiam}"></td>
-                                            <td th:text="${pgg.hinhThucGiamGia == 0? 'Giảm theo số tiền':'Giảm theo %'}"></td>
+                                            <td th:text="${pgg.hinhThucGiamGia == false ? 'Giảm theo số tiền':'Giảm theo %'}"></td>
                                             <td th:text="${pgg.dieuKienSuDung}"></td>
                                             <td th:text="${#dates.format(pgg.ngayBatDau, 'dd/MM/yyyy')}"></td>
                                             <td th:text="${#dates.format(pgg.ngayKetThuc, 'dd/MM/yyyy')}"></td>
-                                            <!--                                            <td th:text="${pgg.trangThai== 0? 'Kết thúc': 'Hoạt động'}"></td>-->
                                             <td>
                                                 <div class="custom-control custom-switch">
                                                     <input type="checkbox" class="custom-control-input"
                                                            th:id="'switch-' + ${i.count}"
-                                                           th:checked="${pgg.trangThai=='1' }">
+                                                           th:checked="${pgg.trangThai== 'true' }">
                                                     <label class="custom-control-label"
                                                            th:for="'switch-' + ${i.count}"></label>
                                                 </div>
