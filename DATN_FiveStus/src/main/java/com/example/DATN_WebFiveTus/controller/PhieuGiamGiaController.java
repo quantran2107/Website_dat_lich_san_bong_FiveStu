@@ -35,16 +35,6 @@ import java.util.stream.Collectors;
 public class PhieuGiamGiaController {
     @Autowired
     private RestTemplate restTemplate;
-
-//    @GetMapping("/web-phieu-giam-gia")
-//    public String hienThi(Model model) {
-//        model.addAttribute("listPGG", Arrays.asList(restTemplate.getForObject(
-//                "http://localhost:8080/api/hien-thi",
-//                PhieuGiamGiaDTO[].class
-//        )));
-//        return "/list/quan-ly-phieu-giam-gia";
-//    }
-
     @GetMapping("/list")
     public String listPhieuGiamGia(Model model, @RequestParam(defaultValue = "0") int page) {
         String apiUrl = "http://localhost:8080/api/phan-trang";
@@ -67,7 +57,6 @@ public class PhieuGiamGiaController {
         } else {
             model.addAttribute("error", "Không thể lấy dữ liệu phân trang");
         }
-
         return "list/quan-ly-phieu-giam-gia";
     }
 

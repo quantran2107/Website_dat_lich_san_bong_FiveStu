@@ -13171,7 +13171,7 @@ form.was-validated select:valid ~ .select2-container--bootstrap4 .select2-select
     }
 }
 
-@keyframes "uppy-Dashboard-slideDownAndFadeIn" {
+@keyframes uppy-Dashboard-slideDownAndFadeIn {
     from {
         transform: translate3d(-50%, -70%, 0);
         opacity: 0;
@@ -13182,7 +13182,7 @@ form.was-validated select:valid ~ .select2-container--bootstrap4 .select2-select
     }
 }
 
-@keyframes "uppy-Dashboard-slideDownAndFadeIn--small" {
+@keyframes uppy-Dashboard-slideDownAndFadeIn--small {
     from {
         transform: translate3d(0, -20%, 0);
         opacity: 0;
