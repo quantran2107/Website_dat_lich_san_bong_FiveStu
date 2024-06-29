@@ -31,9 +31,6 @@ public class PhieuGiamGiaDTO {
     private String tenPhieuGiamGia;
 
 
-    private int soLuong;
-
-
     private String mucGiam;
 
 
