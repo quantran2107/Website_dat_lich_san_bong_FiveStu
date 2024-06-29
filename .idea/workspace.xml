@@ -5,189 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ceb188e-0a08-4f93-a4ba-a4c16562d5e6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/Website_dat_lich_san_bong_FiveStu.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_attoparser_attoparser_2_0_7_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_thymeleaf_3_3_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_thymeleaf_thymeleaf_3_1_2_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_thymeleaf_thymeleaf_spring6_3_1_2_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_unbescape_unbescape_1_1_6_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/.idea/libraries/Maven__org_attoparser_attoparser_2_0_7_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_thymeleaf_3_3_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/.idea/libraries/Maven__org_thymeleaf_thymeleaf_3_1_2_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/.idea/libraries/Maven__org_thymeleaf_thymeleaf_spring6_3_1_2_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/.idea/libraries/Maven__org_unbescape_unbescape_1_1_6_RELEASE.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/DB_DATN.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/java/com/example/DATN_WebFiveTus/controller/PhieuGiamGiaController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/assets/avatars/face-1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/assets/avatars/face-2.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/assets/avatars/face-3.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/assets/avatars/face-4.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/assets/avatars/face-5.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/assets/avatars/face-6.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/assets/avatars/face-7.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/assets/avatars/face-8.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/assets/images/logo.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/assets/images/qrcode.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/assets/products/p1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/assets/products/p2.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/assets/products/p3.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/assets/products/p4.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/apexcharts.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/app-dark.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/app-light.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/app-rtl.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/bootstrap-datepicker.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/dataTables.bootstrap4.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/daterangepicker.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/dropzone.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/dropzone.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/feather.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/fullcalendar.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/jquery.steps.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/jquery.timepicker.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/perfect-scrollbar.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/quill.snow.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/select2-bootstrap4.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/select2.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/simplebar.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/css/uppy.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/fonts/feather.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/fonts/feather.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/fonts/feather.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/fonts/feather.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/Chart.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/apexcharts.custom.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/apexcharts.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/apps.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/bootstrap-datepicker.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/bootstrap.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/d3.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/dataTables.bootstrap4.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/datamaps-zoomto.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/datamaps.all.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/datamaps.custom.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/daterangepicker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/dropzone.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/fullcalendar.custom.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/fullcalendar.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/gauge.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/jquery.dataTables.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/jquery.mask.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/jquery.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/jquery.sparkline.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/jquery.steps.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/jquery.stickOnScroll.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/jquery.timepicker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/jquery.validate.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/moment.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/perfect-scrollbar.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/popper.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/quill.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/select2.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/simplebar.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/tinycolor-min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/topojson.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/static/js/uppy.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/templates/fragment/head.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/templates/fragment/modal.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/templates/fragment/navbar.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/templates/fragment/script.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/templates/fragment/sidebar.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/templates/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/templates/list/quan-ly-phieu-giam-gia.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/com/example/DATN_WebFiveTus/controller/PhieuGiamGiaController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/assets/avatars/face-1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/assets/avatars/face-2.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/assets/avatars/face-3.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/assets/avatars/face-4.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/assets/avatars/face-5.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/assets/avatars/face-6.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/assets/avatars/face-7.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/assets/avatars/face-8.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/assets/images/logo.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/assets/images/qrcode.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/assets/products/p1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/assets/products/p2.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/assets/products/p3.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/assets/products/p4.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/apexcharts.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/app-dark.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/app-light.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/app-rtl.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/bootstrap-datepicker.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/dataTables.bootstrap4.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/daterangepicker.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/dropzone.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/dropzone.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/feather.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/fullcalendar.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/jquery.steps.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/jquery.timepicker.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/perfect-scrollbar.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/quill.snow.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/select2-bootstrap4.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/select2.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/simplebar.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/css/uppy.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/fonts/feather.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/fonts/feather.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/fonts/feather.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/fonts/feather.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/Chart.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/apexcharts.custom.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/apexcharts.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/apps.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/bootstrap-datepicker.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/bootstrap.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/d3.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/dataTables.bootstrap4.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/datamaps-zoomto.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/datamaps.all.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/datamaps.custom.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/daterangepicker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/dropzone.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/fullcalendar.custom.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/fullcalendar.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/gauge.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/jquery.dataTables.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/jquery.mask.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/jquery.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/jquery.sparkline.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/jquery.steps.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/jquery.stickOnScroll.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/jquery.timepicker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/jquery.validate.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/moment.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/perfect-scrollbar.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/popper.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/quill.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/select2.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/simplebar.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/tinycolor-min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/topojson.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/static/js/uppy.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/templates/fragment/head.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/templates/fragment/modal.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/templates/fragment/navbar.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/templates/fragment/script.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/templates/fragment/sidebar.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/templates/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/templates/list/quan-ly-phieu-giam-gia.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DATN_FiveStus/DATN_WebFiveTus.iml" beforeDir="false" afterPath="$PROJECT_DIR$/DATN_FiveStus/DATN_WebFiveTus.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DATN_FiveStus/DB_DATN345.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DATN_FiveStus/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DATN_FiveStus/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DATN_FiveStus/src/main/java/com/example/DATN_WebFiveTus/DatnWebFiveTusApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/java/com/example/DATN_WebFiveTus/DatnWebFiveTusApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DATN_FiveStus/src/main/java/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/java/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaRest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DATN_FiveStus/DB_DATN.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DATN_FiveStus/DB_DATN.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DATN_FiveStus/src/main/java/com/example/DATN_WebFiveTus/entity/HoaDon.java" beforeDir="false" afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/java/com/example/DATN_WebFiveTus/entity/HoaDon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DATN_FiveStus/src/main/java/com/example/DATN_WebFiveTus/entity/PhieuGiamGia.java" beforeDir="false" afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/java/com/example/DATN_WebFiveTus/entity/PhieuGiamGia.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/templates/list/quan-ly-phieu-giam-gia.html" beforeDir="false" afterPath="$PROJECT_DIR$/DATN_FiveStus/src/main/resources/templates/list/quan-ly-phieu-giam-gia.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DATN_FiveStus/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DATN_FiveStus/target/classes/com/example/DATN_WebFiveTus/DatnWebFiveTusApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/com/example/DATN_WebFiveTus/DatnWebFiveTusApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DATN_FiveStus/target/classes/com/example/DATN_WebFiveTus/controller/PhieuGiamGiaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/com/example/DATN_WebFiveTus/controller/PhieuGiamGiaController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DATN_FiveStus/target/classes/com/example/DATN_WebFiveTus/dto/SanCaDTO$SanCaDTOBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/com/example/DATN_WebFiveTus/dto/SanCaDTO$SanCaDTOBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DATN_FiveStus/target/classes/com/example/DATN_WebFiveTus/dto/SanCaDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/com/example/DATN_WebFiveTus/dto/SanCaDTO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DATN_FiveStus/target/classes/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaRest.class" beforeDir="false" afterPath="$PROJECT_DIR$/DATN_FiveStus/target/classes/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaRest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -203,13 +32,47 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/DATN_FiveStus" />
+    <property name="restartRequiresConfirmation" value="false" />
   </component>
-  <component name="RunManager">
+  <component name="RestClientSettings">
+    <option name="REQUEST_HISTORY">
+      <list>
+        <RestClientRequest>
+          <option name="httpMethod" value="GET" />
+          <option name="urlBase" value="http://localhost:8080/api/hien-thi" />
+          <option name="urlPath" value="" />
+          <option name="textToSend" value="" />
+          <option name="filesToSend" value="" />
+        </RestClientRequest>
+        <RestClientRequest>
+          <option name="httpMethod" value="GET" />
+          <option name="urlBase" value="http://localhost:8080/web-phieu-giam-gia" />
+          <option name="urlPath" value="" />
+          <option name="textToSend" value="" />
+          <option name="filesToSend" value="" />
+        </RestClientRequest>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.DatnWebFiveTusApplication">
+    <configuration name="generated-requests#106" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" index="106" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="generated-requests#108" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" index="108" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="generated-requests#109" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" index="109" runType="Run single request">
+      <method v="2" />
+    </configuration>
     <configuration name="DatnWebFiveTusApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="DATN_WebFiveTus" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.DATN_WebFiveTus.DatnWebFiveTusApplication" />
@@ -217,6 +80,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="HTTP Request.generated-requests#109" />
+        <item itemvalue="HTTP Request.generated-requests#108" />
+        <item itemvalue="HTTP Request.generated-requests#106" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -227,6 +97,8 @@
       <option name="presentableId" value="Default" />
       <updated>1719570773249</updated>
       <workItem from="1719570774680" duration="1499000" />
+      <workItem from="1719627257395" duration="1885000" />
+      <workItem from="1719648460239" duration="2941000" />
     </task>
     <servers />
   </component>
@@ -243,5 +115,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

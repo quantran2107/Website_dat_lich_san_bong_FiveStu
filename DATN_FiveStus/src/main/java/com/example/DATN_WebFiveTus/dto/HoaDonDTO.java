@@ -29,14 +29,9 @@ public class HoaDonDTO {
 
     private String maHoaDon;
 
-    private String email;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date ngayTao;
-
-    private String soDienThoaiNguoiDat;
-
-    private String tenNguoiDat;
 
     private Float tongTien;
 

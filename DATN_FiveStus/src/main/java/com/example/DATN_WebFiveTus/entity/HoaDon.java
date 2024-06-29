@@ -50,18 +50,9 @@ public class HoaDon {
     @Column(name = "ma_hoa_don", nullable = false, length = 100)
     private String maHoaDon;
 
-    @Column(name = "email", nullable = false, length = 100)
-    private String email;
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "ngay_tao")
     private Date ngayTao;
-
-    @Column(name = "so_dien_thoai_nguoi_dat", nullable = false, length = 100)
-    private String soDienThoaiNguoiDat;
-
-    @Column(name = "ten_nguoi_dat", nullable = false, length = 100)
-    private String tenNguoiDat;
 
     @Column(name = "tong_tien")
     private Float tongTien;
