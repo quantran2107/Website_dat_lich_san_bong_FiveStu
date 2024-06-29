@@ -42,4 +42,6 @@ public class SanCaDTO {
 
     private String trangThai;
 
+    private float gia;
+
 }

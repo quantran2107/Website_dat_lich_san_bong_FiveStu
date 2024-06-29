@@ -30,12 +30,6 @@ public class NgayTrongTuan {
     @Column(name = "thu_trong_tuan", nullable = false, length = 100)
     private String thuTrongTuan;
 
-    @Column(name = "gia_ca")
-    private Float giaCa;
-
-    @Column(name = "he_so")
-    private Float heSo;
-
     @Column(name = "trang_thai", length = 50)
     private String trangThai;
 }
