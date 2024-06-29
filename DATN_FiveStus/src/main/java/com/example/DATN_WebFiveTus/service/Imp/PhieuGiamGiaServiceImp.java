@@ -1,12 +1,13 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
-import com.example.DATN_WebFiveTus.dto.NuocUongDTO;
 import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
-import com.example.DATN_WebFiveTus.entity.NuocUong;
 import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
 import com.example.DATN_WebFiveTus.repository.PhieuGiamGiaRepository;
 import com.example.DATN_WebFiveTus.service.PhieuGiamGiaService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,6 +44,20 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
     @Override
     public PhieuGiamGiaDTO update(Integer id, PhieuGiamGiaDTO phieuGiamGiaDTO) {
         return null;
+    }
+
+    @Override
+    public Page<PhieuGiamGiaDTO> phanTrang(Pageable pageable) {
+        Page<PhieuGiamGia> phieuGiamGiaPage = phieuGiamGiaRepository.findAll(pageable);
+        List<PhieuGiamGiaDTO> list = phieuGiamGiaPage.getContent().stream()
+                .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
+                .collect(Collectors.toList());
+        return new PageImpl<>(
+                phieuGiamGiaPage.getContent().stream()
+                        .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
+                        .collect(Collectors.toList())
+                , pageable
+                , phieuGiamGiaPage.getTotalElements());
     }
 
     @Override
