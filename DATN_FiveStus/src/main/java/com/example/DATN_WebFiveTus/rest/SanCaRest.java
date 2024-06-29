@@ -50,7 +50,7 @@ public class SanCaRest {
     @PutMapping("/{id}")
     public ResponseEntity<SanCaDTO> update(@PathVariable("id") Integer id ,@RequestBody SanCaDTO sanCaDTO){
         SanCaDTO sanCaDTOSave=sanCaService.update(id,sanCaDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(sanCaDTOSave);
+        return ResponseEntity.status(HttpStatus.OK).body(sanCaDTOSave);
     }
 
     @DeleteMapping("/{id}")

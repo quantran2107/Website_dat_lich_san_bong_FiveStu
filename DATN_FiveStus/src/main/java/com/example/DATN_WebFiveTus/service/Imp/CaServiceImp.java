@@ -61,4 +61,16 @@ public class CaServiceImp implements CaService {
     public void delete(Integer id) {
 
     }
+
+    @Override
+    public void deletedAt(Integer id) {
+        Ca ca=caRepository.findById(id).orElseThrow(()->new ResourceNotfound("Không tồn tạo id: "+id));
+        caRepository.deletedAt(id);
+    }
+
+    @Override
+    public List<CaDTO> getAllJoinFetch() {
+        return caRepository.getAllJoinFetch().stream()
+                .map((ca) -> modelMapper.map(ca,CaDTO.class)).collect(Collectors.toList());
+    }
 }

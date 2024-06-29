@@ -9,6 +9,9 @@ import com.example.DATN_WebFiveTus.repository.SanBongRepository;
 import com.example.DATN_WebFiveTus.service.SanBongService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,7 +52,6 @@ public class SanBongServiceImp implements SanBongService {
     public SanBongDTO update(Integer id, SanBongDTO sanBongDTO) {
         SanBong sanBong=sanBongRepository.findById(id).orElseThrow(() -> new ResourceNotfound("Không tồn tại sân bóng ID: "+id));
         sanBong.setTenSanBong(sanBongDTO.getTenSanBong());
-        sanBong.setGiaSan(sanBongDTO.getGiaSan());
         sanBong.setTrangThai(sanBongDTO.getTrangThai());
         SanBong sanBongUpdate=sanBongRepository.save(sanBong);
         return modelMapper.map(sanBongUpdate,SanBongDTO.class);
@@ -71,4 +73,13 @@ public class SanBongServiceImp implements SanBongService {
         SanBong sanBong=sanBongRepository.findById(id).orElseThrow(()-> new ResourceNotfound("Không tồn tại xoá id: "+id));
         sanBongRepository.deletedAt(id);
     }
+
+    @Override
+    public Page<SanBongDTO> pages(Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<SanBong> sanBongPage = sanBongRepository.getAllJoinFetchPageable(pageable);
+        return sanBongPage.map(sanBong -> modelMapper.map(sanBong, SanBongDTO.class));
+    }
+
+
 }
