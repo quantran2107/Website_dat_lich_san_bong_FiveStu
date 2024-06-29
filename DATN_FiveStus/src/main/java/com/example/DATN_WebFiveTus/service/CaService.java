@@ -16,4 +16,8 @@ public interface CaService {
     CaDTO update(Integer id, CaDTO caDTO);
 
     void delete (Integer id);
+
+    void  deletedAt(Integer id);
+
+    List<CaDTO> getAllJoinFetch();
 }

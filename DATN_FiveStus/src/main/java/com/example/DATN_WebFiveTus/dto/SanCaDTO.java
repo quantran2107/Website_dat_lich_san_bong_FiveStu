@@ -40,6 +40,8 @@ public class SanCaDTO {
     @JsonIgnore
     private String thuTrongTuan;
 
+    private float gia;
+
     private String trangThai;
 
 }

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lí sân bóng</title>
+</head>
+<body>
+<table>
+    <thead>
+    <th>Ten loai san</th>
+    <th>Trang Thai</th>
+    </thead>
+    <tbody>
+    <tr th:each="a :${listLS}">
+        <td th:text="${a.tenLoaiSan}"></td>
+        <td th:text="${a.trangThai}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

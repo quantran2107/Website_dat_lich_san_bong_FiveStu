@@ -20,7 +20,5 @@ public class SanBongDTO {
 
     private String tenSanBong;
 
-    private Float giaSan;
-
     private String trangThai;
 }
