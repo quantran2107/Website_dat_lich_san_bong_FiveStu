@@ -46,9 +46,6 @@ public class PhieuGiamGia {
     @Column(name = "ten_phieu_giam_gia", length = 100)
     private String tenPhieuGiamGia;
 
-    @Column(name = "so_luong")
-    private int soLuong;
-
     @Column(name = "muc_giam", length = 100)
     private String mucGiam;
 
