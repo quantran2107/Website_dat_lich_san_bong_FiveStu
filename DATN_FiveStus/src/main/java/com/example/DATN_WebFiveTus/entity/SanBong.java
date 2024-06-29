@@ -34,8 +34,6 @@ public class SanBong {
     @Column(name = "ten_san_bong", nullable = false, length = 100)
     private String tenSanBong;
 
-    @Column(name = "gia_san")
-    private Float giaSan;
 
     @Column(name = "trang_thai", length = 50)
     private String trangThai;

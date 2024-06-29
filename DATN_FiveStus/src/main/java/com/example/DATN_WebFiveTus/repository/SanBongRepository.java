@@ -2,6 +2,8 @@ package com.example.DATN_WebFiveTus.repository;
 
 import com.example.DATN_WebFiveTus.entity.SanBong;
 import com.example.DATN_WebFiveTus.entity.SanCa;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +17,9 @@ public interface SanBongRepository extends JpaRepository<SanBong,Integer> {
 
     @Query("SELECT sb FROM SanBong sb where sb.deletedAt=true")
     List<SanBong> getAllJoinFetch();
+
+    @Query("SELECT sb FROM SanBong sb where sb.deletedAt=true")
+    Page<SanBong> getAllJoinFetchPageable(Pageable pageable);
 
     @Modifying
     @Transactional
