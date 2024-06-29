@@ -45,30 +45,117 @@
                                                             <option selected>Trạng thái</option>
                                                             <option value="1">Hoạt động</option>
                                                             <option value="2">Kết thúc</option>
-                                                            <!--                                                            <option value="3">Pending</option>-->
-                                                            <!--                                                            <option value="3">Hold</option>-->
+                                                            <option value="3">Hold</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
+<!--                                        Form Add-->
                                         <div class="col ml-auto">
                                             <div class="dropdown float-right">
-                                                <button class="btn btn-primary float-right ml-3" type="button">Add
+                                                <button type="button" class="btn btn-primary float-right ml-3"
+                                                        data-toggle="modal" data-target="#varyModal"
+                                                        data-whatever="@mdo">Thêm<span class="fe fe-plus "></span>
                                                 </button>
+                                                <div class="modal fade" id="varyModal" tabindex="-1" role="dialog"
+                                                     aria-labelledby="varyModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="varyModalLabel">
+                                                                    Thêm phiếu giảm giá</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="inputEmail4">Mã phiếu giảm
+                                                                                giá</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   id="inputEmail4" placeholder="Ma"
+                                                                            >
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="inputEmail4">Tên phiếu giảm
+                                                                                giá</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   id="inputEmail4" placeholder="Ma"
+                                                                            >
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-12">
+                                                                            <label for="inputEmail4">Mức giảm</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   id="inputEmail4" placeholder="Ma"
+                                                                            >
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="inputState">Hình thức giảm
+                                                                                giá</label>
+                                                                            <select id="inputState"
+                                                                                    class="form-control">
+                                                                                <option selected>Choose...</option>
+                                                                                <option>...</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="inputState">Điều kiện sử
+                                                                                dụng</label>
+                                                                            <select id="inputState"
+                                                                                    class="form-control">
+                                                                                <option selected>Choose...</option>
+                                                                                <option>...</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="inputEmail4">Mã phiếu giảm
+                                                                                giá</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   id="inputEmail4" placeholder="Ma"
+                                                                            >
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="inputEmail4">Tên phiếu giảm
+                                                                                giá</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   id="inputEmail4" placeholder="Ma"
+                                                                            >
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn mb-2 btn-secondary"
+                                                                        data-dismiss="modal">Close
+                                                                </button>
+                                                                <button type="button" class="btn mb-2 btn-primary">Submit
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <button class="btn btn-secondary dropdown-toggle" type="button"
                                                         id="actionMenuButton" data-toggle="dropdown"
                                                         aria-haspopup="true" aria-expanded="false"> Hành động
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="actionMenuButton">
-                                                    <a class="dropdown-item" href="#">Export</a>
-                                                    <!--                                                    <a class="dropdown-item" href="#">Delete</a>-->
-                                                    <!--                                                    <a class="dropdown-item" href="#">Something else here</a>-->
+                                                    <a class="dropdown-item" href="#">Export</a> <a
+                                                        class="dropdown-item" href="#">Something else here</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- table -->
+                                    <!-- Table -->
                                     <table class="table datatables" id="dataTable-1">
                                         <thead>
                                         <tr>
@@ -91,7 +178,8 @@
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input"
                                                            th:id="${number + i.index + 1}">
-                                                    <label class="custom-control-label" th:for="${number + i.index + 1}"></label>
+                                                    <label class="custom-control-label"
+                                                           th:for="${number + i.index + 1}"></label>
                                                 </div>
                                             </td>
                                             <!--<td th:text="${listPGG.metadata.number * listPGG.metadata.size + index + 1 }"></td>-->
@@ -123,6 +211,8 @@
                                         </tr>
                                         </tbody>
                                     </table>
+
+<!--                                    Phân trang -->
                                     <nav aria-label="Table Paging" class="mb-0 text-muted">
                                         <ul class="pagination justify-content-end mb-0">
                                             <li class="page-item"
