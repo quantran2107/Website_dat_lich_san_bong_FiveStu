@@ -1,6 +1,8 @@
 package com.example.DATN_WebFiveTus.controller;
 
+import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
 import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
+import com.example.DATN_WebFiveTus.rest.KhachHangRest;
 import com.example.DATN_WebFiveTus.rest.PhieuGiamGiaRest;
 import com.example.DATN_WebFiveTus.service.KhachHangService;
 import com.example.DATN_WebFiveTus.service.PhieuGiamGiaService;
@@ -48,7 +50,7 @@ public class PhieuGiamGiaController {
     private PhieuGiamGiaRest phieuGiamGiaRest;
 
     @Autowired
-    private KhachHangService khachHangService;
+    private KhachHangRest khachHangRest;
 
 
     @GetMapping("phieu-giam-gia")
@@ -79,6 +81,9 @@ public class PhieuGiamGiaController {
             model.addAttribute("listDKSD", uniqueDieuKienSuDung);
             //listFull
             model.addAttribute("listFull", phieuGiamGiaDTOList);
+            //listKH
+            List<KhachHangDTO> khachHangDTOSList = khachHangRest.GetAll2().getBody();
+            model.addAttribute("listKH", khachHangDTOSList);
         } else {
             model.addAttribute("error", "Không thể lấy dữ liệu phân trang");
         }
