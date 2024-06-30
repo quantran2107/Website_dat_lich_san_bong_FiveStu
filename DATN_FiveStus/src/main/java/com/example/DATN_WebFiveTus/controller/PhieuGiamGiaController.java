@@ -2,6 +2,8 @@ package com.example.DATN_WebFiveTus.controller;
 
 import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import com.example.DATN_WebFiveTus.rest.PhieuGiamGiaRest;
+import com.example.DATN_WebFiveTus.service.KhachHangService;
+import com.example.DATN_WebFiveTus.service.PhieuGiamGiaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -19,23 +21,37 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
-//@RequestMapping("/web/")
 public class PhieuGiamGiaController {
+
     @Autowired
     private RestTemplate restTemplate;
-    @GetMapping("/list")
+
+    @Autowired
+    private PhieuGiamGiaRest phieuGiamGiaRest;
+
+    @Autowired
+    private KhachHangService khachHangService;
+
+
+    @GetMapping("phieu-giam-gia")
     public String listPhieuGiamGia(Model model, @RequestParam(defaultValue = "0") int page) {
         String apiUrl = "http://localhost:8080/api/phan-trang";
 
@@ -45,21 +61,58 @@ public class PhieuGiamGiaController {
                 null,
                 new ParameterizedTypeReference<PagedModel<EntityModel<PhieuGiamGiaDTO>>>() {
                 },
-                page, 4);
+                page, 10);
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             PagedModel<EntityModel<PhieuGiamGiaDTO>> phieuGiamGiaPage = responseEntity.getBody();
             int pageSize = (int) phieuGiamGiaPage.getMetadata().getSize();
             int number = pageSize * page;
-            model.addAttribute(("number"),number);
+            model.addAttribute(("number"), number);
             model.addAttribute("listPGG", phieuGiamGiaPage);
             model.addAttribute("currentPage", page);
+            model.addAttribute("pgg", new PhieuGiamGiaDTO());
+            // dieu kien su dung
+            List<PhieuGiamGiaDTO> phieuGiamGiaDTOList = phieuGiamGiaRest.getAll().getBody();
+            Set<String> uniqueDieuKienSuDung = new HashSet<>(phieuGiamGiaDTOList.stream()
+                    .map(PhieuGiamGiaDTO::getDieuKienSuDung)
+                    .collect(Collectors.toList()));
+            model.addAttribute("listDKSD", uniqueDieuKienSuDung);
+            //listFull
+            model.addAttribute("listFull", phieuGiamGiaDTOList);
         } else {
             model.addAttribute("error", "Không thể lấy dữ liệu phân trang");
         }
         return "list/quan-ly-phieu-giam-gia";
     }
 
+    @GetMapping("remove-pgg/{id}")
+    public String removePGG(@PathVariable("id") Integer id) {
+        String apiUrl = "http://localhost:8080/api/" + id;
+
+        restTemplate.exchange(
+                apiUrl,
+                HttpMethod.DELETE,
+                null,
+                Void.class);
+        return "redirect:/phieu-giam-gia";
+    }
+
+    @PostMapping("save-pgg")
+    public String savePhieuGiamGia(@ModelAttribute("pgg") PhieuGiamGiaDTO pgg, Model model) {
+        String apiUrl = "http://localhost:8080/api/save";
+        pgg.setTrangThai(true); // Set trangThai = 1
+        pgg.setDeletedAt(false); // Set deletedAt = false
+        try {
+            // Call REST API to save PhieuGiamGiaDTO
+            ResponseEntity<PhieuGiamGiaDTO> responseEntity = restTemplate.postForEntity(apiUrl, pgg, PhieuGiamGiaDTO.class);
+            PhieuGiamGiaDTO savedPgg = responseEntity.getBody();
+        } catch (RestClientException e) {
+            // Handle exception if REST API call fails
+            e.printStackTrace(); // Example: Log or handle differently
+            return "error"; // Redirect to an error page or handle gracefully
+        }
+        return "redirect:/phieu-giam-gia";
+    }
 }
 
 

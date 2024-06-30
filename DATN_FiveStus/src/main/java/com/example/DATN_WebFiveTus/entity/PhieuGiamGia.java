@@ -65,7 +65,7 @@ public class PhieuGiamGia {
     @Temporal(TemporalType.DATE)
     private Date ngayKetThuc;
 
-    @Column(name = "trang_thai", length = 100)
+    @Column(name = "trang_thai")
     private Boolean trangThai;
 
     @CreationTimestamp
