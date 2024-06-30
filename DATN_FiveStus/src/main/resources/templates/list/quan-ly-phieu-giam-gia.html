@@ -95,9 +95,9 @@
                                                                             <label>Khách hàng</label>
                                                                             <select th:field="*{idKhachHang}"
                                                                                     class="form-control">
-                                                                                <option th:each="pggItem : ${listFull}"
-                                                                                        th:value="${pggItem.idKhachHang}"
-                                                                                        th:text="${pggItem.hoVaTenKhachHang}">
+                                                                                <option th:each="pggItem : ${listKH}"
+                                                                                        th:value="${pggItem.id}"
+                                                                                        th:text="${pggItem.hoVaTen}">
                                                                                 </option>
                                                                             </select>
                                                                         </div>
