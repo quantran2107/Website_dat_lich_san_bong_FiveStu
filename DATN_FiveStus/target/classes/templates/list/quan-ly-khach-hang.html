@@ -12,166 +12,222 @@
                     <h2 class="mb-2 page-title">Quản lý khách hàng</h2>
                     <p class="card-text"></p>
                     <div class="row my-4">
+                        <!-- Small table -->
                         <div class="col-md-12">
                             <div class="card shadow">
                                 <div class="card-body">
-                                    <!-- Search Bar -->
-                                    <div class="row mb-3">
-                                        <div class="col-md-6">
-                                            <input type="text" id="searchBar" class="form-control"
-                                                   placeholder="Tìm kiếm theo mã hoặc tên...">
+                                    <div class="toolbar row mb-3">
+                                        <div class="col">
+                                            <form class="form-inline">
+                                                <div class="form-row">
+                                                    <div class="form-group col-auto mr-auto">
+                                                        <label class="my-1 mr-2 sr-only" for="inlineFormCustomSelectPref1">Show</label>
+                                                        <select class="custom-select mr-sm-2" id="inlineFormCustomSelectPref1">
+                                                            <option value="">...</option>
+                                                            <option value="1">12</option>
+                                                            <option value="2" selected>32</option>
+                                                            <option value="3">64</option>
+                                                            <option value="3">128</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-auto">
+                                                        <label for="search" class="sr-only">Search</label>
+                                                        <input type="text" class="form-control" id="search" value="" placeholder="Search">
+                                                    </div>
+                                                    <div class="form-group col-auto ml-3">
+                                                        <label class="my-1 mr-2 sr-only" for="inlineFormCustomSelectPref">Status</label>
+                                                        <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                                                            <option selected>Trạng thái</option>
+                                                            <option value="1">Hoạt động</option>
+                                                            <option value="2">Kết thúc</option>
+                                                            <option value="3">Hold</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
-                                        <div class="col-md-6 text-right">
-                                            <button class="btn btn-primary" data-toggle="modal"
-                                                    data-target="#addCustomerModal">Thêm
-                                            </button>
+                                        <div class="col ml-auto">
+                                            <div class="dropdown float-right">
+                                                <button type="button" class="btn btn-primary float-right ml-3" data-toggle="modal" data-target="#varyModal" data-whatever="@mdo">Thêm<span class="fe fe-plus"></span></button>
+                                                <div class="modal fade" id="varyModal" tabindex="-1" role="dialog" aria-labelledby="varyModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-lg" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="varyModalLabel">Thêm khách hàng</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+
+<!--                                                            Table ADDKH-->
+                                                            <div class="modal-body">
+                                                                <form action="/quan-ly-khach-hang/them" method="post">
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="maKhachHang">Mã khách hàng</label>
+                                                                            <input type="text" class="form-control" id="maKhachHang" name="maKhachHang" placeholder="Nhập mã khách hàng" required>
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="hoVaTen">Họ và tên</label>
+                                                                            <input type="text" class="form-control" id="hoVaTen" name="hoVaTen" placeholder="Nhập họ và tên" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="email">Email</label>
+                                                                            <input type="email" class="form-control" id="email" name="email" placeholder="Nhập địa chỉ email" required>
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="soDienThoai">Số điện thoại</label>
+                                                                            <input type="text" class="form-control" id="soDienThoai" name="soDienThoai" placeholder="Nhập số điện thoại" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="gioiTinh">Giới tính</label>
+                                                                            <select class="form-control" id="gioiTinh" name="gioiTinh" required>
+                                                                                <option value="true">Nam</option>
+                                                                                <option value="false">Nữ</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="trangThai">Trạng thái</label>
+                                                                            <select class="form-control" id="trangThai" name="trangThai" required>
+                                                                                <option value="active">Hoạt động</option>
+                                                                                <option value="inactive">Không hoạt động</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div id="diaChiContainer">
+                                                                        <div class="form-group">
+                                                                            <label for="tenDiaChi">Địa chỉ</label>
+                                                                            <input type="text" class="form-control" id="tenDiaChi" name="diaChi[0].tenDiaChi" placeholder="Nhập địa chỉ" required>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="ghiChu">Ghi chú</label>
+                                                                            <input type="text" class="form-control" id="ghiChu" name="diaChi[0].ghiChu" placeholder="Nhập ghi chú" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <button type="button" class="btn btn-secondary" onclick="addDiaChi()">Thêm địa chỉ khác</button>
+                                                                    <button type="submit" class="btn btn-primary">Thêm</button>
+                                                                </form>
+                                                            </div>
+<!--                                                            Table DetablKH-->
+                                                            <!-- Modal chi tiết khách hàng -->
+                                                            <div th:each="khachHang : ${listKH}">
+                                                                <div class="modal fade" th:id="'detailModal' + ${khachHang.id}" tabindex="-1" role="dialog" aria-labelledby="'detailModalLabel' + ${khachHang.id}" aria-hidden="true">
+                                                                    <div class="modal-dialog modal-lg" role="document">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title" th:id="'detailModalLabel' + ${khachHang.id}">Chi tiết khách hàng</h5>
+                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <form th:action="@{/quan-ly-khach-hang/cap-nhat}" method="post">
+                                                                                    <input type="hidden" th:name="id" th:value="${khachHang.id}">
+                                                                                    <div class="form-group">
+                                                                                        <label for="maKhachHang">Mã khách hàng</label>
+                                                                                        <input type="text" class="form-control" id="maKhachHang" th:value="${khachHang.maKhachHang}" readonly>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <label for="hoVaTen">Họ và tên</label>
+                                                                                        <input type="text" class="form-control" id="hoVaTen" th:value="${khachHang.hoVaTen}" readonly>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <label for="email">Email</label>
+                                                                                        <input type="email" class="form-control" id="email" th:value="${khachHang.email}" readonly>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <label for="soDienThoai">Số điện thoại</label>
+                                                                                        <input type="text" class="form-control" id="soDienThoai" th:value="${khachHang.soDienThoai}" readonly>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <label for="gioiTinh">Giới tính</label>
+                                                                                        <input type="text" class="form-control" id="gioiTinh" th:value="${khachHang.gioiTinh ? 'Nam' : 'Nữ'}" readonly>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <label for="trangThai">Trạng thái</label>
+                                                                                        <input type="text" class="form-control" id="trangThai" th:value="${khachHang.trangThai == 'active' ? 'Hoạt động' : 'Không hoạt động'}" readonly>
+                                                                                    </div>
+                                                                                    <div th:each="diaChi : ${khachHang.diaChi}">
+                                                                                        <div class="form-group">
+                                                                                            <label for="tenDiaChi">Địa chỉ</label>
+                                                                                            <input type="text" class="form-control" id="tenDiaChi" th:value="${diaChi.tenDiaChi}" readonly>
+                                                                                        </div>
+                                                                                        <div class="form-group">
+                                                                                            <label for="ghiChu">Ghi chú</label>
+                                                                                            <input type="text" class="form-control" id="ghiChu" th:value="${diaChi.ghiChu}" readonly>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="actionMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hành động</button>
+                                            <div class="dropdown-menu" aria-labelledby="actionMenuButton">
+                                                <a class="dropdown-item" href="#">Xuất file</a>
+                                                <a class="dropdown-item" href="#">Hành động khác</a>
+                                            </div>
                                         </div>
                                     </div>
-                                    <!-- table -->
-                                    <table class="table datatables" id="dataTable-1">
-                                        <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>ID</th>
-                                            <th>Mã khách hàng</th>
-                                            <th>Họ và tên</th>
-                                            <th>Trạng thái</th>
-                                            <th>Hành động</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="khachHangTable">
-                                        <tr th:each="khachHang, i : ${listKH}">
-                                            <td th:text="${i.count}"></td>
-                                            <td th:text="${khachHang.id}"></td>
-                                            <td th:text="${khachHang.maKhachHang}"></td>
-                                            <td th:text="${khachHang.hoVaTen}"></td>
-                                            <td th:text="${khachHang.trangThai == 'active' ? 'Hoạt động' : 'Không hoạt động'}"></td>
-                                            <td>
-                                                <button class="btn btn-info btn-sm"
-                                                        onclick="window.location.href='/chi-tiet-khach-hang/' + [[${khachHang.id}]]">
-                                                    Chi tiết
-                                                </button>
-                                                <button class="btn btn-warning btn-sm"
-                                                        onclick="window.location.href='/sua-khach-hang/' + [[${khachHang.id}]]">
-                                                    Sửa
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
                                 </div>
+                                <!-- Table -->
+                                <table class="table datatables" id="dataTable-1">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>ID</th>
+                                        <th>Mã khách hàng</th>
+                                        <th>Họ và tên</th>
+                                        <th>Trạng thái</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="khachHangTable">
+                                    <tr th:each="khachHang, i : ${listKH}">
+                                        <td th:text="${i.count}"></td>
+                                        <td th:text="${khachHang.id}"></td>
+                                        <td th:text="${khachHang.maKhachHang}"></td>
+                                        <td th:text="${khachHang.hoVaTen}"></td>
+                                        <td>
+                                            <div class="custom-control custom-switch">
+                                                <input type="checkbox" class="custom-control-input" id="trangThaiSwitch" th:checked="${khachHang.trangThai == 'active'}" disabled>
+                                                <label class="custom-control-label" for="trangThaiSwitch" th:text="${khachHang.trangThai == 'active' ? 'Hoạt động' : 'Không hoạt động'}"></label>
+                                            </div>
+                                        </td>
+                                        <td style="display: flex">
+                                            <button class="btn mb-2 mr-1 btn-info" type="button" data-toggle="modal" th:data-target="'#detailModal' + ${khachHang.id}">
+                                                <span class="fe fe-eye"></span>
+                                            </button>
+                                            <button class="btn mb-2 ml-1 btn-danger" type="button">
+                                                <span class="fe fe-trash-2"></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div th:include="fragment/modal :: modal"></div>
-    </main>
+                    </div> <!-- simple table -->
+                </div> <!-- end section -->
+            </div> <!-- .col-12 -->
+        </div> <!-- .row -->
+</div> <!-- .container-fluid -->
+<div th:include="fragment/modal :: modal"></div>
+</main>
 </div>
-
-<!-- Add Customer Modal -->
-<div class="modal fade" id="addCustomerModal" tabindex="-1" role="dialog" aria-labelledby="addCustomerModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addCustomerModalLabel">Thêm khách hàng</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="/quan-ly-khach-hang/them" method="post">
-                    <div class="form-group">
-                        <label for="maKhachHang">Mã khách hàng</label>
-                        <input type="text" class="form-control" id="maKhachHang" name="maKhachHang" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="hoVaTen">Họ và tên</label>
-                        <input type="text" class="form-control" id="hoVaTen" name="hoVaTen" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="gioiTinh">Giới tính</label>
-                        <select class="form-control" id="gioiTinh" name="gioiTinh" required>
-                            <option value="true">Nam</option>
-                            <option value="false">Nữ</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="soDienThoai">Số điện thoại</label>
-                        <input type="text" class="form-control" id="soDienThoai" name="soDienThoai" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="trangThai">Trạng thái</label>
-                        <select class="form-control" id="trangThai" name="trangThai" required>
-                            <option value="active">Hoạt động</option>
-                            <option value="inactive">Không hoạt động</option>
-                        </select>
-                    </div>
-                    <!-- Địa chỉ -->
-                    <div id="diaChiContainer">
-                        <div class="form-group">
-                            <label for="tenDiaChi">Tên địa chỉ</label>
-                            <input type="text" class="form-control" id="tenDiaChi" name="diaChi[0].tenDiaChi" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="ghiChu">Ghi chú</label>
-                            <input type="text" class="form-control" id="ghiChu" name="diaChi[0].ghiChu" required>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-secondary" onclick="addDiaChi()">Thêm địa chỉ khác</button>
-                    <button type="submit" class="btn btn-primary">Thêm</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 <div th:include="fragment/script :: script"></div>
-
-<script>
-    document.getElementById('searchBar').addEventListener('input', function () {
-        const filter = this.value.toLowerCase();
-        const rows = document.querySelectorAll('#khachHangTable tr');
-        rows.forEach(row => {
-            const maKhachHang = row.children[2].textContent.toLowerCase();
-            const hoVaTen = row.children[3].textContent.toLowerCase();
-            if (maKhachHang.includes(filter) || hoVaTen.includes(filter)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    });
-
-    document.getElementById('addCustomerForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        const formData = new FormData(this);
-        const data = {};
-        formData.forEach((value, key) => data[key] = value);
-
-        fetch('/khach-hang/them', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                location.reload(); // Reload the page to see the new customer
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    });
-</script>
 </body>
 </html>

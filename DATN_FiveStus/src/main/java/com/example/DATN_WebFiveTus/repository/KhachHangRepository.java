@@ -9,6 +9,5 @@ import java.util.List;
 
 @Repository
 public interface KhachHangRepository extends JpaRepository<KhachHang,Integer> {
-//    @Query("SELECT kh FROM KhachHang kh JOIN FETCH kh.diaChi")
-//    List<KhachHang> getAllJoinFetch();
+
 }
