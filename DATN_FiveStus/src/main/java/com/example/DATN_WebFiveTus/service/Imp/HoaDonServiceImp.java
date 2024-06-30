@@ -1,6 +1,9 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
+import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
+import com.example.DATN_WebFiveTus.entity.HoaDon;
+import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.HoaDonRepository;
 import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
@@ -9,6 +12,9 @@ import com.example.DATN_WebFiveTus.repository.PhieuGiamGiaRepository;
 import com.example.DATN_WebFiveTus.service.HoaDonService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -73,5 +79,14 @@ public class HoaDonServiceImp implements HoaDonService {
     @Override
     public void deletedAt(Integer id) {
 
+    }
+
+    @Override
+    public Page<HoaDonDTO> phanTrang(Pageable pageable) {
+        Page<HoaDon> hoaDonPage = hoaDonRepository.findAll(pageable);
+        List<HoaDonDTO> list = hoaDonPage.getContent().stream()
+                .map(hoaDon -> modelMapper.map(hoaDon, HoaDonDTO.class))
+                .collect(Collectors.toList());
+        return new PageImpl<>(list, pageable, hoaDonPage.getTotalElements());
     }
 }
