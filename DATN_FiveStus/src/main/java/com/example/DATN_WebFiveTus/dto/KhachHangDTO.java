@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -37,4 +39,5 @@ public class KhachHangDTO {
 
     private String trangThai;
 
+    private List<DiaChiDTO> diaChi; // Danh sách địa chỉ
 }

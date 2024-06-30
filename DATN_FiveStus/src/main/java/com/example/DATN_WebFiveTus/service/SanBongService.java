@@ -1,6 +1,7 @@
 package com.example.DATN_WebFiveTus.service;
 
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface SanBongService {
     List<SanBongDTO> getAllJoinFetch();
 
     void deletedAt(Integer id);
+
+    Page<SanBongDTO> pages(Integer pageNo, Integer pageSize);
 }

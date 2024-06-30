@@ -75,16 +75,12 @@
                                         <tr >
                                             <th></th>
                                             <th>STT</th>
-                                            <th>Mã</th>
-                                            <th>Tên</th>
-                                            <th>Số lượng</th>
-                                            <th>Mức giảm</th>
-                                            <th>Hình thức giảm</th>
-                                            <th>Điều kiện sử dụng</th>
-                                            <th>Ngày bắt đầu</th>
-                                            <th>Ngày kết thúc</th>
+                                            <th>Mã hóa đơn</th>
+                                            <th>Tên khách hàng</th>
+                                            <th>Ngày tạo</th>
+                                            <th>Tổng tiền</th>
                                             <th>Trạng thái</th>
-                                            <th>Hành động</th>
+                                            <th>Action</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -96,15 +92,11 @@
                                                 </div>
                                             </td>
                                             <td th:text="${i.count}"></td>
-                                            <td th:text="${hd.maPhieuGiamGia}"></td>
+                                            <td th:text="${hd.maHoaDon}"></td>
                                             <td th:text="${hd.hoVaTenKhachHang}"></td>
-                                            <td th:text="${hd.soLuong}"></td>
-                                            <td th:text="${hd.mucGiam}"></td>
-                                            <td th:text="${hd.hinhThucGiamGia == 0? 'Giảm theo số tiền':'Giảm theo %'}"></td>
-                                            <td th:text="${hd.dieuKienSuDung}"></td>
-                                            <td th:text="${hd.ngayBatDau}"></td>
-                                            <td th:text="${hd.ngayKetThuc}"></td>
-                                            <td th:text="${hd.trangThai== 0? 'Kết thúc': 'Hoạt động'}"></td>
+                                            <td th:text="${hd.ngayTao}"></td>
+                                            <td th:text="${hd.tongTien}"></td>
+                                            <td th:text="${hd.trangThai}"></td>
                                             <td>
                                                 <button class="btn btn-sm dropdown-toggle more-horizontal" type="button"
                                                         data-toggle="dropdown" aria-haspopup="true"

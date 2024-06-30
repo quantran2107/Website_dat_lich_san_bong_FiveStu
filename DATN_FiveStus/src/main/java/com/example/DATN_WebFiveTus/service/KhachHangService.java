@@ -15,4 +15,6 @@ public interface KhachHangService {
     KhachHangDTO update(Integer id, KhachHangDTO KhachHangDTO);
 
     void delete(Integer id);
+
+    KhachHangDTO findById(Integer id);
 }
