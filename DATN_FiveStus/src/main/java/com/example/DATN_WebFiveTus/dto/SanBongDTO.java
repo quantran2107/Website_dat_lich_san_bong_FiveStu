@@ -20,6 +20,9 @@ public class SanBongDTO {
 
     private String tenSanBong;
 
+    private Integer idLoaiSan;
+
+    private String tenLoaiSan;
 
     private String trangThai;
 }

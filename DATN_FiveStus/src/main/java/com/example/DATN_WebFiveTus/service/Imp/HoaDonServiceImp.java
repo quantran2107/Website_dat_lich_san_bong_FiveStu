@@ -27,6 +27,7 @@ public class HoaDonServiceImp implements HoaDonService {
 
     private ModelMapper modelMapper;
 
+    @Autowired
     public HoaDonServiceImp(HoaDonRepository hoaDonRepository, NhanVienReposity nhanVienReposity, PhieuGiamGiaRepository phieuGiamGiaRepository, KhachHangRepository khachHangRepository, ModelMapper modelMapper) {
         this.hoaDonRepository = hoaDonRepository;
         this.nhanVienReposity = nhanVienReposity;
@@ -35,7 +36,7 @@ public class HoaDonServiceImp implements HoaDonService {
         this.modelMapper = modelMapper;
     }
 
-    @Autowired
+
 
     @Override
     public List<HoaDonDTO> getAll() {
