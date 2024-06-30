@@ -29,6 +29,7 @@ public class HoaDonDTO {
 
     private String maHoaDon;
 
+    private String hoVaTenKhachHang;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date ngayTao;
