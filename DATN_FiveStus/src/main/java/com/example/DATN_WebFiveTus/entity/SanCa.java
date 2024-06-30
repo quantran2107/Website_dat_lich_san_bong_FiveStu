@@ -46,6 +46,10 @@ public class SanCa {
     @JoinColumn(name = "id_ngay_trong_tuan", nullable = false)
     private NgayTrongTuan ngayTrongTuan;
 
+    @Column(name = "gia")
+    private float gia;
+
+
     @Column(name = "trang_thai", length = 50)
     private String trangThai;
 

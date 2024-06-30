@@ -1,7 +1,10 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.DiaChiDTO;
+import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
+import com.example.DATN_WebFiveTus.entity.DiaChi;
+import com.example.DATN_WebFiveTus.entity.KhachHang;
 import com.example.DATN_WebFiveTus.repository.DiaChiRepository;
 import com.example.DATN_WebFiveTus.service.DiaChiService;
 import org.modelmapper.ModelMapper;
@@ -28,7 +31,8 @@ public class DiaChiImp implements DiaChiService {
 
     @Override
     public List<DiaChiDTO> getAll() {
-        return null;
+        List<DiaChi>diaChis=diaChiRepository.findAll();
+        return diaChis.stream().map(diaChi -> modelMapper.map(diaChi, DiaChiDTO.class)).collect(Collectors.toList());
     }
 
     @Override
