@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="fragment/head :: head"></head>
+
+<head th:insert="~{fragment/head :: head}"></head>
 <body class="vertical  light  ">
 <div class="wrapper">
-    <div th:include="fragment/navbar :: navbar"></div>
-    <div th:include="fragment/sidebar :: sidebar"></div>
+    <div th:insert="~{fragment/navbar :: navbar}"></div>
+    <div th:insert="~{fragment/sidebar :: sidebar}"></div>
     <main role="main" class="main-content">
         <div class="container-fluid">
             <div class="row justify-content-center">
@@ -51,7 +52,7 @@
                                                 </div>
                                             </form>
                                         </div>
-<!--                                        Form Add-->
+                                        <!-- Form Add-->
                                         <div class="col ml-auto">
                                             <div class="dropdown float-right">
                                                 <button type="button" class="btn btn-primary float-right ml-3"
@@ -70,77 +71,96 @@
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
-                                                            <div class="modal-body">
-                                                                <form>
+                                                            <form th:object="${pgg}" th:action="@{/save-pgg}"
+                                                                  th:method="post">
+                                                                <div class="modal-body">
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
-                                                                            <label for="inputEmail4">Mã phiếu giảm
-                                                                                giá</label>
+                                                                            <label>
+                                                                                Mã phiếu giảm giá
+                                                                            </label>
                                                                             <input type="text" class="form-control"
-                                                                                   id="inputEmail4" placeholder="Ma"
-                                                                            >
+                                                                                   placeholder="Ma"
+                                                                                   th:field="*{maPhieuGiamGia}">
                                                                         </div>
                                                                         <div class="form-group col-md-6">
-                                                                            <label for="inputEmail4">Tên phiếu giảm
-                                                                                giá</label>
+                                                                            <label>Tên phiếu giảm giá</label>
                                                                             <input type="text" class="form-control"
-                                                                                   id="inputEmail4" placeholder="Ma"
-                                                                            >
+                                                                                   placeholder="Tên"
+                                                                                   th:field="*{tenPhieuGiamGia}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-12">
-                                                                            <label for="inputEmail4">Mức giảm</label>
+                                                                            <label>Khách hàng</label>
+                                                                            <select th:field="*{idKhachHang}"
+                                                                                    class="form-control">
+                                                                                <option th:each="pggItem : ${listFull}"
+                                                                                        th:value="${pggItem.idKhachHang}"
+                                                                                        th:text="${pggItem.hoVaTenKhachHang}">
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-12">
+                                                                            <label>Mức giảm</label>
                                                                             <input type="text" class="form-control"
-                                                                                   id="inputEmail4" placeholder="Ma"
-                                                                            >
+                                                                                   placeholder="Mức giảm"
+                                                                                   th:field="*{mucGiam}">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
-                                                                            <label for="inputState">Hình thức giảm
+                                                                            <label for="hinhThucGiamGia">Hình thức giảm
                                                                                 giá</label>
-                                                                            <select id="inputState"
-                                                                                    class="form-control">
-                                                                                <option selected>Choose...</option>
-                                                                                <option>...</option>
+                                                                            <select id="hinhThucGiamGia"
+                                                                                    class="form-control"
+                                                                                    th:field="*{hinhThucGiamGia}">
+                                                                                <option selected th:value="true">Giảm
+                                                                                    theo số tiền
+                                                                                </option>
+                                                                                <option th:value="false">Giảm theo %
+                                                                                </option>
                                                                             </select>
                                                                         </div>
                                                                         <div class="form-group col-md-6">
-                                                                            <label for="inputState">Điều kiện sử
+                                                                            <label for="dieuKienSuDung">Điều kiện sử
                                                                                 dụng</label>
-                                                                            <select id="inputState"
+                                                                            <select id="dieuKienSuDung"
+                                                                                    th:field="*{dieuKienSuDung}"
                                                                                     class="form-control">
-                                                                                <option selected>Choose...</option>
-                                                                                <option>...</option>
+                                                                                <option th:each="dieuKienSuDung:${listDKSD}"
+                                                                                        th:value="${dieuKienSuDung}"
+                                                                                        th:text="${dieuKienSuDung}"
+                                                                                ></option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
-                                                                            <label for="inputEmail4">Mã phiếu giảm
-                                                                                giá</label>
-                                                                            <input type="text" class="form-control"
-                                                                                   id="inputEmail4" placeholder="Ma"
-                                                                            >
+                                                                            <label>Ngày bắt đầu</label>
+                                                                            <input type="date" class="form-control"
+                                                                                   placeholder="Ngày bắt đầu"
+                                                                                   th:field="*{ngayBatDau}">
                                                                         </div>
                                                                         <div class="form-group col-md-6">
-                                                                            <label for="inputEmail4">Tên phiếu giảm
-                                                                                giá</label>
-                                                                            <input type="text" class="form-control"
-                                                                                   id="inputEmail4" placeholder="Ma"
-                                                                            >
+                                                                            <label>Ngày kết thúc</label>
+                                                                            <input type="date" class="form-control"
+                                                                                   placeholder="Ngày kết thúc"
+                                                                                   th:field="*{ngayKetThuc}">
                                                                         </div>
                                                                     </div>
-                                                                </form>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn mb-2 btn-secondary"
-                                                                        data-dismiss="modal">Close
-                                                                </button>
-                                                                <button type="button" class="btn mb-2 btn-primary">Submit
-                                                                </button>
-                                                            </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn mb-2 btn-secondary"
+                                                                            data-dismiss="modal">Close
+                                                                    </button>
+                                                                    <button type="submit" class="btn mb-2 btn-primary">
+                                                                        Submit
+                                                                    </button>
+                                                                </div>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -174,6 +194,44 @@
                                         </thead>
                                         <tbody>
                                         <tr th:each="pgg,i:${listPGG}">
+                                            <div th:if="${pgg.content.deletedAt == false}">
+                                                <td>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               th:id="${pgg.content.id}">
+                                                        <label class="custom-control-label"
+                                                               th:for="${pgg.content.id}"></label>
+                                                    </div>
+                                                </td>
+                                                <td th:text="${number + i.index + 1}"></td>
+                                                <td th:text="${pgg.content.maPhieuGiamGia}"></td>
+                                                <td th:text="${pgg.content.tenPhieuGiamGia}"></td>
+                                                <td th:text="${pgg.content.mucGiam}"></td>
+                                                <td th:text="${pgg.content.hinhThucGiamGia == false
+                                                    ? 'Giảm theo số tiền':'Giảm theo %'}"></td>
+                                                <td th:text="${pgg.content.dieuKienSuDung}"></td>
+                                                <td th:text="${#dates.format(pgg.content.ngayBatDau, 'dd/MM/yyyy')}"></td>
+                                                <td th:text="${#dates.format(pgg.content.ngayKetThuc, 'dd/MM/yyyy')}"></td>
+                                                <td>
+                                                    <div class="custom-control custom-switch">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               th:id="'switch-' + ${pgg.content.id}"
+                                                               th:checked="${pgg.content.trangThai == true }" disabled>
+                                                        <label class="custom-control-label"
+                                                               th:for="'switch-' + ${pgg.content.id}" disabled></label>
+                                                    </div>
+                                                </td>
+                                                <td style="display: flex">
+                                                    <button class="btn mb-2 mr-1 btn-warning" type="button">
+                                                        <span class="fe fe-edit-3"></span>
+                                                    </button>
+                                                    <form th:action="@{/remove-pgg/{id}(id=${pgg.content.id})}">
+                                                        <button class="btn mb-2 ml-1 btn-danger" type="submit">
+                                                            <span class="fe fe-trash-2"></span>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </div>
                                             <td>
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input"
@@ -211,23 +269,24 @@
                                         </tbody>
                                     </table>
 
-<!--                                    Phân trang -->
+                                    <!-- Phân trang -->
                                     <nav aria-label="Table Paging" class="mb-0 text-muted">
                                         <ul class="pagination justify-content-end mb-0">
                                             <li class="page-item"
                                                 th:classappend="${currentPage == 0} ? 'disabled' : ''">
-                                                <a class="page-link" th:href="@{/list(page=${currentPage - 1})}">Previous</a>
+                                                <a class="page-link"
+                                                   th:href="@{/phieu-giam-gia(page=${currentPage - 1})}">Previous</a>
                                             </li>
                                             <li class="page-item"
                                                 th:each="pageNumber : ${#numbers.sequence(0, listPGG.metadata.totalPages - 1)}"
                                                 th:classappend="${currentPage == pageNumber} ? 'active' : ''">
-                                                <a class="page-link" th:href="@{/list(page=${pageNumber})}"
+                                                <a class="page-link" th:href="@{/phieu-giam-gia(page=${pageNumber})}"
                                                    th:text="${pageNumber + 1}">1</a>
                                             </li>
                                             <li class="page-item"
                                                 th:classappend="${currentPage == listPGG.metadata.totalPages - 1} ? 'disabled' : ''">
                                                 <a class="page-link"
-                                                   th:href="@{/list(page=${currentPage + 1})}">Next</a>
+                                                   th:href="@{/phieu-giam-gia(page=${currentPage + 1})}">Next</a>
                                             </li>
                                         </ul>
                                     </nav>
@@ -239,9 +298,10 @@
             </div> <!-- .row -->
 
         </div> <!-- .container-fluid -->
-        <div th:include="fragment/modal :: modal"></div>
+        <div th:insert="~{fragment/modal :: modal}"></div>
     </main>
 </div>
 </body>
-<div th:include="fragment/script :: script"></div>
+<div th:insert="~{fragment/script :: script}"></div>
+
 </html>

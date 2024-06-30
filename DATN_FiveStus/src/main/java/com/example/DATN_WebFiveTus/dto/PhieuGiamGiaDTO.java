@@ -9,8 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.sql.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,6 +25,7 @@ public class PhieuGiamGiaDTO {
 
     private Integer idKhachHang;
 
+    private String hoVaTenKhachHang;
 
     private String maPhieuGiamGia;
 
@@ -47,4 +49,6 @@ public class PhieuGiamGiaDTO {
 
 
     private Boolean trangThai;
+
+    private Boolean deletedAt;
 }
