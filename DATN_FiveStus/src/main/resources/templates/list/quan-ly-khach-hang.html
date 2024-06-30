@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/head :: head"></head>
+<body class="vertical light">
+<div class="wrapper">
+    <div th:include="fragment/navbar :: navbar"></div>
+    <div th:include="fragment/sidebar :: sidebar"></div>
+    <main role="main" class="main-content">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <h2 class="mb-2 page-title">Quản lý khách hàng</h2>
+                    <p class="card-text"></p>
+                    <div class="row my-4">
+                        <div class="col-md-12">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <!-- Search Bar -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <input type="text" id="searchBar" class="form-control"
+                                                   placeholder="Tìm kiếm theo mã hoặc tên...">
+                                        </div>
+                                        <div class="col-md-6 text-right">
+                                            <button class="btn btn-primary" data-toggle="modal"
+                                                    data-target="#addCustomerModal">Thêm
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- table -->
+                                    <table class="table datatables" id="dataTable-1">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>ID</th>
+                                            <th>Mã khách hàng</th>
+                                            <th>Họ và tên</th>
+                                            <th>Trạng thái</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="khachHangTable">
+                                        <tr th:each="khachHang, i : ${listKH}">
+                                            <td th:text="${i.count}"></td>
+                                            <td th:text="${khachHang.id}"></td>
+                                            <td th:text="${khachHang.maKhachHang}"></td>
+                                            <td th:text="${khachHang.hoVaTen}"></td>
+                                            <td th:text="${khachHang.trangThai == 'active' ? 'Hoạt động' : 'Không hoạt động'}"></td>
+                                            <td>
+                                                <button class="btn btn-info btn-sm"
+                                                        onclick="window.location.href='/chi-tiet-khach-hang/' + [[${khachHang.id}]]">
+                                                    Chi tiết
+                                                </button>
+                                                <button class="btn btn-warning btn-sm"
+                                                        onclick="window.location.href='/sua-khach-hang/' + [[${khachHang.id}]]">
+                                                    Sửa
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:include="fragment/modal :: modal"></div>
+    </main>
+</div>
+
+<!-- Add Customer Modal -->
+<div class="modal fade" id="addCustomerModal" tabindex="-1" role="dialog" aria-labelledby="addCustomerModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCustomerModalLabel">Thêm khách hàng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/quan-ly-khach-hang/them" method="post">
+                    <div class="form-group">
+                        <label for="maKhachHang">Mã khách hàng</label>
+                        <input type="text" class="form-control" id="maKhachHang" name="maKhachHang" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hoVaTen">Họ và tên</label>
+                        <input type="text" class="form-control" id="hoVaTen" name="hoVaTen" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gioiTinh">Giới tính</label>
+                        <select class="form-control" id="gioiTinh" name="gioiTinh" required>
+                            <option value="true">Nam</option>
+                            <option value="false">Nữ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="soDienThoai">Số điện thoại</label>
+                        <input type="text" class="form-control" id="soDienThoai" name="soDienThoai" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="trangThai">Trạng thái</label>
+                        <select class="form-control" id="trangThai" name="trangThai" required>
+                            <option value="active">Hoạt động</option>
+                            <option value="inactive">Không hoạt động</option>
+                        </select>
+                    </div>
+                    <!-- Địa chỉ -->
+                    <div id="diaChiContainer">
+                        <div class="form-group">
+                            <label for="tenDiaChi">Tên địa chỉ</label>
+                            <input type="text" class="form-control" id="tenDiaChi" name="diaChi[0].tenDiaChi" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ghiChu">Ghi chú</label>
+                            <input type="text" class="form-control" id="ghiChu" name="diaChi[0].ghiChu" required>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="addDiaChi()">Thêm địa chỉ khác</button>
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div th:include="fragment/script :: script"></div>
+
+<script>
+    document.getElementById('searchBar').addEventListener('input', function () {
+        const filter = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#khachHangTable tr');
+        rows.forEach(row => {
+            const maKhachHang = row.children[2].textContent.toLowerCase();
+            const hoVaTen = row.children[3].textContent.toLowerCase();
+            if (maKhachHang.includes(filter) || hoVaTen.includes(filter)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+
+    document.getElementById('addCustomerForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        const data = {};
+        formData.forEach((value, key) => data[key] = value);
+
+        fetch('/khach-hang/them', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                location.reload(); // Reload the page to see the new customer
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+</script>
+</body>
+</html>
