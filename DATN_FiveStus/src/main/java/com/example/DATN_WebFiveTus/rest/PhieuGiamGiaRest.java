@@ -8,7 +8,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.data.web.SortDefault;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +25,14 @@ import java.util.List;
 @RequestMapping(value = "/api/" ,produces = MediaType.APPLICATION_JSON_VALUE)
 public class PhieuGiamGiaRest {
 
-    private final PhieuGiamGiaService phieuGiamGiaService;
 
-    public PhieuGiamGiaRest(PhieuGiamGiaService phieuGiamGiaService) {
+    private final PhieuGiamGiaService phieuGiamGiaService;
+    private final PagedResourcesAssembler<PhieuGiamGiaDTO> pagedResourcesAssembler;
+
+    public PhieuGiamGiaRest(PhieuGiamGiaService phieuGiamGiaService,
+                            PagedResourcesAssembler<PhieuGiamGiaDTO> pagedResourcesAssembler) {
         this.phieuGiamGiaService = phieuGiamGiaService;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
     @GetMapping("/hien-thi")
@@ -35,9 +42,11 @@ public class PhieuGiamGiaRest {
     }
 
     @GetMapping("/phan-trang")
-    public ResponseEntity<Page<PhieuGiamGiaDTO>> getAllPhieuGiamGia(
-             @PageableDefault(size = 20) final Pageable pageable) {
-        return ResponseEntity.ok(phieuGiamGiaService.phanTrang(pageable));
+    public ResponseEntity<PagedModel<EntityModel<PhieuGiamGiaDTO>>> getAllPhieuGiamGia(
+            @PageableDefault(size = 10) Pageable pageable) {
+        Page<PhieuGiamGiaDTO> phieuGiamGiaPage = phieuGiamGiaService.phanTrang(pageable);
+        PagedModel<EntityModel<PhieuGiamGiaDTO>> pagedModel = pagedResourcesAssembler.toModel(phieuGiamGiaPage);
+        return ResponseEntity.ok(pagedModel);
     }
 
 }

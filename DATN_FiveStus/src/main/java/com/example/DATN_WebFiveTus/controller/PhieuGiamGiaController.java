@@ -6,9 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,55 +23,43 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 //@RequestMapping("/web/")
 public class PhieuGiamGiaController {
-
     @Autowired
     private RestTemplate restTemplate;
-
-//    @GetMapping("/web-phieu-giam-gia")
-//    public String hienThi(Model model) {
-//        model.addAttribute("listPGG", Arrays.asList(restTemplate.getForObject(
-//                "http://localhost:8080/api/hien-thi",
-//                PhieuGiamGiaDTO[].class
-//        )));
-//        return "/list/quan-ly-phieu-giam-gia";
-//    }
-
-
     @GetMapping("/list")
     public String listPhieuGiamGia(Model model, @RequestParam(defaultValue = "0") int page) {
-        // URL của API
         String apiUrl = "http://localhost:8080/api/phan-trang";
 
-        // Thực hiện request API để lấy Page dữ liệu PhieuGiamGiaDTO
-        ResponseEntity<Page<PhieuGiamGiaDTO>> responseEntity = restTemplate.exchange(
+        ResponseEntity<PagedModel<EntityModel<PhieuGiamGiaDTO>>> responseEntity = restTemplate.exchange(
                 apiUrl + "?page={page}&size={size}",
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<Page<PhieuGiamGiaDTO>>() {},
-                page, 10); // page và size là các tham số truyền vào API
+                new ParameterizedTypeReference<PagedModel<EntityModel<PhieuGiamGiaDTO>>>() {
+                },
+                page, 4);
 
-        // Kiểm tra nếu request thành công
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
-            Page<PhieuGiamGiaDTO> phieuGiamGiaPage = responseEntity.getBody();
-
-            // Lấy danh sách PhieuGiamGiaDTO từ phần content của Page
-            List<PhieuGiamGiaDTO> phieuGiamGiaList = phieuGiamGiaPage.getContent();
-
-            // Đưa danh sách này vào model để truyền cho View
-            model.addAttribute("phieuGiamGiaList", phieuGiamGiaList);
+            PagedModel<EntityModel<PhieuGiamGiaDTO>> phieuGiamGiaPage = responseEntity.getBody();
+            int pageSize = (int) phieuGiamGiaPage.getMetadata().getSize();
+            int number = pageSize * page;
+            model.addAttribute(("number"),number);
+            model.addAttribute("listPGG", phieuGiamGiaPage);
+            model.addAttribute("currentPage", page);
         } else {
-            // Xử lý trường hợp lỗi nếu cần
-            // Ví dụ: model.addAttribute("error", "Không thể lấy dữ liệu phân trang");
+            model.addAttribute("error", "Không thể lấy dữ liệu phân trang");
         }
-
-        return "/index"; // Trả về tên của template Thymeleaf
+        return "list/quan-ly-phieu-giam-gia";
     }
+
 }
+
+

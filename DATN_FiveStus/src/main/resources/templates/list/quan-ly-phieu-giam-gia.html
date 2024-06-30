@@ -45,31 +45,117 @@
                                                             <option selected>Trạng thái</option>
                                                             <option value="1">Hoạt động</option>
                                                             <option value="2">Kết thúc</option>
-                                                            <!--                                                            <option value="3">Pending</option>-->
-                                                            <!--                                                            <option value="3">Hold</option>-->
+                                                            <option value="3">Hold</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
+<!--                                        Form Add-->
                                         <div class="col ml-auto">
                                             <div class="dropdown float-right">
-                                                <button class="btn btn-primary float-right ml-3" type="button">Add
-                                                    +
+                                                <button type="button" class="btn btn-primary float-right ml-3"
+                                                        data-toggle="modal" data-target="#varyModal"
+                                                        data-whatever="@mdo">Thêm<span class="fe fe-plus "></span>
                                                 </button>
+                                                <div class="modal fade" id="varyModal" tabindex="-1" role="dialog"
+                                                     aria-labelledby="varyModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="varyModalLabel">
+                                                                    Thêm phiếu giảm giá</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="inputEmail4">Mã phiếu giảm
+                                                                                giá</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   id="inputEmail4" placeholder="Ma"
+                                                                            >
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="inputEmail4">Tên phiếu giảm
+                                                                                giá</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   id="inputEmail4" placeholder="Ma"
+                                                                            >
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-12">
+                                                                            <label for="inputEmail4">Mức giảm</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   id="inputEmail4" placeholder="Ma"
+                                                                            >
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="inputState">Hình thức giảm
+                                                                                giá</label>
+                                                                            <select id="inputState"
+                                                                                    class="form-control">
+                                                                                <option selected>Choose...</option>
+                                                                                <option>...</option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="inputState">Điều kiện sử
+                                                                                dụng</label>
+                                                                            <select id="inputState"
+                                                                                    class="form-control">
+                                                                                <option selected>Choose...</option>
+                                                                                <option>...</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="inputEmail4">Mã phiếu giảm
+                                                                                giá</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   id="inputEmail4" placeholder="Ma"
+                                                                            >
+                                                                        </div>
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="inputEmail4">Tên phiếu giảm
+                                                                                giá</label>
+                                                                            <input type="text" class="form-control"
+                                                                                   id="inputEmail4" placeholder="Ma"
+                                                                            >
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn mb-2 btn-secondary"
+                                                                        data-dismiss="modal">Close
+                                                                </button>
+                                                                <button type="button" class="btn mb-2 btn-primary">Submit
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <button class="btn btn-secondary dropdown-toggle" type="button"
                                                         id="actionMenuButton" data-toggle="dropdown"
                                                         aria-haspopup="true" aria-expanded="false"> Hành động
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="actionMenuButton">
-                                                    <a class="dropdown-item" href="#">Export</a>
-                                                    <!--                                                    <a class="dropdown-item" href="#">Delete</a>-->
-                                                    <!--                                                    <a class="dropdown-item" href="#">Something else here</a>-->
+                                                    <a class="dropdown-item" href="#">Export</a> <a
+                                                        class="dropdown-item" href="#">Something else here</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- table -->
+                                    <!-- Table -->
                                     <table class="table datatables" id="dataTable-1">
                                         <thead>
                                         <tr>
@@ -91,25 +177,26 @@
                                             <td>
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input"
-                                                           th:id="${i.count}">
-                                                    <label class="custom-control-label" th:for="${i.count}"></label>
+                                                           th:id="${number + i.index + 1}">
+                                                    <label class="custom-control-label"
+                                                           th:for="${number + i.index + 1}"></label>
                                                 </div>
                                             </td>
-                                            <td th:text="${i.count}"></td>
-                                            <td th:text="${pgg.maPhieuGiamGia}"></td>
-                                            <td th:text="${pgg.tenPhieuGiamGia}"></td>
-                                            <td th:text="${pgg.mucGiam}"></td>
-                                            <td th:text="${pgg.hinhThucGiamGia == false ? 'Giảm theo số tiền':'Giảm theo %'}"></td>
-                                            <td th:text="${pgg.dieuKienSuDung}"></td>
-                                            <td th:text="${#dates.format(pgg.ngayBatDau, 'dd/MM/yyyy')}"></td>
-                                            <td th:text="${#dates.format(pgg.ngayKetThuc, 'dd/MM/yyyy')}"></td>
+                                            <td th:text="${number + i.index + 1}"></td>
+                                            <td th:text="${pgg.content.maPhieuGiamGia}"></td>
+                                            <td th:text="${pgg.content.tenPhieuGiamGia}"></td>
+                                            <td th:text="${pgg.content.mucGiam}"></td>
+                                            <td th:text="${pgg.content.hinhThucGiamGia == false ? 'Giảm theo số tiền':'Giảm theo %'}"></td>
+                                            <td th:text="${pgg.content.dieuKienSuDung}"></td>
+                                            <td th:text="${#dates.format(pgg.content.ngayBatDau, 'dd/MM/yyyy')}"></td>
+                                            <td th:text="${#dates.format(pgg.content.ngayKetThuc, 'dd/MM/yyyy')}"></td>
                                             <td>
                                                 <div class="custom-control custom-switch">
                                                     <input type="checkbox" class="custom-control-input"
-                                                           th:id="'switch-' + ${i.count}"
-                                                           th:checked="${pgg.trangThai == true }">
+                                                           th:id="'switch-' + ${number + i.index + 1}"
+                                                           th:checked="${pgg.content.trangThai == true }">
                                                     <label class="custom-control-label"
-                                                           th:for="'switch-' + ${i.count}"></label>
+                                                           th:for="'switch-' + ${number + i.index + 1}"></label>
                                                 </div>
                                             </td>
                                             <td style="display: flex">
@@ -123,24 +210,24 @@
                                         </tr>
                                         </tbody>
                                     </table>
+
+<!--                                    Phân trang -->
                                     <nav aria-label="Table Paging" class="mb-0 text-muted">
                                         <ul class="pagination justify-content-end mb-0">
-                                            <li class="page-item" th:class="${listPGG.first ? 'disabled' : ''}">
-                                                <a class="page-link"
-                                                   th:href="@{${'list?page=' + (listPGG.number - 1)}}">Previous</a>
-                                            </li>
-
-                                            <!-- Iterate over page numbers -->
                                             <li class="page-item"
-                                                th:each="pageNumber : ${#numbers.sequence(0, listPGG.totalPages - 1)}"
-                                                th:class="${listPGG.number == pageNumber ? 'active' : ''}">
-                                                <a class="page-link" th:href="@{${'list?page=' + pageNumber}}">[[${pageNumber
-                                                    + 1}]]</a>
+                                                th:classappend="${currentPage == 0} ? 'disabled' : ''">
+                                                <a class="page-link" th:href="@{/list(page=${currentPage - 1})}">Previous</a>
                                             </li>
-
-                                            <li class="page-item" th:class="${listPGG.last ? 'disabled' : ''}">
+                                            <li class="page-item"
+                                                th:each="pageNumber : ${#numbers.sequence(0, listPGG.metadata.totalPages - 1)}"
+                                                th:classappend="${currentPage == pageNumber} ? 'active' : ''">
+                                                <a class="page-link" th:href="@{/list(page=${pageNumber})}"
+                                                   th:text="${pageNumber + 1}">1</a>
+                                            </li>
+                                            <li class="page-item"
+                                                th:classappend="${currentPage == listPGG.metadata.totalPages - 1} ? 'disabled' : ''">
                                                 <a class="page-link"
-                                                   th:href="@{${'list?page=' + (listPGG.number + 1)}}">Next</a>
+                                                   th:href="@{/list(page=${currentPage + 1})}">Next</a>
                                             </li>
                                         </ul>
                                     </nav>

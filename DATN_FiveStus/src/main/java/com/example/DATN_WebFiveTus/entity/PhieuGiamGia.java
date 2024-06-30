@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,6 +31,7 @@ import java.util.Date;
 @Builder
 @ToString
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "phieu_giam_gia")
 public class PhieuGiamGia {
     @Id
