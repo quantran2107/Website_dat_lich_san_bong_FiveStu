@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
 
@@ -41,4 +42,16 @@ public class LoaiSanController {
         loaiSanService.save(loaiSanDTO);
         return "redirect:/listLoaiSan";
     }
+
+    @GetMapping("/loaiSan/edit/{id}")
+    public String edit(@PathVariable("id") Integer id, Model model) {
+        LoaiSanDTO loaiSan = restTemplate.getForObject(
+                "http://localhost:8080/loai-san/{id}",
+                LoaiSanDTO.class,
+                id
+        );
+        model.addAttribute("loaiSan", loaiSan);
+        return "/list/quan-ly-san-bong :: modalContent";
+    }
+
 }
