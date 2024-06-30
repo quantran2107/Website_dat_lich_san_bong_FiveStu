@@ -27,7 +27,7 @@ public class CaRest {
     @GetMapping("hien-thi")
     public ResponseEntity<List> getAll(){
         System.out.println(caService.getAll().toString());
-        return ResponseEntity.ok(caService.getAll());
+        return ResponseEntity.ok(caService.getAllJoinFetch());
     }
 
     @GetMapping("/{id}")

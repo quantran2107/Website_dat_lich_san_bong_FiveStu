@@ -308,7 +308,6 @@
             </div>
 
 
-
             <div class="row justify-content-center">
                 <div class="col-12">
                     <h2 class="mb-2 page-title">Quản lý ca</h2>
@@ -323,10 +322,8 @@
                                             <form class="form-inline">
                                                 <div class="form-row">
                                                     <div class="form-group col-auto mr-auto">
-                                                        <label class="my-1 mr-2 sr-only"
-                                                               for="inlineFormCustomSelectPref1">Show</label>
-                                                        <select class="custom-select mr-sm-2"
-                                                                id="inlineFormCustomSelectPref4">
+                                                        <label class="my-1 mr-2 sr-only" for="inlineFormCustomSelectPref1">Show</label>
+                                                        <select class="custom-select mr-sm-2" id="inlineFormCustomSelectPref4">
                                                             <option value="">...</option>
                                                             <option value="1">12</option>
                                                             <option value="2" selected>32</option>
@@ -336,14 +333,11 @@
                                                     </div>
                                                     <div class="form-group col-auto">
                                                         <label for="search" class="sr-only">Search</label>
-                                                        <input type="text" class="form-control" id="search3" value=""
-                                                               placeholder="Search">
+                                                        <input type="text" class="form-control" id="search3" value="" placeholder="Search">
                                                     </div>
                                                     <div class="form-group col-auto ml-3">
-                                                        <label class="my-1 mr-2 sr-only"
-                                                               for="inlineFormCustomSelectPref">Status</label>
-                                                        <select class="custom-select my-1 mr-sm-2"
-                                                                id="inlineFormCustomSelectPref3">
+                                                        <label class="my-1 mr-2 sr-only" for="inlineFormCustomSelectPref">Status</label>
+                                                        <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref3">
                                                             <option selected>Trạng thái</option>
                                                             <option value="1">Hoạt động</option>
                                                             <option value="2">Kết thúc</option>
@@ -353,22 +347,16 @@
                                                 </div>
                                             </form>
                                         </div>
-                                        <!--                                        Form Add-->
+                                        <!-- Form Add -->
                                         <div class="col ml-auto">
                                             <div class="dropdown float-right">
-                                                <button type="button" class="btn btn-primary float-right ml-3"
-                                                        data-toggle="modal" data-target="#varyModal3"
-                                                        data-whatever="@mdo">Thêm<span class="fe fe-plus "></span>
-                                                </button>
-                                                <div class="modal fade" id="varyModal3" tabindex="-1" role="dialog"
-                                                     aria-labelledby="varyModalLabel" aria-hidden="true">
+                                                <button type="button" class="btn btn-primary float-right ml-3" data-toggle="modal" data-target="#varyModal3" data-whatever="@mdo">Thêm<span class="fe fe-plus "></span></button>
+                                                <div class="modal fade" id="varyModal3" tabindex="-1" role="dialog" aria-labelledby="varyModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="varyModalLabel3">
-                                                                    Thêm ca</h5>
-                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                        aria-label="Close">
+                                                                <h5 class="modal-title" id="varyModalLabel3">Thêm ca</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
@@ -385,28 +373,24 @@
                                                                             <input type="text" class="form-control" id="inputEmail3" th:field="*{tenCa}" placeholder="Tên CA">
                                                                         </div>
                                                                     </div>
-
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
                                                                             <label for="inputEmail3">Gia ca</label>
                                                                             <input type="text" class="form-control" id="inputEmail3" th:field="*{giaCa}" placeholder="Gia ca">
                                                                         </div>
                                                                     </div>
-
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
                                                                             <label for="inputEmail3">thoiGianBatDau</label>
                                                                             <input type="datetime-local" class="form-control" id="inputEmail3" th:field="*{thoiGianBatDau}" placeholder="thoiGianBatDau">
                                                                         </div>
                                                                     </div>
-
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
                                                                             <label for="inputEmail3">thoiGianKetThuc</label>
                                                                             <input type="datetime-local" class="form-control" id="inputEmail3" th:field="*{thoiGianKetThuc}" placeholder="thoiGianKetThuc">
                                                                         </div>
                                                                     </div>
-
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
                                                                             <label for="inputState3">Trang thai</label>
@@ -415,26 +399,16 @@
                                                                             </select>
                                                                         </div>
                                                                     </div>
-
-
-
                                                                     <div class="modal-footer">
-                                                                        <button type="button" class="btn mb-2 btn-secondary"
-                                                                                data-dismiss="modal">Close
-                                                                        </button>
-                                                                        <button type="submit" class="btn mb-2 btn-primary">Add
-                                                                        </button>
+                                                                        <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
+                                                                        <button type="submit" class="btn mb-2 btn-primary">Add</button>
                                                                     </div>
                                                                 </form>
                                                             </div>
-
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                        id="actionMenuButto3" data-toggle="dropdown"
-                                                        aria-haspopup="true" aria-expanded="false"> Hành động
-                                                </button>
+                                                <button class="btn btn-secondary dropdown-toggle" type="button" id="actionMenuButto3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Hành động </button>
                                                 <div class="dropdown-menu" aria-labelledby="actionMenuButton">
                                                     <a class="dropdown-item" href="#">Export</a>
                                                     <a class="dropdown-item" href="#">Something else here</a>
@@ -444,41 +418,157 @@
                                     </div>
                                     <table class="table">
                                         <thead>
-                                        <th>STT</th>
-                                        <th>Ten ca</th>
-                                        <th>Gia ca</th>
-                                        <th>Bat Dau</th>
-                                        <th>Ket Thuc</th>
-                                        <th>Trang thái</th>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Ten ca</th>
+                                            <th>Gia ca</th>
+                                            <th>Bat Dau</th>
+                                            <th>Ket Thuc</th>
+                                            <th>Trang thái</th>
+                                        </tr>
                                         </thead>
                                         <tbody>
                                         <tr th:each="a,b :${listC}">
                                             <td th:text="${b.count}"></td>
                                             <td th:text="${a.tenCa}"></td>
                                             <td th:text="${a.giaCa}"></td>
-                                            <td th:text="${a.thoiGianBatDau}"></td>>
-                                            <td th:text="${a.thoiGianKetThuc}"></td>>
+                                            <td th:text="${a.thoiGianBatDau}"></td>
+                                            <td th:text="${a.thoiGianKetThuc}"></td>
                                             <td th:text="${a.trangThai}"></td>
                                             <td>
-                                                <a th:href="@{/ca/edit/{id}(id=${a.id})}"
-                                                   type="button"
-                                                   class="btn btn-primary"
-                                                   data-toggle="modal"
-                                                   data-target="#varyModal"
-                                                   data-whatever="@mdo">
-                                                    Edit
-                                                </a>
+                                                <a th:href="@{/ca/edit/{id}(id=${a.id})}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#varyModal" data-whatever="@mdo">Edit</a>
                                             </td>
                                         </tr>
                                         </tbody>
                                     </table>
-
                                 </div>
                             </div>
                         </div> <!-- simple table -->
                     </div> <!-- end section -->
                 </div> <!-- .col-12 -->
-            </div>
+            </div> <!-- .row justify-content-center -->
+
+
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <h2 class="mb-2 page-title">Quản lý ngay trong tuan</h2>
+                    <p class="card-text"></p>
+                    <div class="row my-4">
+                        <!-- Small table -->
+                        <div class="col-md-12">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <div class="toolbar row mb-3">
+                                        <div class="col">
+                                            <form class="form-inline">
+                                                <div class="form-row">
+                                                    <div class="form-group col-auto mr-auto">
+                                                        <label class="my-1 mr-2 sr-only" for="inlineFormCustomSelectPref1">Show</label>
+                                                        <select class="custom-select mr-sm-2" id="inlineFormCustomSelectPref5">
+                                                            <option value="">...</option>
+                                                            <option value="1">12</option>
+                                                            <option value="2" selected>32</option>
+                                                            <option value="3">64</option>
+                                                            <option value="3">128</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-auto">
+                                                        <label for="search" class="sr-only">Search</label>
+                                                        <input type="text" class="form-control" id="search5" value="" placeholder="Search">
+                                                    </div>
+                                                    <div class="form-group col-auto ml-3">
+                                                        <label class="my-1 mr-2 sr-only" for="inlineFormCustomSelectPref">Status</label>
+                                                        <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref5s">
+                                                            <option selected>Trạng thái</option>
+                                                            <option value="1">Hoạt động</option>
+                                                            <option value="2">Kết thúc</option>
+                                                            <option value="3">Hold</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!-- Form Add -->
+                                        <div class="col ml-auto">
+                                            <div class="dropdown float-right">
+                                                <button type="button" class="btn btn-primary float-right ml-3" data-toggle="modal" data-target="#varyModal4" data-whatever="@mdo">Thêm<span class="fe fe-plus "></span></button>
+                                                <div class="modal fade" id="varyModal4" tabindex="-1" role="dialog" aria-labelledby="varyModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="varyModalLabel4">Thêm thứ trong tuần</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form th:action="@{/ngayTrongTuan/add}" th:object="${ngayTrongTuan}" th:method="post">
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-6">
+                                                                            <input type="text" class="form-control" th:field="*{id}" hidden>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="inputEmail3">Ngày trong tuần</label>
+                                                                            <input type="checkbox" th:each="a: ${listNTT}" th:value="${a.thuTrongTuan}" th:text="${a.thuTrongTuan}" class="form-control" id="inputEmail5s" th:field="*{thuTrongTuan}" placeholder="thuTrongTuan">
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="inputState3">Trang thai</label>
+                                                                            <select th:field="*{trangThai}" id="inputState3" class="form-control">
+                                                                                <option th:each="a: ${listNTT}" th:value="${a.trangThai}" th:text="${a.trangThai}"></option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
+                                                                        <button type="submit" class="btn mb-2 btn-primary">Add</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-secondary dropdown-toggle" type="button" id="actionMenuButto4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Hành động </button>
+                                                <div class="dropdown-menu" aria-labelledby="actionMenuButton">
+                                                    <a class="dropdown-item" href="#">Export</a>
+                                                    <a class="dropdown-item" href="#">Something else here</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Thứ trong tuần</th>
+                                            <th>Trang thái</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="a,b :${listNTT}">
+                                            <td th:text="${b.count}"></td>
+                                            <td th:text="${a.thuTrongTuan}"></td>
+                                            <td th:text="${a.trangThai}"></td>
+                                            <td>
+                                                <a th:href="@{/ngayTrongTuan/edit/{id}(id=${a.id})}" type="button" class="btn btn-primary" data-toggle="modal" data-target="#varyModal" data-whatever="@mdo">Edit</a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div> <!-- simple table -->
+                    </div> <!-- end section -->
+                </div> <!-- .col-12 -->
+            </div> <!-- .row justify-content-center -->
+
+
+
+
         </div> <!-- .container-fluid -->
         <div th:include="fragment/modal :: modal"></div>
     </main>

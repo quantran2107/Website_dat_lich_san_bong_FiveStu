@@ -23,6 +23,5 @@ public class NgayTrongTuanDTO {
 
     private String thuTrongTuan;
 
-
     private String trangThai;
 }
