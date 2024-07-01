@@ -95,9 +95,9 @@
                                                                             <label>Khách hàng</label>
                                                                             <select th:field="*{idKhachHang}"
                                                                                     class="form-control">
-                                                                                <option th:each="pggItem : ${listFull}"
-                                                                                        th:value="${pggItem.idKhachHang}"
-                                                                                        th:text="${pggItem.hoVaTenKhachHang}">
+                                                                                <option th:each="pggItem : ${listKH}"
+                                                                                        th:value="${pggItem.id}"
+                                                                                        th:text="${pggItem.hoVaTen}">
                                                                                 </option>
                                                                             </select>
                                                                         </div>
@@ -232,39 +232,6 @@
                                                     </form>
                                                 </td>
                                             </div>
-                                            <td>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                           th:id="${number + i.index + 1}">
-                                                    <label class="custom-control-label"
-                                                           th:for="${number + i.index + 1}"></label>
-                                                </div>
-                                            </td>
-                                            <td th:text="${number + i.index + 1}"></td>
-                                            <td th:text="${pgg.content.maPhieuGiamGia}"></td>
-                                            <td th:text="${pgg.content.tenPhieuGiamGia}"></td>
-                                            <td th:text="${pgg.content.mucGiam}"></td>
-                                            <td th:text="${pgg.content.hinhThucGiamGia == false ? 'Giảm theo số tiền':'Giảm theo %'}"></td>
-                                            <td th:text="${pgg.content.dieuKienSuDung}"></td>
-                                            <td th:text="${#dates.format(pgg.content.ngayBatDau, 'dd/MM/yyyy')}"></td>
-                                            <td th:text="${#dates.format(pgg.content.ngayKetThuc, 'dd/MM/yyyy')}"></td>
-                                            <td>
-                                                <div class="custom-control custom-switch">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                           th:id="'switch-' + ${number + i.index + 1}"
-                                                           th:checked="${pgg.content.trangThai == true }">
-                                                    <label class="custom-control-label"
-                                                           th:for="'switch-' + ${number + i.index + 1}"></label>
-                                                </div>
-                                            </td>
-                                            <td style="display: flex">
-                                                <button class="btn mb-2 mr-1 btn-warning" type="button">
-                                                    <span class="fe fe-edit-3"></span>
-                                                </button>
-                                                <button class="btn mb-2 ml-1 btn-danger" type="button">
-                                                    <span class="fe fe-trash-2"></span>
-                                                </button>
-                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
