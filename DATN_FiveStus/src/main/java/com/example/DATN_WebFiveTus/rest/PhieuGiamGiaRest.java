@@ -3,6 +3,7 @@ package com.example.DATN_WebFiveTus.rest;
 import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
 import com.example.DATN_WebFiveTus.service.PhieuGiamGiaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -29,13 +30,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/" ,produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api-phieu-giam-gia/", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PhieuGiamGiaRest {
 
 
     private final PhieuGiamGiaService phieuGiamGiaService;
     private final PagedResourcesAssembler<PhieuGiamGiaDTO> pagedResourcesAssembler;
 
+    @Autowired
     public PhieuGiamGiaRest(PhieuGiamGiaService phieuGiamGiaService,
                             PagedResourcesAssembler<PhieuGiamGiaDTO> pagedResourcesAssembler) {
         this.phieuGiamGiaService = phieuGiamGiaService;
@@ -57,20 +59,26 @@ public class PhieuGiamGiaRest {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Integer id){
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         phieuGiamGiaService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PhieuGiamGiaDTO> getOne(@PathVariable("id") Integer id) {
+        PhieuGiamGiaDTO phieuGiamGiaDTO = phieuGiamGiaService.getOne(id);
+        return ResponseEntity.ok(phieuGiamGiaDTO);
+    }
+
     @PostMapping("save")
-    public ResponseEntity<PhieuGiamGiaDTO> save(@RequestBody PhieuGiamGiaDTO phieuGiamGiaDTO){
-        PhieuGiamGiaDTO phieuGiamGiaDTOSave =phieuGiamGiaService.save(phieuGiamGiaDTO);
+    public ResponseEntity<PhieuGiamGiaDTO> save(@RequestBody PhieuGiamGiaDTO phieuGiamGiaDTO) {
+        PhieuGiamGiaDTO phieuGiamGiaDTOSave = phieuGiamGiaService.save(phieuGiamGiaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(phieuGiamGiaDTOSave);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PhieuGiamGiaDTO> save(@PathVariable("id") Integer id, @RequestBody PhieuGiamGiaDTO phieuGiamGiaDTO){
-        PhieuGiamGiaDTO phieuGiamGiaDTODetail =phieuGiamGiaService.save(phieuGiamGiaDTO);
+    public ResponseEntity<PhieuGiamGiaDTO> update(@PathVariable("id") Integer id, @RequestBody PhieuGiamGiaDTO phieuGiamGiaDTO) {
+        PhieuGiamGiaDTO phieuGiamGiaDTODetail = phieuGiamGiaService.save(phieuGiamGiaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(phieuGiamGiaDTODetail);
     }
 
