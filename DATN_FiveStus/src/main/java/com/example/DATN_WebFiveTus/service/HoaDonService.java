@@ -1,6 +1,9 @@
 package com.example.DATN_WebFiveTus.service;
 
 import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
+import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -15,6 +18,8 @@ public interface HoaDonService {
     HoaDonDTO save(HoaDonDTO hoaDonDTO);
 
     HoaDonDTO update(Integer id, HoaDonDTO hoaDonDTO);
+
+    Page<HoaDonDTO> phanTrang(Pageable pageable);
 
     void delete (Integer id);
 
