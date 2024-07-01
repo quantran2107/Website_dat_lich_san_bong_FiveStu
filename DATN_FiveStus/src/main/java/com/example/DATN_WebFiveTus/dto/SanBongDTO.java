@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.dto;
 
+import com.example.DATN_WebFiveTus.entity.SanCa;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,4 +26,5 @@ public class SanBongDTO {
     private String tenLoaiSan;
 
     private String trangThai;
+
 }

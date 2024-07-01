@@ -5,9 +5,8 @@ import com.example.DATN_WebFiveTus.dto.LoaiSanDTO;
 import com.example.DATN_WebFiveTus.dto.NgayTrongTuanDTO;
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
-import com.example.DATN_WebFiveTus.service.LoaiSanService;
+import com.example.DATN_WebFiveTus.entity.SanCa;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,20 +20,16 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.Arrays;
 
 @Controller
-
-public class LoaiSanController {
-
-    private LoaiSanService loaiSanService;
+public class SanCaController {
 
     private RestTemplate restTemplate;
 
     @Autowired
-    public LoaiSanController(LoaiSanService loaiSanService, RestTemplate restTemplate) {
-        this.loaiSanService = loaiSanService;
+    public SanCaController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    @GetMapping("/listLoaiSan")
+    @GetMapping("/listSanCa")
     public String HienThi(Model model) {
         model.addAttribute("listLS", Arrays.asList(restTemplate.getForObject(
                 "http://localhost:8080/loai-san/hien-thi",
@@ -56,63 +51,68 @@ public class LoaiSanController {
                 SanBongDTO[].class
         )));
 
+        model.addAttribute("listSC", Arrays.asList(restTemplate.getForObject(
+                "http://localhost:8080/san-ca/hien-thi",
+                SanCaDTO[].class
+        )));
+
         model.addAttribute("sanBong",new SanBongDTO());
         model.addAttribute("ca",new CaDTO());
         model.addAttribute("ngayTrongTuan",new NgayTrongTuanDTO());
         model.addAttribute("loaiSan",new LoaiSanDTO());
-        return "/list/quan-ly-san-bong";
+        model.addAttribute("sanCa",new SanCaDTO());
+        return "/list/quan-ly-san-ca";
     }
 
-    @PostMapping("/loaiSan/add")
-    public String add(@ModelAttribute("loaiSan") LoaiSanDTO loaiSanDTO) {
-        RestTemplate restTemplate = new RestTemplate();
-
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://localhost:8080/loai-san");
-
-        restTemplate.postForObject(builder.toUriString(), loaiSanDTO, Void.class);
-
-        return "redirect:/listLoaiSan";
-    }
-
-//    @GetMapping("/loaiSan/edit/{id}")
+//    @GetMapping("/sanCa/edit/{id}")
 //    public String edit(@PathVariable("id") Integer id, Model model) {
-//        System.out.println("Haitam77");
-//        LoaiSanDTO loaiSan = restTemplate.getForObject(
-//                "http://localhost:8080/loai-san/{id}",
-//                LoaiSanDTO.class,
+//        System.out.println("Haahaaa");
+//        SanCa sanCa= restTemplate.getForObject(
+//                "http://localhost:8080/san-ca/{id}",
+//                SanCa.class,
 //                id
 //        );
-//        model.addAttribute("listLS", Arrays.asList(restTemplate.getForObject(
-//                "http://localhost:8080/loai-san/hien-thi",
-//                LoaiSanDTO[].class
+//        model.addAttribute("listSC", Arrays.asList(restTemplate.getForObject(
+//                "http://localhost:8080/san-ca/hien-thi",
+//                CaDTO[].class
 //        )));
 //
-//
-//        model.addAttribute("loaiSan", loaiSan);
-//        return "list/update-loai-san";
+//        model.addAttribute("sanCa", sanCa);
+//        return "list/quan-ly-san-ca";
 //    }
 
-    @GetMapping("/loaiSan/edit/{id}")
-    @ResponseBody
-    public LoaiSanDTO edit(@PathVariable("id") Integer id) {
-        System.out.println("Haahaaa");
-        LoaiSanDTO loaiSanDTO = restTemplate.getForObject(
-                "http://localhost:8080/loai-san/{id}",
-                LoaiSanDTO.class,
-                id
-        );
-
-        return loaiSanDTO;
-    }
-
-    @PostMapping("/loaiSan/update")
-    public String update(@ModelAttribute("loaiSan") LoaiSanDTO loaiSanDTO) {
+    @PostMapping("/sanCa/add")
+    public String add(@ModelAttribute("sanCa") SanCaDTO sanCaDTO) {
         RestTemplate restTemplate = new RestTemplate();
 
-        restTemplate.put("http://localhost:8080/loai-san/{id}", loaiSanDTO, loaiSanDTO.getId());
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://localhost:8080/san-ca");
 
-        return "redirect:/listLoaiSan";
+        restTemplate.postForObject(builder.toUriString(), sanCaDTO, Void.class);
+
+        return "redirect:/listSanCa";
     }
 
+    @GetMapping("/sanCa/edit/{id}")
+    @ResponseBody
+    public SanCaDTO edit(@PathVariable("id") Integer id) {
+        System.out.println("Haahaaa");
+        SanCaDTO sanCaDTO = restTemplate.getForObject(
+                "http://localhost:8080/san-ca/{id}",
+                SanCaDTO.class,
+                id
+        );
+        System.out.println("Gia: " + sanCaDTO.getGia());
+        return sanCaDTO;
+    }
 
+    @PostMapping("/sanCa/update")
+    public String update(@ModelAttribute("sanCa") SanCaDTO sanCaDTO) {
+        System.out.println("UpdATE");
+        RestTemplate restTemplate = new RestTemplate();
+
+        restTemplate.put("http://localhost:8080/san-ca/{id}", sanCaDTO, sanCaDTO.getId());
+        System.out.println("Giá: "+sanCaDTO.getGia());
+
+        return "redirect:/listSanCa";
+    }
 }
