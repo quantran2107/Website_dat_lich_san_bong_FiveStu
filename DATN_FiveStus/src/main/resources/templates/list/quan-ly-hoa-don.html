@@ -45,8 +45,6 @@
                                                             <option selected>Trạng thái</option>
                                                             <option value="1">Hoạt động</option>
                                                             <option value="2">Kết thúc</option>
-                                                            <!--<option value="3">Pending</option>-->
-                                                            <!--<option value="3">Hold</option>-->
                                                         </select>
                                                     </div>
                                                 </div>
@@ -63,8 +61,6 @@
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="actionMenuButton">
                                                     <a class="dropdown-item" href="#">Export</a>
-                                                    <!--<a class="dropdown-item" href="#">Delete</a>-->
-                                                    <!--<a class="dropdown-item" href="#">Something else here</a>-->
                                                 </div>
                                             </div>
                                         </div>
@@ -87,37 +83,104 @@
                                         <tr th:each="hd,i:${listHD}">
                                             <td>
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" th:id="${i.count}">
-                                                    <label class="custom-control-label" th:for="${i.count}"></label>
+                                                    <input type="checkbox" class="custom-control-input"
+                                                           th:id="${number + i.index + 1}">
+                                                    <label class="custom-control-label"
+                                                           th:for="${number + i.index + 1}"></label>
                                                 </div>
                                             </td>
-                                            <td th:text="${i.count}"></td>
-                                            <td th:text="${hd.maHoaDon}"></td>
-                                            <td th:text="${hd.hoVaTenKhachHang}"></td>
-                                            <td th:text="${hd.ngayTao}"></td>
-                                            <td th:text="${hd.tongTien}"></td>
-                                            <td th:text="${hd.trangThai}"></td>
-                                            <td>
-                                                <button class="btn btn-sm dropdown-toggle more-horizontal" type="button"
-                                                        data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
-                                                    <span class="text-muted sr-only">Hành động</span>
+                                            <td th:text="${number + i.index + 1}"></td>
+                                            <td th:text="${hd.content.maHoaDon}"></td>
+                                            <td th:text="${hd.content.hoVaTenKhachHang}"></td>
+                                            <td th:text="${#dates.format(hd.content.ngayTao, 'dd/MM/yyyy')}"></td>
+                                            <td th:text="${hd.content.tongTien}"></td>
+                                            <td th:text="${hd.content.trangThai}"></td>
+                                            <td style="display: flex">
+                                                <button class="btn mb-2 mr-1 btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                    <span class="fe fe-edit-3"></span>
                                                 </button>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <a class="dropdown-item" href="#">Update</a>
-                                                    <a class="dropdown-item" href="#">Remove</a>
-                                                </div>
+                                                <button class="btn mb-2 ml-1 btn-danger" type="button">
+                                                    <span class="fe fe-trash-2"></span>
+                                                </button>
                                             </td>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 50%;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Chi tiết hóa đơn</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form>
+                                                                <div class="form-group">
+                                                                    <label for="tenKhachHang">Tên khách hàng:</label>
+                                                                    <input type="text" class="form-control" id="tenKhachHang" th:value="${hd.content.hoVaTenKhachHang}" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="tenNhanVien">Tên nhân viên:</label>
+                                                                    <input type="text" class="form-control" id="tenNhanVien" th:value="${hd.content.idNhanVien}" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="ngayTao">Ngày tạo:</label>
+                                                                    <input type="text" class="form-control" id="ngayTao" th:value="${#dates.format(hd.content.ngayTao, 'dd/MM/yyyy')}" readonly>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="tongTien">Tổng tiền:</label>
+                                                                    <input type="text" class="form-control" id="tongTien" th:value="${hd.content.tongTien}" readonly>
+                                                                </div>
+                                                                <div class="form-row">
+                                                                    <div class="form-group col-md-4">
+                                                                        <label for="tienCoc">Tiền cọc</label>
+                                                                        <input type="number" class="form-control" id="tienCoc" th:value="${hd.content.tienCoc}" readonly>
+                                                                    </div>
+                                                                    <div class="form-group col-md-4">
+                                                                        <label for="tienConLai">Tiền còn lại</label>
+                                                                        <input type="number" class="form-control" id="tienConLai" th:value="${hd.content.tienConLai}" readonly>
+                                                                    </div>
+                                                                    <div class="form-group col-md-4">
+                                                                        <label for="tienThua">Tiền thừa</label>
+                                                                        <input type="number" class="form-control" id="tienThua" th:value="${hd.content.tienThua}" readonly>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-row">
+                                                                    <div class="form-group col-md-6">
+                                                                        <label for="ngayDenSan">Ngày đến sân</label>
+                                                                        <input type="text" class="form-control" id="ngayDenSan" th:value="${#dates.format(hd.content.ngayDenSan, 'dd/MM/yyyy')}" readonly>
+                                                                    </div>
+                                                                    <div class="form-group col-md-6">
+                                                                        <label for="ngayThanhToan">Ngày thanh toán</label>
+                                                                        <input type="text" class="form-control" id="ngayThanhToan" th:value="${#dates.format(hd.content.ngayThanhToan, 'dd/MM/yyyy')}" readonly>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- Thêm các trường thông tin khác của hóa đơn tại đây -->
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </tr>
                                         </tbody>
                                     </table>
+
+
                                     <nav aria-label="Table Paging" class="mb-0 text-muted">
                                         <ul class="pagination justify-content-end mb-0">
-                                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                                            <li class="page-item"
+                                                th:classappend="${currentPage == 0} ? 'disabled' : ''">
+                                                <a class="page-link" th:href="@{/web-hoa-don(page=${currentPage - 1})}">Previous</a>
+                                            </li>
+                                            <li class="page-item"
+                                                th:each="pageNumber : ${#numbers.sequence(0, listHD.metadata.totalPages - 1)}"
+                                                th:classappend="${currentPage == pageNumber} ? 'active' : ''">
+                                                <a class="page-link" th:href="@{/web-hoa-don(page=${pageNumber})}"
+                                                   th:text="${pageNumber + 1}">1</a>
+                                            </li>
+                                            <li class="page-item"
+                                                th:classappend="${currentPage == listHD.metadata.totalPages - 1} ? 'disabled' : ''">
+                                                <a class="page-link"
+                                                   th:href="@{/web-hoa-don(page=${currentPage + 1})}">Next</a>
+                                            </li>
                                         </ul>
                                     </nav>
                                 </div>
