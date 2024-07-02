@@ -5,15 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7feec345-52a2-495e-846e-fcbecfdd2e37" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/HoaDonRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/HoaDonRest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/fragment/head.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/fragment/head.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-hoa-don.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-hoa-don.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/HoaDonRest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/HoaDonRest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/fragment/sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/fragment/sidebar.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-hoa-don.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-hoa-don.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -49,17 +43,6 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunManager" selected="Spring Boot.DatnWebFiveTusApplication (1)">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="DatnWebFiveTusApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="DATN_FiveStus" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.DATN_WebFiveTus.DatnWebFiveTusApplication" />
@@ -87,7 +70,7 @@
       <workItem from="1719934983217" duration="36000" />
       <workItem from="1719935054056" duration="19000" />
       <workItem from="1719935174955" duration="121000" />
-      <workItem from="1719935309555" duration="296000" />
+      <workItem from="1719935309555" duration="2816000" />
     </task>
     <servers />
   </component>
