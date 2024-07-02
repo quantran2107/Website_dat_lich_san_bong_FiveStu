@@ -84,6 +84,13 @@ public class HoaDonServiceImp implements HoaDonService {
     }
 
     @Override
+    public List<HoaDonDTO> searchHD(String key) {
+        return hoaDonRepository.searchHD(key).stream()
+                .map((hoaDon) -> modelMapper.map(hoaDon, HoaDonDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Page<HoaDonDTO> phanTrang(Pageable pageable) {
         List<HoaDon> hoaDonList = hoaDonRepository.getAllJoinFetch();
 

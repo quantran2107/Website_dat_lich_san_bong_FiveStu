@@ -33,9 +33,10 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group col-auto">
-                                                        <label for="search" class="sr-only">Search</label>
-                                                        <input type="text" class="form-control" id="search" value=""
+                                                        <label for="searchInput" class="sr-only">Search</label>
+                                                        <input type="text" class="form-control" id="searchInput" value=""
                                                                placeholder="Search">
+                                                        <ul id="results"></ul>
                                                     </div>
                                                     <div class="form-group col-auto ml-3">
                                                         <label class="my-1 mr-2 sr-only"
@@ -172,7 +173,8 @@
                                                                         <div class="table-header-custom">
                                                                             <div class="table-row-custom">
                                                                                 <div class="table-cell-custom">STT</div>
-                                                                                <div class="table-cell-custom">Id sân ca</div>
+                                                                                <div class="table-cell-custom">Sân</div>
+                                                                                <div class="table-cell-custom">Ca</div>
                                                                                 <div class="table-cell-custom">Tiền sân</div>
                                                                                 <div class="table-cell-custom">Ghi chú</div>
                                                                                 <div class="table-cell-custom">Trạng thái</div>
@@ -243,7 +245,8 @@
                 var row = $('<div class="table-row-custom"></div>');
 
                 $('<div class="table-cell-custom"></div>').text(index + 1).appendTo(row);
-                $('<div class="table-cell-custom"></div>').text(hdct.idSanCa).appendTo(row);
+                $('<div class="table-cell-custom"></div>').text(hdct.tenSanBong).appendTo(row);
+                $('<div class="table-cell-custom"></div>').text(hdct.tenCa).appendTo(row);
                 $('<div class="table-cell-custom"></div>').text(hdct.tienSan).appendTo(row);
                 $('<div class="table-cell-custom"></div>').text(hdct.ghiChu).appendTo(row);
                 $('<div class="table-cell-custom"></div>').text(hdct.trangThai).appendTo(row);

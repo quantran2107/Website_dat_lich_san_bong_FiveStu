@@ -12,7 +12,10 @@ import java.util.List;
 public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet,Integer> {
     @Query("SELECT hdct FROM HoaDonChiTiet hdct " +
             "JOIN FETCH hdct.hoaDon " +
-            "JOIN FETCH hdct.sanCa ")
+            "JOIN FETCH hdct.sanCa " +
+            "JOIN FETCH hdct.sanCa.sanBong " +
+            "JOIN FETCH hdct.sanCa.ca " +
+            "JOIN FETCH hdct.sanCa.ngayTrongTuan ")
     List<HoaDonChiTiet> getAllJoinFetch();
 
     @Query("SELECT hdct FROM HoaDonChiTiet hdct " +

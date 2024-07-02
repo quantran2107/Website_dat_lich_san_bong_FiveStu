@@ -28,4 +28,8 @@ public class HoaDonChiTietDTO {
 
     private String trangThai;
 
+    private String tenSanBong;
+
+    private String tenCa;
+
 }

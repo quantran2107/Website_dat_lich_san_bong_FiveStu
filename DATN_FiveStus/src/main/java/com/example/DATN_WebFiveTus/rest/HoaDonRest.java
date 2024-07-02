@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -57,4 +58,12 @@ public class HoaDonRest {
         PagedModel<EntityModel<HoaDonDTO>> pagedModel = pagedResourcesAssembler.toModel(hoaDonPage);
         return ResponseEntity.ok(pagedModel);
     }
+
+    @GetMapping("/search/{key}")
+    public ResponseEntity<List<HoaDonDTO>> searchHD(@PathVariable("key") String key) {
+        List<HoaDonDTO> listHoaDon = hoaDonService.searchHD(key);
+        return ResponseEntity.ok(listHoaDon);
+    }
+
+
 }
