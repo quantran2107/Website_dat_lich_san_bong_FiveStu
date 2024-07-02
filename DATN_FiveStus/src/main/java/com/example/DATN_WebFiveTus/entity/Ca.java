@@ -19,8 +19,8 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 
 @AllArgsConstructor
@@ -43,12 +43,13 @@ public class Ca {
     @Column(name = "gia_ca")
     private Float giaCa;
 
+
     @Column(name = "thoi_gian_bat_dau")
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime thoiGianBatDau;
 
     @Column(name = "thoi_gian_ket_thuc")
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime  thoiGianKetThuc;
 
     @Column(name = "trang_thai", length = 50)

@@ -131,6 +131,7 @@
                                                                 <label for="trangThai">Trạng thái</label>
                                                                 <input type="text" class="form-control" id="trangThai" th:value="${khachHang.trangThai == 'active' ? 'Hoạt động' : 'Không hoạt động'}" readonly>
                                                             </div>
+
                                                             <!-- Iterate over addresses -->
                                                             <div th:each="diaChi : ${khachHang.diaChi}">
                                                                 <div class="form-group">
@@ -179,6 +180,10 @@
                                                             <div class="form-group col-md-6">
                                                                 <label for="soDienThoai">Số điện thoại</label>
                                                                 <input type="text" class="form-control" id="soDienThoai" name="soDienThoai" placeholder="Nhập số điện thoại" required>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="soDienThoai">Mật khẩu</label>
+                                                                <input type="text" class="form-control" id="matKhau" name="matKhau"  required>
                                                             </div>
                                                         </div>
                                                         <div class="form-row">

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/head :: head"></head>
+<body class="vertical light">
+<div class="wrapper">
+    <div th:include="fragment/navbar :: navbar"></div>
+    <div th:include="fragment/sidebar :: sidebar"></div>
+    <main role="main" class="main-content">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <h2 class="mb-2 page-title">Quản lý nhân viên</h2>
+                    <p class="card-text"></p>
+                    <div class="row my-4">
+                        <div class="col-md-12">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <div class="toolbar row mb-3">
+                                        <div class="col">
+                                            <form class="form-inline">
+                                                <div class="form-row">
+                                                    <div class="form-group col-auto mr-auto">
+                                                        <label class="my-1 mr-2 sr-only" for="inlineFormCustomSelectPref1">Show</label>
+                                                        <select class="custom-select mr-sm-2" id="inlineFormCustomSelectPref1">
+                                                            <option value="">...</option>
+                                                            <option value="1">12</option>
+                                                            <option value="2" selected>32</option>
+                                                            <option value="3">64</option>
+                                                            <option value="4">128</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-auto">
+                                                        <label for="search" class="sr-only">Search</label>
+                                                        <input type="text" class="form-control" id="search" value="" placeholder="Search">
+                                                    </div>
+                                                    <div class="form-group col-auto ml-3">
+                                                        <label class="my-1 mr-2 sr-only" for="inlineFormCustomSelectPref">Status</label>
+                                                        <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                                                            <option selected>Trạng thái</option>
+                                                            <option value="1">Hoạt động</option>
+                                                            <option value="2">Kết thúc</option>
+                                                            <option value="3">Hold</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col ml-auto">
+                                            <div class="dropdown float-right">
+                                                <button type="button" class="btn btn-primary float-right ml-3" data-toggle="modal" data-target="#addModal" data-whatever="@mdo">Thêm <span class="fe fe-plus"></span></button>
+                                                <button class="btn btn-secondary dropdown-toggle" type="button" id="actionMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hành động</button>
+                                                <div class="dropdown-menu" aria-labelledby="actionMenuButton">
+                                                    <a class="dropdown-item" href="#">Xuất file</a>
+                                                    <a class="dropdown-item" href="#">Hành động khác</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Table -->
+                                    <table class="table datatables" id="dataTable-1">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nhân viên</th>
+                                            <th>Mã nhân viên</th>
+                                            <th>Họ và tên</th>
+                                            <th>Email</th>
+                                            <th>Giới tính</th>
+                                            <th>Số điện thoại</th>
+                                            <th>Địa chỉ</th>
+                                            <th>Trạng thái</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="khachHangTable">
+                                        <tr th:each="nhanVien, i : ${listNV}">
+                                            <td th:text="${i.count}"></td>
+                                            <td th:text="${nhanVien.tenNhanVien}"></td>
+                                            <td th:text="${nhanVien.maNhanVien}"></td>
+                                            <td th:text="${nhanVien.hoTen}"></td>
+                                            <td th:text="${nhanVien.email}"></td>
+                                            <td th:text="${nhanVien.gioiTinh}"></td>
+                                            <td th:text="${nhanVien.soDienThoai}"></td>
+                                            <td th:text="${nhanVien.diaChi}"></td>
+                                            <td th:text="${nhanVien.trangThai}"></td>
+
+
+                                            <td>
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input" id="trangThaiSwitch" th:checked="${nhanVien.trangThai == 'active'}" disabled>
+                                                    <label class="custom-control-label" for="trangThaiSwitch" th:text="${nhanVien.trangThai == 'active' ? 'Hoạt động' : 'Không hoạt động'}"></label>
+                                                </div>
+                                            </td>
+                                            <td style="display: flex">
+                                                <button class="btn mb-2 mr-1 btn-info" type="button" data-toggle="modal" th:data-target="'#detailModal' + ${nhanVien.id}">
+                                                    <span class="fe fe-eye"></span>
+                                                </button>
+                                                <button class="btn mb-2 ml-1 btn-danger" type="button">
+                                                    <span class="fe fe-trash-2"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <!-- Modals for each customer detail -->
+                                    <div th:each="nv : ${listNV}">
+                                        <div class="modal fade" th:id="'detailModal' + ${nv.id}" tabindex="-1" role="dialog" aria-labelledby="'detailModalLabel' + ${nv.id}" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" th:id="'detailModalLabel' + ${nv.id}">Chi tiết nhân viên</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="/update-nhan-vien" method="post" >
+                                                            <input type="hidden" th:name="id" th:value="${nv.id}">
+                                                            <div class="form-group">
+                                                                <label for="tenNhanVien">Tên nhân viên</label>
+                                                                <input type="text" class="form-control" id="tenNhanVien" name="tenNhanVien" th:value="${nv.tenNhanVien}" >
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="maNhanVien">Mã khách hàng</label>
+                                                                <input type="text" class="form-control" id="maNhanVien" name="maNhanVien" th:value="${nv.maNhanVien}" >
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="hoTen">Họ và tên</label>
+                                                                <input type="text" class="form-control" id="hoTen" name="hoTen" th:value="${nv.hoTen}" >
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="email">Email</label>
+                                                                <input type="email" class="form-control" id="email" name="email" th:value="${nv.email}" >
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="soDienThoai">Số điện thoại</label>
+                                                                <input type="text" class="form-control" id="soDienThoai" name="soDienThoai" th:value="${nv.soDienThoai}" >
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="matKhau">Mật khẩu</label>
+                                                                <input type="password" class="form-control" id="matKhau"  name="matKhau" th:value="${nv.matKhau}"  >
+                                                            </div>
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="gioiTinh">Giới tính</label>
+                                                                    <select class="form-control" id="gioiTinh" name="gioiTinh" required>
+                                                                        <option th:value="${nv.gioiTinh}" th:text="${nv.gioiTinh?'Nam':'Nữ'}"></option>
+                                                                        <option th:if="${not nv.gioiTinh}" value="true" >Nam</option>
+                                                                        <option th:if="${nv.gioiTinh}" value="false">Nữ</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="trangThai">Trạng thái</label>
+                                                                    <select class="form-control" id="trangThai" name="trangThai" required>
+                                                                        <option value="active">Hoạt động</option>
+                                                                        <option value="inactive">Không hoạt động</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Iterate over addresses -->
+                                                            <div class="form-group">
+                                                                <label for="diaChi">Địa chỉ</label>
+                                                                <input type="text" class="form-control" id="diaChi" name="diaChi" th:value="${nv.diaChi}" >
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Chỉnh sửa</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Add Customer Modal -->
+                                    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="addModalLabel">Thêm nhân viên</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="/them-nhan-vien" method="post">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <label for="maNhanVien">Mã nhân viên</label>
+                                                                <input type="text" class="form-control" id="maNhanVien" name="maNhanVien" placeholder="Nhập mã nhân viên" required>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="tenNhanVien">Tên nhân viên</label>
+                                                                <input type="text" class="form-control" id="tenNhanVien" name="tenNhanVien" placeholder="Nhập họ và tên" required>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="hoTen">Họ và tên</label>
+                                                                <input type="text" class="form-control" id="hoTen" name="hoTen" placeholder="Nhập họ và tên" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <label for="email">Email</label>
+                                                                <input type="email" class="form-control" id="email" name="email" placeholder="Nhập địa chỉ email" required>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="soDienThoai">Số điện thoại</label>
+                                                                <input type="text" class="form-control" id="soDienThoai" name="soDienThoai" placeholder="Nhập số điện thoại" required>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="matKhau">Mật khẩu</label>
+                                                                <input type="password" class="form-control" id="matKhau" name="matKhau"  required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <label for="gioiTinh">Giới tính</label>
+                                                                <select class="form-control" id="gioiTinh" name="gioiTinh" required>
+                                                                    <option value="true">Nam</option>
+                                                                    <option value="false">Nữ</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="trangThai">Trạng thái</label>
+                                                                <select class="form-control" id="trangThai" name="trangThai" required>
+                                                                    <option value="active">Hoạt động</option>
+                                                                    <option value="inactive">Không hoạt động</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="diaChi">Địa chỉ</label>
+                                                            <input type="text" class="form-control" id="diaChi" name="diaChi" placeholder="Nhập địa chỉ" required>
+                                                        </div>
+
+                                                        <button type="submit" class="btn btn-primary">Thêm</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end section -->
+                </div> <!-- end row -->
+            </div> <!-- end container-fluid -->
+        </div> <!-- end main content -->
+    </main>
+</div>
+<div th:include="fragment/script :: script"></div>
+</body>
+</html>

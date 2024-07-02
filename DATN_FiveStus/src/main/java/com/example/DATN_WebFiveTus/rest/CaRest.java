@@ -40,7 +40,7 @@ public class CaRest {
         return ResponseEntity.status(HttpStatus.CREATED).body(caService.save(caDTO));
     }
 
-    @PutMapping("")
+    @PutMapping("/{id}")
     public ResponseEntity<CaDTO> update(@PathVariable("id") Integer id ,@RequestBody CaDTO caDTO){
         return ResponseEntity.ok(caService.update(id,caDTO));
     }
