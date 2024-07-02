@@ -17,6 +17,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +29,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
+@CrossOrigin()
 @RestController
 @RequestMapping(value = "/api-phieu-giam-gia/", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PhieuGiamGiaRest {
@@ -80,6 +83,46 @@ public class PhieuGiamGiaRest {
     public ResponseEntity<PhieuGiamGiaDTO> update(@PathVariable("id") Integer id, @RequestBody PhieuGiamGiaDTO phieuGiamGiaDTO) {
         PhieuGiamGiaDTO phieuGiamGiaDTODetail = phieuGiamGiaService.save(phieuGiamGiaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(phieuGiamGiaDTODetail);
+    }
+
+    @PutMapping("/toggle-status/{id}")
+    public ResponseEntity<?> toggleStatus(@PathVariable Integer id, @RequestBody Map<String, Boolean> request) {
+        boolean newStatus = request.get("trangThai");
+        try {
+            phieuGiamGiaService.updateStatus(id, newStatus);
+            return ResponseEntity.ok().body("Status updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status");
+        }
+    }
+
+    @DeleteMapping("/delete-soft") // Endpoint đúng cho xóa mềm sử dụng phương thức DELETE
+    public ResponseEntity<Void> deleteSoft(@RequestBody List<Integer> ids) {
+        try {
+            for (Integer id : ids) {
+                PhieuGiamGiaDTO phieuGiamGia = phieuGiamGiaService.getOne(id);
+                if (phieuGiamGia != null) {
+                    phieuGiamGia.setDeletedAt(true); // Đặt cờ deletedAt thành true
+                    phieuGiamGiaService.save(phieuGiamGia); // Lưu entity đã cập nhật
+                } else {
+                    // Xử lý trường hợp không tìm thấy entity với ID tương ứng
+                }
+            }
+            return ResponseEntity.noContent().build(); // Trả về thành công
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<PhieuGiamGiaDTO>> search(@RequestParam String query) {
+        List<PhieuGiamGiaDTO> results = phieuGiamGiaService.search(query);
+        return ResponseEntity.ok(results);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<PhieuGiamGiaDTO>> filter(@RequestParam String status) {
+        return ResponseEntity.ok(phieuGiamGiaService.filter(status));
     }
 
 

@@ -22,33 +22,22 @@
                                     <div class="toolbar row mb-3">
                                         <div class="col">
                                             <form class="form-inline">
+                                                <!--                                                Search-->
                                                 <div class="form-row">
-                                                    <div class="form-group col-auto mr-auto">
-                                                        <label class="my-1 mr-2 sr-only"
-                                                               for="inlineFormCustomSelectPref1">Show</label>
-                                                        <select class="custom-select mr-sm-2"
-                                                                id="inlineFormCustomSelectPref1">
-                                                            <option value="">...</option>
-                                                            <option value="1">12</option>
-                                                            <option value="2" selected>32</option>
-                                                            <option value="3">64</option>
-                                                            <option value="3">128</option>
-                                                        </select>
-                                                    </div>
                                                     <div class="form-group col-auto">
-                                                        <label for="search" class="sr-only">Search</label>
-                                                        <input type="text" class="form-control" id="search" value=""
-                                                               placeholder="Search">
+                                                        <label for="search" class="sr-only">Tìm kiếm</label>
+                                                        <input type="text" class="form-control" id="search"
+                                                               placeholder="Search" oninput="searchTable()">
                                                     </div>
+                                                    <!--                                                    //filter-->
                                                     <div class="form-group col-auto ml-3">
                                                         <label class="my-1 mr-2 sr-only"
-                                                               for="inlineFormCustomSelectPref">Status</label>
+                                                               for="statusFilter">Status</label>
                                                         <select class="custom-select my-1 mr-sm-2"
-                                                                id="inlineFormCustomSelectPref">
-                                                            <option selected>Trạng thái</option>
-                                                            <option value="1">Hoạt động</option>
-                                                            <option value="2">Kết thúc</option>
-                                                            <option value="3">Hold</option>
+                                                                id="statusFilter" onchange="filterTable()">
+                                                            <option value="all" selected>Tất cả</option>
+                                                            <option value="true">Hoạt động</option>
+                                                            <option value="false">Kết thúc</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -162,60 +151,74 @@
                                                         aria-haspopup="true" aria-expanded="false"> Hành động
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="actionMenuButton">
-                                                    <a class="dropdown-item" href="#">Export</a> <a
-                                                        class="dropdown-item" href="#">Something else here</a>
+                                                    <a class="dropdown-item" href="#">Export</a>
+                                                    <a class="dropdown-item" href="#" onclick="deleteSelected()">Xóa
+                                                        những ô đã chọn</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
+
                                     <!-- Table -->
                                     <table class="table datatables" id="dataTable-1">
                                         <thead>
                                         <tr>
-                                            <th></th>
-                                            <th>STT</th>
+                                            <th>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="selectAll">
+                                                    <label class="custom-control-label"
+                                                           for="selectAll"></label>
+                                                </div>
+                                            </th>
+                                            <th>#</th>
                                             <th>Mã</th>
                                             <th>Tên</th>
-                                            <!--                                            <th>Mức giảm</th>-->
-                                            <!--                                            <th>Hình thức giảm</th>-->
-                                            <!--                                            <th>Điều kiện sử dụng</th>-->
                                             <th>Ngày bắt đầu</th>
                                             <th>Ngày kết thúc</th>
                                             <th>Trạng thái</th>
                                             <th>Hành động</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
-                                        <tr th:each="pgg,i:${listPGG}">
+                                        <tbody id="tableBody">
+                                        <tr th:each="pgg,i:${listPGG}"
+                                            th:id="'row_' + ${pgg.content.id}">
                                             <div th:if="${pgg.content.deletedAt == false}">
                                                 <td>
                                                     <div class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input"
-                                                               th:id="${pgg.content.id}">
+                                                        <input type="checkbox"
+                                                               class="custom-control-input  item-checkbox"
+                                                               th:id="${'checkbox_' + pgg.content.id}"
+                                                               th:data-id="${pgg.content.id}"
+                                                        >
                                                         <label class="custom-control-label"
-                                                               th:for="${pgg.content.id}"></label>
+                                                               th:for="${'checkbox_' + pgg.content.id}"></label>
                                                     </div>
                                                 </td>
                                                 <td th:text="${number + i.index + 1}"></td>
-                                                <td th:text="${pgg.content.maPhieuGiamGia}"></td>
-                                                <td th:text="${pgg.content.tenPhieuGiamGia}"></td>
-                                                <!--                                                <td th:text="${pgg.content.mucGiam}"></td>-->
-                                                <!--                                                <td th:text="${pgg.content.hinhThucGiamGia == false-->
-                                                <!--                                                    ? 'Giảm theo số tiền':'Giảm theo %'}"></td>-->
-                                                <!--                                                <td th:text="${pgg.content.dieuKienSuDung}"></td>-->
-                                                <td th:text="${#dates.format(pgg.content.ngayBatDau, 'dd/MM/yyyy')}"></td>
-                                                <td th:text="${#dates.format(pgg.content.ngayKetThuc, 'dd/MM/yyyy')}"></td>
+                                                <td class="maPhieuGiamGia" th:text="${pgg.content.maPhieuGiamGia}"></td>
+                                                <td class="tenPhieuGiamGia"
+                                                    th:text="${pgg.content.tenPhieuGiamGia}"></td>
+                                                <td class="ngayBatDau"
+                                                    th:text="${#dates.format(pgg.content.ngayBatDau, 'dd/MM/yyyy')}">
+                                                </td>
+                                                <td class="ngayKetThuc"
+                                                    th:text="${#dates.format(pgg.content.ngayKetThuc, 'dd/MM/yyyy')}">
+                                                </td>
                                                 <td>
                                                     <div class="custom-control custom-switch">
                                                         <input type="checkbox" class="custom-control-input"
-                                                               th:id="'switch-' + ${pgg.content.id}"
-                                                               th:checked="${pgg.content.trangThai == true }" disabled>
+                                                               th:id="${'switch-' + pgg.content.id}"
+                                                               th:checked="${pgg.content.trangThai}"
+                                                               th:data-id="${pgg.content.id}"
+                                                               onchange="updateVoucherStatus(this)">
                                                         <label class="custom-control-label"
-                                                               th:for="'switch-' + ${pgg.content.id}" disabled></label>
+                                                               th:for="${'switch-' + pgg.content.id}"
+                                                        ></label>
                                                     </div>
                                                 </td>
                                                 <td style="display: flex">
-                                                    <!--                                    Edit-->
+                                                    <!-- Edit-->
                                                     <!-- Form action button to trigger modal -->
                                                     <button class="btn mb-2 mr-1 btn-warning" type="submit"
                                                             data-toggle="modal"
@@ -234,7 +237,7 @@
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <!-- Modal to display details -->
+                                    <!--  details -->
                                     <div class="modal fade" th:each="pgg : ${listFull}"
                                          th:id="'detailModal' + ${pgg.id}"
                                          tabindex="-1" role="dialog"
@@ -244,11 +247,11 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title"
-                                                        th:id="'detailModalLabel' + ${pgg.id}">>
+                                                        th:id="'detailModalLabel' + ${pgg.id}">
                                                         Sửa phiếu giảm giá
                                                     </h5>
-                                                    <button type="button" class="close"
-                                                            data-dismiss="modal" aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
@@ -256,8 +259,7 @@
                                                     <form id="detailForm"
                                                           th:object="${pggDetail}"
                                                           th:method="put"
-                                                          onsubmit="event.preventDefault(); updatePhieuGiamGia(this);"
-                                                    >
+                                                          onsubmit="event.preventDefault(); updatePhieuGiamGia(this);">
                                                         <div class="modal-body">
                                                             <input type="hidden" th:field="*{id}"/>
                                                             <div class="form-row">
@@ -268,7 +270,7 @@
                                                                            placeholder="Ma"
                                                                            th:field="*{maPhieuGiamGia}">
                                                                 </div>
-                                                                <div class="form-group col-md-12">
+                                                                <div class="form-group col-md-6">
                                                                     <label>Tên phiếu giảm giá</label>
                                                                     <input type="text"
                                                                            class="form-control"
@@ -277,7 +279,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-row">
-                                                                <div class="form-group col-md-12">
+                                                                <div class="form-group col-md-6">
                                                                     <label>Khách hàng</label>
                                                                     <select th:field="*{idKhachHang}"
                                                                             class="form-control">
@@ -290,9 +292,7 @@
                                                                         </option>
                                                                     </select>
                                                                 </div>
-                                                            </div>
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-12">
+                                                                <div class="form-group col-md-6">
                                                                     <label>Mức giảm</label>
                                                                     <input type="text"
                                                                            class="form-control"
@@ -302,7 +302,7 @@
                                                             </div>
                                                             <div class="form-row">
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="hinhThucGiamGia">Hình
+                                                                    <label>Hình
                                                                         thức giảm giá</label>
                                                                     <select class="form-control"
                                                                             th:field="*{hinhThucGiamGia}">
@@ -346,10 +346,26 @@
                                                                            th:field="*{ngayKetThuc}">
                                                                 </div>
                                                             </div>
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-12">
+                                                                    <label>Trạng thái</label>
+                                                                    <select class="form-control"
+                                                                            th:field="*{trangThai}">
+                                                                        <option th:field="*{trangThai}"
+                                                                                th:value="${trangThai}"
+                                                                                th:text="${trangThai}"
+                                                                                hidden></option>
+                                                                        <option selected
+                                                                                th:value="true">Hoạt động
+                                                                        </option>
+                                                                        <option th:value="false">Kết thúc
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button"
-                                                                    class="btn mb-2 btn-secondary"
+                                                            <button type="button" class="btn mb-2 btn-secondary"
                                                                     data-dismiss="modal">Close
                                                             </button>
                                                             <button type="submit"
@@ -388,21 +404,42 @@
                     </div> <!-- end section -->
                 </div> <!-- .col-12 -->
             </div> <!-- .row -->
-            <div id="successAlert" class="alert alert-success alert-dismissible fade" role="alert"
-                 style="display: none;">
-                <strong>Success:</strong> <span id="successMessage"></span>
-                <button type="button" class="close" onclick="$('#successAlert').alert('close');" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
         </div> <!-- .container-fluid -->
         <div th:insert="~{fragment/modal :: modal}"></div>
     </main>
 </div>
 </body>
 <div th:insert="~{fragment/script :: script}"></div>
-<script>
 
+<!--Detail-->
+<script th:inline="javascript">
+    function showSuccessToast(message) {
+        Toastify({
+            text: message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            style: {
+                background: "#4CAF50",
+            },
+            stopOnFocus: true
+        }).showToast();
+    }
+
+    function showErrorToast(message) {
+        Toastify({
+            text: message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            style: {
+                background: "#f44336",
+            },
+            stopOnFocus: true
+        }).showToast();
+    }
+
+    /*]]>*/
     function showDetailModal(button) {
         var dataTarget = button.getAttribute("data-target");
         var id = dataTarget.substring(dataTarget.lastIndexOf("#detailModal") + "#detailModal".length);
@@ -423,26 +460,57 @@
                     form.querySelector("select[name='dieuKienSuDung']").value = data.dieuKienSuDung;
                     form.querySelector("input[name='ngayBatDau']").value = data.ngayBatDau;
                     form.querySelector("input[name='ngayKetThuc']").value = data.ngayKetThuc;
+                    form.querySelector("select[name='trangThai']").value = data.trangThai.toString();
                 }
                 $(modal).modal('show');
             })
             .catch(error => console.error('Error:', error));
     }
-</script>
-<script th:inline="javascript">
 
-    function showSuccessToast(message) {
-        Toastify({
-            text: message,
-            duration: 3000,
-            gravity: "top", // Hiển thị ở trên cùng
-            position: "right", // Vị trí hiển thị
-            style: {
-                background: "#4CAF50", // Màu nền
-            },
-            stopOnFocus: true // Dừng khi chú ý vào
-        }).showToast();
+    <!--Switch-->
+
+    /*<![CDATA[*/
+    function updateVoucherStatus(checkbox) {
+        var id = checkbox.getAttribute("data-id");
+        var currentStatus = checkbox.checked; // true: bật, false: tắt
+        if (!checkbox.id.startsWith('switch-')) {
+            // Nếu không phải là switch, không thực hiện
+            return;
+        }
+        if (currentStatus) {
+            // Nếu đang bật, không cho phép
+            checkbox.checked = false; // Không cho phép bật lại
+            showErrorToast('Không thể bật trạng thái,vui lòng chỉnh sửa chi tiết');
+            return;
+        }
+        if (confirm(`Bạn có chắc chắn muốn trạng thái không?`)) {
+            var apiUrl = "http://localhost:8080/api-phieu-giam-gia/toggle-status/" + id;
+
+            fetch(apiUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({"trangThai": currentStatus})
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text(); // Xử lý phản hồi dưới dạng văn bản
+                })
+                .then(responseData => {
+                    console.log('Update successful:', responseData);
+                    showSuccessToast('Cập nhật trạng thái thành công');
+                })
+                .catch(error => {
+                    console.error('Update error:', error);
+                    showErrorToast('Không thể cập nhật trạng thái');
+                });
+        }
     }
+
+    <!--update-->
 
     function updatePhieuGiamGia(form) {
         var id = form.querySelector("input[name='id']").value;
@@ -459,10 +527,10 @@
                 maPhieuGiamGia: formData.get('maPhieuGiamGia'),
                 tenPhieuGiamGia: formData.get('tenPhieuGiamGia'),
                 idKhachHang: formData.get('idKhachHang'),
-                hoVaTenKhachHang: formData.get('hoVaTenKhachHang'),
                 mucGiam: formData.get('mucGiam'),
                 hinhThucGiamGia: formData.get('hinhThucGiamGia'),
                 dieuKienSuDung: formData.get('dieuKienSuDung'),
+                trangThai: formData.get('trangThai'),
                 ngayBatDau: formData.get('ngayBatDau'),
                 ngayKetThuc: formData.get('ngayKetThuc')
             })
@@ -475,20 +543,198 @@
             })
             .then(data => {
                 console.log('Updated successfully:', data);
-                // Đóng modal
+
+                // Close modal
                 $(form.closest('.modal')).modal('hide');
-                // Hiển thị thông báo thành công
+
+                // Show success toast
                 showSuccessToast('Cập nhật phiếu giảm giá thành công');
-                // Load lại dữ liệu mới lên bảng nếu cần
                 setTimeout(() => {
                     window.location.reload();
-                }, 3000); // Đợi 3 giây trước khi tải lại trang
+                }, 1000);
             })
             .catch(error => {
                 console.error('Error updating:', error);
-                // Xử lý lỗi (hiển thị thông báo lỗi, log lỗi, ...)
+                // Handle error (show error message, log error, etc.)
             });
     }
+
+    <!--Xoa nhieu-->
+
+    var reloadOnce = false; // Biến cờ để chỉ load lại trang một lần
+
+    function deleteSelected() {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        var ids = Array.from(checkboxes)
+            .filter(cb => cb.id.startsWith('checkbox_')) // Lọc chỉ những checkbox bắt đầu bằng 'checkbox_'
+            .map(cb => cb.getAttribute('data-id'));
+        if (ids.length === 0) {
+            showErrorToast('Chưa chọn bản ghi để xóa!');
+            return; // Dừng xử lý nếu không có checkbox nào được chọn
+        }
+        if (confirm(`Bạn có chắc chắn muốn xóa ${ids.length} bản ghi đã chọn không?`)) {
+            fetch(`http://localhost:8080/api-phieu-giam-gia/delete-soft`, { // Endpoint cho xóa mềm
+                method: 'DELETE', // Sử dụng phương thức DELETE
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(ids) // Gửi một object chứa các IDs
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    showSuccessToast('Xóa thành công');
+                    // Tải lại dữ liệu sau khi xóa thành công nếu chưa thực hiện
+                    if (!reloadOnce) {
+                        reloadOnce = true;
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1000);
+                    }
+                })
+                .catch(error => {
+                    console.error('Lỗi xóa:', error);
+                });
+        }
+    }
+
+    // Chọn tất cả
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('selectAll').addEventListener('change', function () {
+            var checkboxes = document.querySelectorAll('input[type="checkbox"].custom-control-input');
+            checkboxes.forEach(function (checkbox) {
+                if (checkbox.id.startsWith('checkbox_')) {
+                    checkbox.checked = this.checked;
+                }
+            }, this);
+        });
+    });
+
+    // Search
+    $(document).ready(function () {
+        // Lắng nghe sự kiện khi người dùng nhập liệu vào ô tìm kiếm
+        $('#search').on('input', function () {
+            searchTable(); // Gọi hàm searchTable() mỗi khi có sự thay đổi trong ô tìm kiếm
+        });
+    });
+
+    function updateTableBody(searchResults) {
+        // Clear existing table body content
+        const tableBody = document.getElementById('tableBody');
+        tableBody.innerHTML = '';
+
+        // Loop through search results and create table rows
+        searchResults.forEach(pgg => {
+            var row = '<tr id="row_' + pgg.id + '">';
+            row += '<td>';
+            row += '<div class="custom-control custom-checkbox">';
+            row += '<input type="checkbox" class="custom-control-input item-checkbox" id="checkbox_' + pgg.id + '" data-id="' + pgg.id + '">';
+            row += '<label class="custom-control-label" for="checkbox_' + pgg.id + '"></label>';
+            row += '</div>';
+            row += '</td>';
+            row += '<td>' + pgg.id + '</td>';
+            row += '<td class="maPhieuGiamGia">' + pgg.maPhieuGiamGia + '</td>';
+            row += '<td class="tenPhieuGiamGia">' + pgg.tenPhieuGiamGia + '</td>';
+            row += '<td class="ngayBatDau">' + moment(pgg.ngayBatDau).format('DD/MM/YYYY') + '</td>';
+            row += '<td class="ngayKetThuc">' + moment(pgg.ngayKetThuc).format('DD/MM/YYYY') + '</td>';
+            row += '<td>';
+            row += '<div class="custom-control custom-switch">';
+            row += '<input type="checkbox" class="custom-control-input" id="switch-' + pgg.id + '" data-id="' + pgg.id + '" ' + (pgg.trangThai ? 'checked' : '') + '>';
+            row += '<label class="custom-control-label" for="switch-' + pgg.id + '"></label>';
+            row += '</div>';
+            row += '</td>';
+            row += '<td style="display: flex">';
+            row += '<button class="btn mb-2 mr-1 btn-warning" type="button" data-toggle="modal" th:data-target="\'#detailModal' + pgg.id + '\'" onclick="showDetailModal(' + pgg.id + ')">';
+            row += '<span class="fe fe-edit-3"></span>';
+            row += '</button>';
+            row += '<form action="/remove-pgg/' + pgg.id + '" method="post">';
+            row += '<button class="btn mb-2 ml-1 btn-danger" type="submit">';
+            row += '<span class="fe fe-trash-2"></span>';
+            row += '</button>';
+            row += '</form>';
+            row += '</td>';
+            row += '</tr>';
+            tableBody.innerHTML += row; // Thêm hàng vào bảng
+        });
+    }
+
+
+    // Hàm searchTable() để gửi yêu cầu tìm kiếm và cập nhật bảng
+    function searchTable() {
+        // Get the search query from the input field
+        const searchQuery = document.getElementById('search').value;
+        console.log(searchQuery)
+        // Make an AJAX request to the server-side search endpoint
+        fetch('/api-phieu-giam-gia/search?query=' + encodeURIComponent(searchQuery), {
+            method: 'GET', // Phương thức GET để lấy dữ liệu
+            headers: {
+                'Content-Type': 'application/json' // Thiết lập header nếu cần thiết
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse JSON response
+            })
+            .then(data => {
+                // Update table body with search results
+                updateTableBody(data);
+                if (data.length > 0) {
+                    showDetailModal(data[0].id); // Lấy id của phần tử đầu tiên trong mảng data
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching search results:', error);
+                // Xử lý lỗi ở đây (ví dụ: hiển thị thông báo lỗi cho người dùng)
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Đoạn mã JavaScript của bạn ở đây
+        // Ví dụ: Đăng ký sự kiện onchange cho dropdown
+        const statusFilter = document.getElementById('statusFilter');
+        if (statusFilter) {
+            statusFilter.addEventListener('change', filterTable);
+        }
+    });
+
+
+    function filterTable() {
+        const statusFilter = document.getElementById('statusFilter').value;
+        if (statusFilter) {
+            const selectedValue = statusFilter.value;
+            fetch('/api-phieu-giam-gia/filter?status=' + statusFilter, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    updateTableBody(data);
+                    if (data.length > 0) {
+                        showDetailModal(data[0].id); // Gọi lại hàm showDetailModal với ID của bản ghi đầu tiên
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching filtered results:', error);
+                    // Xử lý lỗi ở đây (ví dụ: hiển thị thông báo lỗi cho người dùng)
+                });
+        } else {
+            console.error('Element with id "statusFilter" not found.');
+        }
+    }
+
 </script>
 
 </html>

@@ -56,6 +56,9 @@ public class PhieuGiamGiaController {
     @Autowired
     private KhachHangRest khachHangRest;
 
+    @Autowired
+    private PhieuGiamGiaService phieuGiamGiaService;
+
 
     @GetMapping("phieu-giam-gia")
     public String listPhieuGiamGia(@RequestParam(defaultValue = "0") int page, Model model) {
@@ -131,7 +134,7 @@ public class PhieuGiamGiaController {
         return "PGG-" + UUID.randomUUID().toString().replace("-", "").substring(0, 8).toUpperCase();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/detail-phieu-giam-gia/{id}")
     public String viewUpdate(@RequestParam(defaultValue = "0") int page,
                              @PathVariable("id") Integer id, Model model) {
         String apiUrl = "http://localhost:8080/api-phieu-giam-gia/" + id;
@@ -178,6 +181,31 @@ public class PhieuGiamGiaController {
         return "redirect:/phieu-giam-gia";
     }
 
+    public String toggleStatus(@PathVariable("id") Integer id, Model model) {
+
+        String apiUrl = "http://localhost:8080/api-phieu-giam-gia/toggle-status/" + id;
+
+        try {
+            // Gửi yêu cầu PUT để cập nhật trạng thái
+            ResponseEntity<Void> responseEntity = restTemplate.exchange(
+                    apiUrl,
+                    HttpMethod.PUT,
+                    null,
+                    Void.class);
+
+            if (responseEntity.getStatusCode().is2xxSuccessful()) {
+                model.addAttribute("success", "Đã cập nhật trạng thái thành công");
+            } else {
+                model.addAttribute("error", "Lỗi khi cập nhật trạng thái");
+            }
+        } catch (RestClientException e) {
+            // Xử lý ngoại lệ nếu gửi yêu cầu API thất bại
+            e.printStackTrace(); // Ví dụ: Log hoặc xử lý khác
+            model.addAttribute("error", "Lỗi khi gửi yêu cầu cập nhật đến server");
+        }
+
+        return "redirect:/phieu-giam-gia";
+    }
 }
 
 
