@@ -12,6 +12,6 @@ public interface HoaDonRepository extends JpaRepository<HoaDon,Integer> {
     @Query("SELECT hd FROM HoaDon hd " +
             "JOIN FETCH hd.khachHang " +
             "JOIN FETCH hd.nhanVien " +
-            "JOIN FETCH hd.phieuGiamGia where hd.deletedAt=true")
+            "JOIN FETCH hd.phieuGiamGia")
     List<HoaDon> getAllJoinFetch();
 }

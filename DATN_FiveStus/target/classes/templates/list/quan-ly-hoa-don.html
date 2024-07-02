@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:include="fragment/head :: head"></head>
-<body class="vertical  light  ">
+<body class="vertical light">
 <div class="wrapper">
     <div th:include="fragment/navbar :: navbar"></div>
     <div th:include="fragment/sidebar :: sidebar"></div>
@@ -68,8 +68,7 @@
                                     <!-- table -->
                                     <table class="table datatables" id="dataTable-1">
                                         <thead>
-                                        <tr >
-                                            <th></th>
+                                        <tr>
                                             <th>STT</th>
                                             <th>Mã hóa đơn</th>
                                             <th>Tên khách hàng</th>
@@ -80,13 +79,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="hd,i:${listHD}">
-                                            <td>
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" th:id="${'checkbox-' + (number + i.index + 1)}">
-                                                    <label class="custom-control-label" th:for="${'checkbox-' + (number + i.index + 1)}"></label>
-                                                </div>
-                                            </td>
+                                        <tr th:each="hd, i : ${listHD}">
                                             <td th:text="${number + i.index + 1}"></td>
                                             <td th:text="${hd.content.maHoaDon}"></td>
                                             <td th:text="${hd.content.hoVaTenKhachHang}"></td>
@@ -94,51 +87,40 @@
                                             <td th:text="${hd.content.tongTien}"></td>
                                             <td th:text="${hd.content.trangThai}"></td>
                                             <td style="display: flex">
-                                                <button class="btn mb-2 mr-1 btn-warning" data-bs-toggle="modal"
-                                                        th:data-bs-target="'#detailModal' + ${hd.content.id}">
+                                                <button class="btn mb-2 mr-1 btn-warning" data-toggle="modal"
+                                                        th:data-target="'#detailModal' + ${hd.content.id}"
+                                                        onclick="showDetailModal(this)">
                                                     <span class="fe fe-eye"></span>
                                                 </button>
-                                                <button class="btn mb-2 ml-1 btn-danger" type="button">
-                                                    <span class="fe fe-trash-2"></span>
-                                                </button>
-                                                <nav class="vertnav navbar navbar-light">
-                                                    <ul class="navbar-nav flex-fill w-100 mb-2">
-                                                        <li class="nav-item dropdown">
-                                                            <a th:href="'#dashboard-' + ${hd != null && hd.content != null ? hd.content.id : ''}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
-                                                                <span class="ml-3 item-text">Dashboard</span>
-                                                                <span class="sr-only">(current)</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </nav>
-
                                             </td>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" th:id="'detailModal' + ${hd.content.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 50%;">
+                                            <div class="modal fade" th:id="'detailModal' + ${hd.content.id}" tabindex="-1" role="dialog" aria-labelledby="detailHoaDon" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 75%;">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Chi tiết hóa đơn</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            <h5 class="modal-title" id="detailHoaDon" th:text="${hd.content.maHoaDon}"></h5>
+                                                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <form>
-                                                                <div class="form-group">
-                                                                    <label for="tenKhachHang">Tên khách hàng:</label>
-                                                                    <input type="text" class="form-control" id="tenKhachHang" th:value="${hd.content.hoVaTenKhachHang}" readonly>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label for="tenNhanVien">Tên nhân viên:</label>
-                                                                    <input type="text" class="form-control" id="tenNhanVien" th:value="${hd.content.idNhanVien}" readonly>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label for="ngayTao">Ngày tạo:</label>
-                                                                    <input type="text" class="form-control" id="ngayTao" th:value="${#dates.format(hd.content.ngayTao, 'dd/MM/yyyy')}" readonly>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label for="tongTien">Tổng tiền:</label>
-                                                                    <input type="text" class="form-control" id="tongTien" th:value="${hd.content.tongTien}" readonly>
+                                                                <div class="form-row">
+                                                                    <div class="form-group col-3">
+                                                                        <label for="tenKhachHang">Tên khách hàng</label>
+                                                                        <input type="text" class="form-control" id="tenKhachHang" th:value="${hd.content.hoVaTenKhachHang}" readonly>
+                                                                    </div>
+                                                                    <div class="form-group col-3">
+                                                                        <label for="tenNhanVien">Tên nhân viên</label>
+                                                                        <input type="text" class="form-control" id="tenNhanVien" th:value="${hd.content.tenNhanVien}" readonly>
+                                                                    </div>
+                                                                    <div class="form-group col-3">
+                                                                        <label for="ngayTao">Ngày tạo</label>
+                                                                        <input type="text" class="form-control" id="ngayTao" th:value="${#dates.format(hd.content.ngayTao, 'dd/MM/yyyy')}" readonly>
+                                                                    </div>
+                                                                    <div class="form-group col-3">
+                                                                        <label for="tongTien">Tổng tiền</label>
+                                                                        <input type="text" class="form-control" id="tongTien" th:value="${hd.content.tongTien}" readonly>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="form-row">
                                                                     <div class="form-group col-md-4">
@@ -154,49 +136,62 @@
                                                                         <input type="number" class="form-control" id="tienThua" th:value="${hd.content.tienThua}" readonly>
                                                                     </div>
                                                                 </div>
+                                                                <div class="form-group">
+                                                                    <label for="ghiChu">Ghi chú</label>
+                                                                    <textarea class="form-control" id="ghiChu" rows="2" th:text="${hd.content.ghiChu}" readonly></textarea>
+                                                                </div>
                                                                 <div class="form-row">
-                                                                    <div class="form-group col-md-6">
+                                                                    <div class="form-group col-md-4">
+                                                                        <label for="trangThai">Trạng thái</label>
+                                                                        <input type="text" class="form-control" id="trangThai" th:value="${hd.content.trangThai}" readonly>
+                                                                    </div>
+                                                                    <div class="form-group col-md-4">
                                                                         <label for="ngayDenSan">Ngày đến sân</label>
                                                                         <input type="text" class="form-control" id="ngayDenSan" th:value="${#dates.format(hd.content.ngayDenSan, 'dd/MM/yyyy')}" readonly>
                                                                     </div>
-                                                                    <div class="form-group col-md-6">
+                                                                    <div class="form-group col-md-4">
                                                                         <label for="ngayThanhToan">Ngày thanh toán</label>
                                                                         <input type="text" class="form-control" id="ngayThanhToan" th:value="${#dates.format(hd.content.ngayThanhToan, 'dd/MM/yyyy')}" readonly>
                                                                     </div>
                                                                 </div>
                                                                 <!-- Thêm các trường thông tin khác của hóa đơn tại đây -->
                                                             </form>
+                                                            <nav class="vertnav navbar navbar-light">
+                                                                <ul class="navbar-nav flex-fill w-100 mb-2">
+                                                                    <li class="nav-item dropdown">
+                                                                        <a th:href="'#dashboard-' + ${hd.content.id}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                                                                            <span class="ml-3 item-text">Chi tiết Hóa đơn</span>
+                                                                            <span class="sr-only">(current)</span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </nav>
+                                                            <ul class="collapse list-unstyled pl-4 w-100" th:id="'dashboard-' + ${hd.content.id}">
+                                                                <li class="nav-item active">
+                                                                    <div class="table-custom datatables-custom" id="dataTable-1-custom">
+                                                                        <div class="table-header-custom">
+                                                                            <div class="table-row-custom">
+                                                                                <div class="table-cell-custom">STT</div>
+                                                                                <div class="table-cell-custom">Id sân ca</div>
+                                                                                <div class="table-cell-custom">Tiền sân</div>
+                                                                                <div class="table-cell-custom">Ghi chú</div>
+                                                                                <div class="table-cell-custom">Trạng thái</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="table-body-custom">
+                                                                            <!-- Dòng dữ liệu -->
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
+                                            <!-- End Modal -->
                                         </tr>
                                         </tbody>
-
-
-
                                     </table>
-
-                                    <tr th:each="hd,i:${listHD}">
-                                        <ul class="collapse list-unstyled pl-4 w-100" th:id="'dashboard-' + ${hd != null && hd.content != null ? hd.content.id : ''}">
-                                            <li class="nav-item active">
-                                                <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Default</span></a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Analytics</span></a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">E-commerce</span></a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Saas Dashboard</span></a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Systems</span></a>
-                                            </li>
-                                        </ul>
-                                    </tr>
 
                                     <nav aria-label="Table Paging" class="mb-0 text-muted">
                                         <ul class="pagination justify-content-end mb-0">
@@ -230,4 +225,32 @@
 </div>
 </body>
 <div th:include="fragment/script :: script"></div>
+<script th:inline="javascript">
+    function showDetailModal(button) {
+        var dataTarget = button.getAttribute("data-target");
+        var idHoaDon = dataTarget.substring(dataTarget.lastIndexOf("#detailModal") + "#detailModal".length);
+
+        // Gọi API để lấy dữ liệu chi tiết hóa đơn
+        var apiURL = "http://localhost:8080/hoa-don-chi-tiet/hien-thi/" + idHoaDon;
+        $.get(apiURL, function (data) {
+            var listHDCT = data;
+
+            // Xử lý dữ liệu nhận được
+            var tableBody = $('#dataTable-1-custom .table-body-custom');
+            tableBody.empty();
+
+            $.each(listHDCT, function (index, hdct) {
+                var row = $('<div class="table-row-custom"></div>');
+
+                $('<div class="table-cell-custom"></div>').text(index + 1).appendTo(row);
+                $('<div class="table-cell-custom"></div>').text(hdct.idSanCa).appendTo(row);
+                $('<div class="table-cell-custom"></div>').text(hdct.tienSan).appendTo(row);
+                $('<div class="table-cell-custom"></div>').text(hdct.ghiChu).appendTo(row);
+                $('<div class="table-cell-custom"></div>').text(hdct.trangThai).appendTo(row);
+
+                row.appendTo(tableBody);
+            });
+        });
+    }
+</script>
 </html>

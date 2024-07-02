@@ -23,8 +23,8 @@ import java.util.List;
 @RequestMapping(value = "/hoa-don/" ,produces = MediaType.APPLICATION_JSON_VALUE)
 public class HoaDonRest {
 
-    private final HoaDonService hoaDonService;
-    private final PagedResourcesAssembler<HoaDonDTO> pagedResourcesAssembler;
+    private HoaDonService hoaDonService;
+    private PagedResourcesAssembler<HoaDonDTO> pagedResourcesAssembler;
 
     @Autowired
     public HoaDonRest(HoaDonService hoaDonService, PagedResourcesAssembler<HoaDonDTO> pagedResourcesAssembler) {

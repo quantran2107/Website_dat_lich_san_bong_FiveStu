@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.dto;
 
+import com.example.DATN_WebFiveTus.entity.SanCa;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
