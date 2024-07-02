@@ -12,6 +12,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,6 +93,45 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu giảm giá với id " + id));
         entity.setDeletedAt(true); // Cập nhật trạng thái xóa mềm
         phieuGiamGiaRepository.save(entity);
+    }
+
+    @Override
+    public void updateStatus(Integer id, boolean newStatus) {
+        PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("PhieuGiamGia not found with id " + id));
+        phieuGiamGia.setTrangThai(newStatus);
+        phieuGiamGiaRepository.save(phieuGiamGia);
+    }
+
+    @Override
+    public void deleteMultiple(List<Integer> ids) {
+        List<PhieuGiamGia> phieuGiamGiaList = phieuGiamGiaRepository.findAllById(ids);
+        phieuGiamGiaList.stream()
+                .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
+                .collect(Collectors.toList()).forEach(phieuGiamGiaDTO -> phieuGiamGiaDTO.setDeletedAt(true));
+        phieuGiamGiaRepository.saveAll(phieuGiamGiaList);
+    }
+
+    @Override
+    public List<PhieuGiamGiaDTO> search(String query) {
+        List<PhieuGiamGia> results = phieuGiamGiaRepository.searchByNameOrCode(query);
+        return results.stream()
+                .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PhieuGiamGiaDTO> filter(String status) {
+        if ("all".equals(status)) {
+            return phieuGiamGiaRepository.findAll().stream()
+                    .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
+                    .collect(Collectors.toList());
+        } else {
+            boolean isActive = "true".equals(status);
+            return phieuGiamGiaRepository.filterByStatus(isActive).stream()
+                    .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
+                    .collect(Collectors.toList());
+        }
     }
 
 }
