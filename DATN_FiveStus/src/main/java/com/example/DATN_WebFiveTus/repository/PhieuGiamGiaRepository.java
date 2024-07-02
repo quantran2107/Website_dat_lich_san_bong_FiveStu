@@ -6,13 +6,31 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia,Integer> {
+public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, Integer> {
     @Query("SELECT pgg FROM PhieuGiamGia pgg " +
             "JOIN FETCH pgg.khachHang where pgg.deletedAt=false")
     Page<PhieuGiamGia> getAllJoinFetch(Pageable pageable);
+
+    @Query("SELECT pgg FROM PhieuGiamGia pgg " +
+            "JOIN FETCH pgg.khachHang " +
+            "WHERE (pgg.tenPhieuGiamGia LIKE %:query% OR pgg.maPhieuGiamGia LIKE %:query%) " +
+            "AND pgg.deletedAt = false")
+    List<PhieuGiamGia> searchByNameOrCode(@Param("query") String query);
+
+    @Query("SELECT pgg FROM PhieuGiamGia pgg " +
+            "JOIN FETCH pgg.khachHang " +
+            "WHERE pgg.trangThai = :status " +
+            "AND pgg.deletedAt = false")
+    List<PhieuGiamGia> filterByStatus(@Param("status") boolean status);
+
+    @Query("SELECT pgg FROM PhieuGiamGia pgg " +
+            "JOIN FETCH pgg.khachHang " +
+            "WHERE pgg.deletedAt = false")
+    List<PhieuGiamGia> getAllJoinFetch();
 }
