@@ -3,6 +3,7 @@ package com.example.DATN_WebFiveTus.rest;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
 import com.example.DATN_WebFiveTus.service.SanCaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,9 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @CrossOrigin("*")
 @RestController
 @RequestMapping("san-ca")
@@ -58,4 +63,38 @@ public class SanCaRest {
         sanCaService.deletedAt(id);
        return ResponseEntity.ok().build();
     }
+
+//    @GetMapping("/sort/{pageNum}")
+//    public ResponseEntity<List> sortSanCa(){
+//
+//    }
+
+    @GetMapping("/sort")
+    public Map<String, Object> getSanCa(
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "desc") String sortDirection) {
+        int[] totalPageElement = new int[2];
+        List<SanCaDTO> sanCaDTOList = sanCaService.listAll2(pageNum, sortDirection, totalPageElement);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("totalPages", totalPageElement[0]);
+        response.put("totalElements", totalPageElement[1]);
+        response.put("sanCaList", sanCaDTOList);
+
+        return response;
+    }
+//
+//    @GetMapping("/sanCaList")
+//    public String getSanCaList(
+//            @RequestParam(defaultValue = "1") Integer pageNum,
+//            @RequestParam(defaultValue = "asc") String sortDirection,
+//            Model model) {
+//        List<SanCaDTO> sanCaDTOList = sanCaService.listAll2(pageNum, sortDirection);
+//
+//        model.addAttribute("sanCaList", sanCaDTOList);
+//        model.addAttribute("currentPage", pageNum);
+//        model.addAttribute("sortDirection", sortDirection);
+//
+//        return "sanCaList"; // Trả về tên của view template (sanCaList.html trong trường hợp này)
+//    }
 }

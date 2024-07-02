@@ -19,15 +19,14 @@
                                             <div class="dropdown float-right">
                                                 <button type="button" class="btn btn-primary float-right ml-3"
                                                         data-toggle="modal" data-target="#varyModal"
-                                                        data-whatever="@mdo">Thêm<span class="fe fe-plus "></span>
+                                                        data-whatever="@mdo">Thêm<span class="fe fe-plus"></span>
                                                 </button>
                                                 <div class="modal fade" id="varyModal" tabindex="-1" role="dialog"
                                                      aria-labelledby="varyModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="varyModalLabel">
-                                                                    Thêm sân ca</h5>
+                                                                <h5 class="modal-title" id="varyModalLabel">Thêm sân ca</h5>
                                                                 <button type="button" class="close" data-dismiss="modal"
                                                                         aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
@@ -54,7 +53,7 @@
                                                                     </div>
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
-                                                                            <label for="addNgayTrongTuan">ngayTrongTuan</label>
+                                                                            <label for="addNgayTrongTuan">Ngày trong tuần</label>
                                                                             <select id="addNgayTrongTuan" class="form-control" th:field="*{idNgayTrongTuan}">
                                                                                 <option th:each="c : ${listNTT}" th:value="${c.id}" th:text="${c.thuTrongTuan}"></option>
                                                                             </select>
@@ -62,14 +61,14 @@
                                                                     </div>
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
-                                                                            <label for="addTrangThai">trangThai</label>
+                                                                            <label for="addTrangThai">Trạng thái</label>
                                                                             <select id="addTrangThai" class="form-control" th:field="*{trangThai}">
-                                                                                <option th:each="d : ${listSC}" th:value="${d.trangThai}" th:text="${d.trangThai}"></option>
+                                                                                <option th:each="d : ${listTT}" th:value="${d}" th:text="${d}"></option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row">
-                                                                        <label for="addGia">Gia</label>
+                                                                        <label for="addGia">Giá</label>
                                                                         <input type="text" class="form-control" th:field="*{gia}" id="addGia">
                                                                     </div>
                                                                     <div class="modal-footer">
@@ -77,7 +76,6 @@
                                                                         <button type="submit" class="btn mb-2 btn-primary">ADD</button>
                                                                     </div>
                                                                 </form>
-
                                                             </div>
                                                         </div>
                                                     </div>
@@ -96,17 +94,17 @@
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th>STT</th>
-                                            <th>tenCa</th>
-                                            <th>tenSanBong</th>
-                                            <th>thuTrongTuan</th>
-                                            <th>trangThai</th>
-                                            <th>gia</th>
+                                            <th><a th:href="@{/sort-page(pageNum=${currentPage}, sortField='tenCa', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">STT</a></th>
+                                            <th><a th:href="@{/sort-page(pageNum=${currentPage}, sortField='tenCa', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Tên Ca</a></th>
+                                            <th><a th:href="@{/sort-page(pageNum=${currentPage}, sortField='tenSanBong', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Tên Sân Bóng</a></th>
+                                            <th><a th:href="@{/sort-page(pageNum=${currentPage}, sortField='thuTrongTuan', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Ngày Trong Tuần</a></th>
+                                            <th><a th:href="@{/sort-page(pageNum=${currentPage}, sortField='trangThai', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Trạng Thái</a></th>
+                                            <th><a th:href="@{/sort-page(pageNum=${currentPage}, sortField='gia', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Giá</a></th>
                                             <th>Hành động</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="a, b : ${listSC}">
+                                        <tr th:each="a, b : ${sanCaDTOList}">
                                             <td th:text="${b.count}"></td>
                                             <td th:text="${a.tenCa}"></td>
                                             <td th:text="${a.tenSanBong}"></td>
@@ -119,12 +117,26 @@
                                         </tr>
                                         </tbody>
                                     </table>
+                                    <div class="pagination">
+                                        <ul class="pagination">
+                                            <li th:classappend="${currentPage == 1} ? 'disabled'">
+                                                <a th:href="@{/sort-page(pageNum=${currentPage - 1}, sortField=${sortField}, sortDirection=${sortDirection})}">&laquo;</a>
+                                            </li>
+                                            <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
+                                                <a th:href="@{/sort-page(pageNum=${i}, sortField=${sortField}, sortDirection=${sortDirection})}" th:text="${i}">1</a>
+                                            </li>
+                                            <li th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                                <a th:href="@{/sort-page(pageNum=${currentPage + 1}, sortField=${sortField}, sortDirection=${sortDirection})}">&raquo;</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
         <div th:include="fragment/modal :: modal"></div>
     </main>
@@ -171,7 +183,7 @@
                         <div class="form-group col-md-6">
                             <label for="editTrangThai">trangThai</label>
                             <select id="editTrangThai" class="form-control" th:field="*{trangThai}">
-                                <option th:each="d : ${listSC}" th:value="${d.trangThai}" th:text="${d.trangThai}"></option>
+                                <option th:each="d : ${listTT}" th:value="${d}" th:text="${d}"></option>
                             </select>
                         </div>
                     </div>

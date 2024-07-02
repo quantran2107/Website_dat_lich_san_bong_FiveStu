@@ -1,6 +1,9 @@
 package com.example.DATN_WebFiveTus.repository;
 
 import com.example.DATN_WebFiveTus.entity.SanCa;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +24,10 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
     @Transactional
     @Query("UPDATE SanCa sc SET sc.deletedAt = FALSE WHERE sc.id = :id")
     void deletedAt(Integer id);
+
+    @Query("SELECT sc FROM SanCa sc")
+    List<SanCa> findBySanCaSort(Sort sort);
+
+    @Query("SELECT sc FROM SanCa sc")
+    Page<SanCa> findBySanCaPage(Pageable  pageable);
 }

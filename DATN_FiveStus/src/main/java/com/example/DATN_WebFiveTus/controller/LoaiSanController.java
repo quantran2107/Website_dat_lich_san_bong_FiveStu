@@ -5,6 +5,10 @@ import com.example.DATN_WebFiveTus.dto.LoaiSanDTO;
 import com.example.DATN_WebFiveTus.dto.NgayTrongTuanDTO;
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
+import com.example.DATN_WebFiveTus.rest.CaRest;
+import com.example.DATN_WebFiveTus.rest.LoaiSanRest;
+import com.example.DATN_WebFiveTus.rest.NgayTrongTuanRest;
+import com.example.DATN_WebFiveTus.rest.SanBongRest;
 import com.example.DATN_WebFiveTus.service.LoaiSanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,23 +23,43 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 
 public class LoaiSanController {
 
-    private LoaiSanService loaiSanService;
-
     private RestTemplate restTemplate;
 
+    private SanBongRest sanBongRest;
+
+    private LoaiSanRest loaiSanRest;
+
+    private CaRest caRest;
+
+    private NgayTrongTuanRest ngayTrongTuanRest;
+
     @Autowired
-    public LoaiSanController(LoaiSanService loaiSanService, RestTemplate restTemplate) {
-        this.loaiSanService = loaiSanService;
+    public LoaiSanController(RestTemplate restTemplate, SanBongRest sanBongRest, LoaiSanRest loaiSanRest, CaRest caRest, NgayTrongTuanRest ngayTrongTuanRest) {
         this.restTemplate = restTemplate;
+        this.sanBongRest = sanBongRest;
+        this.loaiSanRest = loaiSanRest;
+        this.caRest = caRest;
+        this.ngayTrongTuanRest = ngayTrongTuanRest;
     }
 
     @GetMapping("/listLoaiSan")
     public String HienThi(Model model) {
+        List<LoaiSanDTO> listRest = loaiSanRest.getAll().getBody();
+        Set<String> listTTLS = new HashSet<>(listRest.stream()
+                .map(LoaiSanDTO::getTrangThai)
+                .collect(Collectors.toList()));
+
+        model.addAttribute("listTTLS",listTTLS);
+
         model.addAttribute("listLS", Arrays.asList(restTemplate.getForObject(
                 "http://localhost:8080/loai-san/hien-thi",
                 LoaiSanDTO[].class

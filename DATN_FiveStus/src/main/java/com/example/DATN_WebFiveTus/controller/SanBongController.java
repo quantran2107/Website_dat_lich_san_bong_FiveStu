@@ -4,6 +4,10 @@ import com.example.DATN_WebFiveTus.dto.CaDTO;
 import com.example.DATN_WebFiveTus.dto.LoaiSanDTO;
 import com.example.DATN_WebFiveTus.dto.NgayTrongTuanDTO;
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
+import com.example.DATN_WebFiveTus.rest.CaRest;
+import com.example.DATN_WebFiveTus.rest.LoaiSanRest;
+import com.example.DATN_WebFiveTus.rest.NgayTrongTuanRest;
+import com.example.DATN_WebFiveTus.rest.SanBongRest;
 import com.example.DATN_WebFiveTus.service.SanBongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,22 +21,57 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class SanBongController {
 
-    private SanBongService sanBongService;
-
     private RestTemplate restTemplate;
 
+    private SanBongRest sanBongRest;
+
+    private LoaiSanRest loaiSanRest;
+
+    private CaRest caRest;
+
+    private NgayTrongTuanRest ngayTrongTuanRest;
+
     @Autowired
-    public SanBongController(SanBongService sanBongService, RestTemplate restTemplate) {
-        this.sanBongService = sanBongService;
+    public SanBongController(RestTemplate restTemplate, SanBongRest sanBongRest, LoaiSanRest loaiSanRest, CaRest caRest, NgayTrongTuanRest ngayTrongTuanRest) {
         this.restTemplate = restTemplate;
+        this.sanBongRest = sanBongRest;
+        this.loaiSanRest = loaiSanRest;
+        this.caRest = caRest;
+        this.ngayTrongTuanRest = ngayTrongTuanRest;
     }
 
     @GetMapping("/listSanBong")
     public String HienThi(Model model) {
+
+        List<LoaiSanDTO> listRest1 = loaiSanRest.getAll().getBody();
+        Set<String> listTTLS = new HashSet<>(listRest1.stream()
+                .map(LoaiSanDTO::getTrangThai)
+                .collect(Collectors.toList()));
+
+        model.addAttribute("listTTLS",listTTLS);
+
+        List<SanBongDTO> listRest2 = sanBongRest.getAll().getBody();
+        Set<String> listTTSB = new HashSet<>(listRest2.stream()
+                .map(SanBongDTO::getTrangThai)
+                .collect(Collectors.toList()));
+
+        model.addAttribute("listTTSB",listTTSB);
+
+        List<CaDTO> listRest3 = caRest.getAll().getBody();
+        Set<String> listTTC = new HashSet<>(listRest3.stream()
+                .map(CaDTO::getTrangThai)
+                .collect(Collectors.toList()));
+
+        model.addAttribute("listTTC",listTTC);
+
         model.addAttribute("listLS", Arrays.asList(restTemplate.getForObject(
                 "http://localhost:8080/loai-san/hien-thi",
                 LoaiSanDTO[].class
