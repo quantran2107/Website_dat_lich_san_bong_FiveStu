@@ -57,9 +57,9 @@
                                                                             <label for="inputState">Trạng thái</label>
                                                                             <select th:field="*{trangThai}" id="inputState"
                                                                                     class="form-control">
-                                                                                <option th:each="b: ${listLS}"
-                                                                                        th:value="${b.trangThai}"
-                                                                                        th:text="${b.trangThai}"></option>
+                                                                                <option th:each="b: ${listTTLS}"
+                                                                                        th:value="${b}"
+                                                                                        th:text="${b}"></option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -140,9 +140,9 @@
                                         <label for="inputState">Trạng thái</label>
                                         <select th:field="*{trangThai}" id="inputState"
                                                 class="form-control">
-                                            <option th:each="b: ${listLS}"
-                                                    th:value="${b.trangThai}"
-                                                    th:text="${b.trangThai}"></option>
+                                            <option th:each="b: ${listTTLS}"
+                                                    th:value="${b}"
+                                                    th:text="${b}"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -208,9 +208,9 @@
                                                                             <label for="inputState2">Trạng thái</label>
                                                                             <select th:field="*{trangThai}" id="inputState2"
                                                                                     class="form-control">
-                                                                                <option th:each="a: ${listSB}"
-                                                                                        th:value="${a.trangThai}"
-                                                                                        th:text="${a.trangThai}"></option>
+                                                                                <option th:each="a: ${listTTSB}"
+                                                                                        th:value="${a}"
+                                                                                        th:text="${a}"></option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -308,8 +308,9 @@
                                     <div class="form-group col-md-6">
                                         <label for="editTrangThai2">Trạng thái</label>
                                         <select id="editTrangThai2" class="form-control" th:field="*{trangThai}">
-                                            <option th:each="a: ${listSB}" th:value="${a.trangThai}"
-                                                    th:text="${a.trangThai}"></option>
+                                            <option th:each="a: ${listTTSB}"
+                                                    th:value="${a}"
+                                                    th:text="${a}"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -396,7 +397,7 @@
                                                                         <div class="form-group col-md-6">
                                                                             <label for="trangThaiCa">Trạng thái</label>
                                                                             <select id="trangThaiCa" class="form-control" th:field="*{trangThai}">
-                                                                                <option th:each="a : ${listC}" th:value="${a.trangThai}" th:text="${a.trangThai}"></option>
+                                                                                <option th:each="a : ${listTTC}" th:value="${a}" th:text="${a}"></option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -496,7 +497,7 @@
                                     <div class="form-group col-md-6">
                                         <label for="editTrangThaiCa">Trạng thái</label>
                                         <select id="editTrangThaiCa" class="form-control" th:field="*{trangThai}">
-                                            <option th:each="a : ${listC}" th:value="${a.trangThai}" th:text="${a.trangThai}"></option>
+                                            <option th:each="a : ${listTTC}" th:value="${a}" th:text="${a}"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -620,7 +621,7 @@
             <!-- Modal Edit -->
             <div class="modal fade" id="editModal4" tabindex="-1" role="dialog" aria-labelledby="editModalLabel4"
                  aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="editModalLabel4">Chỉnh sửa thứ trong tuần</h5>
@@ -631,16 +632,17 @@
                         <div class="modal-body">
                             <form th:action="@{/ngayTrongTuan/update}" th:object="${ngayTrongTuan}" th:method="post">
                                 <input type="hidden" th:field="*{id}" id="editId4">
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="editNgayTrongTuan">Ngày trong tuần</label>
-                                        <input type="checkbox" th:each="a: ${listNTT}" th:value="${a.thuTrongTuan}"
-                                               th:text="${a.thuTrongTuan}" class="form-control" id="editNgayTrongTuan"
-                                               th:field="*{thuTrongTuan}" placeholder="Ngày trong tuần">
-                                    </div>
-                                </div>
 
                                 <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label>Ngày trong tuần</label><br>
+                                        <div th:each="a: ${listNTT}" class="form-check form-check-inline">
+                                            <input type="checkbox" th:value="${a.thuTrongTuan}" th:id="'editNgayTrongTuan-' + ${a.id}"
+                                                   th:field="*{thuTrongTuan}" class="form-check-input">
+                                            <label th:for="'editNgayTrongTuan-' + ${a.id}" class="form-check-label"
+                                                   th:text="${a.thuTrongTuan}"></label>
+                                        </div>
+                                    </div>
                                     <div class="form-group col-md-6">
                                         <label for="editTrangThaiNgayTrongTuan">Trạng thái</label>
                                         <select th:field="*{trangThai}" id="editTrangThaiNgayTrongTuan" class="form-control">
@@ -648,15 +650,17 @@
                                         </select>
                                     </div>
                                 </div>
+
                                 <div class="modal-footer">
-                                    <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn mb-2 btn-primary">Update</button>
+                                    <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Đóng</button>
+                                    <button type="submit" class="btn mb-2 btn-primary">Cập nhật</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+
 
 
 
@@ -738,28 +742,30 @@
                 url: '/ngayTrongTuan/edit/' + id,
                 method: 'GET',
                 success: function(data) {
+                    // Set the hidden field value
                     $('#editId4').val(data.id);
 
-                    // Đặt lại thuộc tính checked cho từng checkbox
-                    var selectedDays = data.thuTrongTuan; // Dữ liệu từ server, mảng các ngày đã chọn
-                    $('input[type=checkbox]').each(function() {
-                        var checkboxValue = $(this).val();
-                        if (selectedDays.includes(checkboxValue)) {
-                            $(this).prop('checked', true); // Đánh dấu là checked nếu checkboxValue có trong selectedDays
-                        } else {
-                            $(this).prop('checked', false); // Bỏ đánh dấu checked nếu checkboxValue không có trong selectedDays
-                        }
+                    // Uncheck all checkboxes first
+                    $('input[name="thuTrongTuan"]').prop('checked', false);
+
+                    // Check checkboxes based on retrieved data
+                    data.thuTrongTuan.forEach(function(value) {
+                        $('input[name="thuTrongTuan"][value="' + value + '"]').prop('checked', true);
                     });
 
+                    // Set the select option
                     $('#editTrangThaiNgayTrongTuan').val(data.trangThai);
 
-                    // Hiển thị modal chỉnh sửa
+                    // Show the modal
                     $('#editModal4').modal('show');
                 }
             });
         });
     });
 </script>
+
+
+
 
 </body>
 <div th:include="fragment/script :: script"></div>
