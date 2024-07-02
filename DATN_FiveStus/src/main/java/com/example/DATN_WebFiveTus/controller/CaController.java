@@ -4,6 +4,9 @@ import com.example.DATN_WebFiveTus.dto.CaDTO;
 import com.example.DATN_WebFiveTus.dto.LoaiSanDTO;
 import com.example.DATN_WebFiveTus.dto.NgayTrongTuanDTO;
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
+import com.example.DATN_WebFiveTus.dto.SanCaDTO;
+import com.example.DATN_WebFiveTus.entity.Ca;
+import com.example.DATN_WebFiveTus.rest.CaRest;
 import com.example.DATN_WebFiveTus.service.CaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +20,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class CaController {
@@ -25,14 +32,24 @@ public class CaController {
 
     private RestTemplate restTemplate;
 
+    private CaRest caRest;
+
     @Autowired
-    public CaController(CaService caService, RestTemplate restTemplate) {
+    public CaController(CaService caService, RestTemplate restTemplate, CaRest caRest) {
         this.caService = caService;
         this.restTemplate = restTemplate;
+        this.caRest = caRest;
     }
 
     @GetMapping("/listCa")
     public String HienThi(Model model) {
+        List<CaDTO> listRest = caRest.getAll().getBody();
+        Set<String> listTT = new HashSet<>(listRest.stream()
+                .map(CaDTO::getTrangThai)
+                .collect(Collectors.toList()));
+
+        model.addAttribute("listTT",listTT);
+
         model.addAttribute("listNTT", Arrays.asList(restTemplate.getForObject(
                 "http://localhost:8080/ngay-trong-tuan/hien-thi",
                 NgayTrongTuanDTO[].class

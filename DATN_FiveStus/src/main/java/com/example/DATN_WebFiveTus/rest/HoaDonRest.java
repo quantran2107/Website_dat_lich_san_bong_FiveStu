@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -23,8 +24,8 @@ import java.util.List;
 @RequestMapping(value = "/hoa-don/" ,produces = MediaType.APPLICATION_JSON_VALUE)
 public class HoaDonRest {
 
-    private final HoaDonService hoaDonService;
-    private final PagedResourcesAssembler<HoaDonDTO> pagedResourcesAssembler;
+    private HoaDonService hoaDonService;
+    private PagedResourcesAssembler<HoaDonDTO> pagedResourcesAssembler;
 
     @Autowired
     public HoaDonRest(HoaDonService hoaDonService, PagedResourcesAssembler<HoaDonDTO> pagedResourcesAssembler) {
@@ -57,4 +58,11 @@ public class HoaDonRest {
         PagedModel<EntityModel<HoaDonDTO>> pagedModel = pagedResourcesAssembler.toModel(hoaDonPage);
         return ResponseEntity.ok(pagedModel);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<HoaDonDTO>> search(@RequestParam String key) {
+        List<HoaDonDTO> results = hoaDonService.searchHD(key);
+        return ResponseEntity.ok(results);
+    }
+
 }
