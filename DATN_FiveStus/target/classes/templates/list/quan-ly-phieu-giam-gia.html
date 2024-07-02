@@ -733,9 +733,6 @@
                     })
                     .then(data => {
                         updateTableBody(data);
-                        // if (data.length > 0) {
-                        //     showDetailModal(data[0].id); // Gọi lại hàm showDetailModal với ID của bản ghi đầu tiên
-                        // }
                     })
                     .catch(error => {
                         console.error('Error fetching filtered results:', error);
