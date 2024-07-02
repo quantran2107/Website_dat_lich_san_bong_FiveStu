@@ -117,9 +117,9 @@ public class SanCaController {
         RestTemplate restTemplate = new RestTemplate();
 
         restTemplate.put("http://localhost:8080/san-ca/{id}", sanCaDTO, sanCaDTO.getId());
-        System.out.println("Giá: "+sanCaDTO.getGia());
+   
 
-        return "redirect:/listSanCa";
+        return "redirect:/sort-page";
     }
 
     @GetMapping("/sort-page")
