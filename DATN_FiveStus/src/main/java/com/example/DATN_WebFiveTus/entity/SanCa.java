@@ -47,7 +47,7 @@ public class SanCa {
     private NgayTrongTuan ngayTrongTuan;
 
     @Column(name = "gia")
-    private float gia;
+    private Double gia;
 
 
     @Column(name = "trang_thai", length = 50)

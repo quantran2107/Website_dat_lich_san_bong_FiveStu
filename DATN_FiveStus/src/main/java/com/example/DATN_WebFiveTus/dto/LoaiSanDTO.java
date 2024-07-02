@@ -20,5 +20,6 @@ public class LoaiSanDTO {
     private String tenLoaiSan;
 
     private String trangThai;
+
 }
 

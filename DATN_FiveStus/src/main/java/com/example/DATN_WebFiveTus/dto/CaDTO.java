@@ -8,7 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -25,11 +27,9 @@ public class CaDTO {
 
     private Float giaCa;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime thoiGianBatDau;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime  thoiGianKetThuc;
+    private LocalDateTime thoiGianKetThuc;
 
     private String trangThai;
 }

@@ -23,25 +23,26 @@ public class SanCaDTO {
 
     private int id;
 
+    private Double gia;
 
     private Integer idCa;
 
-    @JsonIgnore
+//    @JsonIgnore
     private String tenCa;
 
     private Integer idSanBong;
 
-    @JsonIgnore
+//    @JsonIgnore
     private String tenSanBong;
 
 
     private Integer idNgayTrongTuan;
 
-    @JsonIgnore
+//    @JsonIgnore
     private String thuTrongTuan;
 
     private String trangThai;
 
-    private float gia;
+
 
 }

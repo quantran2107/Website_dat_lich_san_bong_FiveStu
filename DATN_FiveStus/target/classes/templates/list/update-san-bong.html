@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/head :: head"></head>
+<body class="vertical  light  ">
+<div class="wrapper">
+    <div th:include="fragment/navbar :: navbar"></div>
+    <div th:include="fragment/sidebar :: sidebar"></div>
+    <main role="main" class="main-content">
+        <div class="container-fluid">
+            <h2 class="mb-2 page-title">Update loại sân bóng</h2>
+            <form th:action="@{/loaiSan/update}" th:object="${loaiSan}" th:method="post">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label> ID loại sân</label>
+                        <input type="text" class="form-control" th:field="*{id}" hidden>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail4">Tên loại sân</label>
+                        <input type="text" class="form-control" id="inputEmail4" th:field="*{tenLoaiSan}" placeholder="Tên loại sân">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputState">Trang thai</label>
+                        <select th:field="*{trangThai}" id="inputState" class="form-control">
+                            <option th:each="b: ${listLS}" th:value="${b.trangThai}" th:text="${b.trangThai}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn mb-2 btn-primary">Update
+                    </button>
+                </div>
+            </form>
+
+        </div> <!-- .container-fluid -->
+        <div th:include="fragment/modal :: modal"></div>
+    </main>
+</div>
+</body>
+<div th:include="fragment/script :: script"></div>
+</html>

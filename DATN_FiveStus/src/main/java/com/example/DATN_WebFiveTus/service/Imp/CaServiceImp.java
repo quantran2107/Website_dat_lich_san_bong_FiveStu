@@ -50,7 +50,6 @@ public class CaServiceImp implements CaService {
                 -> new ResourceNotfound("Không tồn tại ca id: "+id));
         ca.setTenCa(caDTO.getTenCa());
         ca.setTrangThai(caDTO.getTrangThai());
-        ca.setGiaCa(caDTO.getGiaCa());
         ca.setThoiGianBatDau(caDTO.getThoiGianBatDau());
         ca.setThoiGianKetThuc(caDTO.getThoiGianKetThuc());
         Ca caUpdate=caRepository.save(ca);

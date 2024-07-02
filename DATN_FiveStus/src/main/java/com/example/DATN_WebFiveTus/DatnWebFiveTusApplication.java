@@ -31,6 +31,4 @@ public class DatnWebFiveTusApplication {
         return restTemplate;
     }
 
-
-
 }
