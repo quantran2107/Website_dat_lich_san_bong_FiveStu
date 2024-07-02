@@ -302,8 +302,7 @@
                                                             </div>
                                                             <div class="form-row">
                                                                 <div class="form-group col-md-6">
-                                                                    <label>Hình
-                                                                        thức giảm giá</label>
+                                                                    <label>Hình thức giảm giá</label>
                                                                     <select class="form-control"
                                                                             th:field="*{hinhThucGiamGia}">
                                                                         <option th:field="*{hinhThucGiamGia}"
@@ -311,11 +310,9 @@
                                                                                 th:text="${hinhThucGiamGia}"
                                                                                 hidden></option>
                                                                         <option selected
-                                                                                th:value="true">Giảm
-                                                                            theo số tiền
+                                                                                th:value="true">Giảm theo số tiền
                                                                         </option>
-                                                                        <option th:value="false">Giảm
-                                                                            theo %
+                                                                        <option th:value="false">Giảm theo %
                                                                         </option>
                                                                     </select>
                                                                 </div>
@@ -440,9 +437,16 @@
     }
 
     /*]]>*/
-    function showDetailModal(button) {
-        var dataTarget = button.getAttribute("data-target");
-        var id = dataTarget.substring(dataTarget.lastIndexOf("#detailModal") + "#detailModal".length);
+    function showDetailModal(param) {
+        var id;
+        if (typeof param === "object") {
+            var button = param;
+            var dataTarget = button.getAttribute("data-target");
+            id = dataTarget.substring(dataTarget.lastIndexOf("#detailModal") + "#detailModal".length);
+        } else {
+            id = param;
+        }
+
         var modal = document.getElementById("detailModal" + id);
         var apiUrl = "http://localhost:8080/api-phieu-giam-gia/" + id;
 
@@ -456,7 +460,7 @@
                     form.querySelector("input[name='tenPhieuGiamGia']").value = data.tenPhieuGiamGia;
                     form.querySelector("select[name='idKhachHang']").value = data.idKhachHang;
                     form.querySelector("input[name='mucGiam']").value = data.mucGiam;
-                    form.querySelector("select[name='hinhThucGiamGia']").value = data.hinhThucGiamGia.toString(); // Chuyển đổi sang chuỗi nếu cần
+                    form.querySelector("select[name='hinhThucGiamGia']").value = data.hinhThucGiamGia.toString();
                     form.querySelector("select[name='dieuKienSuDung']").value = data.dieuKienSuDung;
                     form.querySelector("input[name='ngayBatDau']").value = data.ngayBatDau;
                     form.querySelector("input[name='ngayKetThuc']").value = data.ngayKetThuc;
@@ -623,92 +627,57 @@
     });
 
     function updateTableBody(searchResults) {
-        // Clear existing table body content
         const tableBody = document.getElementById('tableBody');
         tableBody.innerHTML = '';
+        let serialNumber = 1;
+        searchResults.forEach((result, index) => {
+            const row = document.createElement('tr');
+            row.setAttribute('id', 'row_' + result.id);
 
-        // Loop through search results and create table rows
-        searchResults.forEach(pgg => {
-            var row = '<tr id="row_' + pgg.id + '">';
-            row += '<td>';
-            row += '<div class="custom-control custom-checkbox">';
-            row += '<input type="checkbox" class="custom-control-input item-checkbox" id="checkbox_' + pgg.id + '" data-id="' + pgg.id + '">';
-            row += '<label class="custom-control-label" for="checkbox_' + pgg.id + '"></label>';
-            row += '</div>';
-            row += '</td>';
-            row += '<td>' + pgg.id + '</td>';
-            row += '<td class="maPhieuGiamGia">' + pgg.maPhieuGiamGia + '</td>';
-            row += '<td class="tenPhieuGiamGia">' + pgg.tenPhieuGiamGia + '</td>';
-            row += '<td class="ngayBatDau">' + moment(pgg.ngayBatDau).format('DD/MM/YYYY') + '</td>';
-            row += '<td class="ngayKetThuc">' + moment(pgg.ngayKetThuc).format('DD/MM/YYYY') + '</td>';
-            row += '<td>';
-            row += '<div class="custom-control custom-switch">';
-            row += '<input type="checkbox" class="custom-control-input" id="switch-' + pgg.id + '" data-id="' + pgg.id + '" ' + (pgg.trangThai ? 'checked' : '') + '>';
-            row += '<label class="custom-control-label" for="switch-' + pgg.id + '"></label>';
-            row += '</div>';
-            row += '</td>';
-            row += '<td style="display: flex">';
-            row += '<button class="btn mb-2 mr-1 btn-warning" type="button" data-toggle="modal" th:data-target="\'#detailModal' + pgg.id + '\'" onclick="showDetailModal(' + pgg.id + ')">';
-            row += '<span class="fe fe-edit-3"></span>';
-            row += '</button>';
-            row += '<form action="/remove-pgg/' + pgg.id + '" method="post">';
-            row += '<button class="btn mb-2 ml-1 btn-danger" type="submit">';
-            row += '<span class="fe fe-trash-2"></span>';
-            row += '</button>';
-            row += '</form>';
-            row += '</td>';
-            row += '</tr>';
-            tableBody.innerHTML += row; // Thêm hàng vào bảng
+            row.innerHTML = `
+
+                    <td>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input item-checkbox" id="checkbox_${result.id}" data-id="${result.id}">
+                            <label class="custom-control-label" for="checkbox_${result.id}"></label>
+                        </div>
+                    </td>
+                    <td>${serialNumber}</td>
+                    <td class="maPhieuGiamGia">${result.maPhieuGiamGia}</td>
+                    <td class="tenPhieuGiamGia">${result.tenPhieuGiamGia}</td>
+                    <td class="ngayBatDau">${new Date(result.ngayBatDau).toLocaleDateString('vi-VN')}</td>
+                    <td class="ngayKetThuc">${new Date(result.ngayKetThuc).toLocaleDateString('vi-VN')}</td>
+                    <td>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="switch-${result.id}" ${result.trangThai ? 'checked' : ''} data-id="${result.id}" onchange="updateVoucherStatus(this)">
+                            <label class="custom-control-label" for="switch-${result.id}"></label>
+                        </div>
+                    </td>
+                    <td style="display: flex">
+                        <!-- Edit -->
+                        <button class="btn mb-2 mr-1 btn-warning" type="button" data-toggle="modal" data-target="#detailModal${result.id}" onclick="showDetailModal(${result.id})">
+                            <span class="fe fe-edit-3"></span>
+                        </button>
+                        <!-- Delete -->
+                        <form action="/remove-pgg/${result.id}" method="post">
+                            <button class="btn mb-2 ml-1 btn-danger" type="submit">
+                                <span class="fe fe-trash-2"></span>
+                            </button>
+                        </form>
+                    </td>
+
+            `;
+            tableBody.appendChild(row);
+            serialNumber++;
         });
     }
 
 
-    // Hàm searchTable() để gửi yêu cầu tìm kiếm và cập nhật bảng
-    function searchTable() {
-        // Get the search query from the input field
-        const searchQuery = document.getElementById('search').value;
-        console.log(searchQuery)
-        // Make an AJAX request to the server-side search endpoint
-        fetch('/api-phieu-giam-gia/search?query=' + encodeURIComponent(searchQuery), {
-            method: 'GET', // Phương thức GET để lấy dữ liệu
-            headers: {
-                'Content-Type': 'application/json' // Thiết lập header nếu cần thiết
-            }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json(); // Parse JSON response
-            })
-            .then(data => {
-                // Update table body with search results
-                updateTableBody(data);
-                if (data.length > 0) {
-                    showDetailModal(data[0].id); // Lấy id của phần tử đầu tiên trong mảng data
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching search results:', error);
-                // Xử lý lỗi ở đây (ví dụ: hiển thị thông báo lỗi cho người dùng)
-            });
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        // Đoạn mã JavaScript của bạn ở đây
-        // Ví dụ: Đăng ký sự kiện onchange cho dropdown
-        const statusFilter = document.getElementById('statusFilter');
-        if (statusFilter) {
-            statusFilter.addEventListener('change', filterTable);
-        }
-    });
-
-
-    function filterTable() {
-        const statusFilter = document.getElementById('statusFilter').value;
-        if (statusFilter) {
-            const selectedValue = statusFilter.value;
-            fetch('/api-phieu-giam-gia/filter?status=' + statusFilter, {
+        // Hàm searchTable() để gửi yêu cầu tìm kiếm và cập nhật bảng
+        function searchTable() {
+            const searchQuery = document.getElementById('search').value;
+            console.log(searchQuery)
+            fetch('/api-phieu-giam-gia/search?query=' + encodeURIComponent(searchQuery), {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -722,18 +691,59 @@
                 })
                 .then(data => {
                     updateTableBody(data);
-                    if (data.length > 0) {
-                        showDetailModal(data[0].id); // Gọi lại hàm showDetailModal với ID của bản ghi đầu tiên
-                    }
                 })
                 .catch(error => {
-                    console.error('Error fetching filtered results:', error);
-                    // Xử lý lỗi ở đây (ví dụ: hiển thị thông báo lỗi cho người dùng)
+                    console.error('Error fetching search results:', error);
                 });
-        } else {
-            console.error('Element with id "statusFilter" not found.');
         }
-    }
+
+        // Bắt sự kiện submit của form tìm kiếm
+        document.getElementById('search').addEventListener('submit', function (event) {
+            event.preventDefault();
+            searchTable();
+        });
+
+        //filter
+        document.addEventListener('DOMContentLoaded', function () {
+            // Đoạn mã JavaScript của bạn ở đây
+            // Ví dụ: Đăng ký sự kiện onchange cho dropdown
+            const statusFilter = document.getElementById('statusFilter');
+            if (statusFilter) {
+                statusFilter.addEventListener('change', filterTable);
+            }
+        });
+
+
+        function filterTable() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            if (statusFilter) {
+                const selectedValue = statusFilter.value;
+                fetch('/api-phieu-giam-gia/filter?status=' + statusFilter, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        updateTableBody(data);
+                        // if (data.length > 0) {
+                        //     showDetailModal(data[0].id); // Gọi lại hàm showDetailModal với ID của bản ghi đầu tiên
+                        // }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching filtered results:', error);
+                        // Xử lý lỗi ở đây (ví dụ: hiển thị thông báo lỗi cho người dùng)
+                    });
+            } else {
+                console.error('Element with id "statusFilter" not found.');
+            }
+        }
 
 </script>
 
