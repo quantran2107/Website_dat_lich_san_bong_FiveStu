@@ -82,7 +82,8 @@
                                                 </div>
                                                 <button class="btn btn-secondary dropdown-toggle" type="button"
                                                         id="actionMenuButton" data-toggle="dropdown"
-                                                        aria-haspopup="true" aria-expanded="false"> Hành động
+                                                        aria-haspopup="true" aria-expanded="false"
+                                                        th:disabled="${#lists.isEmpty(sanCaDTOList)}"> Hành động
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="actionMenuButton">
                                                     <a class="dropdown-item" href="#">Export</a>
@@ -112,24 +113,25 @@
                                             <td th:text="${a.trangThai}"></td>
                                             <td th:text="${a.gia}"></td>
                                             <td>
-                                                <button type="button" class="btn btn-success edit-btn" data-toggle="modal" data-target="#editModal" th:attr="data-id=${a.id}">Edit</button>
+                                                <button type="button" class="btn btn-success edit-btn" data-toggle="modal" data-target="#editModal" th:attr="data-id=${a.id}" th:disabled="${#lists.isEmpty(sanCaDTOList)}">Edit</button>
                                             </td>
                                         </tr>
                                         </tbody>
                                     </table>
                                     <div class="pagination">
                                         <ul class="pagination">
-                                            <li th:classappend="${currentPage == 1} ? 'disabled'">
-                                                <a th:href="@{/sort-page(pageNum=${currentPage - 1}, sortField=${sortField}, sortDirection=${sortDirection})}">&laquo;</a>
+                                            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                                                <a class="page-link" th:href="@{/sort-page(pageNum=${currentPage - 1}, sortField=${sortField}, sortDirection=${sortDirection})}">&laquo;</a>
                                             </li>
-                                            <li th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
-                                                <a th:href="@{/sort-page(pageNum=${i}, sortField=${sortField}, sortDirection=${sortDirection})}" th:text="${i}">1</a>
+                                            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
+                                                <a class="page-link" th:href="@{/sort-page(pageNum=${i}, sortField=${sortField}, sortDirection=${sortDirection})}" th:text="${i}">1</a>
                                             </li>
-                                            <li th:classappend="${currentPage == totalPages} ? 'disabled'">
-                                                <a th:href="@{/sort-page(pageNum=${currentPage + 1}, sortField=${sortField}, sortDirection=${sortDirection})}">&raquo;</a>
+                                            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                                <a class="page-link" th:href="@{/sort-page(pageNum=${currentPage + 1}, sortField=${sortField}, sortDirection=${sortDirection})}">&raquo;</a>
                                             </li>
                                         </ul>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
