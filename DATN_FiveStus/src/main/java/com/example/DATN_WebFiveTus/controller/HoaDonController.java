@@ -23,7 +23,7 @@ public class HoaDonController {
     private RestTemplate restTemplate;
 
     @GetMapping("/web-hoa-don")
-    public String listPhieuGiamGia(Model model, @RequestParam(defaultValue = "0") int page) {
+    public String listHoaDon(Model model, @RequestParam(defaultValue = "0") int page) {
         String apiUrl = "http://localhost:8080/hoa-don/phan-trang";
 
         ResponseEntity<PagedModel<EntityModel<HoaDonDTO>>> responseEntity = restTemplate.exchange(
@@ -55,7 +55,6 @@ public class HoaDonController {
                 apiUrl,
                 HoaDonDTO.class,
                 id);
-
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             HoaDonDTO hoaDon = responseEntity.getBody();
             model.addAttribute("hoaDon", hoaDon);

@@ -83,10 +83,8 @@
                                         <tr th:each="hd,i:${listHD}">
                                             <td>
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                           th:id="${number + i.index + 1}">
-                                                    <label class="custom-control-label"
-                                                           th:for="${number + i.index + 1}"></label>
+                                                    <input type="checkbox" class="custom-control-input" th:id="${'checkbox-' + (number + i.index + 1)}">
+                                                    <label class="custom-control-label" th:for="${'checkbox-' + (number + i.index + 1)}"></label>
                                                 </div>
                                             </td>
                                             <td th:text="${number + i.index + 1}"></td>
@@ -96,15 +94,28 @@
                                             <td th:text="${hd.content.tongTien}"></td>
                                             <td th:text="${hd.content.trangThai}"></td>
                                             <td style="display: flex">
-                                                <button class="btn mb-2 mr-1 btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                    <span class="fe fe-edit-3"></span>
+                                                <button class="btn mb-2 mr-1 btn-warning" data-bs-toggle="modal"
+                                                        th:data-bs-target="'#detailModal' + ${hd.content.id}">
+                                                    <span class="fe fe-eye"></span>
                                                 </button>
                                                 <button class="btn mb-2 ml-1 btn-danger" type="button">
                                                     <span class="fe fe-trash-2"></span>
                                                 </button>
+                                                <nav class="vertnav navbar navbar-light">
+                                                    <ul class="navbar-nav flex-fill w-100 mb-2">
+                                                        <li class="nav-item dropdown">
+                                                            <a th:href="'#dashboard-' + ${hd != null && hd.content != null ? hd.content.id : ''}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                                                                <span class="ml-3 item-text">Dashboard</span>
+                                                                <span class="sr-only">(current)</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+
                                             </td>
+
                                             <!-- Modal -->
-                                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal fade" th:id="'detailModal' + ${hd.content.id}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 50%;">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -159,10 +170,33 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </tr>
                                         </tbody>
+
+
+
                                     </table>
 
+                                    <tr th:each="hd,i:${listHD}">
+                                        <ul class="collapse list-unstyled pl-4 w-100" th:id="'dashboard-' + ${hd != null && hd.content != null ? hd.content.id : ''}">
+                                            <li class="nav-item active">
+                                                <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Default</span></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Analytics</span></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">E-commerce</span></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Saas Dashboard</span></a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link pl-3" href="#"><span class="ml-1 item-text">Systems</span></a>
+                                            </li>
+                                        </ul>
+                                    </tr>
 
                                     <nav aria-label="Table Paging" class="mb-0 text-muted">
                                         <ul class="pagination justify-content-end mb-0">
