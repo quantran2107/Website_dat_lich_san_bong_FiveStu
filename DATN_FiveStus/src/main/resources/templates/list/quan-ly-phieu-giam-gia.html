@@ -228,7 +228,8 @@
                                                     </button>
 
                                                     <form th:action="@{/remove-pgg/{id}(id=${pgg.content.id})}">
-                                                        <button class="btn mb-2 ml-1 btn-danger" type="submit">
+                                                        <button class="btn mb-2 ml-1 btn-danger" type="submit"
+                                                                onclick="return confirm('Bạn có chắc chắn xóa không?')">
                                                             <span class="fe fe-trash-2"></span>
                                                         </button>
                                                     </form>
@@ -659,9 +660,9 @@
                             <span class="fe fe-edit-3"></span>
                         </button>
                         <!-- Delete -->
-                        <form action="/remove-pgg/${result.id}" method="post">
-                            <button class="btn mb-2 ml-1 btn-danger" type="submit">
-                                <span class="fe fe-trash-2"></span>
+                        <form action="/remove-pgg/${result.id}" >
+                            <button class="btn mb-2 ml-1 btn-danger" type="submit" onclick="return confirm('Bạn có chắc chắn xóa không?')">
+                                <span class="fe fe-trash-2" ></span>
                             </button>
                         </form>
                     </td>
@@ -698,7 +699,7 @@
         }
 
         // Bắt sự kiện submit của form tìm kiếm
-        document.getElementById('search').addEventListener('submit', function (event) {
+        document.getElementById('search').addEventListener('input', function (event) {
             event.preventDefault();
             searchTable();
         });
