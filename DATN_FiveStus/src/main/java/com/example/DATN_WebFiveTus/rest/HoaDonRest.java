@@ -59,11 +59,10 @@ public class HoaDonRest {
         return ResponseEntity.ok(pagedModel);
     }
 
-    @GetMapping("/search/{key}")
-    public ResponseEntity<List<HoaDonDTO>> searchHD(@PathVariable("key") String key) {
-        List<HoaDonDTO> listHoaDon = hoaDonService.searchHD(key);
-        return ResponseEntity.ok(listHoaDon);
+    @GetMapping("/search")
+    public ResponseEntity<List<HoaDonDTO>> search(@RequestParam String key) {
+        List<HoaDonDTO> results = hoaDonService.searchHD(key);
+        return ResponseEntity.ok(results);
     }
-
 
 }

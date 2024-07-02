@@ -33,10 +33,9 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group col-auto">
-                                                        <label for="searchInput" class="sr-only">Search</label>
-                                                        <input type="text" class="form-control" id="searchInput" value=""
-                                                               placeholder="Search">
-                                                        <ul id="results"></ul>
+                                                        <label for="search" class="sr-only">Tìm kiếm</label>
+                                                        <input type="text" class="form-control" id="search"
+                                                               placeholder="Search" oninput="searchTable()">
                                                     </div>
                                                     <div class="form-group col-auto ml-3">
                                                         <label class="my-1 mr-2 sr-only"
@@ -96,63 +95,101 @@
                                             </td>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" th:id="'detailModal' + ${hd.content.id}" tabindex="-1" role="dialog" aria-labelledby="detailHoaDon" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 75%;">
+                                            <div class="modal fade" th:id="'detailModal' + ${hd.content.id}"
+                                                 tabindex="-1" role="dialog" aria-labelledby="detailHoaDon"
+                                                 aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                                                     style="max-width: 75%;">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="detailHoaDon" th:text="${hd.content.maHoaDon}"></h5>
-                                                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                                                            <h5 class="modal-title" id="detailHoaDon"
+                                                                th:text="${hd.content.maHoaDon}"></h5>
+                                                            <button type="button" class="btn-close" data-dismiss="modal"
+                                                                    aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <form>
                                                                 <div class="form-row">
                                                                     <div class="form-group col-3">
                                                                         <label for="tenKhachHang">Tên khách hàng</label>
-                                                                        <input type="text" class="form-control" id="tenKhachHang" th:value="${hd.content.hoVaTenKhachHang}" readonly>
+                                                                        <input type="text" class="form-control"
+                                                                               id="tenKhachHang"
+                                                                               th:value="${hd.content.hoVaTenKhachHang}"
+                                                                               readonly>
                                                                     </div>
                                                                     <div class="form-group col-3">
                                                                         <label for="tenNhanVien">Tên nhân viên</label>
-                                                                        <input type="text" class="form-control" id="tenNhanVien" th:value="${hd.content.tenNhanVien}" readonly>
+                                                                        <input type="text" class="form-control"
+                                                                               id="tenNhanVien"
+                                                                               th:value="${hd.content.tenNhanVien}"
+                                                                               readonly>
                                                                     </div>
                                                                     <div class="form-group col-3">
                                                                         <label for="ngayTao">Ngày tạo</label>
-                                                                        <input type="text" class="form-control" id="ngayTao" th:value="${#dates.format(hd.content.ngayTao, 'dd/MM/yyyy')}" readonly>
+                                                                        <input type="text" class="form-control"
+                                                                               id="ngayTao"
+                                                                               th:value="${#dates.format(hd.content.ngayTao, 'dd/MM/yyyy')}"
+                                                                               readonly>
                                                                     </div>
                                                                     <div class="form-group col-3">
                                                                         <label for="tongTien">Tổng tiền</label>
-                                                                        <input type="text" class="form-control" id="tongTien" th:value="${hd.content.tongTien}" readonly>
+                                                                        <input type="text" class="form-control"
+                                                                               id="tongTien"
+                                                                               th:value="${hd.content.tongTien}"
+                                                                               readonly>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-row">
                                                                     <div class="form-group col-md-4">
                                                                         <label for="tienCoc">Tiền cọc</label>
-                                                                        <input type="number" class="form-control" id="tienCoc" th:value="${hd.content.tienCoc}" readonly>
+                                                                        <input type="number" class="form-control"
+                                                                               id="tienCoc"
+                                                                               th:value="${hd.content.tienCoc}"
+                                                                               readonly>
                                                                     </div>
                                                                     <div class="form-group col-md-4">
                                                                         <label for="tienConLai">Tiền còn lại</label>
-                                                                        <input type="number" class="form-control" id="tienConLai" th:value="${hd.content.tienConLai}" readonly>
+                                                                        <input type="number" class="form-control"
+                                                                               id="tienConLai"
+                                                                               th:value="${hd.content.tienConLai}"
+                                                                               readonly>
                                                                     </div>
                                                                     <div class="form-group col-md-4">
                                                                         <label for="tienThua">Tiền thừa</label>
-                                                                        <input type="number" class="form-control" id="tienThua" th:value="${hd.content.tienThua}" readonly>
+                                                                        <input type="number" class="form-control"
+                                                                               id="tienThua"
+                                                                               th:value="${hd.content.tienThua}"
+                                                                               readonly>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label for="ghiChu">Ghi chú</label>
-                                                                    <textarea class="form-control" id="ghiChu" rows="2" th:text="${hd.content.ghiChu}" readonly></textarea>
+                                                                    <textarea class="form-control" id="ghiChu" rows="2"
+                                                                              th:text="${hd.content.ghiChu}"
+                                                                              readonly></textarea>
                                                                 </div>
                                                                 <div class="form-row">
                                                                     <div class="form-group col-md-4">
                                                                         <label for="trangThai">Trạng thái</label>
-                                                                        <input type="text" class="form-control" id="trangThai" th:value="${hd.content.trangThai}" readonly>
+                                                                        <input type="text" class="form-control"
+                                                                               id="trangThai"
+                                                                               th:value="${hd.content.trangThai}"
+                                                                               readonly>
                                                                     </div>
                                                                     <div class="form-group col-md-4">
                                                                         <label for="ngayDenSan">Ngày đến sân</label>
-                                                                        <input type="text" class="form-control" id="ngayDenSan" th:value="${#dates.format(hd.content.ngayDenSan, 'dd/MM/yyyy')}" readonly>
+                                                                        <input type="text" class="form-control"
+                                                                               id="ngayDenSan"
+                                                                               th:value="${#dates.format(hd.content.ngayDenSan, 'dd/MM/yyyy')}"
+                                                                               readonly>
                                                                     </div>
                                                                     <div class="form-group col-md-4">
-                                                                        <label for="ngayThanhToan">Ngày thanh toán</label>
-                                                                        <input type="text" class="form-control" id="ngayThanhToan" th:value="${#dates.format(hd.content.ngayThanhToan, 'dd/MM/yyyy')}" readonly>
+                                                                        <label for="ngayThanhToan">Ngày thanh
+                                                                            toán</label>
+                                                                        <input type="text" class="form-control"
+                                                                               id="ngayThanhToan"
+                                                                               th:value="${#dates.format(hd.content.ngayThanhToan, 'dd/MM/yyyy')}"
+                                                                               readonly>
                                                                     </div>
                                                                 </div>
                                                                 <!-- Thêm các trường thông tin khác của hóa đơn tại đây -->
@@ -160,24 +197,33 @@
                                                             <nav class="vertnav navbar navbar-light">
                                                                 <ul class="navbar-nav flex-fill w-100 mb-2">
                                                                     <li class="nav-item dropdown">
-                                                                        <a th:href="'#dashboard-' + ${hd.content.id}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
+                                                                        <a th:href="'#dashboard-' + ${hd.content.id}"
+                                                                           data-toggle="collapse" aria-expanded="false"
+                                                                           class="dropdown-toggle nav-link">
                                                                             <span class="ml-3 item-text">Chi tiết Hóa đơn</span>
                                                                             <span class="sr-only">(current)</span>
                                                                         </a>
                                                                     </li>
                                                                 </ul>
                                                             </nav>
-                                                            <ul class="collapse list-unstyled pl-4 w-100" th:id="'dashboard-' + ${hd.content.id}">
+                                                            <ul class="collapse list-unstyled pl-4 w-100"
+                                                                th:id="'dashboard-' + ${hd.content.id}">
                                                                 <li class="nav-item active">
-                                                                    <div class="table-custom datatables-custom" id="dataTable-1-custom">
+                                                                    <div class="table-custom datatables-custom"
+                                                                         id="dataTable-1-custom">
                                                                         <div class="table-header-custom">
                                                                             <div class="table-row-custom">
                                                                                 <div class="table-cell-custom">STT</div>
                                                                                 <div class="table-cell-custom">Sân</div>
                                                                                 <div class="table-cell-custom">Ca</div>
-                                                                                <div class="table-cell-custom">Tiền sân</div>
-                                                                                <div class="table-cell-custom">Ghi chú</div>
-                                                                                <div class="table-cell-custom">Trạng thái</div>
+                                                                                <div class="table-cell-custom">Tiền
+                                                                                    sân
+                                                                                </div>
+                                                                                <div class="table-cell-custom">Ghi chú
+                                                                                </div>
+                                                                                <div class="table-cell-custom">Trạng
+                                                                                    thái
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="table-body-custom">
