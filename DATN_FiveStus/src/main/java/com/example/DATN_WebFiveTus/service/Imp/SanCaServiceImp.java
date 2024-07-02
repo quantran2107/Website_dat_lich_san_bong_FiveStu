@@ -13,6 +13,10 @@ import com.example.DATN_WebFiveTus.repository.SanCaRepository;
 import com.example.DATN_WebFiveTus.service.SanCaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -107,4 +111,27 @@ public class SanCaServiceImp implements SanCaService {
         SanCa sanCa=sanCaRepository.findById(id).orElseThrow(()-> new ResourceNotfound("Không tồn tại xoá id: "+id));
         sanCaRepository.deletedAt(id);
     }
+
+    @Override
+    public List<SanCaDTO> listAll2(Integer pageNum, String sortDirection, int[] totalPageElement) {
+        Sort sortS = Sort.by("sanBong.tenSanBong").and(Sort.by("ca.tenCa"));;
+        if (sortDirection.equalsIgnoreCase("asc")) {
+            sortS = sortS.ascending();
+        } else if (sortDirection.equalsIgnoreCase("desc")) {
+            sortS = sortS.descending();
+        }
+
+        Pageable pageable = PageRequest.of(pageNum - 1, 5, sortS);
+        Page<SanCa> sanCaPage = sanCaRepository.findBySanCaPage(pageable);
+
+        totalPageElement[0] = sanCaPage.getTotalPages();
+        totalPageElement[1] = (int) sanCaPage.getTotalElements();
+
+        return sanCaPage.getContent().stream()
+                .map(sanCa -> modelMapper.map(sanCa, SanCaDTO.class))
+                .collect(Collectors.toList());
+    }
+
+
+
 }
