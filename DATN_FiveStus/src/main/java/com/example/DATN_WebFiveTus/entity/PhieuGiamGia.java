@@ -48,14 +48,23 @@ public class PhieuGiamGia {
     @Column(name = "ten_phieu_giam_gia", length = 100)
     private String tenPhieuGiamGia;
 
+    @Column(name = "so_luong", length = 100)
+    private Integer soLuong;
+
     @Column(name = "muc_giam", length = 100)
-    private String mucGiam;
+    private Float mucGiam;
 
     @Column(name = "hinh_thuc_giam_gia")
     private Boolean hinhThucGiamGia;
 
     @Column(name = "dieu_kien_su_dung", length = 100)
-    private String dieuKienSuDung;
+    private Float dieuKienSuDung;
+
+    @Column(name = "gia_tri_toi_da", length = 100)
+    private Float giaTriToiDa;
+
+    @Column(name = "doi_tuong_ap_dung", length = 100)
+    private Boolean doiTuongApDung;
 
     @Column(name = "ngay_bat_dau")
     @Temporal(TemporalType.DATE)
@@ -66,7 +75,10 @@ public class PhieuGiamGia {
     private Date ngayKetThuc;
 
     @Column(name = "trang_thai")
-    private Boolean trangThai;
+    private String trangThai;
+
+    @Column(name = "ghi_chu")
+    private String ghiChu;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

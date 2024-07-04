@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.dto;
 
+import com.example.DATN_WebFiveTus.entity.SanCa;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,5 +27,9 @@ public class HoaDonChiTietDTO {
     private String ghiChu;
 
     private String trangThai;
+
+    private String tenSanBong;
+
+    private String tenCa;
 
 }

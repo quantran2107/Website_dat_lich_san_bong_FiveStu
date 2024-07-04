@@ -17,15 +17,15 @@ import java.util.List;
 @RestController
 @RequestMapping("dia-chi")
 public class DiaChiRest {
-    private DiaChiService diaChiService;
-    @Autowired
-    public DiaChiRest(DiaChiService diaChiService) {
-        this.diaChiService = diaChiService;
-    }
-
-    @GetMapping("hien-thi")
-    public ResponseEntity<List> getAll2(){
-        List<DiaChiDTO> listdiachi=diaChiService.getAllJoinFetch();
-        return ResponseEntity.ok(listdiachi);
-    }
+//    private DiaChiService diaChiService;
+//    @Autowired
+//    public DiaChiRest(DiaChiService diaChiService) {
+//        this.diaChiService = diaChiService;
+//    }
+//
+//    @GetMapping("hien-thi")
+//    public ResponseEntity<List> getAll2(){
+//        List<DiaChiDTO> listdiachi=diaChiService.getAllJoinFetch();
+//        return ResponseEntity.ok(listdiachi);
+//    }
 }

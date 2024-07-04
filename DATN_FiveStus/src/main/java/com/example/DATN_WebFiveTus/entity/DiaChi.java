@@ -33,15 +33,21 @@ public class DiaChi {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "ten_dia_chi", length = 100, columnDefinition = "VARCHAR(100) DEFAULT ''")
-    private String tenDiaChi;
+    @Column(name = "thanh_pho", length = 100, columnDefinition = "VARCHAR(100) DEFAULT ''")
+    private String thanhPho;
+
+    @Column(name = "quan_huyen", length = 100, columnDefinition = "VARCHAR(100) DEFAULT ''")
+    private String quanHuyen;
+
+    @Column(name = "phuong_xa", length = 100, columnDefinition = "VARCHAR(100) DEFAULT ''")
+    private String phuongXa;
 
     @Column(name = "ghi_chu", length = 100, columnDefinition = "VARCHAR(100) DEFAULT ''")
     private String ghiChu;
 
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name = "id_khach_hang", nullable = false)
-    private KhachHang khachHang;
+    @Column(name = "trang_thai", length = 100, columnDefinition = "VARCHAR(100) DEFAULT ''")
+    private Boolean trangThai;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

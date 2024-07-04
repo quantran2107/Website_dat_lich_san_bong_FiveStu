@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,7 +59,8 @@ public class HoaDonServiceImp implements HoaDonService {
 
     @Override
     public HoaDonDTO getOne(Integer id) {
-        return modelMapper.map(hoaDonRepository.findById(id).orElseThrow(()->new ResourceNotfound("Không tồn tại id: "+id)),HoaDonDTO.class);
+        return modelMapper.map(hoaDonRepository.findById(id).orElseThrow(()->
+                new ResourceNotfound("Không tồn tại id: "+id)),HoaDonDTO.class);
     }
 
     @Override
@@ -82,11 +84,33 @@ public class HoaDonServiceImp implements HoaDonService {
     }
 
     @Override
+    public List<HoaDonDTO> searchHD(String key) {
+        return hoaDonRepository.searchHD(key).stream()
+                .map((hoaDon) -> modelMapper.map(hoaDon, HoaDonDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Page<HoaDonDTO> phanTrang(Pageable pageable) {
-        Page<HoaDon> hoaDonPage = hoaDonRepository.findAll(pageable);
-        List<HoaDonDTO> list = hoaDonPage.getContent().stream()
+        List<HoaDon> hoaDonList = hoaDonRepository.getAllJoinFetch();
+
+        // Phân trang thủ công
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<HoaDon> list;
+
+        if (hoaDonList.size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, hoaDonList.size());
+            list = hoaDonList.subList(startItem, toIndex);
+        }
+
+        List<HoaDonDTO> hoaDonDTOList = list.stream()
                 .map(hoaDon -> modelMapper.map(hoaDon, HoaDonDTO.class))
                 .collect(Collectors.toList());
-        return new PageImpl<>(list, pageable, hoaDonPage.getTotalElements());
+
+        return new PageImpl<>(hoaDonDTOList, pageable, hoaDonList.size());
     }
 }
