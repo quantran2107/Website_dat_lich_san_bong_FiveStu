@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,4 +31,9 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
 
     @Query("SELECT sc FROM SanCa sc")
     Page<SanCa> findBySanCaPage(Pageable  pageable);
+
+    @Query("SELECT sc FROM SanCa sc WHERE sc.id = :id OR sc.sanBong.tenSanBong=:keyWords " +
+            "OR sc.ca.tenCa=:keyWords OR sc.ngayTrongTuan.thuTrongTuan=:keyWords OR sc.trangThai=:keyWords")
+    Page<SanCa> search(@Param("id") Integer id, @Param("keyWords") String keyWords, Pageable pageable);
+
 }

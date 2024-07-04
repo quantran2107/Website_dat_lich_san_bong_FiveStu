@@ -132,6 +132,24 @@ public class SanCaServiceImp implements SanCaService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<SanCaDTO> searchKeyWords(Integer pageNum, String keyWords, String sortDirection, int[] totalPageElement, Integer id) {
+        Sort sortS = Sort.by("sanBong.tenSanBong").and(Sort.by("ca.tenCa"));;
+        if (sortDirection.equalsIgnoreCase("asc")) {
+            sortS = sortS.ascending();
+        } else if (sortDirection.equalsIgnoreCase("desc")) {
+            sortS = sortS.descending();
+        }
 
+        Pageable pageable = PageRequest.of(pageNum - 1, 5, sortS);
+        Page<SanCa> sanCaPage = sanCaRepository.search(id,keyWords.trim(),pageable);
+
+        totalPageElement[0] = sanCaPage.getTotalPages();
+        totalPageElement[1] = (int) sanCaPage.getTotalElements();
+
+        return sanCaPage.getContent().stream()
+                .map(sanCa -> modelMapper.map(sanCa, SanCaDTO.class))
+                .collect(Collectors.toList());
+    }
 
 }
