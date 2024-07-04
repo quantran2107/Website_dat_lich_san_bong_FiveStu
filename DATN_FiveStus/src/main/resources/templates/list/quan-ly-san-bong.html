@@ -14,1093 +14,25 @@
                         <div class="col-md-12 mb-4">
                             <div class="card shadow">
                                 <div class="card-body">
-                                    <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home"
-                                               role="tab" aria-controls="home" aria-selected="true">Home</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile"
-                                               role="tab" aria-controls="profile" aria-selected="false">Profile</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact"
-                                               role="tab" aria-controls="contact" aria-selected="false">Contact</a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                             aria-labelledby="home-tab">
-<!--                                            Them san-->
-                                            <div class="card-deck col-4">
-                                                <div class="card shadow mb-4">
-                                                    <div class="card-header">
-                                                        <strong class="card-title">Thêm sân</strong>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <form th:action="@{/loaiSan/add}"
-                                                              th:object="${loaiSan}"
-                                                              th:method="post">
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-6">
-                                                                    <label>ID loại sân</label>
-                                                                    <input type="text"
-                                                                           class="form-control"
-                                                                           th:field="*{id}" hidden>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="inputEmail4">Tên loại
-                                                                        sân</label>
-                                                                    <input type="text"
-                                                                           class="form-control"
-                                                                           id="inputEmail4"
-                                                                           th:field="*{tenLoaiSan}"
-                                                                           placeholder="Tên loại sân">
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="inputState">Trạng
-                                                                        thái</label>
-                                                                    <select th:field="*{trangThai}"
-                                                                            id="inputState"
-                                                                            class="form-control">
-                                                                        <option th:each="b: ${listLS}"
-                                                                                th:value="${b.trangThai}"
-                                                                                th:text="${b.trangThai}"></option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
+                                    <!-- Thanh Tab -->
+                                    <div class="container mt-5">
+                                        <!-- Danh sách loại sân bóng sẽ được thêm vào đây -->
+                                        <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+                                        </ul>
 
-                                                            <div class="modal-footer">
-                                                                <button type="button"
-                                                                        class="btn mb-2 btn-secondary"
-                                                                        data-dismiss="modal">Close
-                                                                </button>
-                                                                <button type="submit"
-                                                                        class="btn mb-2 btn-primary">Add
-                                                                </button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                                <div class="tab-pane fade" id="profile" role="tabpanel"
-                                                     aria-labelledby="profile-tab">
-                                                </div>
-                                                <div class="tab-pane fade" id="contact" role="tabpanel"
-                                                     aria-labelledby="contact-tab">
-                                                </div>
-                                            </div>
+                                        <!-- Nội dung từng tab sẽ được thêm vào đây -->
+                                        <div class="tab-content" id="myTabContent">
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row my-4">
 
-                                <!-- Small table -->
-                                <div class="col-md-12">
-                                    <div class="card shadow">
-                                        <div class="card-body">
-                                            <div class="toolbar row mb-3">
-                                                <!-- Form Add -->
-                                                <div class="col ml-auto">
-                                                    <div class="dropdown float-right">
-                                                        <button type="button" class="btn btn-primary float-right ml-3"
-                                                                data-toggle="modal" data-target="#varyModal"
-                                                                data-whatever="@mdo">Thêm<span
-                                                                class="fe fe-plus "></span>
-                                                        </button>
-                                                        <div class="modal fade" id="varyModal" tabindex="-1"
-                                                             role="dialog"
-                                                             aria-labelledby="varyModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="varyModalLabel">Thêm
-                                                                            loại
-                                                                            sân</h5>
-                                                                        <button type="button" class="close"
-                                                                                data-dismiss="modal"
-                                                                                aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <form th:action="@{/loaiSan/add}"
-                                                                              th:object="${loaiSan}"
-                                                                              th:method="post">
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-6">
-                                                                                    <label>ID loại sân</label>
-                                                                                    <input type="text"
-                                                                                           class="form-control"
-                                                                                           th:field="*{id}" hidden>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-6">
-                                                                                    <label for="inputEmail4">Tên loại
-                                                                                        sân</label>
-                                                                                    <input type="text"
-                                                                                           class="form-control"
-                                                                                           id="inputEmail4"
-                                                                                           th:field="*{tenLoaiSan}"
-                                                                                           placeholder="Tên loại sân">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-6">
-                                                                                    <label for="inputState">Trạng
-                                                                                        thái</label>
-                                                                                    <select th:field="*{trangThai}"
-                                                                                            id="inputState"
-                                                                                            class="form-control">
-                                                                                        <option th:each="b: ${listLS}"
-                                                                                                th:value="${b.trangThai}"
-                                                                                                th:text="${b.trangThai}"></option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <div class="modal-footer">
-                                                                                <button type="button"
-                                                                                        class="btn mb-2 btn-secondary"
-                                                                                        data-dismiss="modal">Close
-                                                                                </button>
-                                                                                <button type="submit"
-                                                                                        class="btn mb-2 btn-primary">Add
-                                                                                </button>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                                id="actionMenuButton" data-toggle="dropdown"
-                                                                aria-haspopup="true" aria-expanded="false"> Hành động
-                                                        </button>
-                                                        <div class="dropdown-menu" aria-labelledby="actionMenuButton">
-                                                            <a class="dropdown-item" href="#">Export</a>
-                                                            <a class="dropdown-item" href="#">Something else here</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Table -->
-                                            <table class="table">
-                                                <thead>
-                                                <tr>
-                                                    <th>STT</th>
-                                                    <th>Tên loại sân</th>
-                                                    <th>Trạng thái</th>
-                                                    <th>Hành động</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr th:each="a,b :${listLS}">
-                                                    <td th:text="${b.count}"></td>
-                                                    <td th:text="${a.tenLoaiSan}"></td>
-                                                    <td th:text="${a.trangThai}"></td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-success edit-btn"
-                                                                data-toggle="modal" data-target="#editModal"
-                                                                th:attr="data-id=${a.id}">Edit
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-
-
-            <!-- Modal Edit -->
-            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel">Chỉnh sửa loại sân</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form th:action="@{/loaiSan/update}" th:object="${loaiSan}" th:method="post">
-                                <input type="hidden" th:field="*{id}" id="editId">
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="editTenLoaiSan">Tên loại sân</label>
-                                        <input type="text" class="form-control" id="editTenLoaiSan" th:field="*{tenLoaiSan}">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="inputState">Trạng thái</label>
-                                        <select th:field="*{trangThai}" id="inputState"
-                                                class="form-control">
-                                            <option th:each="b: ${listTTLS}"
-                                                    th:value="${b}"
-                                                    th:text="${b}"></option>
-                                        </select>
-
-                                    </div>
-                                </div> <!-- simple table -->
-                            </div> <!-- end section -->
-                        </div> <!-- .col-12 -->
-                    </div> <!-- .row -->
-
-                    <!-- Modal Edit -->
-                    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editModalLabel">Chỉnh sửa loại sân</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form th:action="@{/loaiSan/update}" th:object="${loaiSan}" th:method="post">
-                                        <input type="hidden" th:field="*{id}" id="editId">
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="editTenLoaiSan">Tên loại sân</label>
-                                                <input type="text" class="form-control" id="editTenLoaiSan"
-                                                       th:field="*{tenLoaiSan}">
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="inputState">Trạng thái</label>
-                                                <select th:field="*{trangThai}" id="inputState"
-                                                        class="form-control">
-                                                    <option th:each="b: ${listLS}"
-                                                            th:value="${b.trangThai}"
-                                                            th:text="${b.trangThai}"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">
-                                                Close
-                                            </button>
-                                            <button type="submit" class="btn mb-2 btn-primary">Update</button>
-                                        </div>
-                                    </form>
-                                </div>
                             </div>
                         </div>
                     </div>
-
-
-
-
-
-          <div class="row justify-content-center">
-                <div class="col-12">
-                    <h2 class="mb-2 page-title">Quản lý sân bóng</h2>
-                    <div class="row my-4">
-                        <div class="col-md-12">
-                            <div class="card shadow">
-                                <div class="card-body">
-                                    <div class="toolbar row mb-3">
-                                        <div class="col ml-auto">
-                                            <div class="dropdown float-right">
-                                                <button type="button" class="btn btn-primary float-right ml-3"
-                                                        data-toggle="modal" data-target="#varyModal2"
-                                                        data-whatever="@mdo">Thêm<span class="fe fe-plus"></span>
-                                                </button>
-                                                <div class="modal fade" id="varyModal2" tabindex="-1" role="dialog"
-                                                     aria-labelledby="varyModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="varyModalLabel2">Thêm sân bóng</h5>
-                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                        aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form th:action="@{/sanBong/add}" th:object="${sanBong}"
-                                                                      th:method="post">
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-6">
-                                                                            <label>ID loại sân</label>
-                                                                            <input type="text" class="form-control"
-                                                                                   th:field="*{id}" hidden>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-6">
-                                                                            <label for="inputEmail5">Tên sân bóng</label>
-                                                                            <input type="text" class="form-control"
-                                                                                   id="inputEmail5" th:field="*{tenSanBong}"
-                                                                                   placeholder="Tên sân bóng">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-6">
-                                                                            <label for="inputState2">Trạng thái</label>
-                                                                            <select th:field="*{trangThai}" id="inputState2"
-                                                                                    class="form-control">
-                                                                                <option th:each="a: ${listTTSB}"
-                                                                                        th:value="${a}"
-                                                                                        th:text="${a}"></option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-6">
-                                                                            <label for="inputState2">Loại sân</label>
-                                                                            <select th:field="*{idLoaiSan}" id="idLoaiSan"
-                                                                                    class="form-control">
-                                                                                <option th:each="b: ${listLS}"
-                                                                                        th:value="${b.id}"
-                                                                                        th:text="${b.tenLoaiSan}"></option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button"
-                                                                                class="btn mb-2 btn-secondary"
-                                                                                data-dismiss="modal">Close
-                                                                        </button>
-                                                                        <button type="submit"
-                                                                                class="btn mb-2 btn-primary">Add
-
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <form th:action="@{/sanBong/add}"
-                                                                              th:object="${sanBong}"
-                                                                              th:method="post">
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-6">
-                                                                                    <label>ID loại sân</label>
-                                                                                    <input type="text"
-                                                                                           class="form-control"
-                                                                                           th:field="*{id}" hidden>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-6">
-                                                                                    <label for="inputEmail5">Tên sân
-                                                                                        bóng</label>
-                                                                                    <input type="text"
-                                                                                           class="form-control"
-                                                                                           id="inputEmail5"
-                                                                                           th:field="*{tenSanBong}"
-                                                                                           placeholder="Tên sân bóng">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-6">
-                                                                                    <label for="inputState2">Trạng
-                                                                                        thái</label>
-                                                                                    <select th:field="*{trangThai}"
-                                                                                            id="inputState2"
-                                                                                            class="form-control">
-                                                                                        <option th:each="a: ${listSB}"
-                                                                                                th:value="${a.trangThai}"
-                                                                                                th:text="${a.trangThai}"></option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-6">
-                                                                                    <label for="inputState2">Loại
-                                                                                        sân</label>
-                                                                                    <select th:field="*{idLoaiSan}"
-                                                                                            id="idLoaiSan"
-                                                                                            class="form-control">
-                                                                                        <option th:each="b: ${listLS}"
-                                                                                                th:value="${b.id}"
-                                                                                                th:text="${b.tenLoaiSan}"></option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button"
-                                                                                        class="btn mb-2 btn-secondary"
-                                                                                        data-dismiss="modal">Close
-                                                                                </button>
-                                                                                <button type="submit"
-                                                                                        class="btn mb-2 btn-primary">Add
-                                                                                </button>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                                id="actionMenuButton2" data-toggle="dropdown"
-                                                                aria-haspopup="true" aria-expanded="false"> Hành động
-                                                        </button>
-                                                        <div class="dropdown-menu" aria-labelledby="actionMenuButton">
-                                                            <a class="dropdown-item" href="#">Export</a>
-                                                            <a class="dropdown-item" href="#">Something else here</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Table -->
-                                            <table class="table">
-                                                <thead>
-                                                <tr>
-                                                    <th>STT</th>
-                                                    <th>Tên sân</th>
-                                                    <th>Tên loại sân</th>
-                                                    <th>Trạng thái</th>
-                                                    <th>Hành động</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr th:each="a, b : ${listSB}">
-                                                    <td th:text="${b.count}"></td>
-                                                    <td th:text="${a.tenSanBong}"></td>
-                                                    <td th:text="${a.tenLoaiSan}"></td>
-                                                    <td th:text="${a.trangThai}"></td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-success edit-btn"
-                                                                data-toggle="modal" data-target="#editModal2"
-                                                                th:attr="data-id=${a.id}">Edit
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-            <!-- Modal Edit -->
-            <div class="modal fade" id="editModal2" tabindex="-1" role="dialog" aria-labelledby="editModalLabel2"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel2">Chỉnh sửa sân bóng</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form th:action="@{/sanBong/update}" th:object="${sanBong}" th:method="post">
-                                <input type="hidden" th:field="*{id}" id="editId2">
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="editTenSanBong">Tên sân bóng</label>
-                                        <input type="text" class="form-control" id="editTenSanBong"
-                                               th:field="*{tenSanBong}">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="editTrangThai2">Trạng thái</label>
-                                        <select id="editTrangThai2" class="form-control" th:field="*{trangThai}">
-                                            <option th:each="a: ${listTTSB}"
-                                                    th:value="${a}"
-                                                    th:text="${a}"></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="editLoaiSan">Loại sân</label>
-                                        <select id="editLoaiSan" class="form-control" th:field="*{idLoaiSan}">
-                                            <option th:each="b: ${listLS}" th:value="${b.id}"
-                                                    th:text="${b.tenLoaiSan}"></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn mb-2 btn-secondary"
-                                            data-dismiss="modal">Close
-
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form th:action="@{/sanBong/update}" th:object="${sanBong}" th:method="post">
-                                        <input type="hidden" th:field="*{id}" id="editId2">
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="editTenSanBong">Tên sân bóng</label>
-                                                <input type="text" class="form-control" id="editTenSanBong"
-                                                       th:field="*{tenSanBong}">
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="editTrangThai2">Trạng thái</label>
-                                                <select id="editTrangThai2" class="form-control"
-                                                        th:field="*{trangThai}">
-                                                    <option th:each="a: ${listSB}" th:value="${a.trangThai}"
-                                                            th:text="${a.trangThai}"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="editLoaiSan">Loại sân</label>
-                                                <select id="editLoaiSan" class="form-control" th:field="*{idLoaiSan}">
-                                                    <option th:each="b: ${listLS}" th:value="${b.id}"
-                                                            th:text="${b.tenLoaiSan}"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn mb-2 btn-secondary"
-                                                    data-dismiss="modal">Close
-                                            </button>
-                                            <button type="submit" class="btn mb-2 btn-primary">Update</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-            <div class="row justify-content-center">
-                <div class="col-12">
-                    <h2 class="mb-2 page-title">Quản lý ca</h2>
-                    <p class="card-text"></p>
-                    <div class="row my-4">
-                        <!-- Small table -->
-                        <div class="col-md-12">
-                            <div class="card shadow">
-                                <div class="card-body">
-                                    <div class="toolbar row mb-3">
-                                        <!-- Form Add -->
-                                        <div class="col ml-auto">
-                                            <div class="dropdown float-right">
-                                                <button type="button" class="btn btn-primary float-right ml-3" data-toggle="modal" data-target="#varyModal3" data-whatever="@mdo">Thêm<span class="fe fe-plus "></span></button>
-                                                <div class="modal fade" id="varyModal3" tabindex="-1" role="dialog" aria-labelledby="varyModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="varyModalLabel3">Thêm ca</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form th:action="@{/ca/add}" th:object="${ca}" th:method="post">
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-6">
-                                                                            <input type="text" class="form-control" th:field="*{id}" hidden>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-6">
-                                                                            <label for="inputEmail3">Tên ca</label>
-                                                                            <input type="text" class="form-control" id="inputEmail3d" th:field="*{tenCa}" placeholder="Tên CA">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-6">
-                                                                            <label for="inputEmail3">Giá ca</label>
-                                                                            <input type="text" class="form-control" id="inputEmail3ab" th:field="*{giaCa}" placeholder="Giá ca">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-6">
-                                                                            <label for="inputEmail3">Thời gian bắt đầu</label>
-                                                                            <input type="datetime-local" class="form-control" id="inputEmail3s" th:field="*{thoiGianBatDau}" placeholder="Thời gian bắt đầu">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-6">
-                                                                            <label for="inputEmail3">Thời gian kết thúc</label>
-                                                                            <input type="datetime-local" class="form-control" id="inputEmail3" th:field="*{thoiGianKetThuc}" placeholder="Thời gian kết thúc">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-6">
-                                                                            <label for="trangThaiCa">Trạng thái</label>
-                                                                            <select id="trangThaiCa" class="form-control" th:field="*{trangThai}">
-                                                                                <option th:each="a : ${listTTC}" th:value="${a}" th:text="${a}"></option>
-                                                                            </select>
-                                                                        </div>
-
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <form th:action="@{/ca/add}" th:object="${ca}"
-                                                                              th:method="post">
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-6">
-                                                                                    <input type="text"
-                                                                                           class="form-control"
-                                                                                           th:field="*{id}" hidden>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-6">
-                                                                                    <label for="inputEmail3">Tên
-                                                                                        ca</label>
-                                                                                    <input type="text"
-                                                                                           class="form-control"
-                                                                                           id="inputEmail3d"
-                                                                                           th:field="*{tenCa}"
-                                                                                           placeholder="Tên CA">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-6">
-                                                                                    <label for="inputEmail3">Giá
-                                                                                        ca</label>
-                                                                                    <input type="text"
-                                                                                           class="form-control"
-                                                                                           id="inputEmail3ab"
-                                                                                           th:field="*{giaCa}"
-                                                                                           placeholder="Giá ca">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-6">
-                                                                                    <label for="inputEmail3">Thời gian
-                                                                                        bắt
-                                                                                        đầu</label>
-                                                                                    <input type="datetime-local"
-                                                                                           class="form-control"
-                                                                                           id="inputEmail3s"
-                                                                                           th:field="*{thoiGianBatDau}"
-                                                                                           placeholder="Thời gian bắt đầu">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-6">
-                                                                                    <label for="inputEmail3">Thời gian
-                                                                                        kết
-                                                                                        thúc</label>
-                                                                                    <input type="datetime-local"
-                                                                                           class="form-control"
-                                                                                           id="inputEmail3"
-                                                                                           th:field="*{thoiGianKetThuc}"
-                                                                                           placeholder="Thời gian kết thúc">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-6">
-                                                                                    <label for="trangThaiCa">Trạng
-                                                                                        thái</label>
-                                                                                    <select id="trangThaiCa"
-                                                                                            class="form-control"
-                                                                                            th:field="*{trangThai}">
-                                                                                        <option th:each="a : ${listC}"
-                                                                                                th:value="${a.trangThai}"
-                                                                                                th:text="${a.trangThai}"></option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button"
-                                                                                        class="btn mb-2 btn-secondary"
-                                                                                        data-dismiss="modal">Close
-                                                                                </button>
-                                                                                <button type="submit"
-                                                                                        class="btn mb-2 btn-primary">Add
-                                                                                </button>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                                id="actionMenuButto3" data-toggle="dropdown"
-                                                                aria-haspopup="true" aria-expanded="false"> Hành động
-                                                        </button>
-                                                        <div class="dropdown-menu" aria-labelledby="actionMenuButton">
-                                                            <a class="dropdown-item" href="#">Export</a>
-                                                            <a class="dropdown-item" href="#">Something else here</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <table class="table">
-                                                <thead>
-                                                <tr>
-                                                    <th>STT</th>
-                                                    <th>Tên ca</th>
-                                                    <th>Giá ca</th>
-                                                    <th>Tiền tính ca</th>
-                                                    <th>Bắt đầu</th>
-                                                    <th>Kết thúc</th>
-                                                    <th>Trạng thái</th>
-                                                    <th>Hành động</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr th:each="a, b : ${listC}">
-                                                    <td th:text="${b.count}"></td>
-                                                    <td th:text="${a.tenCa}"></td>
-                                                    <td th:text="${a.giaCa}"></td>
-                                                    <td>
-                                                <span th:if="${#temporals.format(a.thoiGianBatDau, 'HH:mm') >= '08:00' and #temporals.format(a.thoiGianKetThuc, 'HH:mm') <= '18:00'}"
-                                                      th:text="${a.giaCa * 1.5}"></span>
-                                                        <span th:unless="${#temporals.format(a.thoiGianBatDau, 'HH:mm') >= '08:00' and #temporals.format(a.thoiGianKetThuc, 'HH:mm') <= '18:00'}"
-                                                              th:text="${a.giaCa}"></span>
-                                                    </td>
-                                                    <td th:text="${#temporals.format(a.thoiGianBatDau, 'HH:mm')}"></td>
-                                                    <td th:text="${#temporals.format(a.thoiGianKetThuc, 'HH:mm')}"></td>
-                                                    <td th:text="${a.trangThai}"></td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-success edit-btn"
-                                                                data-toggle="modal" data-target="#editModal3"
-                                                                th:attr="data-id=${a.id}">Edit
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>STT</th>
-                                            <th>Tên ca</th>
-                                            <th>Giá ca</th>
-                                            <th>Tiền tính ca</th>
-                                            <th>Bắt đầu</th>
-                                            <th>Kết thúc</th>
-                                            <th>Trạng thái</th>
-                                            <th>Hành động</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="a, b : ${listC}">
-                                            <td th:text="${b.count}"></td>
-                                            <td th:text="${a.tenCa}"></td>
-                                            <td th:text="${a.giaCa}"></td>
-                                            <td>
-                                                <span th:if="${#temporals.format(a.thoiGianBatDau, 'HH:mm') >= '08:00' and #temporals.format(a.thoiGianKetThuc, 'HH:mm') <= '18:00'}" th:text="${a.giaCa * 1.5}"></span>
-                                                <span th:unless="${#temporals.format(a.thoiGianBatDau, 'HH:mm') >= '08:00' and #temporals.format(a.thoiGianKetThuc, 'HH:mm') <= '18:00'}" th:text="${a.giaCa}"></span>
-                                            </td>
-                                            <td th:text="${#temporals.format(a.thoiGianBatDau, 'HH:mm')}"></td>
-                                            <td th:text="${#temporals.format(a.thoiGianKetThuc, 'HH:mm')}"></td>
-                                            <td th:text="${a.trangThai}"></td>
-                                            <td>
-                                                <button type="button" class="btn btn-success edit-btn" data-toggle="modal" data-target="#editModal3" th:attr="data-id=${a.id}">Edit</button>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div> <!-- simple table -->
-                    </div> <!-- end section -->
-                </div> <!-- .col-12 -->
-            </div> <!-- .row justify-content-center -->
-
-            <!-- Modal Edit -->
-            <div class="modal fade" id="editModal3" tabindex="-1" role="dialog" aria-labelledby="editModalLabel3" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel3">Chỉnh sửa ca</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form th:action="@{/ca/update}" th:object="${ca}" th:method="post">
-                                <input type="hidden" th:field="*{id}" id="editId3">
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="editTenCa">Tên ca</label>
-                                        <input type="text" class="form-control" id="editTenCa" th:field="*{tenCa}" placeholder="Tên CA">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="editGiaCa">Giá ca</label>
-                                        <input type="text" class="form-control" id="editGiaCa" th:field="*{giaCa}" placeholder="Giá ca">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="editThoiGianBatDau">Thời gian bắt đầu</label>
-                                        <input type="datetime-local" class="form-control" id="editThoiGianBatDau" th:field="*{thoiGianBatDau}" placeholder="Thời gian bắt đầu">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="editThoiGianKetThuc">Thời gian kết thúc</label>
-                                        <input type="datetime-local" class="form-control" id="editThoiGianKetThuc" th:field="*{thoiGianKetThuc}" placeholder="Thời gian kết thúc">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="editTrangThaiCa">Trạng thái</label>
-                                        <select id="editTrangThaiCa" class="form-control" th:field="*{trangThai}">
-                                            <option th:each="a : ${listTTC}" th:value="${a}" th:text="${a}"></option>
-                                        </select>
-                                    </div>
-
-                                </div>
-                                <div class="modal-body">
-                                    <form th:action="@{/ca/update}" th:object="${ca}" th:method="post">
-                                        <input type="hidden" th:field="*{id}" id="editId3">
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="editTenCa">Tên ca</label>
-                                                <input type="text" class="form-control" id="editTenCa"
-                                                       th:field="*{tenCa}"
-                                                       placeholder="Tên CA">
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="editGiaCa">Giá ca</label>
-                                                <input type="text" class="form-control" id="editGiaCa"
-                                                       th:field="*{giaCa}"
-                                                       placeholder="Giá ca">
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="editThoiGianBatDau">Thời gian bắt đầu</label>
-                                                <input type="datetime-local" class="form-control"
-                                                       id="editThoiGianBatDau"
-                                                       th:field="*{thoiGianBatDau}" placeholder="Thời gian bắt đầu">
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="editThoiGianKetThuc">Thời gian kết thúc</label>
-                                                <input type="datetime-local" class="form-control"
-                                                       id="editThoiGianKetThuc"
-                                                       th:field="*{thoiGianKetThuc}" placeholder="Thời gian kết thúc">
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="editTrangThaiCa">Trạng thái</label>
-                                                <select id="editTrangThaiCa" class="form-control"
-                                                        th:field="*{trangThai}">
-                                                    <option th:each="a : ${listC}" th:value="${a.trangThai}"
-                                                            th:text="${a.trangThai}"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">
-                                                Close
-                                            </button>
-                                            <button type="submit" class="btn mb-2 btn-primary">Update</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="row justify-content-center">
-                        <div class="col-12">
-                            <h2 class="mb-2 page-title">Quản lý ngày trong tuần</h2>
-                            <p class="card-text"></p>
-                            <div class="row my-4">
-                                <!-- Small table -->
-                                <div class="col-md-12">
-                                    <div class="card shadow">
-                                        <div class="card-body">
-                                            <div class="toolbar row mb-3">
-                                                <!-- Form Add -->
-                                                <div class="col ml-auto">
-                                                    <div class="dropdown float-right">
-                                                        <button type="button" class="btn btn-primary float-right ml-3"
-                                                                data-toggle="modal" data-target="#varyModal4"
-                                                                data-whatever="@mdo">
-                                                            Thêm<span class="fe fe-plus"></span>
-                                                        </button>
-                                                        <div class="modal fade" id="varyModal4" tabindex="-1"
-                                                             role="dialog"
-                                                             aria-labelledby="varyModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="varyModalLabel4">
-                                                                            Thêm thứ
-                                                                            trong tuần</h5>
-                                                                        <button type="button" class="close"
-                                                                                data-dismiss="modal"
-                                                                                aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <form th:action="@{/ngayTrongTuan/add}"
-                                                                              th:object="${ngayTrongTuan}"
-                                                                              th:method="post">
-                                                                            <input type="hidden" th:field="*{id}">
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-6">
-                                                                                    <label for="inputEmail3">Ngày trong
-                                                                                        tuần</label><br/>
-                                                                                    <input type="checkbox"
-                                                                                           th:each="a: ${listNTT}"
-                                                                                           th:value="${a.thuTrongTuan}"
-                                                                                           th:text="${a.thuTrongTuan}"
-                                                                                           class="form-control"
-                                                                                           id="inputEmail5s"
-                                                                                           th:field="*{thuTrongTuan}"
-                                                                                           placeholder="thuTrongTuan">
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <div class="form-row">
-                                                                                <div class="form-group col-md-6">
-                                                                                    <label for="inputState3">Trạng
-                                                                                        thái</label>
-                                                                                    <select th:field="*{trangThai}"
-                                                                                            id="inputState3"
-                                                                                            class="form-control">
-                                                                                        <option th:each="a: ${listNTT}"
-                                                                                                th:value="${a.trangThai}"
-                                                                                                th:text="${a.trangThai}"></option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button"
-                                                                                        class="btn mb-2 btn-secondary"
-                                                                                        data-dismiss="modal">Close
-                                                                                </button>
-                                                                                <button type="submit"
-                                                                                        class="btn mb-2 btn-primary">Add
-                                                                                </button>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                                id="actionMenuButto4" data-toggle="dropdown"
-                                                                aria-haspopup="true" aria-expanded="false"> Hành động
-                                                        </button>
-                                                        <div class="dropdown-menu" aria-labelledby="actionMenuButton">
-                                                            <a class="dropdown-item" href="#">Export</a>
-                                                            <a class="dropdown-item" href="#">Something else here</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <table class="table">
-                                                <thead>
-                                                <tr>
-                                                    <th>STT</th>
-                                                    <th>Thứ trong tuần</th>
-                                                    <th>Trạng thái</th>
-                                                    <th>Hành động</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr th:each="a,b :${listNTT}">
-                                                    <td th:text="${b.count}"></td>
-                                                    <td th:text="${a.thuTrongTuan}"></td>
-                                                    <td th:text="${a.trangThai}"></td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-success edit-btn"
-                                                                data-toggle="modal" data-target="#editModal4"
-                                                                th:attr="data-id=${a.id}">Edit
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>STT</th>
-                                            <th>Thứ trong tuần</th>
-                                            <th>Trạng thái</th>
-                                            <th>Hành động</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="a,b :${listNTT}">
-                                            <td th:text="${b.count}"></td>
-                                            <td th:text="${a.thuTrongTuan}"></td>
-                                            <td th:text="${a.trangThai}"></td>
-                                            <td>
-                                                <button type="button" class="btn btn-success edit-btn" data-toggle="modal" data-target="#editModal4" th:attr="data-id=${a.id}">Edit</button>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div> <!-- simple table -->
-                    </div> <!-- end section -->
-                </div> <!-- .col-12 -->
-            </div> <!-- .row justify-content-center -->
-
-            <!-- Modal Edit -->
-            <div class="modal fade" id="editModal4" tabindex="-1" role="dialog" aria-labelledby="editModalLabel4"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel4">Chỉnh sửa thứ trong tuần</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form th:action="@{/ngayTrongTuan/update}" th:object="${ngayTrongTuan}" th:method="post">
-                                <input type="hidden" th:field="*{id}" id="editId4">
-
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label>Ngày trong tuần</label><br>
-                                        <div th:each="a: ${listNTT}" class="form-check form-check-inline">
-                                            <input type="checkbox" th:value="${a.thuTrongTuan}" th:id="'editNgayTrongTuan-' + ${a.id}"
-                                                   th:field="*{thuTrongTuan}" class="form-check-input">
-                                            <label th:for="'editNgayTrongTuan-' + ${a.id}" class="form-check-label"
-                                                   th:text="${a.thuTrongTuan}"></label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="editTrangThaiNgayTrongTuan">Trạng thái</label>
-                                        <select th:field="*{trangThai}" id="editTrangThaiNgayTrongTuan" class="form-control">
-                                            <option th:each="a: ${listNTT}" th:value="${a.trangThai}" th:text="${a.trangThai}"></option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Đóng</button>
-                                    <button type="submit" class="btn mb-2 btn-primary">Cập nhật</button>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-
+                </div>
+            </div>
         </div> <!-- .container-fluid -->
         <div th:include="fragment/modal :: modal"></div>
-
     </main>
 </div>
 
@@ -1170,36 +102,152 @@
 
 <script>
     $(document).ready(function () {
-        $('.edit-btn').on('click', function () {
-            var id = $(this).data('id');
+        // Hàm để load danh sách sân bóng theo loại sân bóng
+        function loadSanBongsByLoaiSan(loaiSanId) {
             $.ajax({
-                url: '/ngayTrongTuan/edit/' + id,
+                url: 'http://localhost:8080/san-bong/by-loai-san/' + loaiSanId,
                 method: 'GET',
+                success: function (data) {
+                    // Xóa nội dung cũ trước khi thêm mới
+                    $('#sanListContainer-' + loaiSanId).empty();
 
-                success: function(data) {
-                    // Set the hidden field value
-                    $('#editId4').val(data.id);
+                    // Kiểm tra xem danh sách có dữ liệu không
+                    if (data && data.length > 0) {
+                        // Hiển thị danh sách sân bóng
+                        data.forEach(function (sanBong, index) {
+                            $('#sanListContainer-' + loaiSanId).append(
+                                '<tr>' +
+                                '<td>' + (index + 1) + '</td>' +
+                                '<td>' + sanBong.tenSanBong + '</td>' +
+                                '<td style="display: flex">' +
+                                '<button class="btn mb-2 mr-1 btn-warning" data-id="' + sanBong.id + '"><span class="fe fe-edit-3"></span></button> ' +
+                                '<button class="btn mb-2 ml-1 btn-danger" data-id="' + sanBong.id + '"> <span class="fe fe-trash-2"></span></button>' +
+                                '</td>' +
+                                '</tr>'
+                            );
+                        });
 
-                    // Uncheck all checkboxes first
-                    $('input[name="thuTrongTuan"]').prop('checked', false);
+                        // Ẩn thông báo "Không có sân bóng nào."
+                        $('#noSanBong-' + loaiSanId).hide();
+                    } else {
+                        // Hiển thị thông báo "Không có sân bóng nào."
+                        $('#noSanBong-' + loaiSanId).show();
+                    }
 
-                    // Check checkboxes based on retrieved data
-                    data.thuTrongTuan.forEach(function(value) {
-                        $('input[name="thuTrongTuan"][value="' + value + '"]').prop('checked', true);
+                    $('#sanListContainer-' + loaiSanId).append(
+                        '<tr>' +
+                        '<td>' + "#" + '</td>' +
+                        '<td><input type="text" class="form-control new-san-input" placeholder="Nhập tên"></input> </td>' +
+                        '<td><button type="button" class="btn mb-2 ml-1 btn-success add-san-btn" data-loai-san-id="' + loaiSanId + '"> <span class="fe fe-plus"></span> Thêm</button></td>' +
+                        '</tr>'
+                    );
 
-                    });
+                },
+                error: function (err) {
+                    console.error('Error fetching san bongs by loai san:', err);
+                }
 
-                    // Set the select option
-                    $('#editTrangThaiNgayTrongTuan').val(data.trangThai);
+            });
+        }
 
-                    // Show the modal
-                    $('#editModal4').modal('show');
+        // Gọi API để lấy danh sách các loại sân bóng
+        $.ajax({
+            url: 'http://localhost:8080/loai-san/hien-thi',
+            method: 'GET',
+            success: function (data) {
+                // Duyệt qua danh sách loại sân bóng và thêm vào tab
+                data.forEach(function (loaiSan, index) {
+                    $('#myTab').append(
+                        '<li class="nav-item">' +
+                        '<a class="nav-link' + (index === 0 ? ' active' : '') + '" id="tab-' + loaiSan.id + '" data-toggle="tab" href="#tab-content-' + loaiSan.id +
+                        '" aria-controls="tab-content-' + loaiSan.id + '" aria-selected="' + (index === 0 ? 'true' : 'false') + '">' +
+                        loaiSan.tenLoaiSan +
+                        '</a>' +
+                        '</li>'
+                    );
+
+                    // Thêm nội dung cho từng tab
+                    $('#myTabContent').append(
+                        '<div class="tab-pane fade' + (index === 0 ? ' show active' : '') + '" id="tab-content-' + loaiSan.id
+                        + '" role="tabpanel" aria-labelledby="tab-' + loaiSan.id + '">' +
+                        '<div class="card-deck col-4">' +
+                        '<div class="card shadow mb-4">' +
+                        '<div class="card-header">' +
+                        '<strong class="card-title">Thêm sân</strong>' +
+                        '</div>' +
+                        '<div class="card-body">' +
+                        '<table class="table">' +
+                        '<thead>' +
+                        '<tr>' +
+                        '<th>#</th>' +
+                        '<th>Tên sân</th>' +
+                        '<th>Hành động</th>' +
+                        '</tr>' +
+                        '</thead>' +
+                        '<tbody id="sanListContainer-' + loaiSan.id + '">' +
+                        // Danh sách sân bóng sẽ được thêm bằng JavaScript
+                        '</tbody>' +
+                        '</table>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div id="noSanBong-' + loaiSan.id + '" class="text-muted" style="display: none;">' +
+                        'Không có sân bóng nào.' +
+                        '</div>' +
+                        '</div>'
+                    );
+
+                    // Gọi hàm load danh sách sân bóng cho tab đầu tiên
+                    if (index === 0) {
+                        loadSanBongsByLoaiSan(loaiSan.id);
+                    }
+
+                });
+
+                // Xử lý khi tab được chọn
+                $(document).on('click', '.nav-link', function () {
+                    var loaiSanId = $(this).attr('href').replace('#tab-content-', '');
+                    loadSanBongsByLoaiSan(loaiSanId);
+                });
+            },
+            error: function (err) {
+                console.error('Error fetching loai san bong:', err);
+            }
+        });
+
+        // Xử lý khi click vào nút "Thêm sân"
+        $(document).on('click', '.add-san-btn', function () {
+            var loaiSanId = $(this).data('loai-san-id');
+            var tenSanBong = $(this).closest('tr').find('.new-san-input').val();
+            // Kiểm tra tên sân bóng không được rỗng
+            if (tenSanBong.trim() === '') {
+                alert('Vui lòng nhập tên sân bóng.');
+                return;
+            }
+
+            // Gửi AJAX để thêm sân bóng mới
+            $.ajax({
+                url: 'http://localhost:8080/san-bong',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    loaiSanId: loaiSanId,
+                    tenSanBong: tenSanBong,
+                    idLoaiSan: loaiSanId, // Thêm idLoaiSan vào dữ liệu gửi đi
+                    tenLoaiSan: $('#tab-' + loaiSanId).text().trim() // Thêm tenLoaiSan vào dữ liệu gửi đi
+                }),
+                success: function (response) {
+                    // Sau khi thêm thành công, load lại danh sách sân bóng
+                    loadSanBongsByLoaiSan(loaiSanId); // Hàm load lại danh sách sân bóng
+                },
+                error: function (err) {
+                    console.error('Error adding new san bong:', err);
+                    alert('Đã xảy ra lỗi khi thêm sân bóng.');
                 }
             });
         });
     });
 </script>
-
 
 
 

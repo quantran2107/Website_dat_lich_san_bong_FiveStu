@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("san-bong")
@@ -69,5 +70,11 @@ public class SanBongRest {
 
 
         return ResponseEntity.ok(sanBongService.pages(pageNo,pageSize));
+    }
+//    Ly them ham getByID
+    @GetMapping("/by-loai-san/{id}")
+    public ResponseEntity<List<SanBongDTO>> getSanBongsByLoaiSan(@PathVariable("id") Integer loaiSanId){
+        List<SanBongDTO> sanBongs = sanBongService.getSanBongsByLoaiSanId(loaiSanId);
+        return ResponseEntity.ok(sanBongs);
     }
 }

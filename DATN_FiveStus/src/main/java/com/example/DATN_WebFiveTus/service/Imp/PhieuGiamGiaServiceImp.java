@@ -61,13 +61,6 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
     public PhieuGiamGiaDTO update(Integer id, PhieuGiamGiaDTO phieuGiamGiaDTO) {
         PhieuGiamGia existingEntity = phieuGiamGiaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu giảm giá với id " + id));
-
-        // Update fields from DTO to existing entity
-        existingEntity.setMaPhieuGiamGia(phieuGiamGiaDTO.getMaPhieuGiamGia());
-        existingEntity.setTenPhieuGiamGia(phieuGiamGiaDTO.getTenPhieuGiamGia());
-        existingEntity.setMucGiam(phieuGiamGiaDTO.getMucGiam());
-        // Update other fields accordingly
-
         // Save updated entity
         PhieuGiamGia updatedEntity = phieuGiamGiaRepository.save(existingEntity);
 
@@ -96,7 +89,7 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
     }
 
     @Override
-    public void updateStatus(Integer id, boolean newStatus) {
+    public void updateStatus(Integer id, String newStatus) {
         PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PhieuGiamGia not found with id " + id));
         phieuGiamGia.setTrangThai(newStatus);

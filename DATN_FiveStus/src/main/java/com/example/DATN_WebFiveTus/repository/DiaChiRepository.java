@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface DiaChiRepository extends JpaRepository<DiaChi,Integer> {
-    @Query("SELECT dc FROM DiaChi dc JOIN FETCH dc.khachHang")
+    @Query("SELECT dckh FROM DiaChiKhachHang dckh ")
     List<DiaChi> getAllJoinFetch();
 }

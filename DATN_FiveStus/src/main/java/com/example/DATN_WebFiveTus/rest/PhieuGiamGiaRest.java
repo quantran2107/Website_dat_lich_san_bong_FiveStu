@@ -86,8 +86,8 @@ public class PhieuGiamGiaRest {
     }
 
     @PutMapping("/toggle-status/{id}")
-    public ResponseEntity<?> toggleStatus(@PathVariable Integer id, @RequestBody Map<String, Boolean> request) {
-        boolean newStatus = request.get("trangThai");
+    public ResponseEntity<?> toggleStatus(@PathVariable Integer id, @RequestBody Map<String, String> request) {
+        String newStatus = request.get("trangThai");
         try {
             phieuGiamGiaService.updateStatus(id, newStatus);
             return ResponseEntity.ok().body("Status updated successfully");

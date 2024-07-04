@@ -14,7 +14,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,6 +47,7 @@ public class SanBongServiceImp implements SanBongService {
     @Override
     public SanBongDTO save(SanBongDTO sanBongDTO) {
         SanBong sanBong=modelMapper.map(sanBongDTO,SanBong.class);
+        sanBong.setTrangThai("active");
         SanBong sanBongSave=sanBongRepository.save(sanBong);
         return modelMapper.map(sanBongSave,SanBongDTO.class);
     }
@@ -79,6 +83,12 @@ public class SanBongServiceImp implements SanBongService {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<SanBong> sanBongPage = sanBongRepository.getAllJoinFetchPageable(pageable);
         return sanBongPage.map(sanBong -> modelMapper.map(sanBong, SanBongDTO.class));
+    }
+
+    @Override
+    public List<SanBongDTO> getSanBongsByLoaiSanId(Integer loaiSanId) {
+        return  sanBongRepository.findByLoaiSanId(loaiSanId).stream().map((sanBong) ->modelMapper
+                .map(sanBong,SanBongDTO.class)).collect(Collectors.toList());
     }
 
 

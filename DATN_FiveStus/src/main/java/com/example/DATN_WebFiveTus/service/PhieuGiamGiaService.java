@@ -21,7 +21,7 @@ public interface PhieuGiamGiaService {
 
     void delete(Integer id);
 
-    void updateStatus(Integer id, boolean newStatus);
+    void updateStatus(Integer id, String newStatus);
 
     void deleteMultiple(List<Integer> ids);
 
