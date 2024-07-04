@@ -39,5 +39,5 @@ public class KhachHangDTO {
 
     private String trangThai;
 
-    private List<DiaChiDTO> diaChi; // Danh sách địa chỉ
+    private List<DiaChiKhachHangDTO> diaChi; // Danh sách địa chỉ
 }

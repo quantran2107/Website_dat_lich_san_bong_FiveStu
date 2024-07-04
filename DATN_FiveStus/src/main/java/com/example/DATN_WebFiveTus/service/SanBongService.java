@@ -4,6 +4,7 @@ import com.example.DATN_WebFiveTus.dto.SanBongDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SanBongService {
 
@@ -22,4 +23,6 @@ public interface SanBongService {
     void deletedAt(Integer id);
 
     Page<SanBongDTO> pages(Integer pageNo, Integer pageSize);
+
+    List<SanBongDTO> getSanBongsByLoaiSanId(Integer loaiSanId);
 }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,4 +26,7 @@ public interface SanBongRepository extends JpaRepository<SanBong,Integer> {
     @Transactional
     @Query("UPDATE SanBong sb SET sb.deletedAt = FALSE WHERE sb.id = :id")
     void deletedAt(Integer id);
+
+    @Query("SELECT sb FROM SanBong sb WHERE sb.loaiSan.id = :loaiSanId")
+    List<SanBong> findByLoaiSanId(@Param("loaiSanId") Integer loaiSanId);
 }
