@@ -11,12 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,6 +39,17 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Page<PhieuGiamGiaDTO> phanTrang(Pageable pageable) {
+        Page<PhieuGiamGia> trangPhieuGiamGia = phieuGiamGiaRepository.getAllJoinFetch(pageable);
+        List<PhieuGiamGiaDTO> danhSachDTO = trangPhieuGiamGia.getContent().stream()
+                .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
+                .collect(Collectors.toList());
+        return new PageImpl<>(danhSachDTO, pageable, trangPhieuGiamGia.getTotalElements());
+    }
+
+
+        @Override
     public List<PhieuGiamGiaDTO> getAll() {
         List<PhieuGiamGia> phieuGiamGiaList = phieuGiamGiaRepository.findAll();
         return phieuGiamGiaList.stream()
@@ -53,6 +69,8 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
         PhieuGiamGia phieuGiamGia = modelMapper.map(phieuGiamGiaDTO, PhieuGiamGia.class);
         // Save entity to repository
         PhieuGiamGia savedEntity = phieuGiamGiaRepository.save(phieuGiamGia);
+        savedEntity.setMaPhieuGiamGia(CodeGenerator.generateDiscountCode());
+        savedEntity.setDeletedAt(false);
         // Convert saved entity back to DTO
         return modelMapper.map(savedEntity, PhieuGiamGiaDTO.class);
     }
@@ -61,13 +79,6 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
     public PhieuGiamGiaDTO update(Integer id, PhieuGiamGiaDTO phieuGiamGiaDTO) {
         PhieuGiamGia existingEntity = phieuGiamGiaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu giảm giá với id " + id));
-
-        // Update fields from DTO to existing entity
-        existingEntity.setMaPhieuGiamGia(phieuGiamGiaDTO.getMaPhieuGiamGia());
-        existingEntity.setTenPhieuGiamGia(phieuGiamGiaDTO.getTenPhieuGiamGia());
-        existingEntity.setMucGiam(phieuGiamGiaDTO.getMucGiam());
-        // Update other fields accordingly
-
         // Save updated entity
         PhieuGiamGia updatedEntity = phieuGiamGiaRepository.save(existingEntity);
 
@@ -76,62 +87,73 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
     }
 
     @Override
-    public Page<PhieuGiamGiaDTO> phanTrang(Pageable pageable) {
-        Page<PhieuGiamGia> phieuGiamGiaPage = phieuGiamGiaRepository.getAllJoinFetch(pageable);
-        return new PageImpl<>(
-                phieuGiamGiaPage.getContent().stream()
-                        .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
-                        .collect(Collectors.toList())
-                , pageable
-                , phieuGiamGiaPage.getTotalElements());
-    }
-
-    @Override
     @Transactional
-    public void delete(Integer id) {
-        PhieuGiamGia entity = phieuGiamGiaRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu giảm giá với id " + id));
-        entity.setDeletedAt(true); // Cập nhật trạng thái xóa mềm
-        phieuGiamGiaRepository.save(entity);
-    }
-
-    @Override
-    public void updateStatus(Integer id, boolean newStatus) {
+    public void updateStatus(Integer id, String newStatus) {
         PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("PhieuGiamGia not found with id " + id));
-        phieuGiamGia.setTrangThai(newStatus);
-        phieuGiamGiaRepository.save(phieuGiamGia);
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu giảm giá với id " + id));
+        phieuGiamGia.setTrangThai(newStatus); // Cập nhật trạng thái mới
+        phieuGiamGiaRepository.save(phieuGiamGia); // Lưu lại vào cơ sở dữ liệu
     }
 
-    @Override
-    public void deleteMultiple(List<Integer> ids) {
-        List<PhieuGiamGia> phieuGiamGiaList = phieuGiamGiaRepository.findAllById(ids);
-        phieuGiamGiaList.stream()
-                .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
-                .collect(Collectors.toList()).forEach(phieuGiamGiaDTO -> phieuGiamGiaDTO.setDeletedAt(true));
-        phieuGiamGiaRepository.saveAll(phieuGiamGiaList);
-    }
 
-    @Override
-    public List<PhieuGiamGiaDTO> search(String query) {
-        List<PhieuGiamGia> results = phieuGiamGiaRepository.searchByNameOrCode(query);
-        return results.stream()
-                .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
-                .collect(Collectors.toList());
-    }
+    public static class CodeGenerator {
+        private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
-    @Override
-    public List<PhieuGiamGiaDTO> filter(String status) {
-        if ("all".equals(status)) {
-            return phieuGiamGiaRepository.findAll().stream()
-                    .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
-                    .collect(Collectors.toList());
-        } else {
-            boolean isActive = "true".equals(status);
-            return phieuGiamGiaRepository.filterByStatus(isActive).stream()
-                    .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
-                    .collect(Collectors.toList());
+        public static String generateDiscountCode() {
+            // Tiền tố cố định
+            String prefix = "PGG";
+
+            // Thời gian hiện tại
+            String timestamp = LocalDateTime.now().format(DATE_FORMAT);
+
+            // Mã sinh ngẫu nhiên hoặc số thứ tự (tuỳ chọn)
+            int randomNum = (int) (Math.random() * 1000);
+
+            // Kết hợp các phần lại để tạo mã
+            return prefix + timestamp + String.format("%03d", randomNum);
         }
-    }
 
+        //    @Override
+//    @Transactional
+//    public void delete(Integer id) {
+//        PhieuGiamGia entity = phieuGiamGiaRepository.findById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu giảm giá với id " + id));
+//        entity.setDeletedAt(true); // Cập nhật trạng thái xóa mềm
+//        phieuGiamGiaRepository.save(entity);
+//    }
+//
+
+//
+//    @Override
+//    public void deleteMultiple(List<Integer> ids) {
+//        List<PhieuGiamGia> phieuGiamGiaList = phieuGiamGiaRepository.findAllById(ids);
+//        phieuGiamGiaList.stream()
+//                .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
+//                .collect(Collectors.toList()).forEach(phieuGiamGiaDTO -> phieuGiamGiaDTO.setDeletedAt(true));
+//        phieuGiamGiaRepository.saveAll(phieuGiamGiaList);
+//    }
+
+//    @Override
+//    public List<PhieuGiamGiaDTO> search(String query) {
+//        List<PhieuGiamGia> results = phieuGiamGiaRepository.searchByNameOrCode(query);
+//        return results.stream()
+//                .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
+//                .collect(Collectors.toList());
+//    }
+
+//    @Override
+//    public List<PhieuGiamGiaDTO> filter(String status) {
+//        if ("all".equals(status)) {
+//            return phieuGiamGiaRepository.findAll().stream()
+//                    .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
+//                    .collect(Collectors.toList());
+//        } else {
+//            boolean isActive = "true".equals(status);
+//            return phieuGiamGiaRepository.filterByStatus(isActive).stream()
+//                    .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
+//                    .collect(Collectors.toList());
+//        }
+//    }
+
+    }
 }

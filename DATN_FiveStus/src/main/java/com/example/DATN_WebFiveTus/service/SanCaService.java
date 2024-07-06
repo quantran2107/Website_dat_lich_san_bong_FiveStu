@@ -23,4 +23,6 @@ public interface SanCaService {
     void deletedAt(Integer id);
 
     public List<SanCaDTO> listAll2(Integer pageNum, String sortDirection, int[] totalPageElement);
+
+    public List<SanCaDTO> searchKeyWords(Integer pageNum, String keyWords, String sortDirection, int[] totalPageElement, Integer id);
 }

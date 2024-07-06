@@ -83,6 +83,26 @@ public class SanCaRest {
 
         return response;
     }
+
+//    @GetMapping("/search")
+//    public Map<String, Object> searchById(
+//            @RequestParam(value = "id", defaultValue = "1") Integer id,
+//            @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+//            @RequestParam(value = "trangThai", defaultValue = "inactive") String trangThai,
+//            @RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection
+//    ) {
+//        int[] totalPageElement = new int[2];
+//        List<SanCaDTO> sanCaDTOList = sanCaService.searchId(pageNum,trangThai, sortDirection, totalPageElement, id);
+//
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("totalPages", totalPageElement[0]);
+//        response.put("totalElements", totalPageElement[1]);
+//        response.put("sanCaList", sanCaDTOList);
+//
+//        return response;
+//    }
+
+
 //
 //    @GetMapping("/sanCaList")
 //    public String getSanCaList(

@@ -1,10 +1,13 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.DiaChiDTO;
+import com.example.DATN_WebFiveTus.dto.DiaChiKhachHangDTO;
 import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
 import com.example.DATN_WebFiveTus.entity.DiaChi;
+import com.example.DATN_WebFiveTus.entity.DiaChiKhachHang;
 import com.example.DATN_WebFiveTus.entity.KhachHang;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
+import com.example.DATN_WebFiveTus.repository.DiaChiKhachHangRepository;
 import com.example.DATN_WebFiveTus.repository.DiaChiRepository;
 import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
 import com.example.DATN_WebFiveTus.service.KhachHangService;
@@ -23,7 +26,7 @@ public class KhachHangImp implements KhachHangService {
     private KhachHangRepository khachHangRepository;
 
     @Autowired
-    private DiaChiRepository diaChiRepository;
+    private DiaChiKhachHangRepository diaChiKhachHangRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -51,10 +54,10 @@ public class KhachHangImp implements KhachHangService {
         KhachHang khachHang = modelMapper.map(khachHangDTO, KhachHang.class);
         khachHang = khachHangRepository.save(khachHang);
 
-        for (DiaChiDTO diaChiDTO : khachHangDTO.getDiaChi()) {
-            DiaChi diaChi = modelMapper.map(diaChiDTO, DiaChi.class);
-            diaChi.setKhachHang(khachHang);
-            diaChiRepository.save(diaChi);
+        for (DiaChiKhachHangDTO diaChiKhachHangDTO : khachHangDTO.getDiaChi()) {
+            DiaChiKhachHang diaChiKhachHang = modelMapper.map(diaChiKhachHangDTO, DiaChiKhachHang.class);
+            diaChiKhachHangDTO.setIdKhachHang(khachHang.getId());
+            diaChiKhachHangRepository.save(diaChiKhachHang);
         }
 
         return modelMapper.map(khachHang, KhachHangDTO.class);

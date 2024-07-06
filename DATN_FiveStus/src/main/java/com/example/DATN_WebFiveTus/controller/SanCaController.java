@@ -8,6 +8,8 @@ import com.example.DATN_WebFiveTus.dto.SanBongDTO;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
 import com.example.DATN_WebFiveTus.entity.SanCa;
 import com.example.DATN_WebFiveTus.rest.SanCaRest;
+import com.example.DATN_WebFiveTus.service.LoaiSanService;
+import com.example.DATN_WebFiveTus.service.NgayTrongTuanService;
 import com.example.DATN_WebFiveTus.service.SanCaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,12 +45,21 @@ public class SanCaController {
         this.sanCaService = sanCaService;
     }
 
-    @GetMapping("/listSanCa")
-    public String HienThi(Model model) {
+    @GetMapping("listSanCa")
+    public String listSanCa(
+            @RequestParam(name = "keyWords", required = false) Integer id,
+            @RequestParam(name = "keyWords", required = false) String keyWords,
+            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
+            @RequestParam(name = "sortDirection", defaultValue = "asc") String sortDirection,
+            Model model) {
+
         List<SanCaDTO> listRest = sanCaRest.getAll2().getBody();
         Set<String> listTT = new HashSet<>(listRest.stream()
                 .map(SanCaDTO::getTrangThai)
                 .collect(Collectors.toList()));
+
+        model.addAttribute("listTT",listTT);
+
 
         model.addAttribute("listTT",listTT);
 
@@ -77,11 +88,33 @@ public class SanCaController {
                 SanCaDTO[].class
         )));
 
-        model.addAttribute("sanBong",new SanBongDTO());
-        model.addAttribute("ca",new CaDTO());
-        model.addAttribute("ngayTrongTuan",new NgayTrongTuanDTO());
-        model.addAttribute("loaiSan",new LoaiSanDTO());
-        model.addAttribute("sanCa",new SanCaDTO());
+        model.addAttribute("sanBong", new SanBongDTO());
+        model.addAttribute("ca", new CaDTO());
+        model.addAttribute("ngayTrongTuan", new NgayTrongTuanDTO());
+        model.addAttribute("loaiSan", new LoaiSanDTO());
+        model.addAttribute("sanCa", new SanCaDTO());
+
+        int[] totalPageElement = new int[2]; // Array to store total pages and total elements
+
+        List<SanCaDTO> sanCaDTOList;
+
+        if (id != null || keyWords != null) {
+            // Search by id if id is provided
+            sanCaDTOList = sanCaService.searchKeyWords(pageNum, keyWords.trim(), sortDirection, totalPageElement, id);
+        } else {
+            // Otherwise, list all with pagination and sorting
+            sanCaDTOList = sanCaService.listAll2(pageNum, sortDirection, totalPageElement);
+        }
+
+        // Add attributes to the model
+        model.addAttribute("sanCaDTOList", sanCaDTOList);
+        model.addAttribute("currentPage", pageNum);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("totalPages", totalPageElement[0]);
+        model.addAttribute("totalElements", totalPageElement[1]);
+        model.addAttribute("currentId", id);
+        model.addAttribute("currentTrangThai", keyWords);
+
         return "/list/quan-ly-san-ca";
     }
 
@@ -119,104 +152,52 @@ public class SanCaController {
         restTemplate.put("http://localhost:8080/san-ca/{id}", sanCaDTO, sanCaDTO.getId());
 
 
-        return "redirect:/sort-page";
+        return "redirect:/listSanCa";
     }
 
-    @GetMapping("/sort-page")
-    public String listSanCa(
-            @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
-            @RequestParam(name = "sortDirection", defaultValue = "asc") String sortDirection,
-            Model model) {
 
-            List<SanCaDTO> listRest = sanCaRest.getAll2().getBody();
-    Set<String> listTT = new HashSet<>(listRest.stream()
-            .map(SanCaDTO::getTrangThai)
-            .collect(Collectors.toList()));
-
-        model.addAttribute("listTT",listTT);
-
-                model.addAttribute("listLS", Arrays.asList(restTemplate.getForObject(
-                "http://localhost:8080/loai-san/hien-thi",
-                LoaiSanDTO[].class
-        )));
-
-                model.addAttribute("listNTT", Arrays.asList(restTemplate.getForObject(
-                "http://localhost:8080/ngay-trong-tuan/hien-thi",
-                NgayTrongTuanDTO[].class
-        )));
-
-                model.addAttribute("listC", Arrays.asList(restTemplate.getForObject(
-                "http://localhost:8080/ca/hien-thi",
-                CaDTO[].class
-        )));
-
-                model.addAttribute("listSB", Arrays.asList(restTemplate.getForObject(
-                "http://localhost:8080/san-bong/hien-thi",
-                SanBongDTO[].class
-        )));
-
-                model.addAttribute("listSC", Arrays.asList(restTemplate.getForObject(
-                "http://localhost:8080/san-ca/hien-thi",
-                SanCaDTO[].class
-        )));
-
-                model.addAttribute("sanBong",new SanBongDTO());
-                model.addAttribute("ca",new CaDTO());
-                model.addAttribute("ngayTrongTuan",new NgayTrongTuanDTO());
-                model.addAttribute("loaiSan",new LoaiSanDTO());
-                model.addAttribute("sanCa",new SanCaDTO());
-
-        int[] totalPageElement = new int[2]; // Array to store total pages and total elements
-
-        // Call service method to get list of SanCaDTOs
-        List<SanCaDTO> sanCaDTOList = sanCaService.listAll2(pageNum, sortDirection, totalPageElement);
-
-        // Add attributes to the model
-        model.addAttribute("sanCaDTOList", sanCaDTOList);
-        model.addAttribute("currentPage", pageNum);
-        model.addAttribute("sortDirection", sortDirection);
-        model.addAttribute("totalPages", totalPageElement[0]);
-        model.addAttribute("totalElements", totalPageElement[1]);
-
-        return "/list/quan-ly-san-ca";
-    }
 }
 
 
-//    List<SanCaDTO> listRest = sanCaRest.getAll2().getBody();
-//    Set<String> listTT = new HashSet<>(listRest.stream()
-//            .map(SanCaDTO::getTrangThai)
-//            .collect(Collectors.toList()));
+//
+//    @GetMapping("/listSanCa")
+//    public String HienThi(Model model) {
+//        List<SanCaDTO> listRest = sanCaRest.getAll2().getBody();
+//        Set<String> listTT = new HashSet<>(listRest.stream()
+//                .map(SanCaDTO::getTrangThai)
+//                .collect(Collectors.toList()));
 //
 //        model.addAttribute("listTT",listTT);
 //
-//                model.addAttribute("listLS", Arrays.asList(restTemplate.getForObject(
+//        model.addAttribute("listLS", Arrays.asList(restTemplate.getForObject(
 //                "http://localhost:8080/loai-san/hien-thi",
 //                LoaiSanDTO[].class
 //        )));
 //
-//                model.addAttribute("listNTT", Arrays.asList(restTemplate.getForObject(
+//        model.addAttribute("listNTT", Arrays.asList(restTemplate.getForObject(
 //                "http://localhost:8080/ngay-trong-tuan/hien-thi",
 //                NgayTrongTuanDTO[].class
 //        )));
 //
-//                model.addAttribute("listC", Arrays.asList(restTemplate.getForObject(
+//        model.addAttribute("listC", Arrays.asList(restTemplate.getForObject(
 //                "http://localhost:8080/ca/hien-thi",
 //                CaDTO[].class
 //        )));
 //
-//                model.addAttribute("listSB", Arrays.asList(restTemplate.getForObject(
+//        model.addAttribute("listSB", Arrays.asList(restTemplate.getForObject(
 //                "http://localhost:8080/san-bong/hien-thi",
 //                SanBongDTO[].class
 //        )));
 //
-//                model.addAttribute("listSC", Arrays.asList(restTemplate.getForObject(
+//        model.addAttribute("listSC", Arrays.asList(restTemplate.getForObject(
 //                "http://localhost:8080/san-ca/hien-thi",
 //                SanCaDTO[].class
 //        )));
 //
-//                model.addAttribute("sanBong",new SanBongDTO());
-//                model.addAttribute("ca",new CaDTO());
-//                model.addAttribute("ngayTrongTuan",new NgayTrongTuanDTO());
-//                model.addAttribute("loaiSan",new LoaiSanDTO());
-//                model.addAttribute("sanCa",new SanCaDTO());
+//        model.addAttribute("sanBong",new SanBongDTO());
+//        model.addAttribute("ca",new CaDTO());
+//        model.addAttribute("ngayTrongTuan",new NgayTrongTuanDTO());
+//        model.addAttribute("loaiSan",new LoaiSanDTO());
+//        model.addAttribute("sanCa",new SanCaDTO());
+//        return "/list/quan-ly-san-ca";
+//    }

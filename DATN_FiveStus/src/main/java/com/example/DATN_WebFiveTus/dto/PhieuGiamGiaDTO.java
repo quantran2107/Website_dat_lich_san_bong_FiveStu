@@ -23,32 +23,29 @@ public class PhieuGiamGiaDTO {
 
     private int id;
 
-    private Integer idKhachHang;
-
-    private String hoVaTenKhachHang;
-
     private String maPhieuGiamGia;
-
 
     private String tenPhieuGiamGia;
 
+    private Integer soLuong;
 
-    private String mucGiam;
-
+    private Float mucGiam;
 
     private Boolean hinhThucGiamGia;
 
+    private Float dieuKienSuDung;
 
-    private String dieuKienSuDung;
+    private Float giaTriToiDa;
 
+    private Boolean doiTuongApDung;
 
     private Date ngayBatDau;
 
-
     private Date ngayKetThuc;
 
+    private String trangThai;
 
-    private Boolean trangThai;
+    private String ghiChu;
 
     private Boolean deletedAt;
 }

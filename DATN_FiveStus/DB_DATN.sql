@@ -20,13 +20,30 @@ CREATE TABLE khach_hang (
 -- Table: dia_chi
 CREATE TABLE dia_chi (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  ten_dia_chi VARCHAR(100) DEFAULT '',
+  thanh_pho VARCHAR(100) DEFAULT '',
+  quan_huyen VARCHAR(100) DEFAULT '',
+  phuong_xa VARCHAR(100) DEFAULT '',
   ghi_chu VARCHAR(100) DEFAULT '',
+  trang_thai bit,
+  created_at DATETIME, 
+  updated_at DATETIME,
+  deleted_at bit
+);
+
+-- Table: dia_chi_khach_hang
+CREATE TABLE dia_chi_khach_hang (
+  id INT AUTO_INCREMENT PRIMARY KEY,
   id_khach_hang INT NOT NULL,
-created_at DATETIME, 
+  id_dia_chi INT NOT NULL,
+  so_nha VARCHAR(100) DEFAULT '',
+  duong VARCHAR(100) DEFAULT '',
+  ghi_chu VARCHAR(100) DEFAULT '',
+  trang_thai VARCHAR(100) DEFAULT '',
+  created_at DATETIME, 
   updated_at DATETIME,
   deleted_at bit,
-  CONSTRAINT fk_diaChi_khachHang FOREIGN KEY (id_khach_hang) REFERENCES khach_hang(id)
+  CONSTRAINT fk_diaChiKhachHang_khachHang FOREIGN KEY (id_khach_hang) REFERENCES khach_hang(id),
+  CONSTRAINT fk_diaChiKhachHang_diaChi FOREIGN KEY (id_dia_chi) REFERENCES dia_chi(id)
 );
 
 -- Table: chuc_vu
@@ -75,19 +92,34 @@ CREATE TABLE diem_danh (
 -- Table: phieu_giam_gia
 CREATE TABLE phieu_giam_gia (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  id_khach_hang int not null,
   ma_phieu_giam_gia VARCHAR(100),
   ten_phieu_giam_gia VARCHAR(100),
+  so_luong int,
   muc_giam float,
   hinh_thuc_giam_gia bit,
-  dieu_kien_su_dung VARCHAR(100),
-  ngay_bat_dau DATETIME,
-  ngay_ket_thuc DATETIME,
+  dieu_kien_su_dung float,
+  gia_tri_toi_da float,
+  doi_tuong_ap_dung bit,
+  ngay_bat_dau date,
+  ngay_ket_thuc date,
+  trang_thai VARCHAR(100),
+  ghi_chu VARCHAR(500),
+  created_at DATETIME, 
+  updated_at DATETIME,
+  deleted_at bit
+);
+
+-- Table: phieu_giam_gia_chi_tiet
+CREATE TABLE phieu_giam_gia_chi_tiet (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  id_khach_hang int not null,
+  id_phieu_giam_gia int not null,
   trang_thai bit,
   created_at DATETIME, 
   updated_at DATETIME,
   deleted_at bit,
-    CONSTRAINT fk_phieuGiamGia_khachHang FOREIGN KEY (id_khach_hang) REFERENCES khach_hang(id)
+    CONSTRAINT fk_phieuGiamGiaChiTiet_khachHang FOREIGN KEY (id_khach_hang) REFERENCES khach_hang(id),
+    CONSTRAINT fk_phieuGiamGiaChiTiet_phieuGiamGia FOREIGN KEY (id_phieu_giam_gia) REFERENCES phieu_giam_gia(id)
 );
 
 -- Table: hoa_don
@@ -183,11 +215,9 @@ CREATE TABLE hoa_don_chi_tiet (
   id INT AUTO_INCREMENT PRIMARY KEY,
     id_hoa_don INT NOT NULL,
   id_san_ca INT NOT NULL,
-  ngay_den_san DATE NOT NULL,
-  muay_thanh_toan VARCHAR(50) NOT NULL,
-  thoi_gian_checkin VARCHAR(50) NOT NULL,
   tien_san DECIMAL(10, 2) NOT NULL,
   ghi_chu TEXT NOT NULL,
+  trang_thai VARCHAR(50),
   created_at DATETIME, 
   updated_at DATETIME,
   deleted_at bit,
@@ -381,13 +411,31 @@ VALUES
   ('KH005', 'password5', 'Nguyen Van E', 'nguyenvane@gmail.com', true, '0123456789', 'active', NOW(), NOW(), 0);
 
 
-INSERT INTO dia_chi (ten_dia_chi, ghi_chu, id_khach_hang, created_at, updated_at, deleted_at)
+INSERT INTO dia_chi (id, thanh_pho, quan_huyen, phuong_xa, ghi_chu, trang_thai, created_at, updated_at, deleted_at)
 VALUES
-  ('Dia chi 1', 'Ghi chu 1', 1, NOW(), NOW(), 1),
-  ('Dia chi 2', 'Ghi chu 2', 2, NOW(), NOW(), 1),
-  ('Dia chi 3', 'Ghi chu 3', 3, NOW(), NOW(), 1),
-  ('Dia chi 4', 'Ghi chu 4', 4, NOW(), NOW(), 0),
-  ('Dia chi 5', 'Ghi chu 5', 5, NOW(), NOW(), 0);
+(1, 'Hà Nội', 'Ba Đình', 'Kim Mã', 'Ghi chú 1', 1, '2024-07-01 10:00:00', '2024-07-01 10:00:00', 0),
+(2, 'Hồ Chí Minh', 'Quận 1', 'Bến Nghé', 'Ghi chú 2', 0, '2024-07-02 10:00:00', '2024-07-02 10:00:00', 0),
+(3, 'Đà Nẵng', 'Hải Châu', 'Hải Châu 1', 'Ghi chú 3', 1, '2024-07-03 10:00:00', '2024-07-03 10:00:00', 0),
+(4, 'Hải Phòng', 'Lê Chân', 'An Biên', 'Ghi chú 4', 0, '2024-07-04 10:00:00', '2024-07-04 10:00:00', 0),
+(5, 'Cần Thơ', 'Ninh Kiều', 'Tân An', 'Ghi chú 5', 1, '2024-07-05 10:00:00', '2024-07-05 10:00:00', 0),
+(6, 'Hà Nội', 'Đống Đa', 'Cát Linh', 'Ghi chú 6', 0, '2024-07-06 10:00:00', '2024-07-06 10:00:00', 0),
+(7, 'Hồ Chí Minh', 'Quận 3', '6', 'Ghi chú 7', 1, '2024-07-07 10:00:00', '2024-07-07 10:00:00', 0),
+(8, 'Đà Nẵng', 'Thanh Khê', 'Thạc Gián', 'Ghi chú 8', 0, '2024-07-08 10:00:00', '2024-07-08 10:00:00', 0),
+(9, 'Hải Phòng', 'Ngô Quyền', 'Máy Chai', 'Ghi chú 9', 1, '2024-07-09 10:00:00', '2024-07-09 10:00:00', 0),
+(10, 'Cần Thơ', 'Bình Thủy', 'An Thới', 'Ghi chú 10', 0, '2024-07-10 10:00:00', '2024-07-10 10:00:00', 0);
+
+INSERT INTO dia_chi_khach_hang (id, id_khach_hang,id_dia_chi, so_nha, duong, ghi_chu, trang_thai, created_at, updated_at, deleted_at)
+VALUES
+(1, 1,1, 'Số 1', 'Đường Kim Mã', 'Ghi chú 1', 'Mặc định', '2024-07-01 10:00:00', '2024-07-01 10:00:00', 0),
+(2, 2,2, 'Số 2', 'Đường Nguyễn Huệ', 'Ghi chú 2', 'Hoạt động', '2024-07-02 10:00:00', '2024-07-02 10:00:00', 0),
+(3, 3,3, 'Số 3', 'Đường Bạch Đằng', 'Ghi chú 3', 'Không hoạt động', '2024-07-03 10:00:00', '2024-07-03 10:00:00', 0),
+(4, 4,4, 'Số 4', 'Đường Lê Lợi', 'Ghi chú 4', 'Mặc định', '2024-07-04 10:00:00', '2024-07-04 10:00:00', 0),
+(5, 5,5, 'Số 5', 'Đường 30/4', 'Ghi chú 5', 'Hoạt động', '2024-07-05 10:00:00', '2024-07-05 10:00:00', 0),
+(6, 1,6, 'Số 6', 'Đường Cát Linh', 'Ghi chú 6', 'Không hoạt động', '2024-07-06 10:00:00', '2024-07-06 10:00:00', 0),
+(7, 2,7, 'Số 7', 'Đường Pasteur', 'Ghi chú 7', 'Mặc định', '2024-07-07 10:00:00', '2024-07-07 10:00:00', 0),
+(8, 3,8, 'Số 8', 'Đường Nguyễn Văn Linh', 'Ghi chú 8', 'Hoạt động', '2024-07-08 10:00:00', '2024-07-08 10:00:00', 0),
+(9, 4, 9,'Số 9', 'Đường Trần Phú', 'Ghi chú 9', 'Không hoạt động', '2024-07-09 10:00:00', '2024-07-09 10:00:00', 0),
+(10, 5, 10,'Số 10', 'Đường Lê Hồng Phong', 'Ghi chú 10', 'Mặc định', '2024-07-10 10:00:00', '2024-07-10 10:00:00', 0);
 
 INSERT INTO chuc_vu (ten_chuc_vu, ma_nhan_vien, trang_thai, created_at, updated_at, deleted_at)
 VALUES
@@ -416,13 +464,53 @@ VALUES
   ('Chuc vu 5', NOW(), NOW(), 'Ghi chu 5', 'active', 5, NOW(), NOW(), 0);
   
 
-INSERT INTO phieu_giam_gia (ma_phieu_giam_gia, id_khach_hang,ten_phieu_giam_gia, muc_giam, hinh_thuc_giam_gia, dieu_kien_su_dung, ngay_bat_dau, ngay_ket_thuc, trang_thai, created_at, updated_at, deleted_at)
+INSERT INTO phieu_giam_gia ( ma_phieu_giam_gia, ten_phieu_giam_gia, so_luong, muc_giam, hinh_thuc_giam_gia, dieu_kien_su_dung, gia_tri_toi_da, doi_tuong_ap_dung, ngay_bat_dau, ngay_ket_thuc, trang_thai, ghi_chu, created_at, updated_at, deleted_at)
 VALUES
-  ('PGG001', 1,'Phieu giam gia 1',  10000, 1, 'Dieu kien 1', NOW(), NOW(), 1, NOW(), NOW(), 1),
-  ('PGG002', 2,'Phieu giam gia 2', 20000, 1, 'Dieu kien 2', NOW(), NOW(), 1, NOW(), NOW(), 1),
-  ('PGG003', 3,'Phieu giam gia 3', 30000, 1, 'Dieu kien 3', NOW(), NOW(), 1, NOW(), NOW(), 1),
-  ('PGG004', 4,'Phieu giam gia 4',  50000, 0, 'Dieu kien 4', NOW(), NOW(), 0, NOW(), NOW(), 0),
-  ('PGG005', 5,'Phieu giam gia 5', 70000, 0, 'Dieu kien 5', NOW(), NOW(), 0, NOW(), NOW(), 0);
+( 'PGG001', 'Phiếu giảm giá 1', 10, 10.0, 0, 100.0, 500.0, 1, '2024-07-01', '2024-07-31', 'Đang diễn ra', 'Ghi chú 1', '2024-07-01 10:00:00', '2024-07-01 10:00:00', 0),
+( 'PGG002', 'Phiếu giảm giá 2', 20, 50.0, 1, 200.0, 1000.0, 0, '2024-08-01', '2024-08-31', 'Sắp diễn ra', 'Ghi chú 2', '2024-07-02 10:00:00', '2024-07-02 10:00:00', 0),
+('PGG003', 'Phiếu giảm giá 3', 30, 20.0, 0, 150.0, 750.0, 1, '2024-06-01', '2024-06-30', 'Kết thúc', 'Ghi chú 3', '2024-07-03 10:00:00', '2024-07-03 10:00:00', 0),
+('PGG004', 'Phiếu giảm giá 4', 15, 5.0, 1, 50.0, 300.0, 0, '2024-07-05', '2024-07-25', 'Đang diễn ra', 'Ghi chú 4', '2024-07-04 10:00:00', '2024-07-04 10:00:00', 0),
+( 'PGG005', 'Phiếu giảm giá 5', 25, 30.0, 0, 250.0, 1200.0, 1, '2024-08-05', '2024-08-20', 'Sắp diễn ra', 'Ghi chú 5', '2024-07-05 10:00:00', '2024-07-05 10:00:00', 0),
+( 'PGG006', 'Phiếu giảm giá 6', 50, 15.0, 1, 300.0, 1000.0, 0, '2024-06-05', '2024-06-25', 'Kết thúc', 'Ghi chú 6', '2024-07-06 10:00:00', '2024-07-06 10:00:00', 0),
+( 'PGG007', 'Phiếu giảm giá 7', 40, 25.0, 0, 350.0, 1500.0, 1, '2024-07-10', '2024-07-20', 'Đang diễn ra', 'Ghi chú 7', '2024-07-07 10:00:00', '2024-07-07 10:00:00', 0),
+( 'PGG008', 'Phiếu giảm giá 8', 35, 40.0, 1, 400.0, 1800.0, 0, '2024-08-10', '2024-08-30', 'Sắp diễn ra', 'Ghi chú 8', '2024-07-08 10:00:00', '2024-07-08 10:00:00', 0),
+( 'PGG009', 'Phiếu giảm giá 9', 60, 10.0, 0, 100.0, 500.0, 1, '2024-06-10', '2024-06-30', 'Kết thúc', 'Ghi chú 9', '2024-07-09 10:00:00', '2024-07-09 10:00:00', 0),
+( 'PGG010', 'Phiếu giảm giá 10', 20, 35.0, 1, 450.0, 2000.0, 0, '2024-07-15', '2024-07-31', 'Đang diễn ra', 'Ghi chú 10', '2024-07-10 10:00:00', '2024-07-10 10:00:00', 0),
+( 'PGG011', 'Phiếu giảm giá 11', 15, 12.0, 0, 120.0, 600.0, 1, '2024-08-15', '2024-08-31', 'Sắp diễn ra', 'Ghi chú 11', '2024-07-11 10:00:00', '2024-07-11 10:00:00', 0),
+( 'PGG012', 'Phiếu giảm giá 12', 55, 28.0, 1, 280.0, 1400.0, 0, '2024-06-15', '2024-06-30', 'Kết thúc', 'Ghi chú 12', '2024-07-12 10:00:00', '2024-07-12 10:00:00', 0),
+( 'PGG013', 'Phiếu giảm giá 13', 45, 22.0, 0, 220.0, 1100.0, 1, '2024-07-20', '2024-07-31', 'Đang diễn ra', 'Ghi chú 13', '2024-07-13 10:00:00', '2024-07-13 10:00:00', 0),
+( 'PGG014', 'Phiếu giảm giá 14', 30, 18.0, 1, 180.0, 900.0, 0, '2024-08-20', '2024-08-31', 'Sắp diễn ra', 'Ghi chú 14', '2024-07-14 10:00:00', '2024-07-14 10:00:00', 0),
+( 'PGG015', 'Phiếu giảm giá 15', 70, 24.0, 0, 240.0, 1200.0, 1, '2024-06-20', '2024-06-30', 'Kết thúc', 'Ghi chú 15', '2024-07-15 10:00:00', '2024-07-15 10:00:00', 0),
+( 'PGG016', 'Phiếu giảm giá 16', 25, 26.0, 1, 260.0, 1300.0, 0, '2024-07-25', '2024-07-31', 'Đang diễn ra', 'Ghi chú 16', '2024-07-16 10:00:00', '2024-07-16 10:00:00', 0),
+( 'PGG017', 'Phiếu giảm giá 17', 35, 32.0, 0, 320.0, 1600.0, 1, '2024-08-25', '2024-08-31', 'Sắp diễn ra', 'Ghi chú 17', '2024-07-17 10:00:00', '2024-07-17 10:00:00', 0),
+( 'PGG018', 'Phiếu giảm giá 18', 60, 14.0, 1, 140.0, 700.0, 0, '2024-06-25', '2024-06-30', 'Kết thúc', 'Ghi chú 18', '2024-07-18 10:00:00', '2024-07-18 10:00:00', 0),
+( 'PGG019', 'Phiếu giảm giá 19', 50, 8.0, 0, 80.0, 400.0, 1, '2024-07-28', '2024-07-31', 'Đang diễn ra', 'Ghi chú 19', '2024-07-19 10:00:00', '2024-07-19 10:00:00', 0),
+( 'PGG020', 'Phiếu giảm giá 20', 65, 27.0, 1, 270.0, 1350.0, 0, '2024-08-28', '2024-08-31', 'Sắp diễn ra', 'Ghi chú 20', '2024-07-20 10:00:00', '2024-07-20 10:00:00', 0);
+
+
+INSERT INTO phieu_giam_gia_chi_tiet (id_khach_hang, id_phieu_giam_gia, trang_thai, created_at, updated_at, deleted_at)
+VALUES
+(1, 1, 1, '2024-07-01 10:00:00', '2024-07-01 10:00:00', 0),
+(2, 2, 0, '2024-07-02 10:00:00', '2024-07-02 10:00:00', 0),
+(3, 3, 1, '2024-07-03 10:00:00', '2024-07-03 10:00:00', 0),
+(4, 4, 1, '2024-07-04 10:00:00', '2024-07-04 10:00:00', 0),
+(5, 5, 0, '2024-07-05 10:00:00', '2024-07-05 10:00:00', 0),
+(1, 6, 1, '2024-07-06 10:00:00', '2024-07-06 10:00:00', 0),
+(2, 7, 0, '2024-07-07 10:00:00', '2024-07-07 10:00:00', 0),
+(3, 8, 1, '2024-07-08 10:00:00', '2024-07-08 10:00:00', 0),
+(4, 9, 0, '2024-07-09 10:00:00', '2024-07-09 10:00:00', 0),
+(5, 10, 1, '2024-07-10 10:00:00', '2024-07-10 10:00:00', 0),
+(1, 11, 1, '2024-07-11 10:00:00', '2024-07-11 10:00:00', 0),
+(2, 12, 0, '2024-07-12 10:00:00', '2024-07-12 10:00:00', 0),
+(3, 13, 1, '2024-07-13 10:00:00', '2024-07-13 10:00:00', 0),
+(4, 14, 0, '2024-07-14 10:00:00', '2024-07-14 10:00:00', 0),
+(5, 15, 1, '2024-07-15 10:00:00', '2024-07-15 10:00:00', 0),
+(1, 16, 0, '2024-07-16 10:00:00', '2024-07-16 10:00:00', 0),
+(2, 17, 1, '2024-07-17 10:00:00', '2024-07-17 10:00:00', 0),
+(3, 18, 0, '2024-07-18 10:00:00', '2024-07-18 10:00:00', 0),
+(4, 19, 1, '2024-07-19 10:00:00', '2024-07-19 10:00:00', 0),
+(5, 20, 0, '2024-07-20 10:00:00', '2024-07-20 10:00:00', 0);
+
 
 
 INSERT INTO hoa_don (id_nhan_vien, id_phieu_giam_gia, id_khach_hang, ma_hoa_don, ngay_tao, tong_tien, tien_coc, tien_con_lai, tien_thua, ghi_chu, trang_thai, ngay_den_san, ngay_thanh_toan, created_at, updated_at, deleted_at)
@@ -435,20 +523,32 @@ VALUES
 
 
 INSERT INTO loai_san (ten_loai_san, trang_thai, created_at, updated_at, deleted_at) VALUES
-('Sân cỏ nhân tạo', 'Hoạt động', '2023-06-01 10:00:00', '2023-06-01 10:00:00',1),
-('Sân bóng rổ', 'Đang bảo trì', '2023-06-02 11:00:00', '2023-06-02 11:00:00', 1),
-('Sân tennis', 'Hoạt động', '2023-06-03 12:00:00', '2023-06-03 12:00:00', 1),
-('Sân cầu lông', 'Đóng cửa', '2023-06-04 13:00:00', '2023-06-04 13:00:00', 1),
-('Sân bóng chuyền', 'Hoạt động', '2023-06-05 14:00:00', '2023-06-05 14:00:00', 1);
+('Sân 5', 'Hoạt động', '2023-06-01 10:00:00', '2023-06-01 10:00:00', 1),
+('Sân 7', 'Hoạt động', '2023-06-02 11:00:00', '2023-06-02 11:00:00', 1),
+('Sân 11', 'Hoạt động', '2023-06-03 12:00:00', '2023-06-03 12:00:00', 1);
 
 
-INSERT INTO san_bong (ten_san_bong,id_loai_san , trang_thai, created_at, updated_at, deleted_at)
+
+INSERT INTO san_bong (ten_san_bong, id_loai_san, trang_thai, created_at, updated_at, deleted_at)
 VALUES
-  ('San bong 1', 1,'active', NOW(), NOW(), 1),
-  ('San bong 2', 2,'active', NOW(), NOW(), 1),
-  ('San bong 3', 4,'inactive', NOW(), NOW(), 1),
-  ('San bong 4', 3,'active', NOW(), NOW(), 0),
-  ('San bong 5',5,'active', NOW(), NOW(), 0);
+  ('San bong 1', 1, 'active', NOW(), NOW(), 1),
+  ('San bong 2', 1, 'active', NOW(), NOW(), 1),
+  ('San bong 3', 1, 'inactive', NOW(), NOW(), 1),
+  ('San bong 4', 1, 'active', NOW(), NOW(), 0),
+  ('San bong 5', 1, 'active', NOW(), NOW(), 0),
+('San 7 1', 2, 'active', NOW(), NOW(), 1),
+  ('San 7 2', 2, 'active', NOW(), NOW(), 1),
+  ('San 7 3', 2, 'inactive', NOW(), NOW(), 1),
+  ('San 7 4', 2, 'active', NOW(), NOW(), 0),
+  ('San 7 5', 2, 'active', NOW(), NOW(), 0),
+  ('San 11 1', 3, 'active', NOW(), NOW(), 1),
+  ('San 11 2', 3, 'active', NOW(), NOW(), 1),
+  ('San 11 3', 3, 'inactive', NOW(), NOW(), 1),
+  ('San 11 4', 3, 'active', NOW(), NOW(), 0),
+  ('San 11 5', 3, 'active', NOW(), NOW(), 0);
+  
+
+
   
   INSERT INTO ca (ten_ca, gia_ca, thoi_gian_bat_dau, thoi_gian_ket_thuc, trang_thai, created_at, updated_at, deleted_at)
 VALUES
@@ -475,13 +575,14 @@ VALUES
   (5, 5, 5, 55000,'active', NOW(), NOW(), 0);
 
 
-INSERT INTO hoa_don_chi_tiet (id_hoa_don, id_san_ca, ngay_den_san, muay_thanh_toan, thoi_gian_checkin, tien_san, ghi_chu, created_at, updated_at, deleted_at)
+INSERT INTO hoa_don_chi_tiet (id_hoa_don, id_san_ca, tien_san, ghi_chu, trang_thai, created_at, updated_at, deleted_at)
 VALUES
-  (1, 1, NOW(), 'Thanh toan 1', 'Checkin 1', 100000, 'Ghi chu 1', NOW(), NOW(), 1),
-  (2, 2, NOW(), 'Thanh toan 2', 'Checkin 2', 200000, 'Ghi chu 2', NOW(), NOW(), 1),
-  (3, 3, NOW(), 'Thanh toan 3', 'Checkin 3', 300000, 'Ghi chu 3', NOW(), NOW(), 1),
-  (4, 4, NOW(), 'Thanh toan 4', 'Checkin 4', 400000, 'Ghi chu 4', NOW(), NOW(), 0),
-  (5, 5, NOW(), 'Thanh toan 5', 'Checkin 5', 500000, 'Ghi chu 5', NOW(), NOW(), 0);
+  (1, 1, 100000, 'Ghi chu 1', 'active', NOW(), NOW(), 1),
+  (2, 2, 200000, 'Ghi chu 2', 'active', NOW(), NOW(), 1),
+  (3, 3, 300000, 'Ghi chu 3', 'inactive', NOW(), NOW(), 1),
+  (4, 4, 400000, 'Ghi chu 4', 'active', NOW(), NOW(), 1),
+  (5, 5, 500000, 'Ghi chu 5', 'active', NOW(), NOW(), 1),
+  (1, 4, 600000, 'Ghi chu 6', 'active', NOW(), NOW(), 1);
 
 
 INSERT INTO hinh_thuc_thanh_toan (hinh_thuc_thanh_toan, trang_thai, created_at, updated_at, deleted_at)
