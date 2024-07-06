@@ -72,7 +72,7 @@ public class SanBongRest {
         return ResponseEntity.ok(sanBongService.pages(pageNo,pageSize));
     }
 //    Ly them ham getByID
-    @GetMapping("/by-loai-san/{id}")
+    @GetMapping("/findByIdLoaiSan/{id}")
     public ResponseEntity<List<SanBongDTO>> getSanBongsByLoaiSan(@PathVariable("id") Integer loaiSanId){
         List<SanBongDTO> sanBongs = sanBongService.getSanBongsByLoaiSanId(loaiSanId);
         return ResponseEntity.ok(sanBongs);

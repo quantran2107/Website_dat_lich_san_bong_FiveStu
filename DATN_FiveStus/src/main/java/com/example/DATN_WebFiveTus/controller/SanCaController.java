@@ -45,6 +45,7 @@ public class SanCaController {
         this.sanCaService = sanCaService;
     }
 
+
     @GetMapping("listSanCa")
     public String listSanCa(
             @RequestParam(name = "keyWords", required = false) Integer id,
@@ -58,10 +59,10 @@ public class SanCaController {
                 .map(SanCaDTO::getTrangThai)
                 .collect(Collectors.toList()));
 
-        model.addAttribute("listTT",listTT);
+        model.addAttribute("listTT", listTT);
 
 
-        model.addAttribute("listTT",listTT);
+        model.addAttribute("listTT", listTT);
 
         model.addAttribute("listLS", Arrays.asList(restTemplate.getForObject(
                 "http://localhost:8080/loai-san/hien-thi",
@@ -119,9 +120,9 @@ public class SanCaController {
     }
 
 
-
     @PostMapping("/sanCa/add")
     public String add(@ModelAttribute("sanCa") SanCaDTO sanCaDTO) {
+        System.out.println("ADD HAHA321");
         RestTemplate restTemplate = new RestTemplate();
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://localhost:8080/san-ca");
