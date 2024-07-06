@@ -4,6 +4,8 @@ import com.example.DATN_WebFiveTus.dto.CaDTO;
 import com.example.DATN_WebFiveTus.dto.LoaiSanDTO;
 import com.example.DATN_WebFiveTus.dto.NgayTrongTuanDTO;
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
+import com.example.DATN_WebFiveTus.dto.SanCaDTO;
+import com.example.DATN_WebFiveTus.entity.SanBong;
 import com.example.DATN_WebFiveTus.rest.CaRest;
 import com.example.DATN_WebFiveTus.rest.LoaiSanRest;
 import com.example.DATN_WebFiveTus.rest.NgayTrongTuanRest;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -39,13 +42,27 @@ public class SanBongController {
 
     private NgayTrongTuanRest ngayTrongTuanRest;
 
+    private SanBongService sanBongService;
+
     @Autowired
-    public SanBongController(RestTemplate restTemplate, SanBongRest sanBongRest, LoaiSanRest loaiSanRest, CaRest caRest, NgayTrongTuanRest ngayTrongTuanRest) {
+    public SanBongController(RestTemplate restTemplate, SanBongRest sanBongRest, LoaiSanRest loaiSanRest, CaRest caRest,
+                             NgayTrongTuanRest ngayTrongTuanRest, SanBongService sanBongService) {
         this.restTemplate = restTemplate;
         this.sanBongRest = sanBongRest;
         this.loaiSanRest = loaiSanRest;
         this.caRest = caRest;
         this.ngayTrongTuanRest = ngayTrongTuanRest;
+        this.sanBongService = sanBongService;
+    }
+
+    @GetMapping("/timTenSanBongTheoIdLoaiSan")
+    public String getSanBongsByLoaiSanIds(@RequestParam("idLoaiSan") Integer idLoaiSan, Model model) {
+        System.out.println("Mtam77");
+        List<SanBongDTO> sanBongs = sanBongService.getSanBongsByLoaiSanId(idLoaiSan);
+
+        model.addAttribute("listSB", sanBongs);
+        System.out.println("Haha: "+sanBongs);
+        return "quan-ly-san-bong"; // Thay thế "list-san-bong" bằng tên view của bạn
     }
 
     @GetMapping("/listSanBong")
@@ -92,10 +109,17 @@ public class SanBongController {
                 SanBongDTO[].class
         )));
 
+
+        model.addAttribute("listSC", Arrays.asList(restTemplate.getForObject(
+                "http://localhost:8080/san-ca/hien-thi",
+                SanCaDTO[].class
+        )));
+
         model.addAttribute("sanBong",new SanBongDTO());
         model.addAttribute("ca",new CaDTO());
         model.addAttribute("ngayTrongTuan",new NgayTrongTuanDTO());
         model.addAttribute("loaiSan",new LoaiSanDTO());
+        model.addAttribute("sanCa", new SanCaDTO());
         return "/list/quan-ly-san-bong";
     }
 
@@ -136,9 +160,9 @@ public class SanBongController {
                 SanBongDTO.class,
                 id
         );
-        System.out.println("ID của toi: "+sanBongDTO.getId());
         return sanBongDTO;
     }
+
 
 
     @PostMapping("/sanBong/update")
@@ -149,4 +173,15 @@ public class SanBongController {
         System.out.println("Haha:"+sanBongDTO.getId());
         return "redirect:/listSanBong";
     }
+
+
+//    @GetMapping("/findByIdLoaiSan/{id}")
+//    public String getSanBongsByLoaiSan(@PathVariable("id") Integer loaiSanId, Model model) {
+//        System.out.println("Mtam");
+//        List<SanBongDTO> sanBongs = sanBongService.getSanBongsByLoaiSanId(loaiSanId);
+//        System.out.println("HahaL: "+sanBongs);
+//        model.addAttribute("listSB", sanBongs);
+//        model.addAttribute("idLoaiSan", loaiSanId);
+//        return "/list/quan-ly-san-bong"; // Đây là tên của file Thymeleaf (sanBongList.html)
+//    }
 }

@@ -40,6 +40,8 @@ public class CaServiceImp implements CaService {
     @Override
     public CaDTO save(CaDTO caDTO) {
         Ca ca=modelMapper.map(caDTO,Ca.class);
+        ca.setTrangThai("Đang hoạt động");
+        ca.setDeletedAt(true);
         Ca caSave=caRepository.save(ca);
         return modelMapper.map(caSave,CaDTO.class);
     }
