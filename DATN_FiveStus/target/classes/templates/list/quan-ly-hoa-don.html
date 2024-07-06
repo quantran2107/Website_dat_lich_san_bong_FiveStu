@@ -22,22 +22,10 @@
                                         <div class="col">
                                             <form class="form-inline">
                                                 <div class="form-row">
-                                                    <div class="form-group col-auto mr-auto">
-                                                        <label class="my-1 mr-2 sr-only"
-                                                               for="inlineFormCustomSelectPref1">Show</label>
-                                                        <select class="custom-select mr-sm-2"
-                                                                id="inlineFormCustomSelectPref1">
-                                                            <option value="">...</option>
-                                                            <option value="1">12</option>
-                                                            <option value="2" selected>32</option>
-                                                            <option value="3">64</option>
-                                                            <option value="3">128</option>
-                                                        </select>
-                                                    </div>
                                                     <div class="form-group col-auto">
                                                         <label for="search" class="sr-only">Tìm kiếm</label>
                                                         <input type="text" class="form-control" id="search"
-                                                               placeholder="Search" oninput="searchTable()">
+                                                               placeholder="Search" oninput="searchInvoices(this.value)">
                                                     </div>
                                                     <div class="form-group col-auto ml-3">
                                                         <label class="my-1 mr-2 sr-only"
@@ -54,9 +42,6 @@
                                         </div>
                                         <div class="col ml-auto">
                                             <div class="dropdown float-right">
-                                                <button class="btn btn-primary float-right ml-3" type="button">Add
-                                                    +
-                                                </button>
                                                 <button class="btn btn-secondary dropdown-toggle" type="button"
                                                         id="actionMenuButton" data-toggle="dropdown"
                                                         aria-haspopup="true" aria-expanded="false"> Hành động
@@ -297,5 +282,43 @@
             });
         });
     }
+
+    function searchInvoices(query) {
+        if (query.trim() === "") {
+            // Nếu ô input trống, gọi API lấy toàn bộ danh sách
+            apiURL = "http://localhost:8080/hoa-don/hien-thi";
+        }else{
+            var apiURL = "http://localhost:8080/hoa-don/search?key=" + query;
+        }
+
+        $.get(apiURL, function (data) {
+            var listHD = data;
+
+            var tableBody = $('#dataTable-1 tbody');
+            tableBody.empty();
+
+            $.each(listHD, function (index, hd) {
+                var row = $('<tr></tr>');
+
+                $('<td></td>').text(index + 1).appendTo(row);
+                $('<td></td>').text(hd.maHoaDon).appendTo(row);
+                $('<td></td>').text(hd.hoVaTenKhachHang).appendTo(row);
+                $('<td></td>').text(hd.ngayTao).appendTo(row);
+                $('<td></td>').text(hd.tongTien).appendTo(row);
+                $('<td></td>').text(hd.trangThai).appendTo(row);
+
+                var actionCell = $('<td style="display: flex"></td>');
+                var detailButton = $('<button class="btn mb-2 mr-1 btn-warning" data-toggle="modal"></button>')
+                    .attr('data-target', '#detailModal' + hd.id)
+                    .attr('onclick', 'showDetailModal(this)')
+                    .append('<span class="fe fe-eye"></span>');
+                actionCell.append(detailButton);
+                row.append(actionCell);
+
+                tableBody.append(row);
+            });
+        });
+    }
+
 </script>
 </html>

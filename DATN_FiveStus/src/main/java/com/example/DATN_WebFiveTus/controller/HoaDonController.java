@@ -32,7 +32,7 @@ public class HoaDonController {
                 null,
                 new ParameterizedTypeReference<PagedModel<EntityModel<HoaDonDTO>>>() {
                 },
-                page, 4);
+                page, 10);
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             PagedModel<EntityModel<HoaDonDTO>> hoaDonPage = responseEntity.getBody();
