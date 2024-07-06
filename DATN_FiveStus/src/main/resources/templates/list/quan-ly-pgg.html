@@ -312,236 +312,236 @@
         <form id="addForm" >
             <div class="row">
                 <!--Table bên trái -->
-        <div class="col-md-6">
-        <div class="form-row">
-        <div class="form-group col-md-12">
-        <label for="tenPhieuGiamGia" name="tenPhieuGiamGia">Tên phiếu giảm giá</label>
-        <input type="text" class="form-control" id="tenPhieuGiamGia" placeholder="Tên">
-        </div>
-        </div>
-        <div class="form-row">
-        <div class="form-group col-md-6">
-        <label for="mucGiam" name="mucGiam">Mức giảm</label>
-        <div class="input-group">
-        <input type="text" class="form-control"  id="mucGiam" placeholder="mucGiam" >
-        <button class="btn btn-outline-success" type="button" id="hinhThucGiamGiaVND">
-        $
-        </button>
-        <button class="btn btn-outline-success" type="button" id="hinhThucGiamGiaPercent" >
-        %
-        </div>
-        </div>
+                <div class="col-md-6">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="tenPhieuGiamGia" name="tenPhieuGiamGia">Tên phiếu giảm giá</label>
+                            <input type="text" class="form-control" id="tenPhieuGiamGia" placeholder="Tên">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="mucGiam" name="mucGiam">Mức giảm</label>
+                        <div class="input-group">
+                          <input type="text" class="form-control"  id="mucGiam" placeholder="mucGiam" >
+                          <button class="btn btn-outline-success" type="button" id="hinhThucGiamGiaVND">
+                            $
+                            </button>
+                          <button class="btn btn-outline-success" type="button" id="hinhThucGiamGiaPercent" >
+                            %
+                        </div>
+                    </div>
 
-        <input type="hidden" id="hinhThucGiamGia" name="hinhThucGiamGia" value="true">
+                        <input type="hidden" id="hinhThucGiamGia" name="hinhThucGiamGia" value="true">
 
-        <div class="form-group col-md-6">
-        <label for="giaTriToiDa">Giá trị tối đa</label>
-        <div class="input-group mb-3">
-        <input type="text" class="form-control" id="giaTriToiDa">
-        <span class="input-group-text">$</span>
-        </div>
-        </div>
-        </div>
-        <div class="form-row">
-        <div class="form-group col-md-6">
-        <label for="soLuong">Số lượng</label>
-        <div class="input-group mb-3">
-        <input type="text" class="form-control" id="soLuong">
-        <span class="input-group-text">#</span>
-        </div>
-        </div>
-        <div class="form-group col-md-6">
-        <label for="dieuKienSuDung">Điều kiện</label>
-        <div class="input-group mb-3">
-        <input type="text" class="form-control" id="dieuKienSuDung">
-        <span class="input-group-text">$</span>
-        </div>
-        </div>
-        </div>
-        <div class="form-row">
-        <div class="form-group col-md-6">
-        <label for="ngayBatDau">Ngày bắt đầu</label>
-        <input type="date" class="form-control" id="ngayBatDau" placeholder="Ngày bắt đầu">
-        </div>
-        <div class="form-group col-md-6">
-        <label for="ngayKetThuc">Ngày kết thúc</label>
-        <input type="date" class="form-control" id="ngayKetThuc" placeholder="Ngày kết thúc">
-        </div>
-        </div>
-        <div class="form-row">
-        <div class="form-group col-md-12">
-        <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="doiTuongApDung" id="doiTuongApDung" value="true">
-        <label class="form-check-label" for="doiTuongApDung">Cá nhân</label>
-        </div>
-        <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="doiTuongApDung" id="doiTuongApDung" value="false">
-        <label class="form-check-label" for="doiTuongApDung">Tất cả khách hàng</label>
-        </div>
-        </div>
-        </div>
-        <div class="form-row">
-        <div class="form-group col-md-12">
-        <label for="mucGiam">Ghi chú</label>
-        <div class="input-group mb-3">
-        <input type="text" class="form-control" id="ghiChu">
-        </div>
-        </div>
-        </div>
-        </div>
+                        <div class="form-group col-md-6">
+                            <label for="giaTriToiDa">Giá trị tối đa</label>
+                            <div class="input-group mb-3">
+                              <input type="text" class="form-control" id="giaTriToiDa">
+                              <span class="input-group-text">$</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="soLuong">Số lượng</label>
+                            <div class="input-group mb-3">
+                              <input type="text" class="form-control" id="soLuong">
+                              <span class="input-group-text">#</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="dieuKienSuDung">Điều kiện</label>
+                            <div class="input-group mb-3">
+                              <input type="text" class="form-control" id="dieuKienSuDung">
+                              <span class="input-group-text">$</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="ngayBatDau">Ngày bắt đầu</label>
+                            <input type="date" class="form-control" id="ngayBatDau" placeholder="Ngày bắt đầu">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="ngayKetThuc">Ngày kết thúc</label>
+                            <input type="date" class="form-control" id="ngayKetThuc" placeholder="Ngày kết thúc">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" name="doiTuongApDung" id="doiTuongApDung" value="true">
+                              <label class="form-check-label" for="doiTuongApDung">Cá nhân</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" name="doiTuongApDung" id="doiTuongApDung" value="false">
+                              <label class="form-check-label" for="doiTuongApDung">Tất cả khách hàng</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="mucGiam">Ghi chú</label>
+                            <div class="input-group mb-3">
+                              <input type="text" class="form-control" id="ghiChu">
+                            </div>
+                        </div>
+                        </div>
+                </div>
 
-            <!-- Bảng khách hàng bên phải -->
-        <div class="col-md-6">
-        <table class="table" id="tableKhachHangContainer">
-        <thead>
-        <tr>
-        <th>
-        <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" id="selectAllKH">
-        <label class="custom-control-label" for="selectAllKH"></label>
-        </div>
-        </th>
-        <th>Tên</th>
-        <th>SDT</th>
-        <th>Email</th>
-        </tr>
-        </thead>
-        <tbody id="khachHangTableBody">
-            <!-- Danh sách khách hàng sẽ được thêm vào đây -->
-        </tbody>
-        </table>
-        </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Lưu</button>
-        <button type="button" class="btn btn-secondary" onclick="cancelAdd()">Hủy</button>
+                <!-- Bảng khách hàng bên phải -->
+                <div class="col-md-6">
+                    <table class="table" id="tableKhachHangContainer">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="selectAllKH">
+                                        <label class="custom-control-label" for="selectAllKH"></label>
+                                    </div>
+                                </th>
+                                <th>Tên</th>
+                                <th>SDT</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="khachHangTableBody">
+                            <!-- Danh sách khách hàng sẽ được thêm vào đây -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <button type="button" class="btn btn-secondary" onclick="cancelAdd()">Hủy</button>
         </form>
-        `;
+    `;
         document.addEventListener('DOMContentLoaded', function () {
-        const doiTuongApDungRadios = document.getElementsByName('doiTuongApDung');
-        const khachHangTableContainer = document.getElementById('tableKhachHangContainer');
+            const doiTuongApDungRadios = document.getElementsByName('doiTuongApDung');
+            const khachHangTableContainer = document.getElementById('tableKhachHangContainer');
 
-        for (let i = 0; i < doiTuongApDungRadios.length; i++) {
-        doiTuongApDungRadios[i].addEventListener('change', function () {
-        if (this.value === 'true') {
-        khachHangTableContainer.style.display = 'block';
-        } else {
-        khachHangTableContainer.style.display = 'none';
-        }
-        });
-        }
+            for (let i = 0; i < doiTuongApDungRadios.length; i++) {
+                doiTuongApDungRadios[i].addEventListener('change', function () {
+                    if (this.value === 'true') {
+                        khachHangTableContainer.style.display = 'block';
+                    } else {
+                        khachHangTableContainer.style.display = 'none';
+                    }
+                });
+            }
 
-        // Tự động ẩn bảng khách hàng khi tải trang lần đầu (nếu không muốn hiển thị mặc định)
-        // khachHangTableContainer.style.display = 'none';
+            // Tự động ẩn bảng khách hàng khi tải trang lần đầu (nếu không muốn hiển thị mặc định)
+            // khachHangTableContainer.style.display = 'none';
         });
 
 
 
         document.addEventListener('DOMContentLoaded', (event) => {
-        const hinhThucGiamGiaUSD = document.getElementById('hinhThucGiamGiaVND');
-        const hinhThucGiamGiaPercent = document.getElementById('hinhThucGiamGiaPercent');
-        const hinhThucGiamGia = document.getElementById('hinhThucGiamGia');
+            const hinhThucGiamGiaUSD = document.getElementById('hinhThucGiamGiaVND');
+            const hinhThucGiamGiaPercent = document.getElementById('hinhThucGiamGiaPercent');
+            const hinhThucGiamGia = document.getElementById('hinhThucGiamGia');
 
-        hinhThucGiamGiaUSD.addEventListener('click', () => {
-        hinhThucGiamGia.value = 'true';
-        hinhThucGiamGiaUSD.classList.add('selected');
-        hinhThucGiamGiaPercent.classList.remove('selected');
-        });
+            hinhThucGiamGiaUSD.addEventListener('click', () => {
+                hinhThucGiamGia.value = 'true';
+                hinhThucGiamGiaUSD.classList.add('selected');
+                hinhThucGiamGiaPercent.classList.remove('selected');
+            });
 
-        hinhThucGiamGiaPercent.addEventListener('click', () => {
-        hinhThucGiamGia.value = 'false';
-        hinhThucGiamGiaUSD.classList.remove('selected');
-        hinhThucGiamGiaPercent.classList.add('selected');
-        });
+            hinhThucGiamGiaPercent.addEventListener('click', () => {
+                hinhThucGiamGia.value = 'false';
+                hinhThucGiamGiaUSD.classList.remove('selected');
+                hinhThucGiamGiaPercent.classList.add('selected');
+            });
         });
 
 
         cardBody.innerHTML = form;
 
         fetch('http://localhost:8080/khach-hang/hien-thi')
-        .then(response => response.json())
-        .then(data => {
-        const tableBody = document.getElementById('khachHangTableBody');
-        tableBody.innerHTML = '';
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('khachHangTableBody');
+                tableBody.innerHTML = '';
 
-        data.forEach(khachHang => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-        <td>
-        <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input item-checkbox"
-        id="checkbox-${khachHang.id}"
-        data-id="${khachHang.id}">
-        <label class="custom-control-label" for="checkbox-${khachHang.id}"></label>
-        </div>
-        </td>
-        <td>${khachHang.hoVaTen}</td>
-        <td>${khachHang.soDienThoai}</td>
-        <td>${khachHang.email}</td>
-        `;
-        tableBody.appendChild(row);
-        });
-        })
-        .catch(error => console.error('Error fetching khach hang:', error));
+                data.forEach(khachHang => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                    <td>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input item-checkbox"
+                                   id="checkbox-${khachHang.id}"
+                                   data-id="${khachHang.id}">
+                            <label class="custom-control-label" for="checkbox-${khachHang.id}"></label>
+                        </div>
+                    </td>
+                    <td>${khachHang.hoVaTen}</td>
+                    <td>${khachHang.soDienThoai}</td>
+                    <td>${khachHang.email}</td>
+                `;
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching khach hang:', error));
 
         document.getElementById('addForm').addEventListener('submit', function (event) {
-        event.preventDefault();
+            event.preventDefault();
 
-        const formData = {
-        tenPhieuGiamGia: document.getElementById('tenPhieuGiamGia').value,
-        mucGiam: document.getElementById('mucGiam').value,
-        giaTriToiDa: document.getElementById('giaTriToiDa').value,
-        soLuong: document.getElementById('soLuong').value,
-        dieuKienSuDung: document.getElementById('dieuKienSuDung').value,
-        ngayBatDau: document.getElementById('ngayBatDau').value,
-        ngayKetThuc: document.getElementById('ngayKetThuc').value,
-        doiTuongApDung: document.querySelector('input[name="doiTuongApDung"]:checked').value,
-        ghiChu: document.getElementById('ghiChu').value,
-        };
+            const formData = {
+                tenPhieuGiamGia: document.getElementById('tenPhieuGiamGia').value,
+                mucGiam: document.getElementById('mucGiam').value,
+                giaTriToiDa: document.getElementById('giaTriToiDa').value,
+                soLuong: document.getElementById('soLuong').value,
+                dieuKienSuDung: document.getElementById('dieuKienSuDung').value,
+                ngayBatDau: document.getElementById('ngayBatDau').value,
+                ngayKetThuc: document.getElementById('ngayKetThuc').value,
+                doiTuongApDung: document.querySelector('input[name="doiTuongApDung"]:checked').value,
+                ghiChu: document.getElementById('ghiChu').value,
+            };
 
-        fetch('http://localhost:8080/api-phieu-giam-gia/save', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-        })
-        .then(response => response.json())
-        .then(data => {
-        if (data.success) {
-        Swal.fire({
-        title: 'Thêm Phiếu Giảm Giá',
-        text: 'Thêm thành công!',
-        icon: 'success'
-        });
-        showSuccessToast('Thêm thành công!');
-        cancelAdd();
-        }
-        }).catch(error => {
-        Swal.fire({
-        title: 'Error',
-        text: 'Không thể cập nhật trạng thái',
-        icon: 'error'
-        });
-        showErrorToast('Không thể cập nhật trạng thái');
-        fetchDataAndRenderTable();
+            fetch('http://localhost:8080/api-phieu-giam-gia/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Thêm Phiếu Giảm Giá',
+                            text: 'Thêm thành công!',
+                            icon: 'success'
+                        });
+                        showSuccessToast('Thêm thành công!');
+                        cancelAdd();
+                    }
+                }).catch(error => {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Không thể cập nhật trạng thái',
+                    icon: 'error'
+                });
+                showErrorToast('Không thể cập nhật trạng thái');
+                fetchDataAndRenderTable();
 
+            });
         });
-        });
-        }
+    }
 
 
         function cancelAdd() {
-        const tableBodyCard = document.getElementById('tableCardBody');
-        tableBodyCard.innerHTML = `
+            const tableBodyCard = document.getElementById('tableCardBody');
+            tableBodyCard.innerHTML = `
         <table class="table datatables" id="dataTable">
         <thead>
         <tr>
-        <th>
-        <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" id="selectAll">
-        <label class="custom-control-label" for="selectAll"></label>
-        </div>
-        </th>
+            <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="selectAll">
+                                            <label class="custom-control-label" for="selectAll"></label>
+                                        </div>
+                                    </th>
         <th>#</th>
         <th>Mã</th>
         <th>Tên</th>
@@ -564,7 +564,7 @@
         </ul>
         </nav>
         `;
-        fetchDataAndRenderTable(); // Gọi lại hàm để tải dữ liệu vào bảng
+            fetchDataAndRenderTable(); // Gọi lại hàm để tải dữ liệu vào bảng
         }
 
 
