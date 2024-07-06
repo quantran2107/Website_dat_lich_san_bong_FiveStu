@@ -54,6 +54,9 @@ public class HoaDon {
     @Column(name = "ngay_tao")
     private Date ngayTao;
 
+    @Column(name = "loai")
+    private Boolean loai;
+
     @Column(name = "tong_tien")
     private Float tongTien;
 

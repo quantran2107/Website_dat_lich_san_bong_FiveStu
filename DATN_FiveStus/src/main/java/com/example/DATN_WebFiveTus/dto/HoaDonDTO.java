@@ -25,6 +25,8 @@ public class HoaDonDTO {
 
     private String tenNhanVien;
 
+    private String maNhanVien;
+
     private Integer idPhieuGiamGia;
 
     private Integer idKhachHang;
@@ -32,6 +34,8 @@ public class HoaDonDTO {
     private String maHoaDon;
 
     private String hoVaTenKhachHang;
+
+    private Boolean loai;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date ngayTao;
