@@ -9,23 +9,26 @@ import java.util.List;
 import java.util.Set;
 
 public interface PhieuGiamGiaService {
+
+    Page<PhieuGiamGiaDTO> phanTrang(Pageable pageable);
+
     List<PhieuGiamGiaDTO> getAll();
 
     PhieuGiamGiaDTO getOne(Integer id);
-
+//
     PhieuGiamGiaDTO save(PhieuGiamGiaDTO phieuGiamGiaDTO);
 
     PhieuGiamGiaDTO update(Integer id, PhieuGiamGiaDTO phieuGiamGiaDTO);
 
-    Page<PhieuGiamGiaDTO> phanTrang(Pageable pageable);
 
-    void delete(Integer id);
 
+//    void delete(Integer id);
+//
     void updateStatus(Integer id, String newStatus);
-
-    void deleteMultiple(List<Integer> ids);
-
-    public List<PhieuGiamGiaDTO> search(String query);
-
-    public List<PhieuGiamGiaDTO> filter(String status);
+//
+//    void deleteMultiple(List<Integer> ids);
+//
+//    public List<PhieuGiamGiaDTO> search(String query);
+//
+//    public List<PhieuGiamGiaDTO> filter(String status);
 }
