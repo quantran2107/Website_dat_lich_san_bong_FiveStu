@@ -1,3 +1,74 @@
+POST http://localhost:8080/api-phieu-giam-gia/save
+
+<> 2024-07-05T154744.400.json
+
+###
+
+POST http://localhost:8080/api-phieu-giam-gia/save
+}:
+
+<> 2024-07-05T154547.400.html
+
+###
+
+POST http://localhost:8080/api-phieu-giam-gia/save
+}:
+
+<> 2024-07-05T154506.400.html
+
+###
+
+POST http://localhost:8080/api-phieu-giam-gia/save
+"id": 28,
+    "maPhieuGiamGia": "PGG020",
+    "tenPhieuGiamGia": "Phiếu giảm giá 20",
+    "soLuong": 65,
+    "mucGiam": 27.0,
+    "hinhThucGiamGia": true,
+    "dieuKienSuDung": 270.0,
+    "giaTriToiDa": 1350.0,
+    "doiTuongApDung": false,
+    "ngayBatDau": "2024-08-28",
+    "ngayKetThuc": "2024-08-31",
+    "trangThai": "Sắp diễn ra",
+    "ghiChu": "Ghi chú 20",
+    "deletedAt": false
+}:
+
+<> 2024-07-05T154455.400.html
+
+###
+
+POST http://localhost:8080/api-phieu-giam-gia/save
+
+<> 2024-07-05T154400.400.json
+
+###
+
+GET http://localhost:8080/khach-hang/hien-thi
+
+<> 2024-07-05T112631.200.json
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia/phan-trang
+
+<> 2024-07-04T183545.400.json
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia/phan-trang
+
+<> 2024-07-04T183204.400.json
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia/hien-thi
+
+<> 2024-07-04T183150.400.json
+
+###
+
 POST http://localhost:8080/san-bong/
 "id": 121;
     "tenSanBong": "San bong 1";

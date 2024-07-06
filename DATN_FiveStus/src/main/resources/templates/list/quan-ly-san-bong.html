@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/head :: head"></head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<body class="vertical  light  ">
+<div class="wrapper">
+    <div th:include="fragment/navbar :: navbar"></div>
+    <div th:include="fragment/sidebar :: sidebar"></div>
+    <main role="main" class="main-content">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <h2 class="mb-2 page-title">Quản lý loại sân bóng</h2>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card shadow mb-4">
+                                    <div class="card-body">
+                                        <ul class="nav nav-tabs" id="loaiSanTab" role="tablist">
+                                            <li class="nav-item" th:each="loaiSan, iterStat : ${listLS}">
+                                                <a class="nav-link"
+                                                   id="tab-[[${loaiSan.id}]]"
+                                                   data-toggle="tab"
+                                                   th:href="'#loaiSan-' + ${loaiSan.id}"
+                                                   role="tab"
+                                                   aria-controls="loaiSan-[[${loaiSan.id}]]"
+                                                   th:classappend="${iterStat.index == 0} ? 'active' : ''"
+                                                   aria-selected="[[${iterStat.index == 0}]]"
+                                                   th:text="${loaiSan.tenLoaiSan}">
+                                                    Tên Loại Sân
+                                                </a>
+                                            </li>
+                                        </ul>
+
+                                        <!-- Nội dung từng tab sẽ được thêm vào đây -->
+                                        <div class="tab-content" id="myTabContent">
+
+                                            <!--                                            Tab 1-->
+                                            <div class="tab-pane fade show"
+                                                 role="tabpanel"
+                                                 th:each="loaiSan : ${listLS}"
+                                                 th:id="'loaiSan-' + ${loaiSan.id}"
+                                                 th:aria-labelledby="'tab-' + ${loaiSan.id}">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <table class="table table-striped table-hover table-borderless">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Tên sân</th>
+                                                                <th>Hành động</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody id="sanBongTable-${loaiSan.id}">
+                                                            <tr th:each="sanBong, stat : ${listSB}"
+                                                                th:if="${loaiSan.id == sanBong.idLoaiSan}">
+                                                                <td th:text="${stat.count}"></td>
+                                                                <td th:text="${sanBong.tenSanBong}"></td>
+                                                                <td>
+                                                                    <button class="btn btn-warning"><span class="fe fe-edit-3"></span></button>
+                                                                    <button class="btn btn-danger"><span class="fe fe-trash-2"></span></button>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+
+                                                    <!--                                                    Dong chon ngay-->
+
+                                                    <div class="col-md-8 mt-4">
+                                                        <style>
+                                                            .checkbox-label {
+                                                                display: inline-block;
+                                                                margin-right: 10px;
+                                                                white-space: nowrap; /* Ngăn không cho các phần tử xuống dòng */
+                                                            }
+
+                                                            .text-right {
+                                                                text-align: right;
+                                                            }
+                                                        </style>
+
+                                                        <div class="col-md-12 ">
+                                                            <div class="card shadow">
+                                                                <div class="card-body">
+                                                                    <form id="priceFrameForm">
+                                                                        <h8 class="card-title">Chọn ngày:</h8>
+                                                                        <div class="checkbox-label">
+                                                                            <input type="checkbox" id="mondayCheckbox"
+                                                                                   name="monday">
+                                                                            <label for="mondayCheckbox">Thứ 2</label>
+                                                                        </div>
+                                                                        <div class="checkbox-label">
+                                                                            <input type="checkbox" id="tuesdayCheckbox"
+                                                                                   name="tuesday">
+                                                                            <label for="tuesdayCheckbox">Thứ 3</label>
+                                                                        </div>
+                                                                        <div class="checkbox-label">
+                                                                            <input type="checkbox" id="wednesdayCheckbox"
+                                                                                   name="wednesday">
+                                                                            <label for="wednesdayCheckbox">Thứ 4</label>
+                                                                        </div>
+                                                                        <div class="checkbox-label">
+                                                                            <input type="checkbox" id="thursdayCheckbox"
+                                                                                   name="thursday">
+                                                                            <label for="thursdayCheckbox">Thứ 5</label>
+                                                                        </div>
+                                                                        <div class="checkbox-label">
+                                                                            <input type="checkbox" id="fridayCheckbox"
+                                                                                   name="friday">
+                                                                            <label for="fridayCheckbox">Thứ 6</label>
+                                                                        </div>
+                                                                        <div class="checkbox-label">
+                                                                            <input type="checkbox" id="saturdayCheckbox"
+                                                                                   name="saturday">
+                                                                            <label for="saturdayCheckbox">Thứ 7</label>
+                                                                        </div>
+                                                                        <div class="checkbox-label">
+                                                                            <input type="checkbox" id="sundayCheckbox"
+                                                                                   name="sunday">
+                                                                            <label for="sundayCheckbox">Chủ nhật</label>
+                                                                        </div>
+                                                                        <div class="checkbox-label">
+                                                                            <button type="submit"
+                                                                                    class="btn btn-primary btn-sm">
+                                                                                Thêm
+                                                                            </button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!--                                                    Table ca -->
+
+
+                                                        <div class="col-md-12 mt-5 mb-5">
+                                                            <div class="card shadow">
+                                                                <div class="card-header">
+                                                                    <strong class="card-title">Thứ chọn sẽ thêm vào
+                                                                        day</strong>
+                                                                </div>
+                                                                <div class="card-body my-n2">
+                                                                    <table class="table table-striped table-hover table-borderless">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th>#</th>
+                                                                            <th>Tên sân bóng</th>
+                                                                            <th>Hành động</th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td>
+                                                                                <button class="btn btn-warning"><span
+                                                                                        class="fe fe-edit-3"></span>
+                                                                                </button>
+                                                                                <button class="btn btn-danger"><span
+                                                                                        class="fe fe-trash-2"></span>
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <!-- ... Thêm các dữ liệu khác ... -->
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+
+
+
+                                                </div>
+                                            </div><!--   Tab content 1-->
+
+                                        </div> <!--   Tab content-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- .container-fluid -->
+        <div th:include="fragment/modal :: modal"></div>
+    </main>
+</div>
+
+
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.nav-tabs a').on('shown.bs.tab', function (event) {
+            var loaiSanId = $(event.target).attr('id').split('-')[1];
+            $.ajax({
+                url: '/san-bong/by-loai-san/' + loaiSanId,
+                type: 'GET',
+                success: function (data) {
+                    var sanBongTable = $('#sanBongTable-' + loaiSanId);
+                    sanBongTable.empty();
+                    data.forEach(function (sanBong) {
+                        var row = '<tr><td>' + sanBong.tenSanBong + '</td></tr>';
+                        sanBongTable.append(row);
+                    });
+                }
+            });
+        });
+    });
+</script>
+<!--<script>-->
+<!--    $(document).ready(function () {-->
+<!--        $('.edit-btn').on('click', function () {-->
+<!--            var id = $(this).data('id');-->
+<!--            $.ajax({-->
+<!--                url: '/loaiSan/edit/' + id,-->
+<!--                method: 'GET',-->
+<!--                success: function (data) {-->
+<!--                    $('#editId').val(data.id);-->
+<!--                    $('#editTenLoaiSan').val(data.tenLoaiSan);-->
+<!--                    $('#editTrangThai').val(data.trangThai);-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+
+<!--</script>-->
+<!--Sân bóng-->
+<!--<script>-->
+<!--    $(document).ready(function () {-->
+<!--        $('.edit-btn').on('click', function () {-->
+<!--            var id = $(this).data('id');-->
+<!--            $.ajax({-->
+<!--                url: '/sanBong/edit/' + id,-->
+<!--                method: 'GET',-->
+<!--                success: function (data) {-->
+<!--                    $('#editId2').val(data.id);-->
+<!--                    $('#editTenSanBong').val(data.tenSanBong);-->
+<!--                    $('#editTrangThai').val(data.trangThai);-->
+<!--                    $('#editLoaiSan').val(data.idLoaiSan);-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+
+<!--Ca-->
+
+<!--<script>-->
+<!--    $(document).ready(function () {-->
+<!--        $('.edit-btn').on('click', function () {-->
+<!--            var id = $(this).data('id');-->
+<!--            $.ajax({-->
+<!--                url: '/ca/edit/' + id,-->
+<!--                method: 'GET',-->
+<!--                success: function (data) {-->
+<!--                    $('#editId3').val(data.id);-->
+<!--                    $('#editTenCa').val(data.tenCa);-->
+<!--                    $('#editGiaCa').val(data.giaCa);-->
+<!--                    $('#editThoiGianBatDau').val(data.thoiGianBatDau);-->
+<!--                    $('#editThoiGianKetThuc').val(data.thoiGianKetThuc);-->
+<!--                    $('#editTrangThaiCa').val(data.trangThai);-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+
+<!-- Ngay trong tuan-->
+
+<!--<script>-->
+<!--    $(document).ready(function () {-->
+<!--        // Hàm để load danh sách sân bóng theo loại sân bóng-->
+<!--        function loadSanBongsByLoaiSan(loaiSanId) {-->
+<!--            $.ajax({-->
+<!--                url: 'http://localhost:8080/san-bong/by-loai-san/' + loaiSanId,-->
+<!--                method: 'GET',-->
+<!--                success: function (data) {-->
+<!--                    // Xóa nội dung cũ trước khi thêm mới-->
+<!--                    $('#sanListContainer-' + loaiSanId).empty();-->
+
+<!--                    // Kiểm tra xem danh sách có dữ liệu không-->
+<!--                    if (data && data.length > 0) {-->
+<!--                        // Hiển thị danh sách sân bóng-->
+<!--                        data.forEach(function (sanBong, index) {-->
+<!--                            $('#sanListContainer-' + loaiSanId).append(-->
+<!--                                '<tr>' +-->
+<!--                                '<td>' + (index + 1) + '</td>' +-->
+<!--                                '<td>' + sanBong.tenSanBong + '</td>' +-->
+<!--                                '<td style="display: flex">' +-->
+<!--                                '<button class="btn mb-2 mr-1 btn-warning" data-id="' + sanBong.id + '"><span class="fe fe-edit-3"></span></button> ' +-->
+<!--                                '<button class="btn mb-2 ml-1 btn-danger" data-id="' + sanBong.id + '"> <span class="fe fe-trash-2"></span></button>' +-->
+<!--                                '</td>' +-->
+<!--                                '</tr>'-->
+<!--                            );-->
+<!--                        });-->
+
+<!--                        // Ẩn thông báo "Không có sân bóng nào."-->
+<!--                        $('#noSanBong-' + loaiSanId).hide();-->
+<!--                    } else {-->
+<!--                        // Hiển thị thông báo "Không có sân bóng nào."-->
+<!--                        $('#noSanBong-' + loaiSanId).show();-->
+<!--                    }-->
+
+<!--                    $('#sanListContainer-' + loaiSanId).append(-->
+<!--                        '<tr>' +-->
+<!--                        '<td>#</td>' +-->
+<!--                        '<td><input type="text" class="form-control new-san-input" placeholder="Nhập tên"></td>' +-->
+<!--                        '<td><button type="button" class="btn mb-2 ml-1 btn-success add-san-btn" data-loai-san-id="' + loaiSanId + '"><span class="fe fe-plus"></span> Thêm</button></td>' +-->
+<!--                        '</tr>'-->
+<!--                    );-->
+
+<!--                },-->
+<!--                error: function (err) {-->
+<!--                    console.error('Error fetching san bongs by loai san:', err);-->
+<!--                }-->
+<!--            });-->
+<!--        }-->
+
+<!--        // Gọi API để lấy danh sách các loại sân bóng-->
+<!--        $.ajax({-->
+<!--            url: 'http://localhost:8080/loai-san/hien-thi',-->
+<!--            method: 'GET',-->
+<!--            success: function (data) {-->
+<!--                // Duyệt qua danh sách loại sân bóng và thêm vào tab-->
+<!--                data.forEach(function (loaiSan, index) {-->
+<!--                    $('#myTab').append(-->
+<!--                        '<li class="nav-item">' +-->
+<!--                        '<a class="nav-link' + (index === 0 ? ' active' : '') + '" id="tab-' + loaiSan.id + '" data-toggle="tab" href="#tab-content-' + loaiSan.id +-->
+<!--                        '" aria-controls="tab-content-' + loaiSan.id + '" aria-selected="' + (index === 0 ? 'true' : 'false') + '">' +-->
+<!--                        loaiSan.tenLoaiSan +-->
+<!--                        '</a>' +-->
+<!--                        '</li>'-->
+<!--                    );-->
+
+<!--                    // Thêm nội dung cho từng tab-->
+<!--                    $('#myTabContent').append(-->
+<!--                        '<div class="tab-pane fade' + (index === 0 ? ' show active' : '') + '" id="tab-content-' + loaiSan.id + '" role="tabpanel" aria-labelledby="tab-' + loaiSan.id + '">' +-->
+<!--                        '<div class="card-body">' +-->
+<!--                        '<table class="table">' +-->
+<!--                        '<tbody id="sanListContainer-' + loaiSan.id + '">' +-->
+<!--                        '</tbody>' +-->
+<!--                        '</table>' +-->
+<!--                        '</div>' +-->
+<!--                        '<div id="noSanBong-' + loaiSan.id + '" class="text-muted" style="display: none;">' +-->
+<!--                        'Không có sân bóng nào.' +-->
+<!--                        '</div>' +-->
+<!--                        '</div>'-->
+<!--                    );-->
+
+<!--                    // Gọi hàm load danh sách sân bóng cho tab đầu tiên-->
+<!--                    if (index === 0) {-->
+<!--                        loadSanBongsByLoaiSan(loaiSan.id);-->
+<!--                    }-->
+<!--                });-->
+
+<!--                // Xử lý khi tab được chọn-->
+<!--                $(document).on('click', '.nav-link', function () {-->
+<!--                    var loaiSanId = $(this).attr('href').replace('#tab-content-', '');-->
+<!--                    loadSanBongsByLoaiSan(loaiSanId);-->
+<!--                });-->
+<!--            },-->
+<!--            error: function (err) {-->
+<!--                console.error('Error fetching loai san bong:', err);-->
+<!--            }-->
+<!--        });-->
+
+<!--        // Xử lý khi click vào nút "Thêm sân"-->
+<!--        $(document).on('click', '.add-san-btn', function () {-->
+<!--            var loaiSanId = $(this).data('loai-san-id');-->
+<!--            var tenSanBong = $(this).closest('tr').find('.new-san-input').val();-->
+<!--            // Kiểm tra tên sân bóng không được rỗng-->
+<!--            if (tenSanBong.trim() === '') {-->
+<!--                alert('Vui lòng nhập tên sân bóng.');-->
+<!--                return;-->
+<!--            }-->
+
+<!--            // Gửi AJAX để thêm sân bóng mới-->
+<!--            $.ajax({-->
+<!--                url: 'http://localhost:8080/san-bong',-->
+<!--                method: 'POST',-->
+<!--                contentType: 'application/json',-->
+<!--                data: JSON.stringify({-->
+<!--                    loaiSanId: loaiSanId,-->
+<!--                    tenSanBong: tenSanBong,-->
+<!--                    idLoaiSan: loaiSanId,-->
+<!--                    tenLoaiSan: $('#tab-' + loaiSanId).text().trim()-->
+<!--                }),-->
+<!--                success: function (response) {-->
+<!--                    // Sau khi thêm thành công, load lại danh sách sân bóng-->
+<!--                    loadSanBongsByLoaiSan(loaiSanId);-->
+<!--                },-->
+<!--                error: function (err) {-->
+<!--                    console.error('Error adding new san bong:', err);-->
+<!--                    alert('Đã xảy ra lỗi khi thêm sân bóng.');-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+
+
+</body>
+<div th:include="fragment/script :: script"></div>
+</html>

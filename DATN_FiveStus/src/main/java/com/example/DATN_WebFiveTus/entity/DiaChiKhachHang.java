@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @Entity
-@Table(name = "dia_chi_khach_hang")
+@Table(name="dia_chi_khach_hang")
 public class DiaChiKhachHang {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,15 +37,17 @@ public class DiaChiKhachHang {
     @JoinColumn(name = "id_khach_hang", nullable = false)
     private KhachHang khachHang;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_dia_chi", nullable = false)
-    private DiaChi diaChi;
+    @Column(name = "dia_chi_cu_the", length = 255, columnDefinition = "VARCHAR(255) DEFAULT ''")
+    private String diaChiCuThe;
 
-    @Column(name = "so_nha", length = 100, columnDefinition = "VARCHAR(100) DEFAULT ''")
-    private String soNha;
+    @Column(name = "thanh_pho", length = 100, columnDefinition = "VARCHAR(100) DEFAULT ''")
+    private String thanhPho;
 
-    @Column(name = "duong", length = 100, columnDefinition = "VARCHAR(100) DEFAULT ''")
-    private String duong;
+    @Column(name = "quan_huyen", length = 100, columnDefinition = "VARCHAR(100) DEFAULT ''")
+    private String quanHuyen;
+
+    @Column(name = "phuong_xa", length = 100, columnDefinition = "VARCHAR(100) DEFAULT ''")
+    private String phuongXa;
 
     @Column(name = "ghi_chu", length = 100, columnDefinition = "VARCHAR(100) DEFAULT ''")
     private String ghiChu;
@@ -62,5 +64,5 @@ public class DiaChiKhachHang {
     private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
-    private boolean deletedAt;
+    private Boolean deletedAt;
 }
