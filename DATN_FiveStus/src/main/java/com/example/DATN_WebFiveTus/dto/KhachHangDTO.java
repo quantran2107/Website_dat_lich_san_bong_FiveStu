@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -38,6 +39,8 @@ public class KhachHangDTO {
 
 
     private String trangThai;
+
+    private LocalDateTime createdAt;
 
     private List<DiaChiKhachHangDTO> diaChi; // Danh sách địa chỉ
 }
