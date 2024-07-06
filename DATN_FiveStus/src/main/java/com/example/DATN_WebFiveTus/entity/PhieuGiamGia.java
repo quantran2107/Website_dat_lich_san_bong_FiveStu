@@ -21,8 +21,8 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,10 +37,6 @@ public class PhieuGiamGia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name = "id_khach_hang", nullable = false)
-    private KhachHang khachHang;
 
     @Column(name = "ma_phieu_giam_gia", length = 100)
     private String maPhieuGiamGia;
@@ -89,7 +85,7 @@ public class PhieuGiamGia {
     private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
-    private boolean deletedAt;
+    private Boolean deletedAt;
 }
 
 
