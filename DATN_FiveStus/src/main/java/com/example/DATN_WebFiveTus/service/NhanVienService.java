@@ -8,7 +8,7 @@ import java.util.List;
 public interface NhanVienService {
     List<NhanVienDTO> getAll();
 
-    void save(NhanVienDTO nhanVienDTO);
+    Boolean updateNew(NhanVienDTO nv);
 
-    void updateNV(int id, NhanVienDTO nhanVienDTO);
+    Boolean addNew(NhanVienDTO nv);
 }

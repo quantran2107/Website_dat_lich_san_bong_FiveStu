@@ -90,6 +90,11 @@
 			<artifactId>modelmapper</artifactId>
 			<version>3.2.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>1.9</version> <!-- Thay version phù hợp nhất -->
+		</dependency>
 
 	</dependencies>
 
