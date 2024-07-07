@@ -481,7 +481,7 @@ $(document).ready(function () {
                 data: JSON.stringify(updatedEmployee),
                 success: function (response) {
                     if (response === true) {
-
+                        alert("caidẹov");
                         showSuccessToast('Cập nhật  thành công');
                         $('#formContainer').hide();
 

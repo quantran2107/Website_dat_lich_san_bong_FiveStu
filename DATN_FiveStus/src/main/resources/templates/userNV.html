@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông báo tài khoản và mật khẩu</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            Thông tin tài khoản và mật khẩu
+        </div>
+        <div class="card-body">
+            <p class="card-text">Dưới đây là thông tin tài khoản và mật khẩu của bạn:</p>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Tài khoản:</strong> <span th:text="${username}"></span></li>
+                <li class="list-group-item"><strong>Mật khẩu:</strong> <span th:text="${password}"></span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"
+        integrity="sha384-z9D76r5IL6+ZUOrof8sdFkmp2t/Sc5E5rQt1H2lbNA7W+NEIidAzA4ynazfCiC2J"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+jAErYTkOY7PhC3QPP0+qzkf2TIJ7U8T6Z6"
+        crossorigin="anonymous"></script>
+</body>
+</html>

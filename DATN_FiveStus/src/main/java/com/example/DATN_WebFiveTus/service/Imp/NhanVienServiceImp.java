@@ -4,9 +4,16 @@ import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
 import com.example.DATN_WebFiveTus.entity.NhanVien;
 import com.example.DATN_WebFiveTus.repository.NhanVienReposity;
 import com.example.DATN_WebFiveTus.service.NhanVienService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 
 import java.security.SecureRandom;
@@ -19,6 +26,12 @@ public class NhanVienServiceImp implements NhanVienService {
 
     private NhanVienReposity nhanVienReposity;
     private ModelMapper modelMapper;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    private SpringTemplateEngine springTemplateEngine;
 
     public NhanVienServiceImp(NhanVienReposity nhanVienReposity, ModelMapper modelMapper) {
         this.nhanVienReposity = nhanVienReposity;
@@ -50,8 +63,37 @@ public class NhanVienServiceImp implements NhanVienService {
         nhanVien.setMaNhanVien(generateMaNV());
         nhanVien.setTenNhanVien(generateTKNV(nv.getHoTen()));
         nhanVien.setMatKhau(generateMK(16));
-        nhanVienReposity.save(nhanVien);
-        return true;
+        boolean checkMail = mailFunction(nhanVien);
+        if (checkMail) {
+            nhanVienReposity.save(nhanVien);
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean mailFunction(NhanVien nhanVien) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            Context context = new Context();
+            context.setVariable("username", nhanVien.getTenNhanVien());
+            context.setVariable("password", nhanVien.getMatKhau());
+
+            String html = springTemplateEngine.process("userNV", context);
+
+            helper.setTo(nhanVien.getEmail());
+            helper.setSubject("Thông báo tài khoản và mật khẩu");
+            helper.setText(html, true);
+
+            javaMailSender.send(mimeMessage);
+
+            return true;
+        } catch (MessagingException e) {
+            e.printStackTrace(); // Xử lý exception theo nhu cầu của bạn
+            return false;
+        }
     }
 
     public static String generateMK(int length) {

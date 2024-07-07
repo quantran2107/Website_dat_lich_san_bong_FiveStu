@@ -2,6 +2,7 @@ package com.example.DATN_WebFiveTus.rest;
 
 import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
 import com.example.DATN_WebFiveTus.service.NhanVienService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class NhanVienRest {
     }
 
     @PostMapping("add")
-    public ResponseEntity<Boolean> add(@RequestBody NhanVienDTO nv){
+    public ResponseEntity<Boolean> add(@RequestBody NhanVienDTO nv) throws MessagingException {
         return ResponseEntity.ok(nhanVienService.addNew(nv));
     }
 
