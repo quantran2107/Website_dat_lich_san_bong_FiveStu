@@ -3840,7 +3840,8 @@ input[type="button"].btn-block {
 }
 
 .custom-switch {
-    padding-left: 2.25rem;
+    padding-left: 3rem;
+    padding-top: 9px;
 }
 
 .custom-switch .custom-control-label::before {
@@ -5015,11 +5016,11 @@ input[type="button"].btn-block {
     padding: 0.25em 0.4em;
     font-size: 75%;
     font-weight: 600;
-    line-height: 1;
+    line-height: 2;
     text-align: center;
     white-space: nowrap;
     vertical-align: baseline;
-    border-radius: 0.25rem;
+    border-radius: 0.75rem;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
@@ -5082,7 +5083,6 @@ a.badge-secondary:focus, a.badge-secondary.focus {
     color: #212529;
     background-color: #3ad29f;
 }
-
 a.badge-success:hover, a.badge-success:focus {
     color: #212529;
     background-color: #28b183;
@@ -5092,10 +5092,72 @@ a.badge-success:focus, a.badge-success.focus {
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(58, 210, 159, 0.5);
 }
+.custom-1 {
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 82%;
+    line-height: 2;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 159px ;
+    color: #0d4bdb !important;
+    background-color: #9dd5ff6b  !important;
+}
+.custom-2 {
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 82%;
+    line-height: 2;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 159px;
+    color: #ff00ae !important;
+    background-color: #ff9de04a;
+}
+.custom-3 {
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 82%;
+    line-height: 2;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 159px;
+    color: #ff0000 !important;
+    background-color: #ff00002b;
+}
+.custom-4 {
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 82%;
+    line-height: 2;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 159px;
+    color: #076a0e !important;
+    background-color: #0eff002b;
+}
+.custom-5 {
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 82%;
+    line-height: 2;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 159px;
+    color: #7a7500 !important;
+    background-color: #fff2002e;
+}
+
+
 
 .badge-info {
     color: #ffffff;
-    background-color: #17a2b8;
+    background-color: #69c3e5;
 }
 
 a.badge-info:hover, a.badge-info:focus {

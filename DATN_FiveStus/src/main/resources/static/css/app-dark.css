@@ -5049,7 +5049,14 @@ a.badge:hover, a.badge:focus {
     padding-left: 0.6em;
     border-radius: 10rem;
 }
+.badge-light-primary{
+    padding-right: 0.6em;
+    padding-left: 0.6em;
+    border-radius: 10rem;
+    color: #ffffff;
+    background-color: #1BCAFF !important;
 
+}
 .badge-primary {
     color: #ffffff;
     background-color: #1b68ff;
@@ -5096,8 +5103,9 @@ a.badge-success:focus, a.badge-success.focus {
 }
 
 .badge-info {
-    color: #ffffff;
-    background-color: #17a2b8;
+    color: #ccced0;
+    background-color: #69c3e5;
+    border: #1899dd;
 }
 
 a.badge-info:hover, a.badge-info:focus {
