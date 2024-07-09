@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -89,6 +90,16 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy phiếu giảm giá với id " + id));
         phieuGiamGia.setTrangThai(newStatus); // Cập nhật trạng thái mới
         phieuGiamGiaRepository.save(phieuGiamGia); // Lưu lại vào cơ sở dữ liệu
+    }
+
+    @Override
+    public List<PhieuGiamGiaDTO> searchPhieuGiamGia(String maPhieuGiamGia, String tenPhieuGiamGia, String hinhThucGiamGia, String doiTuongApDung, Date ngayBatDau, Date ngayKetThuc) {
+        List<PhieuGiamGia> phieuGiamGias = phieuGiamGiaRepository.searchPhieuGiamGia(maPhieuGiamGia, tenPhieuGiamGia, hinhThucGiamGia, doiTuongApDung, ngayBatDau, ngayKetThuc);
+
+        // Mapping PhieuGiamGia entities to PhieuGiamGiaDTOs
+        return phieuGiamGias.stream()
+                .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
+                .collect(Collectors.toList());
     }
 
 

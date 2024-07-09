@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "maKhachHang": "KH001",
+    "matKhau": "password1",
+    "hoVaTen": "Nguyen Van A",
+    "email": "nguyenvana@gmail.com",
+    "gioiTinh": true,
+    "soDienThoai": "0123456789",
+    "trangThai": "active",
+    "diaChi": null
+  },
+  {
+    "id": 2,
+    "maKhachHang": "KH002",
+    "matKhau": "password2",
+    "hoVaTen": "Nguyen Van B",
+    "email": "nguyenvanb@gmail.com",
+    "gioiTinh": false,
+    "soDienThoai": "0987654321",
+    "trangThai": "active",
+    "diaChi": null
+  },
+  {
+    "id": 3,
+    "maKhachHang": "KH003",
+    "matKhau": "password3",
+    "hoVaTen": "Nguyen Van C",
+    "email": "nguyenvanc@gmail.com",
+    "gioiTinh": true,
+    "soDienThoai": "0123456789",
+    "trangThai": "inactive",
+    "diaChi": null
+  },
+  {
+    "id": 4,
+    "maKhachHang": "KH004",
+    "matKhau": "password4",
+    "hoVaTen": "Nguyen Van D",
+    "email": "nguyenvand@gmail.com",
+    "gioiTinh": false,
+    "soDienThoai": "0987654321",
+    "trangThai": "active",
+    "diaChi": null
+  },
+  {
+    "id": 5,
+    "maKhachHang": "KH005",
+    "matKhau": "password5",
+    "hoVaTen": "Nguyen Van E",
+    "email": "nguyenvane@gmail.com",
+    "gioiTinh": true,
+    "soDienThoai": "0123456789",
+    "trangThai": "active",
+    "diaChi": null
+  }
+]

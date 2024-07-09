@@ -5,6 +5,7 @@ import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -31,4 +32,11 @@ public interface PhieuGiamGiaService {
 //    public List<PhieuGiamGiaDTO> search(String query);
 //
 //    public List<PhieuGiamGiaDTO> filter(String status);
+
+    public List<PhieuGiamGiaDTO> searchPhieuGiamGia(String maPhieuGiamGia,
+                                                 String tenPhieuGiamGia,
+                                                 String hinhThucGiamGia,
+                                                 String doiTuongApDung,
+                                                 Date ngayBatDau,
+                                                 Date ngayKetThuc);
 }

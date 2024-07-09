@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "idKhachHang": 1,
+    "idPhieuGiamGia": 1,
+    "hoVaTenKhachHang": "Nguyen Van A",
+    "trangThai": true,
+    "emailKhachHang": "nguyenvana@gmail.com",
+    "soDienThoaiKhachHang": "0123456789"
+  },
+  {
+    "id": 2,
+    "idKhachHang": 2,
+    "idPhieuGiamGia": 2,
+    "hoVaTenKhachHang": "Nguyen Van B",
+    "trangThai": false,
+    "emailKhachHang": "nguyenvanb@gmail.com",
+    "soDienThoaiKhachHang": "0987654321"
+  },
+  {
+    "id": 3,
+    "idKhachHang": 3,
+    "idPhieuGiamGia": 3,
+    "hoVaTenKhachHang": "Nguyen Van C",
+    "trangThai": true,
+    "emailKhachHang": "nguyenvanc@gmail.com",
+    "soDienThoaiKhachHang": "0123456789"
+  },
+  {
+    "id": 4,
+    "idKhachHang": 4,
+    "idPhieuGiamGia": 4,
+    "hoVaTenKhachHang": "Nguyen Van D",
+    "trangThai": true,
+    "emailKhachHang": "nguyenvand@gmail.com",
+    "soDienThoaiKhachHang": "0987654321"
+  },
+  {
+    "id": 5,
+    "idKhachHang": 5,
+    "idPhieuGiamGia": 5,
+    "hoVaTenKhachHang": "Nguyen Van E",
+    "trangThai": false,
+    "emailKhachHang": "nguyenvane@gmail.com",
+    "soDienThoaiKhachHang": "0123456789"
+  },
+  {
+    "id": 6,
+    "idKhachHang": 1,
+    "idPhieuGiamGia": 6,
+    "hoVaTenKhachHang": "Nguyen Van A",
+    "trangThai": true,
+    "emailKhachHang": "nguyenvana@gmail.com",
+    "soDienThoaiKhachHang": "0123456789"
+  },
+  {
+    "id": 7,
+    "idKhachHang": 2,
+    "idPhieuGiamGia": 7,
+    "hoVaTenKhachHang": "Nguyen Van B",
+    "trangThai": false,
+    "emailKhachHang": "nguyenvanb@gmail.com",
+    "soDienThoaiKhachHang": "0987654321"
+  },
+  {
+    "id": 8,
+    "idKhachHang": 3,
+    "idPhieuGiamGia": 8,
+    "hoVaTenKhachHang": "Nguyen Van C",
+    "trangThai": true,
+    "emailKhachHang": "nguyenvanc@gmail.com",
+    "soDienThoaiKhachHang": "0123456789"
+  },
+  {
+    "id": 9,
+    "idKhachHang": 4,
+    "idPhieuGiamGia": 9,
+    "hoVaTenKhachHang": "Nguyen Van D",
+    "trangThai": false,
+    "emailKhachHang": "nguyenvand@gmail.com",
+    "soDienThoaiKhachHang": "0987654321"
+  },
+  {
+    "id": 10,
+    "idKhachHang": 5,
+    "idPhieuGiamGia": 10,
+    "hoVaTenKhachHang": "Nguyen Van E",
+    "trangThai": true,
+    "emailKhachHang": "nguyenvane@gmail.com",
+    "soDienThoaiKhachHang": "0123456789"
+  },
+  {
+    "id": 11,
+    "idKhachHang": 1,
+    "idPhieuGiamGia": 11,
+    "hoVaTenKhachHang": "Nguyen Van A",
+    "trangThai": true,
+    "emailKhachHang": "nguyenvana@gmail.com",
+    "soDienThoaiKhachHang": "0123456789"
+  },
+  {
+    "id": 12,
+    "idKhachHang": 2,
+    "idPhieuGiamGia": 12,
+    "hoVaTenKhachHang": "Nguyen Van B",
+    "trangThai": false,
+    "emailKhachHang": "nguyenvanb@gmail.com",
+    "soDienThoaiKhachHang": "0987654321"
+  },
+  {
+    "id": 13,
+    "idKhachHang": 3,
+    "idPhieuGiamGia": 13,
+    "hoVaTenKhachHang": "Nguyen Van C",
+    "trangThai": true,
+    "emailKhachHang": "nguyenvanc@gmail.com",
+    "soDienThoaiKhachHang": "0123456789"
+  },
+  {
+    "id": 14,
+    "idKhachHang": 4,
+    "idPhieuGiamGia": 14,
+    "hoVaTenKhachHang": "Nguyen Van D",
+    "trangThai": false,
+    "emailKhachHang": "nguyenvand@gmail.com",
+    "soDienThoaiKhachHang": "0987654321"
+  },
+  {
+    "id": 15,
+    "idKhachHang": 5,
+    "idPhieuGiamGia": 15,
+    "hoVaTenKhachHang": "Nguyen Van E",
+    "trangThai": true,
+    "emailKhachHang": "nguyenvane@gmail.com",
+    "soDienThoaiKhachHang": "0123456789"
+  },
+  {
+    "id": 16,
+    "idKhachHang": 1,
+    "idPhieuGiamGia": 16,
+    "hoVaTenKhachHang": "Nguyen Van A",
+    "trangThai": false,
+    "emailKhachHang": "nguyenvana@gmail.com",
+    "soDienThoaiKhachHang": "0123456789"
+  },
+  {
+    "id": 17,
+    "idKhachHang": 2,
+    "idPhieuGiamGia": 17,
+    "hoVaTenKhachHang": "Nguyen Van B",
+    "trangThai": true,
+    "emailKhachHang": "nguyenvanb@gmail.com",
+    "soDienThoaiKhachHang": "0987654321"
+  },
+  {
+    "id": 18,
+    "idKhachHang": 3,
+    "idPhieuGiamGia": 18,
+    "hoVaTenKhachHang": "Nguyen Van C",
+    "trangThai": false,
+    "emailKhachHang": "nguyenvanc@gmail.com",
+    "soDienThoaiKhachHang": "0123456789"
+  },
+  {
+    "id": 19,
+    "idKhachHang": 4,
+    "idPhieuGiamGia": 19,
+    "hoVaTenKhachHang": "Nguyen Van D",
+    "trangThai": true,
+    "emailKhachHang": "nguyenvand@gmail.com",
+    "soDienThoaiKhachHang": "0987654321"
+  },
+  {
+    "id": 20,
+    "idKhachHang": 5,
+    "idPhieuGiamGia": 20,
+    "hoVaTenKhachHang": "Nguyen Van E",
+    "trangThai": false,
+    "emailKhachHang": "nguyenvane@gmail.com",
+    "soDienThoaiKhachHang": "0123456789"
+  }
+]

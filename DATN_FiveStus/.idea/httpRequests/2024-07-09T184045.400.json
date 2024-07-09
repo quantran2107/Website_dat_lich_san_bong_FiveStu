@@ -1,0 +1,5 @@
+{
+  "status": 400,
+  "message": "JDBC exception executing SQL [SELECT * FROM phieu_giam_gia pg WHERE (? IS NULL OR pg.maPhieuGiamGia LIKE ?) AND (? IS NULL OR pg.tenPhieuGiamGia LIKE ?) AND (? IS NULL OR pg.hinhThucGiamGia LIKE ?) AND (? IS NULL OR pg.doiTuongApDung LIKE ?) AND (? IS NULL OR pg.ngayBatDau = ?) AND (? IS NULL OR pg.ngayKetThuc = ?)] [Unknown column 'pg.maPhieuGiamGia' in 'where clause'] [n/a]; SQL [n/a]",
+  "timestamp": 1720525245649
+}

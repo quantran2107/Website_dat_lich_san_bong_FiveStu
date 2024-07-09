@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/head :: head"></head>
+<body class="vertical  light  ">
+<div class="wrapper">
+    <div th:include="fragment/navbar :: navbar"></div>
+    <div th:include="fragment/sidebar :: sidebar"></div>
+    <main role="main" class="main-content">
+        <div class="col-12">
+            <h2 class="mb-2 page-title">Quản lý phiếu giảm giá</h2>
+            <p class="card-text"></p>
+            <div class="row my-4">
+                <!-- Small table -->
+                <div class="col-md-12">
+                    <!-- ô Search -->
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="toolbar row mb-3 mt-3">
+                                <div class="col-md-12">
+                                    <form class="form-inline">
+                                        <div class="form-row">
+                                            <!-- Search -->
+                                            <div class="form-group col-auto" style="display: flex">
+                                                <label for="search" class="sr-only">Tìm kiếm</label>
+                                                <input type="text" class="form-control mr-5" id="search"
+                                                       placeholder="Tìm kiếm theo mã hoặc tên" oninput="searchTable()"
+                                                       style="width: 606px;">
+                                                <div class="form-group col-auto "
+                                                     style="    margin-left: 1042px;
+                                                            margin-top: -37px;
+                                                            margin-right: 76px;">
+                                                    <div class="dropdown float-right">
+                                                        <button type="button" class="btn btn-primary"
+                                                                onclick="showAddForm(this)">Thêm
+                                                            <span class="fe fe-plus"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="col-md-12 mt-4">
+                                    <form class="form-inline">
+                                        <div class="form-row">
+                                            <div class="form-group col-auto" style="display: flex">
+                                                <label for="searchNgayBatDau">Từ</label>
+                                                <input class="form-control ml-3 mr-2" style="width: 260px" type="date"
+                                                       id="searchNgayBatDau">
+                                                <label for="searchNgayKetThuc">Đến</label>
+                                                <input class="form-control" style="width: 260px; margin-left: 15px"
+                                                       type="date" id="searchNgayKetThuc">
+                                                <div class="form-group col-auto ml-3">
+                                                    <div class="dropdown float-right">
+                                                        <button class="btn btn-outline-warning dropdown-toggle"
+                                                                type="button" id="actionMenuButton1"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">Kiểu
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="actionMenuButton1">
+                                                            <a class="dropdown-item" href="#">Cá nhân</a>
+                                                            <a class="dropdown-item" href="#">Tất cả khách hàng</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-auto ml-3">
+                                                    <div class="dropdown float-right">
+                                                        <button class="btn btn-outline-warning dropdown-toggle"
+                                                                type="button" id="actionMenuButton2"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">Loại
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="actionMenuButton2">
+                                                            <a class="dropdown-item" href="#">Giảm theo %</a>
+                                                            <a class="dropdown-item" href="#">Giảm theo số tiền</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-auto ml-3">
+                                                    <div class="dropdown float-right">
+                                                        <button class="btn btn-outline-warning dropdown-toggle"
+                                                                type="button" id="actionMenuButton3"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">Trạng thái
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="actionMenuButton3">
+                                                            <a class="dropdown-item" href="#">Đã kết thúc</a>
+                                                            <a class="dropdown-item" href="#">Sắp diễn ra</a>
+                                                            <a class="dropdown-item" href="#">Đang diễn ra</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-auto ml-3">
+                                                    <button type="button" class="btn btn-outline-success"
+                                                            onclick="showAddForm(this)">Xuất Excel
+                                                        <span class="fe fe-file-text"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Search -->
+                    <!-- Table -->
+                    <div class="card shadow mt-5">
+                        <div class="card-body" id="tableCardBody">
+                            <table class="table datatables" id="dataTable"
+                                   style="justify-content: center; text-align: center">
+                                <thead style="justify-content: center; text-align: center">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Mã</th>
+                                    <th>Tên</th>
+                                    <th>Kiểu</th>
+                                    <th>Loại</th>
+                                    <th>Số lượng</th>
+                                    <th>Thời gian</th>
+                                    <th>Trạng thái</th>
+                                    <th>Hành động</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tableBody">
+                                <!-- Dữ liệu sẽ được thêm vào đây -->
+                                </tbody>
+                            </table>
+                            <!-- Phân trang -->
+                            <nav aria-label="Table Paging" class="mb-0 text-muted">
+                                <ul id="pagination" class="pagination justify-content-end mb-0">
+                                    <!-- Các nút phân trang sẽ được thêm bởi JavaScript -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:include="fragment/modal :: modal"></div>
+</div>
+</body>
+
+<script th:include="fragment/script :: script"></script>
+
+<script th:inline="javascript">
+
+    document.addEventListener("DOMContentLoaded", function () {
+        fetchDataAndRenderTable();
+    });
+    let initialTableData = [];
+
+
+    function fetchDataAndRenderTable(page = 0, size = 10) {
+        fetch(`/api-phieu-giam-gia/phan-trang?trang=${page}&kichThuoc=${size}`) // Gọi API để lấy dữ liệu phân trang
+            .then(response => response.json())
+            .then(data => {
+                initialTableData = data.content;
+                const tableBody = document.getElementById('tableBody');
+                tableBody.innerHTML = ''; // Xóa dữ liệu hiện tại trong bảng
+
+
+                data.content.forEach((phieuGiamGia, index) => {
+                    // Xử lý hiển thị dữ liệu theo từng trường
+                    const mucGiamText = phieuGiamGia.hinhThucGiamGia ? `${phieuGiamGia.mucGiam} %` : `${phieuGiamGia.mucGiam} VND`;
+                    const ngayBatDauFormatted = new Date(phieuGiamGia.ngayBatDau).toLocaleDateString();
+                    const ngayKetThucFormatted = new Date(phieuGiamGia.ngayKetThuc).toLocaleDateString();
+                    const now = new Date(); // Lấy ngày hiện tại
+                    const ngayKetThuc = new Date(phieuGiamGia.ngayKetThuc);
+                    const isSwitchChecked = (phieuGiamGia.trangThai === 'Sắp diễn ra' || phieuGiamGia.trangThai === 'Đang diễn ra')
+                        && phieuGiamGia.soLuong > 0 && ngayKetThuc >= now;
+                    const isSwitchHidden = phieuGiamGia.trangThai === 'Đã kết thúc'; // Kiểm tra nếu trạng thái là 'Kết thúc'doiTuongSpan
+                    const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td class="maPhieuGiamGia">${phieuGiamGia.maPhieuGiamGia}</td>
+                        <td class="tenPhieuGiamGia">${phieuGiamGia.tenPhieuGiamGia}</td>
+                        <td class="doiTuongApDung" >
+                        <span class="${phieuGiamGia.doiTuongApDung ? 'custom-2' : 'custom-1'}" style="width: 135px; ">${phieuGiamGia.doiTuongApDung == false ? "Tất cả khách hàng" : "Cá nhân"}</span>
+                        </td>
+                        <td class="mucGiam">${mucGiamText}</td>
+                        <td class="soLuong">${phieuGiamGia.soLuong}</td>
+                        <td class="thoiGian">${ngayBatDauFormatted} - ${ngayKetThucFormatted}</td>
+                        <td class="doiTuongApDung">
+                            <span style="width: 135px;"
+                                  class="${phieuGiamGia.trangThai === 'Đã kết thúc' ? 'custom-3' : phieuGiamGia.trangThai === 'Sắp diễn ra' ? 'custom-5' : 'custom-4'}">
+                                ${phieuGiamGia.trangThai}
+                            </span>
+                        </td>
+                          <td style="display: flex ; text-align: center; margin-right: 0px" >
+                                <button class="btn btn-warning" type="button" data-toggle="modal" style="justify-content: center"
+                                onclick="showUpdate(${phieuGiamGia.id})">
+                                    <span class="fe fe-edit-3"></span>
+                                </button>
+                                <div class="custom-control custom-switch" ${isSwitchHidden ? 'style="display: none;"' : ''}>
+                                    <input type="checkbox" class="custom-control-input"
+                                        id="switch-${phieuGiamGia.id}"
+                                        data-id="${phieuGiamGia.id}"
+                                        ${isSwitchChecked ? 'checked' : ''}
+                                        onchange="updateVoucherStatus(this)">
+                                    <label class="custom-control-label" for="switch-${phieuGiamGia.id}"></label>
+                                </div>
+                            </td>
+                    </tr>
+                    `;
+                    tableBody.insertAdjacentHTML('beforeend', row);
+                });
+                // Tạo các nút phân trang
+                const paginationElement = document.getElementById('pagination');
+                paginationElement.innerHTML = ''; // Xóa nút phân trang hiện tại
+
+                // Tạo nút Previous nếu có trang trước đó
+                if (data.number > 0) {
+                    const previousButton = `<li class="page-item"><a class="page-link" href="#"
+                    onclick="fetchDataAndRenderTable(${data.number - 1}, ${data.size})">Previous</a></li>`;
+                    paginationElement.insertAdjacentHTML('beforeend', previousButton);
+                }
+
+                // Tạo các nút trang
+                for (let i = 0; i < data.totalPages; i++) {
+                    const pageButton = `<li class="page-item ${i === data.number ? 'active' : ''}">
+                    <a class="page-link" href="#" onclick="fetchDataAndRenderTable(${i}, ${data.size})">${i + 1}</a></li>`;
+                    paginationElement.insertAdjacentHTML('beforeend', pageButton);
+                }
+
+                // Tạo nút Next nếu có trang tiếp theo
+                if (data.number < data.totalPages - 1) {
+                    const nextButton = `<li class="page-item"><a class="page-link" href="#"
+                    onclick="fetchDataAndRenderTable(${data.number + 1}, ${data.size})">Next</a></li>`;
+                    paginationElement.insertAdjacentHTML('beforeend', nextButton);
+                }
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
+    //Ket thuc phan trang
+
+
+    //Notification
+    function showSuccessToast(message) {
+        Toastify({
+            text: message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            style: {
+                background: "#4CAF50",
+            },
+            stopOnFocus: true
+        }).showToast();
+    }
+
+    function showErrorToast(message) {
+        Toastify({
+            text: message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            style: {
+                background: "#f44336",
+            },
+            stopOnFocus: true
+        }).showToast();
+    }
+
+    // Confirm  SweetAlert2
+    //Update trang thai
+    function updateVoucherStatus(checkbox) {
+        const id = checkbox.dataset.id;
+        const isChecked = checkbox.checked;
+        if (!checkbox.id.startsWith('switch-')) {
+            // Nếu không phải là switch, không thực hiện
+            return;
+        }
+        // Confirm action using SweetAlert2
+        Swal.fire({
+            title: 'Xác nhận',
+            text: 'Bạn chắc chắn muốn kết thúc phiếu giảm giá?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Update status
+                fetch(`/api-phieu-giam-gia/${id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const currentStatus = data.trangThai;
+
+                        if ((currentStatus === 'Sắp diễn ra' || currentStatus === 'Đang diễn ra') && !isChecked) {
+                            const updateStatus = 'Đã kết thúc';
+
+                            fetch(`/api-phieu-giam-gia/trang-thai/${id}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({trangThai: updateStatus})
+                            })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Failed to update status');
+                                    }
+                                    fetchDataAndRenderTable();
+                                })
+                                .then(data => {
+                                    Swal.fire({
+                                        title: 'Updated Successfully',
+                                        text: 'Cập nhật trạng thái thành công',
+                                        icon: 'success'
+                                    });
+                                    showSuccessToast('Cập nhật trạng thái thành công');
+                                    // Refresh table data
+                                    fetchDataAndRenderTable();
+                                })
+                                .catch(error => {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: 'Không thể cập nhật trạng thái',
+                                        icon: 'error'
+                                    });
+                                    showErrorToast('Không thể cập nhật trạng thái');
+                                    fetchDataAndRenderTable();
+                                });
+                        } else {
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to fetch current status.',
+                            icon: 'error'
+                        });
+                        fetchDataAndRenderTable();
+                    });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                console.log('Action canceled');
+                fetchDataAndRenderTable();
+            }
+        });
+    }
+
+    //Add
+
+    var selectedButton = null;
+
+    function selectButton(type) {
+        if (type === 'VND') {
+            document.getElementById('hinhThucGiamGiaVND').checked = true;
+            selectedButton = 'VND';
+            updateTextColor('VND');
+        } else if (type === 'Percent') {
+            document.getElementById('hinhThucGiamGiaPercent').checked = true;
+            selectedButton = 'Percent';
+            updateTextColor('Percent');
+        }
+    }
+
+    function updateTextColor(type) {
+        var btnVND = document.getElementById('btnVND');
+        var btnPercent = document.getElementById('btnPercent');
+        const giaTriToiDa = document.getElementById('giaTriToiDa');
+        // Reset previous styles
+        btnVND.style.color = '';
+        btnPercent.style.color = '';
+
+        // Set new styles
+        if (type === 'VND') {
+            btnVND.style.color = 'green';
+            btnVND.style.fontWeight = 'bold';
+            giaTriToiDa.disabled = true;
+        } else if (type === 'Percent') {
+            btnPercent.style.color = 'green';
+            btnPercent.style.fontWeight = 'bold';
+            giaTriToiDa.disabled = false;
+        }
+    }
+
+    function showAddForm() {
+
+        const cardBody = document.getElementById('tableCardBody');
+
+        const form = `
+        <form id="addForm" >
+            <div class="row">
+                <!--Table bên trái -->
+                <div class="col-md-6">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="tenPhieuGiamGia" name="tenPhieuGiamGia">Tên phiếu giảm giá</label>
+                            <input type="text" class="form-control" id="tenPhieuGiamGia" placeholder="Tên">
+                            <input type="text" class="form-control" id="id" placeholder="Tên" hidden>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="mucGiam" name="mucGiam">Mức giảm</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="mucGiam" placeholder="mucGiam" style="padding-right: 40px;">
+                                <span class="input-group-btn">
+                                    <label class="btn" id="btnVND" onclick="selectButton('VND')" style="border: 1px  #e9ecef;">
+                                        $<input type="radio" name="hinhThucGiamGia" id="hinhThucGiamGiaVND" style="display: none; color: #0a0c0d" value="false">
+                                    </label>
+                                    <label class="btn" id="btnPercent" onclick="selectButton('Percent')" style="border: 1px  #e9ecef;">
+                                        %<input type="radio" name="hinhThucGiamGia" id="hinhThucGiamGiaPercent" style="display: none; color: #0a0c0d" value="true">
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="giaTriToiDa">Giá trị tối đa</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="giaTriToiDa">
+                                <span class="input-group-text">$</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="soLuong">Số lượng</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="soLuong">
+                                <span class="input-group-text">#</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="dieuKienSuDung">Điều kiện</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="dieuKienSuDung">
+                                <span class="input-group-text">$</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="ngayBatDau">Ngày bắt đầu</label>
+                            <input type="date" class="form-control" id="ngayBatDau" placeholder="Ngày bắt đầu">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="ngayKetThuc">Ngày kết thúc</label>
+                            <input type="date" class="form-control" id="ngayKetThuc" placeholder="Ngày kết thúc">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="doiTuongApDung" id="doiTuongCaNhan" value="true">
+                                <label class="form-check-label" for="doiTuongCaNhan">Cá nhân</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="doiTuongApDung" id="doiTuongTatCa" value="false">
+                                <label class="form-check-label" for="doiTuongTatCa">Tất cả khách hàng</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="ghiChu">Ghi chú</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="ghiChu">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Bảng khách hàng bên phải -->
+                <div class="col-md-6">
+                    <table class="table" id="tableKhachHangContainer" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tên</th>
+                                <th>SDT</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="khachHangTableBody">
+                            <!-- Danh sách khách hàng sẽ được thêm vào đây -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <button type="button" class="btn btn-secondary" onclick="cancelAdd()">Hủy</button>
+        </form>
+    `;
+
+
+        cardBody.innerHTML = form;
+        document.getElementById('doiTuongTatCa').checked = true;
+        // Xử lý sự kiện change cho các radio buttons
+
+        document.addEventListener('change', function (event) {
+            const doiTuongCaNhan = document.getElementById('doiTuongCaNhan');
+            const doiTuongTatCa = document.getElementById('doiTuongTatCa');
+            const tableKhachHangContainer = document.getElementById('tableKhachHangContainer');
+
+            // Xử lý logic khi radio button thay đổi
+            if (event.target === doiTuongTatCa && doiTuongTatCa.checked) {
+                tableKhachHangContainer.style.display = 'none';
+                // Lấy danh sách tất cả ID khách hàng
+                fetch('http://localhost:8080/khach-hang/hien-thi')
+                    .then(response => response.json())
+                    .then(data => {
+                        const allIds = data.map(khachHang => khachHang.id);
+                        setSelectedIdKhachHangs(allIds); // Chọn tất cả ID khách hàng
+                    })
+                    .catch(error => console.error('Error fetching khach hang:', error));
+            } else if (event.target === doiTuongCaNhan && doiTuongCaNhan.checked) {
+                tableKhachHangContainer.style.display = 'block';
+            }
+        });
+        // ADD
+        fetch('http://localhost:8080/khach-hang/hien-thi')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('khachHangTableBody');
+                tableBody.innerHTML = '';
+
+                data.forEach(khachHang => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+        <td>
+        <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input item-checkbox" id="checkbox-${khachHang.id}" data-id="${khachHang.id}">
+        <label class="custom-control-label" for="checkbox-${khachHang.id}"></label>
+        </div>
+        </td>
+        <td id="idKhachHang" hidden>${khachHang.id}</td>
+        <td>${khachHang.hoVaTen}</td>
+        <td>${khachHang.soDienThoai}</td>
+        <td>${khachHang.email}</td>
+        `;
+                    row.addEventListener('click', () => {
+                        // Lưu idKhachHang khi người dùng chọn khách hàng
+                        const idKhachHangInput = document.getElementById('idKhachHang');
+                        idKhachHangInput.value = khachHang.id;
+                    });
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching khach hang:', error));
+
+        function getSelectedRadioValue(name) {
+            const selectedRadio = document.querySelector(`input[name="${name}"]:checked`);
+            return selectedRadio ? selectedRadio.value : ''; // Trả về giá trị của radio nếu có, ngược lại trả về chuỗi trống
+        }
+
+        // Hàm chọn ID khách hàng
+        function setSelectedIdKhachHangs(ids) {
+            const checkboxes = document.querySelectorAll('input.item-checkbox');
+            checkboxes.forEach(checkbox => {
+                const checkboxId = checkbox.getAttribute('data-id');
+                if (ids.includes(checkboxId)) {
+                    checkbox.checked = true;
+                } else {
+                    checkbox.checked = false;
+                }
+            });
+        }
+
+        // Hàm lấy danh sách ID khách hàng đã chọn
+        function getSelectedIdKhachHangs() {
+            const doiTuongTatCa = document.getElementById('doiTuongTatCa');
+            if (doiTuongTatCa.checked) {
+                // Nếu đã chọn "Tất cả khách hàng", lấy danh sách tất cả ID khách hàng
+                return fetch('http://localhost:8080/khach-hang/hien-thi')
+                    .then(response => response.json())
+                    .then(data => data.map(khachHang => khachHang.id))
+                    .catch(error => {
+                        console.error('Error fetching khach hang:', error);
+                        return []; // Trả về mảng rỗng nếu có lỗi
+                    });
+            } else {
+                // Nếu không phải "Tất cả khách hàng", lấy danh sách ID khách hàng đã chọn từ checkbox
+                const checkboxes = document.querySelectorAll('input.item-checkbox:checked');
+                const selectedIds = Array.from(checkboxes).map(checkbox => checkbox.getAttribute('data-id'));
+                return Promise.resolve(selectedIds); // Trả về danh sách ID đã chọn
+            }
+        }
+
+
+        document.getElementById('addForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const selectedIdKhachHangs = getSelectedIdKhachHangs();
+            const data = {
+                tenPhieuGiamGia: document.getElementById('tenPhieuGiamGia').value,
+                mucGiam: document.getElementById('mucGiam').value,
+                giaTriToiDa: document.getElementById('giaTriToiDa').value,
+                soLuong: document.getElementById('soLuong').value,
+                dieuKienSuDung: document.getElementById('dieuKienSuDung').value,
+                ngayBatDau: document.getElementById('ngayBatDau').value,
+                ngayKetThuc: document.getElementById('ngayKetThuc').value,
+                doiTuongApDung: getSelectedRadioValue('doiTuongApDung'),
+                ghiChu: document.getElementById('ghiChu').value,
+                idKhachHangs: selectedIdKhachHangs // Gán danh sách ID khách hàng đã chọn vào đây
+            };
+
+            Swal.fire({
+                title: 'Xác nhận',
+                text: 'Bạn chắc chắn muốn thêm phiếu giảm giá?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('http://localhost:8080/api-phieu-giam-gia/save', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data),
+                    })
+                        .then(response => response.json())
+                        .then(phieuGiamGia => {
+                            const idPhieuGiamGia = phieuGiamGia.id; // Lấy ID phiếu giảm giá trả về
+                            const chiTietData = selectedIdKhachHangs.map(idKhachHang => ({
+                                idPhieuGiamGia,
+                                idKhachHang
+                            }));
+
+                            // Gửi yêu cầu lưu chi tiết phiếu giảm giá
+                            fetch('http://localhost:8080/api-phieu-giam-gia-chi-tiet/save', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(chiTietData),
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    Swal.fire({
+                                        title: 'Updated Successfully',
+                                        text: 'Thêm thành công',
+                                        icon: 'success'
+                                    });
+                                    showSuccessToast('Thêm thành công');
+                                    cancelAdd();
+                                })
+                                .catch(error => {
+                                    Swal.fire({
+                                        title: 'Updated Successfully',
+                                        text: 'Thêm thành công',
+                                        icon: 'success'
+                                    });
+                                    showSuccessToast('Thêm thành công');
+                                    cancelAdd();
+                                });
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                title: 'Updated Successfully',
+                                text: 'Thêm thành công',
+                                icon: 'success'
+                            });
+                            showSuccessToast('Thêm thành công');
+                            cancelAdd();
+                        });
+                } else {
+                    console.log('Action canceled');
+                    cancelAdd();
+                }
+            }).catch(error => {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Failed to fetch current status.',
+                    icon: 'error'
+                });
+                cancelAdd();
+            });
+        });
+    }
+
+
+        //Update Form
+
+        function showUpdate(id) {
+            const cardBody = document.getElementById('tableCardBody');
+            const form = `
+        <form id="updateForm">
+            <div class="row">
+                <!--Table bên trái -->
+                <div class="col-md-6">
+                    <div class="form-row">
+                            <input type="text" class="form-control" id="id"  hidden>
+                            <input type="text" class="form-control" id="deletedAt"  hidden>
+                        <div class="form-group col-md-6">
+                            <label for="maPhieuGiamGia" name="maPhieuGiamGia">Mã phiếu giảm giá</label>
+                            <input type="text" class="form-control" id="maPhieuGiamGia" >
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="tenPhieuGiamGia" name="tenPhieuGiamGia">Tên phiếu giảm giá</label>
+                            <input type="text" class="form-control" id="tenPhieuGiamGia" placeholder="Tên">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="mucGiam" name="mucGiam">Mức giảm</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="mucGiam" placeholder="mucGiam" style="padding-right: 40px;">
+                                <span class="input-group-btn">
+                                    <label class="btn" id="btnVND" onclick="selectButton('VND')" style="border: 1px  #e9ecef;">
+                                        $<input type="radio" name="hinhThucGiamGia" id="hinhThucGiamGiaVND" style="display: none; color: #0a0c0d" value="false">
+                                    </label>
+                                    <label class="btn" id="btnPercent" onclick="selectButton('Percent')" style="border: 1px  #e9ecef;">
+                                        %<input type="radio" name="hinhThucGiamGia" id="hinhThucGiamGiaPercent" style="display: none; color: #0a0c0d" value="true">
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="giaTriToiDa">Giá trị tối đa</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="giaTriToiDa">
+                                <span class="input-group-text">$</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="soLuong">Số lượng</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="soLuong">
+                                <span class="input-group-text">#</span>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="dieuKienSuDung">Điều kiện</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="dieuKienSuDung">
+                                <span class="input-group-text">$</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="ngayBatDau">Ngày bắt đầu</label>
+                            <input type="date" class="form-control" id="ngayBatDau" placeholder="Ngày bắt đầu">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="ngayKetThuc">Ngày kết thúc</label>
+                            <input type="date" class="form-control" id="ngayKetThuc" placeholder="Ngày kết thúc">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="doiTuongApDung" id="doiTuongCaNhan" value="true">
+                                <label class="form-check-label" for="doiTuongCaNhan">Cá nhân</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="doiTuongApDung" id="doiTuongTatCa" value="false">
+                                <label class="form-check-label" for="doiTuongTatCa">Tất cả khách hàng</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="ghiChu">Ghi chú</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="ghiChu">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="trangThai">Trạng thái</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="trangThai" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Bảng khách hàng bên phải -->
+                <div class="col-md-6">
+                    <table class="table" id="tableKhachHangContainer" style="display: block;">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tên</th>
+                                <th>SDT</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="khachHangTableBody">
+                            <!-- Danh sách khách hàng sẽ được thêm vào đây -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <button type="button" class="btn btn-secondary" onclick="cancelAdd()">Hủy</button>
+        </form>
+    `;
+
+            cardBody.innerHTML = form;
+
+            fetch(`http://localhost:8080/api-phieu-giam-gia/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('id').value = data.id;
+                    document.getElementById('tenPhieuGiamGia').value = data.tenPhieuGiamGia;
+                    document.getElementById('maPhieuGiamGia').value = data.maPhieuGiamGia;
+                    document.getElementById('mucGiam').value = data.mucGiam;
+                    document.getElementById('giaTriToiDa').value = data.giaTriToiDa;
+                    document.getElementById('soLuong').value = data.soLuong;
+                    // Kiểm tra giá trị doiTuongApDung và set checked đúng cách
+                    if (data.doiTuongApDung === false) {
+                        document.getElementById('doiTuongTatCa').checked = true;
+                        document.getElementById('tableKhachHangContainer').style.display = 'none';
+                    } else {
+                        document.getElementById('doiTuongCaNhan').checked = true;
+                        document.getElementById('tableKhachHangContainer').style.display = 'block';
+                    }
+                    //Hinh thuc giam gia
+                    if (data.hinhThucGiamGia === false) {
+                        document.getElementById('hinhThucGiamGiaVND').checked = true;
+                        selectButton('VND');
+                    } else {
+                        document.getElementById('hinhThucGiamGiaPercent').checked = true;
+                        selectButton('Percent');
+                    }
+                    document.getElementById('dieuKienSuDung').value = data.dieuKienSuDung;
+                    document.getElementById('ngayBatDau').value = data.ngayBatDau;
+                    document.getElementById('ngayKetThuc').value = data.ngayKetThuc;
+                    document.getElementById('ghiChu').value = data.ghiChu;
+                    document.getElementById('deletedAt').value = data.deletedAt;
+                    // Xử lý trạng thái dựa vào ngày bắt đầu và ngày kết thúc
+                    const ngayBatDauInput = document.getElementById('ngayBatDau');
+                    const ngayKetThucInput = document.getElementById('ngayKetThuc');
+                    function updateTrangThai() {
+                        const currentDate = new Date();
+                        const startDate = new Date(ngayBatDauInput.value);
+                        const endDate = new Date(ngayKetThucInput.value);
+                        const soLuong = parseInt(document.getElementById('soLuong').value);
+                        let trangThai = '';
+                        if (currentDate < startDate) {
+                            trangThai = 'Sắp diễn ra';
+                        } else if (currentDate > endDate) {
+                            trangThai = 'Đã kết thúc';
+                        } else {
+                            trangThai = 'Đang diễn ra';
+                        }
+                        if (soLuong === 0) {
+                            trangThai = 'Đã kết thúc';
+                        }
+                        document.getElementById('trangThai').value = trangThai;
+                    }
+                    updateTrangThai();
+                    document.getElementById('soLuong').addEventListener('change', updateTrangThai);
+                    ngayBatDauInput.addEventListener('change', updateTrangThai);
+                    ngayKetThucInput.addEventListener('change', updateTrangThai);
+                    // Fetch danh sách khách hàng liên quan đến phiếu giảm giá để hiển thị trong bảng và tự động tick các checkbox
+                    fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pggct/${id}`)
+                        .then(response => response.json())
+                        .then(dataCT => {
+                            const tableBody = document.getElementById('khachHangTableBody');
+                            tableBody.innerHTML = '';
+                            if (Array.isArray(dataCT)) {
+                                dataCT.forEach(chiTiet => {
+                                    const row = document.createElement('tr');
+                                    row.innerHTML = `
+                    <td>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input item-checkbox" id="checkbox-${chiTiet.idKhachHang}" data-id="${chiTiet.idKhachHang}" disabled>
+                            <label class="custom-control-label" for="checkbox-${chiTiet.idKhachHang}"></label>
+                        </div>
+                    </td>
+                    <td id="idKhachHang" hidden>${chiTiet.idKhachHang}</td>
+                    <td id="idPhieuGiamGia" hidden>${chiTiet.idPhieuGiamGia}</td>
+                    <td id="tenKhachHang">${chiTiet.hoVaTenKhachHang}</td>
+                    <td id="sdtKhachHang">${chiTiet.soDienThoaiKhachHang}</td>
+                    <td id="emailKhachHang">${chiTiet.emailKhachHang}</td>
+                `;
+                                    tableBody.appendChild(row);
+
+                                    // Tự động tick ô checkbox và disable khi update
+                                    const checkbox = document.getElementById(`checkbox-${chiTiet.idKhachHang}`);
+                                    checkbox.checked = true;
+                                    checkbox.disabled = true;
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                });
+            document.getElementById('updateForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const dataUpdate = {
+                    id: document.getElementById('id').value,
+                    tenPhieuGiamGia: document.getElementById('tenPhieuGiamGia').value,
+                    maPhieuGiamGia: document.getElementById('maPhieuGiamGia').value,
+                    mucGiam: document.getElementById('mucGiam').value,
+                    giaTriToiDa: document.getElementById('giaTriToiDa').value,
+                    soLuong: document.getElementById('soLuong').value,
+                    dieuKienSuDung: document.getElementById('dieuKienSuDung').value,
+                    ngayBatDau: document.getElementById('ngayBatDau').value,
+                    ngayKetThuc: document.getElementById('ngayKetThuc').value,
+                    doiTuongApDung: document.querySelector('input[name="doiTuongApDung"]:checked').value === 'true',
+                    hinhThucGiamGia: document.querySelector('input[name="hinhThucGiamGia"]:checked').value === 'true',
+                    ghiChu: document.getElementById('ghiChu').value,
+                    deletedAt: document.getElementById('deletedAt').value,
+                    trangThai: document.getElementById('trangThai').value,
+                };
+                const id = dataUpdate.id;
+                fetch(`http://localhost:8080/api-phieu-giam-gia/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dataUpdate),
+                })
+                    .then(response => response.json())
+                    .then(dataUpdate => {
+                        Swal.fire({
+                            title: 'Updated Successfully',
+                            text: 'Sửa thành công',
+                            icon: 'success'
+                        });
+                        showSuccessToast('Sửa thành công');
+                        cancelAdd();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+        }
+
+        function cancelAdd() {
+            const tableBodyCard = document.getElementById('tableCardBody');
+            tableBodyCard.innerHTML = `
+        <table class="table datatables" id="dataTable">
+        <thead>
+        <tr>
+        <th>#</th>
+        <th>Mã</th>
+        <th>Tên</th>
+        <th>Kiểu</th>
+        <th>Loại</th>
+        <th>Số lượng</th>
+        <th>Thời gian</th>
+        <th>Trạng thái</th>
+        <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Dữ liệu sẽ được thêm vào đây -->
+        </tbody>
+        </table>
+            <!-- Phân trang -->
+        <nav aria-label="Table Paging" class="mb-0 text-muted">
+        <ul id="pagination" class="pagination justify-content-end mb-0">
+            <!-- Các nút phân trang sẽ được thêm bởi JavaScript -->
+        </ul>
+        </nav>
+        `;
+            fetchDataAndRenderTable(); // Gọi lại hàm để tải dữ liệu vào bảng
+        }
+
+
+</script>
+
+</html>

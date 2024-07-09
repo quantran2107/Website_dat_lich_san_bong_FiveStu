@@ -1,3 +1,49 @@
+GET http://localhost:8080/api-phieu-giam-gia/search-phieu-giam-gia?maPhieuGiamGia=PGG001
+
+<> 2024-07-09T184521.400.json
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia/search-phieu-giam-gia?maPhieuGiamGia=PGG001
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia/search-phieu-giam-gia?maPhieuGiamGia=PGG001&tenPhieuGiamGia=Phiếu giảm giá 1&hinhThucGiamGia=Giảm giá phần trăm&doiTuongApDung=Khách hàng&ngayBatDau=2023-01-01&ngayKetThuc=2023-12-31
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia/search-phieu-giam-gia?maPhieuGiamGia=PGG001&tenPhieuGiamGia=Phiếu giảm giá 1&hinhThucGiamGia=Giảm giá phần trăm&doiTuongApDung=Khách hàng&ngayBatDau=2023-01-01&ngayKetThuc=2023-12-31
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia/search-phieu-giam-gia?maPhieuGiamGia=PGG001&tenPhieuGiamGia=Phiếu giảm giá 1&hinhThucGiamGia=Giảm giá phần trăm&doiTuongApDung=Khách hàng&ngayBatDau=2023-01-01&ngayKetThuc=2023-12-31
+
+<> 2024-07-09T184045.400.json
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia/search-phieu-giam-gia?maPhieuGiamGia=PGG001&tenPhieuGiamGia=Phiếu giảm giá 1&hinhThucGiamGia=Giảm giá phần trăm&doiTuongApDung=Khách hàng&ngayBatDau=2023-01-01&ngayKetThuc=2023-12-31
+
+<> 2024-07-09T183942.400.json
+
+###
+
+GET http://api/search-phieu-giam-gia?maPhieuGiamGia=PGG001&tenPhieuGiamGia=Phiếu giảm giá 1&hinhThucGiamGia=Giảm giá phần trăm&doiTuongApDung=Khách hàng&ngayBatDau=2023-01-01&ngayKetThuc=2023-12-31
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia/search-phieu-giam-gia/PGG578766
+
+<> 2024-07-09T183554.400.json
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia/search-phieu-giam-gia/PGG578766
+
+<> 2024-07-09T183546.400.json
+
+###
+
 GET http://localhost:8080/api-phieu-giam-gia-chi-tiet/21
 
 <> 2024-07-07T201638.200.json

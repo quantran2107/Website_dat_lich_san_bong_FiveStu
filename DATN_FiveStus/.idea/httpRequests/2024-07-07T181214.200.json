@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "idKhachHang": 1,
+  "idPhieuGiamGia": 1,
+  "hoVaTenKhachHang": "Nguyen Van A",
+  "trangThai": true,
+  "emailKhachHang": "nguyenvana@gmail.com",
+  "soDienThoaiKhachHang": "0123456789"
+}

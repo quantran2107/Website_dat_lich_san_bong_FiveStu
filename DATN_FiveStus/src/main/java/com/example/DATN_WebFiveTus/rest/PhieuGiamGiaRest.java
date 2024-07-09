@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -101,6 +102,18 @@ public class PhieuGiamGiaRest {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Cập nhật trạng thái thất bại");
         }
+    }
+
+    @GetMapping("/search-phieu-giam-gia") // Định nghĩa đường dẫn cụ thể cho endpoint này
+    public List<PhieuGiamGiaDTO> searchPhieuGiamGia(
+            @RequestParam(required = false) String maPhieuGiamGia,
+            @RequestParam(required = false) String tenPhieuGiamGia,
+            @RequestParam(required = false) String hinhThucGiamGia,
+            @RequestParam(required = false) String doiTuongApDung,
+            @RequestParam(required = false) Date ngayBatDau,
+            @RequestParam(required = false) Date ngayKetThuc) {
+
+        return phieuGiamGiaService.searchPhieuGiamGia(maPhieuGiamGia, tenPhieuGiamGia, hinhThucGiamGia, doiTuongApDung, ngayBatDau, ngayKetThuc);
     }
 
 //    @DeleteMapping("/delete-soft") // Endpoint đúng cho xóa mềm sử dụng phương thức DELETE
