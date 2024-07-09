@@ -49,7 +49,7 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
     }
 
 
-        @Override
+    @Override
     public List<PhieuGiamGiaDTO> getAll() {
         List<PhieuGiamGia> phieuGiamGiaList = phieuGiamGiaRepository.findAll();
         return phieuGiamGiaList.stream()
@@ -65,13 +65,9 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
 
     @Override
     public PhieuGiamGiaDTO save(PhieuGiamGiaDTO phieuGiamGiaDTO) {
-        // Convert DTO to entity
         PhieuGiamGia phieuGiamGia = modelMapper.map(phieuGiamGiaDTO, PhieuGiamGia.class);
-        // Save entity to repository
         PhieuGiamGia savedEntity = phieuGiamGiaRepository.save(phieuGiamGia);
-        savedEntity.setMaPhieuGiamGia(CodeGenerator.generateDiscountCode());
         savedEntity.setDeletedAt(false);
-        // Convert saved entity back to DTO
         return modelMapper.map(savedEntity, PhieuGiamGiaDTO.class);
     }
 
@@ -96,24 +92,7 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
     }
 
 
-    public static class CodeGenerator {
-        private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-
-        public static String generateDiscountCode() {
-            // Tiền tố cố định
-            String prefix = "PGG";
-
-            // Thời gian hiện tại
-            String timestamp = LocalDateTime.now().format(DATE_FORMAT);
-
-            // Mã sinh ngẫu nhiên hoặc số thứ tự (tuỳ chọn)
-            int randomNum = (int) (Math.random() * 1000);
-
-            // Kết hợp các phần lại để tạo mã
-            return prefix + timestamp + String.format("%03d", randomNum);
-        }
-
-        //    @Override
+    //    @Override
 //    @Transactional
 //    public void delete(Integer id) {
 //        PhieuGiamGia entity = phieuGiamGiaRepository.findById(id)
@@ -155,5 +134,5 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
 //        }
 //    }
 
-    }
 }
+
