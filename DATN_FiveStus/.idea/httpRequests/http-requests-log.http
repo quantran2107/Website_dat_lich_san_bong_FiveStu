@@ -1,3 +1,47 @@
+GET http://localhost:8080/api-phieu-giam-gia-chi-tiet/21
+
+<> 2024-07-07T201638.200.json
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia-chi-tiet/21
+
+<> 2024-07-07T201606.404.json
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia-chi-tiet/1
+
+<> 2024-07-07T201547.200.json
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia-chi-tiet/1
+
+<> 2024-07-07T181214.200.json
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia-chi-tiet/1
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia-chi-tiet/1
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia-chi-tiet/1
+
+<> 2024-07-07T181041.400.json
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia-chi-tiet/hien-thi
+
+<> 2024-07-06T185949.200.json
+
+###
+
 POST http://localhost:8080/api-phieu-giam-gia/save
 
 <> 2024-07-05T154744.400.json

@@ -47,7 +47,8 @@ public class SanBongServiceImp implements SanBongService {
     @Override
     public SanBongDTO save(SanBongDTO sanBongDTO) {
         SanBong sanBong=modelMapper.map(sanBongDTO,SanBong.class);
-        sanBong.setTrangThai("active");
+        sanBong.setTrangThai("Đang hoạt động");
+        sanBong.setDeletedAt(true);
         SanBong sanBongSave=sanBongRepository.save(sanBong);
         return modelMapper.map(sanBongSave,SanBongDTO.class);
     }
