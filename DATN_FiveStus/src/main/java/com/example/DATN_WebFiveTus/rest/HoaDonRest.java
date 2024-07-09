@@ -59,10 +59,17 @@ public class HoaDonRest {
         return ResponseEntity.ok(hoaDonPage);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<HoaDonDTO>> search(@RequestParam String key) {
-        List<HoaDonDTO> results = hoaDonService.searchHD(key);
-        return ResponseEntity.ok(results);
+    @GetMapping("/search-and-filter")
+    public ResponseEntity<Page<HoaDonDTO>> searchAndFilter(
+            @RequestParam(required = false) Boolean loai,
+            @RequestParam(required = false) String key,
+            @RequestParam(required = false) Float tongTienMin,
+            @RequestParam(required = false) Float tongTienMax,
+            @RequestParam(defaultValue = "0") int trang,
+            @RequestParam(defaultValue = "10") int kichThuoc) {
+        Pageable pageable = PageRequest.of(trang, kichThuoc);
+        Page<HoaDonDTO> hoaDonPage = hoaDonService.searchAndFilter(loai, key, tongTienMin, tongTienMax, pageable);
+        return ResponseEntity.ok(hoaDonPage);
     }
 
 }

@@ -62,19 +62,21 @@
                                         <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>ID</th>
-                                            <th>Mã khách hàng</th>
                                             <th>Họ và tên</th>
+                                            <th>Email</th>
+                                            <th>SDT</th>
+                                            <th>Ngày tham gia</th>
                                             <th>Trạng thái</th>
-                                            <th>Hành động</th>
+                                            <th>Thao tác</th>
                                         </tr>
                                         </thead>
                                         <tbody id="khachHangTable">
                                         <tr th:each="khachHang, i : ${listKH}">
                                             <td th:text="${i.count}"></td>
-                                            <td th:text="${khachHang.id}"></td>
-                                            <td th:text="${khachHang.maKhachHang}"></td>
                                             <td th:text="${khachHang.hoVaTen}"></td>
+                                            <td th:text="${khachHang.email}"></td>
+                                            <td th:text="${khachHang.soDienThoai}"></td>
+                                            <td th:text="${khachHang.createdAt}"></td>
                                             <td>
                                                 <div class="custom-control custom-switch">
                                                     <input type="checkbox" class="custom-control-input" id="trangThaiSwitch" th:checked="${khachHang.trangThai == 'active'}" disabled>
@@ -84,9 +86,6 @@
                                             <td style="display: flex">
                                                 <button class="btn mb-2 mr-1 btn-info" type="button" data-toggle="modal" th:data-target="'#detailModal' + ${khachHang.id}">
                                                     <span class="fe fe-eye"></span>
-                                                </button>
-                                                <button class="btn mb-2 ml-1 btn-danger" type="button">
-                                                    <span class="fe fe-trash-2"></span>
                                                 </button>
                                             </td>
                                         </tr>
@@ -164,8 +163,8 @@
                                                     <form action="/quan-ly-khach-hang/them" method="post">
                                                         <div class="form-row">
                                                             <div class="form-group col-md-6">
-                                                                <label for="maKhachHang">Mã khách hàng</label>
-                                                                <input type="text" class="form-control" id="maKhachHang" name="maKhachHang" placeholder="Nhập mã khách hàng" required>
+                                                                <label for="maKhachHang">Use name</label>
+                                                                <input type="text" class="form-control" id="maKhachHang" name="maKhachHang" placeholder="Nhập use name" required>
                                                             </div>
                                                             <div class="form-group col-md-6">
                                                                 <label for="hoVaTen">Họ và tên</label>
@@ -180,10 +179,6 @@
                                                             <div class="form-group col-md-6">
                                                                 <label for="soDienThoai">Số điện thoại</label>
                                                                 <input type="text" class="form-control" id="soDienThoai" name="soDienThoai" placeholder="Nhập số điện thoại" required>
-                                                            </div>
-                                                            <div class="form-group col-md-6">
-                                                                <label for="soDienThoai">Mật khẩu</label>
-                                                                <input type="text" class="form-control" id="matKhau" name="matKhau"  required>
                                                             </div>
                                                         </div>
                                                         <div class="form-row">
@@ -202,14 +197,36 @@
                                                                 </select>
                                                             </div>
                                                         </div>
+
                                                         <div class="form-group">
-                                                            <label for="diaChi">Địa chỉ</label>
-                                                            <input type="text" class="form-control" id="diaChi" name="diaChi" placeholder="Nhập địa chỉ" required>
+                                                            <label for="tenDiaChi">Địa chỉ cụ thể</label>
+                                                            <input type="text" class="form-control" id="tenDiaChi" name="diaChi[0].diaChiCuThe" placeholder="Nhập địa chỉ cụ thể" required>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="ghiChu">Ghi chú</label>
-                                                            <input type="text" class="form-control" id="ghiChu" name="ghiChu" placeholder="Nhập ghi chú" required>
+                                                            <input type="text" class="form-control" id="ghiChu" name="diaChi[0].ghiChu" placeholder="Nhập ghi chú" required>
                                                         </div>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-4">
+                                                                <label for="city">Tỉnh thành</label>
+                                                                <select id="city" class="form-control" name="diaChi[0].thanhPho.id" required>
+                                                                    <option value="" selected>Chọn tỉnh thành</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-4">
+                                                                <label for="district">Quận huyện</label>
+                                                                <select id="district" class="form-control" name="diaChi[0].quanHuyen.id" required>
+                                                                    <option value="" selected>Chọn quận huyện</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-4">
+                                                                <label for="ward">Phường xã</label>
+                                                                <select id="ward" class="form-control" name="diaChi[0].phuongXa.id" required>
+                                                                    <option value="" selected>Chọn phường xã</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
                                                         <button type="submit" class="btn btn-primary">Thêm</button>
                                                     </form>
                                                 </div>
@@ -227,5 +244,61 @@
     </main>
 </div>
 <div th:include="fragment/script :: script"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+
+<script>
+    var citis = document.getElementById("city");
+    var districts = document.getElementById("district");
+    var wards = document.getElementById("ward");
+    var Parameter = {
+        url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+        method: "GET",
+        responseType: "application/json",
+    };
+    var promise = axios(Parameter);
+    promise.then(function (result) {
+        renderCity(result.data);
+    });
+
+    function renderCity(data) {
+        for (const x of data) {
+            var opt = document.createElement('option');
+            opt.value = x.Name;
+            opt.text = x.Name;
+            opt.setAttribute('data-id', x.Id);
+            citis.options.add(opt);
+        }
+        citis.onchange = function () {
+            district.length = 1;
+            ward.length = 1;
+            if(this.options[this.selectedIndex].dataset.id != ""){
+                const result = data.filter(n => n.Id === this.options[this.selectedIndex].dataset.id);
+
+                for (const k of result[0].Districts) {
+                    var opt = document.createElement('option');
+                    opt.value = k.Name;
+                    opt.text = k.Name;
+                    opt.setAttribute('data-id', k.Id);
+                    district.options.add(opt);
+                }
+            }
+        };
+        district.onchange = function () {
+            ward.length = 1;
+            const dataCity = data.filter((n) => n.Id === citis.options[citis.selectedIndex].dataset.id);
+            if (this.options[this.selectedIndex].dataset.id != "") {
+                const dataWards = dataCity[0].Districts.filter(n => n.Id === this.options[this.selectedIndex].dataset.id)[0].Wards;
+
+                for (const w of dataWards) {
+                    var opt = document.createElement('option');
+                    opt.value = w.Name;
+                    opt.text = w.Name;
+                    opt.setAttribute('data-id', w.Id);
+                    wards.options.add(opt);
+                }
+            }
+        };
+    }
+</script>
 </body>
 </html>

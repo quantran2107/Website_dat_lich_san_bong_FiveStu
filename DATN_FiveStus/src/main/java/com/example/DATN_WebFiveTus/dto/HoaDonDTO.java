@@ -35,6 +35,8 @@ public class HoaDonDTO {
 
     private String hoVaTenKhachHang;
 
+    private String soDienThoaiKhachHang;
+
     private Boolean loai;
 
     @Temporal(TemporalType.TIMESTAMP)
