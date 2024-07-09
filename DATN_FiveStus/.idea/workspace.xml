@@ -4,19 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="94c5cdf3-a4b7-479f-99e1-e2aa9a42b2ec" name="Default Changelist" comment="3h50">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaChiTietRest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaChiTietServiceImp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/PhieuGiamGiaChiTietService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/UpdateService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/httpRequests/http-requests-log.http" afterDir="false" />
+    <list default="true" id="94c5cdf3-a4b7-479f-99e1-e2aa9a42b2ec" name="Default Changelist" comment="4h40">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/PhieuGiamGiaChiTietRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/PhieuGiamGiaChiTietRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/app-dark.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/app-dark.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/css/app-light.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/css/app-light.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaServiceImp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-pgg.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-pgg.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/static/css/app-dark.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/css/app-dark.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/static/css/app-light.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/css/app-light.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -431,7 +422,7 @@
       <workItem from="1720316905158" duration="4144000" />
       <workItem from="1720325136697" duration="19952000" />
       <workItem from="1720406194776" duration="13916000" />
-      <workItem from="1720491982217" duration="12924000" />
+      <workItem from="1720491982217" duration="18663000" />
     </task>
     <task id="LOCAL-00001" summary="11h27">
       <created>1719937674616</created>
@@ -475,7 +466,14 @@
       <option name="project" value="LOCAL" />
       <updated>1720255837897</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="4h40">
+      <created>1720518035418</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1720518035418</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -509,6 +507,7 @@
     <MESSAGE value="5h26" />
     <MESSAGE value="1h38" />
     <MESSAGE value="3h50" />
-    <option name="LAST_COMMIT_MESSAGE" value="3h50" />
+    <MESSAGE value="4h40" />
+    <option name="LAST_COMMIT_MESSAGE" value="4h40" />
   </component>
 </project>

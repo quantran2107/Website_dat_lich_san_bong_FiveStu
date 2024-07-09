@@ -687,6 +687,7 @@
                 <div class="col-md-6">
                     <div class="form-row">
                             <input type="text" class="form-control" id="id"  hidden>
+                            <input type="text" class="form-control" id="deletedAt"  hidden>
                         <div class="form-group col-md-6">
                             <label for="maPhieuGiamGia" name="maPhieuGiamGia">Mã phiếu giảm giá</label>
                             <input type="text" class="form-control" id="maPhieuGiamGia" >
@@ -765,6 +766,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="trangThai">Trạng thái</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="trangThai" disabled>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- Bảng khách hàng bên phải -->
                 <div class="col-md-6">
@@ -790,19 +799,6 @@
 
             cardBody.innerHTML = form;
 
-            // Xử lý sự kiện change cho các radio buttons
-            document.addEventListener('change', function (event) {
-                const doiTuongCaNhan = document.getElementById('doiTuongCaNhan');
-                const doiTuongTatCa = document.getElementById('doiTuongTatCa');
-                const tableKhachHangContainer = document.getElementById('tableKhachHangContainer');
-                // Xử lý logic khi radio button thay đổi
-                if (event.target === doiTuongTatCa && doiTuongTatCa.checked) {
-                    tableKhachHangContainer.style.display = 'none';
-                } else if (event.target === doiTuongCaNhan && doiTuongCaNhan.checked) {
-                    tableKhachHangContainer.style.display = 'block';
-                }
-            });
-
             fetch(`http://localhost:8080/api-phieu-giam-gia/${id}`)
                 .then(response => response.json())
                 .then(data => {
@@ -812,26 +808,52 @@
                     document.getElementById('mucGiam').value = data.mucGiam;
                     document.getElementById('giaTriToiDa').value = data.giaTriToiDa;
                     document.getElementById('soLuong').value = data.soLuong;
-                    const doiTuongCaNhan = document.getElementById('doiTuongCaNhan');
-                    const doiTuongTatCa = document.getElementById('doiTuongTatCa');
-                    if (data.doiTuongApDung == 'true') {
-                        doiTuongCaNhan.checked = true;
+                    // Kiểm tra giá trị doiTuongApDung và set checked đúng cách
+                    if (data.doiTuongApDung === false) {
+                        document.getElementById('doiTuongTatCa').checked = true;
+                        document.getElementById('tableKhachHangContainer').style.display = 'none';
                     } else {
-                        doiTuongTatCa.checked = true;
+                        document.getElementById('doiTuongCaNhan').checked = true;
+                        document.getElementById('tableKhachHangContainer').style.display = 'block';
                     }
-                    console.log(data.doiTuongApDung)
-                    const hinhThucGiamGiaVND = document.getElementById('hinhThucGiamGiaVND');
-                    const hinhThucGiamGiaPercent = document.getElementById('hinhThucGiamGiaPercent');
-                    if (data.hinhThucGiamGia === 'false') {
-                        hinhThucGiamGiaVND.checked = true;
+                    //Hinh thuc giam gia
+                    if (data.hinhThucGiamGia === false) {
+                        document.getElementById('hinhThucGiamGiaVND').checked = true;
+                        selectButton('VND');
                     } else {
-                        hinhThucGiamGiaPercent.checked = true;
+                        document.getElementById('hinhThucGiamGiaPercent').checked = true;
+                        selectButton('Percent');
                     }
                     document.getElementById('dieuKienSuDung').value = data.dieuKienSuDung;
                     document.getElementById('ngayBatDau').value = data.ngayBatDau;
                     document.getElementById('ngayKetThuc').value = data.ngayKetThuc;
                     document.getElementById('ghiChu').value = data.ghiChu;
-
+                    document.getElementById('deletedAt').value = data.deletedAt;
+                    // Xử lý trạng thái dựa vào ngày bắt đầu và ngày kết thúc
+                    const ngayBatDauInput = document.getElementById('ngayBatDau');
+                    const ngayKetThucInput = document.getElementById('ngayKetThuc');
+                    function updateTrangThai() {
+                        const currentDate = new Date();
+                        const startDate = new Date(ngayBatDauInput.value);
+                        const endDate = new Date(ngayKetThucInput.value);
+                        const soLuong = parseInt(document.getElementById('soLuong').value);
+                        let trangThai = '';
+                        if (currentDate < startDate) {
+                            trangThai = 'Sắp diễn ra';
+                        } else if (currentDate > endDate) {
+                            trangThai = 'Đã kết thúc';
+                        } else {
+                            trangThai = 'Đang diễn ra';
+                        }
+                        if (soLuong === 0) {
+                            trangThai = 'Đã kết thúc';
+                        }
+                        document.getElementById('trangThai').value = trangThai;
+                    }
+                    updateTrangThai();
+                    document.getElementById('soLuong').addEventListener('change', updateTrangThai);
+                    ngayBatDauInput.addEventListener('change', updateTrangThai);
+                    ngayKetThucInput.addEventListener('change', updateTrangThai);
                     // Fetch danh sách khách hàng liên quan đến phiếu giảm giá để hiển thị trong bảng và tự động tick các checkbox
                     fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pggct/${id}`)
                         .then(response => response.json())
@@ -867,11 +889,6 @@
                             console.error('Error:', error);
                         });
                 });
-
-            function getSelectedRadioValue(name) {
-                const selectedRadio = document.querySelector(`input[name="${name}"]:checked`);
-                return selectedRadio ? selectedRadio.value : ''; // Trả về giá trị của radio nếu có, ngược lại trả về chuỗi trống
-            }
             document.getElementById('updateForm').addEventListener('submit', function (event) {
                 event.preventDefault();
 
@@ -885,10 +902,12 @@
                     dieuKienSuDung: document.getElementById('dieuKienSuDung').value,
                     ngayBatDau: document.getElementById('ngayBatDau').value,
                     ngayKetThuc: document.getElementById('ngayKetThuc').value,
-                    doiTuongApDung: getSelectedRadioValue('doiTuongApDung').value,
-                    ghiChu: document.getElementById('ghiChu').value
+                    doiTuongApDung: document.querySelector('input[name="doiTuongApDung"]:checked').value === 'true',
+                    hinhThucGiamGia: document.querySelector('input[name="hinhThucGiamGia"]:checked').value === 'true',
+                    ghiChu: document.getElementById('ghiChu').value,
+                    deletedAt: document.getElementById('deletedAt').value,
+                    trangThai: document.getElementById('trangThai').value,
                 };
-
                 const id = dataUpdate.id;
                 fetch(`http://localhost:8080/api-phieu-giam-gia/${id}`, {
                     method: 'PUT',
@@ -899,7 +918,6 @@
                 })
                     .then(response => response.json())
                     .then(dataUpdate => {
-                        console.log(dataUpdate)
                         Swal.fire({
                             title: 'Updated Successfully',
                             text: 'Sửa thành công',
