@@ -24,6 +24,16 @@ public class NhanVienRest {
         return ResponseEntity.ok(nhanVienService.getAll());
     }
 
+    @GetMapping("active")
+    public ResponseEntity<List> getActive(){
+        return ResponseEntity.ok(nhanVienService.getActiveNV());
+    }
+
+    @GetMapping("inactive")
+    public ResponseEntity<List> getInactive(){
+        return ResponseEntity.ok(nhanVienService.getInactiveNV());
+    }
+
 
     @PutMapping("update")
     public ResponseEntity<Boolean> update(@RequestBody NhanVienDTO nv){

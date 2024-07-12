@@ -11,4 +11,8 @@ public interface NhanVienService {
     Boolean updateNew(NhanVienDTO nv);
 
     Boolean addNew(NhanVienDTO nv);
+
+    List<NhanVienDTO> getActiveNV();
+
+    List<NhanVienDTO> getInactiveNV();
 }

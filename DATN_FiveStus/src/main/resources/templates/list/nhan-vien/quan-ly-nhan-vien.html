@@ -14,7 +14,9 @@
                         align-items: center;">
                         <div style="margin:0 5px"><i class="fas fa-home"></i></div> <!-- Icon ngôi nhà -->
                         <div style="margin:0 5px"><i class="fas fa-chevron-right"></i></div> <!-- Icon dấu lớn hơn -->
-                        <div id="qlnv" style="margin:0 5px;cursor: pointer;"><div>Quản lý nhân viên</div></div>
+                        <div id="qlnv" style="margin:0 5px;cursor: pointer;">
+                            <div>Quản lý nhân viên</div>
+                        </div>
                         <div id="linkAdd" style="display: flex;
                         align-items: center;cursor: default">
                             <div style="margin:0 5px"><i class="fas fa-chevron-right"></i></div>
@@ -31,64 +33,360 @@
                     <div class="row my-4">
                         <div class="col-md-12">
                             <div class="card shadow">
-                                <div class="card-body">
-                                    <div class="toolbar row mb-3">
-                                        <div class="col">
-                                            <form class="form-inline">
-                                                <div class="form-row" id="searchForm">
-                                                    <div class="form-group col-auto">
-                                                        <label for="search" class="sr-only">Search</label>
-                                                        <input type="text" class="form-control" id="search" value=""
-                                                               placeholder="Search">
-                                                    </div>
-                                                    <div class="form-group col-auto ml-3">
-                                                        <label class="my-1 mr-2 sr-only"
-                                                               for="inlineFormCustomSelectPref">Status</label>
-                                                        <select class="custom-select my-1 mr-sm-2"
-                                                                id="inlineFormCustomSelectPref">
-                                                            <option selected>Trạng thái</option>
-                                                            <option value="1">Hoạt động</option>
-                                                            <option value="2">Kết thúc</option>
-                                                        </select>
+                                <div id="tableNhanVien" class="row">
+                                    <div class="col-8">
+                                        <div class="col" style="margin-top: 20px; display: flex">
+                                            <h2>Danh sách nhân viên</h2>
+                                            <div class="col ml-auto" style="position: relative; left: 600px; top: 10px">
+                                                <button id="btnAdd" class="btn btn-success">Thêm nhân viên</button>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <div class="toolbar row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="searchInput" style="font-weight: bold">Tìm kiếm theo
+                                                        tên, mã,
+                                                        địa
+                                                        chỉ,...</label>
+                                                    <form class="form-inline">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-auto">
+                                                                <input style="width: 45vh" type="text"
+                                                                       class="form-control"
+                                                                       id="searchInput"
+                                                                       placeholder="Tìm kiếm theo tên nhân viên, mã nhân viên, địa chỉ ...">
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label style="font-weight: bold">Trạng thái</label>
+                                                    <form class="form-inline">
+
+                                                        <div class="col-3">
+                                                            <div style="display: flex">
+                                                                <input style="margin-right: 5px" type="radio"
+                                                                       name="status" value="all" checked>
+                                                                <div> Tất cả</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-5">
+                                                            <div style="display: flex">
+                                                                <input style="margin-right: 5px" type="radio"
+                                                                       name="status" value="active">
+                                                                <div> Đang hoạt động</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div style="display: flex">
+                                                                <input style="margin-right: 5px" type="radio"
+                                                                       name="status" value="inactive">
+                                                                <div>Đã nghỉ</div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div id="tableContainer">
+                                                <table class="table table-hover">
+                                                    <thead style="font-weight: bold; background-color: grey;color: white">
+                                                    <tr>
+                                                        <td>#</td>
+                                                        <td>Mã nhân viên</td>
+                                                        <td>Tên nhân viên</td>
+                                                        <td>Email</td>
+                                                        <td>Số điện thoại</td>
+                                                        <td>Giới tính</td>
+                                                        <td>Trạng thái</td>
+                                                        <td>Thao tác</td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="tbodyContainer"></tbody>
+                                                </table>
+                                                <div class="pagination" id="pagination"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-container " style="margin-top: 50px">
+                                            <h4 class="text-center mb-4">Thông tin nhân viên</h4>
+
+                                            <!-- Avatar -->
+                                            <div class="text-center mb-3">
+                                                <img id="imageNVdetail" src=""
+                                                     style="border-radius: 50%;
+                                                            width: 250px;
+                                                            height: 250px;"
+                                                     alt="Avatar">
+                                            </div>
+
+                                            <!-- Tên nhân viên -->
+                                            <div class="form-group">
+                                                <label for="tenNhanViendetail">Tài khoản:</label>
+                                                <input type="text" class="form-control" id="tenNhanViendetail"
+                                                       readonly>
+                                            </div>
+
+                                            <!-- Mã nhân viên -->
+                                            <div class="form-group">
+                                                <label for="maNhanViendetail">Mã nhân viên:</label>
+                                                <input type="text" class="form-control" id="maNhanViendetail"
+                                                       readonly>
+                                            </div>
+
+                                            <!-- Ngày sinh -->
+                                            <div class="form-group">
+                                                <label for="ngaySinhdetail">Ngày sinh:</label>
+                                                <input type="text" class="form-control" id="ngaySinhdetail"
+                                                       readonly>
+                                            </div>
+
+                                            <!-- Ngày vào làm -->
+                                            <div class="form-group">
+                                                <label for="createAtdetail">Ngày vào làm:</label>
+                                                <input type="text" class="form-control" id="createAtdetail"
+                                                       readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="formAdd" style="padding: 20px">
+                                    <h3 style="text-align: center">Thêm mới nhân viên</h3>
+                                    <div>
+                                        <div class="row" style="margin-left: 15px">
+                                            <div class="col-4" style="margin-top: 30px">
+
+                                                <input type="file" class="form-control-file" id="fileInput"
+                                                       accept="image/*" style="width: 1vh" >
+                                                <label class="custom-file-label" for="fileInput" style="width: 150px">Chọn tệp</label>
+                                                <div style="text-align: center;
+                                                            justify-content: center;
+                                                            align-items: center;
+                                                            margin-top: 50px">
+                                                    <img id="previewImage" class="preview-image" src="#" alt="Xem trước ảnh"
+                                                         style=" border-radius: 50%;
+                                                                width: 360px;
+                                                                height: 360px;
+                                                                border: 2px solid #ccc;">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="hoTen" class="font-weight-bold"><span style="color: red;">*</span>Họ tên:</label>
+                                                    <input type="text" class="form-control" id="hoTen" required>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-8" >
+                                                <div class="row">
+                                                    <div class="col-12 ">
+                                                        <button id="btn-scan-qr" type="button" style="margin-left: 85%; margin-right: 0; " class="btn btn-success">
+                                                            Quét CCCD<i style="margin-left: 5px" class="fas fa-qrcode"></i>
+                                                        </button>
+                                                        <!--                                                        <button type="button" class="btn btn-primary" >-->
+                                                        <!--                                                            Quét QR Code-->
+                                                        <!--                                                        </button>-->
+
+                                                        <!-- Modal -->
+                                                        <div class="modal" id="qrCodeModal" tabindex="-1" role="dialog">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title">Quét QR Code</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div id="qr-reader" style="width:300px;height:250px;"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
                                                     </div>
                                                 </div>
-                                            </form>
-                                        </div>
-                                        <div class="col ml-auto" id="actionForm">
-                                            <div class="dropdown float-right">
-                                                <button class="btn btn-success add-button">Thêm mới</button>
-                                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                        id="actionMenuButton" data-toggle="dropdown"
-                                                        aria-haspopup="true" aria-expanded="false">Hành động
-                                                </button>
-                                                <div class="dropdown-menu" aria-labelledby="actionMenuButton">
-                                                    <a class="dropdown-item" href="#">Xuất file</a>
-                                                    <a class="dropdown-item" href="#">Hành động khác</a>
+
+                                                <div class="row" style="margin-top: 100px; padding: 20px">
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label for="ngaySinh"class="font-weight-bold"><span style="color: red;">*</span>Ngày sinh:</label>
+                                                            <input type="date" class="form-control" id="ngaySinh">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="email"class="font-weight-bold"><span style="color: red;">*</span>Email:</label>
+                                                            <input type="email" class="form-control" id="email" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="soDienThoai"class="font-weight-bold"><span style="color: red;">*</span>Số điện thoại:</label>
+                                                            <input type="text" class="form-control" id="soDienThoai" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label class="font-weight-bold"><span style="color: red;">*</span>Giới tính:</label><br>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="gioiTinh" id="gioiTinhNam" value="true" required>
+                                                                <label class="form-check-label" for="gioiTinhNam">Nam</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="gioiTinh" id="gioiTinhNu" value="false" required>
+                                                                <label class="form-check-label" for="gioiTinhNu">Nữ</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group" style="margin-top: 28px">
+                                                            <label for="diaChi" class="font-weight-bold"><span style="color: red;">*</span>Địa chỉ cụ thể:</label>
+                                                            <input type="text" class="form-control" id="diaChi" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row" style=" padding: 20px" >
+                                                    <div class="form-group col-4">
+                                                        <label for="tinh"class="font-weight-bold"><span style="color: red;">*</span>Tỉnh/Thành phố</label>
+                                                        <select class="form-control" id="tinh" name="tinh">
+                                                            <option value="">Chọn Tỉnh/Thành phố</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-4">
+                                                        <label for="huyen" class="font-weight-bold"><span style="color: red;">*</span>Quận/Huyện</label>
+                                                        <select class="form-control" id="huyen" name="huyen" disabled>
+                                                            <option value="">Chọn Quận/Huyện</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-4">
+                                                        <label for="xa"class="font-weight-bold"><span style="color: red;">*</span>Phường/Xã</label>
+                                                        <select class="form-control" id="xa" name="xa" disabled>
+                                                            <option value="">Chọn Phường/Xã</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
 
                                             </div>
                                         </div>
-                                    </div>
+                                        <!-- Các trường dữ liệu -->
 
-                                    <div id="tableContainer"></div>
-                                    <div id="formContainer" style="display:none;"></div>
-                                    <div class="pagination" id="pagination" style="width: 210px;
-                                                                                  position: fixed;
-                                                                                  right: 0;
-                                                                                  bottom: 0;
-                                                                                  background-color: #f0f0f0;
-                                                                                  padding: 10px;
-                                                                                  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);"></div>
+                                        <button style="margin-left: 90%" type="button" id="btnSubmitAdd" class="btn btn-primary">Thêm nhân viên</button>
+                                    </div>
+                                </div>
+                                <div id="formUpdate" style="padding: 20px">
+                                    <h3 style="text-align: center">Chỉnh sửa hồ sơ</h3>
+                                    <div>
+                                        <div class="row" style="margin-left: 15px">
+                                            <div class="col-4" style="margin-top: 30px">
+
+                                                <input type="file" class="form-control-file" id="fileInputU"
+                                                       accept="image/*" style="width: 1vh" >
+                                                <label class="custom-file-label" for="fileInputU" style="width: 150px">Chọn tệp</label>
+                                                <div style="text-align: center;
+                                                            justify-content: center;
+                                                            align-items: center;
+                                                            margin-top: 50px">
+                                                    <img id="previewImageU" class="preview-image" src="#" alt="Xem trước ảnh"
+                                                         style=" border-radius: 50%;
+                                                                width: 360px;
+                                                                height: 360px;
+                                                                border: 2px solid #ccc;">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="hoTen" class="font-weight-bold"><span style="color: red;">*</span>Họ tên:</label>
+                                                    <input type="text" class="form-control" id="hoTenU" required>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-8" >
+
+                                                <div class="row" style="margin-top: 100px; padding: 20px">
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label for="ngaySinhU"class="font-weight-bold"><span style="color: red;">*</span>Ngày sinh:</label>
+                                                            <input type="date" class="form-control" id="ngaySinhU">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="emailU"class="font-weight-bold"><span style="color: red;">*</span>Email:</label>
+                                                            <input type="email" class="form-control" id="emailU" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="soDienThoaiU"class="font-weight-bold"><span style="color: red;">*</span>Số điện thoại:</label>
+                                                            <input type="text" class="form-control" id="soDienThoaiU" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label class="font-weight-bold"><span style="color: red;">*</span>Giới tính:</label><br>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="gioiTinh" id="gioiTinhNamU" value="true" required>
+                                                                <label class="form-check-label" for="gioiTinhNamU">Nam</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="gioiTinh" id="gioiTinhNuU" value="false" required>
+                                                                <label class="form-check-label" for="gioiTinhNuU">Nữ</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group" style="margin-top: 28px">
+                                                            <label for="diaChiU" class="font-weight-bold"><span style="color: red;">*</span>Địa chỉ cụ thể:</label>
+                                                            <input type="text" class="form-control" id="diaChiU" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="font-weight-bold"><span style="color: red;">*</span>Trạng thái:</label><br>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="trangThai" id="trangThaiAc" value="active" required>
+                                                                <label class="form-check-label" for="trangThaiAc">Hoạt động</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="trangThai" id="trangThaiIn" value="inactive" required>
+                                                                <label class="form-check-label" for="trangThaiIn">Đã nghỉ</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row" style=" padding: 20px" >
+                                                    <div class="form-group col-4">
+                                                        <label for="tinhU"class="font-weight-bold"><span style="color: red;">*</span>Tỉnh/Thành phố</label>
+                                                        <select class="form-control" id="tinhU" name="tinh">
+                                                            <option value="">Chọn Tỉnh/Thành phố</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-4">
+                                                        <label for="huyenU" class="font-weight-bold"><span style="color: red;">*</span>Quận/Huyện</label>
+                                                        <select class="form-control" id="huyenU" name="huyen" disabled>
+                                                            <option value="">Chọn Quận/Huyện</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-4">
+                                                        <label for="xaU"class="font-weight-bold"><span style="color: red;">*</span>Phường/Xã</label>
+                                                        <select class="form-control" id="xaU" name="xa" disabled>
+                                                            <option value="">Chọn Phường/Xã</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-warning" type="button" id="btnSubmitUpdate">Lưu chỉnh sửa</button>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+</div>
+</main>
 </div>
 <div th:include="fragment/script :: script"></div>
+<script src="/js/html5-qrcode.min.js"></script>
+<script>
+
+</script>
 <script th:src="@{/js/nhanvien.js}"></script>
+
 </body>
 </html>

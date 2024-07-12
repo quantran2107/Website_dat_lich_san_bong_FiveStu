@@ -8,13 +8,13 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
-
+import org.thymeleaf.context.Context;
 
 import java.security.SecureRandom;
 import java.util.List;
@@ -26,22 +26,23 @@ public class NhanVienServiceImp implements NhanVienService {
 
     private NhanVienReposity nhanVienReposity;
     private ModelMapper modelMapper;
-
     @Autowired
     private JavaMailSender javaMailSender;
 
     @Autowired
     private SpringTemplateEngine springTemplateEngine;
 
+
     public NhanVienServiceImp(NhanVienReposity nhanVienReposity, ModelMapper modelMapper) {
         this.nhanVienReposity = nhanVienReposity;
         this.modelMapper = modelMapper;
+
     }
 
 
     @Override
     public List<NhanVienDTO> getAll() {
-        return nhanVienReposity.findAll().stream().map((nhanVien) ->modelMapper
+        return nhanVienReposity.findAll().stream().map((nhanVien) -> modelMapper
                 .map(nhanVien, NhanVienDTO.class)).collect(Collectors.toList());
     }
 
@@ -49,8 +50,8 @@ public class NhanVienServiceImp implements NhanVienService {
     @Override
     public Boolean updateNew(NhanVienDTO nv) {
         NhanVien nhanVien = nhanVienReposity.getReferenceById(nv.getId());
-        if (nhanVien !=null){
-            nhanVien =modelMapper.map(nv, NhanVien.class);
+        if (nhanVien != null) {
+            nhanVien = modelMapper.map(nv, NhanVien.class);
             nhanVienReposity.save(nhanVien);
             return true;
         }
@@ -63,6 +64,7 @@ public class NhanVienServiceImp implements NhanVienService {
         nhanVien.setMaNhanVien(generateMaNV());
         nhanVien.setTenNhanVien(generateTKNV(nv.getHoTen()));
         nhanVien.setMatKhau(generateMK(16));
+        nhanVien.setTrangThai("active");
         boolean checkMail = mailFunction(nhanVien);
         if (checkMail) {
             nhanVienReposity.save(nhanVien);
@@ -70,6 +72,19 @@ public class NhanVienServiceImp implements NhanVienService {
         }
         return false;
     }
+
+    @Override
+    public List<NhanVienDTO> getActiveNV() {
+        return nhanVienReposity.findAllActive().stream().map((nhanVien) -> modelMapper
+                .map(nhanVien, NhanVienDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<NhanVienDTO> getInactiveNV() {
+        return nhanVienReposity.findAllInActive().stream().map((nhanVien) -> modelMapper
+                .map(nhanVien, NhanVienDTO.class)).collect(Collectors.toList());
+    }
+
 
     public Boolean mailFunction(NhanVien nhanVien) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -96,6 +111,7 @@ public class NhanVienServiceImp implements NhanVienService {
         }
     }
 
+
     public static String generateMK(int length) {
         String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         SecureRandom RANDOM = new SecureRandom();
@@ -106,13 +122,16 @@ public class NhanVienServiceImp implements NhanVienService {
         return sb.toString();
     }
 
-    public String generateMaNV(){
+    public String generateMaNV() {
         List<NhanVien> list = nhanVienReposity.findAll();
-        String manv = String.valueOf(list.get(list.size()-1).getId()) ;
-        return "NV"+manv;
+        if (list.isEmpty()) {
+            return "NV001";
+        }
+        Integer manv =list.get(list.size() - 1).getId()+1;
+        return "NV" + manv;
     }
 
-    public String generateTKNV(String fullName){
+    public String generateTKNV(String fullName) {
         // Tách tên thành các từ
         String[] parts = fullName.split("\\s+");
 
@@ -134,4 +153,5 @@ public class NhanVienServiceImp implements NhanVienService {
 
         return username;
     }
+
 }
