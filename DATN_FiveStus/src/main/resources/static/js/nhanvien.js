@@ -51,7 +51,7 @@ $(document).ready(function () {
                 qrbox: {width: 250, height: 250}
             },
             (qrCodeMessage) => {
-                console.log(qrCodeMessage)
+
                 let dataParts = qrCodeMessage.split('|');
 
                 let hoTen = dataParts[2];
@@ -473,7 +473,7 @@ $(document).ready(function () {
                     $('#ngaySinh').after('<div id="ngaySinhError" class="invalid-feedback">Vui lòng nhập Tên nhân viên.</div>'); // Thêm thông báo lỗi mới
                     return false;
                 }
-                if (hoten === '') {
+                if (hoTen === '') {
                     $('#hoTen').addClass('is-invalid'); // Thêm class is-invalid để bôi đỏ ô input
                     $('#hoTenError').remove(); // Loại bỏ thông báo lỗi cũ nếu có
                     $('#hoTen').after('<div id="hoTenError" class="invalid-feedback">Vui lòng nhập Tên nhân viên.</div>'); // Thêm thông báo lỗi mới
@@ -494,14 +494,14 @@ $(document).ready(function () {
                     return false;
                 }
 
-                if (sdt === '') {
+                if (soDienThoai === '') {
                     $('#soDienThoai').addClass('is-invalid'); // Thêm class is-invalid để bôi đỏ ô input
                     $('#soDienThoaiError').remove(); // Loại bỏ thông báo lỗi cũ nếu có
                     $('#soDienThoai').after('<div id="soDienThoaiError" class="invalid-feedback">Vui lòng nhập số điện thoại.</div>'); // Thêm thông báo lỗi mới
                     return false;
                 }
                 const regexSdt = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
-                if (!regexSdt.test(sdt)) {
+                if (!regexSdt.test(soDienThoai)) {
                     $('#soDienThoai').addClass('is-invalid'); // Thêm class is-invalid để bôi đỏ ô input
                     $('#soDienThoaiError').remove(); // Loại bỏ thông báo lỗi cũ nếu có
                     $('#soDienThoai').after('<div id="soDienThoaiError" class="invalid-feedback">Số điện thoại sai định dang! Vui lòng nhập lại.</div>'); // Thêm thông báo lỗi mới
