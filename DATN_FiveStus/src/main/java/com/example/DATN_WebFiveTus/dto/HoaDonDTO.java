@@ -54,10 +54,10 @@ public class HoaDonDTO {
 
     private String trangThai;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date ngayDenSan;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date ngayThanhToan;
 
 }

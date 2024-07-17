@@ -62,13 +62,14 @@ public class HoaDonRest {
     @GetMapping("/search-and-filter")
     public ResponseEntity<Page<HoaDonDTO>> searchAndFilter(
             @RequestParam(required = false) Boolean loai,
+            @RequestParam(required = false) String trangThai,
             @RequestParam(required = false) String key,
             @RequestParam(required = false) Float tongTienMin,
             @RequestParam(required = false) Float tongTienMax,
             @RequestParam(defaultValue = "0") int trang,
             @RequestParam(defaultValue = "10") int kichThuoc) {
         Pageable pageable = PageRequest.of(trang, kichThuoc);
-        Page<HoaDonDTO> hoaDonPage = hoaDonService.searchAndFilter(loai, key, tongTienMin, tongTienMax, pageable);
+        Page<HoaDonDTO> hoaDonPage = hoaDonService.searchAndFilter(loai, trangThai, key, tongTienMin, tongTienMax, pageable);
         return ResponseEntity.ok(hoaDonPage);
     }
 
