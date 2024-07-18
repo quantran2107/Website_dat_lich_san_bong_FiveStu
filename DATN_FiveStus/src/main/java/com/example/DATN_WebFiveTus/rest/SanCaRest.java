@@ -64,17 +64,13 @@ public class SanCaRest {
        return ResponseEntity.ok().build();
     }
 
-//    @GetMapping("/sort/{pageNum}")
-//    public ResponseEntity<List> sortSanCa(){
-//
-//    }
 
     @GetMapping("/sort")
     public Map<String, Object> getSanCa(
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "desc") String sortDirection) {
         int[] totalPageElement = new int[2];
-        List<SanCaDTO> sanCaDTOList = sanCaService.listAll2(pageNum, sortDirection, totalPageElement);
+        List<SanCaDTO> sanCaDTOList = sanCaService.listAllSortPage(pageNum, sortDirection, totalPageElement);
 
         Map<String, Object> response = new HashMap<>();
         response.put("totalPages", totalPageElement[0]);

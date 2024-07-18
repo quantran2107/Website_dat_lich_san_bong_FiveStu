@@ -26,8 +26,6 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
     @Query("UPDATE SanCa sc SET sc.deletedAt = FALSE WHERE sc.id = :id")
     void deletedAt(Integer id);
 
-    @Query("SELECT sc FROM SanCa sc")
-    List<SanCa> findBySanCaSort(Sort sort);
 
     @Query("SELECT sc FROM SanCa sc")
     Page<SanCa> findBySanCaPage(Pageable  pageable);

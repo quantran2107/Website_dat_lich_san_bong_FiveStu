@@ -87,7 +87,7 @@ public class NgayTrongTuanController {
 
         restTemplate.postForObject(builder.toUriString(), ngayTrongTuanDTO, Void.class);
 
-        return "redirect:/listNgayTrongTuan";
+        return "redirect:/listSanBong";
     }
 
     @GetMapping("/ngayTrongTuan/edit/{id}")

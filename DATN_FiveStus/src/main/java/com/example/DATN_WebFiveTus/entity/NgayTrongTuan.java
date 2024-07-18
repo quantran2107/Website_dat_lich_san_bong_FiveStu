@@ -29,7 +29,7 @@ public class NgayTrongTuan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "thu_trong_tuan", nullable = false, length = 100)
     private String thuTrongTuan;

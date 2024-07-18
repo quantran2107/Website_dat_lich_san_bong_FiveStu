@@ -35,7 +35,7 @@ public class Ca {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "ten_ca", nullable = false, length = 100)
     private String tenCa;

@@ -56,4 +56,6 @@ public class LoaiSanRest {
         loaiSanService.deletedAt(id);
         return ResponseEntity.ok().build();
     }
+
+
 }

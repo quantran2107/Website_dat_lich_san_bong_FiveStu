@@ -1,16 +1,23 @@
 package com.example.DATN_WebFiveTus.controller;
 
+import com.example.DATN_WebFiveTus.config.ExcelExporter;
 import com.example.DATN_WebFiveTus.dto.CaDTO;
 import com.example.DATN_WebFiveTus.dto.LoaiSanDTO;
 import com.example.DATN_WebFiveTus.dto.NgayTrongTuanDTO;
 import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
+import com.example.DATN_WebFiveTus.entity.Ca;
+import com.example.DATN_WebFiveTus.entity.NgayTrongTuan;
+import com.example.DATN_WebFiveTus.entity.SanBong;
 import com.example.DATN_WebFiveTus.entity.SanCa;
 import com.example.DATN_WebFiveTus.rest.SanCaRest;
+import com.example.DATN_WebFiveTus.service.CaService;
 import com.example.DATN_WebFiveTus.service.LoaiSanService;
 import com.example.DATN_WebFiveTus.service.NgayTrongTuanService;
+import com.example.DATN_WebFiveTus.service.SanBongService;
 import com.example.DATN_WebFiveTus.service.SanCaService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -38,17 +46,27 @@ public class SanCaController {
 
     private SanCaService sanCaService;
 
+    private CaService caService;
+
+    private NgayTrongTuanService ngayTrongTuanService;
+
+    private SanBongService sanBongService;
+
+
     @Autowired
-    public SanCaController(RestTemplate restTemplate, SanCaRest sanCaRest, SanCaService sanCaService) {
+    public SanCaController(RestTemplate restTemplate, SanCaRest sanCaRest, SanCaService sanCaService,
+                           CaService caService, NgayTrongTuanService ngayTrongTuanService, SanBongService sanBongService) {
         this.restTemplate = restTemplate;
         this.sanCaRest = sanCaRest;
         this.sanCaService = sanCaService;
+        this.caService = caService;
+        this.ngayTrongTuanService = ngayTrongTuanService;
+        this.sanBongService = sanBongService;
     }
-
 
     @GetMapping("listSanCa")
     public String listSanCa(
-            @RequestParam(name = "keyWords", required = false) Integer id,
+            @RequestParam(name = "haha", required = false) Integer id,
             @RequestParam(name = "keyWords", required = false) String keyWords,
             @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
             @RequestParam(name = "sortDirection", defaultValue = "asc") String sortDirection,
@@ -104,10 +122,9 @@ public class SanCaController {
             sanCaDTOList = sanCaService.searchKeyWords(pageNum, keyWords.trim(), sortDirection, totalPageElement, id);
         } else {
             // Otherwise, list all with pagination and sorting
-            sanCaDTOList = sanCaService.listAll2(pageNum, sortDirection, totalPageElement);
+            sanCaDTOList = sanCaService.listAllSortPage(pageNum, sortDirection, totalPageElement);
         }
 
-        // Add attributes to the model
         model.addAttribute("sanCaDTOList", sanCaDTOList);
         model.addAttribute("currentPage", pageNum);
         model.addAttribute("sortDirection", sortDirection);
@@ -141,20 +158,130 @@ public class SanCaController {
                 SanCaDTO.class,
                 id
         );
-        System.out.println("Gia: " + sanCaDTO.getGia());
         return sanCaDTO;
     }
 
     @PostMapping("/sanCa/update")
     public String update(@ModelAttribute("sanCa") SanCaDTO sanCaDTO) {
-        System.out.println("UpdATE");
+        System.out.println("hahaupdate");
         RestTemplate restTemplate = new RestTemplate();
-
         restTemplate.put("http://localhost:8080/san-ca/{id}", sanCaDTO, sanCaDTO.getId());
-
-
+        System.out.println("Haha:"+sanCaDTO.getId());
         return "redirect:/listSanCa";
     }
+
+    @GetMapping("/export/excels")
+    public void exportExcel(HttpServletResponse httpServletResponse) throws IOException {
+        List<SanCaDTO> listExcel = sanCaService.getAllJoinFetch();
+        System.out.println("HAHA excel: "+listExcel);
+        ExcelExporter excelExporter = new ExcelExporter();
+        excelExporter.Export(listExcel, httpServletResponse);
+    }
+
+//    @PostMapping("/sanCa/add")
+//    public String addSanCa(@ModelAttribute("sanCa") SanCaDTO sanCaDTO,
+//                           @ModelAttribute("ca") CaDTO caDTO,
+//                           @ModelAttribute("sanBong") SanBongDTO sanBongDTO,
+//                           @ModelAttribute("ngayTrongTuan") NgayTrongTuanDTO ngayTrongTuanDTO) {
+//
+//        if (caDTO.getId() != null) {
+//            caService.save(caDTO);
+//            System.out.println("Add1");
+//        }
+//
+//        if (ngayTrongTuanDTO.getId() != null) {
+//            ngayTrongTuanService.save(ngayTrongTuanDTO);
+//            System.out.println("Add2");
+//        }
+//        System.out.println("Không add được add");
+////        sanBongService.save(sanBongDTO);
+////        caService.save(caDTO);
+////        ngayTrongTuanService.save(ngayTrongTuanDTO);
+//        // Lấy thông tin từ các DTO và đưa vào sanCaDTO
+////        sanCaDTO.setIdSanBong(sanBongDTO.getId()); // ID của sân bóng
+//        sanCaDTO.setIdNgayTrongTuan(ngayTrongTuanDTO.getId()); // ID của ngày trong tuần
+//        sanCaDTO.setIdCa(caDTO.getId()); // ID của ca
+//
+//        // Lưu thông tin vào cơ sở dữ liệu
+//        sanCaService.save(sanCaDTO);
+//
+//        return "redirect:/quan-ly-san-bong";
+//    }
+
+
+    // Lưu Ca
+//    @PostMapping("/cas/add")
+//    public String addCa(@ModelAttribute("ca") CaDTO caDTO, Model model) {
+//        System.out.println("HahaCa");
+//        if (caDTO.getId() != null) {
+//            caService.save(caDTO);
+//        }
+//        model.addAttribute("ca", caDTO);
+//        return "redirect:/form-page";
+//    }
+//
+//    // Lưu Ngay Trong Tuan
+//    @PostMapping("/ngayTrongTuans/add")
+//    public String addNgayTrongTuan(@ModelAttribute("ngayTrongTuan") NgayTrongTuanDTO ngayTrongTuanDTO, Model model) {
+//        // Lưu đối tượng ngayTrongTuan trước
+//        NgayTrongTuanDTO savedNgayTrongTuan = ngayTrongTuanService.save(ngayTrongTuanDTO);
+//
+//        // In ra ID để kiểm tra
+//        Integer ngayTrongTuanId = savedNgayTrongTuan.getId();
+//        System.out.println("ID sau khi lưu: " + ngayTrongTuanId);
+//
+//        // Tạo đối tượng SanCaDTO mới
+//        SanCaDTO sanCaDTO = new SanCaDTO();
+//        // Gán ID của ngayTrongTuan vào sanCaDTO
+//        sanCaDTO.setId(8);
+//        sanCaDTO.setIdNgayTrongTuan(ngayTrongTuanId);
+//
+//        // Lưu đối tượng sanCa
+//        SanCaDTO savedSanCa = sanCaService.save(sanCaDTO);
+//        System.out.println("ID sau khi lưu SanCa: " + savedSanCa.getId());
+//
+//        // Thêm đối tượng đã lưu vào model để sử dụng trong view
+//        model.addAttribute("ngayTrongTuan", ngayTrongTuanDTO);
+//
+//        return "redirect:/listSanBong";
+//    }
+//
+//
+//
+//    // Lưu San Bong
+//    @PostMapping("/sanBongs/add")
+//    public String addSanBong(@ModelAttribute("sanBong") SanBongDTO sanBongDTO, Model model) {
+//        if (sanBongDTO.getId() != null) {
+//            System.out.println("HahaCa3");
+//            sanBongService.save(sanBongDTO);
+//        }
+//        model.addAttribute("sanBong", sanBongDTO);
+//        return "redirect:/form-page";
+//    }
+
+    // Lưu San Ca
+//    @PostMapping("/sanCa/add")
+//    public String addSanCa(@ModelAttribute("sanCa") SanCaDTO sanCaDTO,
+//                           @ModelAttribute("ca") CaDTO caDTO,
+//                           @ModelAttribute("sanBong") SanBongDTO sanBongDTO,
+//                           @ModelAttribute("ngayTrongTuan") NgayTrongTuanDTO ngayTrongTuanDTO,
+//                           Model model) {
+//
+//        // Kiểm tra các ID
+//        if (caDTO.getId() != null && ngayTrongTuanDTO.getId() != null && sanBongDTO.getId() != null) {
+//            // Gán các ID từ DTOs vào sanCaDTO
+//            sanCaDTO.setIdNgayTrongTuan(ngayTrongTuanDTO.getId());
+//            sanCaDTO.setIdCa(caDTO.getId());
+//            sanCaDTO.setIdSanBong(sanBongDTO.getId());
+//
+//            // Lưu thông tin vào cơ sở dữ liệu
+//            sanCaService.save(sanCaDTO);
+//        } else {
+//            System.out.println("Không add được sanCa vì thiếu ID");
+//        }
+//
+//        return "redirect:/quan-ly-san-bong";
+//    }
 
 
 }
