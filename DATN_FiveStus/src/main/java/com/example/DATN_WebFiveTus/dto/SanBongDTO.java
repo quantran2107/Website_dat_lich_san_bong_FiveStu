@@ -17,14 +17,17 @@ import lombok.ToString;
 @Builder
 public class SanBongDTO {
 
-    private int id;
+    private Integer id;
 
     private String tenSanBong;
+
+    private Float giaSanBong;
 
     private Integer idLoaiSan;
 
     private String tenLoaiSan;
 
     private String trangThai;
+
 
 }
