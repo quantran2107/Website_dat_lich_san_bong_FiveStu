@@ -75,11 +75,11 @@ public class HoaDon {
     @Column(name = "trang_thai", nullable = false, length = 100)
     private String trangThai;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "ngay_den_san")
     private Date ngayDenSan;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @Column(name = "ngay_thanh_toan")
     private Date ngayThanhToan;
 
