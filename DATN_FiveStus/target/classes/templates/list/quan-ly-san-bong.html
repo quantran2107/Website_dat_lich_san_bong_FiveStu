@@ -218,196 +218,196 @@
         });
     });
 </script>
-<!--<script>-->
-<!--    $(document).ready(function () {-->
-<!--        $('.edit-btn').on('click', function () {-->
-<!--            var id = $(this).data('id');-->
-<!--            $.ajax({-->
-<!--                url: '/loaiSan/edit/' + id,-->
-<!--                method: 'GET',-->
-<!--                success: function (data) {-->
-<!--                    $('#editId').val(data.id);-->
-<!--                    $('#editTenLoaiSan').val(data.tenLoaiSan);-->
-<!--                    $('#editTrangThai').val(data.trangThai);-->
-<!--                }-->
-<!--            });-->
-<!--        });-->
-<!--    });-->
+<script>
+    $(document).ready(function () {
+        $('.edit-btn').on('click', function () {
+            var id = $(this).data('id');
+            $.ajax({
+                url: '/loaiSan/edit/' + id,
+                method: 'GET',
+                success: function (data) {
+                    $('#editId').val(data.id);
+                    $('#editTenLoaiSan').val(data.tenLoaiSan);
+                    $('#editTrangThai').val(data.trangThai);
+                }
+            });
+        });
+    });
 
-<!--</script>-->
+</script>
 <!--Sân bóng-->
-<!--<script>-->
-<!--    $(document).ready(function () {-->
-<!--        $('.edit-btn').on('click', function () {-->
-<!--            var id = $(this).data('id');-->
-<!--            $.ajax({-->
-<!--                url: '/sanBong/edit/' + id,-->
-<!--                method: 'GET',-->
-<!--                success: function (data) {-->
-<!--                    $('#editId2').val(data.id);-->
-<!--                    $('#editTenSanBong').val(data.tenSanBong);-->
-<!--                    $('#editTrangThai').val(data.trangThai);-->
-<!--                    $('#editLoaiSan').val(data.idLoaiSan);-->
-<!--                }-->
-<!--            });-->
-<!--        });-->
-<!--    });-->
-<!--</script>-->
+<script>
+    $(document).ready(function () {
+        $('.edit-btn').on('click', function () {
+            var id = $(this).data('id');
+            $.ajax({
+                url: '/sanBong/edit/' + id,
+                method: 'GET',
+                success: function (data) {
+                    $('#editId2').val(data.id);
+                    $('#editTenSanBong').val(data.tenSanBong);
+                    $('#editTrangThai').val(data.trangThai);
+                    $('#editLoaiSan').val(data.idLoaiSan);
+                }
+            });
+        });
+    });
+</script>
 
 <!--Ca-->
 
-<!--<script>-->
-<!--    $(document).ready(function () {-->
-<!--        $('.edit-btn').on('click', function () {-->
-<!--            var id = $(this).data('id');-->
-<!--            $.ajax({-->
-<!--                url: '/ca/edit/' + id,-->
-<!--                method: 'GET',-->
-<!--                success: function (data) {-->
-<!--                    $('#editId3').val(data.id);-->
-<!--                    $('#editTenCa').val(data.tenCa);-->
-<!--                    $('#editGiaCa').val(data.giaCa);-->
-<!--                    $('#editThoiGianBatDau').val(data.thoiGianBatDau);-->
-<!--                    $('#editThoiGianKetThuc').val(data.thoiGianKetThuc);-->
-<!--                    $('#editTrangThaiCa').val(data.trangThai);-->
-<!--                }-->
-<!--            });-->
-<!--        });-->
-<!--    });-->
-<!--</script>-->
+<script>
+    $(document).ready(function () {
+        $('.edit-btn').on('click', function () {
+            var id = $(this).data('id');
+            $.ajax({
+                url: '/ca/edit/' + id,
+                method: 'GET',
+                success: function (data) {
+                    $('#editId3').val(data.id);
+                    $('#editTenCa').val(data.tenCa);
+                    $('#editGiaCa').val(data.giaCa);
+                    $('#editThoiGianBatDau').val(data.thoiGianBatDau);
+                    $('#editThoiGianKetThuc').val(data.thoiGianKetThuc);
+                    $('#editTrangThaiCa').val(data.trangThai);
+                }
+            });
+        });
+    });
+</script>
 
 <!-- Ngay trong tuan-->
 
-<!--<script>-->
-<!--    $(document).ready(function () {-->
-<!--        // Hàm để load danh sách sân bóng theo loại sân bóng-->
-<!--        function loadSanBongsByLoaiSan(loaiSanId) {-->
-<!--            $.ajax({-->
-<!--                url: 'http://localhost:8080/san-bong/by-loai-san/' + loaiSanId,-->
-<!--                method: 'GET',-->
-<!--                success: function (data) {-->
-<!--                    // Xóa nội dung cũ trước khi thêm mới-->
-<!--                    $('#sanListContainer-' + loaiSanId).empty();-->
+<script>
+    $(document).ready(function () {
+        // Hàm để load danh sách sân bóng theo loại sân bóng
+        function loadSanBongsByLoaiSan(loaiSanId) {
+            $.ajax({
+                url: 'http://localhost:8080/san-bong/by-loai-san/' + loaiSanId,
+                method: 'GET',
+                success: function (data) {
+                    // Xóa nội dung cũ trước khi thêm mới
+                    $('#sanListContainer-' + loaiSanId).empty();
 
-<!--                    // Kiểm tra xem danh sách có dữ liệu không-->
-<!--                    if (data && data.length > 0) {-->
-<!--                        // Hiển thị danh sách sân bóng-->
-<!--                        data.forEach(function (sanBong, index) {-->
-<!--                            $('#sanListContainer-' + loaiSanId).append(-->
-<!--                                '<tr>' +-->
-<!--                                '<td>' + (index + 1) + '</td>' +-->
-<!--                                '<td>' + sanBong.tenSanBong + '</td>' +-->
-<!--                                '<td style="display: flex">' +-->
-<!--                                '<button class="btn mb-2 mr-1 btn-warning" data-id="' + sanBong.id + '"><span class="fe fe-edit-3"></span></button> ' +-->
-<!--                                '<button class="btn mb-2 ml-1 btn-danger" data-id="' + sanBong.id + '"> <span class="fe fe-trash-2"></span></button>' +-->
-<!--                                '</td>' +-->
-<!--                                '</tr>'-->
-<!--                            );-->
-<!--                        });-->
+                    // Kiểm tra xem danh sách có dữ liệu không
+                    if (data && data.length > 0) {
+                        // Hiển thị danh sách sân bóng
+                        data.forEach(function (sanBong, index) {
+                            $('#sanListContainer-' + loaiSanId).append(
+                                '<tr>' +
+                                '<td>' + (index + 1) + '</td>' +
+                                '<td>' + sanBong.tenSanBong + '</td>' +
+                                '<td style="display: flex">' +
+                                '<button class="btn mb-2 mr-1 btn-warning" data-id="' + sanBong.id + '"><span class="fe fe-edit-3"></span></button> ' +
+                                '<button class="btn mb-2 ml-1 btn-danger" data-id="' + sanBong.id + '"> <span class="fe fe-trash-2"></span></button>' +
+                                '</td>' +
+                                '</tr>'
+                            );
+                        });
 
-<!--                        // Ẩn thông báo "Không có sân bóng nào."-->
-<!--                        $('#noSanBong-' + loaiSanId).hide();-->
-<!--                    } else {-->
-<!--                        // Hiển thị thông báo "Không có sân bóng nào."-->
-<!--                        $('#noSanBong-' + loaiSanId).show();-->
-<!--                    }-->
+                        // Ẩn thông báo "Không có sân bóng nào."
+                        $('#noSanBong-' + loaiSanId).hide();
+                    } else {
+                        // Hiển thị thông báo "Không có sân bóng nào."
+                        $('#noSanBong-' + loaiSanId).show();
+                    }
 
-<!--                    $('#sanListContainer-' + loaiSanId).append(-->
-<!--                        '<tr>' +-->
-<!--                        '<td>#</td>' +-->
-<!--                        '<td><input type="text" class="form-control new-san-input" placeholder="Nhập tên"></td>' +-->
-<!--                        '<td><button type="button" class="btn mb-2 ml-1 btn-success add-san-btn" data-loai-san-id="' + loaiSanId + '"><span class="fe fe-plus"></span> Thêm</button></td>' +-->
-<!--                        '</tr>'-->
-<!--                    );-->
+                    $('#sanListContainer-' + loaiSanId).append(
+                        '<tr>' +
+                        '<td>#</td>' +
+                        '<td><input type="text" class="form-control new-san-input" placeholder="Nhập tên"></td>' +
+                        '<td><button type="button" class="btn mb-2 ml-1 btn-success add-san-btn" data-loai-san-id="' + loaiSanId + '"><span class="fe fe-plus"></span> Thêm</button></td>' +
+                        '</tr>'
+                    );
 
-<!--                },-->
-<!--                error: function (err) {-->
-<!--                    console.error('Error fetching san bongs by loai san:', err);-->
-<!--                }-->
-<!--            });-->
-<!--        }-->
+                },
+                error: function (err) {
+                    console.error('Error fetching san bongs by loai san:', err);
+                }
+            });
+        }
 
-<!--        // Gọi API để lấy danh sách các loại sân bóng-->
-<!--        $.ajax({-->
-<!--            url: 'http://localhost:8080/loai-san/hien-thi',-->
-<!--            method: 'GET',-->
-<!--            success: function (data) {-->
-<!--                // Duyệt qua danh sách loại sân bóng và thêm vào tab-->
-<!--                data.forEach(function (loaiSan, index) {-->
-<!--                    $('#myTab').append(-->
-<!--                        '<li class="nav-item">' +-->
-<!--                        '<a class="nav-link' + (index === 0 ? ' active' : '') + '" id="tab-' + loaiSan.id + '" data-toggle="tab" href="#tab-content-' + loaiSan.id +-->
-<!--                        '" aria-controls="tab-content-' + loaiSan.id + '" aria-selected="' + (index === 0 ? 'true' : 'false') + '">' +-->
-<!--                        loaiSan.tenLoaiSan +-->
-<!--                        '</a>' +-->
-<!--                        '</li>'-->
-<!--                    );-->
+        // Gọi API để lấy danh sách các loại sân bóng
+        $.ajax({
+            url: 'http://localhost:8080/loai-san/hien-thi',
+            method: 'GET',
+            success: function (data) {
+                // Duyệt qua danh sách loại sân bóng và thêm vào tab
+                data.forEach(function (loaiSan, index) {
+                    $('#myTab').append(
+                        '<li class="nav-item">' +
+                        '<a class="nav-link' + (index === 0 ? ' active' : '') + '" id="tab-' + loaiSan.id + '" data-toggle="tab" href="#tab-content-' + loaiSan.id +
+                        '" aria-controls="tab-content-' + loaiSan.id + '" aria-selected="' + (index === 0 ? 'true' : 'false') + '">' +
+                        loaiSan.tenLoaiSan +
+                        '</a>' +
+                        '</li>'
+                    );
 
-<!--                    // Thêm nội dung cho từng tab-->
-<!--                    $('#myTabContent').append(-->
-<!--                        '<div class="tab-pane fade' + (index === 0 ? ' show active' : '') + '" id="tab-content-' + loaiSan.id + '" role="tabpanel" aria-labelledby="tab-' + loaiSan.id + '">' +-->
-<!--                        '<div class="card-body">' +-->
-<!--                        '<table class="table">' +-->
-<!--                        '<tbody id="sanListContainer-' + loaiSan.id + '">' +-->
-<!--                        '</tbody>' +-->
-<!--                        '</table>' +-->
-<!--                        '</div>' +-->
-<!--                        '<div id="noSanBong-' + loaiSan.id + '" class="text-muted" style="display: none;">' +-->
-<!--                        'Không có sân bóng nào.' +-->
-<!--                        '</div>' +-->
-<!--                        '</div>'-->
-<!--                    );-->
+                    // Thêm nội dung cho từng tab
+                    $('#myTabContent').append(
+                        '<div class="tab-pane fade' + (index === 0 ? ' show active' : '') + '" id="tab-content-' + loaiSan.id + '" role="tabpanel" aria-labelledby="tab-' + loaiSan.id + '">' +
+                        '<div class="card-body">' +
+                        '<table class="table">' +
+                        '<tbody id="sanListContainer-' + loaiSan.id + '">' +
+                        '</tbody>' +
+                        '</table>' +
+                        '</div>' +
+                        '<div id="noSanBong-' + loaiSan.id + '" class="text-muted" style="display: none;">' +
+                        'Không có sân bóng nào.' +
+                        '</div>' +
+                        '</div>'
+                    );
 
-<!--                    // Gọi hàm load danh sách sân bóng cho tab đầu tiên-->
-<!--                    if (index === 0) {-->
-<!--                        loadSanBongsByLoaiSan(loaiSan.id);-->
-<!--                    }-->
-<!--                });-->
+                    // Gọi hàm load danh sách sân bóng cho tab đầu tiên
+                    if (index === 0) {
+                        loadSanBongsByLoaiSan(loaiSan.id);
+                    }
+                });
 
-<!--                // Xử lý khi tab được chọn-->
-<!--                $(document).on('click', '.nav-link', function () {-->
-<!--                    var loaiSanId = $(this).attr('href').replace('#tab-content-', '');-->
-<!--                    loadSanBongsByLoaiSan(loaiSanId);-->
-<!--                });-->
-<!--            },-->
-<!--            error: function (err) {-->
-<!--                console.error('Error fetching loai san bong:', err);-->
-<!--            }-->
-<!--        });-->
+                // Xử lý khi tab được chọn
+                $(document).on('click', '.nav-link', function () {
+                    var loaiSanId = $(this).attr('href').replace('#tab-content-', '');
+                    loadSanBongsByLoaiSan(loaiSanId);
+                });
+            },
+            error: function (err) {
+                console.error('Error fetching loai san bong:', err);
+            }
+        });
 
-<!--        // Xử lý khi click vào nút "Thêm sân"-->
-<!--        $(document).on('click', '.add-san-btn', function () {-->
-<!--            var loaiSanId = $(this).data('loai-san-id');-->
-<!--            var tenSanBong = $(this).closest('tr').find('.new-san-input').val();-->
-<!--            // Kiểm tra tên sân bóng không được rỗng-->
-<!--            if (tenSanBong.trim() === '') {-->
-<!--                alert('Vui lòng nhập tên sân bóng.');-->
-<!--                return;-->
-<!--            }-->
+        // Xử lý khi click vào nút "Thêm sân"
+        $(document).on('click', '.add-san-btn', function () {
+            var loaiSanId = $(this).data('loai-san-id');
+            var tenSanBong = $(this).closest('tr').find('.new-san-input').val();
+            // Kiểm tra tên sân bóng không được rỗng
+            if (tenSanBong.trim() === '') {
+                alert('Vui lòng nhập tên sân bóng.');
+                return;
+            }
 
-<!--            // Gửi AJAX để thêm sân bóng mới-->
-<!--            $.ajax({-->
-<!--                url: 'http://localhost:8080/san-bong',-->
-<!--                method: 'POST',-->
-<!--                contentType: 'application/json',-->
-<!--                data: JSON.stringify({-->
-<!--                    loaiSanId: loaiSanId,-->
-<!--                    tenSanBong: tenSanBong,-->
-<!--                    idLoaiSan: loaiSanId,-->
-<!--                    tenLoaiSan: $('#tab-' + loaiSanId).text().trim()-->
-<!--                }),-->
-<!--                success: function (response) {-->
-<!--                    // Sau khi thêm thành công, load lại danh sách sân bóng-->
-<!--                    loadSanBongsByLoaiSan(loaiSanId);-->
-<!--                },-->
-<!--                error: function (err) {-->
-<!--                    console.error('Error adding new san bong:', err);-->
-<!--                    alert('Đã xảy ra lỗi khi thêm sân bóng.');-->
-<!--                }-->
-<!--            });-->
-<!--        });-->
-<!--    });-->
-<!--</script>-->
+            // Gửi AJAX để thêm sân bóng mới
+            $.ajax({
+                url: 'http://localhost:8080/san-bong',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    loaiSanId: loaiSanId,
+                    tenSanBong: tenSanBong,
+                    idLoaiSan: loaiSanId,
+                    tenLoaiSan: $('#tab-' + loaiSanId).text().trim()
+                }),
+                success: function (response) {
+                    // Sau khi thêm thành công, load lại danh sách sân bóng
+                    loadSanBongsByLoaiSan(loaiSanId);
+                },
+                error: function (err) {
+                    console.error('Error adding new san bong:', err);
+                    alert('Đã xảy ra lỗi khi thêm sân bóng.');
+                }
+            });
+        });
+    });
+</script>
 
 
 </body>

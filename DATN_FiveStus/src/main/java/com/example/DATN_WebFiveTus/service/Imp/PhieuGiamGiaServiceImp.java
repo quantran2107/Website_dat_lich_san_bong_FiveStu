@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -67,10 +68,36 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
     @Override
     public PhieuGiamGiaDTO save(PhieuGiamGiaDTO phieuGiamGiaDTO) {
         PhieuGiamGia phieuGiamGia = modelMapper.map(phieuGiamGiaDTO, PhieuGiamGia.class);
+
+        // Kiểm tra nếu mã phiếu giảm giá không được điền
+        if (phieuGiamGia.getMaPhieuGiamGia().trim() == null || phieuGiamGia.getMaPhieuGiamGia().trim().isEmpty()) {
+            // Tự động tạo mã phiếu giảm giá mới
+            phieuGiamGia.setMaPhieuGiamGia(generateMaPhieuGiamGia());
+        }
+        if (phieuGiamGia.getSoLuong() == null ) {
+            phieuGiamGia.setSoLuong(Integer.MAX_VALUE); // Set số lượng là dương vô cùng
+        }
+
+        phieuGiamGia.setDeletedAt(false); // Đặt giá trị deletedAt trước khi lưu
         PhieuGiamGia savedEntity = phieuGiamGiaRepository.save(phieuGiamGia);
-        savedEntity.setDeletedAt(false);
         return modelMapper.map(savedEntity, PhieuGiamGiaDTO.class);
     }
+
+
+    private String generateMaPhieuGiamGia() {
+        String PREFIX = "PGG";
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        int RANDOM_PART_LENGTH = 7; // Độ dài của phần ngẫu nhiên, để tổng độ dài là 10
+        SecureRandom RANDOM = new SecureRandom();
+        StringBuilder sb = new StringBuilder(PREFIX);
+        for (int i = 0; i < RANDOM_PART_LENGTH; i++) {
+            int index = RANDOM.nextInt(CHARACTERS.length());
+            sb.append(CHARACTERS.charAt(index));
+        }
+        return sb.toString();
+    }
+
+
 
     @Override
     public PhieuGiamGiaDTO update(Integer id, PhieuGiamGiaDTO phieuGiamGiaDTO) {
@@ -93,14 +120,17 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
     }
 
     @Override
-    public List<PhieuGiamGiaDTO> searchPhieuGiamGia(String maPhieuGiamGia, String tenPhieuGiamGia, String hinhThucGiamGia, String doiTuongApDung, Date ngayBatDau, Date ngayKetThuc) {
-        List<PhieuGiamGia> phieuGiamGias = phieuGiamGiaRepository.searchPhieuGiamGia(maPhieuGiamGia, tenPhieuGiamGia, hinhThucGiamGia, doiTuongApDung, ngayBatDau, ngayKetThuc);
+    public Page<PhieuGiamGiaDTO> searchPhieuGiamGia(String keyword, Boolean doiTuongApDung, Boolean hinhThucGiamGia, String trangThai, Date ngayBatDau, Date ngayKetThuc, Pageable pageable) {
+        List<PhieuGiamGia> phieuGiamGiaList = phieuGiamGiaRepository.searchPhieuGiamGia(keyword, doiTuongApDung, hinhThucGiamGia, trangThai, ngayBatDau, ngayKetThuc, pageable);
 
-        // Mapping PhieuGiamGia entities to PhieuGiamGiaDTOs
-        return phieuGiamGias.stream()
+        List<PhieuGiamGiaDTO> phieuGiamGiaDTOList = phieuGiamGiaList.stream()
                 .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(phieuGiamGiaDTOList, pageable, phieuGiamGiaRepository.count());
     }
+
+
 
 
     //    @Override

@@ -1,3 +1,27 @@
+GET http://localhost:8080/api-phieu-giam-gia/search-and-filter
+
+<> 2024-07-09T201644.400.json
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia/search-and-filter
+
+<> 2024-07-09T201641.400.json
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia/search-and-filter
+
+<> 2024-07-09T201633.400.json
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia/search-and-filter
+
+<> 2024-07-09T201632.400.json
+
+###
+
 GET http://localhost:8080/api-phieu-giam-gia/search-phieu-giam-gia?maPhieuGiamGia=PGG001
 
 <> 2024-07-09T184521.400.json

@@ -17,38 +17,20 @@ public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, Inte
 
     @Query("SELECT pgg FROM PhieuGiamGia pgg   where pgg.deletedAt=false")
     Page<PhieuGiamGia> getAllJoinFetch(Pageable pageable);
-
-//    @Query("SELECT pgg FROM PhieuGiamGia pgg " +
-//            "JOIN FETCH pgg.khachHang " +
-//            "WHERE (pgg.tenPhieuGiamGia LIKE %:query% OR pgg.maPhieuGiamGia LIKE %:query%) " +
-//            "AND pgg.deletedAt = false")
-//    List<PhieuGiamGia> searchByNameOrCode(@Param("query") String query);
-
-//    @Query("SELECT pgg FROM PhieuGiamGia pgg " +
-//            "JOIN FETCH pgg.khachHang " +
-//            "WHERE pgg.trangThai = :status " +
-//            "AND pgg.deletedAt = false")
-//    List<PhieuGiamGia> filterByStatus(@Param("status") boolean status);
-
-//    @Query("SELECT pgg FROM PhieuGiamGia pgg " +
-//            "JOIN FETCH pgg.khachHang " +
-//            "WHERE pgg.deletedAt = false")
-//    List<PhieuGiamGia> getAllJoinFetch();
-
-    @Query(value = "SELECT * FROM phieu_giam_gia pg " +
-            "WHERE (:ma_phieu_giam_gia IS NULL OR pg.ma_phieu_giam_gia LIKE %:maPhieuGiamGia%) " +
-            "AND (:ten_phieu_giam_gia IS NULL OR pg.ten_phieu_giam_gia LIKE %:tenPhieuGiamGia%) " +
-            "AND (:hinh_thuc_giam_gia IS NULL OR pg.hinh_thuc_giam_gia LIKE %:hinhThucGiamGia%) " +
-            "AND (:doi_tuong_ap_dung IS NULL OR pg.doi_tuong_ap_dung LIKE %:doiTuongApDung%) " +
-            "AND (:ngay_bat_dau IS NULL OR pg.ngay_bat_dau = :ngayBatDau) " +
-            "AND (:ngay_ket_thuc IS NULL OR pg.ngay_ket_thuc = :ngayKetThuc)",
-            nativeQuery = true)
+    @Query("SELECT pg FROM PhieuGiamGia pg " +
+            "WHERE (:keyword IS NULL OR pg.maPhieuGiamGia LIKE %:keyword% OR pg.tenPhieuGiamGia LIKE %:keyword%) " +
+            "AND (:doiTuongApDung IS NULL OR pg.doiTuongApDung = :doiTuongApDung) " +
+            "AND (:hinhThucGiamGia IS NULL OR pg.hinhThucGiamGia = :hinhThucGiamGia) " +
+            "AND (:trangThai IS NULL OR pg.trangThai = :trangThai) " +
+            "AND (:ngayBatDau IS NULL OR pg.ngayBatDau >= :ngayBatDau) " +
+            "AND (:ngayKetThuc IS NULL OR pg.ngayKetThuc <= :ngayKetThuc)")
     List<PhieuGiamGia> searchPhieuGiamGia(
-            @Param("maPhieuGiamGia") String maPhieuGiamGia,
-            @Param("tenPhieuGiamGia") String tenPhieuGiamGia,
-            @Param("hinhThucGiamGia") String hinhThucGiamGia,
-            @Param("doiTuongApDung") String doiTuongApDung,
+            @Param("keyword") String keyword,
+            @Param("doiTuongApDung") Boolean doiTuongApDung,
+            @Param("hinhThucGiamGia") Boolean hinhThucGiamGia,
+            @Param("trangThai") String trangThai,
             @Param("ngayBatDau") Date ngayBatDau,
-            @Param("ngayKetThuc") Date ngayKetThuc);
+            @Param("ngayKetThuc") Date ngayKetThuc,
+            Pageable pageable);
 
 }

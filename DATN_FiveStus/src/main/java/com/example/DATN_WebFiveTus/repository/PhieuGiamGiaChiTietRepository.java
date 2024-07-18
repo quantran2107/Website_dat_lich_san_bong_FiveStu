@@ -23,4 +23,5 @@ public interface PhieuGiamGiaChiTietRepository extends JpaRepository<PhieuGiamGi
             "JOIN FETCH  pggct.phieuGiamGia where pggct.phieuGiamGia.id = :idPhieuGiamGia")
     List<PhieuGiamGiaChiTiet> findAllByIdPhieuGiamGia(@Param("idPhieuGiamGia") Integer idPhieuGiamGia);
 
+
 }

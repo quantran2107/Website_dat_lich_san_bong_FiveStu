@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.sql.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -28,5 +30,16 @@ public class PhieuGiamGiaChiTietDTO {
     private String emailKhachHang;
 
     private String soDienThoaiKhachHang;
+
+    private String tenPhieuGiamGiaPhieuGiamGia;
+
+    private String mucGiamPhieuGiamGia;
+
+    private String hinhThucGiamGiaPhieuGiamGia;
+
+    private Date ngayBatDauPhieuGiamGia;
+
+    private Date ngayKetThucPhieuGiamGia;
+
 
 }
