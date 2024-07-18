@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/head :: head">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body class="vertical  light  ">
+<div class="wrapper">
+    <div th:include="fragment/navbar :: navbar"></div>
+    <div th:include="fragment/sidebar :: sidebar"></div>
+    <main role="main" class="main-content">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <h2 class="mb-2 page-title">Quản lý loại sân bóng</h2>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card shadow mb-4">
+                                    <div class="card-body">
+
+                                        <!--                                        Thanh tab loại sân-->
+                                        <ul class="nav nav-tabs" id="loaiSanTab" role="tablist">
+                                            <!-- Chuyển tab theo idLoaiSan -->
+                                            <li class="nav-item" th:each="loaiSan, iterStat : ${listLS}">
+                                                <a class="nav-link"
+                                                   th:id="'tab-' + ${loaiSan.id}"
+                                                   data-bs-toggle="tab"
+                                                   th:attr="href='#loaiSan-' + ${loaiSan.id}, aria-controls='loaiSan-' + ${loaiSan.id}, aria-selected=${iterStat.index == 0 ? 'true' : 'false'}"
+                                                   th:classappend="${iterStat.index == 0} ? 'active' : ''"
+                                                   th:text="${loaiSan.tenLoaiSan}">
+                                                    Tên Loại Sân
+                                                </a>
+                                            </li>
+
+                                            <!-- Tab thêm mới -->
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="addTab" href="#" onclick="addNewTab()">
+                                                    + Thêm loại sân
+                                                </a>
+                                            </li>
+                                        </ul>
+
+
+                                        <!-- Nội dung từng tab sẽ được thêm vào đây -->
+                                        <div class="tab-content" id="myTabContent">
+
+                                            <div>
+
+                                            </div>
+                                            <!--                                            Tab 1-->
+                                            <div class="tab-pane fade show"
+                                                 role="tabpanel"
+                                                 th:each="loaiSan : ${listLS}"
+                                                 th:id="'loaiSan-' + ${loaiSan.id}"
+                                                 th:aria-labelledby="'tab-' + ${loaiSan.id}">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="mt-3">
+
+                                                            <form>
+                                                                <div class="form-group">
+                                                                    <label for="tenSanBong">Tên sân bóng</label>
+                                                                    <input type="text" class="form-control"
+                                                                           id="tenSanBong"
+                                                                           placeholder="Nhập tên sân bóng">
+                                                                </div>
+                                                                <input type="hidden" id="idLoaiSanInput"
+                                                                       name="idLoaiSan">
+                                                                <button type="submit" onclick="submitSanBong()"
+                                                                        class="btn btn-primary">Thêm sân
+                                                                    bóng
+                                                                </button>
+                                                            </form>
+
+                                                        </div>
+
+                                                        <div class="mt-3">
+                                                            <div class="modal fade" id="myModalEdit" tabindex="-1"
+                                                                 role="dialog" aria-labelledby="myModalEdit"
+                                                                 aria-hidden="true">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title"
+                                                                                id="editModalLabel2">Chỉnh sửa sân
+                                                                                bóng</h5>
+                                                                            <button type="button" class="close"
+                                                                                    data-dismiss="modal"
+                                                                                    aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            <form>
+                                                                                <input type="hidden" name="id"
+                                                                                       id="editId">
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-md-6">
+                                                                                        <label for="editTenSanBong">Tên
+                                                                                            sân bóng</label>
+                                                                                        <input type="text"
+                                                                                               class="form-control"
+                                                                                               id="editTenSanBong"
+                                                                                               name="tenSanBong">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-md-6">
+                                                                                        <label for="editTrangThai">Trạng
+                                                                                            thái</label>
+                                                                                        <select id="editTrangThai"
+                                                                                                class="form-control"
+                                                                                                name="trangThai">
+                                                                                            <option th:each="a: ${listTTSB}"
+                                                                                                    th:value="${a}"
+                                                                                                    th:text="${a}"></option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="form-row">
+                                                                                    <div class="form-group col-md-6">
+                                                                                        <label for="editLoaiSan">Loại
+                                                                                            sân</label>
+                                                                                        <select id="editLoaiSan"
+                                                                                                class="form-control"
+                                                                                                name="idLoaiSan">
+                                                                                            <option th:each="a: ${listLS}"
+                                                                                                    th:value="${a.id}"
+                                                                                                    th:text="${a.tenLoaiSan}"></option>
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="modal-footer">
+                                                                                    <button type="button"
+                                                                                            class="btn mb-2 btn-secondary"
+                                                                                            data-dismiss="modal">Close
+                                                                                    </button>
+                                                                                    <button onclick="updateSanBong()" type="submit"
+                                                                                            class="btn mb-2 btn-primary">
+                                                                                        Update
+                                                                                    </button>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <table class="table table-striped table-hover table-borderless">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Tên sân</th>
+                                                                <th>Hành động</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <!-- Sử dụng th:each để duyệt qua danh sách sân bóng -->
+                                                            <tr th:each="sanBong, stat : ${listSB}"
+                                                                th:if="${loaiSan.id == sanBong.idLoaiSan}">
+                                                                <td th:text="${stat.count}"></td>
+                                                                <td>
+                                                                    <span th:text="${sanBong.tenSanBong}"></span>
+                                                                    <div class="custom-control custom-checkbox"
+                                                                         style="display:inline-block; margin-left: 10px;">
+                                                                        <input type="checkbox"
+                                                                               class="custom-control-input item-checkbox"
+                                                                               th:id="'checkbox-' + ${sanBong.id}"
+                                                                               th:value="${sanBong.id}"
+                                                                               th:data-id="${sanBong.tenSanBong}"
+                                                                               th:name="'sanBongIds'">
+                                                                        <label class="custom-control-label"
+                                                                               th:for="'checkbox-' + ${sanBong.id}"></label>
+                                                                    </div>
+
+                                                                </td>
+                                                                <td>
+                                                                    <button onclick="editSanBongs()"
+                                                                            class="btn btn-warning"><span
+                                                                            class="fe fe-edit-3"></span></button>
+
+                                                                    <button onclick="deletedSanBong()"
+                                                                            class="btn btn-danger"><span
+                                                                            class="fe fe-trash-2"></span></button>
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+
+
+                                                    </div>
+                                                    <div class="col-md-8 mt-4">
+                                                        <style>
+                                                            .checkbox-label {
+                                                                display: flex;
+                                                                flex-wrap: wrap;
+                                                            }
+
+                                                            .checkbox-label .checkbox-item {
+                                                                margin-right: 20px; /* Khoảng cách giữa các checkbox */
+                                                            }
+                                                        </style>
+                                                        <div class="col-md-12 ">
+                                                            <div class="card shadow">
+                                                                <div class="card-body">
+                                                                    <div class="mt-3">
+                                                                        <!-- Thêm idNgayTrongTuan vào bảng SanCa -->
+                                                                        <form id="formAddNgayTrongTuan">
+                                                                            <input type="hidden" name="id" value="1"
+                                                                                   id="addId">
+                                                                            <h8 class="card-title">Chọn ngày:</h8>
+                                                                            <div class="checkbox-label">
+                                                                                <div class="checkbox-label">
+                                                                                    <div th:each="ntt : ${listNTT}"
+                                                                                         class="checkbox-item">
+                                                                                        <input class="m-2 dayCheckbox"
+                                                                                               type="checkbox"
+                                                                                               th:value="${ntt.id}"
+                                                                                               id="dayCheckbox-${ntt.id}"
+                                                                                               name="days">
+                                                                                        <label th:for="'dayCheckbox-' + ${ntt.id}"
+                                                                                               th:text="${ntt.thuTrongTuan}"></label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group col-md-6">
+                                                                                <button type="button"
+                                                                                        class="btn btn-primary btn-sm"
+                                                                                        onclick="displaySelectedDays()">
+                                                                                    Thêm ngày
+                                                                                </button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+
+                                                                    <div class="mt-3">
+                                                                        <p>Thứ được chọn sẽ thêm vào đây: <span
+                                                                                id="selectedDays"
+                                                                                class="form-control"></span></p>
+                                                                    </div>
+                                                                    <div class="mt-3">
+                                                                        <label>Sân bóng được chọn: <input type="text"
+                                                                                                          name="tenSanBong"
+                                                                                                          id="selectedSanBong"></label>
+                                                                    </div>
+                                                                    <hr>
+
+                                                                    <form id="formSanCa" style="display: none;">
+                                                                        <div class="mt-3">
+                                                                            <label>Chọn ca</label>
+                                                                            <select id="idCaSelect" name="idCa"
+                                                                                    class="form-select">
+                                                                                <option th:each="ca: ${listC}"
+                                                                                        th:value="${ca.id}"
+                                                                                        th:text="${ca.tenCa}"></option>
+                                                                            </select>
+
+                                                                        </div>
+                                                                        <div class="mt-3">
+                                                                            <label>Giá</label>
+                                                                            <input type="text" name="gia"
+                                                                                   class="form-control">
+                                                                        </div>
+
+                                                                        <!-- Thêm các input hidden để lưu idSanBong và idNgayTrongTuan -->
+                                                                        <input type="hidden" name="idSanBong"
+                                                                               id="selectedSanBongId">
+                                                                        <input type="hidden" name="idNgayTrongTuan"
+                                                                               id="selectedDaysIds">
+
+                                                                        <div class="mt-3">
+                                                                            <button type="submit"
+                                                                                    onclick="submitSanCa()"
+                                                                                    class="btn btn-success"> Thêm sân ca
+                                                                            </button>
+                                                                        </div>
+                                                                    </form>
+
+                                                                </div>
+                                                                <button onclick="deleteTabActive()"
+                                                                        class="btn btn-success ">Xoá tab hiện tại
+                                                                </button>
+                                                            </div>
+                                                        </div><!--   Tab content 1-->
+                                                    </div>
+                                                    <!--   Tab content-->
+                                                </div>
+                                            </div>
+                                        </div><!--   Tab content 1-->
+                                    </div> <!--   Tab content-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- .container-fluid -->
+        <div th:include="fragment/modal :: modal"></div>
+    </main>
+</div>
+
+
+JavaScript
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+
+    function editSanBongs() {
+        $('button.btn-warning').on('click', function() {
+            var sanBongId = $(this).closest('tr').find('input[type="checkbox"]').val();
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/san-bong/' + sanBongId,
+                success: function(data) {
+                    $('#myModalEdit').modal('show');
+                    $('#editId').val(data.id);
+                    $('#editTenSanBong').val(data.tenSanBong);
+                    $('#editTrangThai').val(data.trangThai);
+                    $('#editLoaiSan').val(data.idLoaiSan);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching san bong data:', error);
+                }
+            });
+        });
+    }
+
+    function updateSanBong() {
+        const id = document.getElementById('editId').value;
+        const tenSanBong = document.getElementById('editTenSanBong').value;
+        const trangThai = document.getElementById('editTrangThai').value;
+        const idLoaiSan = document.getElementById('editLoaiSan').value;
+
+        const sanBong = {
+            tenSanBong: tenSanBong,
+            trangThai: trangThai,
+            idLoaiSan: idLoaiSan
+        };
+
+        fetch(`http://localhost:8080/san-bong/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(sanBong)
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Failed to update san bong');
+            })
+            .then(data => {
+                console.log('Update successful:', data);
+                refreshCurrentTab();
+                // Show success message or update the UI accordingly
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Show error message or handle error accordingly
+            });
+    }
+
+
+    // function updateSanBong() {
+    //     const id = document.getElementById('editId').value;
+    //     const tenSanBong = document.getElementById('editTenSanBong').value;
+    //     const trangThai = document.getElementById('editTrangThai').value;
+    //     const idLoaiSan = document.getElementById('editLoaiSan').value;
+    //
+    //     const sanBong = {
+    //         tenSanBong: tenSanBong,
+    //         trangThai: trangThai,
+    //         idLoaiSan: idLoaiSan
+    //     };
+    //
+    //     Swal.fire({
+    //         title: 'Xác nhận cập nhật',
+    //         text: "Bạn có chắc chắn muốn cập nhật sân bóng này?",
+    //         icon: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonColor: '#3085d6',
+    //         cancelButtonColor: '#d33',
+    //         confirmButtonText: 'Có, cập nhật!'
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             fetch(`http://localhost:8080/san-bong/${id}`, {
+    //                 method: 'PUT',
+    //                 headers: {
+    //                     'Content-Type': 'application/json'
+    //                 },
+    //                 body: JSON.stringify(sanBong)
+    //             })
+    //                 .then(response => {
+    //                     if (response.ok) {
+    //                         return response.json();
+    //                     }
+    //                     throw new Error('Failed to update san bong');
+    //                 })
+    //                 .then(data => {
+    //                     console.log('Update successful:', data);
+    //                     Swal.fire(
+    //                         'Thành công!',
+    //                         'Sân bóng đã được cập nhật.',
+    //                         'success'
+    //                     ).then(() => {
+    //                         // Thực hiện các hành động cần thiết sau khi cập nhật thành công
+    //                         location.reload(); // Ví dụ: reload trang để cập nhật giao diện
+    //                     });
+    //                 })
+    //                 .catch(error => {
+    //                     console.error('Error:', error);
+    //                     Swal.fire(
+    //                         'Lỗi!',
+    //                         'Cập nhật sân bóng thất bại.',
+    //                         'error'
+    //                     );
+    //                 });
+    //         }
+    //     });
+    // }
+
+
+
+    function deleteTabActive() {
+        Swal.fire({
+            title: 'Xoá tab hiện tại?',
+            text: 'Bạn chắc chắn muốn xoá tab này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xoá',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var activeTab = $('#loaiSanTab .nav-link.active');
+                var tabId = activeTab.attr('href').replace('#', ''); // Get the ID of the tab
+                var id = tabId.split('-')[1]; // Extract the ID from the tab ID (e.g. "loai-san-1" -> "1")
+
+                // Send DELETE request to API
+                $.ajax({
+                    type: 'DELETE',
+                    url: `http://localhost:8080/loai-san/${id}`,
+                    success: function () {
+                        $(`#${tabId}`).remove(); // Remove the tab content
+                        activeTab.remove(); // Remove the tab link
+                        Swal.fire('Tab đã được xoá!', '', 'success');
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1000);
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                        Swal.fire('Error', 'Xoá tab thất bại!', 'error');
+                    }
+                });
+            }
+        });
+
+
+    }
+
+    function deletedSanBong() {
+        $('tbody').on('click', '.btn-danger', function () {
+            var sanBongId = $(this).closest('tr').find('input[type="checkbox"]').val();
+            Swal.fire({
+                title: "Xóa bản ghi?",
+                text: "Bạn có chắc chắn muốn xóa bản ghi này?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Xóa",
+                cancelButtonText: "Hủy"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: "http://localhost:8080/san-bong/" + sanBongId,
+                        success: function () {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Thành công!",
+                                text: "Bản ghi đã được xóa thành công!"
+                            });
+                            // Bạn có thể reload bảng hoặc cập nhật giao diện tại đây
+                            refreshCurrentTab();
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Lỗi xóa bản ghi: " + error
+                            });
+                            refreshCurrentTab();
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    $(document).ready(function () {
+        // Khi DOM đã sẵn sàng
+        // Tìm tab đầu tiên và thêm lớp active vào tab đó
+        $('#loaiSanTab .nav-link').first().addClass('active');
+
+        // Hiển thị nội dung của tab đầu tiên
+        var firstTabContentId = $('#loaiSanTab .nav-link').first().attr('href');
+        $(firstTabContentId).addClass('show active');
+    });
+
+    $(document).ready(function () {
+        // Lắng nghe sự kiện khi chuyển tab
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+            let idLoaiSan = $(e.target).attr('href').replace('#loaiSan-', '');
+            $('#idLoaiSanInput').val(idLoaiSan);
+
+            // Gỡ bỏ sự kiện submit cũ và gắn sự kiện submit mới
+            $('form').off('submit').on('submit', submitSanBong);
+        });
+    });
+
+
+    // Định nghĩa hàm submitSanCa
+    function submitSanCa() {
+        $('form').off('submit').on('submit', function (event) {
+            // Ngăn chặn hành động mặc định của form (chẳng hạn như reload trang)
+            event.preventDefault();
+
+            var activeTab = $('#loaiSanTab .nav-link.active');
+            var formSanCa = $(activeTab.attr('href')).find('#formSanCa');
+
+            var idCa = formSanCa.find('select[name="idCa"]').val();
+            var gia = formSanCa.find('input[name="gia"]').val();
+
+            if (!idCa) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Đã xảy ra lỗi",
+                    text: "Vui lòng chọn Ca"
+
+                });
+                return;
+            }
+
+            if (!gia || isNaN(parseFloat(gia))) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Đã xảy ra lỗi",
+                    text: "Giá phải là một số"
+
+                });
+                return;
+            }
+
+
+            // Lấy giá trị idSanBong và idNgayTrongTuan từ các checkbox đã chọn
+            var idSanBong = $('input[name="sanBongIds"]:checked').val();
+            var idNgayTrongTuan = $('.dayCheckbox:checked').val();
+
+            // Tạo đối tượng dữ liệu để gửi lên API
+            var formData = {
+                idSanBong: parseInt(idSanBong),
+                idNgayTrongTuan: parseInt(idNgayTrongTuan),
+                idCa: parseInt(idCa),
+                gia: gia
+            };
+
+            // Gọi API POST
+            $.ajax({
+                url: 'http://localhost:8080/san-ca',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    // Xử lý thành công, ví dụ hiển thị thông báo
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Thêm sân ca thành công",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    clearFormSanCa(); // Hàm để làm sạch formSanCa sau khi thực hiện thành công
+                    $('#formSanCa').hide(); // Ẩn form sau khi thêm sân ca thành công
+                },
+                error: function (xhr, status, error) {
+                    // Xử lý lỗi, hiển thị thông báo lỗi
+                    console.error('Đã xảy ra lỗi khi thêm sân ca:', xhr.responseText);
+                    alert('Đã xảy ra lỗi khi thêm sân ca: ' + xhr.responseText);
+                }
+            });
+        });
+
+    }
+
+    // Hàm để làm sạch formSanCa sau khi thêm sân ca thành công
+    function clearFormSanCa() {
+        $('#formSanCa').trigger('reset'); // Reset form fields
+        $('#selectedSanBongId').val(''); // Reset idSanBong hidden input
+        $('#selectedDaysIds').val(''); // Reset idNgayTrongTuan hidden input
+    }
+
+
+    // Xử lý sự kiện submit của form
+    function submitSanBong() {
+
+        $('form').off('submit').on('submit', function (event) {
+            // Ngăn chặn hành động mặc định của form (chẳng hạn như reload trang)
+            event.preventDefault();
+
+            // Lấy dữ liệu từ các trường input trong form của tab hiện tại
+            var tenSanBong = $(this).find('#tenSanBong').val();
+            var idLoaiSan = $('#idLoaiSanInput').val(); // Đã được set từ tab đã chọn
+
+            if (!tenSanBong || tenSanBong.trim() === '') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Đã xảy ra lỗi",
+                    text: "Bạn vui lòng nhập tên sân bóng"
+
+                });
+                return; // Dừng hàm nếu không hợp lệ
+            }
+            // Tạo đối tượng dữ liệu để gửi lên API
+            var formData = {
+                tenSanBong: tenSanBong,
+                idLoaiSan: idLoaiSan
+            };
+
+            // Gọi API POST
+            $.ajax({
+                url: 'http://localhost:8080/san-bong',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    // Xử lý thành công, ví dụ hiển thị thông báo
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Thêm sân bóng thành công",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    // Sau khi thêm thành công, có thể làm gì đó khác, ví dụ như làm sạch form
+                    clearFormSanBong();
+
+                    // Hoặc cập nhật lại danh sách sân bóng của tab hiện tại
+                    refreshCurrentTab();
+                },
+                error: function (xhr, status, error) {
+                    // Xử lý lỗi, ví dụ hiển thị thông báo lỗi
+                    alert('Đã xảy ra lỗi khi thêm sân bóng: ' + xhr.responseText);
+                }
+            });
+        });
+
+        // Hàm dọn dẹp form sau khi thêm thành công
+        function clearFormSanBong() {
+            $('form').trigger('reset'); // Reset form fields
+        }
+
+    }
+
+    // Hàm cập nhật lại danh sách sân bóng của tab hiện tại
+    function refreshCurrentTab() {
+        var currentTab = $('ul.nav-tabs li a.active');
+        var tabContentId = currentTab.attr('href');
+        $(tabContentId).load(location.href + ' ' + tabContentId); // Load lại nội dung của tab
+    }
+
+
+    function displaySelectedDays() {
+        var selectedDays = [];
+        var activeTabHref = getActiveTabHref(); // Lấy href của tab đang active
+
+        // Lấy danh sách checkbox trong tab đang active
+        var checkboxes = document.querySelectorAll(activeTabHref + ' .dayCheckbox');
+        var atLeastOneChecked = false;
+
+        checkboxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                selectedDays.push(checkbox.nextElementSibling.textContent.trim());
+                atLeastOneChecked = true;
+            }
+        });
+
+        if (!atLeastOneChecked) {
+            Swal.fire({
+                icon: "error",
+                title: "Đã xảy ra lỗi",
+                text: "Vui lòng chọn ít nhất một ngày"
+            });
+            return; // Dừng hàm nếu không có checkbox nào được chọn
+        }
+
+        // Hiển thị nội dung của ngày được chọn trong tab đang active
+        $(activeTabHref).find('#selectedDays').text(selectedDays.join(', '));
+        $(activeTabHref).find('#formSanCa').css('display', 'block');
+    }
+
+
+    // Hàm để lấy href của tab đang active
+    function getActiveTabHref() {
+        var activeTab = document.querySelector('#loaiSanTab .nav-link.active');
+        return activeTab.getAttribute('href');
+    }
+
+
+    $(document).ready(function () {
+        // Đối tượng để lưu trữ các sân bóng được chọn
+        var selectedSanBongs = {};
+
+        // Xử lý sự kiện khi checkbox được click
+        $('.item-checkbox').click(function () {
+            var sanBongId = $(this).val();
+            var tenSanBong = $(this).attr('data-id');
+            var activeTabHref = $('#loaiSanTab .nav-link.active').attr('href');
+
+            // Cập nhật đối tượng lưu trữ
+            if ($(this).prop('checked')) {
+                if (!selectedSanBongs[activeTabHref]) {
+                    selectedSanBongs[activeTabHref] = {};
+                }
+                selectedSanBongs[activeTabHref][sanBongId] = tenSanBong;
+            } else {
+                if (selectedSanBongs[activeTabHref]) {
+                    delete selectedSanBongs[activeTabHref][sanBongId];
+                }
+            }
+
+            // Gọi hàm để cập nhật input text của tab đang active
+            updateSelectedSanBongs(activeTabHref);
+        });
+
+        // Hàm cập nhật input text của tab đang active
+        function updateSelectedSanBongs(activeTabHref) {
+            var selectedValues = selectedSanBongs[activeTabHref];
+
+            // Kiểm tra nếu selectedValues không tồn tại
+            if (!selectedValues) {
+                $(activeTabHref).find('#selectedSanBong').val('');
+                return;
+            }
+
+            var selectedSanBongsText = Object.values(selectedValues).join(', ');
+
+            // Hiển thị danh sách các sân bóng được chọn trong input text của tab đang active
+            $(activeTabHref).find('#selectedSanBong').val(selectedSanBongsText);
+        }
+
+        // Xử lý sự kiện khi chuyển tab
+        $('#loaiSanTab .nav-link').on('shown.bs.tab', function (e) {
+            var activeTabHref = $(this).attr('href');
+
+            // Gọi lại hàm để cập nhật input text của tab mới active
+            updateSelectedSanBongs(activeTabHref);
+        });
+    });
+
+
+    <!-- JavaScript để thêm tab mới -->
+    function addNewTab() {
+        // Lấy số lượng tab hiện tại
+        var tabCount = $('#loaiSanTab .nav-item').length;
+
+        // Tạo id mới cho tab và tab-pane tương ứng
+        var newTabId = 'tab-' + tabCount;
+        var newPaneId = 'loaiSan-' + tabCount;
+
+        // Tạo nội dung của tab mới
+        var newTab = '<li class="nav-item">' +
+            '<a class="nav-link" id="' + newTabId + '" ' +
+            'data-bs-toggle="tab" ' +
+            'href="#' + newPaneId + '" ' +
+            'role="tab" ' +
+            'aria-controls="' + newPaneId + '" ' +
+            'aria-selected="true">' +
+            '+ Thêm loại sân' +
+            '</a>' +
+            '</li>';
+
+        // Thay thế tab "+ Thêm loại sân" bằng tab mới
+        $('#addTab').parent().replaceWith(newTab);
+
+        // Tạo nội dung của tab-pane mới
+        var newTabPane = '<div class="tab-pane fade show active" ' +
+            'id="' + newPaneId + '" ' +
+            'role="tabpanel" ' +
+            'aria-labelledby="' + newTabId + '">' +
+            '<div class="row">' +
+            '<div class="col-md-4">' +
+            '<div class="mt-3">' +
+            '<form id="form-' + newTabId + '">' +
+            '<div class="form-row">' +
+            '<div class="form-group col-md-6">' +
+            '<label for="inputEmail4">Tên loại sân</label>' +
+            '<input type="text" class="form-control"' +
+            'id="inputLoaiSan" th:field="*{tenLoaiSan}"' +
+            'placeholder="Tên loại sân">' +
+            '</div>' +
+            '</div>' +
+            '<button type="submit" class="btn mb-2 btn-primary" onclick="addLoaiSanBong()">Thêm loại sân</button>' +
+            '</form>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+
+        // Thêm tab-pane mới vào nội dung các tab
+        $('#myTabContent').append(newTabPane);
+
+        // Kích hoạt tab mới
+        $('#' + newTabId).tab('show');
+    }
+
+    function addLoaiSanBong() {
+        // Lấy giá trị từ input
+        $('form').off('submit').on('submit', function (event) {
+            // Ngăn chặn hành động mặc định của form (chẳng hạn như reload trang)
+            event.preventDefault();
+            var tenLoaiSan = $('#inputLoaiSan').val();
+
+            if (!tenLoaiSan || tenLoaiSan.trim() === '') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Đã xảy ra lỗi",
+                    text: "Bạn vui lòng nhập tên loại sân bóng"
+
+                });
+                return; // Dừng hàm nếu không hợp lệ
+            }
+
+            // Tạo dữ liệu để gửi lên server
+            var data = {
+                tenLoaiSan: tenLoaiSan
+            };
+
+            // Gọi API POST
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8080/loai-san",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function (response) {
+                    $('#idLoaiSanInput').val(response.id);
+                    // Xử lý kết quả thành công (nếu cần)
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Thêm loại sân thành công ",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+
+                    var currentTab = $('ul.nav-tabs li a.active');
+                    var tabContentId = currentTab.attr('href');
+                    $(tabContentId).load(location.href + ' ' + tabContentId);
+                    reloadLoaiSanTabs();
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                    // Tùy chỉnh hành động sau khi thêm thành công, ví dụ: hiển thị thông báo, làm mới danh sách, vv.
+                },
+                error: function (err) {
+                    // Xử lý lỗi (nếu có)
+                    alert("Lỗi khi thêm loại sân", err.responseText);
+
+                    // Tùy chỉnh hành động khi xảy ra lỗi, ví dụ: hiển thị thông báo lỗi, vv.
+                }
+            });
+        });
+    }
+
+
+    // Hàm reload danh sách loại sân
+    function reloadLoaiSanTabs() {
+        // Gửi request GET để lấy danh sách loại sân từ server
+        $.get('http://localhost:8080/loai-san/hien-thi', function (data) {
+            // Xóa các tab hiện tại
+            $('#loaiSanTab .nav-item').not('#addTab').remove();
+
+            // Thêm lại các tab từ dữ liệu mới nhận được
+            $.each(data, function (index, loaiSan) {
+                var tabHtml = '<li class="nav-item">' +
+                    '<a class="nav-link" id="tab-' + loaiSan.id + '" ' +
+                    'data-bs-toggle="tab" ' +
+                    'href="#loaiSan-' + loaiSan.id + '" ' +
+                    'role="tab" ' +
+                    'aria-controls="loaiSan-' + loaiSan.id + '" ' +
+                    'aria-selected="' + (index === 0 ? 'true' : 'false') + '">' +
+                    loaiSan.tenLoaiSan +
+                    '</a>' +
+                    '</li>';
+                $('#loaiSanTab').append(tabHtml);
+            });
+
+            // Thêm tab thêm mới
+            $('#loaiSanTab').append('<li class="nav-item">' +
+                '<a class="nav-link" id="addTab" href="#" onclick="addNewTab()">+ Thêm loại sân</a>' +
+                '</li>');
+        });
+    }
+
+</script>
+
+
+</body>
+<div th:include="fragment/script :: script"></div>
+</html>

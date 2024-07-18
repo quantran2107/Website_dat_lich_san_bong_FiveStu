@@ -44,6 +44,7 @@ public class LoaiSanServiceImp implements LoaiSanService {
     @Override
     public LoaiSanDTO save(LoaiSanDTO loaiSanDTO) {
         LoaiSan loaiSan=modelMapper.map(loaiSanDTO,LoaiSan.class);
+        loaiSan.setDeletedAt(true);
         LoaiSan loaiSanSave=loaiSanRepository.save(loaiSan);
         return modelMapper.map(loaiSanSave,LoaiSanDTO.class);
     }
@@ -60,6 +61,8 @@ public class LoaiSanServiceImp implements LoaiSanService {
 
     @Override
     public void delete(Integer id) {
+        LoaiSan loaiSan=loaiSanRepository.findById(id).orElseThrow(()-> new ResourceNotfound("Không tồn tại ID loại sân bóng: "+id));
+        loaiSanRepository.deleteById(id);
     }
 
     @Override
