@@ -34,11 +34,22 @@
                         <div class="col-md-12">
                             <div class="card shadow">
                                 <div id="tableNhanVien" class="row">
-                                    <div class="col-8">
+                                    <div class="col">
                                         <div class="col" style="margin-top: 20px; display: flex">
                                             <h2>Danh sách nhân viên</h2>
-                                            <div class="col ml-auto" style="position: relative; left: 600px; top: 10px">
-                                                <button id="btnAdd" class="btn btn-success">Thêm nhân viên</button>
+                                            <div class="col ml-auto">
+                                                <button  style="float: right" id="btnAdd" class="btn btn-success"><i class="fas fa-user-plus add-user-icon"></i></button>
+                                                <div style="float: right">
+                                                    <input type="file"  name="file" accept=".xlsx, .xls" id="file" style="width: 0.1px;
+	                                                                                                height: 0.1px;
+	                                                                                                opacity: 0;
+	                                                                                                overflow: hidden;
+	                                                                                                position: absolute;
+	                                                                                                z-index: -1;"/>
+                                                    <div id="labelFile" style="background-color: #3ad29f; border-radius: 5px; margin-right: 10px">
+                                                        <label for="file"style="margin: 8px"><i class="fas fa-file-excel fa-lg"></i></label></div>
+                                                    <button id="btnSubmitFile" class="btn btn-success" style="display: none;">Gửi file</button>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="card-body">
@@ -108,48 +119,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-4">
-                                        <div class="form-container " style="margin-top: 50px">
-                                            <h4 class="text-center mb-4">Thông tin nhân viên</h4>
-
-                                            <!-- Avatar -->
-                                            <div class="text-center mb-3">
-                                                <img id="imageNVdetail" src=""
-                                                     style="border-radius: 50%;
-                                                            width: 250px;
-                                                            height: 250px;"
-                                                     alt="Avatar">
-                                            </div>
-
-                                            <!-- Tên nhân viên -->
-                                            <div class="form-group">
-                                                <label for="tenNhanViendetail">Tài khoản:</label>
-                                                <input type="text" class="form-control" id="tenNhanViendetail"
-                                                       readonly>
-                                            </div>
-
-                                            <!-- Mã nhân viên -->
-                                            <div class="form-group">
-                                                <label for="maNhanViendetail">Mã nhân viên:</label>
-                                                <input type="text" class="form-control" id="maNhanViendetail"
-                                                       readonly>
-                                            </div>
-
-                                            <!-- Ngày sinh -->
-                                            <div class="form-group">
-                                                <label for="ngaySinhdetail">Ngày sinh:</label>
-                                                <input type="text" class="form-control" id="ngaySinhdetail"
-                                                       readonly>
-                                            </div>
-
-                                            <!-- Ngày vào làm -->
-                                            <div class="form-group">
-                                                <label for="createAtdetail">Ngày vào làm:</label>
-                                                <input type="text" class="form-control" id="createAtdetail"
-                                                       readonly>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div id="formAdd" style="padding: 20px">
                                     <h3 style="text-align: center">Thêm mới nhân viên</h3>
@@ -183,11 +152,7 @@
                                                         <button id="btn-scan-qr" type="button" style="margin-left: 85%; margin-right: 0; " class="btn btn-success">
                                                             Quét CCCD<i style="margin-left: 5px" class="fas fa-qrcode"></i>
                                                         </button>
-                                                        <!--                                                        <button type="button" class="btn btn-primary" >-->
-                                                        <!--                                                            Quét QR Code-->
-                                                        <!--                                                        </button>-->
 
-                                                        <!-- Modal -->
                                                         <div class="modal" id="qrCodeModal" tabindex="-1" role="dialog">
                                                             <div class="modal-dialog" role="document">
                                                                 <div class="modal-content">
@@ -268,7 +233,7 @@
                                         </div>
                                         <!-- Các trường dữ liệu -->
 
-                                        <button style="margin-left: 90%" type="button" id="btnSubmitAdd" class="btn btn-primary">Thêm nhân viên</button>
+                                        <button style="float: right" type="button" id="btnSubmitAdd" class="btn btn-primary">Thêm nhân viên</button>
                                     </div>
                                 </div>
                                 <div id="formUpdate" style="padding: 20px">
@@ -299,8 +264,12 @@
                                             </div>
                                             <div class="col-8" >
 
-                                                <div class="row" style="margin-top: 100px; padding: 20px">
+                                                <div class="row" style="margin-top: 0px; padding: 20px">
                                                     <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label for="maNhanVienU"class="font-weight-bold"><span style="color: red;">*</span>Mã nhân viên:</label>
+                                                            <input type="text" class="form-control" id="maNhanVienU">
+                                                        </div>
                                                         <div class="form-group">
                                                             <label for="ngaySinhU"class="font-weight-bold"><span style="color: red;">*</span>Ngày sinh:</label>
                                                             <input type="date" class="form-control" id="ngaySinhU">
@@ -318,6 +287,14 @@
 
                                                     <div class="col-6">
                                                         <div class="form-group">
+                                                            <label for="tenNhanVienU"class="font-weight-bold"><span style="color: red;">*</span>Tài khoản:</label>
+                                                            <input type="text" class="form-control" id="tenNhanVienU">
+                                                        </div>
+                                                        <div class="form-group" style="margin-top: 28px">
+                                                            <label for="createAtU" class="font-weight-bold"><span style="color: red;">*</span>Ngày vào làm:</label>
+                                                            <input type="date" class="form-control" id="createAtU" required>
+                                                        </div>
+                                                        <div class="form-group">
                                                             <label class="font-weight-bold"><span style="color: red;">*</span>Giới tính:</label><br>
                                                             <div class="form-check form-check-inline">
                                                                 <input class="form-check-input" type="radio" name="gioiTinh" id="gioiTinhNamU" value="true" required>
@@ -328,10 +305,7 @@
                                                                 <label class="form-check-label" for="gioiTinhNuU">Nữ</label>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group" style="margin-top: 28px">
-                                                            <label for="diaChiU" class="font-weight-bold"><span style="color: red;">*</span>Địa chỉ cụ thể:</label>
-                                                            <input type="text" class="form-control" id="diaChiU" required>
-                                                        </div>
+
                                                         <div class="form-group">
                                                             <label class="font-weight-bold"><span style="color: red;">*</span>Trạng thái:</label><br>
                                                             <div class="form-check form-check-inline">
@@ -365,10 +339,17 @@
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <div class="row" style=" padding: 20px">
+                                                    <div class="form-group" style="margin-top: 28px">
+                                                        <label for="diaChiU" class="font-weight-bold"><span style="color: red;">*</span>Địa chỉ cụ thể:</label>
+                                                        <input type="text" class="form-control" id="diaChiU" required>
+                                                    </div>
+                                                </div>
 
                                             </div>
                                         </div>
-                                        <button class="btn btn-warning" type="button" id="btnSubmitUpdate">Lưu chỉnh sửa</button>
+                                        <button class="btn btn-warning" style="float: right" id="btnChangeUpdate">Chỉnh sửa</button>
+                                        <button class="btn btn-warning" style="float: right;display: none" type="button" id="btnSubmitUpdate" >Lưu chỉnh sửa</button>
                                     </div>
                                 </div>
                             </div>
@@ -378,14 +359,12 @@
                 </div>
             </div>
         </div>
+    </main>
 </div>
 </main>
 </div>
 <div th:include="fragment/script :: script"></div>
 <script src="/js/html5-qrcode.min.js"></script>
-<script>
-
-</script>
 <script th:src="@{/js/nhanvien.js}"></script>
 
 </body>

@@ -1,27 +1,40 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
+import com.example.DATN_WebFiveTus.entity.LichLamViec;
 import com.example.DATN_WebFiveTus.entity.NhanVien;
 import com.example.DATN_WebFiveTus.repository.NhanVienReposity;
 import com.example.DATN_WebFiveTus.service.NhanVienService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.modelmapper.ModelMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class NhanVienServiceImp implements NhanVienService {
 
     private NhanVienReposity nhanVienReposity;
@@ -36,7 +49,6 @@ public class NhanVienServiceImp implements NhanVienService {
     public NhanVienServiceImp(NhanVienReposity nhanVienReposity, ModelMapper modelMapper) {
         this.nhanVienReposity = nhanVienReposity;
         this.modelMapper = modelMapper;
-
     }
 
 
@@ -83,6 +95,85 @@ public class NhanVienServiceImp implements NhanVienService {
     public List<NhanVienDTO> getInactiveNV() {
         return nhanVienReposity.findAllInActive().stream().map((nhanVien) -> modelMapper
                 .map(nhanVien, NhanVienDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Boolean addMore(MultipartFile file) {
+        try {
+            InputStream inputStream = file.getInputStream();
+            Workbook workbook= new XSSFWorkbook(inputStream);
+
+            Sheet sheet = workbook.getSheetAt(0);
+            Iterator<Row> iterator = sheet.iterator();
+
+
+            int skipRows = 2;
+            for (int i = 0; i < skipRows; i++) {
+                if (iterator.hasNext()) {
+                    iterator.next();
+                }
+            }
+
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+            while (iterator.hasNext()) {
+                Row currentRow = iterator.next();
+                Cell firstCell = currentRow.getCell(1);
+                if (firstCell == null || firstCell.getCellType() == CellType.BLANK) {
+                    break; // Dừng vòng lặp nếu dòng không có dữ liệu
+                }
+                NhanVien nhanVien = createNhanVienFormRow(currentRow,dateFormatter);
+
+                if (nhanVien != null) {
+                    boolean checkMail = mailFunction(nhanVien);
+                    if (checkMail) {
+                        nhanVienReposity.save(nhanVien);
+                    }
+                }
+            }
+
+            workbook.close();
+
+
+            return true;
+        } catch (IOException e ){
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+    }
+
+    private NhanVien createNhanVienFormRow(Row row, DateTimeFormatter dateTimeFormatter) {
+        NhanVien nhanVien = new NhanVien();
+        try {
+            Cell cellTenNV = row.getCell(1);
+            Cell cellNgaySinh = row.getCell(2);
+            Cell cellGioiTinh = row.getCell(3);
+            Cell cellEmail = row.getCell(4);
+            Cell cellSDT = row.getCell(5);
+            Cell cellDc = row.getCell(6);
+            Cell cellTinh = row.getCell(7);
+            Cell cellHuyen = row.getCell(8);
+            Cell cellXa = row.getCell(9);
+
+            nhanVien.setHoTen(cellTenNV.getStringCellValue());
+            nhanVien.setNgaySinh(LocalDate.parse(cellNgaySinh.getStringCellValue(),dateTimeFormatter));
+            nhanVien.setGioiTinh(cellGioiTinh.getStringCellValue().equalsIgnoreCase("Nam")?true:false);
+            nhanVien.setEmail(cellEmail.getStringCellValue());
+            nhanVien.setSoDienThoai(cellSDT.getStringCellValue());
+
+            String diaChi = cellDc.getStringCellValue()+", "+cellTinh.getStringCellValue() +", "+cellHuyen.getStringCellValue()+", "+cellXa.getStringCellValue();
+
+            nhanVien.setDiaChi(diaChi);
+
+            nhanVien.setMaNhanVien(generateMaNV());
+            nhanVien.setTenNhanVien(generateTKNV(nhanVien.getHoTen()));
+            nhanVien.setMatKhau(generateMK(16));
+            nhanVien.setTrangThai("active");
+            return nhanVien;
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

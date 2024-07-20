@@ -17,6 +17,12 @@ public class NhanVienController {
     public String hienThi() {
         return "/list/nhan-vien/quan-ly-nhan-vien";
     }
+
+    @GetMapping("/test")
+    public String test() {
+        return "/list/nhan-vien/test";
+    }
 }
+
 
 

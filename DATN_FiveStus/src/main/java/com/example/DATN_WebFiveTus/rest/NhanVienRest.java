@@ -6,6 +6,7 @@ import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -44,5 +45,11 @@ public class NhanVienRest {
     public ResponseEntity<Boolean> add(@RequestBody NhanVienDTO nv) throws MessagingException {
         return ResponseEntity.ok(nhanVienService.addNew(nv));
     }
-
+    @PostMapping("upload")
+    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file){
+        if(file.isEmpty()){
+            return ResponseEntity.ok(false);
+        }
+        return ResponseEntity.ok(nhanVienService.addMore(file));
+    }
 }

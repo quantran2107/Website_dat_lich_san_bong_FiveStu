@@ -38,4 +38,6 @@ public class NhanVienDTO {
     private String diaChi;
 
     private String trangThai;
+
+
 }

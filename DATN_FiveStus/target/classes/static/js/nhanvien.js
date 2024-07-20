@@ -32,6 +32,67 @@ $(document).ready(function () {
         }).showToast();
     }
 
+
+    $('#file').on('change', function() {
+        let fileName = '';
+        let newFileName = $(this).val().split('\\').pop(); // Lấy tên file đã chọn mới
+
+        if (newFileName) { // Nếu có chọn file mới
+            fileName = newFileName; // Lưu tên file mới
+            $('#labelFile').html('<label for="file" style="margin: 15px">' + fileName + '</label>'); // Thay đổi nội dung của label
+            $('#btnSubmitFile').show(); // Hiển thị nút btn để gửi file
+        } else { // Nếu không chọn file mới
+            // Giữ nguyên file đã chọn trước đó, nếu có
+            if (fileName) {
+                $('#labelFile').html('<label for="file" style="margin: 15px">' + fileName + '</label>'); // Giữ nguyên nội dung của label
+                $('#btnSubmitFile').show(); // Hiển thị nút btn để gửi file
+            } else {
+                // Nếu không có file đã chọn trước đó, không làm gì cả
+            }
+        }
+    });
+
+    $('#btnSubmitFile').click(function() {
+        ajaxSubmitForm(); // Gọi hàm ajaxSubmitForm để gửi dữ liệu form
+    });
+
+    function ajaxSubmitForm() {
+        let form = new FormData();
+        let file = $('#file')[0].files[0]; // Lấy file từ input
+        form.append('file', file); // Thêm file vào FormData
+
+        // Vô hiệu hóa nút gửi
+        $('#btnSubmitFile').prop('disabled', true);
+
+        $.ajax({
+            type: 'POST',
+            enctype: 'multipart/form-data',
+            url: 'nhan-vien/upload', // Đường dẫn API xử lý upload file
+            data: form,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 1000000,
+
+            success: function(data, textStatus, jqXHR) {
+                showSuccessToast("Tải file lên thành công!")
+                $('#btnSubmitFile').hide();
+                $('#file').val(''); // Xóa giá trị của input file
+                $('#labelFile').html('<label for="file"style="margin: 8px"><i class="fas fa-file-excel fa-lg"></i></label>'); // Reset label
+                loadTable(apiGetAll, '', currentPage, recordsPerPage);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $('#btnSubmitFile').hide();
+                $('#file').val(''); // Xóa giá trị của input file
+                $('#labelFile').html('<label for="file"style="margin: 8px"><i class="fas fa-file-excel fa-lg"></i></label>'); // Reset label
+                showErrorToast("Tải file thất bại!")
+                $('#btnSubmitFile').prop('disabled', false); // Bật lại nút gửi
+            }
+        });
+    }
+
+
+
     // code Qr
     const btnScanQR = document.getElementById('btn-scan-qr');
 
@@ -193,14 +254,14 @@ $(document).ready(function () {
     loadTable(apiGetAll, '', currentPage, recordsPerPage);
     $(`#formAdd`).hide();
     $(`#formUpdate`).hide();
-    $('#imageNVdetail').attr('src', 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg');
+
 
     $('#qlnv').on('click', function() {
         $(`#tableNhanVien`).show()
         loadTable(apiGetAll, '', currentPage, recordsPerPage);
         $(`#formAdd`).hide();
         $(`#formUpdate`).hide();
-        $('#imageNVdetail').attr('src', 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg');
+
     });
 
 
@@ -230,35 +291,7 @@ $(document).ready(function () {
         loadTable(apiGetAll, keysearch, currentPage, recordsPerPage); // Gọi lại hàm loadTable với từ khóa tìm kiếm
     });
 
-    // Hàm click table row -> hiển thị form
-    $(document).off('click').on('click', '#eyeButton', function () {
 
-        let employee = $(this).data('employee');
-        $(`#createAtdetail`).val(new Date(employee["createdAt"]).toLocaleDateString());
-        $(`#maNhanViendetail`).val(employee["maNhanVien"]);
-        $(`#tenNhanViendetail`).val(employee["tenNhanVien"]);
-        if (employee["ngaySinh"] == null) {
-            $(`#ngaySinhdetail`).val("Chưa cập nhật ngày sinh");
-        } else {
-            let ngaySinhRaw = employee["ngaySinh"];
-            let parts = ngaySinhRaw.split('-');
-
-            let ngay = parts[2];
-            let thang = parts[1];
-            let nam = parts[0];
-
-            // Định dạng lại theo dd/MM/yyyy
-            let ngaySinhFormatted = ngay + '/' + thang + '/' + nam;
-
-            // Gán giá trị vào trường input
-            $('#ngaySinhdetail').val(ngaySinhFormatted);
-        }
-        if (employee["imageNV"]) {
-            $('#imageNVdetail').attr('src', 'data:image/jpeg;base64,' + employee["imageNV"]);
-        } else {
-            $('#imageNVdetail').attr('src', 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg');
-        }
-    });
 
     // Hàm loadTable với phân trang và chức năng prev, next
     function loadTable(api, keysearch = '', page, limit) {
@@ -298,8 +331,7 @@ $(document).ready(function () {
                                     ${employee.trangThai == "active" ? "Hoạt động" : "Đã nghỉ"}
                             </td>
                             <td><button class="btn btn-warning action-button" data-employee='${JSON.stringify(employee)}'><i class="fas fa-edit edit-icon"></i></button>
-                                <button id="eyeButton" class="btn btn-success" data-employee='${JSON.stringify(employee)}'><i class="fa fa-eye"></i></button></td>
-                        </tr>`;
+                          </tr>`;
             });
 
             // Hiển thị dữ liệu vào tbody
@@ -598,6 +630,12 @@ $(document).ready(function () {
 
         $(`#hoTenU`).val(nhanV["hoTen"]);
         $(`#ngaySinhU`).val(nhanV["ngaySinh"]);
+        $(`#createAtU`).val(nhanV["createdAt"]);
+        console.log(nhanV["createdAt"])
+        console.log(nhanV["ngaySinh"])
+        $(`#tenNhanVienU`).val(nhanV["tenNhanVien"]);
+        $(`#maNhanVienU`).val(nhanV["maNhanVien"]);
+
         $(`#emailU`).val(nhanV["email"]);
         $(`#soDienThoaiU`).val(nhanV["soDienThoai"]);
         if (nhanV["gioiTinh"]){
@@ -673,6 +711,21 @@ $(document).ready(function () {
             }).prop('selected', true);
 
         });
+
+        $('#formUpdate').find('input').prop('disabled', true);
+        $('#tinhU').prop('disabled',true);
+        $('#huyenU').prop('disabled',true);
+        $('#xaU').prop('disabled',true);
+
+        $('#btnChangeUpdate').off('click').click(function () {
+            $('#formUpdate').find('input').prop('disabled', false);
+            $('#btnSubmitUpdate').show();
+            $('#tinhU').prop('disabled',false);
+            $('#huyenU').prop('disabled',false);
+            $('#xaU').prop('disabled',false);
+            $(this).hide();
+        });
+
 
         $('#btnSubmitUpdate').off('click').on('click', function () {
             const tinh = $('#tinhU option:selected').text();
