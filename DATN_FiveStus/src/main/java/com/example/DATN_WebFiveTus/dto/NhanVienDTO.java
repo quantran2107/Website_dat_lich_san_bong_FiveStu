@@ -2,6 +2,9 @@ package com.example.DATN_WebFiveTus.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -22,6 +25,12 @@ public class NhanVienDTO {
 
     private String email;
 
+    private LocalDate ngaySinh;
+
+    private LocalDateTime createdAt;
+
+    private byte[] imageNV;
+
     private Boolean gioiTinh;
 
     private String soDienThoai;
@@ -29,4 +38,6 @@ public class NhanVienDTO {
     private String diaChi;
 
     private String trangThai;
+
+
 }
