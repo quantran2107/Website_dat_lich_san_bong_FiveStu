@@ -41,5 +41,6 @@ public class PhieuGiamGiaChiTietDTO {
 
     private Date ngayKetThucPhieuGiamGia;
 
+    private Boolean deletedAt;
 
 }

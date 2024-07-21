@@ -1,6 +1,5 @@
 package com.example.DATN_WebFiveTus.repository;
 
-import com.example.DATN_WebFiveTus.entity.HoaDon;
 import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +28,8 @@ public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, Inte
             @Param("doiTuongApDung") Boolean doiTuongApDung,
             @Param("hinhThucGiamGia") Boolean hinhThucGiamGia,
             @Param("trangThai") String trangThai,
-            @Param("ngayBatDau") Date ngayBatDau,
+            @Param("ngayBatDau") Date
+                    ngayBatDau,
             @Param("ngayKetThuc") Date ngayKetThuc,
             Pageable pageable);
 

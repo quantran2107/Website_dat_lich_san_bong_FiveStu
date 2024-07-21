@@ -45,6 +45,11 @@ public class EmailConfig {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.ssl.enable", isSSL);
         props.put("mail.smtp.from", email);
+        props.put("mail.smtp.connectiontimeout", "5000"); // 3 giây
+        props.put("mail.smtp.timeout", "5000"); // 3 giây
+        props.put("mail.smtp.writetimeout", "3000"); // 3 giây
+        props.put("mail.smtp.maxtotalconnections", "50"); // Tăng số kết nối song song
+        props.put("mail.smtp.poolsize", "50"); // Tăng kích thước pool kết nối
         props.put("mail.debug", "false"); // Có thể bỏ đi khi đã vào production
 
         return mailSender;

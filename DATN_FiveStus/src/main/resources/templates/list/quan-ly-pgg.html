@@ -17,15 +17,18 @@
                         <div class="card-body" id="tableCardBody1">
                             <div class="toolbar row mb-3 mt-3">
                                 <div class="col-md-12">
-                                    <form class="form-inline" id="filterForm">
+                                    <form class="form-inline" id="filterForm"
+                                          style="display: flex; justify-content: space-between; align-items: center;">
                                         <!-- Search -->
-                                        <div class="form-group col-auto" style="display: flex;">
-                                            <label class="sr-only" for="search">Tìm kiếm</label>
-                                            <input class="form-control mr-5" id="search"
+                                        <div class="form-group" style="flex-grow: 1;">
+                                            <label for="search">Tìm kiếm</label>
+                                            <input class="form-control ml-3 mr-5" id="search"
                                                    oninput="searchPGG(this.value)"
                                                    placeholder="Tìm kiếm theo mã hoặc tên" style="width: 400px;"
                                                    type="text">
-                                            <button class="btn btn-success ml-auto"
+                                        </div>
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <button class="btn btn-success"
                                                     onclick="showAddForm(this)"
                                                     type="button">Thêm
                                                 <span class="fe fe-plus"></span>
@@ -35,75 +38,78 @@
                                 </div>
 
                                 <div class="col-md-12 mt-4">
-                                    <form class="form-inline" id="filterDateForm">
-                                        <div class="form-row">
-                                            <div class="form-group col-auto" style="display: flex;">
-                                                <label for="searchStartDate">Từ</label>
-                                                <input class="form-control ml-3 mr-2" id="searchStartDate"
-                                                       style="width: 163px;"
-                                                       type="date">
-                                                <label for="searchEndDate">Đến</label>
-                                                <input class="form-control" id="searchEndDate"
-                                                       style="width: 163px; margin-left: 15px;"
-                                                       type="date">
-                                                <div class="dropdown ml-5">
-                                                    <button aria-expanded="false"
-                                                            aria-haspopup="true"
-                                                            class="btn btn-outline-success dropdown-toggle"
-                                                            data-toggle="dropdown" id="actionMenuButton1"
-                                                            type="button">Kiểu
-                                                    </button>
-                                                    <div aria-labelledby="actionMenuButton1" class="dropdown-menu">
-                                                        <a class="dropdown-item" href="#"
-                                                           onclick="setDoiTuongApDung(true)">Cá nhân</a>
-                                                        <a class="dropdown-item" href="#"
-                                                           onclick="setDoiTuongApDung(false)">Công khai</a>
-                                                    </div>
-                                                </div>
-                                                <div class="dropdown ml-3">
-                                                    <button aria-expanded="false"
-                                                            aria-haspopup="true"
-                                                            class="btn btn-outline-success dropdown-toggle"
-                                                            data-toggle="dropdown" id="actionMenuButton2"
-                                                            type="button">Loại
-                                                    </button>
-                                                    <div aria-labelledby="actionMenuButton2" class="dropdown-menu">
-                                                        <a class="dropdown-item" href="#"
-                                                           onclick="setHinhThucGiamGia(true)">Giảm theo %</a>
-                                                        <a class="dropdown-item" href="#"
-                                                           onclick="setHinhThucGiamGia(false)">Giảm theo VND</a>
-                                                    </div>
-                                                </div>
-                                                <div class="dropdown ml-3">
-                                                    <button aria-expanded="false"
-                                                            aria-haspopup="true"
-                                                            class="btn btn-outline-success dropdown-toggle"
-                                                            data-toggle="dropdown" id="actionMenuButton3"
-                                                            type="button">Trạng thái
-                                                    </button>
-                                                    <div aria-labelledby="actionMenuButton3" class="dropdown-menu"
-                                                         id="statusFilter">
-                                                        <a class="dropdown-item" href="#"
-                                                           onclick="setStatusFilter('Đã kết thúc')">Đã kết thúc</a>
-                                                        <a class="dropdown-item" href="#"
-                                                           onclick="setStatusFilter('Sắp diễn ra')">Sắp diễn ra</a>
-                                                        <a class="dropdown-item" href="#"
-                                                           onclick="setStatusFilter('Đang diễn ra')">Đang diễn ra</a>
-                                                    </div>
-                                                </div>
-                                                <button class="btn btn-outline-success ml-3" onclick="showAddForm(this)"
-                                                        type="button">Xuất Excel
-                                                    <span class="fe fe-file-text"></span>
+                                    <form class="form-inline" id="filterDateForm"
+                                          style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div class="form-group d-flex" style="flex-grow: 1;">
+                                            <label for="searchStartDate">Từ</label>
+                                            <input class="form-control ml-3 mr-3" id="searchStartDate"
+                                                   onchange="searchStartDate(this.value)"
+                                                   style="width: 163px;"
+                                                   type="date">
+                                            <label for="searchEndDate">Đến</label>
+                                            <input class="form-control" id="searchEndDate"
+                                                   onchange="searchEndDate(this.value)"
+                                                   style="width: 163px; margin-left: 15px;"
+                                                   type="date">
+                                            <div class="dropdown">
+                                                <button aria-expanded="false"
+                                                        aria-haspopup="true"
+                                                        class="btn btn-outline-success ml-3 mr-3 dropdown-toggle"
+                                                        data-toggle="dropdown" id="actionMenuButton1"
+                                                        type="button">Kiểu
                                                 </button>
-                                                <div class="form-group col-auto ml-3">
-                                                    <button class="btn btn-outline-info" onclick="resetFilters()"
-                                                            type="button">Reset
-                                                    </button>
+                                                <div aria-labelledby="actionMenuButton1" class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setDoiTuongApDung(true)">Cá nhân</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setDoiTuongApDung(false)">Công khai</a>
                                                 </div>
                                             </div>
+                                            <div class="dropdown mr-3">
+                                                <button aria-expanded="false"
+                                                        aria-haspopup="true"
+                                                        class="btn btn-outline-success dropdown-toggle"
+                                                        data-toggle="dropdown" id="actionMenuButton2"
+                                                        type="button">Loại
+                                                </button>
+                                                <div aria-labelledby="actionMenuButton2" class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setHinhThucGiamGia(true)">Giảm theo %</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setHinhThucGiamGia(false)">Giảm theo VND</a>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown mr-3">
+                                                <button aria-expanded="false"
+                                                        aria-haspopup="true"
+                                                        class="btn btn-outline-success dropdown-toggle"
+                                                        data-toggle="dropdown" id="actionMenuButton3"
+                                                        type="button">Trạng thái
+                                                </button>
+                                                <div aria-labelledby="actionMenuButton3" class="dropdown-menu"
+                                                     id="statusFilter">
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setStatusFilter('Đã kết thúc')">Đã kết thúc</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setStatusFilter('Sắp diễn ra')">Sắp diễn ra</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setStatusFilter('Đang diễn ra')">Đang diễn ra</a>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-outline-success mr-3" onclick="showAddForm(this)"
+                                                    type="button">Xuất Excel
+                                                <span class="fe fe-file-text"></span>
+                                            </button>
+                                        </div>
+                                        <div class="form-group d-flex gap-2">
+                                            <button class="btn btn-info" onclick="resetFilters()"
+                                                    type="button">Reset
+                                            </button>
                                         </div>
                                     </form>
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
@@ -270,15 +276,19 @@
         fetchDataAndRenderTable();
     }
 
-    function searchStartDate(startDate) {
-        currentSearchStartDate = startDate.trim() === "" ? null : startDate;
+    // Đảm bảo rằng các hàm không nằm trong một phạm vi đóng gói
+    window.searchStartDate = function (date) {
+        console.log("Start Date:", date);
+        currentSearchStartDate = date;
         fetchDataAndRenderTable();
     }
 
-    function searchEndDate(endDate) {
-        currentSearchEndDate = endDate.trim() === "" ? null : endDate;
+    window.searchEndDate = function (date) {
+        console.log("End Date:", date);
+        currentSearchEndDate = date;
         fetchDataAndRenderTable();
     }
+
 
     function setDoiTuongApDung(doiTuongApDung) {
         currentDoiTuongApDung = doiTuongApDung;
@@ -488,10 +498,10 @@
         <label for="maPhieuGiamGia" name="maPhieuGiamGia">Mã phiếu giảm giá</label>
         <input type="text" class="form-control" id="maPhieuGiamGia" placeholder="Nhập mã hoặc tự động tạo mã">
         </div>
-         <div class="form-group col-md-6">
+        <div class="form-group col-md-6">
         <label for="tenPhieuGiamGia" name="tenPhieuGiamGia">Tên phiếu giảm giá</label>
         <input type="text" class="form-control" id="tenPhieuGiamGia" placeholder="Tên">
-                    <span id="tenPhieuGiamGiaError" class="text-danger"></span>
+        <span id="tenPhieuGiamGiaError" class="text-danger"></span>
         </div>
         </div>
         <div class="form-row">
@@ -508,7 +518,7 @@
         </label>
         </span>
         </div>
-                    <span id="mucGiamError" class="text-danger"></span>
+        <span id="mucGiamError" class="text-danger"></span>
         </div>
         <div class="form-group col-md-6">
         <label for="giaTriToiDa">Giá trị tối đa</label>
@@ -516,7 +526,7 @@
         <input type="text" class="form-control" id="giaTriToiDa" placeholder="Giá trị tối đa">
         <span class="input-group-text">$</span>
         </div>
-                    <span id="giaTriToiDaError" class="text-danger"></span>
+        <span id="giaTriToiDaError" class="text-danger"></span>
         </div>
         </div>
         <div class="form-row">
@@ -526,7 +536,7 @@
         <input type="text" class="form-control" id="soLuong" placeholder="Số lượng">
         <span class="input-group-text">#</span>
         </div>
-                    <span id="soLuongError" class="text-danger"></span>
+        <span id="soLuongError" class="text-danger"></span>
         </div>
         <div class="form-group col-md-6">
         <label for="dieuKienSuDung">Điều kiện tối thiểu</label>
@@ -534,20 +544,20 @@
         <input type="text" class="form-control" id="dieuKienSuDung" placeholder="Điều kiện tối thiểu">
         <span class="input-group-text">$</span>
         </div>
-                    <span id="dieuKienSuDungError" class="text-danger"></span>
+        <span id="dieuKienSuDungError" class="text-danger"></span>
         </div>
         </div>
         <div class="form-row">
         <div class="form-group col-md-6">
         <label for="ngayBatDau">Ngày bắt đầu</label>
         <input type="date" class="form-control" id="ngayBatDau" placeholder="Ngày bắt đầu">
-                    <span id="ngayBatDauError" class="text-danger"></span>
+        <span id="ngayBatDauError" class="text-danger"></span>
 
         </div>
         <div class="form-group col-md-6">
         <label for="ngayKetThuc">Ngày kết thúc</label>
         <input type="date" class="form-control" id="ngayKetThuc" placeholder="Ngày kết thúc">
-                    <span id="ngayKetThucError" class="text-danger"></span>
+        <span id="ngayKetThucError" class="text-danger"></span>
 
         </div>
         </div>
@@ -587,9 +597,9 @@
         <th>Tên</th>
         <th>SDT</th>
         <th>Email</th>
-<th>
-<span id="khachHangError" class="text-danger"></span>
-</th>
+        <th>
+        <span id="khachHangError" class="text-danger"></span>
+        </th>
         </tr>
         </thead>
         <tbody id="khachHangTableBody">
@@ -849,6 +859,7 @@
             const selectedEmailsKhachHangs = selectedKhachHangs.map(khachHang => khachHang.email);
 
             const data = {
+                maPhieuGiamGia: document.getElementById('maPhieuGiamGia').value,
                 tenPhieuGiamGia: document.getElementById('tenPhieuGiamGia').value,
                 mucGiam: document.getElementById('mucGiam').value,
                 hinhThucGiamGia: getSelectedRadioValue('hinhThucGiamGia'),
@@ -992,9 +1003,12 @@
                 document.getElementById('giaTriToiDaError').innerText = 'Giá trị tối đa không được để trống';
                 isValid = false;
             }
-            if (!Number.isInteger(Number(soLuong)) || Number(soLuong) <= 0) {
-                document.getElementById('soLuongError').innerText = "Số lượng phải là số nguyên dương";
-                isValid = false;
+
+            if (soLuong !== "") { // Chỉ kiểm tra nếu không trống
+                if (!Number.isInteger(Number(soLuong)) || Number(soLuong) <= 0) {
+                    document.getElementById('soLuongError').innerText = "Số lượng phải là số nguyên dương";
+                    isValid = false;
+                }
             }
             if (!dieuKienSuDung) {
                 document.getElementById('dieuKienSuDungError').innerText = 'Điều kiện sử dụng không được để trống';
@@ -1014,7 +1028,10 @@
                 document.getElementById('ngayKetThucError').innerText = 'Ngày kết thúc phải sau ngày bắt đầu';
                 isValid = false;
             }
-            if (new Date(ngayBatDau) < new Date()) {
+            // Lấy ngày hiện tại và loại bỏ thời gian
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            if (new Date(ngayBatDau) < today) {
                 document.getElementById('ngayBatDauError').innerText = 'Ngày bắt đầu không được nhỏ hơn ngày hiện tại';
                 isValid = false;
             }
@@ -1039,87 +1056,101 @@
             // Xóa nội dung và đảm bảo rằng form vẫn nằm yên trong hàng
             tableBodyCard1.innerHTML = `
         <div class="toolbar row mb-3 mt-3">
-        <div class="col-md-12">
-        <form class="form-inline" id="filterForm">
-            <!-- Search -->
-        <div class="form-group col-auto" style="display: flex;">
-        <label class="sr-only" for="search">Tìm kiếm</label>
-        <input class="form-control mr-5" id="search"
-        oninput="searchPGG(this.value)"
-        placeholder="Tìm kiếm theo mã hoặc tên" style="width: 400px;"
-        type="text">
-        <button class="btn btn-success ml-auto"
-        onclick="showAddForm(this)"
-        type="button">Thêm
-        <span class="fe fe-plus"></span>
-        </button>
-        </div>
-        </form>
-        </div>
+                                <div class="col-md-12">
+                                    <form class="form-inline" id="filterForm"
+                                          style="display: flex; justify-content: space-between; align-items: center;">
+                                        <!-- Search -->
+                                        <div class="form-group" style="flex-grow: 1;">
+                                            <label for="search">Tìm kiếm</label>
+                                            <input class="form-control ml-3 mr-5" id="search"
+                                                   oninput="searchPGG(this.value)"
+                                                   placeholder="Tìm kiếm theo mã hoặc tên" style="width: 400px;"
+                                                   type="text">
+                                        </div>
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <button class="btn btn-success"
+                                                    onclick="showAddForm(this)"
+                                                    type="button">Thêm
+                                                <span class="fe fe-plus"></span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
 
-        <div class="col-md-12 mt-4">
-        <form class="form-inline" id="filterDateForm">
-        <div class="form-row">
-        <div class="form-group col-auto" style="display: flex;">
-        <label for="searchStartDate">Từ</label>
-        <input class="form-control ml-3 mr-2" id="searchStartDate"
-        style="width: 163px;"
-        type="date">
-        <label for="searchEndDate">Đến</label>
-        <input class="form-control" id="searchEndDate"
-        style="width: 163px; margin-left: 15px;"
-        type="date">
-        <div class="dropdown ml-5">
-        <button aria-expanded="false"
-        aria-haspopup="true"
-        class="btn btn-outline-success dropdown-toggle"
-        data-toggle="dropdown" id="actionMenuButton1"
-        type="button">Kiểu
-        </button>
-        <div aria-labelledby="actionMenuButton1" class="dropdown-menu">
-        <a class="dropdown-item" href="#" onclick="setDoiTuongApDung(true)">Cá nhân</a>
-        <a class="dropdown-item" href="#" onclick="setDoiTuongApDung(false)">Công khai</a>
-        </div>
-        </div>
-        <div class="dropdown ml-3">
-        <button aria-expanded="false"
-        aria-haspopup="true"
-        class="btn btn-outline-success dropdown-toggle"
-        data-toggle="dropdown" id="actionMenuButton2"
-        type="button">Loại
-        </button>
-        <div aria-labelledby="actionMenuButton2" class="dropdown-menu">
-        <a class="dropdown-item" href="#"  onclick="setHinhThucGiamGia(true)">Giảm theo %</a>
-        <a class="dropdown-item" href="#" onclick="setHinhThucGiamGia(false)">Giảm theo VND</a>
-        </div>
-        </div>
-        <div class="dropdown ml-3">
-        <button aria-expanded="false"
-        aria-haspopup="true"
-        class="btn btn-outline-success dropdown-toggle"
-        data-toggle="dropdown" id="actionMenuButton3"
-        type="button">Trạng thái
-        </button>
-        <div aria-labelledby="actionMenuButton3" class="dropdown-menu" id="statusFilter">
-        <a class="dropdown-item" href="#" onclick="setStatusFilter('Đã kết thúc')">Đã kết thúc</a>
-        <a class="dropdown-item" href="#" onclick="setStatusFilter('Sắp diễn ra')">Sắp diễn ra</a>
-        <a class="dropdown-item" href="#" onclick="setStatusFilter('Đang diễn ra')">Đang diễn ra</a>
-        </div>
-        </div>
-        <button class="btn btn-outline-success ml-3" onclick="showAddForm(this)"
-        type="button">Xuất Excel
-        <span class="fe fe-file-text"></span>
-        </button>
-        <div class="form-group col-auto ml-3">
-        <button class="btn btn-outline-info" onclick="resetFilters()"
-        type="button">Reset
-        </button>
-        </div>
-        </div>
-        </div>
-        </form>
-        </div>
-        </div>
+                                <div class="col-md-12 mt-4">
+                                    <form class="form-inline" id="filterDateForm"
+                                          style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div class="form-group d-flex" style="flex-grow: 1;">
+                                            <label for="searchStartDate">Từ</label>
+                                            <input class="form-control ml-3 mr-3" id="searchStartDate"
+                                                   onchange="searchStartDate(this.value)"
+                                                   style="width: 163px;"
+                                                   type="date">
+                                            <label for="searchEndDate">Đến</label>
+                                            <input class="form-control" id="searchEndDate"
+                                                   onchange="searchEndDate(this.value)"
+                                                   style="width: 163px; margin-left: 15px;"
+                                                   type="date">
+                                            <div class="dropdown">
+                                                <button aria-expanded="false"
+                                                        aria-haspopup="true"
+                                                        class="btn btn-outline-success ml-3 mr-3 dropdown-toggle"
+                                                        data-toggle="dropdown" id="actionMenuButton1"
+                                                        type="button">Kiểu
+                                                </button>
+                                                <div aria-labelledby="actionMenuButton1" class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setDoiTuongApDung(true)">Cá nhân</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setDoiTuongApDung(false)">Công khai</a>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown mr-3">
+                                                <button aria-expanded="false"
+                                                        aria-haspopup="true"
+                                                        class="btn btn-outline-success dropdown-toggle"
+                                                        data-toggle="dropdown" id="actionMenuButton2"
+                                                        type="button">Loại
+                                                </button>
+                                                <div aria-labelledby="actionMenuButton2" class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setHinhThucGiamGia(true)">Giảm theo %</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setHinhThucGiamGia(false)">Giảm theo VND</a>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown mr-3">
+                                                <button aria-expanded="false"
+                                                        aria-haspopup="true"
+                                                        class="btn btn-outline-success dropdown-toggle"
+                                                        data-toggle="dropdown" id="actionMenuButton3"
+                                                        type="button">Trạng thái
+                                                </button>
+                                                <div aria-labelledby="actionMenuButton3" class="dropdown-menu"
+                                                     id="statusFilter">
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setStatusFilter('Đã kết thúc')">Đã kết thúc</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setStatusFilter('Sắp diễn ra')">Sắp diễn ra</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setStatusFilter('Đang diễn ra')">Đang diễn ra</a>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-outline-success mr-3" onclick="showAddForm(this)"
+                                                    type="button">Xuất Excel
+                                                <span class="fe fe-file-text"></span>
+                                            </button>
+                                        </div>
+                                        <div class="form-group d-flex gap-2">
+                                            <button class="btn btn-info" onclick="resetFilters()"
+                                                    type="button">Reset
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                            </div>
         `;
         }
 
@@ -1144,10 +1175,12 @@
         <div class="form-group col-md-6">
         <label for="maPhieuGiamGia" name="maPhieuGiamGia">Mã phiếu giảm giá</label>
         <input type="text" class="form-control" id="maPhieuGiamGia" >
+                    <span id="errorMaPhieuGiamGia" class="text-danger"></span>
         </div>
         <div class="form-group col-md-6">
         <label for="tenPhieuGiamGia" name="tenPhieuGiamGia">Tên phiếu giảm giá</label>
         <input type="text" class="form-control" id="tenPhieuGiamGia" placeholder="Tên">
+                    <span id="errorTenPhieuGiamGia" class="text-danger"></span>
         </div>
         </div>
         <div class="form-row">
@@ -1164,6 +1197,7 @@
         </label>
         </span>
         </div>
+                    <span id="errorMucGiam" class="text-danger"></span>
         </div>
         <div class="form-group col-md-6">
         <label for="giaTriToiDa">Giá trị tối đa</label>
@@ -1171,6 +1205,7 @@
         <input type="text" class="form-control" id="giaTriToiDa">
         <span class="input-group-text">$</span>
         </div>
+                    <span id="errorGiaTriToiDa" class="text-danger"></span>
         </div>
         </div>
         <div class="form-row">
@@ -1180,6 +1215,7 @@
         <input type="text" class="form-control" id="soLuong">
         <span class="input-group-text">#</span>
         </div>
+                    <span id="errorSoLuong" class="text-danger"></span>
         </div>
         <div class="form-group col-md-6">
         <label for="dieuKienSuDung">Điều kiện tối thiểu</label>
@@ -1187,16 +1223,19 @@
         <input type="text" class="form-control" id="dieuKienSuDung">
         <span class="input-group-text">$</span>
         </div>
+                    <span id="errorDieuKienSuDung" class="text-danger"></span>
         </div>
         </div>
         <div class="form-row">
         <div class="form-group col-md-6">
         <label for="ngayBatDau">Ngày bắt đầu</label>
         <input type="date" class="form-control" id="ngayBatDau" placeholder="Ngày bắt đầu">
+                    <span id="errorNgayBatDau" class="text-danger"></span>
         </div>
         <div class="form-group col-md-6">
         <label for="ngayKetThuc">Ngày kết thúc</label>
         <input type="date" class="form-control" id="ngayKetThuc" placeholder="Ngày kết thúc">
+                    <span id="errorNgayKetThuc" class="text-danger"></span>
         </div>
         </div>
         <div class="form-row">
@@ -1210,6 +1249,7 @@
         <label class="form-check-label" for="doiTuongTatCa">Công khai</label>
         </div>
         </div>
+                    <span id="errorDoiTuongApDung" class="text-danger"></span>
         </div>
         <div class="form-row">
         <div class="form-group col-md-12">
@@ -1234,6 +1274,7 @@
         <input class="form-control mr-5" id="searchKH"
         placeholder="Tìm kiếm theo mã, tên , sdt"
         type="text" style="margin-top: 33px;display: block; width: 450px" >
+        <span id="khachHangError" class="text-danger"></span>
         <table class="table" id="tableKhachHangContainer" style="display: block;">
         <thead>
         <tr>
@@ -1345,18 +1386,18 @@
                                     const khachHang = khachHangs[i];
                                     const row = document.createElement('tr');
                                     row.innerHTML = `
-        <td>
-        <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input item-checkbox" id="checkbox-${khachHang.id}" data-id="${khachHang.id}" ${checkedStatus[khachHang.id] ? 'checked' : ''}>
-        <label class="custom-control-label" for="checkbox-${khachHang.id}"></label>
-        </div>
-        </td>
-        <td id="idKhachHang" hidden>${khachHang.id}</td>
-        <td>${khachHang.maKhachHang}</td>
-        <td>${khachHang.hoVaTen}</td>
-        <td>${khachHang.soDienThoai}</td>
-        <td>${khachHang.email}</td>
-        `;
+                                        <td>
+                                        <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input item-checkbox" id="checkbox-${khachHang.id}" data-id="${khachHang.id}" ${checkedStatus[khachHang.id] ? 'checked' : ''}>
+                                        <label class="custom-control-label" for="checkbox-${khachHang.id}"></label>
+                                        </div>
+                                        </td>
+                                        <td id="idKhachHang" hidden>${khachHang.id}</td>
+                                        <td>${khachHang.maKhachHang}</td>
+                                        <td>${khachHang.hoVaTen}</td>
+                                        <td>${khachHang.soDienThoai}</td>
+                                        <td>${khachHang.email}</td>
+                                        `;
                                     row.addEventListener('click', () => {
                                         // Lưu idKhachHang khi người dùng chọn khách hàng
                                         const idKhachHangInput = document.getElementById('idKhachHang');
@@ -1422,6 +1463,7 @@
 
             //End pagnitation
 
+
             async function getSelectedIdKhachHangs() {
                 const doiTuongTatCa = document.getElementById('doiTuongTatCa');
                 if (doiTuongTatCa.checked) {
@@ -1444,6 +1486,8 @@
                 }
             }
 
+
+            // Ham check id khach hang chua ton tai de them moi
             async function checkChiTietPhieuGiamGia(idPhieuGiamGia, selectedIds) {
                 try {
                     const response = await fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pggct/${idPhieuGiamGia}`);
@@ -1473,78 +1517,258 @@
                 }
             }
 
+
+            // Hàm kiểm tra ID khách hàng đã tồn tại nhưng không có trong danh sách đã chọn
+            async function getNotSelectedIds(idPhieuGiamGia, selectedIds) {
+                try {
+                    // Lấy danh sách ID khách hàng đã tồn tại từ API
+                    const response = await fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pggct/${idPhieuGiamGia}`);
+                    if (!response.ok) {
+                        throw new Error('Lỗi khi lấy chi tiết phiếu giảm giá');
+                    }
+                    const existingData = await response.json();
+
+                    // Tạo tập hợp các ID khách hàng đã tồn tại từ dữ liệu nhận được từ API
+                    const existingIdsSet = new Set(existingData.map(chiTiet => chiTiet.idKhachHang.toString())); // Chuyển tất cả thành chuỗi
+
+                    // Chuyển selectedIds thành chuỗi để so sánh chính xác
+                    const selectedIdsSet = new Set(selectedIds.map(id => id.toString()));
+
+                    // Tạo một mảng để lưu các ID đã tồn tại nhưng không có trong selectedIds
+                    const notSelectedIds = Array.from(existingIdsSet).filter(idKhachHang => !selectedIdsSet.has(idKhachHang));
+
+                    console.log('Các ID khách hàng đã tồn tại nhưng đã bị bỏ chọn:', notSelectedIds);
+
+                    return notSelectedIds; // Trả về mảng các ID khách hàng đã tồn tại nhưng không có trong selectedIds
+                } catch (error) {
+                    console.error('Lỗi khi kiểm tra ID khách hàng đã tồn tại nhưng không có trong danh sách đã chọn:', error);
+                    return []; // Trả về mảng rỗng nếu có lỗi
+                }
+            }
+
+
             // Hàm cập nhật phiếu giảm giá và chi tiết
             document.getElementById('updateForm').addEventListener('submit', async function (event) {
-                    event.preventDefault();
-                    try {
-                        const selectedIdKhachHangs = await getSelectedIdKhachHangs(); // Lấy danh sách ID khách hàng đã chọn
-                        const dataUpdate = {
-                            id: document.getElementById('id').value,
-                            tenPhieuGiamGia: document.getElementById('tenPhieuGiamGia').value,
-                            maPhieuGiamGia: document.getElementById('maPhieuGiamGia').value,
-                            mucGiam: document.getElementById('mucGiam').value,
-                            giaTriToiDa: document.getElementById('giaTriToiDa').value,
-                            soLuong: document.getElementById('soLuong').value,
-                            dieuKienSuDung: document.getElementById('dieuKienSuDung').value,
-                            ngayBatDau: document.getElementById('ngayBatDau').value,
-                            ngayKetThuc: document.getElementById('ngayKetThuc').value,
-                            doiTuongApDung: document.querySelector('input[name="doiTuongApDung"]:checked').value === 'true',
-                            hinhThucGiamGia: document.querySelector('input[name="hinhThucGiamGia"]:checked').value === 'true',
-                            ghiChu: document.getElementById('ghiChu').value,
-                            deletedAt: document.getElementById('deletedAt').value,
-                            trangThai: document.getElementById('trangThai').value
-                        };
-
-                        // Gọi API để cập nhật phiếu giảm giá
-                        await fetch(`http://localhost:8080/api-phieu-giam-gia/${dataUpdate.id}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(dataUpdate),
-                        });
-
-
-                        // Gọi hàm kiểm tra chi tiết phiếu giảm giá với ID phiếu và danh sách ID khách hàng đã chọn
-                        const notFoundIds = await checkChiTietPhieuGiamGia(dataUpdate.id, selectedIdKhachHangs);
-
-                        if (notFoundIds.length > 0) {
-                            for (const idKhachHang of notFoundIds) {
-                                const chiTietData = {
-                                    idPhieuGiamGia: dataUpdate.id,
-                                    idKhachHang
+                event.preventDefault();
+                if (validateFormUpdate()) {
+                    Swal.fire({
+                        title: 'Xác nhận',
+                        text: 'Bạn chắc chắn muốn update phiếu giảm giá?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: 'Cancel'
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            try {
+                                const selectedIdKhachHangs = await getSelectedIdKhachHangs(); // Lấy danh sách ID khách hàng đã chọn
+                                const dataUpdate = {
+                                    id: document.getElementById('id').value,
+                                    tenPhieuGiamGia: document.getElementById('tenPhieuGiamGia').value,
+                                    maPhieuGiamGia: document.getElementById('maPhieuGiamGia').value,
+                                    mucGiam: document.getElementById('mucGiam').value,
+                                    giaTriToiDa: document.getElementById('giaTriToiDa').value,
+                                    soLuong: document.getElementById('soLuong').value,
+                                    dieuKienSuDung: document.getElementById('dieuKienSuDung').value,
+                                    ngayBatDau: document.getElementById('ngayBatDau').value,
+                                    ngayKetThuc: document.getElementById('ngayKetThuc').value,
+                                    doiTuongApDung: document.querySelector('input[name="doiTuongApDung"]:checked').value === 'true',
+                                    hinhThucGiamGia: document.querySelector('input[name="hinhThucGiamGia"]:checked').value === 'true',
+                                    ghiChu: document.getElementById('ghiChu').value,
+                                    deletedAt: document.getElementById('deletedAt').value,
+                                    trangThai: document.getElementById('trangThai').value
                                 };
 
-                                await fetch('http://localhost:8080/api-phieu-giam-gia-chi-tiet/save', {
-                                    method: 'POST',
+                                // Gọi API để cập nhật phiếu giảm giá
+                                const responseUpdate = await fetch(`http://localhost:8080/api-phieu-giam-gia/${dataUpdate.id}`, {
+                                    method: 'PUT',
                                     headers: {
                                         'Content-Type': 'application/json',
                                     },
-                                    body: JSON.stringify(chiTietData),
+                                    body: JSON.stringify(dataUpdate),
+                                });
+
+                                if (!responseUpdate.ok) {
+                                    const errorData = await responseUpdate.json();
+                                    throw new Error(`Error updating phiếu giảm giá: ${errorData.message}`);
+                                }
+
+                                // Gọi hàm kiểm tra chi tiết phiếu giảm giá với ID phiếu và danh sách ID khách hàng đã chọn
+                                const notFoundIds = await checkChiTietPhieuGiamGia(dataUpdate.id, selectedIdKhachHangs);
+                                const notSelectedIds = await getNotSelectedIds(dataUpdate.id, selectedIdKhachHangs);
+
+                                if (notFoundIds.length > 0) {
+                                    for (const idKhachHang of notFoundIds) {
+                                        const chiTietData = {
+                                            idPhieuGiamGia: dataUpdate.id,
+                                            idKhachHang
+                                        };
+
+                                        const responseSave = await fetch('http://localhost:8080/api-phieu-giam-gia-chi-tiet/save', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                            },
+                                            body: JSON.stringify(chiTietData),
+                                        });
+
+                                        if (!responseSave.ok) {
+                                            const errorData = await responseSave.json();
+                                            throw new Error(`Error saving chi tiết phiếu giảm giá: ${errorData.message}`);
+                                        }
+                                    }
+                                }
+
+                                // Xử lý các ID đã tồn tại nhưng bị bỏ chọn (cập nhật deletedAt = true)
+                                if (notSelectedIds.length > 0) {
+                                    for (const idKhachHang of notSelectedIds) {
+                                        await fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/${dataUpdate.id}/khach-hang/${idKhachHang}`, {
+                                            method: 'PUT',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                            },
+                                            body: JSON.stringify(true), // Gửi giá trị boolean dưới dạng đối tượng JSON
+                                        });
+                                    }
+                                }
+
+                                // Xử lý các ID mới được chọn lại (cập nhật deletedAt = false)
+                                if (selectedIdKhachHangs.length > 0) {
+                                    for (const idKhachHang of selectedIdKhachHangs) {
+                                        await fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/${dataUpdate.id}/khach-hang/${idKhachHang}`, {
+                                            method: 'PUT',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                            },
+                                            body: JSON.stringify(false), // Gửi giá trị boolean dưới dạng đối tượng JSON
+                                        });
+
+                                    }
+                                }
+
+                                // Hiển thị thông báo khi cập nhật thành công
+                                Swal.fire({
+                                    title: 'Updated Successfully',
+                                    text: 'Sửa thành công',
+                                    icon: 'success'
+                                });
+                                showSuccessToast('Sửa thành công');
+                                cancelAdd();
+                            } catch (error) {
+                                Swal.fire({
+                                    title: 'Lỗi',
+                                    text: `Có lỗi xảy ra: ${error.message}`,
+                                    icon: 'error'
                                 });
                             }
                         }
+                    }).catch(error => {
+                        console.error('Error in confirmation dialog:', error);
+                        Swal.fire({
+                            title: 'Lỗi',
+                            text: 'Có lỗi xảy ra khi xác nhận sửa phiếu giảm giá',
+                            icon: 'error'
+                        });
+                    });
+                }
+            });
 
-                        // Hiển thị thông báo khi cập nhật thành công
-                        Swal.fire({
-                            title: 'Updated Successfully',
-                            text: 'Sửa thành công',
-                            icon: 'success'
-                        });
-                        showSuccessToast('Sửa thành công');
-                        cancelAdd();
-                    } catch {
-                        Swal.fire({
-                            title: 'Updated Successfully',
-                            text: 'Sửa thành công',
-                            icon: 'success'
-                        });
-                        showSuccessToast('Sửa thành công');
-                        cancelAdd();
+
+            function validateFormUpdate() {
+                // Lấy các giá trị từ các trường input
+                const tenPhieuGiamGia = document.getElementById('tenPhieuGiamGia').value.trim();
+                const maPhieuGiamGia = document.getElementById('maPhieuGiamGia').value.trim();
+                const mucGiam = document.getElementById('mucGiam').value.trim();
+                const giaTriToiDa = document.getElementById('giaTriToiDa').value.trim();
+                const soLuong = document.getElementById('soLuong').value.trim();
+                const dieuKienSuDung = document.getElementById('dieuKienSuDung').value.trim();
+                const ngayBatDau = document.getElementById('ngayBatDau').value.trim();
+                const ngayKetThuc = document.getElementById('ngayKetThuc').value.trim();
+                const hinhThucGiamGiaVND = document.getElementById('hinhThucGiamGiaVND');
+                const hinhThucGiamGiaPercent = document.getElementById('hinhThucGiamGiaPercent');
+                const doiTuongCaNhan = document.getElementById('doiTuongCaNhan');
+                const tableKhachHangContainer = document.getElementById('tableKhachHangContainer');
+                const selectedCheckboxes = document.querySelectorAll('#tableKhachHangContainer input[type="checkbox"]:checked');
+
+
+                // Đặt lại thông báo lỗi
+                document.getElementById('errorMaPhieuGiamGia').innerText = '';
+                document.getElementById('errorTenPhieuGiamGia').innerText = '';
+                document.getElementById('errorMucGiam').innerText = '';
+                document.getElementById('errorGiaTriToiDa').innerText = '';
+                document.getElementById('errorSoLuong').innerText = '';
+                document.getElementById('errorDieuKienSuDung').innerText = '';
+                document.getElementById('errorNgayBatDau').innerText = '';
+                document.getElementById('errorNgayKetThuc').innerText = '';
+
+                let isValid = true;
+
+                // Kiểm tra các trường bắt buộc
+                const validRadio = hinhThucGiamGiaVND.checked || hinhThucGiamGiaPercent.checked;
+
+                if (!maPhieuGiamGia) {
+                    document.getElementById('errorMaPhieuGiamGia').innerText = 'Tên phiếu giảm giá không được để trống';
+                    isValid = false;
+                }
+                if (!tenPhieuGiamGia) {
+                    document.getElementById('errorTenPhieuGiamGia').innerText = 'Tên phiếu giảm giá không được để trống';
+                    isValid = false;
+                }
+                if (!validRadio) {
+                    document.getElementById('errorMucGiam').innerText = "Vui lòng chọn một hình thức giảm giá";
+                    isValid = false;
+                } else if (!mucGiam) {
+                    document.getElementById('errorMucGiam').innerText = 'Mức giảm không được để trống';
+                    isValid = false;
+                } else if (hinhThucGiamGiaPercent.checked && parseFloat(mucGiam) >= 100) {
+                    document.getElementById('errorMucGiam').innerText = "Mức giảm phải nhỏ hơn 100%";
+                    isValid = false;
+                }
+
+                if (hinhThucGiamGiaPercent.checked && !giaTriToiDa) {
+                    document.getElementById('errorGiaTriToiDa').innerText = 'Giá trị tối đa không được để trống';
+                    isValid = false;
+                }
+
+                if (soLuong !== "") { // Chỉ kiểm tra nếu không trống
+                    if (!Number.isInteger(Number(soLuong)) || Number(soLuong) <= 0) {
+                        document.getElementById('errorSoLuong').innerText = "Số lượng phải là số nguyên dương";
+                        isValid = false;
                     }
                 }
-            )
-            ;
+                if (!dieuKienSuDung) {
+                    document.getElementById('errorDieuKienSuDung').innerText = 'Điều kiện sử dụng không được để trống';
+                    isValid = false;
+                }
+                if (!ngayBatDau) {
+                    document.getElementById('errorNgayBatDau').innerText = 'Ngày bắt đầu không được để trống';
+                    isValid = false;
+                }
+                if (!ngayKetThuc) {
+                    document.getElementById('errorNgayKetThuc').innerText = 'Ngày kết thúc không được để trống';
+                    isValid = false;
+                }
+
+                // Kiểm tra nếu ngày bắt đầu lớn hơn ngày kết thúc
+                if (new Date(ngayBatDau) > new Date(ngayKetThuc)) {
+                    document.getElementById('errorNgayKetThuc').innerText = 'Ngày kết thúc phải sau ngày bắt đầu';
+                    isValid = false;
+                }
+                // Lấy ngày hiện tại và loại bỏ thời gian
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                if (new Date(ngayBatDau) < today) {
+                    document.getElementById('errorNgayBatDau').innerText = 'Ngày bắt đầu không được nhỏ hơn ngày hiện tại';
+                    isValid = false;
+                }
+
+                if (doiTuongCaNhan.checked && selectedCheckboxes.length === 0) {
+                    const khachHangError = document.getElementById('khachHangError');
+                    khachHangError.innerText = 'Vui lòng chọn ít nhất một khách hàng.';
+                    isValid = false;
+                }
+                return isValid;
+            }
         }
 
 </script>

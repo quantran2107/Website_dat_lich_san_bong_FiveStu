@@ -1,0 +1,5 @@
+{
+  "status": 400,
+  "message": "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; For input string: \"search-and-filter\"",
+  "timestamp": 1720531004039
+}

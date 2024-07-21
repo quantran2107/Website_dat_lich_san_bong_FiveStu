@@ -130,50 +130,5 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
         return new PageImpl<>(phieuGiamGiaDTOList, pageable, phieuGiamGiaRepository.count());
     }
 
-
-
-
-    //    @Override
-//    @Transactional
-//    public void delete(Integer id) {
-//        PhieuGiamGia entity = phieuGiamGiaRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu giảm giá với id " + id));
-//        entity.setDeletedAt(true); // Cập nhật trạng thái xóa mềm
-//        phieuGiamGiaRepository.save(entity);
-//    }
-//
-
-//
-//    @Override
-//    public void deleteMultiple(List<Integer> ids) {
-//        List<PhieuGiamGia> phieuGiamGiaList = phieuGiamGiaRepository.findAllById(ids);
-//        phieuGiamGiaList.stream()
-//                .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
-//                .collect(Collectors.toList()).forEach(phieuGiamGiaDTO -> phieuGiamGiaDTO.setDeletedAt(true));
-//        phieuGiamGiaRepository.saveAll(phieuGiamGiaList);
-//    }
-
-//    @Override
-//    public List<PhieuGiamGiaDTO> search(String query) {
-//        List<PhieuGiamGia> results = phieuGiamGiaRepository.searchByNameOrCode(query);
-//        return results.stream()
-//                .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
-//                .collect(Collectors.toList());
-//    }
-
-//    @Override
-//    public List<PhieuGiamGiaDTO> filter(String status) {
-//        if ("all".equals(status)) {
-//            return phieuGiamGiaRepository.findAll().stream()
-//                    .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
-//                    .collect(Collectors.toList());
-//        } else {
-//            boolean isActive = "true".equals(status);
-//            return phieuGiamGiaRepository.filterByStatus(isActive).stream()
-//                    .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
-//                    .collect(Collectors.toList());
-//        }
-//    }
-
 }
 

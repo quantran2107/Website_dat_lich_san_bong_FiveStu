@@ -111,8 +111,8 @@ public class PhieuGiamGiaRest {
             @RequestParam(required = false) Boolean doiTuongApDung,
             @RequestParam(required = false) Boolean hinhThucGiamGia,
             @RequestParam(required = false) String trangThai,
-            @RequestParam(required = false) Date ngayBatDau,
-            @RequestParam(required = false) Date ngayKetThuc,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") Date ngayBatDau,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") Date ngayKetThuc,
             @PageableDefault(page = 0, size = 10) Pageable pageable) {
 
         Page<PhieuGiamGiaDTO> phieuGiamGiaPage = phieuGiamGiaService.searchPhieuGiamGia(

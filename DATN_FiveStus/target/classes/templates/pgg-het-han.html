@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Thông Báo Phiếu Giảm Giá</title>
+    <title>Thông Báo Hết Hạn Phiếu Giảm Giá</title>
     <style>
         .container {
             margin: 0 auto;
@@ -14,7 +14,7 @@
             background-color: #f9f9f9;
         }
         .header {
-            background-color: #198754;
+            background-color: #dc3545;
             padding: 20px;
             text-align: center;
             border-top-left-radius: 5px;
@@ -23,6 +23,7 @@
         }
         .header h1 {
             margin: 0;
+            font-size: 24px;
         }
         .content {
             padding: 20px;
@@ -36,14 +37,14 @@
         }
         .button {
             color: #fff;
-            background-color: #198754;
+            background-color: #dc3545;
             padding: 10px 20px;
             text-decoration: none;
             border-radius: 5px;
             display: inline-block;
         }
         .button:hover {
-            background-color: #145c32;
+            background-color: #c82333;
         }
         table {
             width: 100%;
@@ -63,21 +64,18 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>Bạn có một phiếu giảm giá:
-            <br>
-            <span th:text="${ten}"></span></h1>
+        <h1>Thông Báo Hết Hạn Phiếu Giảm Giá</h1>
     </div>
     <div class="content">
-        <h2>Thông Báo Phiếu Giảm Giá</h2>
-        <p>Xin chào quý khách hàng thân yêu,</p>
-        <p>Sân bóng Five Stu gửi đến bạn một phiếu giảm giá đặc biệt.</p>
+        <p>Xin chào quý khách hàng thân mến,</p>
+        <p>Chúng tôi xin thông báo rằng phiếu giảm giá của bạn đã hết hạn.</p>
         <table>
             <tr>
-                <th>#</th>
                 <th>Chi Tiết</th>
+                <td><span th:text="${ten}"></span></td>
             </tr>
             <tr>
-                <td>Giảm</td>
+                <td>Mức Giảm</td>
                 <td><span th:text="${mucGiam}"></span> cho đơn hàng từ: <span th:text="${dieuKienToiThieu}"></span></td>
             </tr>
             <tr>
@@ -89,9 +87,9 @@
                 <td><span th:text="${ketThuc}"></span></td>
             </tr>
         </table>
-        <p>Hãy sử dụng phiếu giảm giá này khi bạn mua sắm trên trang web của chúng tôi để nhận được ưu đãi đặc biệt.</p>
-        <a th:href="@{http://localhost:8080/phieu-giam-gia}" class="button" style="color: #ccced0">Xem Chi Tiết</a>
-        <p>Cảm ơn bạn đã ủng hộ chúng tôi!</p>
+        <p>Rất tiếc vì sự bất tiện này. Nếu bạn có bất kỳ câu hỏi nào hoặc cần thêm thông tin, hãy liên hệ với chúng tôi.</p>
+        <a th:href="@{http://localhost:8080/phieu-giam-gia}" class="button">Xem Chi Tiết</a>
+        <p>Cảm ơn bạn đã ủng hộ và sử dụng dịch vụ của chúng tôi!</p>
     </div>
     <div class="footer">
         <p>Sân bóng Five Stu</p>

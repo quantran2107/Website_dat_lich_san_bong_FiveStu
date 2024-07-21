@@ -42,12 +42,10 @@ public class PhieuGiamGiaChiTietRest {
         return ResponseEntity.ok(savedPhieuGiamGiaCT);
     }
 
-
-
     @PutMapping("/{id}")
     public ResponseEntity<PhieuGiamGiaChiTietDTO> update(@PathVariable("id") Integer id, @RequestBody PhieuGiamGiaChiTietDTO phieuGiamGiaChiTietDTO) {
-        PhieuGiamGiaChiTietDTO savedPhieuGiamGiaCT = serviceImp.save(phieuGiamGiaChiTietDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedPhieuGiamGiaCT);
+        PhieuGiamGiaChiTietDTO savedPhieuGiamGiaCT = serviceImp.update(id, phieuGiamGiaChiTietDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(savedPhieuGiamGiaCT);
     }
 
     @GetMapping("/{id}")
@@ -60,6 +58,15 @@ public class PhieuGiamGiaChiTietRest {
     public ResponseEntity<List<PhieuGiamGiaChiTietDTO>> findAllPGGCT(@PathVariable("idPhieuGiamGia") Integer idPhieuGiamGia) {
         List<PhieuGiamGiaChiTietDTO> phieuGiamGiaChiTietList = serviceImp.findByIdPGG(idPhieuGiamGia);
         return ResponseEntity.ok(phieuGiamGiaChiTietList);
+    }
+
+    @PutMapping("/{id}/khach-hang/{idKhachHang}")
+    public ResponseEntity<Void> updateDeletedAt(
+            @PathVariable("id") Integer id,
+            @PathVariable("idKhachHang") Integer idKhachHang,
+            @RequestBody Boolean deletedAt) {
+        serviceImp.updateDeletedAt(id, idKhachHang, deletedAt);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
