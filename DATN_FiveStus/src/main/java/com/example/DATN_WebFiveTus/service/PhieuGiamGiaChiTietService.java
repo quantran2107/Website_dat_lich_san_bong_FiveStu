@@ -12,4 +12,5 @@ public interface PhieuGiamGiaChiTietService {
     PhieuGiamGiaChiTietDTO update(Integer id, PhieuGiamGiaChiTietDTO phieuGiamGiaChiTietDTO);
     PhieuGiamGiaChiTietDTO getOne(Integer id);
     List<PhieuGiamGiaChiTietDTO> findByIdPGG(Integer ids);
+    void updateDeletedAt(Integer id, Integer idKhachHang, Boolean deletedAt);
 }
