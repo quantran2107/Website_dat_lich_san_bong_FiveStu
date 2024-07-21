@@ -22,12 +22,4 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet,Int
             "JOIN FETCH hdct.hoaDon " +
             "JOIN FETCH hdct.sanCa WHERE hdct.hoaDon.id = :idHoaDon")
     List<HoaDonChiTiet> searchFromHoaDon(@Param("idHoaDon") Integer idHoaDon);
-
-    //Từ HDCT nối CTDVSB nối DVSB nối DoThue,NươcUong,phuPhu,phuPhiHD
-    // lấy: tenDoThue,tenNuocUong, donGiaDoThue,donGiaNuocUong, soLuong ở DVSB, giaPhuPhiHD,tenPhuPhi
-//    from HDCT// bảng chính
-
-//    @Query("SELECT ctdvsb  from ChiTietDichVuSanBong ctdvsb join  ctdvsb.hoaDonChiTiet hdct join ctdvsb.dichVuSanBong dvsb join dvsb.doThue dt join dvsb.nuocUong nu")
-//    List<HoaDonChiTiet> getAll();
-
 }

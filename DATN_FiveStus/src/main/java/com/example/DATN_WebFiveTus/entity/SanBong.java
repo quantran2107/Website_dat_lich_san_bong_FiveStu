@@ -41,8 +41,8 @@ public class SanBong {
     private String tenSanBong;
 
 
-    @Column(name="gia_san_bong")
-    private Float giaSanBong;
+//    @Column(name="gia_san_bong")
+//    private Float giaSanBong;
 
     @Column(name = "trang_thai", length = 50)
     private String trangThai;
