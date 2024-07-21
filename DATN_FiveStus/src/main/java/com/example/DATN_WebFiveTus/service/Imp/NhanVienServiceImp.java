@@ -1,33 +1,32 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
-import com.example.DATN_WebFiveTus.entity.LichLamViec;
 import com.example.DATN_WebFiveTus.entity.NhanVien;
 import com.example.DATN_WebFiveTus.repository.NhanVienReposity;
 import com.example.DATN_WebFiveTus.service.NhanVienService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.modelmapper.ModelMapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -228,7 +227,7 @@ public class NhanVienServiceImp implements NhanVienService {
 
         // Lấy từ cuối cùng làm họ chính (viết thường)
         String lastName = parts[parts.length - 1].toLowerCase();
-        lastName = StringUtils.stripAccents(lastName);
+//        lastName = StringUtils.stripAccents(lastName);
 
         // Lấy chữ cái đầu của các từ còn lại (không bao gồm từ cuối cùng) và viết thường
         StringBuilder initials = new StringBuilder();

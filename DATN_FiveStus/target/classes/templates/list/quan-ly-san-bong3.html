@@ -67,7 +67,7 @@
                                                                 <div class="form-group">
                                                                     <label for="tenSanBong">Tên sân bóng</label>
                                                                     <input type="text" class="form-control"
-                                                                           id="tenSanBong"
+                                                                           id="tenSanBong" name="tenSanBong"
                                                                            placeholder="Nhập tên sân bóng">
                                                                 </div>
                                                                 <input type="hidden" id="idLoaiSanInput"
@@ -141,7 +141,8 @@
                                                                                             class="btn mb-2 btn-secondary"
                                                                                             data-dismiss="modal">Close
                                                                                     </button>
-                                                                                    <button onclick="updateSanBong()" type="submit"
+                                                                                    <button onclick="updateSanBong()"
+                                                                                            type="submit"
                                                                                             class="btn mb-2 btn-primary">
                                                                                         Update
                                                                                     </button>
@@ -245,11 +246,11 @@
                                                                                 id="selectedDays"
                                                                                 class="form-control"></span></p>
                                                                     </div>
-                                                                    <div class="mt-3">
-                                                                        <label>Sân bóng được chọn: <input type="text"
-                                                                                                          name="tenSanBong"
-                                                                                                          id="selectedSanBong"></label>
-                                                                    </div>
+<!--                                                                    <div class="mt-3">-->
+<!--                                                                        <label>Sân bóng được chọn: <input type="text"-->
+<!--                                                                                                          name="tenSanBong"-->
+<!--                                                                                                          id="selectedSanBong"></label>-->
+<!--                                                                    </div>-->
                                                                     <hr>
 
                                                                     <form id="formSanCa" style="display: none;">
@@ -285,7 +286,7 @@
 
                                                                 </div>
                                                                 <button onclick="deleteTabActive()"
-                                                                        class="btn btn-success ">Xoá tab hiện tại
+                                                                        class="btn btn-warning">Xoá tab hiện tại
                                                                 </button>
                                                             </div>
                                                         </div><!--   Tab content 1-->
@@ -315,19 +316,19 @@ JavaScript
 <script>
 
     function editSanBongs() {
-        $('button.btn-warning').on('click', function() {
+        $('button.btn-warning').on('click', function () {
             var sanBongId = $(this).closest('tr').find('input[type="checkbox"]').val();
             $.ajax({
                 type: 'GET',
                 url: 'http://localhost:8080/san-bong/' + sanBongId,
-                success: function(data) {
+                success: function (data) {
                     $('#myModalEdit').modal('show');
                     $('#editId').val(data.id);
                     $('#editTenSanBong').val(data.tenSanBong);
                     $('#editTrangThai').val(data.trangThai);
                     $('#editLoaiSan').val(data.idLoaiSan);
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error('Error fetching san bong data:', error);
                 }
             });
@@ -369,66 +370,6 @@ JavaScript
                 // Show error message or handle error accordingly
             });
     }
-
-
-    // function updateSanBong() {
-    //     const id = document.getElementById('editId').value;
-    //     const tenSanBong = document.getElementById('editTenSanBong').value;
-    //     const trangThai = document.getElementById('editTrangThai').value;
-    //     const idLoaiSan = document.getElementById('editLoaiSan').value;
-    //
-    //     const sanBong = {
-    //         tenSanBong: tenSanBong,
-    //         trangThai: trangThai,
-    //         idLoaiSan: idLoaiSan
-    //     };
-    //
-    //     Swal.fire({
-    //         title: 'Xác nhận cập nhật',
-    //         text: "Bạn có chắc chắn muốn cập nhật sân bóng này?",
-    //         icon: 'warning',
-    //         showCancelButton: true,
-    //         confirmButtonColor: '#3085d6',
-    //         cancelButtonColor: '#d33',
-    //         confirmButtonText: 'Có, cập nhật!'
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-    //             fetch(`http://localhost:8080/san-bong/${id}`, {
-    //                 method: 'PUT',
-    //                 headers: {
-    //                     'Content-Type': 'application/json'
-    //                 },
-    //                 body: JSON.stringify(sanBong)
-    //             })
-    //                 .then(response => {
-    //                     if (response.ok) {
-    //                         return response.json();
-    //                     }
-    //                     throw new Error('Failed to update san bong');
-    //                 })
-    //                 .then(data => {
-    //                     console.log('Update successful:', data);
-    //                     Swal.fire(
-    //                         'Thành công!',
-    //                         'Sân bóng đã được cập nhật.',
-    //                         'success'
-    //                     ).then(() => {
-    //                         // Thực hiện các hành động cần thiết sau khi cập nhật thành công
-    //                         location.reload(); // Ví dụ: reload trang để cập nhật giao diện
-    //                     });
-    //                 })
-    //                 .catch(error => {
-    //                     console.error('Error:', error);
-    //                     Swal.fire(
-    //                         'Lỗi!',
-    //                         'Cập nhật sân bóng thất bại.',
-    //                         'error'
-    //                     );
-    //                 });
-    //         }
-    //     });
-    // }
-
 
 
     function deleteTabActive() {
@@ -507,14 +448,20 @@ JavaScript
         });
     }
 
+
     $(document).ready(function () {
         // Khi DOM đã sẵn sàng
         // Tìm tab đầu tiên và thêm lớp active vào tab đó
-        $('#loaiSanTab .nav-link').first().addClass('active');
+        var $firstTab = $('#loaiSanTab .nav-link').first();
+        $firstTab.addClass('active');
 
         // Hiển thị nội dung của tab đầu tiên
-        var firstTabContentId = $('#loaiSanTab .nav-link').first().attr('href');
+        var firstTabContentId = $firstTab.attr('href');
         $(firstTabContentId).addClass('show active');
+
+        // Lấy giá trị idLoaiSan của tab đầu tiên và thiết lập vào input
+        var idLoaiSan = firstTabContentId.replace('#loaiSan-', '');
+        $('#idLoaiSanInput').val(idLoaiSan);
     });
 
     $(document).ready(function () {
@@ -522,7 +469,7 @@ JavaScript
         $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
             let idLoaiSan = $(e.target).attr('href').replace('#loaiSan-', '');
             $('#idLoaiSanInput').val(idLoaiSan);
-
+            $('#tenSanBong').val('');
             // Gỡ bỏ sự kiện submit cũ và gắn sự kiện submit mới
             $('form').off('submit').on('submit', submitSanBong);
         });
@@ -583,7 +530,6 @@ JavaScript
                 success: function (response) {
                     // Xử lý thành công, ví dụ hiển thị thông báo
                     Swal.fire({
-                        position: "top-end",
                         icon: "success",
                         title: "Thêm sân ca thành công",
                         showConfirmButton: false,
@@ -609,13 +555,30 @@ JavaScript
         $('#selectedDaysIds').val(''); // Reset idNgayTrongTuan hidden input
     }
 
-
     // Xử lý sự kiện submit của form
     function submitSanBong() {
 
         $('form').off('submit').on('submit', function (event) {
             // Ngăn chặn hành động mặc định của form (chẳng hạn như reload trang)
             event.preventDefault();
+
+            function updateIdLoaiSanInput() {
+                // Lấy idLoaiSan của tab đang hoạt động
+                var activeTab = $('#loaiSanTab .nav-link.active');
+                var activeTabContentId = activeTab.attr('href');
+                var idLoaiSan = activeTabContentId.replace('#loaiSan-', '');
+                $('#idLoaiSanInput').val(idLoaiSan);
+            }
+
+            //
+            // // Cập nhật idLoaiSanInput cho tab đầu tiên khi trang được tải
+            updateIdLoaiSanInput();
+
+            // Lắng nghe sự kiện khi chuyển tab
+            $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+                // Cập nhật idLoaiSanInput khi chuyển tab
+                updateIdLoaiSanInput();
+            });
 
             // Lấy dữ liệu từ các trường input trong form của tab hiện tại
             var tenSanBong = $(this).find('#tenSanBong').val();
@@ -645,7 +608,6 @@ JavaScript
                 success: function (response) {
                     // Xử lý thành công, ví dụ hiển thị thông báo
                     Swal.fire({
-                        position: "top-end",
                         icon: "success",
                         title: "Thêm sân bóng thành công",
                         showConfirmButton: false,
@@ -856,7 +818,6 @@ JavaScript
                     $('#idLoaiSanInput').val(response.id);
                     // Xử lý kết quả thành công (nếu cần)
                     Swal.fire({
-                        position: "top-end",
                         icon: "success",
                         title: "Thêm loại sân thành công ",
                         showConfirmButton: false,
@@ -866,9 +827,12 @@ JavaScript
                     var currentTab = $('ul.nav-tabs li a.active');
                     var tabContentId = currentTab.attr('href');
                     $(tabContentId).load(location.href + ' ' + tabContentId);
-                    reloadLoaiSanTabs();
-                    setTimeout(function () {
-                        window.location.reload();
+                    // reloadLoaiSanTabs();
+                    // setTimeout(function () {
+                    //     window.location.reload();
+                    // }, 1000);
+                    setTimeout(function() {
+                        reloadLoaiSanTabs(response.id);
                     }, 1000);
                     // Tùy chỉnh hành động sau khi thêm thành công, ví dụ: hiển thị thông báo, làm mới danh sách, vv.
                 },
@@ -910,6 +874,9 @@ JavaScript
                 '<a class="nav-link" id="addTab" href="#" onclick="addNewTab()">+ Thêm loại sân</a>' +
                 '</li>');
         });
+
+        // Kích hoạt tab mới thêm
+        $('#tab-' + newTabId).tab('show');
     }
 
 </script>
