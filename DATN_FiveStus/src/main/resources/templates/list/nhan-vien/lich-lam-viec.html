@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/head :: head"></head>
+<body class="vertical light">
+<div class="wrapper">
+    <div th:include="fragment/navbar :: navbar"></div>
+    <div th:include="fragment/sidebar :: sidebar"></div>
+    <main role="main" class="main-content">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <h2 class="mb-2 page-title">Lịch làm việc</h2>
+                    <div style="display: flex;
+                        align-items: center;">
+                        <div style="margin:0 5px"><i class="fas fa-home"></i></div> <!-- Icon ngôi nhà -->
+                        <div style="margin:0 5px"><i class="fas fa-chevron-right"></i></div> <!-- Icon dấu lớn hơn -->
+                        <div id="qlnv" style="margin:0 5px;cursor: pointer;">
+                            <div>Lịch làm việc</div>
+                        </div>
+                        <div id="linkAdd" style="display: flex;
+                        align-items: center;cursor: default">
+                            <div style="margin:0 5px"><i class="fas fa-chevron-right"></i></div>
+                            <!-- Icon dấu lớn hơn -->
+                            <div style="margin:0 5px">Thêm mới</div>
+                        </div>
+                        <div id="linkUpdate" style="display: flex;
+                        align-items: center; cursor: default">
+                            <div style="margin:0 5px"><i class="fas fa-chevron-right"></i></div>
+                            <!-- Icon dấu lớn hơn -->
+                            <div style="margin:0 5px">Sửa đổi</div>
+                        </div>
+                    </div>
+                    <div class="row my-4">
+                        <div class="col-md-12">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <div id="tableLich">
+                                        <div class="col-12">
+                                            <div class="col" style="margin-top: 20px; display: flex">
+                                                <h2>Lịch làm việc </h2>
+                                                <div class="col ml-auto">
+                                                    <div style="float: right">
+                                                        <input type="file"  name="file" accept=".xlsx, .xls" id="file" style="width: 0.1px;
+	                                                                                                height: 0.1px;
+	                                                                                                opacity: 0;
+	                                                                                                overflow: hidden;
+	                                                                                                position: absolute;
+	                                                                                                z-index: -1;"/>
+                                                        <div id="labelFile" style="background-color: #3ad29f; border-radius: 5px"><label for="file"
+                                                        style="margin: 10px"><i class="fas fa-file-excel fa-lg"></i></label></div>
+                                                        <button id="btnSubmitFile" class="btn btn-success" style="display: none;">Gửi file</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+
+                                                <div class="toolbar row mb-3">
+                                                    <div class="col-md-8" style="display: flex;">
+                                                        <div class="col-md-6">
+                                                            <label for="date-input" class="form-label">Tìm theo
+                                                                ngày:</label>
+                                                            <input type="date" id="date-input" class="form-control">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="searchInput" style="font-weight: bold">Tìm kiếm
+                                                                theo
+                                                                mã, tên nhân viên
+                                                            </label>
+                                                            <form class="form-inline">
+                                                                <div class="form-row">
+                                                                    <div class="form-group col-auto">
+                                                                        <input style="width: 45vh" type="text"
+                                                                               class="form-control"
+                                                                               id="searchInput"
+                                                                               placeholder="Tìm kiếm theo tên nhân viên, mã nhân viên">
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label style="font-weight: bold">Tìm theo ca</label>
+                                                        <form class="form-inline">
+
+                                                            <div class="col-3">
+                                                                <div style="display: flex">
+                                                                    <input style="margin-right: 5px" type="radio"
+                                                                           name="status" value="" checked>
+                                                                    <div> Tất cả</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-5">
+                                                                <div style="display: flex">
+                                                                    <input style="margin-right: 5px" type="radio"
+                                                                           name="status" value="06:30:00">
+                                                                    <div>Ca sáng</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <div style="display: flex">
+                                                                    <input style="margin-right: 5px" type="radio"
+                                                                           name="status" value="12:30:00">
+                                                                    <div>Ca chiều</div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div id="tableContainer">
+                                                    <table class="table table-hover" style="text-align: center">
+                                                        <thead style="font-weight: bold; background-color: grey;color: white">
+                                                        <tr>
+                                                            <td>#</td>
+                                                            <td>Mã nhân viên</td>
+                                                            <td>Tên nhân viên</td>
+                                                            <td>Vị trí</td>
+                                                            <td>Ca làm</td>
+                                                            <td>Giờ bắt đầu</td>
+                                                            <td>Giờ kết thúc</td>
+                                                            <td>Ngày</td>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody id="tbodyContainer"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</main>
+</div>
+<div th:include="fragment/script :: script"></div>
+<script th:src="@{/js/lichLamViec.js}"></script>
+
+
+</body>
+</html>
