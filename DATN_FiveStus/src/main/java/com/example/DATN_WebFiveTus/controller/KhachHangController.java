@@ -2,60 +2,86 @@ package com.example.DATN_WebFiveTus.controller;
 
 import com.example.DATN_WebFiveTus.dto.DiaChiKhachHangDTO;
 import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
+import com.example.DATN_WebFiveTus.service.DiaChiKhachHangService;
 import com.example.DATN_WebFiveTus.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Controller
-@RequestMapping("/quan-ly-khach-hang")
 public class KhachHangController {
 
     @Autowired
     private KhachHangService khachHangService;
+    @Autowired
+    private DiaChiKhachHangService diaChiKhachHangService;
 
     @Autowired
     private RestTemplate restTemplate;
 
-    @GetMapping
-    public String hienThi(Model model) {
-        KhachHangDTO[] khachHangDTOs = restTemplate.getForObject(
-                "http://localhost:8080/khach-hang/hien-thi",
-                KhachHangDTO[].class);
-        DiaChiKhachHangDTO[] diaChiDTOs = restTemplate.getForObject(
-                "http://localhost:8080/dia-chi/hien-thi",
-                DiaChiKhachHangDTO[].class);
+    @GetMapping("/quan-ly-khach-hang")
+    public String hienThiKhachHang(Model model, @RequestParam(name = "page", defaultValue = "0") int page,
+                                   @RequestParam(name = "size", defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<KhachHangDTO> khachHangDTOS = khachHangService.getAll(pageable);
 
-        model.addAttribute("listKH", Arrays.asList(khachHangDTOs));
-        model.addAttribute("listDC", Arrays.asList(diaChiDTOs));
+        model.addAttribute("page", khachHangDTOS);
         model.addAttribute("khachHangDTO", new KhachHangDTO());
         model.addAttribute("diaChiDTO", new DiaChiKhachHangDTO());
 
         return "/list/quan-ly-khach-hang";
     }
 
-    @PostMapping("/them")
+
+    @PostMapping("/quan-ly-khach-hang/them")
     public String addKhachHang(@ModelAttribute KhachHangDTO khachHangDTO) {
         khachHangService.save(khachHangDTO);
         return "redirect:/quan-ly-khach-hang";
     }
 
-    @GetMapping("/detail")
-    public String detailKH(@RequestParam("id") Integer id, Model model) {
-        KhachHangDTO khachHangDTO = khachHangService.findById(id);
-        if (khachHangDTO != null) {
+    @GetMapping("/quan-ly-khach-hang-detail")
+    public String detailHTKH(@RequestParam(value = "id", required = false) Integer id,
+                             @RequestParam(value = "page", defaultValue = "0") int pageDiaChi,
+                             @RequestParam(value = "sizeDiaChi", defaultValue = "3") int sizeDiaChi,
+                             Model model) {
+        if (id != null) {
+            KhachHangDTO khachHangDTO = khachHangService.findById(id);
+            Pageable pageable = PageRequest.of(pageDiaChi, sizeDiaChi, Sort.by("createdAt").descending()); // Sử dụng pageDiaChi và sizeDiaChi từ request
+            Page<DiaChiKhachHangDTO> diaChiPage = diaChiKhachHangService.findByIdDC(id, pageable);
+            List<DiaChiKhachHangDTO> diaChiList = new ArrayList<>(diaChiPage.getContent());
+
+            if (diaChiList.isEmpty() && pageDiaChi > 0) {
+                return "redirect:/quan-ly-khach-hang-detail?id=" + id + "&page=" + (pageDiaChi - 1); // Sửa đổi thành pageDiaChi - 1
+            }
+
+//            Collections.reverse(diaChiList);
+
             model.addAttribute("khachHang", khachHangDTO);
-            return "/detail/khach-hang-detail";
-        } else {
-            return "redirect:/quan-ly-khach-hang";
+            model.addAttribute("diaChiList", diaChiList);
+            model.addAttribute("totalPages", diaChiPage.getTotalPages());
+            model.addAttribute("currentPage", pageDiaChi);
+            model.addAttribute("id", id); // Chỉ thêm id vào model nếu nó tồn tại
+            model.addAttribute("sizeDiaChi", sizeDiaChi); // Thêm size vào model để nó có thể truyền lại vào view
         }
+
+        return "list/quan-ly-dia-chi-khach-hang";
+    }
+
+    @PostMapping("/quan-ly-khach-hang/cap-nhat")
+    public String updateKH(@ModelAttribute KhachHangDTO khachHangDTO) {
+        khachHangService.update(khachHangDTO.getId(), khachHangDTO);
+        return "redirect:/quan-ly-khach-hang";
     }
 }
+
+
