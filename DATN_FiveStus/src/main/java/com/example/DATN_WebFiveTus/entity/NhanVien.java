@@ -1,10 +1,5 @@
 package com.example.DATN_WebFiveTus.entity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +9,7 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -47,8 +43,16 @@ public class NhanVien {
     @Column(name = "gioi_tinh", nullable = false, length = 100)
     private Boolean gioiTinh;
 
+    @Column(name = "ngay_sinh")
+    private LocalDate ngaySinh;
+
     @Column(name = "so_dien_thoai", nullable = false, length = 100)
     private String soDienThoai;
+
+    @Lob
+    @Column(name = "image_nv", columnDefinition = "LONGBLOB")
+    private byte[] imageNV;
+
 
     @Column(name = "dia_chi", nullable = false, length = 100)
     private String diaChi;

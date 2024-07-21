@@ -41,6 +41,8 @@ public class NgayTrongTuanServiceImp implements NgayTrongTuanService {
     @Override
     public NgayTrongTuanDTO save(NgayTrongTuanDTO ngayTrongTuanDTO) {
         NgayTrongTuan ngayTrongTuan=modelMapper.map(ngayTrongTuanDTO,NgayTrongTuan.class);
+        ngayTrongTuan.setTrangThai("Đang sử dụng");
+        ngayTrongTuan.setDeletedAt(true);
         NgayTrongTuan ngayTrongTuanSave=ngayTrongTuanRepository.save(ngayTrongTuan);
         return modelMapper.map(ngayTrongTuanSave,NgayTrongTuanDTO.class);
     }

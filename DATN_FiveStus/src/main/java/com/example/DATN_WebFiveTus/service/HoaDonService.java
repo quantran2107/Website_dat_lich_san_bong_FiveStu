@@ -26,6 +26,10 @@ public interface HoaDonService {
 
     void deletedAt(Integer id);
 
-    List<HoaDonDTO> searchHD(@Param("key") String key);
-
+    Page<HoaDonDTO> searchAndFilter(@Param("loai") Boolean loai,
+                                    @Param("trangThai") String trangThai,
+                                    @Param("keyword") String keyword,
+                                    @Param("tongTienMin") Float tongTienMin,
+                                    @Param("tongTienMax") Float tongTienMax,
+                                    Pageable pageable);
 }

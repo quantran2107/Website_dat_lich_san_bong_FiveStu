@@ -25,6 +25,8 @@ public class HoaDonDTO {
 
     private String tenNhanVien;
 
+    private String maNhanVien;
+
     private Integer idPhieuGiamGia;
 
     private Integer idKhachHang;
@@ -32,6 +34,10 @@ public class HoaDonDTO {
     private String maHoaDon;
 
     private String hoVaTenKhachHang;
+
+    private String soDienThoaiKhachHang;
+
+    private Boolean loai;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date ngayTao;
@@ -48,10 +54,10 @@ public class HoaDonDTO {
 
     private String trangThai;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date ngayDenSan;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date ngayThanhToan;
 
 }

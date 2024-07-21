@@ -19,7 +19,7 @@ import lombok.ToString;
 @Builder
 public class NgayTrongTuanDTO {
 
-    private int id;
+    private Integer id;
 
     private String thuTrongTuan;
 

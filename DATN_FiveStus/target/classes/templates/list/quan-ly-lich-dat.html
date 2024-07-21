@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/head :: head">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css">
+</head>
+<body class="vertical light">
+<div class="wrapper">
+    <div th:include="fragment/navbar :: navbar"></div>
+    <div th:include="fragment/sidebar :: sidebar"></div>
+    <main role="main" class="main-content">
+        <!-- Nội dung chính sẽ được thêm vào bằng JavaScript -->
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="row align-items-center my-3">
+                        <div class="col">
+                            <h2 class="mb-2 page-title">Quản lý lịch đặt sân</h2>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target=".modal-calendar"><span class="fe fe-filter fe-16 text-muted"></span></button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal"><span class="fe fe-plus fe-16 mr-3"></span>New Event</button>
+                        </div>
+                    </div>
+                    <div id='calendar'></div>
+                    <!-- new event modal -->
+                    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="varyModalLabel">New Event</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body p-4">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="eventTitle" class="col-form-label">Title</label>
+                                            <input type="text" class="form-control" id="eventTitle" placeholder="Add event title">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="eventNote" class="col-form-label">Note</label>
+                                            <textarea class="form-control" id="eventNote" placeholder="Add some note for your event"></textarea>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-8">
+                                                <label for="eventType">Event type</label>
+                                                <select id="eventType" class="form-control select2">
+                                                    <option value="work">Work</option>
+                                                    <option value="home">Home</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="date-input1">Start Date</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text" id="button-addon-date"><span class="fe fe-calendar fe-16"></span></div>
+                                                    </div>
+                                                    <input type="text" class="form-control drgpicker" id="drgpicker-start" value="04/24/2020">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="startDate">Start Time</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text" id="button-addon-time"><span class="fe fe-clock fe-16"></span></div>
+                                                    </div>
+                                                    <input type="text" class="form-control time-input" id="start-time" placeholder="10:00 AM">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="date-input1">End Date</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text" id="button-addon-date"><span class="fe fe-calendar fe-16"></span></div>
+                                                    </div>
+                                                    <input type="text" class="form-control drgpicker" id="drgpicker-end" value="04/24/2020">
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="startDate">End Time</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text" id="button-addon-time"><span class="fe fe-clock fe-16"></span></div>
+                                                    </div>
+                                                    <input type="text" class="form-control time-input" id="end-time" placeholder="11:00 AM">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-between">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="RepeatSwitch" checked>
+                                        <label class="custom-control-label" for="RepeatSwitch">All day</label>
+                                    </div>
+                                    <button type="button" class="btn mb-2 btn-primary">Save Event</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- new event modal -->
+                </div> <!-- .col-12 -->
+            </div> <!-- .row -->
+        </div> <!-- .container-fluid -->
+        <div class="modal fade modal-notif modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="defaultModalLabel">Notifications</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="list-group list-group-flush my-n3">
+                            <div class="list-group-item bg-transparent">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="fe fe-box fe-24"></span>
+                                    </div>
+                                    <div class="col">
+                                        <small><strong>Package has uploaded successfully</strong></small>
+                                        <div class="my-0 text-muted small">Package is zipped and uploaded</div>
+                                        <small class="badge badge-pill badge-light text-muted">1m ago</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item bg-transparent">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="fe fe-download fe-24"></span>
+                                    </div>
+                                    <div class="col">
+                                        <small><strong>Widgets are updated successfully</strong></small>
+                                        <div class="my-0 text-muted small">Just create new layout Index, form, table</div>
+                                        <small class="badge badge-pill badge-light text-muted">2m ago</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item bg-transparent">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="fe fe-inbox fe-24"></span>
+                                    </div>
+                                    <div class="col">
+                                        <small><strong>Notifications have been sent</strong></small>
+                                        <div class="my-0 text-muted small">Fusce dapibus, tellus ac cursus commodo</div>
+                                        <small class="badge badge-pill badge-light text-muted">30m ago</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item bg-transparent">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="fe fe-link fe-24"></span>
+                                    </div>
+                                    <div class="col">
+                                        <small><strong>Link was attached to menu</strong></small>
+                                        <div class="my-0 text-muted small">New layout has been attached to the menu</div>
+                                        <small class="badge badge-pill badge-light text-muted">1h ago</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item bg-transparent">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="fe fe-alert-triangle fe-24"></span>
+                                    </div>
+                                    <div class="col">
+                                        <small><strong>New alert</strong></small>
+                                        <div class="my-0 text-muted small">Lorem ipsum dolor sit amet, consectetur</div>
+                                        <small class="badge badge-pill badge-light text-muted">2h ago</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item bg-transparent">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="fe fe-home fe-24"></span>
+                                    </div>
+                                    <div class="col">
+                                        <small><strong>Login from 192.186.1.1</strong></small>
+                                        <div class="my-0 text-muted small">8h ago</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item bg-transparent">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="fe fe-user fe-24"></span>
+                                    </div>
+                                    <div class="col">
+                                        <small><strong>New connection</strong></small>
+                                        <div class="my-0 text-muted small">Anna accepted your request</div>
+                                        <small class="badge badge-pill badge-light text-muted">12h ago</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item bg-transparent">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="fe fe-calendar fe-24"></span>
+                                    </div>
+                                    <div class="col">
+                                        <small><strong>New event added</strong></small>
+                                        <div class="my-0 text-muted small">Meeting with Amanda at 10:30 AM</div>
+                                        <small class="badge badge-pill badge-light text-muted">1d ago</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item bg-transparent">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="fe fe-box fe-24"></span>
+                                    </div>
+                                    <div class="col">
+                                        <small><strong>Package has uploaded successfully</strong></small>
+                                        <div class="my-0 text-muted small">Package is zipped and uploaded</div>
+                                        <small class="badge badge-pill badge-light text-muted">1m ago</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade modal-calendar" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="defaultModalLabel">Filters</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group my-4">
+                            <label for="example-select">Category</label>
+                            <select class="form-control" id="example-select">
+                                <option selected>All</option>
+                                <option>Business</option>
+                                <option>Personal</option>
+                                <option>Work</option>
+                                <option>Home</option>
+                            </select>
+                        </div>
+                        <div class="form-group my-4">
+                            <label for="example-select">Event Type</label>
+                            <select class="form-control" id="example-select">
+                                <option selected>All</option>
+                                <option>Event</option>
+                                <option>Meeting</option>
+                                <option>Holiday</option>
+                                <option>Appointment</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main> <!-- main -->
+</div> <!-- .wrapper -->
+
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/moment.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/simplebar.min.js"></script>
+<script src='js/daterangepicker.js'></script>
+<script src='js/jquery.stickOnScroll.js'></script>
+<script src="js/tinycolor-min.js"></script>
+<script src="js/config.js"></script>
+<script src='js/fullcalendar.js'></script>
+<script src='js/fullcalendar.custom.js'></script>
+<script>
+    var calendarEl = document.getElementById('calendar');
+    if (calendarEl) {
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['dayGrid', 'timeGrid', 'list', 'bootstrap'],
+                timeZone: 'UTC',
+                themeSystem: 'bootstrap',
+                header: {
+                    left: 'today, prev, next',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+                },
+                buttonIcons: {
+                    today: 'Hôm nay',
+                    month: 'Tháng',
+                    week: 'Tuần',
+                    day: 'Ngày',
+                    list: 'Danh sách',
+                    prev: 'fe-arrow-left',
+                    next: 'fe-arrow-right',
+                    prevYear: 'left-double-arrow',
+                    nextYear: 'right-double-arrow'
+                },
+                weekNumbers: true,
+                eventLimit: true, // cho phép liên kết "more" khi có quá nhiều sự kiện
+                locale: 'vi',
+                events: function(fetchInfo, successCallback, failureCallback) {
+                    $.when(
+                        $.ajax({
+                            url: 'http://localhost:8080/hoa-don/hien-thi', // API trả về hóa đơn
+                            method: 'GET'
+                        }),
+                        $.ajax({
+                            url: 'http://localhost:8080/hoa-don-chi-tiet/hien-thi', // API trả về chi tiết hóa đơn
+                            method: 'GET'
+                        })
+                    ).done(function(hoaDonResponse, chiTietResponse) {
+                        var events = [];
+                        var hoaDons = hoaDonResponse[0]; // Dữ liệu hóa đơn
+                        var chiTietHoaDons = chiTietResponse[0]; // Dữ liệu chi tiết hóa đơn
+
+                        // Tạo đối tượng ánh xạ để lưu thông tin hóa đơn theo ID
+                        var hoaDonMap = {};
+                        hoaDons.forEach(function(hoaDon) {
+                            hoaDonMap[hoaDon.id] = hoaDon; // Ánh xạ ID hóa đơn tới thông tin hóa đơn
+                        });
+
+                        // Tạo sự kiện dựa vào dữ liệu chi tiết hóa đơn
+                        chiTietHoaDons.forEach(function(chiTiet) {
+                            var hoaDon = hoaDonMap[chiTiet.idHoaDon]; // Lấy thông tin hóa đơn tương ứng
+
+                            // Trích xuất giờ và phút từ datetime
+                            var startTime = new Date(chiTiet.thoiGianBatDauCa);
+                            var endTime = new Date(chiTiet.thoiGianKetThucCa);
+
+                            // Nếu có thông tin hóa đơn, kết hợp ngày và giờ
+                            if (hoaDon) {
+                                events.push({
+                                    title: chiTiet.tenSanBong, // Tùy chỉnh tên trường theo API của bạn
+                                    start: hoaDon.ngayDenSan + 'T' + startTime.toISOString().substr(11, 19), // Kết hợp ngày và giờ
+                                    end: hoaDon.ngayDenSan + 'T' + endTime.toISOString().substr(11, 19), // Kết hợp ngày và giờ cho kết thúc
+                                });
+                            }
+                        });
+
+                        successCallback(events);
+                    }).fail(function() {
+                        failureCallback();
+                    });
+                }
+            });
+            calendar.render();
+        });
+    }
+</script>
+<script src='js/jquery.mask.min.js'></script>
+<script src='js/select2.min.js'></script>
+<script src='js/jquery.steps.min.js'></script>
+<script src='js/jquery.validate.min.js'></script>
+<script src='js/jquery.timepicker.js'></script>
+<script src='js/dropzone.min.js'></script>
+<script src='js/uppy.min.js'></script>
+<script src='js/quill.min.js'></script>
+</body>
+</html>

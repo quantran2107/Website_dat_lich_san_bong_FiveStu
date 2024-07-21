@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,11 +35,14 @@ public class SanBong {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "ten_san_bong", nullable = false, length = 100)
     private String tenSanBong;
 
+
+//    @Column(name="gia_san_bong")
+//    private Float giaSanBong;
 
     @Column(name = "trang_thai", length = 50)
     private String trangThai;
@@ -57,4 +62,7 @@ public class SanBong {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="id_loai_san")
     private LoaiSan loaiSan;
+
+    @OneToMany(mappedBy = "sanBong")
+    private List<SanCa> list;
 }

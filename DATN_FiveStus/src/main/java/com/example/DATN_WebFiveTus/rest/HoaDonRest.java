@@ -4,6 +4,7 @@ import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.service.HoaDonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -25,12 +26,10 @@ import java.util.List;
 public class HoaDonRest {
 
     private HoaDonService hoaDonService;
-    private PagedResourcesAssembler<HoaDonDTO> pagedResourcesAssembler;
 
     @Autowired
-    public HoaDonRest(HoaDonService hoaDonService, PagedResourcesAssembler<HoaDonDTO> pagedResourcesAssembler) {
+    public HoaDonRest(HoaDonService hoaDonService) {
         this.hoaDonService = hoaDonService;
-        this.pagedResourcesAssembler = pagedResourcesAssembler;
     }
 
     @GetMapping("hien-thi")
@@ -52,17 +51,26 @@ public class HoaDonRest {
     }
 
     @GetMapping("/phan-trang")
-    public ResponseEntity<PagedModel<EntityModel<HoaDonDTO>>> getAllHoaDon(
-            @PageableDefault(size = 10) Pageable pageable) {
+    public ResponseEntity<Page<HoaDonDTO>> getAllHoaDon(
+            @RequestParam(defaultValue = "0") int trang,
+            @RequestParam(defaultValue = "10") int kichThuoc) {
+        Pageable pageable = PageRequest.of(trang, kichThuoc);
         Page<HoaDonDTO> hoaDonPage = hoaDonService.phanTrang(pageable);
-        PagedModel<EntityModel<HoaDonDTO>> pagedModel = pagedResourcesAssembler.toModel(hoaDonPage);
-        return ResponseEntity.ok(pagedModel);
+        return ResponseEntity.ok(hoaDonPage);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<HoaDonDTO>> search(@RequestParam String key) {
-        List<HoaDonDTO> results = hoaDonService.searchHD(key);
-        return ResponseEntity.ok(results);
+    @GetMapping("/search-and-filter")
+    public ResponseEntity<Page<HoaDonDTO>> searchAndFilter(
+            @RequestParam(required = false) Boolean loai,
+            @RequestParam(required = false) String trangThai,
+            @RequestParam(required = false) String key,
+            @RequestParam(required = false) Float tongTienMin,
+            @RequestParam(required = false) Float tongTienMax,
+            @RequestParam(defaultValue = "0") int trang,
+            @RequestParam(defaultValue = "10") int kichThuoc) {
+        Pageable pageable = PageRequest.of(trang, kichThuoc);
+        Page<HoaDonDTO> hoaDonPage = hoaDonService.searchAndFilter(loai, trangThai, key, tongTienMin, tongTienMax, pageable);
+        return ResponseEntity.ok(hoaDonPage);
     }
 
 }

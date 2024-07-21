@@ -3,6 +3,7 @@ package com.example.DATN_WebFiveTus.rest;
 
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
+import com.example.DATN_WebFiveTus.entity.SanBong;
 import com.example.DATN_WebFiveTus.service.SanBongService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -54,7 +55,7 @@ public class SanBongRest {
     @PutMapping("/{id}")
     public ResponseEntity<SanBongDTO> update(@PathVariable("id") Integer id ,@RequestBody SanBongDTO sanBongDTO){
         SanBongDTO sanBongDTODetail=sanBongService.update(id,sanBongDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(sanBongDTODetail);
+        return ResponseEntity.ok(sanBongDTODetail);
     }
 
     @DeleteMapping("/{id}")
@@ -72,7 +73,7 @@ public class SanBongRest {
         return ResponseEntity.ok(sanBongService.pages(pageNo,pageSize));
     }
 //    Ly them ham getByID
-    @GetMapping("/by-loai-san/{id}")
+    @GetMapping("/findByIdLoaiSan/{id}")
     public ResponseEntity<List<SanBongDTO>> getSanBongsByLoaiSan(@PathVariable("id") Integer loaiSanId){
         List<SanBongDTO> sanBongs = sanBongService.getSanBongsByLoaiSanId(loaiSanId);
         return ResponseEntity.ok(sanBongs);

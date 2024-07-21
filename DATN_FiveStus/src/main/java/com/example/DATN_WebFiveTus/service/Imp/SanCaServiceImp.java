@@ -75,6 +75,8 @@ public class SanCaServiceImp implements SanCaService {
 
 
         SanCa sanCa=modelMapper.map(sanCaDTO,SanCa.class);
+        sanCa.setDeletedAt(true);
+        sanCa.setTrangThai("Đã đặt nhé");
         sanCa.setCa(ca);
         sanCa.setSanBong(sanBong);
         sanCa.setNgayTrongTuan(ngayTrongTuan);
@@ -113,7 +115,7 @@ public class SanCaServiceImp implements SanCaService {
     }
 
     @Override
-    public List<SanCaDTO> listAll2(Integer pageNum, String sortDirection, int[] totalPageElement) {
+    public List<SanCaDTO> listAllSortPage(Integer pageNum, String sortDirection, int[] totalPageElement) {
         Sort sortS = Sort.by("sanBong.tenSanBong").and(Sort.by("ca.tenCa"));;
         if (sortDirection.equalsIgnoreCase("asc")) {
             sortS = sortS.ascending();

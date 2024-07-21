@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -84,10 +85,32 @@ public class HoaDonServiceImp implements HoaDonService {
     }
 
     @Override
-    public List<HoaDonDTO> searchHD(String key) {
-        return hoaDonRepository.searchHD(key).stream()
-                .map((hoaDon) -> modelMapper.map(hoaDon, HoaDonDTO.class))
+    public Page<HoaDonDTO> searchAndFilter(@Param("loai") Boolean loai,
+                                           @Param("trangThai") String trangThai,
+                                           @Param("keyword") String keyword,
+                                           @Param("tongTienMin") Float tongTienMin,
+                                           @Param("tongTienMax") Float tongTienMax,
+                                           Pageable pageable) {
+        List<HoaDon> hoaDonList = hoaDonRepository.searchAndFilter(loai, trangThai, keyword, tongTienMin, tongTienMax);
+
+        // Phân trang thủ công
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<HoaDon> list;
+
+        if (hoaDonList.size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, hoaDonList.size());
+            list = hoaDonList.subList(startItem, toIndex);
+        }
+
+        List<HoaDonDTO> hoaDonDTOList = list.stream()
+                .map(hoaDon -> modelMapper.map(hoaDon, HoaDonDTO.class))
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(hoaDonDTOList, pageable, hoaDonList.size());
     }
 
     @Override

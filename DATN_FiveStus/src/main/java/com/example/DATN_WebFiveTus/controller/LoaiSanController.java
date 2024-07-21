@@ -95,7 +95,7 @@ public class LoaiSanController {
 
         restTemplate.postForObject(builder.toUriString(), loaiSanDTO, Void.class);
 
-        return "redirect:/listLoaiSan";
+        return "redirect:/listSanBong";
     }
 
 //    @GetMapping("/loaiSan/edit/{id}")

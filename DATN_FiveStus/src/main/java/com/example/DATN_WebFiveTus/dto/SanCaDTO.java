@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Builder
 public class SanCaDTO {
 
-    private int id;
+    private Integer id;
 
     private Double gia;
 
@@ -44,5 +44,7 @@ public class SanCaDTO {
     private String trangThai;
 
 
+    private LocalDateTime thoiGianBatDauCa;
 
+    private LocalDateTime thoiGianKetThucCa;
 }

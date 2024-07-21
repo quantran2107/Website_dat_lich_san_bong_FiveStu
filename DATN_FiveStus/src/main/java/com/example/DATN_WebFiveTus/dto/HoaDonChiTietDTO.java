@@ -1,12 +1,13 @@
 package com.example.DATN_WebFiveTus.dto;
 
-import com.example.DATN_WebFiveTus.entity.SanCa;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +21,8 @@ public class HoaDonChiTietDTO {
 
     private Integer idHoaDon;
 
+    private String maHoaDon;
+
     private Integer idSanCa;
 
     private String tienSan;
@@ -31,5 +34,9 @@ public class HoaDonChiTietDTO {
     private String tenSanBong;
 
     private String tenCa;
+
+    private LocalDateTime thoiGianBatDauCa;
+
+    private LocalDateTime thoiGianKetThucCa;
 
 }

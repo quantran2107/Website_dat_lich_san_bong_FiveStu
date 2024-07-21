@@ -4,39 +4,76 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="94c5cdf3-a4b7-479f-99e1-e2aa9a42b2ec" name="Default Changelist" comment="3h52">
+    <list default="true" id="14a715b4-a7aa-4018-ae36-c676df152603" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/EmailConfig.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/ThymleafTemplateConfig.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/controller/LichLamViecController.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/dto/LichLamViecDTO$LichLamViecDTOBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/dto/LichLamViecDTO.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/entity/LichLamViec$LichLamViecBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/entity/LichLamViec.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/LichLamViecRepository.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/LichLamViecRest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/LichLamViecServiceImpl.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/LichLamViecService.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/static/img/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/static/js/html5-qrcode.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/static/js/lichLamViec.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/static/js/nhanvien.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/templates/list/nhan-vien/lich-lam-viec.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-san-bong.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/templates/pgg-het-han.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/templates/pgg.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/templates/userNV.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-san-bong.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-san-bong.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/controller/PhieuGiamGiaController$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/controller/PhieuGiamGiaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/controller/PhieuGiamGiaController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/DiaChiRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/DiaChiRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/DiaChiRest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/DiaChiRest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-san-bong.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-san-bong.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/dto/HoaDonChiTietDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/dto/HoaDonChiTietDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/entity/SanBong.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/entity/SanBong.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/fragment/sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/fragment/sidebar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-lich-dat.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-lich-dat.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/DatnWebFiveTusApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/DatnWebFiveTusApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/controller/NhanVienController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/controller/NhanVienController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/dto/NhanVienDTO$NhanVienDTOBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/dto/NhanVienDTO$NhanVienDTOBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/dto/NhanVienDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/dto/NhanVienDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/dto/PhieuGiamGiaChiTietDTO$PhieuGiamGiaChiTietDTOBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/dto/PhieuGiamGiaChiTietDTO$PhieuGiamGiaChiTietDTOBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/dto/PhieuGiamGiaChiTietDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/dto/PhieuGiamGiaChiTietDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/entity/NhanVien$NhanVienBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/entity/NhanVien$NhanVienBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/entity/NhanVien.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/entity/NhanVien.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/NhanVienReposity.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/NhanVienReposity.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/PhieuGiamGiaChiTietRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/PhieuGiamGiaChiTietRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/PhieuGiamGiaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/PhieuGiamGiaRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/NhanVienRest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/NhanVienRest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaChiTietRest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaChiTietRest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaRest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaRest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/NhanVienServiceImp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/NhanVienServiceImp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaChiTietServiceImp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaChiTietServiceImp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaServiceImp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaServiceImp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/NhanVienService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/NhanVienService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/PhieuGiamGiaChiTietService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/PhieuGiamGiaChiTietService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/PhieuGiamGiaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/PhieuGiamGiaService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/css/app-light.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/css/app-light.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/js/dropzone.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/js/dropzone.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/fragment/head.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/fragment/head.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/fragment/sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/fragment/sidebar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/nhan-vien/quan-ly-nhan-vien.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/nhan-vien/quan-ly-nhan-vien.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-pgg.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-pgg.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-san-bong3.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-san-bong3.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="HTML File" />
-        <option value="Class" />
-        <option value="Interface" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectId" id="2ihJaseYGg348g7CNpV5GcDY7Vz" />
+  <component name="ProjectId" id="2jQFVuNe18Ukv2eXugpcwGavCgC" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RequestMappingsPanelOrder0" value="0" />
     <property name="RequestMappingsPanelOrder1" value="1" />
     <property name="RequestMappingsPanelWidth0" value="75" />
@@ -45,201 +82,10 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="restartRequiresConfirmation" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../java5/btvn9" />
+    <property name="settings.editor.selected.configurable" value="com.poratu.idea.plugins.tomcat.setting.TomcatServersConfigurable" />
   </component>
-  <component name="RestClientSettings">
-    <option name="REQUEST_HISTORY">
-      <list>
-        <RestClientRequest>
-          <option name="httpMethod" value="POST" />
-          <option name="urlBase" value="http://localhost:8080/san-bong/" />
-          <option name="urlPath" value="" />
-          <option name="headers">
-            <list>
-              <KeyValuePair>
-                <option name="key" value="&quot;id&quot;" />
-                <option name="value" value="121;" />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="    &quot;tenSanBong&quot;" />
-                <option name="value" value="&quot;San bong 1&quot;;" />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="    &quot;idLoaiSan&quot;" />
-                <option name="value" value="1;" />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="    &quot;tenLoaiSan&quot;" />
-                <option name="value" value="&quot;Sân 5&quot;;" />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value=" &quot;trangThai&quot;" />
-                <option name="value" value="true" />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="}" />
-                <option name="value" value="" />
-              </KeyValuePair>
-            </list>
-          </option>
-          <option name="textToSend" value="" />
-          <option name="filesToSend" value="" />
-        </RestClientRequest>
-        <RestClientRequest>
-          <option name="httpMethod" value="POST" />
-          <option name="urlBase" value="http://localhost:8080/san-bong/" />
-          <option name="urlPath" value="" />
-          <option name="headers">
-            <list>
-              <KeyValuePair>
-                <option name="key" value="&quot;id&quot;" />
-                <option name="value" value="121," />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="    &quot;tenSanBong&quot;" />
-                <option name="value" value="&quot;San bong 1&quot;," />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="    &quot;idLoaiSan&quot;" />
-                <option name="value" value="1," />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="    &quot;tenLoaiSan&quot;" />
-                <option name="value" value="&quot;Sân 5&quot;," />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value=" &quot;trangThai&quot;" />
-                <option name="value" value="true" />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="}" />
-                <option name="value" value="" />
-              </KeyValuePair>
-            </list>
-          </option>
-          <option name="textToSend" value="" />
-          <option name="filesToSend" value="" />
-        </RestClientRequest>
-        <RestClientRequest>
-          <option name="httpMethod" value="POST" />
-          <option name="urlBase" value="http://localhost:8080/san-bong/" />
-          <option name="urlPath" value="" />
-          <option name="headers">
-            <list>
-              <KeyValuePair>
-                <option name="key" value="&quot;id&quot;" />
-                <option name="value" value="12," />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="    &quot;tenSanBong&quot;" />
-                <option name="value" value="&quot;San bong 1&quot;," />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="    &quot;idLoaiSan&quot;" />
-                <option name="value" value="1," />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="    &quot;tenLoaiSan&quot;" />
-                <option name="value" value="&quot;Sân 5&quot;," />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value=" &quot;trangThai&quot;" />
-                <option name="value" value="true" />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="}" />
-                <option name="value" value="" />
-              </KeyValuePair>
-            </list>
-          </option>
-          <option name="textToSend" value="" />
-          <option name="filesToSend" value="" />
-        </RestClientRequest>
-        <RestClientRequest>
-          <option name="httpMethod" value="POST" />
-          <option name="urlBase" value="http://localhost:8080/san-bong/" />
-          <option name="urlPath" value="" />
-          <option name="headers">
-            <list>
-              <KeyValuePair>
-                <option name="key" value="&quot;id&quot;" />
-                <option name="value" value="1," />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="    &quot;tenSanBong&quot;" />
-                <option name="value" value="&quot;San bong 1&quot;," />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="    &quot;idLoaiSan&quot;" />
-                <option name="value" value="1," />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="    &quot;tenLoaiSan&quot;" />
-                <option name="value" value="&quot;Sân 5&quot;," />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value=" &quot;trangThai&quot;" />
-                <option name="value" value="true" />
-              </KeyValuePair>
-              <KeyValuePair>
-                <option name="key" value="}" />
-                <option name="value" value="" />
-              </KeyValuePair>
-            </list>
-          </option>
-          <option name="textToSend" value="" />
-          <option name="filesToSend" value="" />
-        </RestClientRequest>
-        <RestClientRequest>
-          <option name="httpMethod" value="PUT" />
-          <option name="urlBase" value="http://localhost:8080/api-phieu-giam-gia/toggle-status/2" />
-          <option name="urlPath" value="" />
-          <option name="headers">
-            <list>
-              <KeyValuePair>
-                <option name="key" value="}" />
-                <option name="value" value="" />
-              </KeyValuePair>
-            </list>
-          </option>
-          <option name="textToSend" value="" />
-          <option name="filesToSend" value="" />
-        </RestClientRequest>
-        <RestClientRequest>
-          <option name="httpMethod" value="POST" />
-          <option name="urlBase" value="http://localhost:8080/san-bong" />
-          <option name="urlPath" value="" />
-          <option name="textToSend" value="" />
-          <option name="filesToSend" value="" />
-        </RestClientRequest>
-        <RestClientRequest>
-          <option name="httpMethod" value="GET" />
-          <option name="urlBase" value="http://localhost:8080/san-bong/by-loai-san/1" />
-          <option name="urlPath" value="" />
-          <option name="textToSend" value="" />
-          <option name="filesToSend" value="" />
-        </RestClientRequest>
-        <RestClientRequest>
-          <option name="httpMethod" value="GET" />
-          <option name="urlBase" value="http://localhost:8080/san-bong/by-loai-san" />
-          <option name="urlPath" value="" />
-          <option name="parameters">
-            <list>
-              <KeyValuePair>
-                <option name="key" value="1" />
-                <option name="value" value="" />
-              </KeyValuePair>
-            </list>
-          </option>
-          <option name="parametersEnabled" value="true" />
-          <option name="textToSend" value="" />
-          <option name="filesToSend" value="" />
-        </RestClientRequest>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager" selected="Spring Boot.DatnWebFiveTusApplication">
+  <component name="RunManager">
     <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
@@ -251,20 +97,14 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="generated-requests#171" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" index="171" runType="Run single request">
-      <method v="2" />
-    </configuration>
-    <configuration name="generated-requests#178" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" index="178" runType="Run single request">
-      <method v="2" />
-    </configuration>
-    <configuration name="generated-requests#180" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" index="180" runType="Run single request">
-      <method v="2" />
-    </configuration>
-    <configuration name="generated-requests#182" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" index="182" runType="Run single request">
-      <method v="2" />
-    </configuration>
-    <configuration name="DatnWebFiveTusApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <configuration name="DatnWebFiveTusApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <module name="DATN_WebFiveTus" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.DATN_WebFiveTus.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.DATN_WebFiveTus.DatnWebFiveTusApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -272,41 +112,23 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="HTTP Request.generated-requests#182" />
-        <item itemvalue="HTTP Request.generated-requests#171" />
-        <item itemvalue="HTTP Request.generated-requests#180" />
-        <item itemvalue="HTTP Request.generated-requests#178" />
+        <item itemvalue="Spring Boot.DatnWebFiveTusApplication" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="94c5cdf3-a4b7-479f-99e1-e2aa9a42b2ec" name="Default Changelist" comment="" />
-      <created>1719936944568</created>
+      <changelist id="14a715b4-a7aa-4018-ae36-c676df152603" name="Default Changelist" comment="" />
+      <created>1721311427166</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1719936944568</updated>
-      <workItem from="1719936946134" duration="8169000" />
-      <workItem from="1719988130345" duration="14116000" />
-      <workItem from="1720013445430" duration="1218000" />
-      <workItem from="1720068196026" duration="7978000" />
+      <updated>1721311427166</updated>
+      <workItem from="1721311428476" duration="2375000" />
+      <workItem from="1721373283546" duration="1606000" />
+      <workItem from="1721543151778" duration="107000" />
+      <workItem from="1721543300298" duration="12313000" />
     </task>
-    <task id="LOCAL-00001" summary="11h27">
-      <created>1719937674616</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1719937674616</updated>
-    </task>
-    <task id="LOCAL-00002" summary="3h52">
-      <created>1720083200472</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1720083200472</updated>
-    </task>
-    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -323,10 +145,5 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="11h27" />
-    <MESSAGE value="3h52" />
-    <option name="LAST_COMMIT_MESSAGE" value="3h52" />
   </component>
 </project>

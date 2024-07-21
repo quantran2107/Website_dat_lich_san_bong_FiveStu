@@ -2,9 +2,11 @@ package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
+import com.example.DATN_WebFiveTus.entity.LoaiSan;
 import com.example.DATN_WebFiveTus.entity.SanBong;
 import com.example.DATN_WebFiveTus.entity.SanCa;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
+import com.example.DATN_WebFiveTus.repository.LoaiSanRepository;
 import com.example.DATN_WebFiveTus.repository.SanBongRepository;
 import com.example.DATN_WebFiveTus.service.SanBongService;
 import org.modelmapper.ModelMapper;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,13 +25,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class SanBongServiceImp implements SanBongService {
+private LoaiSanRepository loaiSanRepository;
 
     private SanBongRepository sanBongRepository;
 
     private ModelMapper modelMapper;
 
+
     @Autowired
-    public SanBongServiceImp(SanBongRepository sanBongRepository, ModelMapper modelMapper) {
+    public SanBongServiceImp(LoaiSanRepository loaiSanRepository, SanBongRepository sanBongRepository, ModelMapper modelMapper) {
+        this.loaiSanRepository = loaiSanRepository;
         this.sanBongRepository = sanBongRepository;
         this.modelMapper = modelMapper;
     }
@@ -46,17 +52,22 @@ public class SanBongServiceImp implements SanBongService {
 
     @Override
     public SanBongDTO save(SanBongDTO sanBongDTO) {
+        LoaiSan loaiSan=loaiSanRepository.findById(sanBongDTO.getIdLoaiSan()).orElseThrow(() -> new ResourceNotfound("Không tồn tại loại sân bóng ID ạ: "+sanBongDTO.getIdLoaiSan()));
         SanBong sanBong=modelMapper.map(sanBongDTO,SanBong.class);
-        sanBong.setTrangThai("active");
+        sanBong.setLoaiSan(loaiSan);
+        sanBong.setTrangThai("Đang hoạt động");
+        sanBong.setDeletedAt(true);
         SanBong sanBongSave=sanBongRepository.save(sanBong);
         return modelMapper.map(sanBongSave,SanBongDTO.class);
     }
 
     @Override
     public SanBongDTO update(Integer id, SanBongDTO sanBongDTO) {
+        LoaiSan loaiSan=loaiSanRepository.findById(sanBongDTO.getIdLoaiSan()).orElseThrow(() -> new ResourceNotfound("Không tồn tại loại sân bóng ID: "+sanBongDTO.getIdLoaiSan()));
         SanBong sanBong=sanBongRepository.findById(id).orElseThrow(() -> new ResourceNotfound("Không tồn tại sân bóng ID: "+id));
         sanBong.setTenSanBong(sanBongDTO.getTenSanBong());
         sanBong.setTrangThai(sanBongDTO.getTrangThai());
+        sanBong.setLoaiSan(loaiSan);
         SanBong sanBongUpdate=sanBongRepository.save(sanBong);
         return modelMapper.map(sanBongUpdate,SanBongDTO.class);
     }
@@ -91,5 +102,43 @@ public class SanBongServiceImp implements SanBongService {
                 .map(sanBong,SanBongDTO.class)).collect(Collectors.toList());
     }
 
+    @Override
+    public List<SanBongDTO> listAllSortPage(Integer pageNum, String sortDirection, int[] totalPageElement) {
+        Sort sortS = Sort.by("tenSanBong");
+        if (sortDirection.equalsIgnoreCase("asc")) {
+            sortS = sortS.ascending();
+        } else if (sortDirection.equalsIgnoreCase("desc")) {
+            sortS = sortS.descending();
+        }
 
+        Pageable pageable = PageRequest.of(pageNum - 1, 5, sortS);
+        Page<SanBong> sanBongPage = sanBongRepository.findBySanBongPage(pageable);
+
+        totalPageElement[0] = sanBongPage.getTotalPages();
+        totalPageElement[1] = (int) sanBongPage.getTotalElements();
+
+        return sanBongPage.getContent().stream()
+                .map(sanBong -> modelMapper.map(sanBong, SanBongDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SanBongDTO> searchKeyWords(Integer pageNum, String keyWords, String sortDirection, int[] totalPageElement, Integer id) {
+        Sort sortS = Sort.by("tenSanBong");
+        if (sortDirection.equalsIgnoreCase("asc")) {
+            sortS = sortS.ascending();
+        } else if (sortDirection.equalsIgnoreCase("desc")) {
+            sortS = sortS.descending();
+        }
+
+        Pageable pageable = PageRequest.of(pageNum - 1, 5, sortS);
+        Page<SanBong> sanBongPage = sanBongRepository.search(id,keyWords.trim(),pageable);
+
+        totalPageElement[0] = sanBongPage.getTotalPages();
+        totalPageElement[1] = (int) sanBongPage.getTotalElements();
+
+        return sanBongPage.getContent().stream()
+                .map(sanBong -> modelMapper.map(sanBong, SanBongDTO.class))
+                .collect(Collectors.toList());
+    }
 }
