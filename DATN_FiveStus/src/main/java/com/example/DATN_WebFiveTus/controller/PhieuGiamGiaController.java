@@ -2,7 +2,6 @@ package com.example.DATN_WebFiveTus.controller;
 
 import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
 import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
-import com.example.DATN_WebFiveTus.rest.KhachHangRest;
 import com.example.DATN_WebFiveTus.rest.PhieuGiamGiaRest;
 import com.example.DATN_WebFiveTus.service.KhachHangService;
 import com.example.DATN_WebFiveTus.service.PhieuGiamGiaService;

@@ -1,5 +1,12 @@
 package com.example.DATN_WebFiveTus.service.Imp;
-
+import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
+import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.modelmapper.ModelMapper;
+import java.util.stream.Collectors;
 import com.example.DATN_WebFiveTus.dto.DiaChiKhachHangDTO;
 import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
 import com.example.DATN_WebFiveTus.entity.DiaChiKhachHang;
@@ -8,12 +15,12 @@ import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.DiaChiKhachHangRepository;
 import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
 import com.example.DATN_WebFiveTus.service.KhachHangService;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+
 
 @Service
 public class KhachHangImp implements KhachHangService {
@@ -54,7 +61,7 @@ public class KhachHangImp implements KhachHangService {
         if (diaChiList != null && !diaChiList.isEmpty()) {
             for (DiaChiKhachHangDTO diaChiKhachHangDTO : diaChiList) {
                 DiaChiKhachHang diaChiKhachHang = modelMapper.map(diaChiKhachHangDTO, DiaChiKhachHang.class);
-                diaChiKhachHang.setKhachHang(khachHang);
+                diaChiKhachHang.setIdKhachHang(khachHang);
                 diaChiKhachHangRepository.save(diaChiKhachHang);
             }
         }
@@ -63,14 +70,39 @@ public class KhachHangImp implements KhachHangService {
     }
 
     @Override
-    public KhachHangDTO update(Integer id, KhachHangDTO khachHangDTO) {
-        // Implement update logic here
-        return null;
+    public void update(Integer id, KhachHangDTO khachHangDTO) {
+        // Lấy khách hàng từ repository
+        KhachHang khachHang = khachHangRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách hàng có id: " + id));
+
+        // Cập nhật thông tin từ khachHangDTO vào khachHang
+        if (khachHangDTO.getMaKhachHang() != null) {
+            khachHang.setMaKhachHang(khachHangDTO.getMaKhachHang());
+        }
+        if (khachHangDTO.getMatKhau() != null) {
+            khachHang.setMatKhau(khachHangDTO.getMatKhau());
+        }
+        if (khachHangDTO.getHoVaTen() != null) {
+            khachHang.setHoVaTen(khachHangDTO.getHoVaTen());
+        }
+        if (khachHangDTO.getEmail() != null) {
+            khachHang.setEmail(khachHangDTO.getEmail());
+        }
+        khachHang.setGioiTinh(khachHangDTO.isGioiTinh());
+        if (khachHangDTO.getSoDienThoai() != null) {
+            khachHang.setSoDienThoai(khachHangDTO.getSoDienThoai());
+        }
+        if (khachHangDTO.getTrangThai() != null) {
+            khachHang.setTrangThai(khachHangDTO.getTrangThai());
+        }
+
+        // Lưu thông tin khách hàng đã cập nhật vào cơ sở dữ liệu
+        khachHangRepository.save(khachHang);
+
     }
 
     @Override
     public void delete(Integer id) {
-        // Implement delete logic here
     }
 
     @Override
@@ -79,4 +111,32 @@ public class KhachHangImp implements KhachHangService {
                 .orElseThrow(() -> new ResourceNotfound("Không tồn tại id: " + id));
         return modelMapper.map(khachHang, KhachHangDTO.class);
     }
+
+    @Override
+    public Page<KhachHangDTO> getAll(Pageable pageable) {
+        Page<KhachHang> khachHangs = khachHangRepository.findAll(pageable);
+        return khachHangs.map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class));
+    }
+
+    @Override
+    public List<KhachHangDTO> search(String query) {
+        List<KhachHang> results = khachHangRepository.searchByNameOrPhone(query);
+        return results.stream()
+                .map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<KhachHangDTO> filter(String status) {
+        if ("all".equals(status)) {
+            return khachHangRepository.findAll().stream()
+                    .map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class))
+                    .collect(Collectors.toList());
+        } else {
+            return khachHangRepository.filterByStatus(status).stream()
+                    .map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class))
+                    .collect(Collectors.toList());
+        }
+    }
+
 }
