@@ -20,6 +20,8 @@ public class HoaDonChiTietDTO {
 
     private Integer idHoaDon;
 
+    private String maHoaDon;
+
     private Integer idSanCa;
 
     private String tienSan;

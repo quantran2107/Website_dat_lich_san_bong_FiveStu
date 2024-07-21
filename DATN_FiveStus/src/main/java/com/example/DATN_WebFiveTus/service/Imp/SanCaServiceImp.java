@@ -115,7 +115,7 @@ public class SanCaServiceImp implements SanCaService {
     }
 
     @Override
-    public List<SanCaDTO> listAll2(Integer pageNum, String sortDirection, int[] totalPageElement) {
+    public List<SanCaDTO> listAllSortPage(Integer pageNum, String sortDirection, int[] totalPageElement) {
         Sort sortS = Sort.by("sanBong.tenSanBong").and(Sort.by("ca.tenCa"));;
         if (sortDirection.equalsIgnoreCase("asc")) {
             sortS = sortS.ascending();

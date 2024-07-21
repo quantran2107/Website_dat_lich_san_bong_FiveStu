@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Builder
 public class CaDTO {
 
-    private int id;
+    private Integer id;
 
     private String tenCa;
 

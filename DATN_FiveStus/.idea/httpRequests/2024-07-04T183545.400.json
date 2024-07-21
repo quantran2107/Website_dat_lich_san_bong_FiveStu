@@ -1,5 +1,0 @@
-{
-  "status": 400,
-  "message": "ModelMapper mapping errors:\r\n\r\n1) Converter org.modelmapper.internal.converter.BooleanConverter@2d177e4 failed to convert java.lang.String to java.lang.Boolean.\r\n\r\n1 error",
-  "timestamp": 1720092945707
-}

@@ -1,5 +1,0 @@
-{
-  "status": 400,
-  "message": "Required request body is missing: public org.springframework.http.ResponseEntity<com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO> com.example.DATN_WebFiveTus.rest.PhieuGiamGiaRest.save(com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO)",
-  "timestamp": 1720169040854
-}

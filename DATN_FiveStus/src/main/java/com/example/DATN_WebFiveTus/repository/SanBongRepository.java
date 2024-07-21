@@ -29,4 +29,12 @@ public interface SanBongRepository extends JpaRepository<SanBong,Integer> {
 
     @Query("SELECT sb FROM SanBong sb WHERE sb.loaiSan.id = :loaiSanId")
     List<SanBong> findByLoaiSanId(@Param("loaiSanId") Integer loaiSanId);
+
+
+
+    @Query("SELECT sb FROM SanBong sb")
+    Page<SanBong> findBySanBongPage(Pageable  pageable);
+
+    @Query("SELECT sb FROM SanBong sb WHERE sb.id = :id OR sb.tenSanBong=:keyWords OR sb.loaiSan.tenLoaiSan=:keyWords OR sb.trangThai=:keyWords")
+    Page<SanBong> search(@Param("id") Integer id, @Param("keyWords") String keyWords, Pageable pageable);
 }
