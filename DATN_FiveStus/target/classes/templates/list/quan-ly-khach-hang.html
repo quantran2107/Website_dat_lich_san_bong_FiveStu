@@ -411,14 +411,13 @@
                 return response.json();
             })
             .then(data => {
-                updateTableBody(data); // Gọi hàm cập nhật bảng dữ liệu với dữ liệu trả về từ server
+                updateTableBody(data);
             })
             .catch(error => {
                 console.error('Error fetching filter results:', error.message);
             });
     }
 
-    // Bắt sự kiện change của dropdown trạng thái
     document.getElementById('filterStatus').addEventListener('change', function (event) {
         event.preventDefault();
         filterKhachHang();
@@ -426,7 +425,7 @@
 
     function updateTableBody(data) {
         var tableBody = document.getElementById('khachHangTable');
-        tableBody.innerHTML = ''; // Xóa dữ liệu cũ trước khi cập nhật
+        tableBody.innerHTML = '';
 
         data.forEach(function (khachHang, index) {
             var row = '<tr>' +
