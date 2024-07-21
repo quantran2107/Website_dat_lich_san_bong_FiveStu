@@ -18,10 +18,6 @@ public class NhanVienController {
         return "/list/nhan-vien/quan-ly-nhan-vien";
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "/list/nhan-vien/test";
-    }
 }
 
 
