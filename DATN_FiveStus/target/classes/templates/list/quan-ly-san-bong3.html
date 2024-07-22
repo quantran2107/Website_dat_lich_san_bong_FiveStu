@@ -56,6 +56,7 @@
                                             <!--                                            Tab 1-->
                                             <div class="tab-pane fade show"
                                                  role="tabpanel"
+
                                                  th:each="loaiSan : ${listLS}"
                                                  th:id="'loaiSan-' + ${loaiSan.id}"
                                                  th:aria-labelledby="'tab-' + ${loaiSan.id}">
@@ -73,7 +74,7 @@
                                                                 <input type="hidden" id="idLoaiSanInput"
                                                                        name="idLoaiSan">
                                                                 <button type="submit" onclick="submitSanBong()"
-                                                                        class="btn btn-primary">Thêm sân
+                                                                        class="btn btn-success">Thêm sân
                                                                     bóng
                                                                 </button>
                                                             </form>
@@ -138,12 +139,12 @@
                                                                                 </div>
                                                                                 <div class="modal-footer">
                                                                                     <button type="button"
-                                                                                            class="btn mb-2 btn-secondary"
+                                                                                            class="btn mb-2 btn-outline-secondary"
                                                                                             data-dismiss="modal">Close
                                                                                     </button>
                                                                                     <button onclick="updateSanBong()"
                                                                                             type="submit"
-                                                                                            class="btn mb-2 btn-primary">
+                                                                                            class="btn mb-2 btn-success">
                                                                                         Update
                                                                                     </button>
                                                                                 </div>
@@ -184,7 +185,7 @@
                                                                 </td>
                                                                 <td>
                                                                     <button onclick="editSanBongs()"
-                                                                            class="btn btn-warning"><span
+                                                                            class="btn btn-outline-success"><span
                                                                             class="fe fe-edit-3"></span></button>
 
                                                                     <button onclick="deletedSanBong()"
@@ -233,7 +234,7 @@
                                                                             </div>
                                                                             <div class="form-group col-md-6">
                                                                                 <button type="button"
-                                                                                        class="btn btn-primary btn-sm"
+                                                                                        class="btn btn-success btn-sm"
                                                                                         onclick="displaySelectedDays()">
                                                                                     Thêm ngày
                                                                                 </button>
@@ -286,7 +287,7 @@
 
                                                                 </div>
                                                                 <button onclick="deleteTabActive()"
-                                                                        class="btn btn-warning">Xoá tab hiện tại
+                                                                        class="btn btn-success">Xoá tab hiện tại
                                                                 </button>
                                                             </div>
                                                         </div><!--   Tab content 1-->
@@ -316,7 +317,7 @@ JavaScript
 <script>
 
     function editSanBongs() {
-        $('button.btn-warning').on('click', function () {
+        $('button.btn-outline-success').on('click', function () {
             var sanBongId = $(this).closest('tr').find('input[type="checkbox"]').val();
             $.ajax({
                 type: 'GET',
@@ -772,7 +773,7 @@ JavaScript
             'placeholder="Tên loại sân">' +
             '</div>' +
             '</div>' +
-            '<button type="submit" class="btn mb-2 btn-primary" onclick="addLoaiSanBong()">Thêm loại sân</button>' +
+            '<button type="submit" class="btn mb-2 btn-success" onclick="addLoaiSanBong()">Thêm loại sân</button>' +
             '</form>' +
             '</div>' +
             '</div>' +
