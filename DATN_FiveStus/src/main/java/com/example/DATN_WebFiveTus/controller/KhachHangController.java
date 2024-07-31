@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -44,10 +46,16 @@ public class KhachHangController {
 
 
     @PostMapping("/quan-ly-khach-hang/them")
-    public String addKhachHang(@ModelAttribute KhachHangDTO khachHangDTO) {
-        khachHangService.save(khachHangDTO);
-        return "redirect:/quan-ly-khach-hang";
+    public ResponseEntity<String> addKhachHang(@ModelAttribute KhachHangDTO khachHangDTO) {
+        try {
+            khachHangService.save(khachHangDTO);
+            return ResponseEntity.ok("Thêm khách hàng thành công!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi khi thêm khách hàng");
+        }
     }
+
+
 
     @GetMapping("/quan-ly-khach-hang-detail")
     public String detailHTKH(@RequestParam(value = "id", required = false) Integer id,
@@ -77,11 +85,17 @@ public class KhachHangController {
         return "list/quan-ly-dia-chi-khach-hang";
     }
 
-    @PostMapping("/quan-ly-khach-hang/cap-nhat")
-    public String updateKH(@ModelAttribute KhachHangDTO khachHangDTO) {
-        khachHangService.update(khachHangDTO.getId(), khachHangDTO);
-        return "redirect:/quan-ly-khach-hang";
-    }
+        @PostMapping("/quan-ly-khach-hang/cap-nhat")
+        public ResponseEntity<String> updateKH(@ModelAttribute KhachHangDTO khachHangDTO) {
+            try {
+                khachHangService.update(khachHangDTO.getId(), khachHangDTO);
+                return ResponseEntity.ok("Cập nhật thông tin thành công!");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Đã xảy ra lỗi khi cập nhật thông tin");
+            }
+        }
+
 }
 
 

@@ -3,16 +3,6 @@
 <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" rel="stylesheet">
 <head th:include="fragment/head :: head">
-    <style>
-        .text-success {
-            color: #4CAF50; /* Màu xanh lá cây */
-        }
-
-        .text-danger {
-            color: #f44336; /* Màu đỏ */
-        }
-
-    </style>
 </head>
 <body class="vertical light">
 <div class="wrapper">
@@ -36,49 +26,36 @@
                                                   style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                                                 <!-- Search -->
                                                 <div class="form-group"
-                                                     style="flex-grow: 1; display: flex; align-items: center;">
+                                                     style="flex-grow: 1; display: flex; align-items: center; margin-right: 50px">
                                                     <label class="mr-2" for="search">Tìm kiếm</label>
                                                     <input class="form-control" id="search"
                                                            oninput="searchKhachHang(this.value)"
-                                                           placeholder="Tìm kiếm theo mã hoặc tên" style="flex-grow: 1;"
+                                                           placeholder="Tìm kiếm theo tên,email hoặc SDT" style="flex-grow: 1;"
                                                            type="text">
                                                 </div>
 
                                                 <!-- Dropdown -->
-                                                <div class="form-group"
-                                                     style="flex-grow: 1; display: flex; align-items: center; margin-right: 10px;">
+                                                <div class="form-group" style="flex-grow: 1; display: flex; align-items: center; margin-right: 10px;">
                                                     <label class="sr-only" for="filterStatus">Trạng thái</label>
-                                                    <select class=" btn btn-outline-success custom-select my-1 mr-2"
-                                                            id="filterStatus"
-                                                            style="width: 150px;align-items: center">
-                                                        <option value="all">Tất cả</option>
+                                                    <select class="btn btn-outline-success custom-select my-1 mr-2" id="filterStatus" style="width: 150px;margin-left: 38px; align-items: center; background: white; color: green;" onchange="filterKhachHang()">
+                                                        <option value="all">Trạng thái</option>
                                                         <option value="active">Hoạt động</option>
                                                         <option value="inactive">Không hoạt động</option>
                                                     </select>
                                                 </div>
-
-                                                <!-- Export Button -->
-                                                <div class="form-group"
-                                                     style="flex-grow: 1; display: flex; align-items: center;">
-                                                    <button class="btn btn-outline-success" style="width: 150px;margin-left: -160px;"
-                                                            type="button">
-                                                        Xuất Excel <span class="fe fe-file-text"></span>
-                                                    </button>
+                                                <div class="form-group" style="flex-grow: 1; display: flex; align-items: center; margin-right: 10px;">
+                                                    <label class="sr-only" for="filterGender">Giới tính</label>
+                                                    <select class="btn btn-outline-success custom-select my-1 mr-2" id="filterGender" style="width: 150px;margin-left: -174px; align-items: center; background: white; color: green;" onchange="filterKhachHang();">
+                                                        <option value="all">Giới tính</option>
+                                                        <option value="male">Nam</option>
+                                                        <option value="female">Nữ</option>
+                                                    </select>
                                                 </div>
-
-                                                <!-- Reset Button -->
-                                                <div class="form-group"
-                                                     style="flex-grow: 1; display: flex; align-items: center;">
-                                                    <button class="btn btn-primary" onclick="resetFilters()" style="width: 100px;margin-left: -150px;"
-                                                            type="button">Reset
-                                                    </button>
-                                                </div>
-
                                                 <!-- Add Button -->
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                                    <button class="btn btn-success" onclick="showAddForm(this)"
-                                                            style="width: 100px;" type="button">
-                                                        Thêm <span class="fe fe-plus"></span>
+                                                    <button type="button" class="btn btn-success"
+                                                            data-toggle="modal" data-target="#addModal" style="width: 100px;"
+                                                            data-whatever="@mdo">Thêm <span class="fe fe-plus"></span>
                                                     </button>
                                                 </div>
                                             </form>
@@ -86,11 +63,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
-                            <!--                            Bang-->
-
-                            <!-- Table -->
                             <div class="card shadow mt-5">
                                 <div class="card-body" id="tableCardBody">
                                     <table class="table datatables" id="dataTable-1">
@@ -233,12 +205,6 @@
                                                            placeholder="Nhập địa chỉ cụ thể"
                                                            required type="text">
                                                 </div>
-                                                <div class="form-group">
-                                                    <label for="ghiChu">Ghi chú</label>
-                                                    <input class="form-control" id="ghiChu" name="diaChi[0].ghiChu"
-                                                           placeholder="Nhập ghi chú" required
-                                                           type="text">
-                                                </div>
                                                 <div class="form-row">
                                                     <div class="form-group col-md-4">
                                                         <label for="city">Tỉnh thành</label>
@@ -261,6 +227,12 @@
                                                             <option selected value="">Chọn phường xã</option>
                                                         </select>
                                                     </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="ghiChu">Ghi chú</label>
+                                                    <input class="form-control" id="ghiChu" name="diaChi[0].ghiChu"
+                                                           placeholder="Nhập ghi chú" required
+                                                           type="text">
                                                 </div>
 
                                                 <button class="btn btn-success" type="submit">Thêm</button>
@@ -342,9 +314,9 @@
 
     function searchKhachHang() {
         const searchQuery = document.getElementById('search').value.trim(); // Lấy giá trị từ ô tìm kiếm và loại bỏ khoảng trắng
-        console.log(searchQuery); // Debug: log giá trị searchQuery để kiểm tra
-
-        fetch('/khach-hang/search?query=' + encodeURIComponent(searchQuery), {
+        const pageSize = 5; // Số lượng kết quả trên mỗi trang
+        const page = 1; // Bắt đầu từ trang đầu tiên
+        fetch(`/khach-hang/search?query=${encodeURIComponent(searchQuery)}&page=${page}&pageSize=${pageSize}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -363,7 +335,6 @@
                 console.error('Error fetching search results:', error);
             });
     }
-
     // Bắt sự kiện input của ô tìm kiếm
     document.getElementById('search').addEventListener('input', function (event) {
         event.preventDefault();
@@ -417,9 +388,15 @@
     }
 
     function filterKhachHang() {
-        const status = document.getElementById('filterStatus').value; // Lấy giá trị của trạng thái từ dropdown
+        const status = document.getElementById('filterStatus').value;
+        const gender = document.getElementById('filterGender').value;
+        const pageSize = 5; // Số lượng kết quả trên mỗi trang
+        const page = 1; // Bắt đầu từ trang đầu tiên
 
-        fetch('/khach-hang/filter?status=' + encodeURIComponent(status), {
+        // Chuyển đổi giá trị gender thành boolean
+        const genderParam = gender === 'male' ? 'true' : gender === 'female' ? 'false' : 'all';
+
+        fetch(`/khach-hang/filter?status=${encodeURIComponent(status)}&gender=${encodeURIComponent(genderParam)}&page=${page}&pageSize=${pageSize}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -441,6 +418,10 @@
             });
     }
 
+
+
+
+
     document.getElementById('filterStatus').addEventListener('change', function (event) {
         event.preventDefault();
         filterKhachHang();
@@ -458,7 +439,7 @@
                 '<td>' + khachHang.soDienThoai + '</td>' +
                 '<td>' + khachHang.createdAt + '</td>' +
                 '<td>' + (khachHang.gioiTinh ? 'Nam' : 'Nữ') + '</td>' +
-                '<td><span class="' + (khachHang.trangThai === 'active' ? 'text-success' : 'text-danger') + '">' +
+                '<td><span class="' + (khachHang.trangThai === 'active' ? 'custom-4' : 'custom-3') + '">' +
                 (khachHang.trangThai === 'active' ? 'Hoạt động' : 'Không hoạt động') + '</span></td>' +
                 '<td style="display: flex"><a href="/quan-ly-khach-hang-detail?id=' + khachHang.id + '">' +
                 '<button class="btn mb-2 mr-1 btn-outline-success type="button"><span class="fe fe-edit-3"></span></button>' +
@@ -467,6 +448,52 @@
             tableBody.innerHTML += row;
         });
     }
+    document.getElementById("addForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Ngăn chặn hành động mặc định của submit form
+
+        // Hiển thị hộp thoại xác nhận
+        Swal.fire({
+            title: 'Xác nhận',
+            text: 'Bạn chắc chắn muốn thêm khách hàng này không?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true // Đổi vị trí nút đồng ý và hủy
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Lấy dữ liệu từ form
+                let formData = new FormData(this);
+
+                // Gửi yêu cầu AJAX để thêm khách hàng
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.text()) // Xử lý phản hồi dưới dạng văn bản
+                    .then(text => {
+                        Swal.fire({
+                            title: 'Thành công!',
+                            text: text,
+                            icon: 'success'
+                        }).then(() => {
+                            // Tải lại trang sau khi thêm thành công
+                            window.location.reload();
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Đã xảy ra lỗi khi thêm khách hàng',
+                            icon: 'error'
+                        });
+                    });
+            }
+        });
+    });
+
+
 
 
 </script>
