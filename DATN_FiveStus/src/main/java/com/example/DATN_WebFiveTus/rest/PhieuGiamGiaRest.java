@@ -1,8 +1,10 @@
 package com.example.DATN_WebFiveTus.rest;
 
+import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
 import com.example.DATN_WebFiveTus.service.PhieuGiamGiaService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.data.web.SortDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -62,9 +66,7 @@ public class PhieuGiamGiaRest {
     }
 
 
-
-
-//    @DeleteMapping("/{id}")
+    //    @DeleteMapping("/{id}")
 //    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
 //        phieuGiamGiaService.delete(id);
 //        return ResponseEntity.noContent().build();
@@ -77,7 +79,7 @@ public class PhieuGiamGiaRest {
     }
 
     @PostMapping("save")
-    public ResponseEntity<PhieuGiamGiaDTO> save(@RequestBody PhieuGiamGiaDTO phieuGiamGiaDTO) {
+    public ResponseEntity<PhieuGiamGiaDTO> save(@RequestBody PhieuGiamGiaDTO phieuGiamGiaDTO) throws MessagingException {
         PhieuGiamGiaDTO savedPhieuGiamGia = phieuGiamGiaService.save(phieuGiamGiaDTO);
         return ResponseEntity.ok(savedPhieuGiamGia);
     }
@@ -102,6 +104,24 @@ public class PhieuGiamGiaRest {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Cập nhật trạng thái thất bại");
         }
     }
+
+    @GetMapping("/search-and-filter")
+    public ResponseEntity<Page<PhieuGiamGiaDTO>> searchAndFilter(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Boolean doiTuongApDung,
+            @RequestParam(required = false) Boolean hinhThucGiamGia,
+            @RequestParam(required = false) String trangThai,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") Date ngayBatDau,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") Date ngayKetThuc,
+            @PageableDefault(page = 0, size = 10) Pageable pageable) {
+
+        Page<PhieuGiamGiaDTO> phieuGiamGiaPage = phieuGiamGiaService.searchPhieuGiamGia(
+                keyword, doiTuongApDung, hinhThucGiamGia, trangThai, ngayBatDau, ngayKetThuc, pageable);
+
+        return ResponseEntity.ok(phieuGiamGiaPage);
+    }
+
+
 
 //    @DeleteMapping("/delete-soft") // Endpoint đúng cho xóa mềm sử dụng phương thức DELETE
 //    public ResponseEntity<Void> deleteSoft(@RequestBody List<Integer> ids) {

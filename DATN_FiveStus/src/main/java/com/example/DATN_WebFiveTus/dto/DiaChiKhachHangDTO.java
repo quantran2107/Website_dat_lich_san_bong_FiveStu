@@ -26,6 +26,8 @@ public class DiaChiKhachHangDTO {
 
     private Integer id;
 
+    private Integer idKhachHang;
+
     private String diaChiCuThe;
 
     private String thanhPho;

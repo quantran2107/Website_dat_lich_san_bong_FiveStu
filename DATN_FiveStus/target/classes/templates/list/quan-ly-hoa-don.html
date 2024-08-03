@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:include="fragment/head :: head"></head>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" rel="stylesheet">
+<script crossorigin="anonymous"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 <body class="vertical light">
 <div class="wrapper">
     <div th:include="fragment/navbar :: navbar"></div>
     <div th:include="fragment/sidebar :: sidebar"></div>
-    <main role="main" class="main-content">
+    <main class="main-content" role="main">
         <!-- Nội dung chính sẽ được thêm vào bằng JavaScript -->
     </main>
 </div>
@@ -19,7 +19,7 @@
 <div th:include="fragment/script :: script"></div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet"/>
 
 <script th:inline="javascript">
 
@@ -61,7 +61,7 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group col-md-2">
-                                                        <button class="btn btn-primary" onclick="back()">Làm mới</button>
+                                                        <button class="btn btn-info" onclick="back()">Làm mới</button>
                                                     </div>
                                                 </div>
                                                 <div class="form-row">
@@ -133,7 +133,7 @@
                                         </div>
                                         <div class="col ml-auto">
                                             <div class="dropdown float-right">
-                                                <button class="btn btn-primary" type="button">
+                                                <button class="btn btn-success" type="button">
                                                     + Tạo hóa đơn
                                                 </button>
                                             </div>
@@ -185,28 +185,28 @@
                                     <nav aria-label="Table Paging" class="mb-0 text-muted">
                                         <ul id="pagination" class="pagination justify-content-end mb-0">
                                             <!-- Các nút phân trang sẽ được thêm bởi JavaScript -->
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        </ul>
+        </nav>
         </div>
-    `;
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        `;
 
         $('.drgpicker').daterangepicker({
-            singleDatePicker: true,
-            timePicker: false,
-            showDropdowns: true,
-            locale: {
-                format: 'MM/DD/YYYY'
-            }
+        singleDatePicker: true,
+        timePicker: false,
+        showDropdowns: true,
+        locale: {
+        format: 'MM/DD/YYYY'
+        }
         });
 
         fetchDataAndRenderTable(); // Gọi hàm fetch và render table khi DOMContentLoaded
-    });
+        });
 
         let initialTableData = [];
         let currentSearchQuery = "";
@@ -216,483 +216,483 @@
         let currentStatusFilter2 = null;
 
         function fetchDataAndRenderTable(page = 0, size = 10) {
-            let apiURL = `/hoa-don/search-and-filter?trang=${page}&kichThuoc=${size}`;
+        let apiURL = `/hoa-don/search-and-filter?trang=${page}&kichThuoc=${size}`;
 
-            if (currentSearchQuery) {
-                apiURL += `&key=${encodeURIComponent(currentSearchQuery)}`;
-            }
-            if (currentSearchMinMoney) {
-                apiURL += `&tongTienMin=${encodeURIComponent(currentSearchMinMoney)}`;
-            }
-            if (currentSearchMaxMoney) {
-                apiURL += `&tongTienMax=${encodeURIComponent(currentSearchMaxMoney)}`;
-            }
-            if (currentStatusFilter) {
-                apiURL += `&loai=${currentStatusFilter}`;
-            }
-            if (currentStatusFilter2) {
-                apiURL += `&trangThai=${currentStatusFilter2}`;
-            }
+        if (currentSearchQuery) {
+        apiURL += `&key=${encodeURIComponent(currentSearchQuery)}`;
+        }
+        if (currentSearchMinMoney) {
+        apiURL += `&tongTienMin=${encodeURIComponent(currentSearchMinMoney)}`;
+        }
+        if (currentSearchMaxMoney) {
+        apiURL += `&tongTienMax=${encodeURIComponent(currentSearchMaxMoney)}`;
+        }
+        if (currentStatusFilter) {
+        apiURL += `&loai=${currentStatusFilter}`;
+        }
+        if (currentStatusFilter2) {
+        apiURL += `&trangThai=${currentStatusFilter2}`;
+        }
 
-            fetch(apiURL)
-                .then(response => response.json())
-                .then(data => {
-                    renderTable(data, page, size);
-                })
-                .catch(error => console.error('Error fetching data:', error));
+        fetch(apiURL)
+        .then(response => response.json())
+        .then(data => {
+        renderTable(data, page, size);
+        })
+        .catch(error => console.error('Error fetching data:', error));
         }
 
         function renderTable(data, page, size) {
-            const tableData = data.content || data; // Kiểm tra nếu data.content không tồn tại, sử dụng data trực tiếp
-            initialTableData = tableData;
-            const tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = ''; // Xóa dữ liệu hiện tại trong bảng
+        const tableData = data.content || data; // Kiểm tra nếu data.content không tồn tại, sử dụng data trực tiếp
+        initialTableData = tableData;
+        const tableBody = document.getElementById('tableBody');
+        tableBody.innerHTML = ''; // Xóa dữ liệu hiện tại trong bảng
 
-            tableData.forEach((hoaDon, index) => {
-                const ngayTaoFormatted = new Date(hoaDon.ngayTao).toLocaleDateString();
-                const row = `
-            <tr>
-                <td>${(page * size) + index + 1}</td>
-                <td class="maHoaDon">${hoaDon.maHoaDon}</td>
-                <td class="maNhanVien">${hoaDon.maNhanVien}</td>
-                <td class="hoVaTenKhachHang">${hoaDon.hoVaTenKhachHang}</td>
-                <td class="soDienThoaiKhachHang">${hoaDon.soDienThoaiKhachHang}</td>
-                <td class="loai">
-                    <span style="width: 90%"
-                        class="${hoaDon.loai === true ? 'custom-1' : 'custom-2'}" >
-                        ${hoaDon.loai == false ? "Online" : "Tại quầy"}
-                    </span>
-                </td>
-                <td class="ngayTao">${ngayTaoFormatted}</td>
-                <td class="tongTien">${hoaDon.tongTien}</td>
-                <td class="trangThai">
-                    <span style="width: 90%"
-                        class="${hoaDon.trangThai === 'hủy' ? 'custom-3' : 'custom-4'}">
-                        ${hoaDon.trangThai}
-                    </span>
-                </td>
-                <td>
-                    <button class="btn mb-2 mr-1 btn-warning" type="button" onclick="showDetailContent(${hoaDon.id})">
-                        <span class="fe fe-eye"></span>
-                    </button>
-                </td>
-            </tr>
+        tableData.forEach((hoaDon, index) => {
+        const ngayTaoFormatted = new Date(hoaDon.ngayTao).toLocaleDateString();
+        const row = `
+        <tr>
+        <td>${(page * size) + index + 1}</td>
+        <td class="maHoaDon">${hoaDon.maHoaDon}</td>
+        <td class="maNhanVien">${hoaDon.maNhanVien}</td>
+        <td class="hoVaTenKhachHang">${hoaDon.hoVaTenKhachHang}</td>
+        <td class="soDienThoaiKhachHang">${hoaDon.soDienThoaiKhachHang}</td>
+        <td class="loai">
+        <span style="width: 90%"
+        class="${hoaDon.loai === true ? 'custom-1' : 'custom-4'}" >
+        ${hoaDon.loai == false ? "Online" : "Tại quầy"}
+        </span>
+        </td>
+        <td class="ngayTao">${ngayTaoFormatted}</td>
+        <td class="tongTien">${hoaDon.tongTien}</td>
+        <td class="trangThai">
+        <span style="width: 90%"
+        class="${hoaDon.trangThai === 'hủy' ? 'custom-3' : 'custom-4'}">
+        ${hoaDon.trangThai}
+        </span>
+        </td>
+        <td>
+        <button class="btn mb-2 mr-1 btn-outline-success" type="button" onclick="showDetailContent(${hoaDon.id})">
+        <span class="fe fe-eye"></span>
+        </button>
+        </td>
+        </tr>
         `;
-                tableBody.insertAdjacentHTML('beforeend', row);
-            });
+        tableBody.insertAdjacentHTML('beforeend', row);
+        });
 
-            // Tạo các nút phân trang
-            const paginationElement = document.getElementById('pagination');
-            paginationElement.innerHTML = ''; // Xóa nút phân trang hiện tại
+        // Tạo các nút phân trang
+        const paginationElement = document.getElementById('pagination');
+        paginationElement.innerHTML = ''; // Xóa nút phân trang hiện tại
 
-            // Tạo nút Previous nếu có trang trước đó
-            if (data.number > 0) {
-                const previousButton = `<li class="page-item"><a class="page-link" href="#" onclick="fetchDataAndRenderTable(${data.number - 1}, ${data.size})">Previous</a></li>`;
-                paginationElement.insertAdjacentHTML('beforeend', previousButton);
-            }
+        // Tạo nút Previous nếu có trang trước đó
+        if (data.number > 0) {
+        const previousButton = `<li class="page-item"><a class="page-link" href="#" onclick="fetchDataAndRenderTable(${data.number - 1}, ${data.size})">Previous</a></li>`;
+        paginationElement.insertAdjacentHTML('beforeend', previousButton);
+        }
 
-            // Tạo các nút trang
-            for (let i = 0; i < data.totalPages; i++) {
-                const pageButton = `<li class="page-item ${i === data.number ? 'active' : ''}"><a class="page-link" href="#" onclick="fetchDataAndRenderTable(${i}, ${data.size})">${i + 1}</a></li>`;
-                paginationElement.insertAdjacentHTML('beforeend', pageButton);
-            }
+        // Tạo các nút trang
+        for (let i = 0; i < data.totalPages; i++) {
+        const pageButton = `<li class="page-item ${i === data.number ? 'active' : ''}"><a class="page-link" href="#" onclick="fetchDataAndRenderTable(${i}, ${data.size})">${i + 1}</a></li>`;
+        paginationElement.insertAdjacentHTML('beforeend', pageButton);
+        }
 
-            // Tạo nút Next nếu có trang tiếp theo
-            if (data.number < data.totalPages - 1) {
-                const nextButton = `<li class="page-item"><a class="page-link" href="#" onclick="fetchDataAndRenderTable(${data.number + 1}, ${data.size})">Next</a></li>`;
-                paginationElement.insertAdjacentHTML('beforeend', nextButton);
-            }
+        // Tạo nút Next nếu có trang tiếp theo
+        if (data.number < data.totalPages - 1) {
+        const nextButton = `<li class="page-item"><a class="page-link" href="#" onclick="fetchDataAndRenderTable(${data.number + 1}, ${data.size})">Next</a></li>`;
+        paginationElement.insertAdjacentHTML('beforeend', nextButton);
+        }
         }
 
         function searchInvoices(query) {
-            currentSearchQuery = query.trim() === "" ? null : query;
-            fetchDataAndRenderTable();
+        currentSearchQuery = query.trim() === "" ? null : query;
+        fetchDataAndRenderTable();
         }
 
         function searchMinMoney(minMoney) {
-            currentSearchMinMoney = minMoney.trim() === "" ? null : minMoney;
-            fetchDataAndRenderTable();
+        currentSearchMinMoney = minMoney.trim() === "" ? null : minMoney;
+        fetchDataAndRenderTable();
         }
 
         function searchMaxMoney(maxMoney) {
-            currentSearchMaxMoney = maxMoney.trim() === "" ? null : maxMoney;
-            fetchDataAndRenderTable();
+        currentSearchMaxMoney = maxMoney.trim() === "" ? null : maxMoney;
+        fetchDataAndRenderTable();
         }
 
         function filterTable() {
-            const statusFilter = document.getElementById('statusFilter').value;
-            currentStatusFilter = statusFilter === "all" ? null : statusFilter;
-            fetchDataAndRenderTable();
+        const statusFilter = document.getElementById('statusFilter').value;
+        currentStatusFilter = statusFilter === "all" ? null : statusFilter;
+        fetchDataAndRenderTable();
         }
 
         function filterTable2(valueStatus) {
-            currentStatusFilter2 = valueStatus === "all" ? null : valueStatus;
-            fetchDataAndRenderTable();
+        currentStatusFilter2 = valueStatus === "all" ? null : valueStatus;
+        fetchDataAndRenderTable();
         }
 
         // Hàm để ẩn nội dung ban đầu và hiển thị nội dung mới
         function showDetailContent(id) {
-            const bodyContent = document.getElementById('bodyContent');
+        const bodyContent = document.getElementById('bodyContent');
 
-            const form = `
-                <div class="row justify-content-center">
-                    <div class="col-12">
-                        <h2 class="mb-2 page-title">Quản lý hóa đơn</h2>
-                        <div class="row my-4">
-                            <div class="col-md-12">
-                                <div class="card shadow">
-                                    <div class="card-body">
-                                        <div class="form-row mb-3">
-                                            <h4 class="card-title ml-3" id="title"></h4>
-                                        </div>
-                                        <div>
-                                             <form>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-4">
-                                                        <label for="hoVaTenKhachHang" name="hoVaTenKhachHang">Tên khách hàng</label>
-                                                        <input type="text" class="form-control" id="hoVaTenKhachHang" readonly>
-                                                    </div>
-                                                    <div class="form-group col-md-4">
-                                                        <label for="soDienThoaiKhachHang" name="soDienThoaiKhachHang">SĐT</label>
-                                                        <input type="text" class="form-control" id="soDienThoaiKhachHang" readonly>
-                                                    </div>
-                                                    <div class="form-group col-md-4">
-                                                        <label for="maNhanVien" name="maNhanVien">Mã nhân viên</label>
-                                                        <input type="text" class="form-control" id="maNhanVien" readonly>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-3">
-                                                        <label for="tienCoc" name="tienCoc">Tiền cọc</label>
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" id="tienCoc" readonly>
-                                                            <span class="input-group-text">$</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-md-3">
-                                                        <label for="tongTien" name="tongTien">Tổng tiền</label>
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" id="tongTien" readonly>
-                                                            <span class="input-group-text">$</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-md-3">
-                                                        <label for="trangThai" name="trangThai">Trạng thái</label>
-                                                        <input type="text" class="form-control" id="trangThai" readonly>
-                                                    </div>
-                                                    <div class="form-group col-md-3">
-                                                        <label for="loai" name="loai">Loại</label>
-                                                        <input type="text" class="form-control" id="loai" readonly>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-3">
-                                                        <label for="ngayDenSan" name="ngayDenSan">Ngày đến sân</label>
-                                                        <input type="date" class="form-control" id="ngayDenSan" readonly>
-                                                    </div>
-                                                    <div class="form-group col-md-3">
-                                                        <label for="ngayThanhToan" name="ngayThanhToan">Ngày thanh toán</label>
-                                                        <input type="date" class="form-control" id="ngayThanhToan" readonly>
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <label for="ghiChu" name="ghiChu">Ghi chú</label>
-                                                        <textarea class="form-control" id="ghiChu" readonly></textarea>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row my-4">
-                            <div class="col-md-12">
-                                <div class="card shadow">
-                                    <div class="card-body">
-                                        <div class="form-row mb-3">
-                                            <h4 class="card-title ml-3">Thông tin sân đặt</h4>
-                                        </div>
-                                        <div>
-                                             <table class="table datatables" style="justify-content: center; text-align: center" id="dataTable-1">
-                                                <thead>
-                                                    <tr>
-                                                        <th>STT</th>
-                                                        <th>Sân</th>
-                                                        <th>Ca</th>
-                                                        <th>Tổng tiền</th>
-                                                        <th>Trạng thái</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="tableBody">
-                                                    <!-- Dữ liệu bảng sẽ được thêm bởi JavaScript -->
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row my-4">
-                            <div class="col-md-4">
-                                <div class="card shadow">
-                                    <div class="card-body">
-                                        <div class="row mb-2">
-                                            <div class="col-6 text-left">Tổng tiền sân:</div>
-                                            <div class="col-6 text-right">100,000 VND</div>
-                                        </div>
-                                        <div class="row mb-2">
-                                            <div class="col-6 text-left">Tổng tiền dịch vụ:</div>
-                                            <div class="col-6 text-right">50,000 VND</div>
-                                        </div>
-                                        <div class="row mb-2">
-                                            <div class="col-6 text-left">Tổng tiền phụ phí:</div>
-                                            <div class="col-6 text-right">20,000 VND</div>
-                                        </div>
-                                        <div class="row mb-2">
-                                            <div class="col-6 text-left">Tổng tiền giảm:</div>
-                                            <div class="col-6 text-right">10,000 VND</div>
-                                        </div>
-                                        <hr>
-                                        <div class="row mb-2">
-                                            <div class="col-6 text-left">Tổng tiền thanh toán:</div>
-                                            <div class="col-6 text-right">160,000 VND</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button class="btn btn-secondary" onclick="back()">Quay lại</button>
-            `;
+        const form = `
+        <div class="row justify-content-center">
+        <div class="col-12">
+        <h2 class="mb-2 page-title">Quản lý hóa đơn</h2>
+        <div class="row my-4">
+        <div class="col-md-12">
+        <div class="card shadow">
+        <div class="card-body">
+        <div class="form-row mb-3">
+        <h4 class="card-title ml-3" id="title"></h4>
+        </div>
+        <div>
+        <form>
+        <div class="form-row">
+        <div class="form-group col-md-4">
+        <label for="hoVaTenKhachHang" name="hoVaTenKhachHang">Tên khách hàng</label>
+        <input type="text" class="form-control" id="hoVaTenKhachHang" readonly>
+        </div>
+        <div class="form-group col-md-4">
+        <label for="soDienThoaiKhachHang" name="soDienThoaiKhachHang">SĐT</label>
+        <input type="text" class="form-control" id="soDienThoaiKhachHang" readonly>
+        </div>
+        <div class="form-group col-md-4">
+        <label for="maNhanVien" name="maNhanVien">Mã nhân viên</label>
+        <input type="text" class="form-control" id="maNhanVien" readonly>
+        </div>
+        </div>
+        <div class="form-row">
+        <div class="form-group col-md-3">
+        <label for="tienCoc" name="tienCoc">Tiền cọc</label>
+        <div class="input-group">
+        <input type="text" class="form-control" id="tienCoc" readonly>
+        <span class="input-group-text">$</span>
+        </div>
+        </div>
+        <div class="form-group col-md-3">
+        <label for="tongTien" name="tongTien">Tổng tiền</label>
+        <div class="input-group">
+        <input type="text" class="form-control" id="tongTien" readonly>
+        <span class="input-group-text">$</span>
+        </div>
+        </div>
+        <div class="form-group col-md-3">
+        <label for="trangThai" name="trangThai">Trạng thái</label>
+        <input type="text" class="form-control" id="trangThai" readonly>
+        </div>
+        <div class="form-group col-md-3">
+        <label for="loai" name="loai">Loại</label>
+        <input type="text" class="form-control" id="loai" readonly>
+        </div>
+        </div>
+        <div class="form-row">
+        <div class="form-group col-md-3">
+        <label for="ngayDenSan" name="ngayDenSan">Ngày đến sân</label>
+        <input type="date" class="form-control" id="ngayDenSan" readonly>
+        </div>
+        <div class="form-group col-md-3">
+        <label for="ngayThanhToan" name="ngayThanhToan">Ngày thanh toán</label>
+        <input type="date" class="form-control" id="ngayThanhToan" readonly>
+        </div>
+        <div class="form-group col-md-6">
+        <label for="ghiChu" name="ghiChu">Ghi chú</label>
+        <textarea class="form-control" id="ghiChu" readonly></textarea>
+        </div>
+        </div>
+        </form>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="row my-4">
+        <div class="col-md-12">
+        <div class="card shadow">
+        <div class="card-body">
+        <div class="form-row mb-3">
+        <h4 class="card-title ml-3">Thông tin sân đặt</h4>
+        </div>
+        <div>
+        <table class="table datatables" style="justify-content: center; text-align: center" id="dataTable-1">
+        <thead>
+        <tr>
+        <th>STT</th>
+        <th>Sân</th>
+        <th>Ca</th>
+        <th>Tổng tiền</th>
+        <th>Trạng thái</th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Dữ liệu bảng sẽ được thêm bởi JavaScript -->
+        </tbody>
+        </table>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="row my-4">
+        <div class="col-md-4">
+        <div class="card shadow">
+        <div class="card-body">
+        <div class="row mb-2">
+        <div class="col-6 text-left">Tổng tiền sân:</div>
+        <div class="col-6 text-right">100,000 VND</div>
+        </div>
+        <div class="row mb-2">
+        <div class="col-6 text-left">Tổng tiền dịch vụ:</div>
+        <div class="col-6 text-right">50,000 VND</div>
+        </div>
+        <div class="row mb-2">
+        <div class="col-6 text-left">Tổng tiền phụ phí:</div>
+        <div class="col-6 text-right">20,000 VND</div>
+        </div>
+        <div class="row mb-2">
+        <div class="col-6 text-left">Tổng tiền giảm:</div>
+        <div class="col-6 text-right">10,000 VND</div>
+        </div>
+        <hr>
+        <div class="row mb-2">
+        <div class="col-6 text-left">Tổng tiền thanh toán:</div>
+        <div class="col-6 text-right">160,000 VND</div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <button class="btn btn-outline-secondary" onclick="back()">Quay lại</button>
+        `;
 
-            bodyContent.innerHTML = form;
+        bodyContent.innerHTML = form;
 
-            fetch(`http://localhost:8080/hoa-don/${id}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('title').innerText = 'Thông tin hóa đơn: ' + data.maHoaDon;
-                    document.getElementById('hoVaTenKhachHang').value = data.hoVaTenKhachHang;
-                    document.getElementById('soDienThoaiKhachHang').value = data.soDienThoaiKhachHang;
-                    document.getElementById('maNhanVien').value = data.maNhanVien;
-                    document.getElementById('tongTien').value = data.tongTien;
-                    document.getElementById('tienCoc').value = data.tienCoc;
-                    document.getElementById('loai').value = data.loai;
-                    document.getElementById('trangThai').value = data.trangThai;
-                    document.getElementById('ghiChu').value = data.ghiChu;
-                    document.getElementById('ngayDenSan').value = data.ngayDenSan;
-                    document.getElementById('ngayThanhToan').value = data.ngayThanhToan;
-                });
+        fetch(`http://localhost:8080/hoa-don/${id}`)
+        .then(response => response.json())
+        .then(data => {
+        document.getElementById('title').innerText = 'Thông tin hóa đơn: ' + data.maHoaDon;
+        document.getElementById('hoVaTenKhachHang').value = data.hoVaTenKhachHang;
+        document.getElementById('soDienThoaiKhachHang').value = data.soDienThoaiKhachHang;
+        document.getElementById('maNhanVien').value = data.maNhanVien;
+        document.getElementById('tongTien').value = data.tongTien;
+        document.getElementById('tienCoc').value = data.tienCoc;
+        document.getElementById('loai').value = data.loai;
+        document.getElementById('trangThai').value = data.trangThai;
+        document.getElementById('ghiChu').value = data.ghiChu;
+        document.getElementById('ngayDenSan').value = data.ngayDenSan;
+        document.getElementById('ngayThanhToan').value = data.ngayThanhToan;
+        });
 
-            fetch(`http://localhost:8080/hoa-don-chi-tiet/hien-thi/${id}`)
-                .then(response => response.json())
-                .then(data => {
-                    const tableBody = document.getElementById('tableBody');
-                    tableBody.innerHTML = '';
-                    data.forEach((chiTiet, index) => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${chiTiet.tenSanBong}</td>
-                    <td>${chiTiet.tenCa}</td>
-                    <td>${chiTiet.tienSan}</td>
-                    <td>
-                        <span style="width: 90%"
-                            class="${chiTiet.trangThai === 'hủy' ? 'custom-3' : 'custom-4'}">
-                            ${chiTiet.trangThai}
-                        </span>
-                    </td>
-                `;
-                        tableBody.appendChild(row);
-                    });
-                });
+        fetch(`http://localhost:8080/hoa-don-chi-tiet/hien-thi/${id}`)
+        .then(response => response.json())
+        .then(data => {
+        const tableBody = document.getElementById('tableBody');
+        tableBody.innerHTML = '';
+        data.forEach((chiTiet, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${chiTiet.tenSanBong}</td>
+        <td>${chiTiet.tenCa}</td>
+        <td>${chiTiet.tienSan}</td>
+        <td>
+        <span style="width: 90%"
+        class="${chiTiet.trangThai === 'hủy' ? 'custom-3' : 'custom-4'}">
+        ${chiTiet.trangThai}
+        </span>
+        </td>
+        `;
+        tableBody.appendChild(row);
+        });
+        });
         };
 
         function back(){
-            const mainContent = document.querySelector('.main-content');
-            mainContent.innerHTML = `
+        const mainContent = document.querySelector('.main-content');
+        mainContent.innerHTML = `
         <div class="container-fluid" id="bodyContent">
-            <div class="row justify-content-center">
-                <div class="col-12">
-                    <h2 class="mb-2 page-title">Quản lý hóa đơn</h2>
-                    <div class="row my-4">
-                        <div class="col-md-12">
-                            <div class="card shadow">
-                                <div class="card-body">
-                                    <div class="form-row mb-3">
-                                        <i class="bi bi-funnel-fill"></i>
-                                        <h4 class="card-title ml-3">Bộ lọc</h4>
-                                    </div>
-                                    <div class="toolbar row">
-                                        <div class="col">
-                                            <form>
-                                                <div class="form-row mb-3">
-                                                    <div class="form-group col-md-1 d-flex align-items-center">
-                                                        <label for="search">Tìm kiếm: </label>
-                                                    </div>
-                                                    <div class="form-group col-md-4 mr-5">
-                                                        <input type="text" class="form-control" id="search"
-                                                               placeholder="Mã HD, NV, tên KH, SĐT" oninput="searchInvoices(this.value)">
-                                                    </div>
-                                                    <div class="form-group col-md-1 d-flex align-items-center">
-                                                        <label for="statusFilter">Loại: </label>
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <select class="custom-select my-1 mr-sm-2"
-                                                                id="statusFilter" onchange="filterTable()">
-                                                            <option value="all" selected>Tất cả</option>
-                                                            <option value="0">Online</option>
-                                                            <option value="1">Tại quầy</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <button class="btn btn-primary" onclick="back()">Làm mới</button>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <h5>Tổng tiền</h5>
-                                                </div>
-                                                <div class="form-row mb-3">
-                                                    <div class="form-group col-md-1 d-flex align-items-center">
-                                                        <label for="tienMin">Từ: </label>
-                                                    </div>
-                                                    <div class="form-group col-md-4 mr-5">
-                                                        <input type="text" class="form-control" id="tienMin"
-                                                               placeholder="Nhập số tiền" oninput="searchMinMoney(this.value)">
-                                                    </div>
-                                                    <div class="form-group col-md-1 d-flex align-items-center">
-                                                        <label for="tienMax">Đến: </label>
-                                                    </div>
-                                                    <div class="form-group col-md-4 mr-5">
-                                                        <input type="text" class="form-control" id="tienMax"
-                                                               placeholder="Nhập số tiền" oninput="searchMaxMoney(this.value)">
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <h5>Ngày tạo</h5>
-                                                </div>
-                                                <div class="form-row mb-3">
-                                                    <div class="form-group col-md-1 d-flex align-items-center">
-                                                        <label for="ngayBatDau">Từ ngày: </label>
-                                                    </div>
-                                                    <div class="form-group col-md-4 mr-5">
-                                                        <div class="input-group">
-                                                          <input type="text" class="form-control drgpicker" id="ngayBatDau" value="" placeholder="dd/MM/yyyy">
-                                                          <div class="input-group-append">
-                                                            <div class="input-group-text" id="button-addon-date"><span class="fe fe-calendar fe-16 mx-2"></span></div>
-                                                          </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-md-1 d-flex align-items-center">
-                                                        <label for="ngayKetThuc">Đến ngày: </label>
-                                                    </div>
-                                                    <div class="form-group col-md-4">
-                                                        <div class="input-group">
-                                                          <input type="text" class="form-control drgpicker" id="ngayKetThuc" value="" placeholder="dd/MM/yyyy">
-                                                          <div class="input-group-append">
-                                                            <div class="input-group-text" id="button-addon-date"><span class="fe fe-calendar fe-16 mx-2"></span></div>
-                                                          </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row my-4">
-                        <div class="col-md-12">
-                            <div class="card shadow">
-                                <div class="card-body">
-                                    <div class="toolbar row mb-3">
-                                        <div class="col">
-                                            <form class="form-inline">
-                                                <div class="form-row">
-                                                    <div class="form-group col-auto ml-3">
-                                                        <h4 class="card-title">Danh sách hóa đơn</h4>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="col ml-auto">
-                                            <div class="dropdown float-right">
-                                                <button class="btn btn-primary" type="button">
-                                                    + Tạo hóa đơn
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mb-4">
-                                    <div class="card shadow">
-                                        <div class="card-body">
-                                            <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
-                                                <li class="nav-item">
-                                                    <button class="nav-link active" role="tab" data-toggle="pill" aria-controls="pills-home" aria-selected="true" onclick="filterTable2('all')">Tất cả</button>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-profile" onclick="filterTable2('da thanh toan')" aria-selected="false">Đã thanh toán</button>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-contact" onclick="filterTable2('huy')" aria-selected="false">Hủy</button>
-                                                </li>
-                                            </ul>
-                                            <div class="tab-content mb-1" id="pills-tabContent">
-                                                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                                                    <table class="table datatables" style="justify-content: center; text-align: center" id="table-home">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>STT</th>
-                                                                <th>Mã hóa đơn</th>
-                                                                <th>Mã nhân viên</th>
-                                                                <th>Tên khách hàng</th>
-                                                                <th>SĐT khách hàng</th>
-                                                                <th>Loại</th>
-                                                                <th>Ngày tạo</th>
-                                                                <th>Tổng tiền</th>
-                                                                <th>Trạng thái</th>
-                                                                <th>Hành động</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="tableBody">
-                                                            <!-- Dữ liệu bảng sẽ được thêm bởi JavaScript -->
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                    <nav aria-label="Table Paging" class="mb-0 text-muted">
-                                        <ul id="pagination" class="pagination justify-content-end mb-0">
-                                            <!-- Các nút phân trang sẽ được thêm bởi JavaScript -->
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="row justify-content-center">
+        <div class="col-12">
+        <h2 class="mb-2 page-title">Quản lý hóa đơn</h2>
+        <div class="row my-4">
+        <div class="col-md-12">
+        <div class="card shadow">
+        <div class="card-body">
+        <div class="form-row mb-3">
+        <i class="bi bi-funnel-fill"></i>
+        <h4 class="card-title ml-3">Bộ lọc</h4>
         </div>
-    `;
+        <div class="toolbar row">
+        <div class="col">
+        <form>
+        <div class="form-row mb-3">
+        <div class="form-group col-md-1 d-flex align-items-center">
+        <label for="search">Tìm kiếm: </label>
+        </div>
+        <div class="form-group col-md-4 mr-5">
+        <input type="text" class="form-control" id="search"
+        placeholder="Mã HD, NV, tên KH, SĐT" oninput="searchInvoices(this.value)">
+        </div>
+        <div class="form-group col-md-1 d-flex align-items-center">
+        <label for="statusFilter">Loại: </label>
+        </div>
+        <div class="form-group col-md-2">
+        <select class="custom-select my-1 mr-sm-2"
+        id="statusFilter" onchange="filterTable()">
+        <option value="all" selected>Tất cả</option>
+        <option value="0">Online</option>
+        <option value="1">Tại quầy</option>
+        </select>
+        </div>
+        <div class="form-group col-md-2">
+        <button class="btn btn-info" onclick="back()">Làm mới</button>
+        </div>
+        </div>
+        <div class="form-row">
+        <h5>Tổng tiền</h5>
+        </div>
+        <div class="form-row mb-3">
+        <div class="form-group col-md-1 d-flex align-items-center">
+        <label for="tienMin">Từ: </label>
+        </div>
+        <div class="form-group col-md-4 mr-5">
+        <input type="text" class="form-control" id="tienMin"
+        placeholder="Nhập số tiền" oninput="searchMinMoney(this.value)">
+        </div>
+        <div class="form-group col-md-1 d-flex align-items-center">
+        <label for="tienMax">Đến: </label>
+        </div>
+        <div class="form-group col-md-4 mr-5">
+        <input type="text" class="form-control" id="tienMax"
+        placeholder="Nhập số tiền" oninput="searchMaxMoney(this.value)">
+        </div>
+        </div>
+        <div class="form-row">
+        <h5>Ngày tạo</h5>
+        </div>
+        <div class="form-row mb-3">
+        <div class="form-group col-md-1 d-flex align-items-center">
+        <label for="ngayBatDau">Từ ngày: </label>
+        </div>
+        <div class="form-group col-md-4 mr-5">
+        <div class="input-group">
+        <input type="text" class="form-control drgpicker" id="ngayBatDau" value="" placeholder="dd/MM/yyyy">
+        <div class="input-group-append">
+        <div class="input-group-text" id="button-addon-date"><span class="fe fe-calendar fe-16 mx-2"></span></div>
+        </div>
+        </div>
+        </div>
+        <div class="form-group col-md-1 d-flex align-items-center">
+        <label for="ngayKetThuc">Đến ngày: </label>
+        </div>
+        <div class="form-group col-md-4">
+        <div class="input-group">
+        <input type="text" class="form-control drgpicker" id="ngayKetThuc" value="" placeholder="dd/MM/yyyy">
+        <div class="input-group-append">
+        <div class="input-group-text" id="button-addon-date"><span class="fe fe-calendar fe-16 mx-2"></span></div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </form>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="row my-4">
+        <div class="col-md-12">
+        <div class="card shadow">
+        <div class="card-body">
+        <div class="toolbar row mb-3">
+        <div class="col">
+        <form class="form-inline">
+        <div class="form-row">
+        <div class="form-group col-auto ml-3">
+        <h4 class="card-title">Danh sách hóa đơn</h4>
+        </div>
+        </div>
+        </form>
+        </div>
+        <div class="col ml-auto">
+        <div class="dropdown float-right">
+        <button class="btn btn-success" type="button">
+        + Tạo hóa đơn
+        </button>
+        </div>
+        </div>
+        </div>
+        <div class="col-md-12 mb-4">
+        <div class="card shadow">
+        <div class="card-body">
+        <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist" >
+        <li class="nav-item">
+        <button class="nav-link active" role="tab" data-toggle="pill" aria-controls="pills-home" aria-selected="true" onclick="filterTable2('all')" >Tất cả</button>
+        </li>
+        <li class="nav-item">
+        <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-profile" onclick="filterTable2('da thanh toan')" aria-selected="false">Đã thanh toán</button>
+        </li>
+        <li class="nav-item">
+        <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-contact" onclick="filterTable2('huy')" aria-selected="false">Hủy</button>
+        </li>
+        </ul>
+        <div class="tab-content mb-1" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+        <table class="table datatables" style="justify-content: center; text-align: center" id="table-home">
+        <thead>
+        <tr>
+        <th>STT</th>
+        <th>Mã hóa đơn</th>
+        <th>Mã nhân viên</th>
+        <th>Tên khách hàng</th>
+        <th>SĐT khách hàng</th>
+        <th>Loại</th>
+        <th>Ngày tạo</th>
+        <th>Tổng tiền</th>
+        <th>Trạng thái</th>
+        <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Dữ liệu bảng sẽ được thêm bởi JavaScript -->
+        </tbody>
+        </table>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <nav aria-label="Table Paging" class="mb-0 text-muted">
+        <ul id="pagination" class="pagination justify-content-end mb-0">
+            <!-- Các nút phân trang sẽ được thêm bởi JavaScript -->
+        </ul>
+        </nav>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        `;
 
-            $('.drgpicker').daterangepicker({
-                singleDatePicker: true,
-                timePicker: false,
-                showDropdowns: true,
-                locale: {
-                    format: 'MM/DD/YYYY'
-                }
-            });
-            initialTableData = [];
-            currentSearchQuery = "";
-            currentSearchMinMoney = "";
-            currentSearchMaxMoney = "";
-            currentStatusFilter = null;
-            currentStatusFilter2 = null;
-            fetchDataAndRenderTable(); // Gọi hàm fetch và render table khi DOMContentLoaded
+        $('.drgpicker').daterangepicker({
+        singleDatePicker: true,
+        timePicker: false,
+        showDropdowns: true,
+        locale: {
+        format: 'MM/DD/YYYY'
+        }
+        });
+        initialTableData = [];
+        currentSearchQuery = "";
+        currentSearchMinMoney = "";
+        currentSearchMaxMoney = "";
+        currentStatusFilter = null;
+        currentStatusFilter2 = null;
+        fetchDataAndRenderTable(); // Gọi hàm fetch và render table khi DOMContentLoaded
         }
 </script>
 </html>

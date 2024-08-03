@@ -17,11 +17,11 @@
                 <div class="col-12">
                     <div class="row align-items-center my-3">
                         <div class="col">
-                            <h2 class="page-title">Calendar</h2>
+                            <h2 class="mb-2 page-title">Quản lý lịch đặt sân</h2>
                         </div>
                         <div class="col-auto">
                             <button type="button" class="btn" data-bs-toggle="modal" data-bs-target=".modal-calendar"><span class="fe fe-filter fe-16 text-muted"></span></button>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal"><span class="fe fe-plus fe-16 mr-3"></span>New Event</button>
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#eventModal"><span class="fe fe-plus fe-16 mr-3"></span>New Event</button>
                         </div>
                     </div>
                     <div id='calendar'></div>
@@ -99,7 +99,7 @@
                                         <input type="checkbox" class="custom-control-input" id="RepeatSwitch" checked>
                                         <label class="custom-control-label" for="RepeatSwitch">All day</label>
                                     </div>
-                                    <button type="button" class="btn mb-2 btn-primary">Save Event</button>
+                                    <button type="button" class="btn mb-2 btn-success">Save Event</button>
                                 </div>
                             </div>
                         </div>
@@ -226,7 +226,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -262,7 +262,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Apply</button>
+                        <button type="button" class="btn btn-success">Apply</button>
                     </div>
                 </div>
             </div>
@@ -285,32 +285,76 @@
 <script src='js/fullcalendar.custom.js'></script>
 <script>
     var calendarEl = document.getElementById('calendar');
-    if (calendarEl)
-    {
-        document.addEventListener('DOMContentLoaded', function()
-        {
-            var calendar = new FullCalendar.Calendar(calendarEl,
-                {
-                    plugins: ['dayGrid', 'timeGrid', 'list', 'bootstrap'],
-                    timeZone: 'UTC',
-                    themeSystem: 'bootstrap',
-                    header:
-                        {
-                            left: 'today, prev, next',
-                            center: 'title',
-                            right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-                        },
-                    buttonIcons:
-                        {
-                            prev: 'fe-arrow-left',
-                            next: 'fe-arrow-right',
-                            prevYear: 'left-double-arrow',
-                            nextYear: 'right-double-arrow'
-                        },
-                    weekNumbers: true,
-                    eventLimit: true, // allow "more" link when too many events
-                    events: 'https://fullcalendar.io/demo-events.json'
-                });
+    if (calendarEl) {
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['dayGrid', 'timeGrid', 'list', 'bootstrap'],
+                timeZone: 'UTC',
+                themeSystem: 'bootstrap',
+                header: {
+                    left: 'today, prev, next',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+                },
+                buttonIcons: {
+                    today: 'Hôm nay',
+                    month: 'Tháng',
+                    week: 'Tuần',
+                    day: 'Ngày',
+                    list: 'Danh sách',
+                    prev: 'fe-arrow-left',
+                    next: 'fe-arrow-right',
+                    prevYear: 'left-double-arrow',
+                    nextYear: 'right-double-arrow'
+                },
+                weekNumbers: true,
+                eventLimit: true, // cho phép liên kết "more" khi có quá nhiều sự kiện
+                locale: 'vi',
+                events: function(fetchInfo, successCallback, failureCallback) {
+                    $.when(
+                        $.ajax({
+                            url: 'http://localhost:8080/hoa-don/hien-thi', // API trả về hóa đơn
+                            method: 'GET'
+                        }),
+                        $.ajax({
+                            url: 'http://localhost:8080/hoa-don-chi-tiet/hien-thi', // API trả về chi tiết hóa đơn
+                            method: 'GET'
+                        })
+                    ).done(function(hoaDonResponse, chiTietResponse) {
+                        var events = [];
+                        var hoaDons = hoaDonResponse[0]; // Dữ liệu hóa đơn
+                        var chiTietHoaDons = chiTietResponse[0]; // Dữ liệu chi tiết hóa đơn
+
+                        // Tạo đối tượng ánh xạ để lưu thông tin hóa đơn theo ID
+                        var hoaDonMap = {};
+                        hoaDons.forEach(function(hoaDon) {
+                            hoaDonMap[hoaDon.id] = hoaDon; // Ánh xạ ID hóa đơn tới thông tin hóa đơn
+                        });
+
+                        // Tạo sự kiện dựa vào dữ liệu chi tiết hóa đơn
+                        chiTietHoaDons.forEach(function(chiTiet) {
+                            var hoaDon = hoaDonMap[chiTiet.idHoaDon]; // Lấy thông tin hóa đơn tương ứng
+
+                            // Trích xuất giờ và phút từ datetime
+                            var startTime = new Date(chiTiet.thoiGianBatDauCa);
+                            var endTime = new Date(chiTiet.thoiGianKetThucCa);
+
+                            // Nếu có thông tin hóa đơn, kết hợp ngày và giờ
+                            if (hoaDon) {
+                                events.push({
+                                    title: chiTiet.tenSanBong, // Tùy chỉnh tên trường theo API của bạn
+                                    start: hoaDon.ngayDenSan + 'T' + startTime.toISOString().substr(11, 19), // Kết hợp ngày và giờ
+                                    end: hoaDon.ngayDenSan + 'T' + endTime.toISOString().substr(11, 19), // Kết hợp ngày và giờ cho kết thúc
+                                });
+                            }
+                        });
+
+                        successCallback(events);
+                    }).fail(function() {
+                        failureCallback();
+                    });
+                }
+            });
             calendar.render();
         });
     }
