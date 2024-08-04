@@ -1,12 +1,16 @@
 package com.example.DATN_WebFiveTus.service.Imp;
+
 import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
+
 import java.util.stream.Collectors;
+
 import com.example.DATN_WebFiveTus.dto.DiaChiKhachHangDTO;
 import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
 import com.example.DATN_WebFiveTus.entity.DiaChiKhachHang;
@@ -16,10 +20,11 @@ import com.example.DATN_WebFiveTus.repository.DiaChiKhachHangRepository;
 import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
 import com.example.DATN_WebFiveTus.service.KhachHangService;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+
 import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
 
 
 @Service
@@ -119,24 +124,45 @@ public class KhachHangImp implements KhachHangService {
     }
 
     @Override
-    public List<KhachHangDTO> search(String query) {
-        List<KhachHang> results = khachHangRepository.searchByNameOrPhone(query);
+    public List<KhachHangDTO> search(String query, int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Page<KhachHang> results = khachHangRepository.searchByNamePhoneOrEmail(query, pageable);
+
         return results.stream()
                 .map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class))
                 .collect(Collectors.toList());
     }
 
+
     @Override
-    public List<KhachHangDTO> filter(String status) {
-        if ("all".equals(status)) {
-            return khachHangRepository.findAll().stream()
-                    .map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class))
-                    .collect(Collectors.toList());
+    public List<KhachHangDTO> filter(String status, String gender, int page, int pageSize) {
+        List<KhachHang> khachHangs;
+        boolean genderBoolean;
+
+        if ("true".equals(gender)) {
+            genderBoolean = true; // Nam
+        } else if ("false".equals(gender)) {
+            genderBoolean = false; // Nữ
         } else {
-            return khachHangRepository.filterByStatus(status).stream()
-                    .map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class))
-                    .collect(Collectors.toList());
+            // Trường hợp "all", không cần lọc theo giới tính
+            genderBoolean = true; // Mặc định, không lọc theo giới tính
         }
+
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+
+        if ("all".equals(status) && ("all".equals(gender) || gender == null)) {
+            khachHangs = khachHangRepository.findAll(pageable).getContent();
+        } else if ("all".equals(status)) {
+            khachHangs = khachHangRepository.filterByGender(genderBoolean, pageable).getContent();
+        } else if ("all".equals(gender)) {
+            khachHangs = khachHangRepository.filterByStatus(status, pageable).getContent();
+        } else {
+            khachHangs = khachHangRepository.findByStatusAndGender(status, genderBoolean, pageable).getContent();
+        }
+
+        return khachHangs.stream()
+                .map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class))
+                .collect(Collectors.toList());
     }
 
 }

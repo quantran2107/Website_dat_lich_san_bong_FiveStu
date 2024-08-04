@@ -1,13 +1,303 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="fragment/head :: head"></head>
-<body class="vertical  light  ">
-<div class="wrapper">
-    <div th:include="fragment/navbar :: navbar"></div>
-    <div th:include="fragment/sidebar :: sidebar"></div>
-    <main role="main" class="main-content"></main>
-    <div th:include="fragment/modal :: modal"></div>
+
+<!--<head th:include="~{fragment/head :: head}"></head>-->
+<!--<body class="vertical  light  ">-->
+<!--<div class="wrapper">-->
+<!--    <div th:include="~{fragment/navbar :: navbar}"></div>-->
+<!--    <div th:include="~{fragment/sidebar :: sidebar}"></div>-->
+<!--    <main role="main" class="main-content"></main>-->
+<!--    <div th:include="~{fragment/modal :: modal}"></div>-->
+<!--</div>-->
+<!--</body>-->
+<!--<script th:include="~{fragment/script :: script}"></script>-->
+<!--</html>-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+        }
+
+        .left-content, .right-content {
+            width: 50%;
+            padding: 20px;
+        }
+
+        .right-content {
+            border-left: 1px solid #ddd;
+        }
+
+        .logo {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .features {
+            margin-bottom: 30px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .feature-icon {
+            color: #f77f00;
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        .feature-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 700;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            border-color: #007BFF;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            background: #f77f00;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #d16500;
+        }
+
+        .link {
+            display: block;
+            margin-top: 10px;
+            color: #f77f00;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .link:hover {
+            color: #d16500;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .social-login button {
+            width: 48%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .social-login .google {
+            background: #db4437;
+            color: white;
+        }
+
+        .social-login .google:hover {
+            background: #b33b2d;
+        }
+
+        .social-login .facebook {
+            background: #3b5998;
+            color: white;
+        }
+
+        .social-login .facebook:hover {
+            background: #2d4373;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .remember-me label {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .remember-me input {
+            margin-right: 10px;
+        }
+
+        .forgot-password {
+            color: #f77f00;
+            text-decoration: none;
+        }
+
+        .forgot-password:hover {
+            color: #d16500;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-link a {
+            color: #f77f00;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .register-link a:hover {
+            color: #d16500;
+        }
+
+        .footer-links {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .footer-links a {
+            color: #888;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="left-content">
+        <div class="logo">
+            <img src="logo.png" alt="Sporta Logo">
+            <h1>Sporta</h1>
+        </div>
+        <div class="features">
+            <div class="feature">
+                <span class="feature-icon">✔</span>
+                <div>
+                    <div class="feature-title">Tìm sân nhanh chóng</div>
+                    <div class="feature-description">Tìm sân bóng quanh bạn nhanh chóng</div>
+                </div>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">✔</span>
+                <div>
+                    <div class="feature-title">Tìm đối thủ phù hợp</div>
+                    <div class="feature-description">Tìm ra ngay kèo hay đối phù hợp trình độ uy tín</div>
+                </div>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">✔</span>
+                <div>
+                    <div class="feature-title">Tìm câu lạc bộ để tham gia</div>
+                    <div class="feature-description">Hàng trăm clb uy tín chờ bạn vào chơi</div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-links">
+            <a href="#">Về chúng tôi</a> |
+            <a href="#">Điều khoản sử dụng</a> |
+            <a href="#">Chính sách bảo mật</a>
+        </div>
+    </div>
+    <div class="right-content">
+        <h2>Chào mừng quay trở lại</h2>
+        <div class="social-login">
+            <button class="google">Đăng nhập với Google</button>
+            <button class="facebook">Đăng nhập với Facebook</button>
+        </div>
+        <div class="separator">or</div>
+        <form th:action="@{/login}" method="post">
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="remember-me">
+                <label>
+                    <input type="checkbox" name="remember">
+                    Remember me
+                </label>
+                <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+            <button type="submit" class="btn">Đăng nhập</button>
+        </form>
+        <div class="register-link">
+            Chưa có tài khoản? <a href="#">Đăng ký ở đây</a>
+        </div>
+    </div>
 </div>
 </body>
-<script th:include="fragment/script :: script"></script>
 </html>
+

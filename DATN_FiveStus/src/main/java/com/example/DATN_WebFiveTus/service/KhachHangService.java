@@ -23,8 +23,9 @@ public interface KhachHangService {
 
     Page<KhachHangDTO> getAll(Pageable pageable);
 
-    public List<KhachHangDTO> search(String query);
+    public List<KhachHangDTO> search(String query, int page, int pageSize);
 
-    public List<KhachHangDTO> filter(String status);
+    public List<KhachHangDTO> filter(String status, String gender, int page, int pageSize);
+
 }
 

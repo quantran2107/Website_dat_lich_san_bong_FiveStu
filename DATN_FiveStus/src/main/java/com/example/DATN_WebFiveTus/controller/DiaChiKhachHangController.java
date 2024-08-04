@@ -3,6 +3,8 @@ package com.example.DATN_WebFiveTus.controller;
 import com.example.DATN_WebFiveTus.dto.DiaChiKhachHangDTO;
 import com.example.DATN_WebFiveTus.service.DiaChiKhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,24 +20,35 @@ public class DiaChiKhachHangController {
     private DiaChiKhachHangService diaChiKhachHangService;
 
     @PostMapping("/them-dia-chi")
-    public String addAddress(@RequestParam("idKhachHang") Integer idKhachHang, @ModelAttribute DiaChiKhachHangDTO diaChiKhachHangDTO, Model model) {
-        diaChiKhachHangDTO.setIdKhachHang(idKhachHang);
-        diaChiKhachHangService.save(diaChiKhachHangDTO);
-        return "redirect:/quan-ly-khach-hang-detail?id=" + idKhachHang + "&page=0";
+    public ResponseEntity<String> addAddress(@RequestParam("idKhachHang") Integer idKhachHang,
+                                             @ModelAttribute DiaChiKhachHangDTO diaChiKhachHangDTO) {
+        try {
+            diaChiKhachHangDTO.setIdKhachHang(idKhachHang);
+            diaChiKhachHangService.save(diaChiKhachHangDTO);
+            return ResponseEntity.ok("Thêm địa chỉ thành công!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Đã xảy ra lỗi khi thêm địa chỉ");
+        }
     }
     @PostMapping("/cap-nhat-dia-chi")
-    public String updateAddress(@RequestParam("id") Integer id, @ModelAttribute DiaChiKhachHangDTO diaChiKhachHangDTO) {
-        // Lấy địa chỉ từ id
-        DiaChiKhachHangDTO diaChi = diaChiKhachHangService.getOne(id);
+    public ResponseEntity<String> updateAddress(@RequestParam("id") Integer id, @ModelAttribute DiaChiKhachHangDTO diaChiKhachHangDTO) {
+        try {
+            // Lấy địa chỉ từ id
+            DiaChiKhachHangDTO diaChi = diaChiKhachHangService.getOne(id);
 
-        // Lấy idKhachHang từ địa chỉ
-        Integer idKhachHang = diaChi.getIdKhachHang();
+            // Lấy idKhachHang từ địa chỉ
+            Integer idKhachHang = diaChi.getIdKhachHang();
 
-        // Cập nhật địa chỉ
-        diaChiKhachHangService.update(id, diaChiKhachHangDTO);
+            // Cập nhật địa chỉ
+            diaChiKhachHangService.update(id, diaChiKhachHangDTO);
 
-        // Chuyển hướng về chi tiết của khách hàng
-        return "redirect:/quan-ly-khach-hang-detail?id=" + idKhachHang;
+            // Trả về thông báo thành công
+            return ResponseEntity.ok("Cập nhật địa chỉ thành công!");
+        } catch (Exception e) {
+            // Trả về thông báo lỗi
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi khi cập nhật địa chỉ");
+        }
     }
 
 

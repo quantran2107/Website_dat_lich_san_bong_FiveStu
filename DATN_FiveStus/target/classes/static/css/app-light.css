@@ -101,6 +101,23 @@ abbr[data-original-title] {
     border-bottom: 0;
     text-decoration-skip-ink: none;
 }
+.range-container {
+    position: relative;
+    width: 100%;
+}
+
+.range-labels {
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.range-labels span {
+    position: relative;
+    display: inline-block;
+}
 
 address {
     margin-bottom: 1rem;
@@ -4191,8 +4208,7 @@ input[type="button"].btn-block {
 
 .nav-link:hover, .nav-link:focus {
     text-decoration: none;
-    background: linear-gradient(to right, #56ab2f, #a8e063) !important; /* Gradient cho hiệu ứng hover */
-    color: #ffffff !important; /* Màu chữ khi hover */
+    color: #28a745 ;/* Màu chữ khi hover */
 }
 
 .nav-link.disabled {
@@ -4201,60 +4217,74 @@ input[type="button"].btn-block {
     cursor: default;
 }
 
+/* Định dạng thanh tab */
 .nav-tabs {
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid #e9ecef; /* Viền phía dưới thanh tab */
 }
 
+/* Khoảng cách dưới cùng của các item */
 .nav-tabs .nav-item {
     margin-bottom: -1px;
 }
 
+/* Kiểu cho các liên kết của tab */
 .nav-tabs .nav-link {
-    border: 1px solid transparent;
+    border: 0; /* Loại bỏ viền xung quanh tab */
+    border-bottom: 2px solid transparent; /* Viền dưới tab không chọn */
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
-     /* Màu chữ xanh lá cây cho các tab không được chọn */
-    background-color: transparent !important; /* Đảm bảo không có màu nền nào khác ngoài khi chọn */
+    background-color: transparent !important; /* Nền trong suốt khi không chọn */
+    color: #333; /* Màu chữ xám tối cho tab không chọn */
+    transition: background-color 0.3s ease, color 0.3s ease, border-bottom-color 0.3s ease; /* Hiệu ứng chuyển màu nền, chữ và viền dưới */
 }
 
-.nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
-    background: linear-gradient(to right, #56ab2f, #a8e063) !important; /* Gradient cho hiệu ứng hover */
+/* Hiệu ứng khi hover hoặc focus vào tab */
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link:focus {
+    color: #28a745; /* Màu chữ trắng khi hover */
 }
 
+/* Kiểu cho tab đang hoạt động */
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+    color: #28a745 !important; /* Màu chữ xanh lá cây cho tab đang hoạt động */
+    background-color: #fff !important; /* Nền trắng cho tab đang hoạt động */
+    border-bottom-color: #28a745 !important; /* Màu viền xanh lá cây dưới tab đang hoạt động */
+}
+
+/* Kiểu cho liên kết bị vô hiệu hóa */
 .nav-tabs .nav-link.disabled {
     color: #6c757d !important;
     background-color: transparent !important;
     border-color: transparent !important;
 }
 
-.nav-tabs .nav-link.active,
-.nav-tabs .nav-item.show .nav-link {
-    color: #ffffff !important; /* Màu chữ trắng cho tab đang hoạt động */
-    background: linear-gradient(to right, #56ab2f, #a8e063) !important; /* Gradient cho hiệu ứng hover */
-    border-color: #28a745 !important; /* Màu viền xanh lá cây */
-}
-
+/* Kiểu cho menu dropdown */
 .nav-tabs .dropdown-menu {
     margin-top: -1px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
 
+
+
 .nav-pills .nav-link {
     border-radius: 0.25rem;
     transition: background-color 0.3s ease;
+
      /* Màu chữ xanh lá cây cho các pill */
 }
 
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
     color: #ffffff !important; /* Màu chữ trắng cho pill đang hoạt động */
-    background: linear-gradient(to right, #56ab2f, #a8e063) !important; /* Gradient cho hiệu ứng hover */
+    background: linear-gradient(to right, #56ab2f, #a8e063);
 }
 
 .nav-fill .nav-item {
     flex: 1 1 auto;
     text-align: center;
+
 }
 
 .nav-justified .nav-item {
@@ -11072,7 +11102,7 @@ button:focus {
     top: 0;
     bottom: 0;
     width: 2px;
-    background-color: #1b68ff;
+    background-color: #28a745;
 }
 
 .vertical .topnav,
@@ -11783,8 +11813,8 @@ svg.navbar-brand-img {
 }
 
 .navbar-light .navbar-nav .nav-link:hover {
-    background: #f8f9fa;
-    color: #2aff1b;
+    color: #fff; /* Màu chữ trắng khi hover */
+    background: linear-gradient(to right, #56ab2f, #a8e063)
 }
 
 .navbar-dark .navbar-nav .nav-link {
