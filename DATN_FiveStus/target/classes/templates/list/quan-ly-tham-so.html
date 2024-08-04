@@ -14,20 +14,117 @@
                     <h6>Các điều khoản của sân bóng</h6>
                     <div class="card shadow mb-4">
                         <div class="card-body">
+
+                            <div class="toolbar row mb-3">
+                                <div class="col ml-auto">
+                                    <div class="dropdown float-right">
+                                        <button type="button" class="btn btn-primary float-right ml-3"
+                                                data-toggle="modal" data-target="#varyModalAdd"
+                                                data-whatever="@mdo">Thêm<span class="fe fe-plus"></span>
+                                        </button>
+                                        <div class="modal fade" id="varyModalAdd" tabindex="-1" role="dialog"
+                                             aria-labelledby="varyModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="varyModalLabel">Thêm Tham Số</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form th:action="@{/thamSo/add}" th:object="${thamSo}" method="post">
+                                                            <!-- Loại bỏ trường id vì khi thêm mới, id thường không cần thiết -->
+
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="addMaThamSo">Mã tham số</label>
+                                                                    <input type="text" class="form-control" id="addMaThamSo" th:field="*{ma}">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="addTenThamSo">Tên tham số</label>
+                                                                    <input type="text" class="form-control" id="addTenThamSo" th:field="*{ten}">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="addGiaTriThamSo">Giá trị tham số</label>
+                                                                    <input type="text" class="form-control" id="addGiaTriThamSo" th:field="*{giaTri}">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="addTypeGiaTriThamSo">Type giá trị tham số</label>
+                                                                    <input type="text" class="form-control" id="addTypeGiaTriThamSo" th:field="*{typeGiaTri}">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="addMoTaThamSo">Mô tả tham số</label>
+                                                                    <input type="text" class="form-control" id="addMoTaThamSo" th:field="*{moTa}">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn mb-2 btn-primary">Add</button>
+                                                            </div>
+                                                        </form>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                id="actionMenuButton" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false"
+                                                th:disabled="${#lists.isEmpty(sanCaDTOList)}"> Hành động
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="actionMenuButton">
+                                            <a class="dropdown-item" href="#">Export</a>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="mt-3">
                                 <table class="table">
                                     <thead>
-                                    <th>STT</th>
-                                    <th>Mã</th>
-                                    <th>Tên tham số</th>
-                                    <th>Giá trị</th>
-                                    <th>Type</th>
-                                    <th>Mô tả</th>
-                                    <th>Trạng thái</th>
-                                    <th>Hành động</th>
+                                    <tr>
+                                        <th class="gray-white-background">
+                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='ma', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">STT</a>
+                                        </th>
+                                        <th class="gray-white-background">
+                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='ma', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Mã</a>
+                                        </th>
+
+                                        <th class="gray-white-background">
+                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='ten', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Tên tham số</a>
+                                        </th>
+                                        <th class="gray-white-background">
+                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='giaTri', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Giá trị</a>
+                                        </th>
+                                        <th class="gray-white-background">
+                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='moTa', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Mô tả</a>
+                                        </th>
+                                        <th class="gray-white-background">
+                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='trangThai', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Trạng thái</a>
+                                        </th>
+
+                                        <th class="gray-white-background">Hành động</th>
+                                    </tr>
+
                                     </thead>
                                     <tbody>
-                                    <tr th:each="thamSo,i: ${listThamSo}">
+                                    <tr th:each="thamSo,i: ${thamSoDTOList}">
                                         <td th:text="${i.count}"></td>
                                         <td th:text="${thamSo.ma}"></td>
                                         <td th:text="${thamSo.ten}"></td>
@@ -53,6 +150,32 @@
                                     </tr>
                                     </tbody>
                                 </table>
+
+
+                                <div class="pagination">
+                                    <ul class="pagination">
+                                        <!-- Nút Previous -->
+                                        <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                                            <a class="page-link"
+                                               th:href="@{/listThamSo(pageNum=${currentPage - 1}, sortField=${sortField}, sortDirection=${sortDirection})}">&laquo;</a>
+                                        </li>
+
+                                        <!-- Danh sách các trang -->
+                                        <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+                                            th:classappend="${i == currentPage} ? 'active'">
+                                            <a class="page-link"
+                                               th:href="@{/listThamSo(pageNum=${i}, sortField=${sortField}, sortDirection=${sortDirection})}"
+                                               th:text="${i}"></a>
+                                        </li>
+
+                                        <!-- Nút Next -->
+                                        <li class="page-item"
+                                            th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                            <a class="page-link"
+                                               th:href="@{/listThamSo(pageNum=${currentPage + 1}, sortField=${sortField}, sortDirection=${sortDirection})}">&raquo;</a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
 
                             <div class="mt-3">
@@ -134,6 +257,7 @@
                                                         <button type="submit" class="btn mb-2 btn-primary">Update</button>
                                                     </div>
                                                 </form>
+
                                             </div>
                                         </div>
                                     </div>
@@ -152,6 +276,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+
+
     $(document).ready(function() {
         $('.edit-btn').on('click', function() {
             var id = $(this).data('id');

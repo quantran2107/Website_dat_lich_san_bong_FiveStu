@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.service;
 
+import com.example.DATN_WebFiveTus.dto.SanCaDTO;
 import com.example.DATN_WebFiveTus.dto.ThamSoDTO;
 import com.example.DATN_WebFiveTus.entity.ThamSo;
 
@@ -18,5 +19,7 @@ public interface ThamSoService {
      void delete(Integer id);
 
      ThamSoDTO findByTenThamSo(String ma);
+
+     public List<ThamSoDTO> listAllSortPage(Integer pageNum, String sortDirection, int[] totalPageElement);
 
 }
