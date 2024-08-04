@@ -20,22 +20,7 @@
                         </div>
                     </div>
 
-<!--                    <div class="mt-3">-->
-<!--                        <a th:href="@{listSanCa}" class="btn btn-success">Reset</a>-->
-<!--                    </div>-->
 
-<!--                    <div class="form-row">-->
-<!--                        <div class="form-group col-md-6">-->
-<!--                            <form action="/listSanCa" method="get" class="form-inline">-->
-<!--                                <label for="searchTrangThai">Trạng thái</label>-->
-<!--                                <select id="searchTrangThai" name="trangThai" class="form-control">-->
-<!--                                    <option value="">&#45;&#45; Select &#45;&#45;</option>-->
-<!--                                    <option th:each="d : ${listTT}" th:value="${d}" th:text="${d}"></option>-->
-<!--                                </select>-->
-<!--                                <button type="submit" class="btn btn-primary">Search</button>-->
-<!--                            </form>-->
-<!--                        </div>-->
-<!--                    </div>-->
 
                     <div class="mt-3">
                         <a th:href="@{/export/excels}" class="btn btn-success">Export Excel</a>
@@ -228,20 +213,6 @@
                                         </ul>
                                     </div>
 
-
-                                    <!--                                    <div class="pagination">-->
-                                    <!--                                        <ul class="pagination">-->
-                                    <!--                                            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">-->
-                                    <!--                                                <a class="page-link" th:href="@{/listSanCa(pageNum=${currentPage - 1}, sortField=${sortField}, sortDirection=${sortDirection})}">&laquo;</a>-->
-                                    <!--                                            </li>-->
-                                    <!--                                            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">-->
-                                    <!--                                                <a class="page-link" th:href="@{/listSanCa(pageNum=${i}, sortField=${sortField}, sortDirection=${sortDirection})}" th:text="${i}">1</a>-->
-                                    <!--                                            </li>-->
-                                    <!--                                            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">-->
-                                    <!--                                                <a class="page-link" th:href="@{/listSanCa(pageNum=${currentPage + 1}, sortField=${sortField}, sortDirection=${sortDirection})}">&raquo;</a>-->
-                                    <!--                                            </li>-->
-                                    <!--                                        </ul>-->
-                                    <!--                                    </div>-->
 
                                 </div>
                             </div>
