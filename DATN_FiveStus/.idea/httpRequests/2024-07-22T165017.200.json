@@ -1,0 +1,119 @@
+{
+  "totalPages": 2,
+  "totalElements": 17,
+  "first": true,
+  "last": false,
+  "numberOfElements": 10,
+  "size": 10,
+  "content": [
+    {
+      "id": 1,
+      "donGia": 50000.0,
+      "image": "image1.jpg",
+      "soLuong": 10,
+      "tenNuocUong": "Nuoc uong 1",
+      "trangThai": "Còn",
+      "deletedAt": false
+    },
+    {
+      "id": 2,
+      "donGia": 60000.0,
+      "image": "image2.jpg",
+      "soLuong": 0,
+      "tenNuocUong": "Nuoc uong 2",
+      "trangThai": "Hết",
+      "deletedAt": false
+    },
+    {
+      "id": 3,
+      "donGia": 70000.0,
+      "image": "image3.jpg",
+      "soLuong": 30,
+      "tenNuocUong": "Nuoc uong 3",
+      "trangThai": "Còn",
+      "deletedAt": false
+    },
+    {
+      "id": 4,
+      "donGia": 80000.0,
+      "image": "image4.jpg",
+      "soLuong": 0,
+      "tenNuocUong": "Nuoc uong 4",
+      "trangThai": "Hết",
+      "deletedAt": false
+    },
+    {
+      "id": 5,
+      "donGia": 90000.0,
+      "image": "image5.jpg",
+      "soLuong": 50,
+      "tenNuocUong": "Nuoc uong 5",
+      "trangThai": "Còn",
+      "deletedAt": false
+    },
+    {
+      "id": 6,
+      "donGia": 10000.0,
+      "image": "image6.jpg",
+      "soLuong": 0,
+      "tenNuocUong": "Nuoc uong 6",
+      "trangThai": "Hết",
+      "deletedAt": false
+    },
+    {
+      "id": 7,
+      "donGia": 20000.0,
+      "image": "image7.jpg",
+      "soLuong": 25,
+      "tenNuocUong": "Nuoc uong 7",
+      "trangThai": "Còn",
+      "deletedAt": false
+    },
+    {
+      "id": 8,
+      "donGia": 30000.0,
+      "image": "image8.jpg",
+      "soLuong": 0,
+      "tenNuocUong": "Nuoc uong 8",
+      "trangThai": "Hết",
+      "deletedAt": false
+    },
+    {
+      "id": 9,
+      "donGia": 40000.0,
+      "image": "image9.jpg",
+      "soLuong": 45,
+      "tenNuocUong": "Nuoc uong 9",
+      "trangThai": "Còn",
+      "deletedAt": false
+    },
+    {
+      "id": 10,
+      "donGia": 50000.0,
+      "image": "image10.jpg",
+      "soLuong": 55,
+      "tenNuocUong": "Nuoc uong 10",
+      "trangThai": "Còn",
+      "deletedAt": false
+    }
+  ],
+  "number": 0,
+  "sort": {
+    "empty": true,
+    "sorted": false,
+    "unsorted": true
+  },
+  "pageable": {
+    "pageNumber": 0,
+    "pageSize": 10,
+    "sort": {
+      "empty": true,
+      "sorted": false,
+      "unsorted": true
+    },
+    "offset": 0,
+    "paged": true,
+    "unpaged": false
+  },
+  "empty": false
+}

@@ -1,0 +1,5 @@
+{
+  "status": 400,
+  "message": "Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> com.example.DATN_WebFiveTus.rest.DoThueRest.deleteSoft(java.lang.Integer,java.util.Map<java.lang.String, java.lang.Boolean>)",
+  "timestamp": 1722705737025
+}

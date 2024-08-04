@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DATN_WebFiveTus.iml" filepath="$PROJECT_DIR$/DATN_WebFiveTus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/DATN_FiveStus.iml" filepath="$PROJECT_DIR$/.idea/DATN_FiveStus.iml" />
     </modules>
   </component>
 </project>

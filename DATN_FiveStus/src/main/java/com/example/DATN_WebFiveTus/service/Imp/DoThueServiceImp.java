@@ -1,13 +1,37 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.DoThueDTO;
+import com.example.DATN_WebFiveTus.dto.NuocUongDTO;
+import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import com.example.DATN_WebFiveTus.entity.DoThue;
+import com.example.DATN_WebFiveTus.entity.NhanVien;
+import com.example.DATN_WebFiveTus.entity.NuocUong;
+import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
+import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.DoThueRepository;
 import com.example.DATN_WebFiveTus.service.DoThueService;
+import jakarta.persistence.EntityNotFoundException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,7 +47,7 @@ public class DoThueServiceImp implements DoThueService {
 
     @Override
     public List<DoThueDTO> getAll() {
-        List<DoThue> doThues = doThueRepository.findAll();
+        List<DoThue> doThues = doThueRepository.getAll();
         return doThues.stream()
                 .map(dothue -> modelMapper.map(dothue, DoThueDTO.class))
                 .collect(Collectors.toList());
@@ -31,12 +55,16 @@ public class DoThueServiceImp implements DoThueService {
 
     @Override
     public DoThueDTO getOne(Integer id) {
-        return null;
+        return modelMapper.map(doThueRepository.findById(id).orElseThrow(() ->
+                new ResourceNotfound("Không tồn tại phieu giam gia ID: " + id)), DoThueDTO.class);
     }
 
     @Override
     public DoThueDTO save(DoThueDTO doThueDTO) {
-        return null;
+        DoThue doThue = modelMapper.map(doThueDTO, DoThue.class);
+        doThue.setDeletedAt(false); // Đặt giá trị deletedAt trước khi lưu
+        DoThue savedEntity = doThueRepository.save(doThue);
+        return modelMapper.map(savedEntity, DoThueDTO.class);
     }
 
     @Override
@@ -45,7 +73,43 @@ public class DoThueServiceImp implements DoThueService {
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
-
+        DoThue doThue = doThueRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("DoThue not found with id " + id));
+        doThue.setDeletedAt(true); // Giả sử có phương thức setDeletedAt trong entity
+        doThueRepository.save(doThue); // Cập nhật entity trong cơ sở dữ liệu
     }
+
+
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<DoThueDTO> phanTrang(Pageable pageable) {
+        Page<DoThue> trangDoThue = doThueRepository.getAllJoinFetch(pageable);
+        List<DoThueDTO> danhSachDTO = trangDoThue.getContent().stream()
+                .map(doThue -> modelMapper.map(doThue, DoThueDTO.class))
+                .collect(Collectors.toList());
+        return new PageImpl<>(danhSachDTO, pageable, trangDoThue.getTotalElements());
+    }
+
+    @Override
+    public Page<DoThueDTO> searchDoThue(String keyword, String trangThai, Float donGiaMin, Float donGiaMax, Pageable pageable) {
+        // Lấy dữ liệu phân trang cùng với tổng số bản ghi
+        Page<DoThue> doThuePage = doThueRepository.searchDoThue(keyword, trangThai, donGiaMin, donGiaMax, pageable);
+
+        // Chuyển đổi danh sách DoThue thành DoThueDTO
+        List<DoThueDTO> doThueDTOList = doThuePage.getContent().stream()
+                .map(doThue -> modelMapper.map(doThue, DoThueDTO.class))
+                .collect(Collectors.toList());
+
+        // Trả về đối tượng PageImpl với tổng số bản ghi từ Page
+        return new PageImpl<>(doThueDTOList, pageable, doThuePage.getTotalElements());
+    }
+
+
+
+
+
 }

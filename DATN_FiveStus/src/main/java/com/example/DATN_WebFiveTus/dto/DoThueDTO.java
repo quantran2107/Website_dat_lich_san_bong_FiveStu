@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,11 +23,15 @@ public class DoThueDTO {
 
     private float donGia;
 
-    private String image;
-
     private int soLuong;
 
     private String tenDoThue;
 
     private String trangThai;
+
+    private Boolean deletedAt;
+
+    private LocalDateTime createdAt;
+
+    private byte[] imageData;
 }
