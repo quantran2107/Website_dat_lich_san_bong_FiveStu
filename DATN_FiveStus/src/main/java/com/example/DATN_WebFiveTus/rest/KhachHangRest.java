@@ -43,12 +43,20 @@ public class KhachHangRest {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<KhachHangDTO>> search(@RequestParam String query) {
-        List<KhachHangDTO> results = khachHangService.search(query);
-        return ResponseEntity.ok(results);
+    public List<KhachHangDTO> searchKhachHang(
+            @RequestParam(defaultValue = "") String query,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int pageSize) {
+        return khachHangService.search(query, page, pageSize);
     }
+
     @GetMapping("/filter")
-    public List<KhachHangDTO> filter(@RequestParam String status) {
-        return khachHangService.filter(status);
+    public List<KhachHangDTO> filterKhachHang(
+            @RequestParam(defaultValue = "all") String status,
+            @RequestParam(defaultValue = "all") String gender,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int pageSize) {
+        return khachHangService.filter(status, gender, page, pageSize);
     }
+
 }
