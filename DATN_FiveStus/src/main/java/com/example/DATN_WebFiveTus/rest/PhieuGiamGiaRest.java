@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.rest;
 
+import com.example.DATN_WebFiveTus.dto.DoThueDTO;
 import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +61,7 @@ public class PhieuGiamGiaRest {
         return ResponseEntity.ok(trangPhieuGiamGia);
     }
 
+
     @GetMapping("/hien-thi")
     public ResponseEntity<List<PhieuGiamGiaDTO>> getAll() {
         List<PhieuGiamGiaDTO> phieuGiamGiaList = phieuGiamGiaService.getAll();
@@ -66,12 +69,6 @@ public class PhieuGiamGiaRest {
     }
 
 
-    //    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
-//        phieuGiamGiaService.delete(id);
-//        return ResponseEntity.noContent().build();
-//    }
-//
     @GetMapping("/{id}")
     public ResponseEntity<PhieuGiamGiaDTO> getOne(@PathVariable("id") Integer id) {
         PhieuGiamGiaDTO phieuGiamGiaDTO = phieuGiamGiaService.getOne(id);
@@ -115,15 +112,18 @@ public class PhieuGiamGiaRest {
             @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") Date ngayKetThuc,
             @PageableDefault(page = 0, size = 10) Pageable pageable) {
 
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.desc("createdAt")));
+
+
         Page<PhieuGiamGiaDTO> phieuGiamGiaPage = phieuGiamGiaService.searchPhieuGiamGia(
-                keyword, doiTuongApDung, hinhThucGiamGia, trangThai, ngayBatDau, ngayKetThuc, pageable);
+                keyword, doiTuongApDung, hinhThucGiamGia, trangThai, ngayBatDau, ngayKetThuc, sortedPageable);
 
         return ResponseEntity.ok(phieuGiamGiaPage);
     }
 
 
 
-//    @DeleteMapping("/delete-soft") // Endpoint đúng cho xóa mềm sử dụng phương thức DELETE
+//    @DeleteMapping("/delete-soft") //
 //    public ResponseEntity<Void> deleteSoft(@RequestBody List<Integer> ids) {
 //        try {
 //            for (Integer id : ids) {

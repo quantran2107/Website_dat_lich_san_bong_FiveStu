@@ -1,0 +1,176 @@
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+<> 2024-08-04T003031.400.json
+
+###
+
+PUT http://localhost:8080/do_thue/deleted-mem/31
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+<> 2024-08-04T002217.400.json
+
+###
+
+DELETE http://localhost:8080/do_thue/deleted/31
+
+###
+
+DELETE http://localhost:8080/do_thue/deleted/31
+
+###
+
+PUT http://localhost:8080/do_thue/deleted/31
+
+###
+
+PUT http://localhost:8080/do_thue/deleted/31
+
+###
+
+PUT http://localhost:8080/do_thue/deleted/31
+
+<> 2024-08-04T001102.400.json
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+###
+
+PUT http://localhost:8080/do_thue/deleted_soft/31
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+###
+
+PUT http://localhost:8080/do_thue/delete-soft/31
+
+###
+
+GET http://localhost:8080/api-phieu-giam-gia/1
+
+<> 2024-07-23T200721.200.json
+
+###
+
+GET http://localhost:8080/nuoc_uong/6
+
+<> 2024-07-23T200449.400.json
+
+###
+
+GET http://localhost:8080/nuoc_uong/1
+
+<> 2024-07-23T200443.400.json
+
+###
+
+GET http://localhost:8080/nuoc_uong/{{id}}
+
+###
+
+GET http://localhost:8080/do_thue/id=1
+
+<> 2024-07-23T200412.400.json
+
+###
+
+GET http://localhost:8080/do_thue/{1}
+
+###
+
+GET http://localhost:8080/do_thue/1
+
+<> 2024-07-23T200347.400.json
+
+###
+
+GET http://localhost:8080/do_thue/hien-thi
+
+<> 2024-07-22T214156.200.json
+
+###
+
+GET http://localhost:8080/do_thue/phan-trang
+
+<> 2024-07-22T170230.200.json
+
+###
+
+GET http://localhost:8080/nuoc_uong/phan-trang
+
+<> 2024-07-22T170129.200.json
+
+###
+
+GET http://localhost:8080/do_thue/phan-trang
+
+<> 2024-07-22T170124.400.json
+
+###
+
+GET http://localhost:8080/do_thue/phan-trang
+
+<> 2024-07-22T170003.400.json
+
+###
+
+GET http://localhost:8080/nuoc_uong/phan-trang
+
+<> 2024-07-22T165017.200.json
+
+###
+

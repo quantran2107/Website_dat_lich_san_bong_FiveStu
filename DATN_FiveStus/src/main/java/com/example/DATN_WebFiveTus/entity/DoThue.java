@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,9 +34,6 @@ public class DoThue {
     @Column(name = "don_gia", precision = 10)
     private float donGia;
 
-    @Column(name = "image", length = 255)
-    private String image;
-
     @Column(name = "so_luong")
     private int soLuong;
 
@@ -54,4 +52,8 @@ public class DoThue {
 
     @Column(name = "deleted_at")
     private boolean deletedAt;
+
+    @Lob
+    @Column(name = "image_data", columnDefinition = "LONGBLOB")
+    private byte[] imageData;
 }
