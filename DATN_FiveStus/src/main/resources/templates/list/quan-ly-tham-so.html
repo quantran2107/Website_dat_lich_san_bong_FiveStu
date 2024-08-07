@@ -7,20 +7,21 @@
     <div th:include="fragment/navbar :: navbar"></div>
     <div th:include="fragment/sidebar :: sidebar"></div>
     <main role="main" class="main-content">
-        <div class="container-fluid">
-            <div class="container">
-                <div class="card">
-                    <h2 class="mb-2 page-title">Quản lý tham số</h2>
-                    <h6>Các điều khoản của sân bóng</h6>
+        <div class="col-12">
+            <h2 class="mb-2 page-title">Quản lý tham số</h2>
+            <h6>Các điều khoản của sân bóng</h6>
+                <p class="card-text"></p>
+
+
                     <div class="card shadow mb-4">
                         <div class="card-body">
 
                             <div class="toolbar row mb-3">
                                 <div class="col ml-auto">
                                     <div class="dropdown float-right">
-                                        <button type="button" class="btn btn-primary float-right ml-3"
+                                        <button type="button" class="btn btn-success float-right ml-3"
                                                 data-toggle="modal" data-target="#varyModalAdd"
-                                                data-whatever="@mdo">Thêm<span class="fe fe-plus"></span>
+                                                data-whatever="@mdo" title="Thêm"><span class="fe fe-plus"></span>
                                         </button>
                                         <div class="modal fade" id="varyModalAdd" tabindex="-1" role="dialog"
                                              aria-labelledby="varyModalLabel" aria-hidden="true">
@@ -82,15 +83,15 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                id="actionMenuButton" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false"
-                                                th:disabled="${#lists.isEmpty(sanCaDTOList)}"> Hành động
-                                        </button>
-                                        <div class="dropdown-menu" aria-labelledby="actionMenuButton">
-                                            <a class="dropdown-item" href="#">Export</a>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
+<!--                                        <button class="btn btn-secondary dropdown-toggle" type="button"-->
+<!--                                                id="actionMenuButton" data-toggle="dropdown"-->
+<!--                                                aria-haspopup="true" aria-expanded="false"-->
+<!--                                                th:disabled="${#lists.isEmpty(sanCaDTOList)}"> Hành động-->
+<!--                                        </button>-->
+<!--                                        <div class="dropdown-menu" aria-labelledby="actionMenuButton">-->
+<!--                                            <a class="dropdown-item" href="#">Export</a>-->
+<!--                                            <a class="dropdown-item" href="#">Something else here</a>-->
+<!--                                        </div>-->
                                     </div>
                                 </div>
                             </div>
@@ -100,23 +101,23 @@
                                     <thead>
                                     <tr>
                                         <th class="gray-white-background">
-                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='ma', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">STT</a>
+                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='ma', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}" style="color: #0b860d">STT</a>
                                         </th>
                                         <th class="gray-white-background">
-                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='ma', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Mã</a>
+                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='ma', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}" style="color: #0b860d">Mã</a>
                                         </th>
 
                                         <th class="gray-white-background">
-                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='ten', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Tên tham số</a>
+                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='ten', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}" style="color: #0b860d">Tên tham số</a>
                                         </th>
                                         <th class="gray-white-background">
-                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='giaTri', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Giá trị</a>
+                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='giaTri', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}" style="color: #0b860d">Giá trị</a>
                                         </th>
                                         <th class="gray-white-background">
-                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='moTa', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Mô tả</a>
+                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='moTa', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}" style="color: #0b860d">Mô tả</a>
                                         </th>
                                         <th class="gray-white-background">
-                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='trangThai', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Trạng thái</a>
+                                            <a th:href="@{/listThamSo(pageNum=${currentPage}, sortField='trangThai', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}" style="color: #0b860d">Trạng thái</a>
                                         </th>
 
                                         <th class="gray-white-background">Hành động</th>
@@ -129,7 +130,7 @@
                                         <td th:text="${thamSo.ma}"></td>
                                         <td th:text="${thamSo.ten}"></td>
                                         <td th:text="${thamSo.giaTri}"></td>
-                                        <td th:text="${thamSo.typeGiaTri}"></td>
+                                        <td th:text="${thamSo.typeGiaTri}" hidden></td>
                                         <td th:text="${thamSo.moTa}"></td>
 <!--                                        <td th:text="${thamSo.trangThai}?'Đang kích hoạt':'Không kích hoạt'"></td>-->
 
@@ -140,10 +141,10 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-warning edit-btn"
+                                            <button type="button" class="btn btn-outline-success edit-btn"
                                                     data-toggle="modal" data-target="#myModalEdit"
                                                     th:attr="data-id=${thamSo.id}"
-                                                    th:if="${!#lists.isEmpty(listThamSo)}">
+                                                    th:if="${!#lists.isEmpty(listThamSo)}" title="Sửa">
                                                 <span class="fe fe-edit-3"></span>
                                             </button>
                                         </td>
@@ -152,12 +153,12 @@
                                 </table>
 
 
-                                <div class="pagination">
-                                    <ul class="pagination">
+                                <nav aria-label="Table Paging" class="mb-0 text-muted">
+                                    <ul class="pagination justify-content-end mb-0" id="pagination">
                                         <!-- Nút Previous -->
                                         <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                                             <a class="page-link"
-                                               th:href="@{/listThamSo(pageNum=${currentPage - 1}, sortField=${sortField}, sortDirection=${sortDirection})}">&laquo;</a>
+                                               th:href="@{/listThamSo(pageNum=${currentPage - 1}, sortField=${sortField}, sortDirection=${sortDirection})}"><</a>
                                         </li>
 
                                         <!-- Danh sách các trang -->
@@ -172,10 +173,10 @@
                                         <li class="page-item"
                                             th:classappend="${currentPage == totalPages} ? 'disabled'">
                                             <a class="page-link"
-                                               th:href="@{/listThamSo(pageNum=${currentPage + 1}, sortField=${sortField}, sortDirection=${sortDirection})}">&raquo;</a>
+                                               th:href="@{/listThamSo(pageNum=${currentPage + 1}, sortField=${sortField}, sortDirection=${sortDirection})}">></a>
                                         </li>
                                     </ul>
-                                </div>
+                                </nav>
                             </div>
 
                             <div class="mt-3">
@@ -266,7 +267,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+
         </div>
         <div th:include="fragment/modal :: modal"></div>
     </main>
