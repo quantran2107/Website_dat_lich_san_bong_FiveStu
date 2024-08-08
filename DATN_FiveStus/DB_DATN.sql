@@ -298,26 +298,27 @@ id INT AUTO_INCREMENT PRIMARY KEY,
 CREATE TABLE do_thue (
   id INT AUTO_INCREMENT PRIMARY KEY,
   don_gia DECIMAL(10, 2),
-  image VARCHAR(255),
   so_luong INT,
   ten_do_thue VARCHAR(255),
   trang_thai VARCHAR(50),
   created_at DATETIME, 
   updated_at DATETIME,
-  deleted_at bit default 0
+  deleted_at bit default 0,
+  image_data LONGBLOB
 );
+
 
 -- Table: nuoc_uong
 CREATE TABLE nuoc_uong (
   id INT AUTO_INCREMENT PRIMARY KEY,
   don_gia DECIMAL(10, 2),
-  image VARCHAR(255),
   so_luong INT,
   ten_nuoc_uong VARCHAR(255),
   trang_thai VARCHAR(50),
   created_at DATETIME, 
   updated_at DATETIME,
-  deleted_at bit default 0
+  deleted_at bit default 0,
+  image_data LONGBLOB
 );
 
 -- Table: dich_vu_san_bong
@@ -719,55 +720,60 @@ VALUES
   (4, 'Tao hoa don', 'Tao', NOW(), NOW(), 'Nguyen Van D', 'Nguyen Van D', 4, 'active', NOW(), NOW(), 0),
   (5, 'Cap nhat hoa don', 'Cap nhat', NOW(), NOW(), 'Nguyen Van E', 'Nguyen Van E', 5, 'active', NOW(), NOW(), 0);
 
-INSERT INTO do_thue (don_gia, image, so_luong, ten_do_thue, trang_thai, created_at, updated_at)
+-- Chèn dữ liệu vào bảng do_thue
+INSERT INTO do_thue (don_gia, so_luong, ten_do_thue, trang_thai, created_at, updated_at, deleted_at, image_data)
 VALUES
-  (100000, 'img\\img1.jpg', 10, 'Do thue 1', 'Còn', NOW(), NOW()),
-  (200000, 'img\\img2.jpg', 20, 'Do thue 2', 'Còn', NOW(), NOW()),
-  (300000, 'img\\img3.jpg', 30, 'Do thue 3', 'Còn', NOW(), NOW()),
-  (400000, 'img\\img4.jpg', 40, 'Do thue 4', 'Còn', NOW(), NOW()),
-  (500000, 'img\\img5.jpg', 50, 'Do thue 5', 'Còn', NOW(), NOW()),
-  (600000, 'img\\img1.jpg', 0, 'Do thue 6', 'Hết', NOW(), NOW()),
-  (700000, 'img\\img2.jpg', 70, 'Do thue 7', 'Còn', NOW(), NOW()),
-  (800000, 'img\\img3.jpg', 80, 'Do thue 8', 'Còn', NOW(), NOW()),
-  (900000, 'img\\img4.jpg', 90, 'Do thue 9', 'Còn', NOW(), NOW()),
-  (1000000, 'img\\img5.jpg', 0, 'Do thue 10', 'Hết', NOW(), NOW()),
-  (1100000, 'img\\img1.jpg', 110, 'Do thue 11', 'Còn', NOW(), NOW()),
-  (1200000, 'img\\img2.jpg', 120, 'Do thue 12', 'Còn', NOW(), NOW()),
-  (1300000, 'img\\img3.jpg', 0, 'Do thue 13', 'Hết', NOW(), NOW()),
-  (1400000, 'img\\img4.jpg', 140, 'Do thue 14', 'Còn', NOW(), NOW()),
-  (1500000, 'img\\img5.jpg', 150, 'Do thue 15', 'Còn', NOW(), NOW()),
-  (1600000, 'img\\img1.jpg', 160, 'Do thue 16', 'Còn', NOW(), NOW()),
-  (1700000, 'img\\img2.jpg', 170, 'Do thue 17', 'Còn', NOW(), NOW()),
-  (1800000, 'img\\img3.jpg', 0, 'Do thue 18', 'Hết', NOW(), NOW()),
-  (1900000, 'img\\img4.jpg', 190, 'Do thue 19', 'Còn', NOW(), NOW()),
-  (2000000, 'img\\img5.jpg', 200, 'Do thue 20', 'Còn', NOW(), NOW());
+  (100000, 10, 'Do thue 1', 'Còn', NOW(), NOW(), 0, NULL),
+  (200000, 20, 'Do thue 2', 'Còn', NOW(), NOW(), 0, NULL),
+  (300000, 0, 'Do thue 3', 'Hết', NOW(), NOW(), 0, NULL),
+  (400000, 40, 'Do thue 4', 'Còn', NOW(), NOW(), 0, NULL),
+  (500000, 50, 'Do thue 5', 'Còn', NOW(), NOW(), 0, NULL),
+  (600000, 0, 'Do thue 6', 'Hết', NOW(), NOW(), 0, NULL),
+  (700000, 70, 'Do thue 7', 'Còn', NOW(), NOW(), 0, NULL),
+  (800000, 80, 'Do thue 8', 'Còn', NOW(), NOW(), 0, NULL),
+  (900000, 0, 'Do thue 9', 'Hết', NOW(), NOW(), 0, NULL),
+  (1000000, 0, 'Do thue 10', 'Hết', NOW(), NOW(), 0, NULL),
+  (1100000, 110, 'Do thue 11', 'Còn', NOW(), NOW(), 0, NULL),
+  (1200000, 120, 'Do thue 12', 'Còn', NOW(), NOW(), 0, NULL),
+  (1300000, 0, 'Do thue 13', 'Hết', NOW(), NOW(), 0, NULL),
+  (1400000, 140, 'Do thue 14', 'Còn', NOW(), NOW(), 0, NULL),
+  (1500000, 150, 'Do thue 15', 'Còn', NOW(), NOW(), 0, NULL),
+  (1600000, 0, 'Do thue 16', 'Hết', NOW(), NOW(), 0, NULL),
+  (1700000, 170, 'Do thue 17', 'Còn', NOW(), NOW(), 0, NULL),
+  (1800000, 0, 'Do thue 18', 'Hết', NOW(), NOW(), 0, NULL),
+  (1900000, 190, 'Do thue 19', 'Còn', NOW(), NOW(), 0, NULL),
+  (2000000, 200, 'Do thue 20', 'Còn', NOW(), NOW(), 0, NULL);
 
 
 
 
 
-INSERT INTO nuoc_uong (don_gia, image, so_luong, ten_nuoc_uong, trang_thai, created_at, updated_at)
+
+INSERT INTO nuoc_uong (don_gia, so_luong, ten_nuoc_uong, trang_thai, created_at, updated_at, image_data)
 VALUES
-  (50000, 'img\\img1.jpg', 10, 'Nuoc uong 1', 'Còn', NOW(), NOW()),
-  (60000, 'img\\img2.jpg', 20, 'Nuoc uong 2', 'Còn', NOW(), NOW()),
-  (70000, 'img\\img3.jpg', 0, 'Nuoc uong 3', 'Hết', NOW(), NOW()),
-  (80000, 'img\\img4.jpg', 40, 'Nuoc uong 4', 'Còn', NOW(), NOW()),
-  (90000, 'img\\img5.jpg', 50, 'Nuoc uong 5', 'Còn', NOW(), NOW()),
-  (100000, 'img\\img1.jpg', 0, 'Nuoc uong 6', 'Hết', NOW(), NOW()),
-  (110000, 'img\\img2.jpg', 30, 'Nuoc uong 7', 'Còn', NOW(), NOW()),
-  (120000, 'img\\img3.jpg', 0, 'Nuoc uong 8', 'Hết', NOW(), NOW()),
-  (130000, 'img\\img4.jpg', 20, 'Nuoc uong 9', 'Còn', NOW(), NOW()),
-  (140000, 'img\\img5.jpg', 0, 'Nuoc uong 10', 'Hết', NOW(), NOW()),
-  (150000, 'img\\img1.jpg', 50, 'Nuoc uong 11', 'Còn', NOW(), NOW()),
-  (160000, 'img\\img2.jpg', 30, 'Nuoc uong 12', 'Còn', NOW(), NOW()),
-  (170000, 'img\\img3.jpg', 0, 'Nuoc uong 13', 'Hết', NOW(), NOW()),
-  (180000, 'img\\img4.jpg', 10, 'Nuoc uong 14', 'Còn', NOW(), NOW()),
-  (190000, 'img\\img5.jpg', 0, 'Nuoc uong 15', 'Hết', NOW(), NOW()),
-  (200000, 'img\\img1.jpg', 25, 'Nuoc uong 16', 'Còn', NOW(), NOW()),
-  (210000, 'img\\img2.jpg', 0, 'Nuoc uong 17', 'Hết', NOW(), NOW()),
-  (220000, 'img\\img3.jpg', 15, 'Nuoc uong 18', 'Còn', NOW(), NOW()),
-  (230000, 'img\\img4.jpg', 0, 'Nuoc uong 19', 'Hết', NOW(), NOW()),
-  (240000, 'img\\img5.jpg', 35, 'Nuoc uong 20', 'Còn', NOW(), NOW());
+(50.00, 20, 'Nước Uống A', 'Còn', NOW(), NOW(), NULL),
+(55.00, 5, 'Nước Uống B', 'Còn', NOW(), NOW(), NULL),
+(60.00, 0, 'Nước Uống C', 'Hết', NOW(), NOW(), NULL),
+(65.00, 10, 'Nước Uống D', 'Còn', NOW(), NOW(), NULL),
+(70.00, 3, 'Nước Uống E', 'Còn', NOW(), NOW(), NULL),
+(75.00, 0, 'Nước Uống F', 'Hết', NOW(), NOW(), NULL),
+(80.00, 25, 'Nước Uống G', 'Còn', NOW(), NOW(), NULL),
+(85.00, 0, 'Nước Uống H', 'Hết', NOW(), NOW(), NULL),
+(90.00, 7, 'Nước Uống I', 'Còn', NOW(), NOW(), NULL),
+(95.00, 15, 'Nước Uống J', 'Còn', NOW(), NOW(), NULL),
+(100.00, 2, 'Nước Uống K', 'Còn', NOW(), NOW(), NULL),
+(105.00, 0, 'Nước Uống L', 'Hết', NOW(), NOW(), NULL),
+(110.00, 8, 'Nước Uống M', 'Còn', NOW(), NOW(), NULL),
+(115.00, 0, 'Nước Uống N', 'Hết', NOW(), NOW(), NULL),
+(120.00, 4, 'Nước Uống O', 'Còn', NOW(), NOW(), NULL),
+(125.00, 0, 'Nước Uống P', 'Hết', NOW(), NOW(), NULL),
+(130.00, 6, 'Nước Uống Q', 'Còn', NOW(), NOW(), NULL),
+(135.00, 0, 'Nước Uống R', 'Hết', NOW(), NOW(), NULL),
+(140.00, 9, 'Nước Uống S', 'Còn', NOW(), NOW(), NULL),
+(145.00, 0, 'Nước Uống T', 'Hết', NOW(), NOW(), NULL),
+(150.00, 11, 'Nước Uống U', 'Còn', NOW(), NOW(), NULL),
+(155.00, 0, 'Nước Uống V', 'Hết', NOW(), NOW(), NULL);
+
 
 
 INSERT INTO dich_vu_san_bong (id_do_thue, id_nuoc_uong, don_gia, so_luong_do_thue, so_luong_nuoc_uong, trang_thai, created_at, updated_at, deleted_at)

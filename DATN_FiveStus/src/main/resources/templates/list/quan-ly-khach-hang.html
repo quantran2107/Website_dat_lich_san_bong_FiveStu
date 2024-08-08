@@ -26,7 +26,7 @@
                                                   style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
                                                 <!-- Search -->
                                                 <div class="form-group"
-                                                     style="flex-grow: 1; display: flex; align-items: center; margin-right: 50px">
+                                                     style="flex-grow: 1; display: flex; align-items: center; margin-right: 10px">
                                                     <label class="mr-2" for="search">Tìm kiếm</label>
                                                     <input class="form-control" id="search"
                                                            oninput="searchKhachHang(this.value)"
@@ -37,7 +37,7 @@
                                                 <!-- Dropdown -->
                                                 <div class="form-group" style="flex-grow: 1; display: flex; align-items: center; margin-right: 10px;">
                                                     <label class="sr-only" for="filterStatus">Trạng thái</label>
-                                                    <select class="btn btn-outline-success custom-select my-1 mr-2" id="filterStatus" style="width: 150px;margin-left: 38px; align-items: center; background: white; color: green;" onchange="filterKhachHang()">
+                                                    <select class="btn btn-outline-success custom-select my-1 mr-2" id="filterStatus" style="width: 150px;margin-left: 10px; align-items: center; background: white; color: green;" onchange="filterKhachHang()">
                                                         <option value="all">Trạng thái</option>
                                                         <option value="active">Hoạt động</option>
                                                         <option value="inactive">Không hoạt động</option>
@@ -45,17 +45,22 @@
                                                 </div>
                                                 <div class="form-group" style="flex-grow: 1; display: flex; align-items: center; margin-right: 10px;">
                                                     <label class="sr-only" for="filterGender">Giới tính</label>
-                                                    <select class="btn btn-outline-success custom-select my-1 mr-2" id="filterGender" style="width: 150px;margin-left: -174px; align-items: center; background: white; color: green;" onchange="filterKhachHang();">
+                                                    <select class="btn btn-outline-success custom-select my-1 mr-2" id="filterGender" style="width: 150px;margin-left: -185px; align-items: center; background: white; color: green;" onchange="filterKhachHang();">
                                                         <option value="all">Giới tính</option>
                                                         <option value="male">Nam</option>
                                                         <option value="female">Nữ</option>
                                                     </select>
                                                 </div>
                                                 <!-- Add Button -->
+
+                                                <button class="btn btn-primary" onclick="resetFilters()"
+                                                        title="Reset" type="button" >
+                                                    <span class="fe fe-refresh-ccw"></span>
+                                                </button>
                                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                                     <button type="button" class="btn btn-success"
-                                                            data-toggle="modal" data-target="#addModal" style="width: 100px;"
-                                                            data-whatever="@mdo">Thêm <span class="fe fe-plus"></span>
+                                                            data-toggle="modal" data-target="#addModal"
+                                                            data-whatever="@mdo" title="Thêm"> <span class="fe fe-plus"></span>
                                                     </button>
                                                 </div>
                                             </form>
@@ -63,6 +68,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="card shadow mt-5">
                                 <div class="card-body" id="tableCardBody">
                                     <table class="table datatables" id="dataTable-1">
@@ -94,7 +100,7 @@
 
                                             <td style="display: flex">
                                                 <a th:href="@{/quan-ly-khach-hang-detail(id=${khachHang.id})}">
-                                                    <button class="btn mb-2 mr-1 btn-outline-success" type="button">
+                                                    <button class="btn mb-2 mr-1 btn-outline-success" type="button" title="Sửa">
                                                         <span class="fe fe-edit-3"></span>
                                                     </button>
                                                 </a>
@@ -114,7 +120,7 @@
                                                     <li th:class="${page.number == 0} ? 'page-item disabled' : 'page-item'">
                                                         <a class="page-link"
                                                            th:href="@{/quan-ly-khach-hang(page=${page.number - 1})}"
-                                                           th:if="${page.hasPrevious()}">Previous</a>
+                                                           th:if="${page.hasPrevious()}"><</a>
                                                     </li>
                                                     <li th:class="${page.number == i} ? 'page-item active' : 'page-item'"
                                                         th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}">
@@ -125,7 +131,7 @@
                                                     <li th:class="${page.number + 1 == page.totalPages} ? 'page-item disabled' : 'page-item'">
                                                         <a class="page-link"
                                                            th:href="@{/quan-ly-khach-hang(page=${page.number + 1})}"
-                                                           th:if="${page.hasNext()}">Next</a>
+                                                           th:if="${page.hasNext()}">></a>
                                                     </li>
                                                     <li th:class="${page.last} ? 'page-item disabled' : 'page-item'">
                                                         <a class="page-link"
@@ -312,6 +318,22 @@
         };
     }
 
+    function resetFilters() {
+        // Reset the search input
+        document.getElementById('search').value = '';
+
+        // Reset the dropdowns to their default values
+        document.getElementById('filterStatus').value = 'all';
+        document.getElementById('filterGender').value = 'all';
+
+        // Call the functions to update the displayed results
+        searchKhachHang('');
+        filterKhachHang();
+    }
+
+
+
+
     function searchKhachHang() {
         const searchQuery = document.getElementById('search').value.trim(); // Lấy giá trị từ ô tìm kiếm và loại bỏ khoảng trắng
         const pageSize = 5; // Số lượng kết quả trên mỗi trang
@@ -356,7 +378,7 @@
                 '<td><span class="' + (khachHang.trangThai === 'active' ? 'text-success' : 'text-danger') + '">' +
                 (khachHang.trangThai === 'active' ? 'Hoạt động' : 'Không hoạt động') + '</span></td>' +
                 '<td style="display: flex"><a href="/quan-ly-khach-hang-detail?id=' + khachHang.id + '">' +
-                '<button class="btn mb-2 mr-1 btn-outline-success" type="button"><span class="fe fe-edit-3"></span></button>' +
+                '<button class="btn mb-2 mr-1 btn-outline-success" type="button" title="Sửa"><span class="fe fe-edit-3"></span></button>' +
                 '</a></td>' +
                 '</tr>';
             tableBody.innerHTML += row;
@@ -442,7 +464,7 @@
                 '<td><span class="' + (khachHang.trangThai === 'active' ? 'custom-4' : 'custom-3') + '">' +
                 (khachHang.trangThai === 'active' ? 'Hoạt động' : 'Không hoạt động') + '</span></td>' +
                 '<td style="display: flex"><a href="/quan-ly-khach-hang-detail?id=' + khachHang.id + '">' +
-                '<button class="btn mb-2 mr-1 btn-outline-success type="button"><span class="fe fe-edit-3"></span></button>' +
+                '<button class="btn mb-2 mr-1 btn-outline-success type="button"><span class="fe fe-edit-3" title="Sửa"></span></button>' +
                 '</a></td>' +
                 '</tr>';
             tableBody.innerHTML += row;
