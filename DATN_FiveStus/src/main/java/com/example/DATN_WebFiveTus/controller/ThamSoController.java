@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Controller
 public class ThamSoController {
@@ -68,17 +70,42 @@ public class ThamSoController {
 //        return "list/quan-ly-tham-so";
 //    }
 
+//    @PostMapping("/thamSo/add")
+//    public String add(@ModelAttribute("thamSo") ThamSoDTO thamSoDTO) {
+//        System.out.println("ADD HAHA321");
+//        RestTemplate restTemplate = new RestTemplate();
+//
+//        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://localhost:8080/tham-so");
+//        thamSoDTO.setMa(thamSoDTO.getTen().replace(" ","_"));
+//        restTemplate.postForObject(builder.toUriString(), thamSoDTO, Void.class);
+//
+//        return "redirect:/listThamSo";
+//    }
+
     @PostMapping("/thamSo/add")
     public String add(@ModelAttribute("thamSo") ThamSoDTO thamSoDTO) {
         System.out.println("ADD HAHA321");
         RestTemplate restTemplate = new RestTemplate();
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://localhost:8080/tham-so");
+        // Tạo mã tham số từ tên tham số
+        String maThamSo = convertToMaThamSo(thamSoDTO.getTen());
+        thamSoDTO.setMa(maThamSo);
 
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://localhost:8080/tham-so");
         restTemplate.postForObject(builder.toUriString(), thamSoDTO, Void.class);
 
         return "redirect:/listThamSo";
     }
+
+    private String convertToMaThamSo(String ten) {
+        // Chuyển đổi tên sang chữ thường
+        String normalized = Normalizer.normalize(ten, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        String noDiacritics = pattern.matcher(normalized).replaceAll("");
+        String sanitized = noDiacritics.replaceAll("[^a-zA-Z0-9\\s]", ""); // Xóa các ký tự đặc biệt
+        return sanitized.toLowerCase().replace(" ", "_");
+    }
+
 
     @GetMapping("/thamSo/edit/{id}")
     @ResponseBody
