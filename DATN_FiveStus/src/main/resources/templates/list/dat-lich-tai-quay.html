@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="~{fragment/head :: head}"></head>
+<body class="vertical light">
+<div class="wrapper">
+    <div th:include="~{fragment/navbar :: navbar}"></div>
+    <div th:include="~{fragment/sidebar :: sidebar}"></div>
+
+    <!-- Main Content -->
+    <main class="main-content" role="main">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="page-title">Đặt lịch</h2>
+                </div>
+            </div>
+
+            <div class="row mt-4" id="content-ban-hang">
+                <div class="col-md-7">
+                    <div class="row h-100">
+                        <!-- Phần trên bên trái -->
+                        <div class="col-12 mb-3">
+                            <div class="card shadow h-100">
+                                <div class="card-body">
+                                    <!-- Tiêu đề của box -->
+                                    <h5 class="card-title text-success">Danh sách hóa đơn</h5>
+                                    <!-- Nội dung phần trên bên trái -->
+                                    <div class="toolbar row mb-3 mt-3">
+                                        <div class="col-md-12">
+                                            <form class="form-inline" id="filterForm"
+                                                  style="display: flex; align-items: center;">
+                                                <!-- Search -->
+                                                <div class="form-group"
+                                                     style="flex-grow: 1; display: flex; align-items: center;">
+                                                    <label class="me-2" for="search">Tìm kiếm</label>
+                                                    <input class="form-control me-2" id="search"
+
+                                                           placeholder="Tìm kiếm theo số điện thoại"
+                                                           style="width: 400px;"
+                                                           type="text">
+                                                    <!-- Nút Reset -->
+                                                    <button class="btn btn-primary me-2" onclick="resetFilters()"
+                                                            title="Reset" type="button">
+                                                        <span class="fe fe-refresh-ccw"></span>
+                                                    </button>
+                                                    <button class="btn btn-warning " onclick="scanQRCode()"
+                                                            title="Quét QR hóa đơn" type="button">
+                                                        <span class="fe fe-grid"></span>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <!-- Phần bên trái chia thành 2 tab -->
+                                    <div class="row mt-4">
+                                        <div class="col-12">
+                                            <!-- Tabs -->
+                                            <ul class="nav nav-tabs" id="tabList">
+                                                <li class="nav-item">
+                                                    <a aria-controls="dang-hoat-dong" aria-selected="true"
+                                                       class="nav-link active"
+                                                       data-bs-toggle="tab" href="#dang-hoat-dong"
+                                                       id="dang-hoat-dong-tab"
+                                                       role="tab">Đang hoạt động</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a aria-controls="cho-nhan" aria-selected="false" class="nav-link"
+                                                       data-bs-toggle="tab" href="#cho-nhan" id="cho-nhan-tab"
+                                                       role="tab">Chờ nhận sân</a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content mt-3">
+                                                <!-- Tab Content for "Đang hoạt động" -->
+                                                <div aria-labelledby="dang-hoat-dong-tab"
+                                                     class="tab-pane fade show active"
+                                                     id="dang-hoat-dong"
+                                                     role="tabpanel">
+                                                    <table class="table table-striped mt-2">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Tên KH</th>
+                                                            <th>SDT</th>
+                                                            <th>Email</th>
+                                                            <th>Sân ca</th>
+                                                            <th>Thời gian</th>
+                                                            <th>Ngày đặt lịch</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody id="dang-hoat-dong-table">
+                                                        <!-- Dữ liệu của bảng "Đang hoạt động" sẽ được chèn vào đây -->
+                                                        </tbody>
+                                                    </table>
+                                                    <!-- Pagination -->
+                                                    <nav aria-label="Table Paging" class="mb-0 text-muted">
+                                                        <ul class="pagination justify-content-end mb-0"
+                                                            id="paginationDangHoatDong">
+                                                            <!-- Pagination buttons will be inserted here by JavaScript -->
+                                                        </ul>
+                                                    </nav>
+                                                </div>
+
+                                                <!-- Tab Content for "Chờ nhận sân" -->
+                                                <div aria-labelledby="cho-nhan-tab" class="tab-pane fade" id="cho-nhan"
+                                                     role="tabpanel">
+                                                    <table class="table table-striped mt-2">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Tên KH</th>
+                                                            <th>SDT</th>
+                                                            <th>Email</th>
+                                                            <th>Sân ca</th>
+                                                            <th>Thời gian</th>
+                                                            <th>Ngày đặt lịch</th>
+                                                            <th>Hành động</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody id="cho-nhan-table">
+                                                        <!-- Dữ liệu của bảng "Chờ nhận sân" sẽ được chèn vào đây -->
+                                                        </tbody>
+                                                    </table>
+                                                    <!-- Pagination -->
+                                                    <nav aria-label="Table Paging" class="mb-0 text-muted">
+                                                        <ul class="pagination justify-content-end mb-0"
+                                                            id="paginationChoNhan">
+                                                            <!-- Pagination buttons will be inserted here by JavaScript -->
+                                                        </ul>
+                                                    </nav>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phần dưới bên trái -->
+                        <div class="col-12">
+                            <div class="card shadow h-100">
+                                <div class="card-body">
+                                    <!-- Tiêu đề của box -->
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <!-- Tiêu đề của box -->
+                                        <h5 class="card-title text-success mb-0">Dịch vụ sử dụng</h5>
+                                        <!-- Nút nằm bên phải tiêu đề -->
+                                        <button  class="btn btn-outline-success" title="Thêm dịch vụ" type="button">
+                                            <span class="fe fe-plus"></span>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phần Tabs và Nội dung Tabs bên phải -->
+                <div class="col-md-5">
+                    <div class="card shadow h-100">
+                        <div class="card-body">
+                            <!-- Tiêu đề của box -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <!-- Tiêu đề của box -->
+                                <h5 class="card-title text-success mb-3">Thông tin hóa đơn</h5>
+                                <!-- Khung chứa các nút nằm bên phải -->
+                                <div class="d-flex">
+                                    <!-- Nút Thêm hóa đơn -->
+                                    <button   id="addInvoiceButton" class="btn btn-outline-primary me-2"
+                                            title="Thêm hóa đơn"
+                                            type="button">
+                                        <span class="fe fe-plus"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Phần Tabs nằm ngang -->
+                            <ul class="nav nav-tabs" id="tabListRight">
+                                <!-- Tabs sẽ được tạo động tại đây -->
+                            </ul>
+                            <!-- Phần Nội dung Tabs nằm bên dưới -->
+                            <div class="tab-content" id="tabContentRight">
+                                <!-- Nội dung các tab sẽ được tạo động tại đây -->
+                                <form>
+                                    <div class="row">
+                                        <!-- Dòng đầu tiên với hai ô -->
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="tenKH">Tên khách hàng</label>
+                                                <input class="form-control" id="tenKH" type="text">
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="sdt">SDT</label>
+                                                <input class="form-control" id="sdt" type="text">
+                                            </div>
+                                        </div>
+
+                                        <!-- Dòng thứ hai với hai ô -->
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="tenSanCa">Tên sân ca</label>
+                                                <input class="form-control" id="tenSanCa" type="text">
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="thoiGianDa">Thời gian đá</label>
+                                                <input class="form-control" id="thoiGianDa" type="time">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <!-- Dòng thứ ba với hai ô -->
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="ngayDenSan">Ngày đặt sân</label>
+                                                <input class="form-control" id="ngayDenSan" type="date">
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="tienCocThua">Tiền cọc thừa</label>
+                                                <input class="form-control" id="tienCocThua" type="text">
+                                            </div>
+                                        </div>
+
+                                        <!-- Dòng thứ tư với hai ô -->
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="giaSan">Giá sân</label>
+                                                <input class="form-control" id="giaSan" type="text">
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <label for="giaDichVu">Giá dịch vụ</label>
+                                                <input class="form-control" id="giaDichVu" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <!-- Dòng cuối cùng với hai ô -->
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="tienPhuPhi">Tiền phụ phí</label>
+                                                <input class="form-control" id="tienPhuPhi" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="tienCocSan">Tiền cọc sân</label>
+                                                <input class="form-control" id="tienCocSan" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:include="~{fragment/modal :: modal}"></div>
+</div>
+
+<script th:include="~{fragment/script :: script}"></script>
+<script>
+
+    function showSuccessToast(message) {
+        Toastify({
+            text: message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            style: {
+                background: "#4CAF50",
+            },
+            stopOnFocus: true
+        }).showToast();
+    }
+
+    function showErrorToast(message) {
+        Toastify({
+            text: message,
+            duration: 3000,
+            gravity: "top",
+            position: "center",
+            style: {
+                background: "#f44336",
+            },
+            stopOnFocus: true
+        }).showToast();
+    }
+
+    async function fetchData(trangThai, page, tableId) {
+        try {
+            const pageSize = 3; // Đảm bảo giá trị này khớp với giá trị bạn sử dụng trong backend
+            const url = `http://localhost:8080/hoa-don-chi-tiet/trang-thai?trangThai=${encodeURIComponent(trangThai)}&page=${page}&size=${pageSize}`;
+            console.log(`Fetching data from URL: ${url}`); // Debugging URL
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
+
+            const data = await response.json();
+            console.log('Data received:', data); // Debugging response data
+
+            const tableBody = document.getElementById(tableId);
+            tableBody.innerHTML = '';
+
+            data.content.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.classList.add('invoice-row');
+                row.setAttribute('data-id', item.id);
+                row.addEventListener('click', showInvoiceDetails); // Gọi showInvoiceDetails với event
+                row.innerHTML = `
+                <td hidden>${item.id}</td>
+                <td>${index + 1 + (page * pageSize)}</td>
+                <td class="tenKH">${item.hoVaTenKhachHang}</td>
+                <td class="sdt">${item.soDienThoaiKhachHang}</td>
+                <td>${item.emailKhachHang}</td>
+                <td>${item.tenSanBong}</td>
+                <td>${item.tenCa}</td>
+                <td>${item.ngayDenSan}</td>
+                <td>
+                    ${trangThai === 'Đang hoạt động' ? '' : `<button class="btn btn-outline-success" onclick="checkIn(${item.id})" title="Check in"><span class="fe fe-check-circle"></span></button>`}
+                </td>
+            `;
+                tableBody.appendChild(row);
+            });
+            updatePagination(data.totalPages, page, tableId);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            showErrorToast('Có lỗi xảy ra khi tải dữ liệu.');
+        }
+    }
+
+    function updatePagination(totalPages, currentPage, tableId) {
+        const paginationElement = document.getElementById(`pagination${tableId === 'dang-hoat-dong-table' ? 'DangHoatDong' : 'ChoNhan'}`);
+        paginationElement.innerHTML = '';
+
+        // Nếu chỉ có một trang, không hiển thị phân trang
+        if (totalPages <= 1) return;
+
+        // Thêm trang đầu tiên
+        paginationElement.innerHTML += `
+        <li class="page-item ${currentPage === 0 ? 'active' : ''}">
+            <button class="page-link" type="button" onclick="handlePageClick(0, '${tableId}')">1</button>
+        </li>
+    `;
+
+        // Thêm dấu "..." trước các trang gần trang hiện tại nếu cần
+        if (currentPage > 2) {
+            paginationElement.innerHTML += `
+            <li class="page-item dropdown">
+                <button class="page-link dropdown-toggle" type="button" id="dropdownMenu${tableId}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">...</button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu${tableId}">
+                    ${generatePageLinks(1, Math.min(currentPage - 1, totalPages - 2), tableId)}
+                </div>
+            </li>
+        `;
+        }
+
+        // Thêm các trang gần trang hiện tại
+        const startPage = Math.max(1, currentPage - 1);
+        const endPage = Math.min(totalPages - 2, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            paginationElement.innerHTML += `
+            <li class="page-item ${i === currentPage ? 'active' : ''}">
+                <button class="page-link" type="button" onclick="handlePageClick(${i}, '${tableId}')">${i + 1}</button>
+            </li>
+        `;
+        }
+
+        // Thêm dấu "..." sau các trang gần trang hiện tại nếu cần
+        if (currentPage < totalPages - 3) {
+            paginationElement.innerHTML += `
+            <li class="page-item dropdown">
+                <button class="page-link dropdown-toggle" type="button" id="dropdownMenuEnd${tableId}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">...</button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuEnd${tableId}">
+                    ${generatePageLinks(Math.max(currentPage + 2, 1), totalPages - 1, tableId)}
+                </div>
+            </li>
+        `;
+        }
+
+        // Thêm trang cuối cùng
+        paginationElement.innerHTML += `
+        <li class="page-item ${currentPage === totalPages - 1 ? 'active' : ''}">
+            <button class="page-link" type="button" onclick="handlePageClick(${totalPages - 1}, '${tableId}')">${totalPages}</button>
+        </li>
+    `;
+
+        // Khởi tạo dropdown
+        $('.dropdown-toggle').dropdown();
+    }
+
+    function generatePageLinks(startPage, endPage, tableId) {
+        let links = '';
+        for (let i = startPage; i <= endPage; i++) {
+            links += `
+            <a class="dropdown-item" href="#" onclick="handlePageClick(${i}, '${tableId}')">${i + 1}</a>
+        `;
+        }
+        return links;
+    }
+
+    function handlePageClick(page, tableId) {
+        const trangThai = tableId === 'dang-hoat-dong-table' ? 'Đang hoạt động' : 'Chờ nhận sân';
+        fetchData(trangThai, page, tableId);
+    }
+
+    function loadTabData(tabId) {
+        const trangThai = tabId === 'dang-hoat-dong' ? 'Đang hoạt động' : 'Chờ nhận sân';
+        fetchData(trangThai, 0, `${tabId}-table`);
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadTabData('dang-hoat-dong');
+
+        document.querySelectorAll('.nav-link').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('aria-controls');
+                loadTabData(tabId);
+            });
+        });
+    });
+
+    let tabCount = 0;  // Số lượng tab hiện tại
+    const maxTabs = 5; // Giới hạn số lượng tab
+
+    function removeTab(event, tabId) {
+        event.preventDefault();
+
+        // Xóa tab khỏi danh sách
+        document.getElementById(`${tabId}-tab`).parentElement.remove();
+
+        // Xóa nội dung tab
+        document.getElementById(tabId).remove();
+
+        tabCount--;
+    }
+
+    function resetFilters() {
+        // Logic to reset filters
+        document.getElementById('search').value = '';
+        fetchData('Đang hoạt động', 0, 'dang-hoat-dong-table');
+        fetchData('Chờ nhận sân', 0, 'cho-nhan-table');
+    }
+
+    // function addTab() {
+    //     if (tabCount < maxTabs) {
+    //         // Xóa form mặc định nếu chưa tạo tab nào
+    //         const defaultForm = document.querySelector('#tabContentRight > form');
+    //         if (defaultForm) {
+    //             defaultForm.remove();
+    //         }
+    //
+    //         // Tăng số lượng tab và tạo ID cho tab mới
+    //         tabCount++;
+    //         const tabId = `tab${tabCount}`;
+    //         const tabTitle = `Lịch đặt ${tabCount}`;
+    //
+    //         // Tạo tab mới với nút xóa
+    //         const newTab = document.createElement('li');
+    //         newTab.classList.add('nav-item');
+    //         newTab.innerHTML = `
+    //         <a class="nav-link ${tabCount === 1 ? 'active' : ''}" id="${tabId}-tab" data-bs-toggle="tab"
+    //            href="#${tabId}" role="tab" aria-controls="${tabId}" aria-selected="${tabCount === 1}">
+    //             ${tabTitle}
+    //             <button type="button" class="close" onclick="removeTab(event, '${tabId}')" title="Xóa">
+    //                 <span class="fe fe-x-circle" style="color: #ff0000; font-size: 15px;"></span>
+    //             </button>
+    //         </a>
+    //     `;
+    //         document.getElementById('tabListRight').appendChild(newTab);
+    //
+    //         // Tạo nội dung tab mới
+    //         const newTabContent = document.createElement('div');
+    //         newTabContent.className = `tab-pane fade ${tabCount === 1 ? 'show active' : ''}`;
+    //         newTabContent.id = tabId;
+    //         newTabContent.setAttribute('role', 'tabpanel');
+    //         newTabContent.setAttribute('aria-labelledby', `${tabId}-tab`);
+    //         newTabContent.innerHTML = `
+    //         <form>
+    //             <div class="row">
+    //                 <!-- Dòng đầu tiên với hai ô -->
+    //         <div class="col-md-6">
+    //         <div class="form-group mb-3">
+    //         <label for="tenKH${tabCount}">Tên khách hàng</label>
+    //         <input type="text" id="tenKH${tabCount}" class="form-control">
+    //         </div>
+    //         <div class="form-group mb-3">
+    //         <label for="sdt${tabCount}">SDT</label>
+    //         <input type="text" id="sdt${tabCount}" class="form-control">
+    //         </div>
+    //         </div>
+    //
+    //             <!-- Dòng thứ hai với hai ô -->
+    //         <div class="col-md-6">
+    //         <div class="form-group mb-3">
+    //         <label for="tenSanCa${tabCount}">Tên sân ca</label>
+    //         <input type="text" id="tenSanCa${tabCount}" class="form-control">
+    //         </div>
+    //         <div class="form-group mb-3">
+    //         <label for="thoiGianDa${tabCount}">Thời gian đá</label>
+    //         <input type="time" id="thoiGianDa${tabCount}" class="form-control">
+    //         </div>
+    //         </div>
+    //         </div>
+    //
+    //         <div class="row">
+    //             <!-- Dòng thứ ba với hai ô -->
+    //         <div class="col-md-6">
+    //         <div class="form-group mb-3">
+    //         <label for="ngayDenSan${tabCount}">Ngày đặt sân</label>
+    //         <input type="date" id="ngayDenSan${tabCount}" class="form-control">
+    //         </div>
+    //         <div class="form-group mb-3">
+    //         <label for="tienCocThua${tabCount}">Tiền cọc thừa</label>
+    //         <input type="text" id="tienCocThua${tabCount}" class="form-control">
+    //         </div>
+    //         </div>
+    //
+    //             <!-- Dòng thứ tư với hai ô -->
+    //         <div class="col-md-6">
+    //         <div class="form-group mb-3">
+    //         <label for="giaSan${tabCount}">Giá sân</label>
+    //         <input type="text" id="giaSan${tabCount}" class="form-control">
+    //         </div>
+    //         <div class="form-group mb-3">
+    //         <label for="giaDichVu${tabCount}">Giá dịch vụ</label>
+    //         <input type="text" id="giaDichVu${tabCount}" class="form-control">
+    //         </div>
+    //         </div>
+    //         </div>
+    //
+    //         <div class="row">
+    //             <!-- Dòng cuối cùng với hai ô -->
+    //         <div class="col-md-6">
+    //         <div class="form-group mb-3">
+    //         <label for="tienPhuPhi${tabCount}">Tiền phụ phí</label>
+    //         <input type="text" id="tienPhuPhi${tabCount}" class="form-control">
+    //         </div>
+    //         </div>
+    //
+    //         <div class="col-md-6">
+    //         <div class="form-group mb-3">
+    //         <label for="tienCocSan${tabCount}">Tiền cọc sân</label>
+    //         <input type="text" id="tienCocSan${tabCount}" class="form-control">
+    //         </div>
+    //         </div>
+    //         </div>
+    //         </form>
+    //         `
+    //
+    //
+    //                 ;
+    //                 document.getElementById('tabContentRight').appendChild(newTabContent);
+    //             } else {
+    //                 showErrorToast('Tối đa 5 tab');
+    //             }
+    //         }
+
+
+    function showInvoiceDetails(event) {
+        const row = event.currentTarget; // Lấy dòng hiện tại được chọn
+        const invoiceId = row.getAttribute('data-id'); // Lấy id hóa đơn chi tiết từ thuộc tính data-id
+        const tabName =
+            `HD ${invoiceId}`
+        ;
+
+        // Xóa form mặc định nếu chưa tạo tab nào
+        const defaultForm = document.querySelector('#tabContentRight > form');
+        if (defaultForm) {
+            defaultForm.remove();
+        }
+
+        // Kiểm tra nếu tab đã tồn tại thì kích hoạt nó
+        if (document.getElementById(
+            `tab-${invoiceId}`
+        )) {
+            const existingTab = document.getElementById(
+                `tab-${invoiceId}`
+            );
+            const tab = new bootstrap.Tab(existingTab);
+            tab.show();
+            return;
+        }
+
+        // Tạo mới tab
+        const tabListRight = document.getElementById('tabListRight');
+        const tabContentRight = document.getElementById('tabContentRight');
+
+        // Tạo phần tử tab mới
+        const newTab = document.createElement('li');
+        newTab.classList.add('nav-item');
+        newTab.innerHTML =
+
+
+            `
+            <a class="nav-link" id="tab-${invoiceId}" data-bs-toggle="tab" href="#content-${invoiceId}" role="tab">
+                ${tabName}
+            <button type="button" class="close" onclick="removeTab2(event, 'tab-${invoiceId}')" title="Xóa">
+            <span class="fe fe-x-circle" style="color: #ff0000; font-size: 15px;"></span>
+            </button>
+            </a>
+            `;
+        tabListRight.appendChild(newTab);
+
+        // Tạo phần tử nội dung cho tab mới
+        const newTabContent = document.createElement('div');
+        newTabContent.classList.add('tab-pane', 'fade');
+        newTabContent.setAttribute('id', `content-${invoiceId}`);
+        newTabContent.setAttribute('role', 'tabpanel');
+        newTabContent.innerHTML = `
+            <form>
+            <div class="row">
+            <div class="col-md-6">
+            <div class="form-group mb-3">
+            <label for="id${invoiceId}">ID</label>
+            <input type="text" id="id${invoiceId}" class="form-control" readonly>
+            </div>
+            <div class="form-group mb-3">
+            <label for="idHoaDon${invoiceId}">ID Hóa đơn</label>
+            <input type="text" id="idHoaDon${invoiceId}" class="form-control" readonly>
+            </div>
+            <div class="form-group mb-3">
+            <label for="maHoaDon${invoiceId}">Mã Hóa đơn</label>
+            <input type="text" id="maHoaDon${invoiceId}" class="form-control" readonly>
+            </div>
+            <div class="form-group mb-3">
+            <label for="ngayTaoHoaDon${invoiceId}">Ngày tạo Hóa đơn</label>
+            <input type="text" id="ngayTaoHoaDon${invoiceId}" class="form-control" readonly>
+            </div>
+            <div class="form-group mb-3">
+            <label for="ngayDenSan${invoiceId}">Ngày đến sân</label>
+            <input type="text" id="ngayDenSan${invoiceId}" class="form-control" readonly>
+            </div>
+            <div class="form-group mb-3">
+            <label for="tienSan${invoiceId}">Tiền sân</label>
+            <input type="text" id="tienSan${invoiceId}" class="form-control" readonly>
+            </div>
+            </div>
+
+            <div class="col-md-6">
+            <div class="form-group mb-3">
+            <label for="ghiChu${invoiceId}">Ghi chú</label>
+            <input type="text" id="ghiChu${invoiceId}" class="form-control" readonly>
+            </div>
+            <div class="form-group mb-3">
+            <label for="trangThai${invoiceId}">Trạng thái</label>
+            <input type="text" id="trangThai${invoiceId}" class="form-control" readonly>
+            </div>
+            <div class="form-group mb-3">
+            <label for="tenSanBong${invoiceId}">Tên Sân bóng</label>
+            <input type="text" id="tenSanBong${invoiceId}" class="form-control" readonly>
+            </div>
+            <div class="form-group mb-3">
+            <label for="tenCa${invoiceId}">Tên Ca</label>
+            <input type="text" id="tenCa${invoiceId}" class="form-control" readonly>
+            </div>
+            <div class="form-group mb-3">
+            <label for="thoiGianBatDauCa${invoiceId}">Thời gian bắt đầu Ca</label>
+            <input type="text" id="thoiGianBatDauCa${invoiceId}" class="form-control" readonly>
+            </div>
+            <div class="form-group mb-3">
+            <label for="thoiGianKetThucCa${invoiceId}">Thời gian kết thúc Ca</label>
+            <input type="text" id="thoiGianKetThucCa${invoiceId}" class="form-control" readonly>
+            </div>
+            </div>
+            </div>
+
+            <div class="row">
+            <div class="col-md-6">
+            <div class="form-group mb-3">
+            <label for="hoVaTenKhachHang${invoiceId}">Họ và tên Khách hàng</label>
+            <input type="text" id="hoVaTenKhachHang${invoiceId}" class="form-control" readonly>
+            </div>
+            <div class="form-group mb-3">
+            <label for="soDienThoaiKhachHang${invoiceId}">Số điện thoại Khách hàng</label>
+            <input type="text" id="soDienThoaiKhachHang${invoiceId}" class="form-control" readonly>
+            </div>
+            <div class="form-group mb-3">
+            <label for="emailKhachHang${invoiceId}">Email Khách hàng</label>
+            <input type="email" id="emailKhachHang${invoiceId}" class="form-control" readonly>
+            </div>
+            </div>
+            </div>
+            </form>
+            `;
+        tabContentRight.appendChild(newTabContent);
+
+        // Tăng giá trị tabCount cho tab tiếp theo
+        tabCount++;
+
+        // Gọi API để lấy dữ liệu và điền vào form
+        fetch(`http://localhost:8080/hoa-don-chi-tiet/${invoiceId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Điền dữ liệu vào các trường trong form
+                document.getElementById(`id${invoiceId}`).value = data.id;
+                document.getElementById(`idHoaDon${invoiceId}`).value = data.idHoaDon;
+                document.getElementById(`maHoaDon${invoiceId}`).value = data.maHoaDon;
+                document.getElementById(`ngayTaoHoaDon${invoiceId}`).value = data.ngayTaoHoaDon;
+                document.getElementById(`ngayDenSan${invoiceId}`).value = data.ngayDenSan;
+                document.getElementById(`tienSan${invoiceId}`).value = data.tienSan;
+                document.getElementById(`ghiChu${invoiceId}`).value = data.ghiChu;
+                document.getElementById(`trangThai${invoiceId}`).value = data.trangThai;
+                document.getElementById(`tenSanBong${invoiceId}`).value = data.tenSanBong;
+                document.getElementById(`tenCa${invoiceId}`).value = data.tenCa;
+                document.getElementById(`thoiGianBatDauCa${invoiceId}`).value = data.thoiGianBatDauCa;
+                document.getElementById(`thoiGianKetThucCa${invoiceId}`).value = data.thoiGianKetThucCa;
+                document.getElementById(`hoVaTenKhachHang${invoiceId}`).value = data.hoVaTenKhachHang;
+                document.getElementById(`soDienThoaiKhachHang${invoiceId}`).value = data.soDienThoaiKhachHang;
+                document.getElementById(`emailKhachHang${invoiceId}`).value = data.emailKhachHang;
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error fetching invoice details:', error);
+            });
+
+        // Kích hoạt tab vừa tạo
+        const tab = new bootstrap.Tab(document.getElementById(`tab-${invoiceId}`));
+        tab.show();
+    }
+
+
+    function removeTab2(event, tabId) {
+        event.stopPropagation(); // Ngăn sự kiện bấm vào tab
+
+        // Xóa tab khỏi danh sách tab
+        const tabElement = document.getElementById(tabId);
+        if (tabElement) {
+            tabElement.parentElement.remove();
+        }
+
+        // Xóa nội dung tương ứng của tab
+        const contentId = tabId.replace('tab-', 'content-');
+        const contentElement = document.getElementById(contentId);
+        if (contentElement) {
+            contentElement.remove();
+        }
+
+        // Nếu tab bị xóa đang được hiển thị thì kích hoạt tab trước đó
+        if (tabElement.classList.contains('active')) {
+            const tabListRight = document.getElementById('tabListRight');
+            const firstTab = tabListRight.querySelector('.nav-link');
+            if (firstTab) {
+                const firstTabInstance = new bootstrap.Tab(firstTab);
+                firstTabInstance.show();
+            }
+        }
+    }
+
+    $(document).ready(function() {
+        $('#addInvoiceButton').on('click', function() {
+            $.ajax({
+                url: 'http://localhost:8080/chon-san', // URL của nội dung bạn muốn tải
+                method: 'GET',
+                success: function(response) {
+                    $('#content-ban-hang').html(response); // Cập nhật nội dung của phần tử
+                },
+                error: function(xhr, status, error) {
+                    console.error("An error occurred: " + xhr.responseText);
+                }
+            });
+        });
+    });
+
+
+</script>
+</body>
+</html>

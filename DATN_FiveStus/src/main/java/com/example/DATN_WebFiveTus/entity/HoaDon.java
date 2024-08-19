@@ -76,10 +76,6 @@ public class HoaDon {
     private String trangThai;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "ngay_den_san")
-    private Date ngayDenSan;
-
-    @Temporal(TemporalType.DATE)
     @Column(name = "ngay_thanh_toan")
     private Date ngayThanhToan;
 
