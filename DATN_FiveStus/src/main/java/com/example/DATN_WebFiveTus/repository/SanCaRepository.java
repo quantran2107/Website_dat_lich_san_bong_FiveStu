@@ -18,7 +18,7 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
     @Query("SELECT sc FROM SanCa sc " +
             "JOIN FETCH sc.ca " +
             "JOIN FETCH sc.sanBong " +
-            "JOIN FETCH sc.ngayTrongTuan where sc.deletedAt=true")
+            "JOIN FETCH sc.ngayTrongTuan where sc.deletedAt=false")
     List<SanCa> getAllJoinFetch();
 
     @Modifying

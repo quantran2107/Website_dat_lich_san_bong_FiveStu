@@ -16,10 +16,10 @@ import java.util.List;
 @Repository
 public interface SanBongRepository extends JpaRepository<SanBong,Integer> {
 
-    @Query("SELECT sb FROM SanBong sb where sb.deletedAt=true")
+    @Query("SELECT sb FROM SanBong sb where sb.deletedAt=false ")
     List<SanBong> getAllJoinFetch();
 
-    @Query("SELECT sb FROM SanBong sb where sb.deletedAt=true")
+    @Query("SELECT sb FROM SanBong sb where sb.deletedAt=false")
     Page<SanBong> getAllJoinFetchPageable(Pageable pageable);
 
     @Modifying

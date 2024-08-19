@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface HoaDonRepository extends JpaRepository<HoaDon,Integer> {
+public interface HoaDonRepository extends JpaRepository<HoaDon, Integer> {
 
     @Query("SELECT hd FROM HoaDon hd " +
             "JOIN FETCH hd.khachHang " +
@@ -35,5 +35,8 @@ public interface HoaDonRepository extends JpaRepository<HoaDon,Integer> {
             @Param("keyword") String keyword,
             @Param("tongTienMin") Float tongTienMin,
             @Param("tongTienMax") Float tongTienMax);
+
+    @Query("SELECT hd FROM HoaDon hd LEFT JOIN FETCH hd.khachHang WHERE hd.id = :id")
+    HoaDon findByIdWithKhachHang(@Param("id") Integer id);
 
 }

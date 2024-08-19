@@ -1,10 +1,8 @@
-
-
-    function downloadTemplate(type) {
+function downloadTemplate(type) {
     window.location.href = `http://localhost:8080/template/${type}/download`;
 }
 
-    function openFileDialog(type) {
+function openFileDialog(type) {
     // Lưu loại dịch vụ để sử dụng khi gửi dữ liệu
     window.currentImportType = type;
 
@@ -12,19 +10,19 @@
     document.getElementById('fileInput').click();
 }
 
-    function handleFileChange(event) {
+function handleFileChange(event) {
     const file = event.target.files[0];
     if (!file) {
-    alert("Please select a file.");
-    return;
-}
+        alert("Please select a file.");
+        return;
+    }
 
     // Gửi tệp đến API
     importFromExcel(window.currentImportType, file);
 }
 
 
-    function showSuccessToast(message) {
+function showSuccessToast(message) {
     Toastify({
         text: message,
         duration: 3000,
@@ -37,7 +35,7 @@
     }).showToast();
 }
 
-    function showErrorToast(message) {
+function showErrorToast(message) {
     Toastify({
         text: message,
         duration: 3000,
@@ -50,7 +48,7 @@
     }).showToast();
 }
 
-    document.addEventListener('DOMContentLoaded', async function () {
+document.addEventListener('DOMContentLoaded', async function () {
     showLoading();
     currentServiceType = 'do_thue'; // Default service type
     await fetchPriceRange(currentServiceType);
@@ -59,41 +57,41 @@
     changeTab(currentServiceType);
 });
 
-    let currentServiceType = 'do_thue';
-    let currentSearchQuery = '';
-    let currentStatusFilter = '';
-    let currentDonGiaMin = '';
-    let currentDonGiaMax = '';
+let currentServiceType = 'do_thue';
+let currentSearchQuery = '';
+let currentStatusFilter = '';
+let currentDonGiaMin = '';
+let currentDonGiaMax = '';
 
-    const pageSize = 10;
-    const debounceDelay = 300;
-    let debounceTimeout;
+const pageSize = 10;
+const debounceDelay = 300;
+let debounceTimeout;
 
-    const cache = {};
-    const cacheDuration = 30 * 1000; // 30 giây
+const cache = {};
+const cacheDuration = 30 * 1000; // 30 giây
 
 
-    async function fetchData(apiUrl) {
+async function fetchData(apiUrl) {
     const currentTime = Date.now();
     const cacheEntry = cache[apiUrl];
 
     if (cacheEntry && (currentTime - cacheEntry.timestamp < cacheDuration)) {
-    return cacheEntry.data;
-}
+        return cacheEntry.data;
+    }
 
     try {
-    const response = await fetch(apiUrl);
-    if (!response.ok) throw new Error('Network response was not ok');
-    const data = await response.json();
-    cache[apiUrl] = { data, timestamp: currentTime };
-    return data;
-} catch (error) {
-    console.error('Error fetching data:', error);
-    return null;
-}
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        cache[apiUrl] = {data, timestamp: currentTime};
+        return data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        return null;
+    }
 }
 
-    async function loadData(serviceType, page = 0) {
+async function loadData(serviceType, page = 0) {
     currentServiceType = serviceType;
     const size = pageSize;
     let apiUrl = `http://localhost:8080/${currentServiceType}/search-and-filter?page=${page}&size=${size}`;
@@ -102,30 +100,29 @@
     if (currentSearchQuery) apiUrl += `&keyword=${encodeURIComponent(currentSearchQuery)}`;
     if (currentStatusFilter) apiUrl += `&trangThai=${encodeURIComponent(currentStatusFilter)}`;
     if (currentDonGiaMin !== undefined && currentDonGiaMax !== undefined) {
-    apiUrl += `&donGiaMin=${encodeURIComponent(currentDonGiaMin)}&donGiaMax=${encodeURIComponent(currentDonGiaMax)}`;
-}
+        apiUrl += `&donGiaMin=${encodeURIComponent(currentDonGiaMin)}&donGiaMax=${encodeURIComponent(currentDonGiaMax)}`;
+    }
 
     // Fetch dữ liệu từ API
     const data = await fetchData(apiUrl);
 
     // Kiểm tra xem dữ liệu trả về có hợp lệ không
     if (data && data.totalElements !== undefined && data.size !== undefined) {
-    renderTable(data.content, page, size);
-    updatePagination(data.totalElements, page, size);
-}
+        renderTable(data.content, page, size);
+        updatePagination(data.totalElements, page, size);
+    }
 
 }
 
 
-
-    function renderTable(items, page, size) {
+function renderTable(items, page, size) {
     const tableBody = document.getElementById(`tableBody${currentServiceType === 'do_thue' ? 'DoThue' : 'NuocUong'}`);
     const fragment = document.createDocumentFragment();
 
     items.forEach((item, index) => {
-    const row = document.createElement('tr');
-    row.dataset.itemId = item.id; // Add identifier for easier update
-    row.innerHTML = `
+        const row = document.createElement('tr');
+        row.dataset.itemId = item.id; // Add identifier for easier update
+        row.innerHTML = `
             <td>${index + 1 + page * size}</td>
             <td>${item.tenDoThue || item.tenNuocUong}</td>
             <td>
@@ -149,15 +146,15 @@
                 </button>
             </td>
         `;
-    fragment.appendChild(row);
-});
+        fragment.appendChild(row);
+    });
 
     // Replace all rows
     tableBody.innerHTML = '';
     tableBody.appendChild(fragment);
 }
 
-    function updatePagination(totalElements, currentPage, size) {
+function updatePagination(totalElements, currentPage, size) {
     const pagination = document.getElementById(`pagination${currentServiceType === 'do_thue' ? 'DoThue' : 'NuocUong'}`);
     const fragment = document.createDocumentFragment();
 
@@ -169,19 +166,19 @@
 
     // Nếu chỉ có một trang hoặc không có trang nào, chỉ hiển thị số trang đó
     if (totalPages <= 1) {
-    if (totalPages === 1) {
-    const singlePageLi = document.createElement('li');
-    singlePageLi.className = 'page-item active'; // Nổi bật trang hiện tại
-    const singlePageA = document.createElement('a');
-    singlePageA.className = 'page-link';
-    singlePageA.href = '#';
-    singlePageA.textContent = '1'; // Hiển thị số trang
-    singlePageLi.appendChild(singlePageA);
-    fragment.appendChild(singlePageLi);
-}
-    pagination.appendChild(fragment);
-    return;
-}
+        if (totalPages === 1) {
+            const singlePageLi = document.createElement('li');
+            singlePageLi.className = 'page-item active'; // Nổi bật trang hiện tại
+            const singlePageA = document.createElement('a');
+            singlePageA.className = 'page-link';
+            singlePageA.href = '#';
+            singlePageA.textContent = '1'; // Hiển thị số trang
+            singlePageLi.appendChild(singlePageA);
+            fragment.appendChild(singlePageLi);
+        }
+        pagination.appendChild(fragment);
+        return;
+    }
 
     // Số trang tối đa để hiển thị
     const maxPagesToShow = 3;
@@ -189,131 +186,131 @@
 
     // Điều chỉnh startPage và endPage để chỉ hiển thị số trang hợp lý
     if (totalPages <= maxPagesToShow) {
-    startPage = 0;
-    endPage = totalPages;
-} else {
-    // Hiển thị trang xung quanh trang hiện tại
-    startPage = Math.max(0, currentPage - Math.floor(maxPagesToShow / 2));
-    endPage = Math.min(totalPages, startPage + maxPagesToShow);
+        startPage = 0;
+        endPage = totalPages;
+    } else {
+        // Hiển thị trang xung quanh trang hiện tại
+        startPage = Math.max(0, currentPage - Math.floor(maxPagesToShow / 2));
+        endPage = Math.min(totalPages, startPage + maxPagesToShow);
 
-    // Điều chỉnh startPage nếu không đủ trang trước đó
-    if (endPage - startPage < maxPagesToShow) {
-    startPage = Math.max(0, endPage - maxPagesToShow);
-}
-}
+        // Điều chỉnh startPage nếu không đủ trang trước đó
+        if (endPage - startPage < maxPagesToShow) {
+            startPage = Math.max(0, endPage - maxPagesToShow);
+        }
+    }
 
     // Thêm nút "Previous" nếu không phải là trang đầu tiên
     if (currentPage > 0) {
-    const prevPageLi = document.createElement('li');
-    prevPageLi.className = 'page-item';
-    const prevPageA = document.createElement('a');
-    prevPageA.className = 'page-link';
-    prevPageA.href = '#';
-    prevPageA.textContent = '<';
-    prevPageA.addEventListener('click', (event) => {
-    event.preventDefault();
-    loadData(currentServiceType, currentPage - 1);
-});
-    prevPageLi.appendChild(prevPageA);
-    fragment.appendChild(prevPageLi);
-}
+        const prevPageLi = document.createElement('li');
+        prevPageLi.className = 'page-item';
+        const prevPageA = document.createElement('a');
+        prevPageA.className = 'page-link';
+        prevPageA.href = '#';
+        prevPageA.textContent = '<';
+        prevPageA.addEventListener('click', (event) => {
+            event.preventDefault();
+            loadData(currentServiceType, currentPage - 1);
+        });
+        prevPageLi.appendChild(prevPageA);
+        fragment.appendChild(prevPageLi);
+    }
 
     // Thêm các trang số
     for (let i = startPage; i < endPage; i++) {
-    const li = document.createElement('li');
-    li.className = `page-item${i === currentPage ? ' active' : ''}`;
-    const a = document.createElement('a');
-    a.className = 'page-link';
-    a.href = '#';
-    a.textContent = i + 1;
-    a.addEventListener('click', (event) => {
-    event.preventDefault();
-    loadData(currentServiceType, i);
-});
-    li.appendChild(a);
-    fragment.appendChild(li);
-}
+        const li = document.createElement('li');
+        li.className = `page-item${i === currentPage ? ' active' : ''}`;
+        const a = document.createElement('a');
+        a.className = 'page-link';
+        a.href = '#';
+        a.textContent = i + 1;
+        a.addEventListener('click', (event) => {
+            event.preventDefault();
+            loadData(currentServiceType, i);
+        });
+        li.appendChild(a);
+        fragment.appendChild(li);
+    }
 
     // Thêm nút "Next" nếu không phải là trang cuối cùng
     if (currentPage < totalPages - 1) {
-    const nextPageLi = document.createElement('li');
-    nextPageLi.className = 'page-item';
-    const nextPageA = document.createElement('a');
-    nextPageA.className = 'page-link';
-    nextPageA.href = '#';
-    nextPageA.textContent = '>';
-    nextPageA.addEventListener('click', (event) => {
-    event.preventDefault();
-    loadData(currentServiceType, currentPage + 1);
-});
-    nextPageLi.appendChild(nextPageA);
-    fragment.appendChild(nextPageLi);
-}
+        const nextPageLi = document.createElement('li');
+        nextPageLi.className = 'page-item';
+        const nextPageA = document.createElement('a');
+        nextPageA.className = 'page-link';
+        nextPageA.href = '#';
+        nextPageA.textContent = '>';
+        nextPageA.addEventListener('click', (event) => {
+            event.preventDefault();
+            loadData(currentServiceType, currentPage + 1);
+        });
+        nextPageLi.appendChild(nextPageA);
+        fragment.appendChild(nextPageLi);
+    }
     console.log(totalElements, currentPage, size)
     pagination.appendChild(fragment); // Append all pagination items at once
 }
 
 
-
-    function debounce(func, delay) {
+function debounce(func, delay) {
     if (debounceTimeout) clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(func, delay);
 }
 
 
-    const debouncedSearchDonGia = debounce(function (min, current, max) {
+const debouncedSearchDonGia = debounce(function (min, current, max) {
     currentDonGiaMin = min;
     currentDonGiaMax = current;
     loadData(currentServiceType, 0); // Load data with updated price range
 }, debounceDelay);
 
-    function updatePriceRange(value) {
+function updatePriceRange(value) {
     document.getElementById('rangeValue').textContent = value;
     searchDonGia(value);
 }
-    function showLoading() {
+
+function showLoading() {
     document.getElementById('loadingOverlay').classList.remove('loading-hidden');
 }
 
-    function hideLoading() {
+function hideLoading() {
     document.getElementById('loadingOverlay').classList.add('loading-hidden');
 }
 
 
-    // Function to initialize price range slider
-    function initializePriceRange(minPrice, maxPrice) {
+// Function to initialize price range slider
+function initializePriceRange(minPrice, maxPrice) {
     const rangeInput = document.getElementById('customRange2');
     if (rangeInput) {
-    rangeInput.min = minPrice;
-    rangeInput.max = maxPrice;
-    rangeInput.value = maxPrice; // Set initial value to maxPrice
-    document.getElementById('rangeMin').textContent = minPrice;
-    document.getElementById('rangeMax').textContent = maxPrice;
-    document.getElementById('rangeValue').textContent = maxPrice;
-}
+        rangeInput.min = minPrice;
+        rangeInput.max = maxPrice;
+        rangeInput.value = maxPrice; // Set initial value to maxPrice
+        document.getElementById('rangeMin').textContent = minPrice;
+        document.getElementById('rangeMax').textContent = maxPrice;
+        document.getElementById('rangeValue').textContent = maxPrice;
+    }
 }
 
-    document.getElementById('customRange2').addEventListener('input', function () {
+document.getElementById('customRange2').addEventListener('input', function () {
     const value = this.value;
     updatePriceRange(value);
 });
 
 
-    function setStatusFilterDV(status) {
+function setStatusFilterDV(status) {
     currentStatusFilter = status;
     document.getElementById('statusFilterButton').textContent = status;
     loadData(currentServiceType, 0); // Load data with updated status filter
 }
 
-    function searchDV(query) {
+function searchDV(query) {
     clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
-    currentSearchQuery = query;
-    loadData(currentServiceType, 0); // Load data with updated search query
-}, debounceDelay);
+        currentSearchQuery = query;
+        loadData(currentServiceType, 0); // Load data with updated search query
+    }, debounceDelay);
 }
 
-    function resetFilters() {
+function resetFilters() {
     // Đặt lại các bộ lọc
     currentSearchQuery = '';
     currentStatusFilter = '';
@@ -334,14 +331,14 @@
 }
 
 
-    function changeTab(serviceType) {
+function changeTab(serviceType) {
     currentServiceType = serviceType;
     fetchPriceRange(serviceType).then(() => {
-    loadData(serviceType, 0); // Load data for the selected tab
-});
+        loadData(serviceType, 0); // Load data for the selected tab
+    });
 }
 
-    function searchDonGia(value) {
+function searchDonGia(value) {
     const min = document.getElementById('customRange2').min;
     const max = document.getElementById('customRange2').max;
     currentDonGiaMin = min;
@@ -350,24 +347,24 @@
 }
 
 
-    // Function to fetch price range for a service type
-    async function fetchPriceRange(serviceType) {
+// Function to fetch price range for a service type
+async function fetchPriceRange(serviceType) {
     let apiUrl = `http://localhost:8080/${serviceType}/hien-thi`;
     const data = await fetchData(apiUrl);
     if (data) {
-    const donGia = data.map(item => item.donGia).filter(donGia => typeof donGia === 'number');
-    if (donGia.length > 0) {
-    const minPrice = Math.min(...donGia);
-    const maxPrice = Math.max(...donGia);
-    initializePriceRange(minPrice, maxPrice);
-} else {
-    console.warn('No valid prices found.');
-    initializePriceRange(0, 0);
-}
-}
+        const donGia = data.map(item => item.donGia).filter(donGia => typeof donGia === 'number');
+        if (donGia.length > 0) {
+            const minPrice = Math.min(...donGia);
+            const maxPrice = Math.max(...donGia);
+            initializePriceRange(minPrice, maxPrice);
+        } else {
+            console.warn('No valid prices found.');
+            initializePriceRange(0, 0);
+        }
+    }
 }
 
-    function deleteItem(id) {
+function deleteItem(id) {
     Swal.fire({
         title: 'Xác nhận',
         text: 'Bạn chắc chắn muốn xóa dịch vụ này?',
@@ -384,7 +381,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ deletedAt: true }) // Gửi body với trường deletedAt
+                body: JSON.stringify({deletedAt: true}) // Gửi body với trường deletedAt
             })
                 .then(response => {
                     if (response.ok) {
@@ -417,104 +414,104 @@
 }
 
 
-    function importFromExcel(type) {
+function importFromExcel(type) {
     const fileInput = document.getElementById('fileInput');
     const file = fileInput.files[0];
     if (!file) {
-    showErrorToast('Chọn 1 file');
-    return;
-}
+        showErrorToast('Chọn 1 file');
+        return;
+    }
 
     const formData = new FormData();
     formData.append("file", file);
 
     axios.post(`http://localhost:8080/import/${type}`, formData, {
-    headers: {
-    'Content-Type': 'multipart/form-data'
-}
-})
-    .then(response => {
-    showSuccessToast('Thêm dịch vụ thành công');
-    fileInput.value = '';  // Xóa tệp đã chọn
-    loadData(currentServiceType, 0);
-})
-    .catch(error => {
-    showErrorToast('Thêm dịch vụ thất bại');
-    loadData(currentServiceType, 0);
-});
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+        .then(response => {
+            showSuccessToast('Thêm dịch vụ thành công');
+            fileInput.value = '';  // Xóa tệp đã chọn
+            loadData(currentServiceType, 0);
+        })
+        .catch(error => {
+            showErrorToast('Thêm dịch vụ thất bại');
+            loadData(currentServiceType, 0);
+        });
 }
 
-    //Export excel
-    async function exportToExcel(serviceType) {
+//Export excel
+async function exportToExcel(serviceType) {
     try {
-    // Tạo workbook mới
-    var wb = XLSX.utils.book_new();
+        // Tạo workbook mới
+        var wb = XLSX.utils.book_new();
 
-    // Tạo URL API dựa trên loại dịch vụ
-    let apiUrl = `http://localhost:8080/${serviceType}/hien-thi`; // Đảm bảo URL là chính xác
+        // Tạo URL API dựa trên loại dịch vụ
+        let apiUrl = `http://localhost:8080/${serviceType}/hien-thi`; // Đảm bảo URL là chính xác
 
-    // Fetch dữ liệu từ API
-    const response = await fetch(apiUrl);
-    if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
-}
-    const data = await response.json();
+        // Fetch dữ liệu từ API
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+        }
+        const data = await response.json();
 
-    // Debug: In dữ liệu trả về từ API
-    console.log("Dữ liệu từ API:", data);
+        // Debug: In dữ liệu trả về từ API
+        console.log("Dữ liệu từ API:", data);
 
-    if (data && Array.isArray(data)) {
-    // Tạo bảng dữ liệu từ kết quả API
-    const items = data;
-    const table = document.createElement('table');
-    const thead = document.createElement('thead');
-    const tbody = document.createElement('tbody');
+        if (data && Array.isArray(data)) {
+            // Tạo bảng dữ liệu từ kết quả API
+            const items = data;
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
 
-    // Tạo tiêu đề bảng
-    const headerRow = document.createElement('tr');
-    headerRow.innerHTML = `
+            // Tạo tiêu đề bảng
+            const headerRow = document.createElement('tr');
+            headerRow.innerHTML = `
                 <th>STT</th>
                 <th>Tên</th>
                 <th>Đơn Giá</th>
                 <th>Số Lượng</th>
                 <th>Trạng Thái</th>
             `;
-    thead.appendChild(headerRow);
+            thead.appendChild(headerRow);
 
-    // Tạo dữ liệu bảng
-    items.forEach((item, index) => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
+            // Tạo dữ liệu bảng
+            items.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
                     <td>${index + 1}</td>
                     <td>${item.tenDoThue || item.tenNuocUong}</td>
                     <td>${item.donGia ? item.donGia + ' VND' : 'N/A'}</td>
                     <td>${item.soLuong || '0'}</td>
                     <td>${item.trangThai || 'N/A'}</td>
                 `;
-    tbody.appendChild(row);
-});
+                tbody.appendChild(row);
+            });
 
-    table.appendChild(thead);
-    table.appendChild(tbody);
+            table.appendChild(thead);
+            table.appendChild(tbody);
 
-    // Chuyển đổi bảng HTML thành sheet
-    var ws = XLSX.utils.table_to_sheet(table);
+            // Chuyển đổi bảng HTML thành sheet
+            var ws = XLSX.utils.table_to_sheet(table);
 
-    // Thêm sheet vào workbook
-    XLSX.utils.book_append_sheet(wb, ws, serviceType === 'do_thue' ? "Đồ Thuê" : "Nước Uống");
+            // Thêm sheet vào workbook
+            XLSX.utils.book_append_sheet(wb, ws, serviceType === 'do_thue' ? "Đồ Thuê" : "Nước Uống");
 
-    // Xuất file Excel
-    XLSX.writeFile(wb, serviceType === 'do_thue' ? 'do_thue_data.xlsx' : 'nuoc_uong_data.xlsx');
-} else {
-    console.error("Dữ liệu trả về không phải là mảng hoặc dữ liệu không hợp lệ.");
+            // Xuất file Excel
+            XLSX.writeFile(wb, serviceType === 'do_thue' ? 'do_thue_data.xlsx' : 'nuoc_uong_data.xlsx');
+        } else {
+            console.error("Dữ liệu trả về không phải là mảng hoặc dữ liệu không hợp lệ.");
+        }
+    } catch (error) {
+        console.error("Có lỗi xảy ra khi xuất dữ liệu:", error);
+    }
 }
-} catch (error) {
-    console.error("Có lỗi xảy ra khi xuất dữ liệu:", error);
-}
-}
 
-    // Hàm hiển thị form thêm dữ liệu
-    function showAddForm() {
+// Hàm hiển thị form thêm dữ liệu
+function showAddForm() {
     const cardBody = $('#tableCardBody');
     const cardBody1 = $('#tableCardBody1');
 
@@ -525,31 +522,19 @@
 
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link $
-                        {
-                            currentServiceType === 'do_thue' ? 'active' : ''
-                        }
-                    " id="tabDoThue-tab" data-toggle="tab" href="#tabDoThue" role="tab" aria-controls="tabDoThue" aria-selected="$
-                        {
-                            currentServiceType === 'do_thue'
-                        }
-                    ">Quản lý đồ thuê</a>
+                                    <a class="nav-link ${currentServiceType === 'do_thue' ? 'active' : ''}" 
+                                    id="tabDoThue-tab" data-toggle="tab" href="#tabDoThue" role="tab" 
+                                    aria-controls="tabDoThue" aria-selected="${currentServiceType === 'do_thue'}">Quản lý đồ thuê</a>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <a class="nav-link $
-                        {
-                            currentServiceType === 'nuoc_uong' ? 'active' : ''
-                        }
-                    " id="tabNuocUong-tab" data-toggle="tab" href="#tabNuocUong" role="tab" aria-controls="tabNuocUong" aria-selected="$
-                        {
-                            currentServiceType === 'nuoc_uong'
-                        }
+                                    <a class="nav-link ${currentServiceType === 'nuoc_uong' ? 'active' : ''}" 
+                                    id="tabNuocUong-tab" data-toggle="tab" href="#tabNuocUong" role="tab" 
+                                    aria-controls="tabNuocUong" aria-selected="${currentServiceType === 'nuoc_uong'}
                     ">Quản lý nước uống</a>
                                 </li>
                             </ul>
                             <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade $
-                        {
+                                <div class="tab-pane fade ${
                             currentServiceType === 'do_thue' ? 'show active' : ''
                         }
                     " id="tabDoThue" role="tabpanel" aria-labelledby="tabDoThue-tab">
@@ -651,8 +636,8 @@
     $('#myTab a[href="#' + currentServiceType + '"]').tab('show');
 }
 
-    // Hàm submit form cho đồ thuê
-    function submitAddFormDoThue(event) {
+// Hàm submit form cho đồ thuê
+function submitAddFormDoThue(event) {
     event.preventDefault(); // Ngăn không cho form reload lại trang
 
     // Lấy giá trị từ các trường nhập liệu
@@ -672,30 +657,30 @@
 
     // Kiểm tra các trường dữ liệu
     if (!ten) {
-    $('#errorTenDoThue').text('Tên không được để trống.');
-    hasError = true;
-}
+        $('#errorTenDoThue').text('Tên không được để trống.');
+        hasError = true;
+    }
 
     if (isNaN(soLuong) || soLuong <= 0) {
-    $('#errorSoLuongDoThue').text('Số lượng phải là số dương.');
-    hasError = true;
-}
+        $('#errorSoLuongDoThue').text('Số lượng phải là số dương.');
+        hasError = true;
+    }
 
     if (!donGia || isNaN(donGia) || donGia <= 0) {
-    $('#errorDonGiaDoThue').text('Đơn giá phải là số dương.');
-    hasError = true;
-}
+        $('#errorDonGiaDoThue').text('Đơn giá phải là số dương.');
+        hasError = true;
+    }
 
     // Kiểm tra tệp hình ảnh
     if (!imageFile) {
-    $('#errorImageDoThue').text('Vui lòng chọn một tệp hình ảnh.');
-    hasError = true;
-}
+        $('#errorImageDoThue').text('Vui lòng chọn một tệp hình ảnh.');
+        hasError = true;
+    }
 
     // Nếu có lỗi, không gửi form
     if (hasError) {
-    return;
-}
+        return;
+    }
 
     // Xác định trạng thái dịch vụ
     let trangThai = soLuong === 0 ? 'Hết' : 'Còn';
@@ -711,48 +696,48 @@
 
     // Hiển thị xác nhận trước khi gửi yêu cầu
     Swal.fire({
-    title: 'Xác nhận',
-    text: 'Bạn chắc chắn muốn thêm dịch vụ này?',
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonText: 'Có',
-    cancelButtonText: 'Hủy'
-}).then((result) => {
-    if (result.isConfirmed) {
-    // Gửi yêu cầu AJAX để thêm dịch vụ
-    $.ajax({
-    url: apiUrl,
-    type: 'POST',
-    data: formData,
-    contentType: false,
-    processData: false,
-    success: function (response) {
-    // Hiển thị thông báo thành công
-    Swal.fire({
-    title: 'Thành công',
-    text: 'Thêm dịch vụ thành công',
-    icon: 'success'
-}).then(() => {
-    showSuccessToast('Thêm dịch vụ thành công');
-    cancelAdd();
-});
-},
-    error: function (xhr, status, error) {
-    console.error('Có lỗi xảy ra:', error);
-    // Hiển thị thông báo lỗi
-    Swal.fire({
-    title: 'Lỗi',
-    text: 'Có lỗi xảy ra: ' + xhr.responseText,
-    icon: 'error'
-});
-}
-});
-}
-});
+        title: 'Xác nhận',
+        text: 'Bạn chắc chắn muốn thêm dịch vụ này?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Có',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Gửi yêu cầu AJAX để thêm dịch vụ
+            $.ajax({
+                url: apiUrl,
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    // Hiển thị thông báo thành công
+                    Swal.fire({
+                        title: 'Thành công',
+                        text: 'Thêm dịch vụ thành công',
+                        icon: 'success'
+                    }).then(() => {
+                        showSuccessToast('Thêm dịch vụ thành công');
+                        cancelAdd();
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error('Có lỗi xảy ra:', error);
+                    // Hiển thị thông báo lỗi
+                    Swal.fire({
+                        title: 'Lỗi',
+                        text: 'Có lỗi xảy ra: ' + xhr.responseText,
+                        icon: 'error'
+                    });
+                }
+            });
+        }
+    });
 }
 
-    // Hàm submit form cho nước uống
-    function submitAddFormNuocUong(event) {
+// Hàm submit form cho nước uống
+function submitAddFormNuocUong(event) {
     event.preventDefault(); // Ngăn không cho form reload lại trang
 
     // Lấy giá trị từ các trường nhập liệu
@@ -772,30 +757,30 @@
 
     // Kiểm tra các trường dữ liệu
     if (!ten) {
-    $('#errorTenNuocUong').text('Tên không được để trống.');
-    hasError = true;
-}
+        $('#errorTenNuocUong').text('Tên không được để trống.');
+        hasError = true;
+    }
 
     if (isNaN(soLuong) || soLuong <= 0) {
-    $('#errorSoLuongNuocUong').text('Số lượng phải là số dương.');
-    hasError = true;
-}
+        $('#errorSoLuongNuocUong').text('Số lượng phải là số dương.');
+        hasError = true;
+    }
 
     if (!donGia || isNaN(donGia) || donGia <= 0) {
-    $('#errorDonGiaNuocUong').text('Đơn giá phải là số dương.');
-    hasError = true;
-}
+        $('#errorDonGiaNuocUong').text('Đơn giá phải là số dương.');
+        hasError = true;
+    }
 
     // Kiểm tra tệp hình ảnh
     if (!imageFile) {
-    $('#errorImageNuocUong').text('Vui lòng chọn một tệp hình ảnh.');
-    hasError = true;
-}
+        $('#errorImageNuocUong').text('Vui lòng chọn một tệp hình ảnh.');
+        hasError = true;
+    }
 
     // Nếu có lỗi, không gửi form
     if (hasError) {
-    return;
-}
+        return;
+    }
 
     // Xác định trạng thái dịch vụ
     let trangThai = soLuong === 0 ? 'Hết' : 'Còn';
@@ -811,66 +796,52 @@
 
     // Hiển thị xác nhận trước khi gửi yêu cầu
     Swal.fire({
-    title: 'Xác nhận',
-    text: 'Bạn chắc chắn muốn thêm dịch vụ này?',
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonText: 'Có',
-    cancelButtonText: 'Hủy'
-}).then((result) => {
-    if (result.isConfirmed) {
-    // Gửi yêu cầu AJAX để thêm dịch vụ
-    $.ajax({
-    url: apiUrl,
-    type: 'POST',
-    data: formData,
-    contentType: false,
-    processData: false,
-    success: function (response) {
-    // Hiển thị thông báo thành công
-    Swal.fire({
-    title: 'Thành công',
-    text: 'Thêm dịch vụ thành công',
-    icon: 'success'
-}).then(() => {
-    showSuccessToast('Thêm dịch vụ thành công');
-    cancelAdd();
-});
-},
-    error: function (xhr, status, error) {
-    console.error('Có lỗi xảy ra:', error);
-    // Hiển thị thông báo lỗi
-    Swal.fire({
-    title: 'Lỗi',
-    text: 'Có lỗi xảy ra: ' + xhr.responseText,
-    icon: 'error'
-});
-}
-});
-}
-});
+        title: 'Xác nhận',
+        text: 'Bạn chắc chắn muốn thêm dịch vụ này?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Có',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Gửi yêu cầu AJAX để thêm dịch vụ
+            $.ajax({
+                url: apiUrl,
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    // Hiển thị thông báo thành công
+                    Swal.fire({
+                        title: 'Thành công',
+                        text: 'Thêm dịch vụ thành công',
+                        icon: 'success'
+                    }).then(() => {
+                        showSuccessToast('Thêm dịch vụ thành công');
+                        cancelAdd();
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error('Có lỗi xảy ra:', error);
+                    // Hiển thị thông báo lỗi
+                    Swal.fire({
+                        title: 'Lỗi',
+                        text: 'Có lỗi xảy ra: ' + xhr.responseText,
+                        icon: 'error'
+                    });
+                }
+            });
+        }
+    });
 }
 
 
-    //Edit
-    // Hàm hiển thị form thêm dữ liệu
-    function editItem(id) {
+// Hàm hiển thị form thêm dữ liệu
+function editItem(id) {
     const cardBody = $('#tableCardBody');
     const cardBody1 = $('#tableCardBody1');
-    const apiUrl = `
-
-
-            http://localhost:8080/$
-                {
-                    currentServiceType
-                }
-            /$
-                {
-                    id
-                }
-
-
-        `;
+    const apiUrl = `http://localhost:8080/${currentServiceType}/${id}`;
 
     // Ẩn cardBody1 và làm trống cardBody
     cardBody1.hide();
@@ -878,268 +849,154 @@
 
     // Gọi API để lấy dữ liệu
     $.get(apiUrl, function (data) {
-    let formContent = '';
-    let imageDisplay = '';
+        let formContent = '';
+        let imageDisplay = '';
 
-    // URL của ảnh hiện tại
-    const imageUrl = `
+        // URL của ảnh hiện tại
+        const imageUrl = `data:image/jpeg;base64,${data.imageData}`;
 
-
-            data:image/jpeg;base64,$
-                {
-                    data.imageData
-                }
-
-
-        `;
-
-    if (currentServiceType === 'do_thue') {
-    imageDisplay = `
-
-
-
-                    <div class="form-group col-md-6">
-                        <label>Ảnh Hiện Tại:</label>
-                        <img id="currentImage" src="$
-                {
-                    imageUrl
-                }
-            " alt="Hình Ảnh" style="width: 100%; max-width: 300px;">
+        if (currentServiceType === 'do_thue') {
+            imageDisplay = `
+                <div class="form-group col-md-6">
+                    <label>Ảnh Hiện Tại:</label>
+                    <img id="currentImage" src="${imageUrl}" alt="Hình Ảnh" style="width: 100%; max-width: 300px;">
+                </div>`;
+            formContent = `
+                <form id="updateDichVu" enctype="multipart/form-data">
+                    <input type="text" class="form-control" id="id" value="${data.id}" hidden>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="tenDoThue">Tên</label>
+                            <input type="text" class="form-control" id="tenDoThue" value="${data.tenDoThue}" placeholder="Tên">
+                            <span id="errorTenDoThue" class="text-danger"></span>
+                        </div>
                     </div>
-
-
-
-        `;
-    formContent = `
-
-
-
-                    <form id="updateDichVu" enctype="multipart/form-data">
-                        <input type="text" class="form-control" id="id" value="$
-                {
-                    data.id
-                }
-            " hidden>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="tenDoThue">Tên</label>
-                                <input type="text" class="form-control" id="tenDoThue" value="$
-                {
-                    data.tenDoThue
-                }
-            " placeholder="Tên">
-                                <span id="errorTenDoThue" class="text-danger"></span>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="soLuongDoThue">Số lượng</label>
+                            <div class="input-group mb-3">
+                                <input type="number" class="form-control" id="soLuongDoThue" value="${data.soLuong}">
+                                <span class="input-group-text">#</span>
                             </div>
+                            <span id="errorSoLuongDoThue" class="text-danger"></span>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="soLuongDoThue">Số lượng</label>
-                                <div class="input-group mb-3">
-                                    <input type="number" class="form-control" id="soLuongDoThue" value="$
-                {
-                    data.soLuong
-                }
-            ">
-                                    <span class="input-group-text">#</span>
-                                </div>
-                                <span id="errorSoLuongDoThue" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="donGiaDoThue">Đơn giá</label>
-                                <div class="input-group mb-3">
-                                    <input type="number" step="0.01" class="form-control" id="donGiaDoThue" value="$
-                {
-                    data.donGia
-                }
-            " placeholder="Đơn giá" aria-label="Đơn giá" aria-describedby="basic-addon2">
-                                    <span class="input-group-text" id="basic-addon2">VND</span>
-                                </div>
-                                <span id="errorDonGiaDoThue" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="trangThai">Trạng thái</label>
-                                <div class="input-group mb-3">
-                                    <input type="text" step="0.01" class="form-control" id="trangThai" value="$
-                {
-                    data.trangThai
-                }
-            "  aria-label="Đơn giá" aria-describedby="basic-addon2" disabled>
-                                </div>
-                                <span id="errorTrangThai" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="imageDoThue" class="form-label">Chọn Ảnh</label>
-                                <input class="form-control" type="file" id="imageDoThue" onchange="previewImage(event)">
-                                <span id="errorImageDoThue" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary" onclick="submitUpdateFormDoThue(event, $
-                {
-                    data.id
-                }
-            )">Lưu</button>
-                        <button type="button" class="btn btn-success" onclick="cancelAdd()">Hủy</button>
-                    </form>
-
-
-
-        `;
-} else if (currentServiceType === 'nuoc_uong') {
-    imageDisplay = `
-
-
-
-                    <div class="form-group col-md-6">
-                        <label>Ảnh Hiện Tại:</label>
-                        <img id="currentImage" src="$
-                {
-                    imageUrl
-                }
-            " alt="Hình Ảnh" style="width: 100%; max-width: 300px;">
                     </div>
-
-
-
-        `;
-    formContent = `
-
-
-
-                    <form id="updateDichVu" enctype="multipart/form-data">
-                        <input type="text" class="form-control" id="id" value="$
-                {
-                    data.id
-                }
-            " hidden>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="tenNuocUong">Tên</label>
-                                <input type="text" class="form-control" id="tenNuocUong" value="$
-                {
-                    data.tenNuocUong
-                }
-            " placeholder="Tên">
-                                <span id="errorTenNuocUong" class="text-danger"></span>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="donGiaDoThue">Đơn giá</label>
+                            <div class="input-group mb-3">
+                                <input type="number" step="0.01" class="form-control" id="donGiaDoThue" value="${data.donGia}" placeholder="Đơn giá" aria-label="Đơn giá" aria-describedby="basic-addon2">
+                                <span class="input-group-text" id="basic-addon2">VND</span>
                             </div>
+                            <span id="errorDonGiaDoThue" class="text-danger"></span>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="soLuongNuocUong">Số lượng</label>
-                                <div class="input-group mb-3">
-                                    <input type="number" class="form-control" id="soLuongNuocUong" value="$
-                {
-                    data.soLuong
-                }
-            ">
-                                    <span class="input-group-text">#</span>
-                                </div>
-                                <span id="errorSoLuongNuocUong" class="text-danger"></span>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="trangThai">Trạng thái</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="trangThai" value="${data.trangThai}" disabled>
                             </div>
+                            <span id="errorTrangThai" class="text-danger"></span>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="donGiaNuocUong">Đơn giá</label>
-                                <div class="input-group mb-3">
-                                    <input type="number" step="0.01" class="form-control" id="donGiaNuocUong" value="$
-                {
-                    data.donGia
-                }
-            " placeholder="Đơn giá" aria-label="Đơn giá" aria-describedby="basic-addon2">
-                                    <span class="input-group-text" id="basic-addon2">VND</span>
-                                </div>
-                                <span id="errorDonGiaNuocUong" class="text-danger"></span>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="imageDoThue" class="form-label">Chọn Ảnh</label>
+                            <input class="form-control" type="file" id="imageDoThue" onchange="previewImage(event)">
+                            <span id="errorImageDoThue" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" onclick="submitUpdateFormDoThue(event, ${data.id})">Lưu</button>
+                    <button type="button" class="btn btn-success" onclick="cancelAdd()">Hủy</button>
+                </form>`;
+        } else if (currentServiceType === 'nuoc_uong') {
+            imageDisplay = `
+                <div class="form-group col-md-6">
+                    <label>Ảnh Hiện Tại:</label>
+                    <img id="currentImage" src="${imageUrl}" alt="Hình Ảnh" style="width: 100%; max-width: 300px;">
+                </div>`;
+            formContent = `
+                <form id="updateDichVu" enctype="multipart/form-data">
+                    <input type="text" class="form-control" id="id" value="${data.id}" hidden>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="tenNuocUong">Tên</label>
+                            <input type="text" class="form-control" id="tenNuocUong" value="${data.tenNuocUong}" placeholder="Tên">
+                            <span id="errorTenNuocUong" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="soLuongNuocUong">Số lượng</label>
+                            <div class="input-group mb-3">
+                                <input type="number" class="form-control" id="soLuongNuocUong" value="${data.soLuong}">
+                                <span class="input-group-text">#</span>
                             </div>
+                            <span id="errorSoLuongNuocUong" class="text-danger"></span>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="trangThai">Trạng thái</label>
-                                <div class="input-group mb-3">
-                                    <input type="number" step="0.01" class="form-control" id="trangThai" value="$
-                {
-                    data.trangThai
-                }
-            " aria-label="Đơn giá" aria-describedby="basic-addon2" disabled>
-                                </div>
-                                <span id="errorTrangThai" class="text-danger"></span>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="donGiaNuocUong">Đơn giá</label>
+                            <div class="input-group mb-3">
+                                <input type="number" step="0.01" class="form-control" id="donGiaNuocUong" value="${data.donGia}" placeholder="Đơn giá" aria-label="Đơn giá" aria-describedby="basic-addon2">
+                                <span class="input-group-text" id="basic-addon2">VND</span>
                             </div>
+                            <span id="errorDonGiaNuocUong" class="text-danger"></span>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="imageNuocUong" class="form-label">Chọn Ảnh</label>
-                                <input class="form-control" type="file" id="imageNuocUong" onchange="previewImage(event)">
-                                <span id="errorImageNuocUong" class="text-danger"></span>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="trangThai">Trạng thái</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="trangThai" value="${data.trangThai}" disabled>
                             </div>
+                            <span id="errorTrangThai" class="text-danger"></span>
                         </div>
-                        <button type="submit" class="btn btn-primary" onclick="submitUpdateFormNuocUong(event, $
-                {
-                    data.id
-                }
-            )">Lưu</button>
-                        <button type="button" class="btn btn-success" onclick="cancelAdd()">Hủy</button>
-                    </form>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="imageNuocUong" class="form-label">Chọn Ảnh</label>
+                            <input class="form-control" type="file" id="imageNuocUong" onchange="previewImage(event)">
+                            <span id="errorImageNuocUong" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" onclick="submitUpdateFormNuocUong(event, ${data.id})">Lưu</button>
+                    <button type="button" class="btn btn-success" onclick="cancelAdd()">Hủy</button>
+                </form>`;
+        }
 
-
-
-        `;
+        // Thêm phần hiển thị ảnh vào formContent
+        cardBody.html(`
+            <div class="row">
+                <div class="col-md-6">${formContent}</div>
+                <div class="col-md-6">${imageDisplay}</div>
+            </div>`);
+    });
 }
 
-    // Thêm phần hiển thị ảnh vào formContent
-    cardBody.html(`
-
-
-
-                <div class="row">
-                    <div class="col-md-6">
-        $
-                {
-                    formContent
-                }
-
-                    </div>
-                    <div class="col-md-6">
-        $
-                {
-                    imageDisplay
-                }
-
-                    </div>
-                </div>
-
-
-
-        `);
-});
-}
-
-
-    // Hàm preview ảnh
-    function previewImage(event) {
+// Hàm preview ảnh
+function previewImage(event) {
     const input = event.target;
     const file = input.files[0];
     const reader = new FileReader();
 
     reader.onload = function (e) {
-    // Cập nhật hình ảnh hiện tại
-    const currentImage = document.getElementById('currentImage');
-    if (currentImage) {
-    currentImage.src = e.target.result;
-}
-}
+        // Cập nhật hình ảnh hiện tại
+        const currentImage = document.getElementById('currentImage');
+        if (currentImage) {
+            currentImage.src = e.target.result;
+        }
+    };
 
     if (file) {
-    reader.readAsDataURL(file);
-}
+        reader.readAsDataURL(file);
+    }
 }
 
-    // Submit form update cho dịch vụ cho thuê
-
-    function submitUpdateFormDoThue(event, id) {
+// Submit form update cho dịch vụ cho thuê
+function submitUpdateFormDoThue(event, id) {
     event.preventDefault(); // Ngăn không cho form reload lại trang
 
     // Lấy giá trị từ các trường nhập liệu
@@ -1158,232 +1015,128 @@
     // Biến để kiểm tra lỗi
     let hasError = false;
 
-    // Kiểm tra các trường dữ liệu
+    // Kiểm tra các trường nhập liệu
     if (!ten) {
-    $('#errorTenDoThue').text('Tên không được để trống.');
-    hasError = true;
-}
+        $('#errorTenDoThue').text('Tên không được để trống');
+        hasError = true;
+    }
 
-    if (isNaN(soLuong) || soLuong < 0) {
-    $('#errorSoLuongDoThue').text('Số lượng phải là số dương.');
-    hasError = true;
-}
+    if (isNaN(soLuong) || soLuong <= 0) {
+        $('#errorSoLuongDoThue').text('Số lượng phải là một số dương');
+        hasError = true;
+    }
 
-    if (!donGia || isNaN(donGia) || donGia <= 0) {
-    $('#errorDonGiaDoThue').text('Đơn giá phải là số dương.');
-    hasError = true;
-}
+    if (isNaN(parseFloat(donGia)) || parseFloat(donGia) <= 0) {
+        $('#errorDonGiaDoThue').text('Đơn giá phải là một số dương');
+        hasError = true;
+    }
 
-    // Nếu có lỗi, không gửi form
     if (hasError) {
-    return;
-}
-    // Đọc tệp tin hình ảnh và chuyển đổi thành base64
-    const fileInput = document.getElementById('imageDoThue');
-    let imageFile = null;
+        return; // Dừng lại nếu có lỗi
+    }
 
-    if (fileInput.files.length > 0) {
-    imageFile = fileInput.files[0];
-}
-
-    // Xác định trạng thái dịch vụ
-    trangThai = soLuong === 0 ? 'Hết' : 'Còn';
-
-    // Tạo đối tượng dữ liệu để gửi
-    let requestData = {
-    id: id,
-    tenDoThue: ten,
-    donGia: donGia,
-    soLuong: soLuong,
-    trangThai: trangThai
-};
-
-    // Chuyển đổi đối tượng dữ liệu thành JSON
-    const jsonData = JSON.stringify(requestData);
-
-    // Tạo đối tượng FormData để gửi dữ liệu
+    // Dữ liệu gửi lên server
     const formData = new FormData();
-    formData.append("doThueDTO", jsonData);
-    if (imageFile) {
-    formData.append("imageFile", imageFile);
-}
+    formData.append('tenDoThue', ten);
+    formData.append('soLuong', soLuong);
+    formData.append('donGia', donGia);
+    formData.append('trangThai', trangThai);
+    if (imageData) {
+        formData.append('imageDoThue', imageData);
+    }
 
-    // Hiển thị xác nhận trước khi gửi yêu cầu
-    Swal.fire({
-    title: 'Xác nhận',
-    text: 'Bạn chắc chắn muốn sửa đồ thuê này?',
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonText: 'Có',
-    cancelButtonText: 'Hủy'
-}).then((result) => {
-    if (result.isConfirmed) {
-    // Gửi yêu cầu AJAX để cập nhật dữ liệu
+    // Gửi dữ liệu lên server
     $.ajax({
-    url: `
-
-
-            http://localhost:8080/do_thue/$
-                {
-                    id
-                }
-
-
-        `,
-    type: 'PUT',
-    data: formData,
-    contentType: false,
-    processData: false,
-    success: function (response) {
-    // Hiển thị thông báo thành công
-    Swal.fire({
-    title: 'Thành công',
-    text: 'Sửa đồ thuê thành công',
-    icon: 'success'
-}).then(() => {
-    showSuccessToast('Sửa đồ thuê thành công');
-    cancelAdd();
-});
-},
-    error: function (xhr, status, error) {
-    console.error('Có lỗi xảy ra:', error);
-    // Hiển thị thông báo lỗi
-    Swal.fire({
-    title: 'Lỗi',
-    text: 'Có lỗi xảy ra: ' + xhr.responseText,
-    icon: 'error'
-});
-}
-});
-}
-});
+        url: `http://localhost:8080/do_thue/${id}`,
+        type: 'PUT',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            // Xử lý thành công, reload dữ liệu và hiển thị lại bảng
+            alert('Cập nhật thành công');
+            cancelAdd(); // Quay lại bảng dữ liệu
+            loadData(currentServiceType,0)        },
+        error: function (xhr, status, error) {
+            alert('Cập nhật thất bại');
+        }
+    });
 }
 
-    // Submit form update cho nước uống
-    function submitUpdateFormDoThue(event, id) {
+// Submit form update cho dịch vụ nước uống
+function submitUpdateFormNuocUong(event, id) {
     event.preventDefault(); // Ngăn không cho form reload lại trang
 
     // Lấy giá trị từ các trường nhập liệu
-    const ten = $('#tenDoThue').val().trim();
-    const donGia = $('#donGiaDoThue').val().trim();
+    const ten = $('#tenNuocUong').val().trim();
+    const donGia = $('#donGiaNuocUong').val().trim();
     let trangThai = $('#trangThai').val().trim();
-    const soLuong = parseInt($('#soLuongDoThue').val().trim());
-    const imageData = $('#imageDoThue')[0].files[0];
+    const soLuong = parseInt($('#soLuongNuocUong').val().trim());
+    const imageData = $('#imageNuocUong')[0].files[0];
 
     // Xóa các thông báo lỗi trước đó
-    $('#errorTenDoThue').text('');
-    $('#errorSoLuongDoThue').text('');
-    $('#errorDonGiaDoThue').text('');
-    $('#errorImageDoThue').text('');
+    $('#errorTenNuocUong').text('');
+    $('#errorSoLuongNuocUong').text('');
+    $('#errorDonGiaNuocUong').text('');
+    $('#errorImageNuocUong').text('');
 
     // Biến để kiểm tra lỗi
     let hasError = false;
 
-    // Kiểm tra các trường dữ liệu
+    // Kiểm tra các trường nhập liệu
     if (!ten) {
-    $('#errorTenDoThue').text('Tên không được để trống.');
-    hasError = true;
-}
+        $('#errorTenNuocUong').text('Tên không được để trống');
+        hasError = true;
+    }
 
-    if (isNaN(soLuong) || soLuong < 0) {
-    $('#errorSoLuongDoThue').text('Số lượng phải là số dương.');
-    hasError = true;
-}
+    if (isNaN(soLuong) || soLuong <= 0) {
+        $('#errorSoLuongNuocUong').text('Số lượng phải là một số dương');
+        hasError = true;
+    }
 
-    if (!donGia || isNaN(donGia) || donGia < 0) {
-    $('#errorDonGiaDoThue').text('Đơn giá phải là số dương.');
-    hasError = true;
-}
+    if (isNaN(parseFloat(donGia)) || parseFloat(donGia) <= 0) {
+        $('#errorDonGiaNuocUong').text('Đơn giá phải là một số dương');
+        hasError = true;
+    }
 
-    // Nếu có lỗi, không gửi form
     if (hasError) {
-    return;
-}
-    // Đọc tệp tin hình ảnh và chuyển đổi thành base64
-    const fileInput = document.getElementById('imageDoThue');
-    let imageFile = null;
+        return; // Dừng lại nếu có lỗi
+    }
 
-    if (fileInput.files.length > 0) {
-    imageFile = fileInput.files[0];
-}
-
-    // Xác định trạng thái dịch vụ
-    trangThai = soLuong === 0 ? 'Hết' : 'Còn';
-
-    // Tạo đối tượng dữ liệu để gửi
-    let requestData = {
-    id: id,
-    tenDoThue: ten,
-    donGia: donGia,
-    soLuong: soLuong,
-    trangThai: trangThai
-};
-
-    // Chuyển đổi đối tượng dữ liệu thành JSON
-    const jsonData = JSON.stringify(requestData);
-
-    // Tạo đối tượng FormData để gửi dữ liệu
+    // Dữ liệu gửi lên server
     const formData = new FormData();
-    formData.append("doThueDTO", jsonData);
-    if (imageFile) {
-    formData.append("imageFile", imageFile);
-}
+    formData.append('tenNuocUong', ten);
+    formData.append('soLuong', soLuong);
+    formData.append('donGia', donGia);
+    formData.append('trangThai', trangThai);
+    if (imageData) {
+        formData.append('imageNuocUong', imageData);
+    }
 
-    // Hiển thị xác nhận trước khi gửi yêu cầu
-    Swal.fire({
-    title: 'Xác nhận',
-    text: 'Bạn chắc chắn muốn sửa đồ thuê này?',
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonText: 'Có',
-    cancelButtonText: 'Hủy'
-}).then((result) => {
-    if (result.isConfirmed) {
-    // Gửi yêu cầu AJAX để cập nhật dữ liệu
+    // Gửi dữ liệu lên server
     $.ajax({
-    url: `
-
-
-            http://localhost:8080/do_thue/$
-                {
-                    id
-                }
-
-
-        `,
-    type: 'PUT',
-    data: formData,
-    contentType: false,
-    processData: false,
-    success: function (response) {
-    // Hiển thị thông báo thành công
-    Swal.fire({
-    title: 'Thành công',
-    text: 'Sửa đồ thuê thành công',
-    icon: 'success'
-}).then(() => {
-    showSuccessToast('Sửa đồ thuê thành công');
-    cancelAdd();
-});
-},
-    error: function (xhr, status, error) {
-    console.error('Có lỗi xảy ra:', error);
-    // Hiển thị thông báo lỗi
-    Swal.fire({
-    title: 'Lỗi',
-    text: 'Có lỗi xảy ra: ' + xhr.responseText,
-    icon: 'error'
-});
-}
-});
-}
-});
+        url: `http://localhost:8080/nuoc_uong/${id}`,
+        type: 'PUT',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            // Xử lý thành công, reload dữ liệu và hiển thị lại bảng
+            alert('Cập nhật thành công');
+            cancelAdd(); // Quay lại bảng dữ liệu
+           loadData(currentServiceType,0)
+        },
+        error: function (xhr, status, error) {
+            alert('Cập nhật thất bại');
+        }
+    });
 }
 
 
-    //Cancel Add
 
-    function cancelAdd() {
+//Cancel Add
+
+function cancelAdd() {
     // Lưu loại dịch vụ hiện tại vào localStorage
     localStorage.setItem('currentServiceType', currentServiceType);
 
@@ -1397,10 +1150,7 @@
 
     // Xóa nội dung và đảm bảo rằng form vẫn nằm yên trong hàng
     tableBodyCard.innerHTML = `
-
-
-
-                <div class="toolbar row mb-3 mt-3">
+<div class="toolbar row mb-3 mt-3">
                                             <div class="col-md-12">
                                                 <form class="form-inline" id="filterDateForm"
                                                       style="display: flex; justify-content: space-between; align-items: center;">
