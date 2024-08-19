@@ -43,6 +43,7 @@ public class SanCaDTO {
 
     private String trangThai;
 
+    private String tenLoaiSan;
 
     private LocalDateTime thoiGianBatDauCa;
 
