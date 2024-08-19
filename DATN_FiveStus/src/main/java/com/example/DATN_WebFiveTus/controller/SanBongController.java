@@ -263,24 +263,3 @@ public class SanBongController {
 
 }
 
-//ok
-
-
-//ok
-//    @GetMapping("/listSanBong/{idLoaiSan}")
-//    public String hienThiTheoLoaiSan(@PathVariable("idLoaiSan") Integer loaiSanId, Model model) {
-//        // Fetch list of SanBongDTO based on loaiSanId
-//        String url = UriComponentsBuilder.fromUriString("http://localhost:8080/san-bong/by-loai-san/{id}")
-//                .buildAndExpand(loaiSanId)
-//                .toUriString();
-//
-//        SanBongDTO[] listSanBongArray = restTemplate.getForObject(url, SanBongDTO[].class);
-//        List<SanBongDTO> listSanBong = Arrays.asList(listSanBongArray);
-//
-//        model.addAttribute("listIDLS", listSanBong);
-//
-//        // Load other necessary data like LoaiSanDTO, CaDTO, NgayTrongTuanDTO if needed
-//        // ...
-//
-//        return "/list/quan-ly-san-bong";
-//    }

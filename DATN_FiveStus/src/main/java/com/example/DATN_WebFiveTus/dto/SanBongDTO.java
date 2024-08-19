@@ -21,7 +21,7 @@ public class SanBongDTO {
 
     private String tenSanBong;
 
-    private Float giaSanBong;
+//    private Float giaSanBong;
 
     private Integer idLoaiSan;
 

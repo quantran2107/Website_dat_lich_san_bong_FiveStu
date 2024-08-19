@@ -40,8 +40,8 @@ public class Ca {
     @Column(name = "ten_ca", nullable = false, length = 100)
     private String tenCa;
 
-    @Column(name = "gia_ca")
-    private Float giaCa;
+//    @Column(name = "gia_ca")
+//    private Float giaCa;
 
 
     @Column(name = "thoi_gian_bat_dau")
