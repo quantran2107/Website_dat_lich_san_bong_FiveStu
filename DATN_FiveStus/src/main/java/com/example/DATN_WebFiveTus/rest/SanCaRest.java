@@ -124,4 +124,19 @@ public class SanCaRest {
 //
 //        return "sanCaList"; // Trả về tên của view template (sanCaList.html trong trường hợp này)
 //    }
+
+    @GetMapping("/chon-san-ca/{id}")
+    public ResponseEntity<List> getSanCaByHoaDonChiTietId(@PathVariable("id") Integer id) {
+        List<SanCaDTO> sanCaDTOs = sanCaService.findSanCaAndNgayDenSanByHoaDonChiTietId(id);
+
+        return ResponseEntity.ok(sanCaDTOs);
+    }
+
+    @GetMapping("/danh-sach-san-ca/{idSanBong}/{idNgayTrongTuan}")
+    public ResponseEntity<List> danhSachSanCa(@PathVariable("idSanBong") Integer idSanBong,
+                                              @PathVariable("idNgayTrongTuan") Integer idNgayTrongTuan){
+        List<SanCaDTO> listSanCa = sanCaService.findSanCaBySan(idSanBong,idNgayTrongTuan);
+        return ResponseEntity.ok(listSanCa);
+    }
+
 }

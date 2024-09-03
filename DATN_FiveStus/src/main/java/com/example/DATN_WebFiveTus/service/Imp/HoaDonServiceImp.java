@@ -18,7 +18,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
+import java.time.Instant;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,7 +69,26 @@ public class HoaDonServiceImp implements HoaDonService {
 
     @Override
     public HoaDonDTO save(HoaDonDTO hoaDonDTO) {
-        return null;
+        HoaDon hoaDon = modelMapper.map(hoaDonDTO,HoaDon.class);
+        hoaDon.setMaHoaDon(generateMaHoaDon());
+        hoaDon.setTrangThai("Chờ thanh toán");
+        Date now = Date.from(Instant.now());
+        hoaDon.setNgayTao(now);
+        HoaDon hoaDonSave = hoaDonRepository.save(hoaDon);
+        return modelMapper.map(hoaDonSave,HoaDonDTO.class);
+    }
+
+    private String generateMaHoaDon() {
+        String PREFIX = "HD";
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        int RANDOM_PART_LENGTH = 8; // Độ dài của phần ngẫu nhiên, để tổng độ dài là 10
+        SecureRandom RANDOM = new SecureRandom();
+        StringBuilder sb = new StringBuilder(PREFIX);
+        for (int i = 0; i < RANDOM_PART_LENGTH; i++) {
+            int index = RANDOM.nextInt(CHARACTERS.length());
+            sb.append(CHARACTERS.charAt(index));
+        }
+        return sb.toString();
     }
 
     @Override

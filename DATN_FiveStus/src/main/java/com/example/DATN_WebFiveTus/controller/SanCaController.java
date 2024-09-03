@@ -282,6 +282,10 @@ public class SanCaController {
 //        return "redirect:/quan-ly-san-bong";
 //    }
 
+    @GetMapping("list-san-ca")
+    public String listSanCa(){
+        return "/list/chon-san-ca";
+    }
 
 }
 

@@ -63,4 +63,6 @@ public class HoaDonChiTietDTO {
 
     private String emailKhachHang;
 
+    private String tenLoaiSan;
+
 }

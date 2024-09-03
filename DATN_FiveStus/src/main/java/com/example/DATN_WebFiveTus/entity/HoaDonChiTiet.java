@@ -46,7 +46,7 @@ public class HoaDonChiTiet {
     @Column(name = "ma_hoa_don_chi_tiet", nullable = false, length = 100)
     private String maHoaDonChiTiet;
 
-    @Column(name = "tien_san", nullable = false)
+    @Column(name = "tien_san")
     private String tienSan;
 
     @Column(name = "ghi_chu", length = 200)

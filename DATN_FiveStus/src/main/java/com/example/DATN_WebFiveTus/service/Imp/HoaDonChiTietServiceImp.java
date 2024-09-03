@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -65,7 +66,34 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
     @Override
     public HoaDonChiTietDTO save(HoaDonChiTietDTO hoaDonChiTietDTO) {
-        return null;
+        HoaDonChiTiet hoaDonChiTiet = modelMapper.map(hoaDonChiTietDTO,HoaDonChiTiet.class);
+
+        SanCa sanCa = sanCaRepository.findById(hoaDonChiTietDTO.getIdSanCa()).orElseThrow();
+
+        HoaDon hoaDon = hoaDonRepository.findById(hoaDonChiTietDTO.getIdHoaDon()).orElseThrow();
+
+        hoaDonChiTiet.setMaHoaDonChiTiet(generateMaHoaDonChiTiet());
+        hoaDonChiTiet.setSanCa(sanCa);
+        hoaDonChiTiet.setHoaDon(hoaDon);
+        hoaDonChiTiet.setNgayDenSan(hoaDonChiTietDTO.getNgayDenSan());
+        hoaDonChiTiet.setTrangThai("Chờ nhận sân");
+
+        HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
+
+        return modelMapper.map(hoaDonChiTietSave,HoaDonChiTietDTO.class);
+    }
+
+    private String generateMaHoaDonChiTiet() {
+        String PREFIX = "HDCT";
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        int RANDOM_PART_LENGTH = 6; // Độ dài của phần ngẫu nhiên, để tổng độ dài là 10
+        SecureRandom RANDOM = new SecureRandom();
+        StringBuilder sb = new StringBuilder(PREFIX);
+        for (int i = 0; i < RANDOM_PART_LENGTH; i++) {
+            int index = RANDOM.nextInt(CHARACTERS.length());
+            sb.append(CHARACTERS.charAt(index));
+        }
+        return sb.toString();
     }
 
     @Override
