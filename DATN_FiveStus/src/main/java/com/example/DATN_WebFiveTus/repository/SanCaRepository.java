@@ -34,4 +34,12 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
             "OR sc.ca.tenCa=:keyWords OR sc.ngayTrongTuan.thuTrongTuan=:keyWords OR sc.trangThai=:keyWords")
     Page<SanCa> search(@Param("id") Integer id, @Param("keyWords") String keyWords, Pageable pageable);
 
+    @Query("select sc from SanCa sc " +
+            "join fetch sc.sanBong sb " +
+            "join fetch sc.ca c " +
+            "join fetch sc.ngayTrongTuan ntt " +
+            "where sc.deletedAt = false and sb.deletedAt = false and c.deletedAt = false " +
+            "and c.id = :idCa and ntt.thuTrongTuan = :thuTrongTuan and sc.trangThai = :trangThai")
+    List<SanCa> sanHopLe(@Param("idCa") Integer idCa, @Param("thuTrongTuan") String thuTrongTuan, @Param("trangThai") String trangThai);
+
 }

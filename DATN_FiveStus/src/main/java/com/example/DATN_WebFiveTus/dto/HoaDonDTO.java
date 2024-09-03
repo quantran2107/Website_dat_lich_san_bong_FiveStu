@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
@@ -53,9 +54,6 @@ public class HoaDonDTO {
     private String ghiChu;
 
     private String trangThai;
-
-    @Temporal(TemporalType.DATE)
-    private Date ngayDenSan;
 
     @Temporal(TemporalType.DATE)
     private Date ngayThanhToan;

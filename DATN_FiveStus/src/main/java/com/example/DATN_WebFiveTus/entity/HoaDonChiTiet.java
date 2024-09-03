@@ -43,6 +43,9 @@ public class HoaDonChiTiet {
     @JoinColumn(name = "id_san_ca", nullable = false)
     private SanCa sanCa;
 
+    @Column(name = "ma_hoa_don_chi_tiet", nullable = false, length = 100)
+    private String maHoaDonChiTiet;
+
     @Column(name = "tien_san", nullable = false)
     private String tienSan;
 

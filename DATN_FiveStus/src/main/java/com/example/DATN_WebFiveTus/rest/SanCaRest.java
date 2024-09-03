@@ -35,33 +35,44 @@ public class SanCaRest {
 
 
     @GetMapping("hien-thi")
-    public ResponseEntity<List> getAll2(){
-        List<SanCaDTO> listSanCa=sanCaService.getAllJoinFetch();
+    public ResponseEntity<List> getAll2() {
+        List<SanCaDTO> listSanCa = sanCaService.getAllJoinFetch();
         return ResponseEntity.ok(listSanCa);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SanCaDTO> getOne(@PathVariable("id") Integer id){
-        SanCaDTO sanCaDTODetail=sanCaService.getOne(id);
-       return ResponseEntity.ok(sanCaDTODetail);
+    public ResponseEntity<SanCaDTO> getOne(@PathVariable("id") Integer id) {
+        SanCaDTO sanCaDTODetail = sanCaService.getOne(id);
+        return ResponseEntity.ok(sanCaDTODetail);
     }
 
+    @GetMapping("/san-bong-hop-le")
+    public ResponseEntity<?> findByTrangThai(
+            @RequestParam(value = "idCa", required = false) Integer idCa,
+            @RequestParam(value = "thuTrongTuan", defaultValue = "") String thuTrongTuan,
+            @RequestParam(value = "trangThai", defaultValue = "") String trangThai) {
+
+        List<SanCaDTO> list = sanCaService.findByTrangThai(idCa, thuTrongTuan, trangThai);
+        return ResponseEntity.ok(list);
+    }
+
+
     @PostMapping("")
-    public ResponseEntity<SanCaDTO> save(@RequestBody SanCaDTO sanCaDTO){
-        SanCaDTO sanCaDTOSave=sanCaService.save(sanCaDTO);
+    public ResponseEntity<SanCaDTO> save(@RequestBody SanCaDTO sanCaDTO) {
+        SanCaDTO sanCaDTOSave = sanCaService.save(sanCaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(sanCaDTOSave);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SanCaDTO> update(@PathVariable("id") Integer id ,@RequestBody SanCaDTO sanCaDTO){
-        SanCaDTO sanCaDTOSave=sanCaService.update(id,sanCaDTO);
+    public ResponseEntity<SanCaDTO> update(@PathVariable("id") Integer id, @RequestBody SanCaDTO sanCaDTO) {
+        SanCaDTO sanCaDTOSave = sanCaService.update(id, sanCaDTO);
         return ResponseEntity.status(HttpStatus.OK).body(sanCaDTOSave);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Integer id){
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         sanCaService.deletedAt(id);
-       return ResponseEntity.ok().build();
+        return ResponseEntity.ok().build();
     }
 
 

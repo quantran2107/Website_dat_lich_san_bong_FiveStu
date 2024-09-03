@@ -11926,11 +11926,11 @@ svg.navbar-brand-img {
     background: #f8f9fa;
 }
 
-.fc-bootstrap .fc-toolbar .btn {
-    color: #6c757d;
-    background-color: #ffffff;
-    border-color: #e9ecef;
-}
+/*.fc-bootstrap .fc-toolbar .btn {*/
+/*    color: #6c757d;*/
+/*    background-color: #ffffff;*/
+/*    border-color: #e9ecef;*/
+/*}*/
 
 .fc-bootstrap .fc-toolbar .btn.active {
     color: #ffffff;
@@ -11963,16 +11963,16 @@ svg.navbar-brand-img {
 }
 
 .gauge-container.g4 > .gauge .value-text {
-    fill: #6c757d;
+    fill: #9ae991;
 }
 
 .gauge-container.g4 .value-text {
-    color: #6c757d;
+    color: #9ae991;
 }
 
 /* file manager */
 .file-panel .selected {
-    background-color: #6c757d;
+    background-color: #9ae991;
 }
 
 .file-panel .selected .fname strong {

@@ -17,6 +17,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -134,5 +140,42 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
         return dto;
     }
+
+    @Override
+    public List<HoaDonChiTietDTO> findByNgayDenSan(Date ngayDenSan) {
+        // Lấy danh sách HoaDonChiTiet từ repository
+        List<HoaDonChiTiet> list = hoaDonChiTietRepository.findByNgayDenSan(ngayDenSan);
+
+        // Ánh xạ và bổ sung thông tin cho DTO
+        List<HoaDonChiTietDTO> dtoList = list.stream()
+                .map(hoaDonChiTiet -> {
+                    // Ánh xạ từ HoaDonChiTiet sang HoaDonChiTietDTO
+                    HoaDonChiTietDTO dto = modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class);
+
+                    // Lấy thông tin hóa đơn từ đối tượng HoaDon
+                    HoaDon hoaDon = hoaDonChiTiet.getHoaDon();
+                    if (hoaDon != null) {
+                        dto.setMaHoaDon(hoaDon.getMaHoaDon());
+                        if (hoaDon.getKhachHang() != null) {
+                            dto.setIdKhachHang(hoaDon.getKhachHang().getId());
+                            dto.setHoVaTenKhachHang(hoaDon.getKhachHang().getHoVaTen());
+                            dto.setSoDienThoaiKhachHang(hoaDon.getKhachHang().getSoDienThoai());
+                            dto.setEmailKhachHang(hoaDon.getKhachHang().getEmail());
+                        }
+                    }
+
+                    return dto;
+                })
+                .collect(Collectors.toMap(
+                        HoaDonChiTietDTO::getMaHoaDon, // key
+                        dto -> dto, // value
+                        (existing, replacement) -> existing)) // Resolve conflicts: keep existing
+                .values()
+                .stream()
+                .collect(Collectors.toList());
+
+        return dtoList;
+    }
+
 
 }

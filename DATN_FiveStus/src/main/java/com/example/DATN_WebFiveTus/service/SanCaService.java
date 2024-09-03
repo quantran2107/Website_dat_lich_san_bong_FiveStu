@@ -25,4 +25,6 @@ public interface SanCaService {
     public List<SanCaDTO> listAllSortPage(Integer pageNum, String sortDirection, int[] totalPageElement);
 
     public List<SanCaDTO> searchKeyWords(Integer pageNum, String keyWords, String sortDirection, int[] totalPageElement, Integer id);
+
+    List<SanCaDTO> findByTrangThai(Integer idCa, String thuTrongTuan ,String trangThai );
 }

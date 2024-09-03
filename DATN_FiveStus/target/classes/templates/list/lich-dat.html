@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="~{fragment/head :: head}"></head>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
+    <style>
+        /* Nút điều hướng và các chế độ month, week, day */
+        /* Đảm bảo nút giữ nguyên màu khi click */
+        .fc-toolbar-title {
+            text-transform: capitalize;
+        }
+
+
+        .fc-toolbar .fc-button-group > .fc-button:focus,
+        .fc .fc-prev-button:focus,
+        .fc .fc-next-button:focus,
+        .fc-toolbar .fc-button-group > .fc-button:hover,
+        .fc .fc-prev-button:hover,
+        .fc .fc-next-button:hover {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .fc-toolbar .fc-button-group > .fc-button:active,
+        .fc .fc-prev-button:active,
+        .fc .fc-next-button:active {
+            background-color: #4CAF50 !important;
+            color: #fff !important;
+            border-color: #4CAF50 !important;
+        }
+
+
+        .fc-toolbar .fc-button-group > .fc-button {
+            background-color: #fff;
+            color: #4CAF50;
+            border: 1px solid #4CAF50;
+        }
+
+        .fc-toolbar .fc-button-group > .fc-button.fc-button-active {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .fc .fc-prev-button, .fc .fc-next-button {
+            background-color: #fff;
+            color: #4CAF50;
+            border: 1px solid #4CAF50;
+        }
+
+        .fc .fc-prev-button:hover, .fc .fc-next-button:hover {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        /* Tùy chỉnh sự kiện */
+        .fc-daygrid-block-event .fc-event-time, .fc-daygrid-block-event .fc-event-title {
+            color: #fff;
+        }
+
+        .fc-daygrid-event {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+            color: #fff;
+        }
+
+        /* Tùy chỉnh vùng highlight */
+        .fc-daygrid-day-bg .fc-highlight {
+            background-color: #cfe2ff;
+        }
+
+    </style>
+</head>
+<body class="vertical  light  ">
+<div class="wrapper">
+    <div th:include="~{fragment/navbar :: navbar}"></div>
+    <div th:include="~{fragment/sidebar :: sidebar}"></div>
+    <main class="main-content" role="main">
+        <div class="col-12">
+            <h2 class="mb-2 page-title">Quản lý lịch đặt</h2>
+            <p class="card-text"></p>
+            <div class="row my-4">
+                <!-- Small table -->
+                <div class="col-md-12">
+                    <!-- ô Search -->
+                    <div class="card shadow">
+                        <div class="card-body" id="tableCardBody1">
+                            <div class="toolbar row mb-3 mt-3">
+                                <div class="col-md-12">
+                                    <form class="form-inline" id="filterForm"
+                                          style="display: flex; justify-content: space-between; align-items: center;">
+                                        <!-- Search -->
+                                        <div class="form-group" style="flex-grow: 1;">
+                                            <label for="search">Tìm kiếm</label>
+                                            <input class="form-control ml-3 mr-5" id="search"
+
+                                                   placeholder="Tìm kiếm theo mã hoặc tên" style="width: 400px;"
+                                                   type="text">
+                                        </div>
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <button class="btn btn-success"
+                                                    title="Thêm" type="button">
+                                                <span class="fe fe-plus"></span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="col-md-12 mt-4">
+                                    <form class="form-inline" id="filterDateForm"
+                                          style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div class="form-group d-flex" style="flex-grow: 1;">
+                                            <label for="searchStartDate">Từ</label>
+                                            <input class="form-control ml-3 mr-3" id="searchStartDate"
+                                                   onchange="searchStartDate(this.value)"
+                                                   style="width: 163px;"
+                                                   type="date">
+                                            <label for="searchEndDate">Đến</label>
+                                            <input class="form-control" id="searchEndDate"
+                                                   onchange="searchEndDate(this.value)"
+                                                   style="width: 163px; margin-left: 15px; margin-right: 15px"
+                                                   type="date">
+                                            <div class="dropdown mr-3">
+                                                <button aria-expanded="false"
+                                                        aria-haspopup="true"
+                                                        class="btn btn-outline-success dropdown-toggle"
+                                                        data-toggle="dropdown" id="actionMenuButton3"
+                                                        type="button">Trạng thái
+                                                </button>
+                                                <div aria-labelledby="actionMenuButton3" class="dropdown-menu"
+                                                     id="statusFilter">
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setStatusFilter('Đã kết thúc')">Đã kết thúc</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setStatusFilter('Sắp diễn ra')">Sắp diễn ra</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setStatusFilter('Đang diễn ra')">Đang diễn ra</a>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-outline-success"
+                                                    onclick="exportToExcel()"
+                                                    title="Xuất Excel" type="button">
+                                                <span class="fe fe-file-text"></span>
+                                            </button>
+                                        </div>
+                                        <div class="form-group d-flex gap-2">
+                                            <button class="btn btn-primary" onclick="resetFilters()"
+                                                    title="Reset" type="button">
+                                                <span class="fe fe-refresh-ccw"></span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- End Search -->
+                    <!-- Calendar -->
+                    <div class="card shadow mt-5">
+                        <div class="card-body" id="tableCardBody">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                    <!-- Modal Detail -->
+                    <div class="modal" id="eventModal" role="dialog" tabindex="-1">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Chi tiết hóa đơn</h5>
+                                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Mã hóa đơn:</strong> <span id="modalMaHoaDon"></span></p>
+                                    <p><strong>Mã hóa đơn chi tiết:</strong> <span id="modalMaHoaDonChiTiet"></span></p>
+                                    <p><strong>Ngày tạo hóa đơn:</strong> <span id="modalNgayTaoHoaDon"></span></p>
+                                    <p><strong>Ngày đến sân:</strong> <span id="modalNgayDenSan"></span></p>
+                                    <p><strong>Thời gian bắt đầu:</strong> <span id="modalThoiGianBatDau"></span></p>
+                                    <p><strong>Thời gian kết thúc:</strong> <span id="modalThoiGianKetThuc"></span></p>
+                                    <p><strong>Giá sân:</strong> <span id="modalTienSan"></span></p>
+                                    <p><strong>Ghi chú:</strong> <span id="modalGhiChu"></span></p>
+                                    <p><strong>Tên sân bóng:</strong> <span id="modalTenSanBong"></span></p>
+                                    <p><strong>Họ và tên khách hàng:</strong> <span id="modalHoVaTenKhachHang"></span>
+                                    </p>
+                                    <p><strong>Số điện thoại khách hàng:</strong> <span
+                                            id="modalSoDienThoaiKhachHang"></span></p>
+                                    <p><strong>Email khách hàng:</strong> <span id="modalEmailKhachHang"></span></p>
+                                    <p><strong>Trạng thái:</strong> <span id="modalTrangThai"></span></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" data-dismiss="modal" type="button">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal Add-->
+                    <div class="modal fade" id="createEventModal" tabindex="-1" role="dialog" aria-labelledby="createEventModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Đặt lịch </h5>
+                                    <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="createEventForm">
+                                        <div class="form-group">
+                                            <label for="ngayDenSanInput">Ngày đến sân</label>
+                                            <input type="date" class="form-control" id="ngayDenSanInput" >
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cboCa">Chọn ca</label>
+                                            <select class="form-control" id="cboCa" name="cboCa" required>
+                                                <option value="">Chọn ca</option>
+                                                <!-- Các tùy chọn sẽ được thêm vào ở đây -->
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="thoiGianBatDauInput">Thời gian bắt đầu ca</label>
+                                            <input type="text" class="form-control" id="thoiGianBatDauInput" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="thoiGianKetThucInput">Thời gian kết thúc ca</label>
+                                            <input type="text" class="form-control" id="thoiGianKetThucInput" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cboSanBong">Chọn sân</label>
+                                            <select class="form-control" id="cboSanBong" name="cboSanBong" required>
+                                                <option value="">Chọn sân bóng</option>
+                                            </select>
+                                        </div>
+                                        <!-- Thêm các trường khác nếu cần -->
+                                        <button type="submit" class="btn btn-primary">Lưu sự kiện</button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" data-dismiss="modal" type="button">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div th:include="~{fragment/modal :: modal}"></div>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+<script th:include="~{fragment/script :: script}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Đối tượng ánh xạ từ tiếng Anh sang tiếng Việt
+        const dayTranslations = {
+            'Sunday': 'Chủ nhật',
+            'Monday': 'Thứ 2',
+            'Tuesday': 'Thứ 3',
+            'Wednesday': 'Thứ 4',
+            'Thursday': 'Thứ 5',
+            'Friday': 'Thứ 6',
+            'Saturday': 'Thứ 7'
+        };
+
+        // Khi tài liệu đã sẵn sàng, lấy danh sách các ca từ API và điền vào dropdown
+        $.ajax({
+            url: 'http://localhost:8080/ca/hien-thi',
+            type: 'GET',
+            success: function(response) {
+                var cboCa = $('#cboCa');
+                cboCa.empty(); // Xóa các tùy chọn hiện tại
+
+                // Thêm các tùy chọn mới vào dropdown
+                response.forEach(function(ca) {
+                    cboCa.append($('<option>', {
+                        value: ca.id, // Hoặc giá trị phù hợp khác
+                        text: ca.tenCa // Hiển thị tên ca
+                    }));
+                });
+
+                // Lắng nghe sự thay đổi của dropdown để cập nhật thời gian và sân bóng
+                cboCa.on('change', function() {
+                    var caId = $(this).val();
+                    var thuTrongTuan = getSelectedDayOfWeek(); // Lấy ngày trong tuần từ ô calendar
+                    console.log(thuTrongTuan)
+                    if (caId) {
+                        $.ajax({
+                            url: 'http://localhost:8080/ca/' + caId, // Thay đổi URL theo API của bạn để lấy thông tin ca
+                            type: 'GET',
+                            success: function(caData) {
+                                // Chuyển đổi thời gian bắt đầu và kết thúc từ định dạng đầy đủ thành chỉ giờ
+                                var thoiGianBatDau = moment(caData.thoiGianBatDau).format('HH:mm');
+                                var thoiGianKetThuc = moment(caData.thoiGianKetThuc).format('HH:mm');
+                                console.log(thoiGianBatDau);
+                                console.log(thoiGianKetThuc);
+
+                                // Cập nhật các trường thời gian bắt đầu và kết thúc
+                                $('#thoiGianBatDauInput').val(thoiGianBatDau);
+                                $('#thoiGianKetThucInput').val(thoiGianKetThuc);
+
+                                // Cập nhật sân bóng khi ca được chọn
+                                updateSanBong(caId, thuTrongTuan, 'Còn trống');
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error fetching ca details:', error);
+                            }
+                        });
+                    } else {
+                        // Xóa các trường thời gian nếu không có ca được chọn
+                        $('#thoiGianBatDauInput').val('');
+                        $('#thoiGianKetThucInput').val('');
+                    }
+                });
+
+                // Lắng nghe sự thay đổi của ô calendar để cập nhật sân bóng
+                $('#ngayDenSanInput').on('change', function() {
+                    var thuTrongTuan = getSelectedDayOfWeek(); // Lấy ngày trong tuần từ ô calendar
+                    console.log(thuTrongTuan)
+                    var idCa = $('#cboCa').val(); // Lấy idCa từ dropdown
+                    if (idCa) {
+                        updateSanBong(idCa, thuTrongTuan, 'Còn trống');
+                    }
+                });
+
+                // Hàm để lấy ngày trong tuần từ ô calendar và chuyển đổi thành tiếng Việt
+                function getSelectedDayOfWeek() {
+                    var selectedDate = $('#ngayDenSanInput').val(); // Giả sử bạn có một ô input với id="ngayDenSanInput"
+                    var dayOfWeekEnglish = moment(selectedDate).format('dddd'); // Lấy tên ngày trong tuần bằng tiếng Anh
+                    var dayOfWeekVietnamese = dayTranslations[dayOfWeekEnglish]; // Chuyển đổi sang tiếng Việt
+                    return dayOfWeekVietnamese;
+                }
+
+                // Hàm để cập nhật danh sách sân bóng
+                function updateSanBong(idCa, thuTrongTuan, trangThai) {
+                    $.ajax({
+                        url: 'http://localhost:8080/san-ca/san-bong-hop-le',
+                        type: 'GET',
+                        data: {
+                            idCa: idCa,
+                            thuTrongTuan: thuTrongTuan,
+                            trangThai: trangThai
+                        },
+                        success: function(response) {
+                            var cboSanBong = $('#cboSanBong');
+                            cboSanBong.empty(); // Xóa các tùy chọn hiện tại
+
+                            // Thêm các tùy chọn mới vào dropdown sân bóng
+                            response.forEach(function(sanCa) {
+                                cboSanBong.append($('<option>', {
+                                    value: sanCa.id, // Hoặc giá trị phù hợp khác
+                                    text: sanCa.tenSanBong // Hiển thị tên sân bóng
+                                }));
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error fetching san bong data:', error);
+                        }
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching ca data:', error);
+            }
+        });
+    });
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        if (!calendarEl) {
+            console.error('Element with id "calendar" not found.');
+            return;
+        }
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'vi',
+            selectable: true,
+            editable: true,
+            buttonText: {
+                today: 'Hôm nay',
+                month: 'Tháng',
+                week: 'Tuần',
+                day: 'Ngày',
+                list: 'Danh sách'
+            },
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: function (fetchInfo, successCallback, failureCallback) {
+                var startDate = moment(fetchInfo.startStr).format('YYYY-MM-DD');
+                var endDate = moment(fetchInfo.endStr).format('YYYY-MM-DD');
+
+                // Lấy danh sách tất cả các ngày trong khoảng thời gian
+                var dates = [];
+                var currentDate = moment(startDate);
+                while (currentDate <= moment(endDate)) {
+                    dates.push(currentDate.format('YYYY-MM-DD'));
+                    currentDate.add(1, 'days');
+                }
+
+                // Tạo một mảng các promise cho mỗi yêu cầu API
+                var requests = dates.map(date => {
+                    return $.ajax({
+                        url: 'http://localhost:8080/hoa-don-chi-tiet/ngay-den-san',
+                        type: 'GET',
+                        data: {
+                            'ngayDenSan': date
+                        }
+                    });
+                });
+
+                Promise.all(requests)
+                    .then(responses => {
+                        var events = [];
+                        responses.forEach(response => {
+                            if (Array.isArray(response)) {
+                                response.forEach(item => {
+                                    if (item) {
+                                        // Chuyển đổi ngày và giờ
+                                        var eventDate = moment(item.ngayDenSan, 'DD/MM/YYYY').format('YYYY-MM-DD');
+                                        var startTime = moment(item.thoiGianBatDauCa, 'YYYY-MM-DDTHH:mm:ss').format('HH:mm:ss');
+                                        var endTime = moment(item.thoiGianKetThucCa, 'YYYY-MM-DDTHH:mm:ss').format('HH:mm:ss');
+
+                                        // Tạo chuỗi thời gian đầy đủ cho bắt đầu và kết thúc
+                                        var startDateTime = eventDate + 'T' + startTime;
+                                        var endDateTime = eventDate + 'T' + endTime;
+
+                                        events.push({
+                                            id: item.id,
+                                            title: item.maHoaDonChiTiet, // Hoặc một tiêu đề khác tùy vào dữ liệu của bạn
+                                            start: startDateTime,
+                                            end: endDateTime
+                                        });
+                                    } else {
+                                        console.warn('Item is undefined or null:', item);
+                                    }
+                                });
+                            } else {
+                                console.warn('Không có dữ liệu:', response);
+                            }
+                        });
+                        successCallback(events);
+                    })
+                    .catch(error => {
+                        if (error && error.message) {
+                            console.error('Error :', error.message);
+                        } else {
+                            console.error('Error :', error);
+                        }
+                        failureCallback();
+                    });
+            },
+            dateClick: function (info) {
+                // Mở modal
+                $('#createEventModal').modal('show');
+
+                // Điền ngày đến sân vào ô ngày đến sân
+                $('#ngayDenSanInput').val(info.dateStr);
+                $('#createEventForm').on('submit', function(event) {
+                    event.preventDefault();
+
+                    // Lấy dữ liệu từ form
+                    var ngayDenSan = $('#ngayDenSanInput').val();
+                    var thoiGianBatDauCa = $('#thoiGianBatDauCaInput').val();
+                    var thoiGianKetThucCa = $('#thoiGianKetThucCaInput').val();
+                    var maHoaDonChiTiet = $('#maHoaDonChiTietInput').val();
+
+                    // Gửi dữ liệu đến server để lưu sự kiện mới
+                    $.ajax({
+                        url: 'http://localhost:8080/hoa-don-chi-tiet', // Thay đổi URL theo API của bạn
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            ngayDenSan: ngayDenSan,
+                            thoiGianBatDauCa: thoiGianBatDauCa,
+                            thoiGianKetThucCa: thoiGianKetThucCa,
+                            maHoaDonChiTiet: maHoaDonChiTiet
+                            // Thêm các trường khác nếu cần
+                        }),
+                        success: function(response) {
+                            // Đóng modal và làm mới lịch
+                            $('#createEventModal').modal('hide');
+                            calendar.refetchEvents(); // Làm mới lịch để hiện sự kiện mới
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error creating event:', error);
+                        }
+                    });
+                });
+
+            },
+            eventClick: function (info) {
+                var eventId = info.event.id; // Lấy id của sự kiện (hdct)
+                console.log(eventId)
+                // Fetch event details from API using event ID
+                $.ajax({
+                    url: 'http://localhost:8080/hoa-don-chi-tiet/' + eventId, // Sử dụng id để lấy thông tin chi tiết
+                    type: 'GET',
+                    success: function (eventData) {
+                        // Update modal with event details
+                        $('#modalMaHoaDon').text(eventData.maHoaDon);
+                        $('#modalMaHoaDonChiTiet').text(eventData.maHoaDonChiTiet);
+                        $('#modalNgayTaoHoaDon').text(eventData.ngayTaoHoaDon);
+                        $('#modalNgayDenSan').text(eventData.ngayDenSan);
+                        // Chỉ hiển thị thời gian mà không có ngày
+                        $('#modalThoiGianBatDau').text(moment(eventData.thoiGianBatDauCa).format('HH:mm:ss'));
+                        $('#modalThoiGianKetThuc').text(moment(eventData.thoiGianKetThucCa).format('HH:mm:ss'));
+                        $('#modalTienSan').text(eventData.tienSan);
+                        $('#modalGhiChu').text(eventData.ghiChu);
+                        $('#modalTrangThai').text(eventData.trangThai);
+                        $('#modalTenSanBong').text(eventData.tenSanBong);
+                        $('#modalTenCa').text(eventData.tenCa);
+                        $('#modalHoVaTenKhachHang').text(eventData.hoVaTenKhachHang);
+                        $('#modalSoDienThoaiKhachHang').text(eventData.soDienThoaiKhachHang);
+                        $('#modalEmailKhachHang').text(eventData.emailKhachHang);
+
+                        // Show the modal
+                        $('#eventModal').modal('show');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching event details:', error);
+                    }
+                });
+
+            }
+        });
+
+        calendar.render();
+    });
+
+</script>
+</html>

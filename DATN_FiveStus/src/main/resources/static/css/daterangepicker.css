@@ -219,7 +219,7 @@
 }
 
 .daterangepicker td.disabled, .daterangepicker option.disabled {
-  color: #999;
+  color: #9ae991;
   cursor: not-allowed;
   text-decoration: line-through;
 }
