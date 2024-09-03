@@ -101,6 +101,23 @@ abbr[data-original-title] {
     border-bottom: 0;
     text-decoration-skip-ink: none;
 }
+.range-container {
+    position: relative;
+    width: 100%;
+}
+
+.range-labels {
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.range-labels span {
+    position: relative;
+    display: inline-block;
+}
 
 address {
     margin-bottom: 1rem;
@@ -3893,9 +3910,9 @@ input[type="button"].btn-block {
 }
 
 .custom-select:focus {
-    border-color: #9bbcff;
+    border-color: #009443;
     outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(27, 104, 255, 0.25);
+    box-shadow: 0 0 0 0.2rem rgb(13, 141, 7);
 }
 
 .custom-select:focus::-ms-value {
@@ -4024,11 +4041,11 @@ input[type="button"].btn-block {
 }
 
 .custom-range:focus::-moz-range-thumb {
-    box-shadow: 0 0 0 1px #f8f9fa, 0 0 0 0.2rem rgba(27, 104, 255, 0.25);
+    box-shadow: 0 0 0 1px #f8f9fa, 0 0 0 0.2rem rgb(27, 255, 31);
 }
 
 .custom-range:focus::-ms-thumb {
-    box-shadow: 0 0 0 1px #f8f9fa, 0 0 0 0.2rem rgba(27, 104, 255, 0.25);
+    box-shadow: 0 0 0 1px #f8f9fa, 0 0 0 0.2rem rgb(27, 255, 31);
 }
 
 .custom-range::-moz-focus-outer {
@@ -4039,7 +4056,7 @@ input[type="button"].btn-block {
     width: 1rem;
     height: 1rem;
     margin-top: -0.25rem;
-    background-color: #1b68ff;
+    background-color: #1bff1f;
     border: 0;
     border-radius: 1rem;
     transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -4069,7 +4086,7 @@ input[type="button"].btn-block {
 .custom-range::-moz-range-thumb {
     width: 1rem;
     height: 1rem;
-    background-color: #1b68ff;
+    background-color: #1bff1f;
     border: 0;
     border-radius: 1rem;
     transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -4165,7 +4182,6 @@ input[type="button"].btn-block {
 .custom-select {
     transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-
 @media (prefers-reduced-motion: reduce) {
     .custom-control-label::before,
     .custom-file-label,
@@ -4185,68 +4201,90 @@ input[type="button"].btn-block {
 .nav-link {
     display: block;
     padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease;
+     /* Màu chữ xanh lá cây */
 }
 
 .nav-link:hover, .nav-link:focus {
     text-decoration: none;
+    color: #28a745 ;/* Màu chữ khi hover */
 }
 
 .nav-link.disabled {
-    color: #6c757d;
+    color: #6c757d !important;
     pointer-events: none;
     cursor: default;
 }
 
+/* Định dạng thanh tab */
 .nav-tabs {
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid #e9ecef; /* Viền phía dưới thanh tab */
 }
 
+/* Khoảng cách dưới cùng của các item */
 .nav-tabs .nav-item {
     margin-bottom: -1px;
 }
 
+/* Kiểu cho các liên kết của tab */
 .nav-tabs .nav-link {
-    border: 1px solid transparent;
+    border: 0; /* Loại bỏ viền xung quanh tab */
+    border-bottom: 2px solid transparent; /* Viền dưới tab không chọn */
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
+    background-color: transparent !important; /* Nền trong suốt khi không chọn */
+    color: #333; /* Màu chữ xám tối cho tab không chọn */
+    transition: background-color 0.3s ease, color 0.3s ease, border-bottom-color 0.3s ease; /* Hiệu ứng chuyển màu nền, chữ và viền dưới */
 }
 
-.nav-tabs .nav-link:hover, .nav-tabs .nav-link:focus {
-    border-color: #6c757d;
+/* Hiệu ứng khi hover hoặc focus vào tab */
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link:focus {
+    color: #28a745; /* Màu chữ trắng khi hover */
 }
 
-.nav-tabs .nav-link.disabled {
-    color: #6c757d;
-    background-color: transparent;
-    border-color: transparent;
-}
-
+/* Kiểu cho tab đang hoạt động */
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
-    color: #495057;
-    background-color: transparent;
-    border-color: #6c757d;
+    color: #28a745 !important; /* Màu chữ xanh lá cây cho tab đang hoạt động */
+    background-color: #fff !important; /* Nền trắng cho tab đang hoạt động */
+    border-bottom-color: #28a745 !important; /* Màu viền xanh lá cây dưới tab đang hoạt động */
 }
 
+/* Kiểu cho liên kết bị vô hiệu hóa */
+.nav-tabs .nav-link.disabled {
+    color: #6c757d !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+
+/* Kiểu cho menu dropdown */
 .nav-tabs .dropdown-menu {
     margin-top: -1px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
 
+
+
 .nav-pills .nav-link {
     border-radius: 0.25rem;
+    transition: background-color 0.3s ease;
+
+     /* Màu chữ xanh lá cây cho các pill */
 }
 
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
-    color: #ffffff;
-    background-color: #1b68ff;
+    color: #ffffff !important; /* Màu chữ trắng cho pill đang hoạt động */
+    background: linear-gradient(to right, #56ab2f, #a8e063);
 }
 
 .nav-fill .nav-item {
     flex: 1 1 auto;
     text-align: center;
+
 }
 
 .nav-justified .nav-item {
@@ -11064,7 +11102,7 @@ button:focus {
     top: 0;
     bottom: 0;
     width: 2px;
-    background-color: #1b68ff;
+    background-color: #28a745;
 }
 
 .vertical .topnav,
@@ -11328,7 +11366,7 @@ select {
 }
 
 .timeline .timeline-item.item-primary::before {
-    background-color: #1b68ff;
+    background-color: #1bff54;
 }
 
 .timeline .timeline-item.item-success::before {
@@ -11538,6 +11576,8 @@ select {
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
+
 
 @media (max-width: 991.98px) {
     .vertical .sidebar-left,
@@ -11757,7 +11797,7 @@ select {
 
 .h1, .h2, .h3, .h4, .h5, .h6,
 h1, h2, h3, h4, h5, h6, strong {
-    color: #001a4e;
+    color: #004e14;
 }
 
 .text-muted {
@@ -11765,16 +11805,16 @@ h1, h2, h3, h4, h5, h6, strong {
 }
 
 svg.navbar-brand-img {
-    fill: #1b68ff;
+    fill: #2aff1b;
 }
 
 .navbar-light .navbar-nav .nav-link {
-    color: #001a4e;
+    color: #004e14;
 }
 
 .navbar-light .navbar-nav .nav-link:hover {
-    background: #f8f9fa;
-    color: #1b68ff;
+    color: #fff; /* Màu chữ trắng khi hover */
+    background: linear-gradient(to right, #56ab2f, #a8e063)
 }
 
 .navbar-dark .navbar-nav .nav-link {
@@ -11800,8 +11840,8 @@ svg.navbar-brand-img {
 }
 
 .nav-tabs .nav-link.active {
-    color: #1b68ff;
-    border-color: #1b68ff;
+    color: #2aff1b;
+    border-color: #2aff1b;
 }
 
 /* wrapper */
@@ -11811,7 +11851,7 @@ svg.navbar-brand-img {
 }
 
 .headerbg .wrapper:before {
-    background: #002c81;
+    background: #2aff1b;
 }
 
 .vertnav .dropdown-toggle::after {
@@ -11886,22 +11926,22 @@ svg.navbar-brand-img {
     background: #f8f9fa;
 }
 
-.fc-bootstrap .fc-toolbar .btn {
-    color: #6c757d;
-    background-color: #ffffff;
-    border-color: #e9ecef;
-}
+/*.fc-bootstrap .fc-toolbar .btn {*/
+/*    color: #6c757d;*/
+/*    background-color: #ffffff;*/
+/*    border-color: #e9ecef;*/
+/*}*/
 
 .fc-bootstrap .fc-toolbar .btn.active {
     color: #ffffff;
-    background-color: #1b68ff;
-    border-color: #1b68ff;
+    background-color: #28a745 !important; /* Màu nền khi nút được chọn */
+    border-color: #28a745 !important; /* Viền nút màu xanh lá cây */
 }
 
 .fc-bootstrap .fc-event {
     color: #ffffff;
-    background-color: #3ad29f;
-    border-color: #3ad29f;
+    background-color: #28a745 !important; /* Màu nền khi nút được chọn */
+    border-color: #28a745 !important; /* Viền nút màu xanh lá cây */
 }
 
 .fc-bootstrap .fc-event:hover {
@@ -11914,7 +11954,7 @@ svg.navbar-brand-img {
 }
 
 .gauge-container > .gauge .value {
-    stroke: #1b68ff;
+    stroke: #1bff32;
     color: #e9ecef;
 }
 
@@ -11923,16 +11963,16 @@ svg.navbar-brand-img {
 }
 
 .gauge-container.g4 > .gauge .value-text {
-    fill: #6c757d;
+    fill: #9ae991;
 }
 
 .gauge-container.g4 .value-text {
-    color: #6c757d;
+    color: #9ae991;
 }
 
 /* file manager */
 .file-panel .selected {
-    background-color: #6c757d;
+    background-color: #9ae991;
 }
 
 .file-panel .selected .fname strong {

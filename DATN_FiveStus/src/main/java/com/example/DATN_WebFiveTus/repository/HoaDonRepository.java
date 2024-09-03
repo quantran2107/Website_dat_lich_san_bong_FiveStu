@@ -1,15 +1,17 @@
 package com.example.DATN_WebFiveTus.repository;
 
 import com.example.DATN_WebFiveTus.entity.HoaDon;
+import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.util.List;
 
 @Repository
-public interface HoaDonRepository extends JpaRepository<HoaDon,Integer> {
+public interface HoaDonRepository extends JpaRepository<HoaDon, Integer> {
 
     @Query("SELECT hd FROM HoaDon hd " +
             "JOIN FETCH hd.khachHang " +
@@ -35,5 +37,8 @@ public interface HoaDonRepository extends JpaRepository<HoaDon,Integer> {
             @Param("keyword") String keyword,
             @Param("tongTienMin") Float tongTienMin,
             @Param("tongTienMax") Float tongTienMax);
+
+    @Query("SELECT hd FROM HoaDon hd LEFT JOIN FETCH hd.khachHang WHERE hd.id = :id")
+    HoaDon findByIdWithKhachHang(@Param("id") Integer id);
 
 }

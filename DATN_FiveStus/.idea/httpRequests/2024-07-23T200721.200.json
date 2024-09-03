@@ -1,0 +1,16 @@
+{
+  "id": 1,
+  "maPhieuGiamGia": "PGG001",
+  "tenPhieuGiamGia": "Phiếu giảm giá 1",
+  "soLuong": 10,
+  "mucGiam": 10.0,
+  "hinhThucGiamGia": false,
+  "dieuKienSuDung": 100.0,
+  "giaTriToiDa": 500.0,
+  "doiTuongApDung": true,
+  "ngayBatDau": "2024-07-01",
+  "ngayKetThuc": "2024-07-31",
+  "trangThai": "Đang diễn ra",
+  "ghiChu": "Ghi chú 1",
+  "deletedAt": false
+}

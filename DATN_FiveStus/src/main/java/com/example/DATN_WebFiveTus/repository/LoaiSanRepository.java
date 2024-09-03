@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface LoaiSanRepository extends JpaRepository<LoaiSan,Integer> {
 
-    @Query("SELECT ls FROM LoaiSan ls where ls.deletedAt=true")
+    @Query("SELECT ls FROM LoaiSan ls where ls.deletedAt=false")
     List<LoaiSan> getAllJoinFetch();
 
     @Modifying

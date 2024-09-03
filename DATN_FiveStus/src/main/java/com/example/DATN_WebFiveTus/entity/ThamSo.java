@@ -14,6 +14,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.sql.Time;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -23,20 +30,38 @@ import lombok.ToString;
 @Entity
 @Table(name = "tham_so")
 public class ThamSo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name = "id_loai_tham_so")
-    private LoaiThamSo loaiThamSo;
+    @Column(name = "ma", nullable = false)
+    private String ma;
 
-    @Column(name = "ten", length = 100)
+    @Column(name = "ten", nullable = false)
     private String ten;
 
-    @Column(name = "gia_tri", length = 100)
+    @Column(name = "gia_tri", nullable = false)
     private String giaTri;
 
-    @Column(name = "trang_thai", length = 50)
-    private String trangThai;
+    @Column(name = "type_gia_tri", nullable = false)
+    private String typeGiaTri;
+
+    @Column(name = "mo_ta")
+    private String moTa;
+
+    @Column(name = "trang_thai", nullable = false)
+    private boolean trangThai;
+
+    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at", columnDefinition = "BIT(1) DEFAULT 1")
+    private Boolean deletedAt = true;
+
 }

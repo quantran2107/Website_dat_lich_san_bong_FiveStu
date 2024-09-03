@@ -139,7 +139,6 @@ public class SanCaController {
 
     @PostMapping("/sanCa/add")
     public String add(@ModelAttribute("sanCa") SanCaDTO sanCaDTO) {
-        System.out.println("ADD HAHA321");
         RestTemplate restTemplate = new RestTemplate();
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString("http://localhost:8080/san-ca");
@@ -283,6 +282,10 @@ public class SanCaController {
 //        return "redirect:/quan-ly-san-bong";
 //    }
 
+    @GetMapping("list-san-ca")
+    public String listSanCa(){
+        return "/list/chon-san-ca";
+    }
 
 }
 

@@ -33,9 +33,9 @@ public class DiaChiKhachHang {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "id_khach_hang", nullable = false)
-    private KhachHang khachHang;
+    private KhachHang idKhachHang;
 
     @Column(name = "dia_chi_cu_the", length = 255, columnDefinition = "VARCHAR(255) DEFAULT ''")
     private String diaChiCuThe;

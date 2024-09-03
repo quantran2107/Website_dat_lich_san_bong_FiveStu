@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "donGia": 100000.0,
+    "image": "img\\img1.jpg",
+    "soLuong": 10,
+    "tenDoThue": "Do thue 1",
+    "trangThai": "Còn",
+    "deletedAt": false
+  },
+  {
+    "id": 2,
+    "donGia": 200000.0,
+    "image": "img\\img2.jpg",
+    "soLuong": 20,
+    "tenDoThue": "Do thue 2",
+    "trangThai": "Còn",
+    "deletedAt": false
+  },
+  {
+    "id": 3,
+    "donGia": 300000.0,
+    "image": "img\\img3.jpg",
+    "soLuong": 30,
+    "tenDoThue": "Do thue 3",
+    "trangThai": "Còn",
+    "deletedAt": false
+  },
+  {
+    "id": 4,
+    "donGia": 400000.0,
+    "image": "img\\img4.jpg",
+    "soLuong": 40,
+    "tenDoThue": "Do thue 4",
+    "trangThai": "Còn",
+    "deletedAt": false
+  },
+  {
+    "id": 5,
+    "donGia": 500000.0,
+    "image": "img\\img5.jpg",
+    "soLuong": 50,
+    "tenDoThue": "Do thue 5",
+    "trangThai": "Còn",
+    "deletedAt": false
+  },
+  {
+    "id": 6,
+    "donGia": 600000.0,
+    "image": "img\\img1.jpg",
+    "soLuong": 0,
+    "tenDoThue": "Do thue 6",
+    "trangThai": "Hết",
+    "deletedAt": false
+  },
+  {
+    "id": 7,
+    "donGia": 700000.0,
+    "image": "img\\img2.jpg",
+    "soLuong": 70,
+    "tenDoThue": "Do thue 7",
+    "trangThai": "Còn",
+    "deletedAt": false
+  },
+  {
+    "id": 8,
+    "donGia": 800000.0,
+    "image": "img\\img3.jpg",
+    "soLuong": 80,
+    "tenDoThue": "Do thue 8",
+    "trangThai": "Còn",
+    "deletedAt": false
+  },
+  {
+    "id": 9,
+    "donGia": 900000.0,
+    "image": "img\\img4.jpg",
+    "soLuong": 90,
+    "tenDoThue": "Do thue 9",
+    "trangThai": "Còn",
+    "deletedAt": false
+  },
+  {
+    "id": 10,
+    "donGia": 1000000.0,
+    "image": "img\\img5.jpg",
+    "soLuong": 0,
+    "tenDoThue": "Do thue 10",
+    "trangThai": "Hết",
+    "deletedAt": false
+  },
+  {
+    "id": 11,
+    "donGia": 1100000.0,
+    "image": "img\\img1.jpg",
+    "soLuong": 110,
+    "tenDoThue": "Do thue 11",
+    "trangThai": "Còn",
+    "deletedAt": false
+  },
+  {
+    "id": 12,
+    "donGia": 1200000.0,
+    "image": "img\\img2.jpg",
+    "soLuong": 120,
+    "tenDoThue": "Do thue 12",
+    "trangThai": "Còn",
+    "deletedAt": false
+  },
+  {
+    "id": 13,
+    "donGia": 1300000.0,
+    "image": "img\\img3.jpg",
+    "soLuong": 0,
+    "tenDoThue": "Do thue 13",
+    "trangThai": "Hết",
+    "deletedAt": false
+  },
+  {
+    "id": 14,
+    "donGia": 1400000.0,
+    "image": "img\\img4.jpg",
+    "soLuong": 140,
+    "tenDoThue": "Do thue 14",
+    "trangThai": "Còn",
+    "deletedAt": false
+  },
+  {
+    "id": 15,
+    "donGia": 1500000.0,
+    "image": "img\\img5.jpg",
+    "soLuong": 150,
+    "tenDoThue": "Do thue 15",
+    "trangThai": "Còn",
+    "deletedAt": false
+  },
+  {
+    "id": 16,
+    "donGia": 1600000.0,
+    "image": "img\\img1.jpg",
+    "soLuong": 160,
+    "tenDoThue": "Do thue 16",
+    "trangThai": "Còn",
+    "deletedAt": false
+  },
+  {
+    "id": 17,
+    "donGia": 1700000.0,
+    "image": "img\\img2.jpg",
+    "soLuong": 170,
+    "tenDoThue": "Do thue 17",
+    "trangThai": "Còn",
+    "deletedAt": false
+  },
+  {
+    "id": 18,
+    "donGia": 1800000.0,
+    "image": "img\\img3.jpg",
+    "soLuong": 0,
+    "tenDoThue": "Do thue 18",
+    "trangThai": "Hết",
+    "deletedAt": false
+  },
+  {
+    "id": 19,
+    "donGia": 1900000.0,
+    "image": "img\\img4.jpg",
+    "soLuong": 190,
+    "tenDoThue": "Do thue 19",
+    "trangThai": "Còn",
+    "deletedAt": false
+  },
+  {
+    "id": 20,
+    "donGia": 2000000.0,
+    "image": "img\\img5.jpg",
+    "soLuong": 200,
+    "tenDoThue": "Do thue 20",
+    "trangThai": "Còn",
+    "deletedAt": false
+  }
+]

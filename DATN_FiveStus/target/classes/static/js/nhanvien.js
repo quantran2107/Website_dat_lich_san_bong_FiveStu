@@ -33,7 +33,7 @@ $(document).ready(function () {
     }
 
 
-    $('#file').on('change', function() {
+    $('#file').on('change', function () {
         let fileName = '';
         let newFileName = $(this).val().split('\\').pop(); // Lấy tên file đã chọn mới
 
@@ -52,7 +52,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#btnSubmitFile').click(function() {
+    $('#btnSubmitFile').click(function () {
         ajaxSubmitForm(); // Gọi hàm ajaxSubmitForm để gửi dữ liệu form
     });
 
@@ -74,14 +74,14 @@ $(document).ready(function () {
             cache: false,
             timeout: 1000000,
 
-            success: function(data, textStatus, jqXHR) {
+            success: function (data, textStatus, jqXHR) {
                 showSuccessToast("Tải file lên thành công!")
                 $('#btnSubmitFile').hide();
                 $('#file').val(''); // Xóa giá trị của input file
                 $('#labelFile').html('<label for="file"style="margin: 8px"><i class="fas fa-file-excel fa-lg"></i></label>'); // Reset label
                 loadTable(apiGetAll, '', currentPage, recordsPerPage);
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function (jqXHR, textStatus, errorThrown) {
                 $('#btnSubmitFile').hide();
                 $('#file').val(''); // Xóa giá trị của input file
                 $('#labelFile').html('<label for="file"style="margin: 8px"><i class="fas fa-file-excel fa-lg"></i></label>'); // Reset label
@@ -90,7 +90,6 @@ $(document).ready(function () {
             }
         });
     }
-
 
 
     // code Qr
@@ -256,14 +255,13 @@ $(document).ready(function () {
     $(`#formUpdate`).hide();
 
 
-    $('#qlnv').on('click', function() {
+    $('#qlnv').on('click', function () {
         $(`#tableNhanVien`).show()
         loadTable(apiGetAll, '', currentPage, recordsPerPage);
         $(`#formAdd`).hide();
         $(`#formUpdate`).hide();
 
     });
-
 
 
     // Xử lý sự kiện thay đổi trạng thái
@@ -290,7 +288,6 @@ $(document).ready(function () {
         currentPage = 1; // Reset lại trang về trang đầu tiên khi tìm kiếm
         loadTable(apiGetAll, keysearch, currentPage, recordsPerPage); // Gọi lại hàm loadTable với từ khóa tìm kiếm
     });
-
 
 
     // Hàm loadTable với phân trang và chức năng prev, next
@@ -320,36 +317,44 @@ $(document).ready(function () {
 
             // Render dữ liệu vào tbody
             paginatedData.forEach((employee, index) => {
+                const statusClass = employee.trangThai === 'active' ? 'custom-4' : 'custom-3';
+                const statusText = employee.trangThai === 'active' ? 'Hoạt động' : 'Đã nghỉ';
+
                 tbody += `<tr style="cursor: default">
-                            <td class="special-td">${startIndex + index + 1}</td>
-                            <td class="special-td">${employee.maNhanVien}</td>
-                            <td class="special-td">${employee.hoTen}</td>
-                            <td class="special-td">${employee.email}</td>
-                            <td class="special-td">${employee.soDienThoai}</td>
-                            <td class="special-td">${employee.gioiTinh ? "Nam" : "Nữ"}</td>
-                            <td class="special-td"  style="${employee.trangThai == "active" ? "color:green;font-weight:bold" : "color:red;font-style:italic"}">
-                                    ${employee.trangThai == "active" ? "Hoạt động" : "Đã nghỉ"}
-                            </td>
-                            <td><button class="btn btn-warning action-button" data-employee='${JSON.stringify(employee)}'><i class="fas fa-edit edit-icon"></i></button>
+                <td class="special-td">${startIndex + index + 1}</td>
+                <td class="special-td">${employee.maNhanVien}</td>
+                <td class="special-td">${employee.hoTen}</td>
+                <td class="special-td">${employee.email}</td>
+                <td class="special-td">${employee.soDienThoai}</td>
+                <td class="special-td">${employee.gioiTinh ? "Nam" : "Nữ"}</td>
+               <td>
+                    <span class="${statusClass}">
+                        <span>${statusText}</span>
+                    </span>
+                </td>
+
+
+
+            <td><button class="btn btn-outline-success action-button" data-employee='${JSON.stringify(employee)}'><i class="fas fa-edit edit-icon"></i></button>
                           </tr>`;
             });
 
             // Hiển thị dữ liệu vào tbody
             $('#tbodyContainer').html(tbody);
-            $('.action-button').off('click').on('click', function() {
+            $('.action-button').off('click').on('click', function () {
                 let employeeData = $(this).data('employee');
                 renderUpdateForm(employeeData)
 
             });
             // Tạo các nút phân trang
             let pagination = `<div class="pagination" id="pagination">
-                                <button class="btn btn-primary prev-page" ${currentPage === 1 ? 'disabled' : ''}>Prev</button>
+                                <button class="btn btn-success prev-page" ${currentPage === 1 ? 'disabled' : ''}>Prev</button>
                                 <select class="page-select form-control">`;
             for (let i = 1; i <= totalPages; i++) {
                 pagination += `<option value="${i}" ${i === currentPage ? 'selected' : ''}>Trang ${i}</option>`;
             }
             pagination += `</select>
-                            <button class="btn btn-primary next-page" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
+                            <button class="btn btn-success next-page" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
                            </div>`;
             $('#pagination').html(pagination);
 
@@ -567,6 +572,7 @@ $(document).ready(function () {
 
                 return true;
             }
+
             if (!valid()) {
                 return;
             }
@@ -598,7 +604,7 @@ $(document).ready(function () {
                         $(`#formAdd`).hide();
                         $(`#formUpdate`).hide();
                         $('#imageNVdetail').attr('src', 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg');
-                        imageData='';
+                        imageData = '';
                         $('#formAdd').find('input').val('');
                     } else {
                         showErrorToast('Thêm thất bại');
@@ -611,6 +617,7 @@ $(document).ready(function () {
 
         });
     }
+
     // Gán sự kiện click cho các nút có class 'action-button'
 
 
@@ -620,8 +627,8 @@ $(document).ready(function () {
         $(`#formUpdate`).show()
         $(`#linkAdd`).hide();
         $(`#linkUpdate`).show();
-        if(nhanV["imageNV"]){
-            imageData =nhanV["imageNV"]
+        if (nhanV["imageNV"]) {
+            imageData = nhanV["imageNV"]
             $('#previewImageU').attr('src', 'data:image/jpeg;base64,' + nhanV["imageNV"]);
         } else {
             $('#previewImageU').attr('src', 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg');
@@ -638,15 +645,15 @@ $(document).ready(function () {
 
         $(`#emailU`).val(nhanV["email"]);
         $(`#soDienThoaiU`).val(nhanV["soDienThoai"]);
-        if (nhanV["gioiTinh"]){
-            $(`#gioiTinhNamU`).prop('checked',true);
-        }else {
-            $(`#gioiTinhNuU`).prop('checked',true);
+        if (nhanV["gioiTinh"]) {
+            $(`#gioiTinhNamU`).prop('checked', true);
+        } else {
+            $(`#gioiTinhNuU`).prop('checked', true);
         }
-        if(nhanV["trangThai"] === "active"){
-            $(`#trangThaiAc`).prop('checked',true);
-        }else {
-            $(`#trangThaiIn`).prop('checked',true);
+        if (nhanV["trangThai"] === "active") {
+            $(`#trangThaiAc`).prop('checked', true);
+        } else {
+            $(`#trangThaiIn`).prop('checked', true);
         }
 
 
@@ -698,31 +705,31 @@ $(document).ready(function () {
                     $('#xaU').append(new Option(commune.Name, commune.Id));
                 });
             });
-            $('#tinhU').find('option').filter(function() {
+            $('#tinhU').find('option').filter(function () {
                 return $(this).text() === tinh;
             }).prop('selected', true);
             $('#tinhU').trigger('change');
-            $('#huyenU').find('option').filter(function() {
+            $('#huyenU').find('option').filter(function () {
                 return $(this).text() === huyen;
             }).prop('selected', true);
             $('#huyenU').trigger('change');
-            $('#xaU').find('option').filter(function() {
+            $('#xaU').find('option').filter(function () {
                 return $(this).text() === xa;
             }).prop('selected', true);
 
         });
 
         $('#formUpdate').find('input').prop('disabled', true);
-        $('#tinhU').prop('disabled',true);
-        $('#huyenU').prop('disabled',true);
-        $('#xaU').prop('disabled',true);
+        $('#tinhU').prop('disabled', true);
+        $('#huyenU').prop('disabled', true);
+        $('#xaU').prop('disabled', true);
 
         $('#btnChangeUpdate').off('click').click(function () {
             $('#formUpdate').find('input').prop('disabled', false);
             $('#btnSubmitUpdate').show();
-            $('#tinhU').prop('disabled',false);
-            $('#huyenU').prop('disabled',false);
-            $('#xaU').prop('disabled',false);
+            $('#tinhU').prop('disabled', false);
+            $('#huyenU').prop('disabled', false);
+            $('#xaU').prop('disabled', false);
             $(this).hide();
         });
 
@@ -740,14 +747,14 @@ $(document).ready(function () {
             const email = $('#emailU').val();
             const sdt = $('#soDienThoaiU').val();
             const ngaySinh = $('#ngaySinhU').val();
-            let gioiTinh ;
+            let gioiTinh;
             if ($(`#gioiTinhNamU`).is(`:checked`)) {
                 gioiTinh = true;
             }
             if ($(`#gioiTinhNuU`).is(`:checked`)) {
                 gioiTinh = false;
             }
-            let trangThai ;
+            let trangThai;
             if ($(`#trangThaiAc`).is(`:checked`)) {
                 trangThai = "active";
             }
@@ -874,6 +881,7 @@ $(document).ready(function () {
 
                 return true;
             }
+
             if (!valid()) {
                 return;
             }
@@ -904,7 +912,7 @@ $(document).ready(function () {
                         $(`#formAdd`).hide();
                         $(`#formUpdate`).hide();
                         $('#imageNVdetail').attr('src', 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg');
-                        imageData='';
+                        imageData = '';
                         $('#formUpdate').find('input').val('');
                     } else {
                         showErrorToast('Không thể cập nhật trạng thái');

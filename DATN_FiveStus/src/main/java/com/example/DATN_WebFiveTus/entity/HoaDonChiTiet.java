@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +20,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,11 +43,18 @@ public class HoaDonChiTiet {
     @JoinColumn(name = "id_san_ca", nullable = false)
     private SanCa sanCa;
 
-    @Column(name = "tien_san", nullable = false)
+    @Column(name = "ma_hoa_don_chi_tiet", nullable = false, length = 100)
+    private String maHoaDonChiTiet;
+
+    @Column(name = "tien_san")
     private String tienSan;
 
     @Column(name = "ghi_chu", length = 200)
     private String ghiChu;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "ngay_den_san")
+    private Date ngayDenSan;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

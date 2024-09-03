@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/head :: head"></head>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" rel="stylesheet">
+<script crossorigin="anonymous"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<style>
+    .select-short {
+        width: auto; /* Hoặc bạn có thể đặt một giá trị cụ thể như width: 300px; */
+        min-width: 200px; /* Đặt chiều rộng tối thiểu nếu cần */
+        max-width: 100%; /* Đảm bảo không vượt quá kích thước của phần tử cha */
+    }
+
+    .form-row {
+        align-items: center;
+    }
+
+    .san-ca-content p {
+        margin: 0;
+    }
+
+    .separator {
+        margin: 0 10px; /* Adjust the margin as needed */
+        font-weight: bold;
+    }
+
+    .card-body {
+        margin-bottom: 10px; /* Add space between cards */
+    }
+
+    .san-ca-box {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 5px;
+        text-align: left; /* Căn lề trái cho nội dung */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .san-ca-header {
+        text-align: center; /* Căn giữa tên ca */
+        margin-bottom: 10px;
+    }
+
+    .san-ca-content {
+        text-align: left; /* Căn lề trái cho nội dung chi tiết */
+        flex-grow: 1;
+    }
+
+    .san-ca-footer {
+        display: flex;
+        justify-content: flex-end; /* Căn phải cho nút trạng thái */
+    }
+
+    .san-ca-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .san-ca-section {
+        display: none; /* Hide initially */
+        margin-top: 20px;
+    }
+
+    /* CSS tùy chỉnh cho input ngày */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        background: #007bff; /* Màu nền của calendar */
+        border-radius: 50%;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    input[type="date"]::-webkit-input-placeholder {
+        color: #6c757d;
+    }
+
+    input[type="date"] {
+        font-size: 1rem;
+        padding: 10px;
+        border-radius: 0.25rem;
+        border: 1px solid #ced4da;
+        width: 100%;
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .btn:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
+</style>
+<body class="vertical light">
+<div class="wrapper">
+    <div th:include="fragment/navbar :: navbar"></div>
+    <div th:include="fragment/sidebar :: sidebar"></div>
+    <main class="main-content" role="main">
+        <div class="container-fluid" id="bodyContent">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <h2 class="mb-2 page-title">Chọn sân ca</h2>
+                    <div class="row my-4">
+                        <div class="col-md-12">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <div class="form-row mb-3">
+                                        <i class="bi bi-calendar3"></i>
+                                        <h4 class="card-title ml-3">Ngày đến sân</h4>
+                                    </div>
+                                    <div class="toolbar row">
+                                        <div class="col">
+                                            <div class="form-row mb-1">
+                                                <div class="input-group col-md-4">
+                                                    <input type="date" id="ngayDenSan" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-4">
+                        <div class="col-md-12">
+                            <div id="sanCaContainer" class="card shadow">
+                                <!-- Dữ liệu loại sân và chọn sân bóng sẽ được thêm vào đây -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const ngayDenSanInput = document.getElementById('ngayDenSan');
+        let hoaDonChiTietList = []; // Lưu trữ danh sách hóa đơn chi tiết
+
+        // Đặt giá trị ngày hiện tại vào ô nhập ngày
+        const today = new Date().toISOString().split('T')[0];
+        ngayDenSanInput.value = today;
+
+        // Lấy danh sách hóa đơn chi tiết từ API
+        fetch('http://localhost:8080/hoa-don-chi-tiet/hien-thi')
+            .then(response => response.json())
+            .then(data => {
+                hoaDonChiTietList = data;
+            })
+            .catch(error => console.error('Error fetching hoa don chi tiet data:', error));
+
+        // Hàm lấy tên ngày trong tuần
+        function getDayOfWeek(dateString) {
+            const daysOfWeek = ['1', '2', '3', '4', '5', '6', '7'];
+            const date = new Date(dateString);
+            const dayIndex = date.getDay();
+            return daysOfWeek[dayIndex];
+        }
+
+        // Fetch initial data
+        fetch('http://localhost:8080/loai-san/hien-thi')
+            .then(response => response.json())
+            .then(data => {
+                const sanCaContainer = document.getElementById('sanCaContainer');
+
+                data.forEach(san => {
+                    const cardBody = document.createElement('div');
+                    cardBody.classList.add('card-body');
+
+                    const formRow = document.createElement('div');
+                    formRow.classList.add('form-row', 'mb-3', 'd-flex', 'align-items-center');
+
+                    const title = document.createElement('h4');
+                    title.classList.add('card-title', 'mb-0');
+                    title.textContent = san.tenLoaiSan;
+
+                    const separator = document.createElement('span');
+                    separator.classList.add('separator');
+                    separator.textContent = '-';
+
+                    const select = document.createElement('select');
+                    select.classList.add('form-select', 'select-short');
+
+                    // Create container for SanCa details
+                    const sanCaDetails = document.createElement('div');
+                    sanCaDetails.classList.add('san-ca-container');
+                    sanCaDetails.id = `sanCaDetails_${san.id}`;
+
+                    fetch(`http://localhost:8080/san-bong/findByIdLoaiSan/${san.id}`)
+                        .then(response => response.json())
+                        .then(sanBongs => {
+                            sanBongs.forEach((sanBong, index) => {
+                                const option = document.createElement('option');
+                                option.value = sanBong.id;
+                                option.textContent = sanBong.tenSanBong;
+                                select.appendChild(option);
+
+                                // Automatically select the first option
+                                if (index === 0) {
+                                    select.value = sanBong.id;
+                                    loadSanCaDetails(san.id, sanBong.id);
+                                }
+                            });
+
+                            // Add event listener for select change
+                            select.addEventListener('change', function() {
+                                const selectedSanBongId = this.value;
+                                loadSanCaDetails(san.id, selectedSanBongId);
+                            });
+                        })
+                        .catch(error => console.error('Error fetching san bong data:', error));
+
+                    formRow.appendChild(title);
+                    formRow.appendChild(separator);
+                    formRow.appendChild(select);
+                    cardBody.appendChild(formRow);
+                    cardBody.appendChild(sanCaDetails); // Add the container for san ca details
+                    sanCaContainer.appendChild(cardBody);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+
+        function convertToDate(dateString) {
+            const [day, month, year] = dateString.split('/').map(Number);
+            return new Date(year, month - 1, day);
+        }
+
+        function loadSanCaDetails(sanId, sanBongId) {
+            const sanCaDetailsSection = document.getElementById(`sanCaDetails_${sanId}`);
+            sanCaDetailsSection.innerHTML = ''; // Xóa dữ liệu cũ
+
+            if (sanBongId) {
+
+                const ngayDenSan = ngayDenSanInput.value;
+                const ngayDenSanDate = convertToDate(ngayDenSan);
+                const ngayDenSanPrev = new Date(ngayDenSanDate);
+                const ngayDenSanNext = new Date(ngayDenSanDate);
+
+                ngayDenSanPrev.setDate(ngayDenSanDate.getDate() - 1); // Lùi 1 ngày
+                ngayDenSanNext.setDate(ngayDenSanDate.getDate() + 1); // Tăng 1 ngày
+
+                const idNgayTrongTuan = getDayOfWeek(ngayDenSan);
+
+                fetch(`http://localhost:8080/san-ca/danh-sach-san-ca/${sanBongId}/${idNgayTrongTuan}`)
+                    .then(response => response.json())
+                    .then(sanCaList => {
+                        sanCaList.forEach(sanCa => {
+                            const sanCaBox = document.createElement('div');
+                            sanCaBox.classList.add('san-ca-box', 'col-md-2');
+
+                            const sanCaHeader = document.createElement('div');
+                            sanCaHeader.classList.add('san-ca-header');
+                            const tenCa = document.createElement('h5');
+                            tenCa.textContent = sanCa.tenCa;
+                            sanCaHeader.appendChild(tenCa);
+
+                            const sanCaContent = document.createElement('div');
+                            sanCaContent.classList.add('san-ca-content');
+
+                            // Add date and time
+                            const thoiGian = document.createElement('p');
+                            const batDau = new Date(sanCa.thoiGianBatDauCa).getHours();
+                            const ketThuc = new Date(sanCa.thoiGianKetThucCa).getHours();
+                            thoiGian.innerHTML = `<i class="bi bi-clock-fill"></i> ${batDau}:00 - ${ketThuc}:00`;
+
+                            const gia = document.createElement('p');
+                            gia.innerHTML = `<i class="bi bi-currency-dollar"></i> ${sanCa.gia.toLocaleString()} VNĐ`;
+
+                            const dateParagraph = document.createElement('p');
+                            dateParagraph.classList.add('date-paragraph');
+                            dateParagraph.innerHTML = `<i class="bi bi-calendar-event"></i> Ngày: ${ngayDenSanInput.value}`;
+
+                            // const trangThai = document.createElement('p');
+                            // trangThai.classList.add('fw-bold');
+                            // trangThai.style.textAlign = 'left'; // Align content to the left
+                            //
+                            // // Set status and color based on the status
+                            // if (sanCa.trangThai === 'Còn trống') {
+                            //     trangThai.textContent = "Còn trống";
+                            //     trangThai.style.color = 'green';
+                            // } else if (sanCa.trangThai === 'Hoạt động') {
+                            //     trangThai.textContent = sanCa.trangThai;
+                            //     trangThai.style.color = 'orange';
+                            // } else if (sanCa.trangThai === 'Đã được đặt') {
+                            //     trangThai.textContent = sanCa.trangThai;
+                            //     trangThai.style.color = 'red';
+                            // }
+
+                            sanCaContent.appendChild(thoiGian);
+                            sanCaContent.appendChild(gia);
+                            sanCaContent.appendChild(dateParagraph); // Add date after gia
+
+                            const sanCaFooter = document.createElement('div');
+                            sanCaFooter.classList.add('san-ca-footer');
+                            const trangThaiButton = document.createElement('button');
+                            trangThaiButton.classList.add('btn', 'btn-sm');
+
+                            // Kiểm tra xem có hóa đơn chi tiết nào trùng với ngày và ca này không
+                            const isBooked = hoaDonChiTietList.some(hoaDonChiTiet => {
+                                const hoaDonDate = convertToDate(hoaDonChiTiet.ngayDenSan);
+                                return (
+                                    (hoaDonChiTiet.idSanCa === sanCa.id) &&
+                                    (hoaDonDate.toDateString() === ngayDenSanDate.toDateString() ||
+                                        hoaDonDate.toDateString() === ngayDenSanPrev.toDateString() ||
+                                        hoaDonDate.toDateString() === ngayDenSanNext.toDateString())
+                                );
+                            });
+
+                            if (isBooked) {
+                                trangThaiButton.textContent = 'Đã được đặt';
+                                trangThaiButton.classList.add('btn-danger');
+                                trangThaiButton.disabled = true;
+                            } else {
+                                trangThaiButton.textContent = 'Đặt sân';
+                                trangThaiButton.classList.add('btn-success');
+                                trangThaiButton.addEventListener('click', function() {
+                                    handleDatSan(sanCa.id, ngayDenSanInput.value, trangThaiButton);
+                                });
+                            }
+
+                            sanCaFooter.appendChild(trangThaiButton);
+
+                            sanCaBox.appendChild(sanCaHeader);
+                            sanCaBox.appendChild(sanCaContent);
+                            sanCaBox.appendChild(sanCaFooter);
+
+                            sanCaDetailsSection.appendChild(sanCaBox);
+                        });
+                        addDateToSanCaContent();
+                    })
+                    .catch(error => console.error('Error fetching san ca data:', error));
+            }
+        }
+
+        function convertDateFormat(dateString) {
+            const [year, month, day] = dateString.split('-');
+            return `${day}/${month}/${year}`;
+        }
+
+        function handleDatSan(idSanCa, ngayDenSan, button) {
+            // Bước 1: Thêm hóa đơn
+            fetch('http://localhost:8080/hoa-don/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({}), // Gửi yêu cầu rỗng
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to create HoaDon');
+                    }
+                    return response.json();
+                })
+                .then(hoaDon => {
+                    // Chuyển đổi định dạng ngày
+                    const ngayDenSanFormatted = convertDateFormat(document.getElementById('ngayDenSan').value);
+
+                    // Bước 2: Thêm hóa đơn chi tiết
+                    const hoaDonChiTiet = {
+                        idHoaDon: hoaDon.id,
+                        idSanCa: idSanCa,
+                        ngayDenSan: ngayDenSanFormatted
+                    };
+
+                    console.log(hoaDonChiTiet); // Kiểm tra giá trị trước khi gửi
+
+                    return fetch('http://localhost:8080/hoa-don-chi-tiet/save', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(hoaDonChiTiet),
+                    });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Sau khi đặt sân thành công, cập nhật giao diện
+                    button.textContent = 'Đã được đặt';
+                    button.classList.remove('btn-success');
+                    button.classList.add('btn-danger');
+                    button.disabled = true;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function addDateToSanCaContent() {
+            const selectedDate = ngayDenSanInput.value;
+            if (selectedDate) {
+                const sanCaContainers = document.querySelectorAll('.san-ca-container');
+                sanCaContainers.forEach(container => {
+                    const sanCaBoxes = container.querySelectorAll('.san-ca-box');
+                    sanCaBoxes.forEach(box => {
+                        const sanCaContent = box.querySelector('.san-ca-content');
+                        let dateParagraph = sanCaContent.querySelector('.date-paragraph');
+                        if (!dateParagraph) {
+                            dateParagraph = document.createElement('p');
+                            dateParagraph.classList.add('date-paragraph');
+                            sanCaContent.appendChild(dateParagraph);
+                        }
+                        dateParagraph.innerHTML = `<i class="bi bi-calendar-event"></i> Ngày: ${selectedDate}`;
+                    });
+                });
+            }
+        }
+
+        // Lắng nghe sự kiện thay đổi ngày để cập nhật lại danh sách sân ca
+        ngayDenSanInput.addEventListener('change', function() {
+            const selectedDate = ngayDenSanInput.value;
+            addDateToSanCaContent();
+            const selectElements = document.querySelectorAll('.form-select');
+            selectElements.forEach(select => {
+                const sanId = select.closest('.card-body').querySelector('.san-ca-container').id.split('_')[1];
+                loadSanCaDetails(sanId, select.value);
+            });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr("#ngayDenSan", {
+
+        });
+    });
+</script>
+<div th:include="fragment/script :: script"></div>
+</html>
