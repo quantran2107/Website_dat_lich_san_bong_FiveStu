@@ -5,6 +5,8 @@ import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface HoaDonChiTietService {
@@ -28,5 +30,7 @@ public interface HoaDonChiTietService {
     Page<HoaDonChiTietDTO> getHoaDonChiTietByTrangThai(String trangThai, Pageable pageable);
 
     HoaDonChiTietDTO getOneHDCT(Integer id);
+
+    List<HoaDonChiTietDTO> findByNgayDenSan(Date ngayDenSan);
 
 }

@@ -154,4 +154,10 @@ public class SanCaServiceImp implements SanCaService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<SanCaDTO> findByTrangThai(Integer idCa, String thuTrongTuan, String trangThai) {
+        List<SanCa> list = sanCaRepository.sanHopLe(idCa,thuTrongTuan,trangThai);
+        return list.stream().map(sanCa -> modelMapper.map(sanCa,SanCaDTO.class)).collect(Collectors.toList());
+    }
+
 }

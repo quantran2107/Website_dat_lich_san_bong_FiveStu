@@ -1,11 +1,7 @@
 package com.example.DATN_WebFiveTus.rest;
 
 import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
-import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
-import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
-import com.example.DATN_WebFiveTus.repository.HoaDonChiTietRepository;
 import com.example.DATN_WebFiveTus.service.HoaDonChiTietService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 
 @RestController
 @RequestMapping("/hoa-don-chi-tiet/")
@@ -54,11 +51,28 @@ public class HoaDonChiTietRest {
         return ResponseEntity.ok(result);
     }
 
-
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable("id") Integer id) {
         HoaDonChiTietDTO hoaDonChiTietDTO = hoaDonChiTietService.getOneHDCT(id);
         return ResponseEntity.ok(hoaDonChiTietDTO);
     }
+
+    @GetMapping("/ngay-den-san")
+    public ResponseEntity<?> finByNgayDenSan(
+            @RequestParam(required = false) Date ngayDenSan) {
+        List<HoaDonChiTietDTO> result;
+        if (ngayDenSan == null) {
+            // Xử lý khi không có ngày được cung cấp, có thể trả về một danh sách rỗng hoặc thông báo lỗi
+            result = new ArrayList<>();  // Hoặc xử lý theo cách bạn muốn
+        } else {
+            result = hoaDonChiTietService.findByNgayDenSan(ngayDenSan);
+        }
+        return ResponseEntity.ok(result);
+    }
+
+
+
+
+
+
 }
