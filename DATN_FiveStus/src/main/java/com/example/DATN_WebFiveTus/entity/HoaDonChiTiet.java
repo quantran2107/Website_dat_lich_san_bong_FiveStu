@@ -49,6 +49,9 @@ public class HoaDonChiTiet {
     @Column(name = "tien_san")
     private String tienSan;
 
+    @Column(name = "loai_ngay_dat")
+    private String loaiNgayDat;
+
     @Column(name = "ghi_chu", length = 200)
     private String ghiChu;
 

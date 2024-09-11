@@ -205,5 +205,31 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         return dtoList;
     }
 
+    @Override
+    public HoaDonChiTietDTO save2(HoaDonChiTietDTO hoaDonChiTietDTO) {
+        HoaDonChiTiet hoaDonChiTiet = modelMapper.map(hoaDonChiTietDTO,HoaDonChiTiet.class);
+
+        SanCa sanCa = sanCaRepository.findById(hoaDonChiTietDTO.getIdSanCa()).orElseThrow();
+
+        HoaDon hoaDon = hoaDonRepository.findById(hoaDonChiTietDTO.getIdHoaDon()).orElseThrow();
+
+        hoaDonChiTiet.setMaHoaDonChiTiet(generateMaHoaDonChiTiet());
+        hoaDonChiTiet.setSanCa(sanCa);
+        hoaDonChiTiet.setHoaDon(hoaDon);
+        hoaDonChiTiet.setNgayDenSan(hoaDonChiTietDTO.getNgayDenSan());
+        hoaDonChiTiet.setTrangThai("Chờ nhận sân");
+        hoaDonChiTiet.setLoaiNgayDat("Theo ngày");
+
+        HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
+
+        return modelMapper.map(hoaDonChiTietSave,HoaDonChiTietDTO.class);
+    }
+
+    @Override
+    public boolean isSanCaBooked(Long idSanCa, LocalDate ngayDenSan) {
+        Long count = hoaDonChiTietRepository.countByIdSanCaAndNgayDenSan(idSanCa, ngayDenSan);
+        return count > 0;  // Nếu count > 0 tức là sân ca đã được đặt
+    }
+
 
 }

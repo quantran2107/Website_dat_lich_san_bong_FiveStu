@@ -61,4 +61,6 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
     List<SanCa> findSanCaBySan(@Param("idSanBong") Integer idSanBong,
                                @Param("idNgayTrongTuan") Integer idNgayTrongTuan);
 
+
+
 }
