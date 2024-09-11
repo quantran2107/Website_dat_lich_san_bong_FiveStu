@@ -3,6 +3,7 @@ package com.example.DATN_WebFiveTus.service.Imp;
 import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import com.example.DATN_WebFiveTus.entity.HoaDon;
+import com.example.DATN_WebFiveTus.entity.KhachHang;
 import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.HoaDonRepository;
@@ -70,6 +71,10 @@ public class HoaDonServiceImp implements HoaDonService {
     @Override
     public HoaDonDTO save(HoaDonDTO hoaDonDTO) {
         HoaDon hoaDon = modelMapper.map(hoaDonDTO,HoaDon.class);
+
+        KhachHang khachHang = khachHangRepository.findById(hoaDonDTO.getIdKhachHang()).orElseThrow();
+
+        hoaDon.setKhachHang(khachHang);
         hoaDon.setMaHoaDon(generateMaHoaDon());
         hoaDon.setTrangThai("Chờ thanh toán");
         Date now = Date.from(Instant.now());

@@ -165,4 +165,10 @@ public class KhachHangImp implements KhachHangService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public KhachHangDTO findBySoDienThoai(String soDienThoai) {
+        KhachHang khachHang = khachHangRepository.findKhachHangBySoDienThoai(soDienThoai);
+        return modelMapper.map(khachHang, KhachHangDTO.class);
+    }
+
 }

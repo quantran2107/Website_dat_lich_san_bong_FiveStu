@@ -22,12 +22,16 @@
     }
 
     .san-ca-content p {
-        margin: 0;
+        margin: 10px 0;
     }
 
     .separator {
-        margin: 0 10px; /* Adjust the margin as needed */
-        font-weight: bold;
+        border: 0; /* Xóa đường viền mặc định */
+        height: 1px; /* Độ dày của đường kẻ */
+        background-color: #ddd; /* Màu sắc của đường kẻ */
+        margin: 5px 0; /* Khoảng cách trên và dưới đường kẻ */
+        width: 100%; /* Đảm bảo đường kẻ kéo dài hết chiều ngang */
+        box-sizing: border-box; /* Bao gồm padding và border vào tổng chiều rộng */
     }
 
     .card-body {
@@ -38,15 +42,42 @@
         border: 1px solid #ddd;
         border-radius: 5px;
         padding: 10px;
-        margin: 5px;
+        margin: 10px 15px;
         text-align: left; /* Căn lề trái cho nội dung */
         display: flex;
         flex-direction: column;
     }
 
     .san-ca-header {
-        text-align: center; /* Căn giữa tên ca */
-        margin-bottom: 10px;
+        display: flex;
+        align-items: center; /* Căn chỉnh theo chiều dọc */
+        justify-content: space-between; /* Căn chỉnh hai phần tử trái và phải */
+    }
+
+    .san-ca-header .checkbox-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .san-ca-header .checkbox-container input[type="checkbox"] {
+        margin-right: 5px;
+        margin-bottom: 50px;
+    }
+
+    .san-ca-header .text-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end; /* Căn chỉnh phần tử bên phải */
+        flex-grow: 1; /* Làm cho text container chiếm hết không gian còn lại */
+        text-align: right; /* Căn chỉnh văn bản về phía bên phải */
+    }
+
+    .san-ca-header .text-container h5 {
+        margin: 0;
+    }
+
+    .san-ca-header .text-container .ten-loai-san {
+        margin-top: 5px; /* Khoảng cách giữa tên ca và tên loại sân */
     }
 
     .san-ca-content {
@@ -62,6 +93,10 @@
     .san-ca-container {
         display: flex;
         flex-wrap: wrap;
+    }
+
+    .checkbox-container {
+        flex-shrink: 0; /* Đảm bảo checkbox không làm thay đổi kích thước của container */
     }
 
     .san-ca-section {
@@ -98,6 +133,10 @@
         opacity: 0.65;
         cursor: not-allowed;
     }
+
+    .custom-modal {
+        max-width: 65%; /* Tăng chiều rộng của modal lên 90% */
+    }
 </style>
 <body class="vertical light">
 <div class="wrapper">
@@ -107,7 +146,7 @@
         <div class="container-fluid" id="bodyContent">
             <div class="row justify-content-center">
                 <div class="col-12">
-                    <h2 class="mb-2 page-title">Chọn sân ca</h2>
+                    <h2 class="mb-2 page-title">Quản lý sân ca</h2>
                     <div class="row my-4">
                         <div class="col-md-12">
                             <div class="card shadow">
@@ -122,6 +161,17 @@
                                                 <div class="input-group col-md-4">
                                                     <input type="date" id="ngayDenSan" class="form-control" />
                                                 </div>
+                                                <div class="dropdown">
+                                                    <button aria-expanded="false" aria-haspopup="true" class="btn btn-outline-success ml-3 mr-3 dropdown-toggle"
+                                                            data-toggle="dropdown" id="actionMenuButton1" type="button">Chọn loại sân
+                                                    </button>
+                                                    <div id="loaiSanDropdown" aria-labelledby="actionMenuButton1" class="dropdown-menu">
+                                                        <!-- Các mục dropdown sẽ được thêm vào đây từ JavaScript -->
+                                                    </div>
+                                                </div>
+                                                <div class="input-group col-md-2">
+                                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#book-modal">Điền thông tin</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -129,10 +179,65 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row my-4">
-                        <div class="col-md-12">
-                            <div id="sanCaContainer" class="card shadow">
-                                <!-- Dữ liệu loại sân và chọn sân bóng sẽ được thêm vào đây -->
+                    <div id="sanCaContainer" class="row my-4">
+                        <!-- Dữ liệu loại sân và chọn sân bóng sẽ được thêm vào đây -->
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="book-modal" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg custom-modal" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Đặt lịch</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Form on the left side -->
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-3">
+                                                    <label for="hoVaTen">Họ và tên</label>
+                                                    <input type="text" id="hoVaTen" class="form-control">
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label for="soDienThoai">Số điện thoại</label>
+                                                    <input type="text" id="soDienThoai" class="form-control">
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label for="ghiChu">Ghi chú</label>
+                                                    <textarea class="form-control" id="ghiChu" rows="4"></textarea>
+                                                </div>
+                                            </div> <!-- /.col -->
+                                            <div class="col-md-8">
+                                                <!-- Table on the right side -->
+                                                <table id="sanCaTable" class="table table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Sân Bóng</th>
+                                                        <th>Ngày</th>
+                                                        <th>Ca</th>
+                                                        <th>Thời Gian</th>
+                                                        <th>Giá</th>
+                                                        <th>Thao tác</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                    <!-- Button to submit the form and book the soccer field -->
+                                    <button type="button" class="btn btn-primary" id="datLich">Đặt lịch</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -144,295 +249,6 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const ngayDenSanInput = document.getElementById('ngayDenSan');
-        let hoaDonChiTietList = []; // Lưu trữ danh sách hóa đơn chi tiết
-
-        // Đặt giá trị ngày hiện tại vào ô nhập ngày
-        const today = new Date().toISOString().split('T')[0];
-        ngayDenSanInput.value = today;
-
-        // Lấy danh sách hóa đơn chi tiết từ API
-        fetch('http://localhost:8080/hoa-don-chi-tiet/hien-thi')
-            .then(response => response.json())
-            .then(data => {
-                hoaDonChiTietList = data;
-            })
-            .catch(error => console.error('Error fetching hoa don chi tiet data:', error));
-
-        // Hàm lấy tên ngày trong tuần
-        function getDayOfWeek(dateString) {
-            const daysOfWeek = ['1', '2', '3', '4', '5', '6', '7'];
-            const date = new Date(dateString);
-            const dayIndex = date.getDay();
-            return daysOfWeek[dayIndex];
-        }
-
-        // Fetch initial data
-        fetch('http://localhost:8080/loai-san/hien-thi')
-            .then(response => response.json())
-            .then(data => {
-                const sanCaContainer = document.getElementById('sanCaContainer');
-
-                data.forEach(san => {
-                    const cardBody = document.createElement('div');
-                    cardBody.classList.add('card-body');
-
-                    const formRow = document.createElement('div');
-                    formRow.classList.add('form-row', 'mb-3', 'd-flex', 'align-items-center');
-
-                    const title = document.createElement('h4');
-                    title.classList.add('card-title', 'mb-0');
-                    title.textContent = san.tenLoaiSan;
-
-                    const separator = document.createElement('span');
-                    separator.classList.add('separator');
-                    separator.textContent = '-';
-
-                    const select = document.createElement('select');
-                    select.classList.add('form-select', 'select-short');
-
-                    // Create container for SanCa details
-                    const sanCaDetails = document.createElement('div');
-                    sanCaDetails.classList.add('san-ca-container');
-                    sanCaDetails.id = `sanCaDetails_${san.id}`;
-
-                    fetch(`http://localhost:8080/san-bong/findByIdLoaiSan/${san.id}`)
-                        .then(response => response.json())
-                        .then(sanBongs => {
-                            sanBongs.forEach((sanBong, index) => {
-                                const option = document.createElement('option');
-                                option.value = sanBong.id;
-                                option.textContent = sanBong.tenSanBong;
-                                select.appendChild(option);
-
-                                // Automatically select the first option
-                                if (index === 0) {
-                                    select.value = sanBong.id;
-                                    loadSanCaDetails(san.id, sanBong.id);
-                                }
-                            });
-
-                            // Add event listener for select change
-                            select.addEventListener('change', function() {
-                                const selectedSanBongId = this.value;
-                                loadSanCaDetails(san.id, selectedSanBongId);
-                            });
-                        })
-                        .catch(error => console.error('Error fetching san bong data:', error));
-
-                    formRow.appendChild(title);
-                    formRow.appendChild(separator);
-                    formRow.appendChild(select);
-                    cardBody.appendChild(formRow);
-                    cardBody.appendChild(sanCaDetails); // Add the container for san ca details
-                    sanCaContainer.appendChild(cardBody);
-                });
-            })
-            .catch(error => console.error('Error fetching data:', error));
-
-        function convertToDate(dateString) {
-            const [day, month, year] = dateString.split('/').map(Number);
-            return new Date(year, month - 1, day);
-        }
-
-        function loadSanCaDetails(sanId, sanBongId) {
-            const sanCaDetailsSection = document.getElementById(`sanCaDetails_${sanId}`);
-            sanCaDetailsSection.innerHTML = ''; // Xóa dữ liệu cũ
-
-            if (sanBongId) {
-
-                const ngayDenSan = ngayDenSanInput.value;
-                const ngayDenSanDate = convertToDate(ngayDenSan);
-                const ngayDenSanPrev = new Date(ngayDenSanDate);
-                const ngayDenSanNext = new Date(ngayDenSanDate);
-
-                ngayDenSanPrev.setDate(ngayDenSanDate.getDate() - 1); // Lùi 1 ngày
-                ngayDenSanNext.setDate(ngayDenSanDate.getDate() + 1); // Tăng 1 ngày
-
-                const idNgayTrongTuan = getDayOfWeek(ngayDenSan);
-
-                fetch(`http://localhost:8080/san-ca/danh-sach-san-ca/${sanBongId}/${idNgayTrongTuan}`)
-                    .then(response => response.json())
-                    .then(sanCaList => {
-                        sanCaList.forEach(sanCa => {
-                            const sanCaBox = document.createElement('div');
-                            sanCaBox.classList.add('san-ca-box', 'col-md-2');
-
-                            const sanCaHeader = document.createElement('div');
-                            sanCaHeader.classList.add('san-ca-header');
-                            const tenCa = document.createElement('h5');
-                            tenCa.textContent = sanCa.tenCa;
-                            sanCaHeader.appendChild(tenCa);
-
-                            const sanCaContent = document.createElement('div');
-                            sanCaContent.classList.add('san-ca-content');
-
-                            // Add date and time
-                            const thoiGian = document.createElement('p');
-                            const batDau = new Date(sanCa.thoiGianBatDauCa).getHours();
-                            const ketThuc = new Date(sanCa.thoiGianKetThucCa).getHours();
-                            thoiGian.innerHTML = `<i class="bi bi-clock-fill"></i> ${batDau}:00 - ${ketThuc}:00`;
-
-                            const gia = document.createElement('p');
-                            gia.innerHTML = `<i class="bi bi-currency-dollar"></i> ${sanCa.gia.toLocaleString()} VNĐ`;
-
-                            const dateParagraph = document.createElement('p');
-                            dateParagraph.classList.add('date-paragraph');
-                            dateParagraph.innerHTML = `<i class="bi bi-calendar-event"></i> Ngày: ${ngayDenSanInput.value}`;
-
-                            // const trangThai = document.createElement('p');
-                            // trangThai.classList.add('fw-bold');
-                            // trangThai.style.textAlign = 'left'; // Align content to the left
-                            //
-                            // // Set status and color based on the status
-                            // if (sanCa.trangThai === 'Còn trống') {
-                            //     trangThai.textContent = "Còn trống";
-                            //     trangThai.style.color = 'green';
-                            // } else if (sanCa.trangThai === 'Hoạt động') {
-                            //     trangThai.textContent = sanCa.trangThai;
-                            //     trangThai.style.color = 'orange';
-                            // } else if (sanCa.trangThai === 'Đã được đặt') {
-                            //     trangThai.textContent = sanCa.trangThai;
-                            //     trangThai.style.color = 'red';
-                            // }
-
-                            sanCaContent.appendChild(thoiGian);
-                            sanCaContent.appendChild(gia);
-                            sanCaContent.appendChild(dateParagraph); // Add date after gia
-
-                            const sanCaFooter = document.createElement('div');
-                            sanCaFooter.classList.add('san-ca-footer');
-                            const trangThaiButton = document.createElement('button');
-                            trangThaiButton.classList.add('btn', 'btn-sm');
-
-                            // Kiểm tra xem có hóa đơn chi tiết nào trùng với ngày và ca này không
-                            const isBooked = hoaDonChiTietList.some(hoaDonChiTiet => {
-                                const hoaDonDate = convertToDate(hoaDonChiTiet.ngayDenSan);
-                                return (
-                                    (hoaDonChiTiet.idSanCa === sanCa.id) &&
-                                    (hoaDonDate.toDateString() === ngayDenSanDate.toDateString() ||
-                                        hoaDonDate.toDateString() === ngayDenSanPrev.toDateString() ||
-                                        hoaDonDate.toDateString() === ngayDenSanNext.toDateString())
-                                );
-                            });
-
-                            if (isBooked) {
-                                trangThaiButton.textContent = 'Đã được đặt';
-                                trangThaiButton.classList.add('btn-danger');
-                                trangThaiButton.disabled = true;
-                            } else {
-                                trangThaiButton.textContent = 'Đặt sân';
-                                trangThaiButton.classList.add('btn-success');
-                                trangThaiButton.addEventListener('click', function() {
-                                    handleDatSan(sanCa.id, ngayDenSanInput.value, trangThaiButton);
-                                });
-                            }
-
-                            sanCaFooter.appendChild(trangThaiButton);
-
-                            sanCaBox.appendChild(sanCaHeader);
-                            sanCaBox.appendChild(sanCaContent);
-                            sanCaBox.appendChild(sanCaFooter);
-
-                            sanCaDetailsSection.appendChild(sanCaBox);
-                        });
-                        addDateToSanCaContent();
-                    })
-                    .catch(error => console.error('Error fetching san ca data:', error));
-            }
-        }
-
-        function convertDateFormat(dateString) {
-            const [year, month, day] = dateString.split('-');
-            return `${day}/${month}/${year}`;
-        }
-
-        function handleDatSan(idSanCa, ngayDenSan, button) {
-            // Bước 1: Thêm hóa đơn
-            fetch('http://localhost:8080/hoa-don/save', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({}), // Gửi yêu cầu rỗng
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to create HoaDon');
-                    }
-                    return response.json();
-                })
-                .then(hoaDon => {
-                    // Chuyển đổi định dạng ngày
-                    const ngayDenSanFormatted = convertDateFormat(document.getElementById('ngayDenSan').value);
-
-                    // Bước 2: Thêm hóa đơn chi tiết
-                    const hoaDonChiTiet = {
-                        idHoaDon: hoaDon.id,
-                        idSanCa: idSanCa,
-                        ngayDenSan: ngayDenSanFormatted
-                    };
-
-                    console.log(hoaDonChiTiet); // Kiểm tra giá trị trước khi gửi
-
-                    return fetch('http://localhost:8080/hoa-don-chi-tiet/save', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(hoaDonChiTiet),
-                    });
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Sau khi đặt sân thành công, cập nhật giao diện
-                    button.textContent = 'Đã được đặt';
-                    button.classList.remove('btn-success');
-                    button.classList.add('btn-danger');
-                    button.disabled = true;
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        function addDateToSanCaContent() {
-            const selectedDate = ngayDenSanInput.value;
-            if (selectedDate) {
-                const sanCaContainers = document.querySelectorAll('.san-ca-container');
-                sanCaContainers.forEach(container => {
-                    const sanCaBoxes = container.querySelectorAll('.san-ca-box');
-                    sanCaBoxes.forEach(box => {
-                        const sanCaContent = box.querySelector('.san-ca-content');
-                        let dateParagraph = sanCaContent.querySelector('.date-paragraph');
-                        if (!dateParagraph) {
-                            dateParagraph = document.createElement('p');
-                            dateParagraph.classList.add('date-paragraph');
-                            sanCaContent.appendChild(dateParagraph);
-                        }
-                        dateParagraph.innerHTML = `<i class="bi bi-calendar-event"></i> Ngày: ${selectedDate}`;
-                    });
-                });
-            }
-        }
-
-        // Lắng nghe sự kiện thay đổi ngày để cập nhật lại danh sách sân ca
-        ngayDenSanInput.addEventListener('change', function() {
-            const selectedDate = ngayDenSanInput.value;
-            addDateToSanCaContent();
-            const selectElements = document.querySelectorAll('.form-select');
-            selectElements.forEach(select => {
-                const sanId = select.closest('.card-body').querySelector('.san-ca-container').id.split('_')[1];
-                loadSanCaDetails(sanId, select.value);
-            });
-        });
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        flatpickr("#ngayDenSan", {
-
-        });
-    });
-</script>
+<script th:src="@{/js/chon-san-ca.js}"></script>
 <div th:include="fragment/script :: script"></div>
 </html>

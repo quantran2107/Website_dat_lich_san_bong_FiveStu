@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +78,25 @@ public class HoaDonChiTietRest {
     public ResponseEntity<HoaDonChiTietDTO> save(@RequestBody HoaDonChiTietDTO hoaDonChiTietDTO){
         HoaDonChiTietDTO hoaDonChiTietDTOSave = hoaDonChiTietService.save(hoaDonChiTietDTO);
         return ResponseEntity.ok(hoaDonChiTietDTOSave);
+    }
+
+    @PostMapping("/save2")
+    public ResponseEntity<HoaDonChiTietDTO> save2(@RequestBody HoaDonChiTietDTO hoaDonChiTietDTO){
+        HoaDonChiTietDTO hoaDonChiTietDTOSave = hoaDonChiTietService.save2(hoaDonChiTietDTO);
+        return ResponseEntity.ok(hoaDonChiTietDTOSave);
+    }
+
+    @GetMapping("/kiem-tra-dat")
+    public ResponseEntity<String> checkSanCaStatus(
+            @RequestParam("idSanCa") Long idSanCa,
+            @RequestParam("ngayDenSan") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate ngayDenSan) {
+        boolean isBooked = hoaDonChiTietService.isSanCaBooked(idSanCa, ngayDenSan);
+
+        if (isBooked) {
+            return ResponseEntity.ok("Đã được đặt");
+        } else {
+            return ResponseEntity.ok("Còn trống");
+        }
     }
 
 }
