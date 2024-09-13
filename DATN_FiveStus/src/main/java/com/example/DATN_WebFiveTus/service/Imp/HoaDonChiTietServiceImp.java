@@ -218,7 +218,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         hoaDonChiTiet.setHoaDon(hoaDon);
         hoaDonChiTiet.setNgayDenSan(hoaDonChiTietDTO.getNgayDenSan());
         hoaDonChiTiet.setTrangThai("Chờ nhận sân");
-        hoaDonChiTiet.setLoaiNgayDat("Theo ngày");
+        hoaDonChiTiet.setKieuNgayDat("Theo ngày");
 
         HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
 

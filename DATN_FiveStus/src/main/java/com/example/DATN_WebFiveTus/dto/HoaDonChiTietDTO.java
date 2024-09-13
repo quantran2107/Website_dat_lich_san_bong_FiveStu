@@ -65,6 +65,6 @@ public class HoaDonChiTietDTO {
 
     private String tenLoaiSan;
 
-    private String loaiNgayDat;
+    private String kieuNgayDat;
 
 }

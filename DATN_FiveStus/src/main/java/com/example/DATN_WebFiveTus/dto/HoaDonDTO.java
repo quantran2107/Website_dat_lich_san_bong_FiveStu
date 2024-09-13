@@ -40,7 +40,6 @@ public class HoaDonDTO {
 
     private Boolean loai;
 
-    @Temporal(TemporalType.TIMESTAMP)
     private Date ngayTao;
 
     private Float tongTien;
