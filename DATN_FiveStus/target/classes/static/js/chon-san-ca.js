@@ -205,6 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     checkboxLabel.appendChild(checkbox);
                     checkboxLabel.appendChild(labelText);
                     checkboxContainer.appendChild(checkboxLabel);
+                    checkbox.addEventListener('change', handleCheckboxChange);
 
                     header.appendChild(checkboxContainer);
                 }
@@ -227,7 +228,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => {
 
             });
-        
+
         return header;
     }
 
@@ -344,67 +345,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Khi thay đổi ngày, kiểm tra và cập nhật bảng chỉ với các checkbox đã chọn
     ngayDenSanInput.addEventListener('change', function () {
-        // Xóa toàn bộ dữ liệu trong bảng trước khi cập nhật dữ liệu mới
+        // Xóa toàn bộ dữ liệu trong bảng
         sanCaTableBody.innerHTML = '';
-
-        // Lấy lại dữ liệu từ các checkbox đã chọn
-        const allCheckboxes = document.querySelectorAll('.san-ca-container input[type="checkbox"]:checked');
-        allCheckboxes.forEach(checkbox => {
-            const sanCaId = checkbox.value;
-            // Kiểm tra nếu dòng đã tồn tại trong bảng thì không thêm lại
-            if (!document.getElementById(`sanCaRow_${sanCaId}`)) {
-                fetch(`http://localhost:8080/san-ca/${sanCaId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const row = document.createElement('tr');
-                        row.id = `sanCaRow_${sanCaId}`;
-
-                        const sanBongCell = document.createElement('td');
-                        sanBongCell.textContent = data.tenSanBong;
-                        row.appendChild(sanBongCell);
-
-                        const ngayCell = document.createElement('td');
-                        ngayCell.textContent = ngayDenSanInput.value;
-                        row.appendChild(ngayCell);
-
-                        const tenCaCell = document.createElement('td');
-                        tenCaCell.textContent = data.tenCa;
-                        row.appendChild(tenCaCell);
-
-                        const thoiGianCell = document.createElement('td');
-                        const batDau = new Date(data.thoiGianBatDauCa).getHours();
-                        const ketThuc = new Date(data.thoiGianKetThucCa).getHours();
-                        thoiGianCell.innerHTML = `${batDau}:00 - ${ketThuc}:00`;
-                        row.appendChild(thoiGianCell);
-
-                        const giaCell = document.createElement('td');
-                        giaCell.innerHTML = `${data.gia.toLocaleString()} VNĐ`;
-                        row.appendChild(giaCell);
-
-                        const thaoTacCell = document.createElement('td');
-                        const deleteButton = document.createElement('button');
-                        deleteButton.classList.add('btn', 'btn-outline-danger');
-                        deleteButton.setAttribute('type', 'button');
-                        deleteButton.setAttribute('title', 'Xóa');
-                        deleteButton.style.justifyContent = 'center';
-
-                        const deleteIcon = document.createElement('span');
-                        deleteIcon.classList.add('fe', 'fe-trash-2');
-                        deleteButton.appendChild(deleteIcon);
-
-                        deleteButton.addEventListener('click', () => {
-                            sanCaTableBody.removeChild(row);
-                            checkbox.checked = false;
-                        });
-
-                        thaoTacCell.appendChild(deleteButton);
-                        row.appendChild(thaoTacCell);
-
-                        sanCaTableBody.appendChild(row);
-                    })
-                    .catch(error => showError('Error fetching san ca data:', error));
-            }
-        });
 
         // Cập nhật nội dung san-ca-container cho ngày mới
         const sanCaContainers = document.querySelectorAll('.san-ca-container');
@@ -534,6 +476,7 @@ document.querySelector('#datLich').addEventListener('click', function () {
             // Đóng modal sau khi đặt lịch thành công
             alert('Đặt lịch thành công!');
             $('#book-modal').modal('hide');
+            window.location.href = 'http://localhost:8080/dat-lich-tai-quay';
         })
         .catch(error => {
             console.error('Lỗi khi thêm hóa đơn:', error);
