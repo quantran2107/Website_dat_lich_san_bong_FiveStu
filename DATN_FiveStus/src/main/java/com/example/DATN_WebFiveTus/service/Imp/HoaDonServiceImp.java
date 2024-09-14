@@ -70,15 +70,17 @@ public class HoaDonServiceImp implements HoaDonService {
 
     @Override
     public HoaDonDTO save(HoaDonDTO hoaDonDTO) {
+
+        // Tìm khách hàng theo ID
+        KhachHang khachHang = khachHangRepository.findById(hoaDonDTO.getIdKhachHang())
+                .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại với ID: " + hoaDonDTO.getIdKhachHang()));
         HoaDon hoaDon = modelMapper.map(hoaDonDTO,HoaDon.class);
-
-        KhachHang khachHang = khachHangRepository.findById(hoaDonDTO.getIdKhachHang()).orElseThrow();
-
-        hoaDon.setKhachHang(khachHang);
         hoaDon.setMaHoaDon(generateMaHoaDon());
         hoaDon.setTrangThai("Chờ thanh toán");
         Date now = Date.from(Instant.now());
+        hoaDon.setKhachHang(khachHang);
         hoaDon.setNgayTao(now);
+        hoaDon.setDeletedAt(false);
         HoaDon hoaDonSave = hoaDonRepository.save(hoaDon);
         return modelMapper.map(hoaDonSave,HoaDonDTO.class);
     }

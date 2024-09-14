@@ -118,6 +118,12 @@ public class KhachHangImp implements KhachHangService {
     }
 
     @Override
+    public KhachHangDTO findBySoDienThoai(String soDienThoai) {
+        KhachHang khachHang = khachHangRepository.findKhachHangBySoDienThoai(soDienThoai);
+        return modelMapper.map(khachHang, KhachHangDTO.class);
+    }
+
+    @Override
     public Page<KhachHangDTO> getAll(Pageable pageable) {
         Page<KhachHang> khachHangs = khachHangRepository.findAll(pageable);
         return khachHangs.map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class));
@@ -163,12 +169,6 @@ public class KhachHangImp implements KhachHangService {
         return khachHangs.stream()
                 .map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public KhachHangDTO findBySoDienThoai(String soDienThoai) {
-        KhachHang khachHang = khachHangRepository.findKhachHangBySoDienThoai(soDienThoai);
-        return modelMapper.map(khachHang, KhachHangDTO.class);
     }
 
 }

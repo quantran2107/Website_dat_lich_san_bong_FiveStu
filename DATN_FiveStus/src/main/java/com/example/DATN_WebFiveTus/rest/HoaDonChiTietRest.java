@@ -80,11 +80,13 @@ public class HoaDonChiTietRest {
         return ResponseEntity.ok(hoaDonChiTietDTOSave);
     }
 
+
     @PostMapping("/save2")
     public ResponseEntity<HoaDonChiTietDTO> save2(@RequestBody HoaDonChiTietDTO hoaDonChiTietDTO){
         HoaDonChiTietDTO hoaDonChiTietDTOSave = hoaDonChiTietService.save2(hoaDonChiTietDTO);
         return ResponseEntity.ok(hoaDonChiTietDTOSave);
     }
+
 
     @GetMapping("/kiem-tra-dat")
     public ResponseEntity<String> checkSanCaStatus(

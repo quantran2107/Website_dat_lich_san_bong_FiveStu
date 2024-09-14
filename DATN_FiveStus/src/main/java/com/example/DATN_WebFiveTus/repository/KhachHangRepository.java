@@ -30,4 +30,5 @@ public interface KhachHangRepository extends JpaRepository<KhachHang,Integer> {
 
     @Query("SELECT kh FROM KhachHang kh WHERE kh.soDienThoai = :soDienThoai ")
     KhachHang findKhachHangBySoDienThoai(@Param("soDienThoai") String soDienThoai);
+
 }

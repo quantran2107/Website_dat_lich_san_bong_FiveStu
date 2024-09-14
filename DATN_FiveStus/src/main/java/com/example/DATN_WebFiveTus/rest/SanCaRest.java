@@ -3,7 +3,7 @@ package com.example.DATN_WebFiveTus.rest;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
 import com.example.DATN_WebFiveTus.service.SanCaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.DayOfWeek;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +60,61 @@ public class SanCaRest {
         List<SanCaDTO> list = sanCaService.findByTrangThai(idCa, thuTrongTuan, trangThai);
         return ResponseEntity.ok(list);
     }
+
+
+    @GetMapping("/hien-thi-san-trong")
+    public ResponseEntity<?> hienThiSanTrong(
+            @RequestParam(value = "startDate", required = true)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
+            @RequestParam(value = "endDate", required = true)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
+            @RequestParam(value = "idLoaiSan", required = true) Integer idLoaiSan) {
+
+        // Chuyển đổi startDate và endDate thành danh sách các thứ trong tuần
+        List<String> thuTrongTuanList = convertDateToThuTrongTuan(startDate, endDate);
+
+        // Gọi service với danh sách thuTrongTuan và idLoaiSan
+        List<SanCaDTO> list = sanCaService.hienThiSanTrong(idLoaiSan, thuTrongTuanList, startDate, endDate);
+
+        // Trả về danh sách dưới dạng ResponseEntity
+        return ResponseEntity.ok(list);
+    }
+
+    // Hàm chuyển đổi Date thành danh sách các thứ trong tuần
+    private List<String> convertDateToThuTrongTuan(Date startDate, Date endDate) {
+        List<String> thuTrongTuanList = new ArrayList<>();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+
+        while (!calendar.getTime().after(endDate)) {
+            // Lấy thứ trong tuần từ Calendar (1 = Chủ nhật, 2 = Thứ hai, ...)
+            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+            // Chuyển đổi thành chuỗi thứ trong tuần (Ví dụ: "Thứ Hai", "Thứ Ba", ...)
+            thuTrongTuanList.add(convertDayOfWeekToThuTrongTuan(dayOfWeek));
+
+            // Tăng ngày lên 1
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        return thuTrongTuanList;
+    }
+
+    // Chuyển đổi dayOfWeek (Calendar) sang định dạng thứ trong tuần (Ví dụ: "Thứ Hai")
+    private String convertDayOfWeekToThuTrongTuan(int dayOfWeek) {
+        switch (dayOfWeek) {
+            case Calendar.MONDAY: return "Thứ Hai";
+            case Calendar.TUESDAY: return "Thứ Ba";
+            case Calendar.WEDNESDAY: return "Thứ Tư";
+            case Calendar.THURSDAY: return "Thứ Năm";
+            case Calendar.FRIDAY: return "Thứ Sáu";
+            case Calendar.SATURDAY: return "Thứ Bảy";
+            case Calendar.SUNDAY: return "Chủ Nhật";
+            default: throw new IllegalArgumentException("Invalid day of week: " + dayOfWeek);
+        }
+    }
+
 
 
     @PostMapping("")
@@ -125,12 +185,7 @@ public class SanCaRest {
 //        return "sanCaList"; // Trả về tên của view template (sanCaList.html trong trường hợp này)
 //    }
 
-    @GetMapping("/chon-san-ca/{id}")
-    public ResponseEntity<List> getSanCaByHoaDonChiTietId(@PathVariable("id") Integer id) {
-        List<SanCaDTO> sanCaDTOs = sanCaService.findSanCaAndNgayDenSanByHoaDonChiTietId(id);
 
-        return ResponseEntity.ok(sanCaDTOs);
-    }
 
     @GetMapping("/danh-sach-san-ca/{idSanBong}/{idNgayTrongTuan}")
     public ResponseEntity<List> danhSachSanCa(@PathVariable("idSanBong") Integer idSanBong,

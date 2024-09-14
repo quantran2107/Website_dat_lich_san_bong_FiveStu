@@ -33,17 +33,17 @@ import java.util.Date;
 public class HoaDonChiTiet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name = "id_hoa_don", nullable = false)
+    @JoinColumn(name = "id_hoa_don")
     private HoaDon hoaDon;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "id_san_ca", nullable = false)
+    @JoinColumn(name = "id_san_ca")
     private SanCa sanCa;
 
-    @Column(name = "ma_hoa_don_chi_tiet", nullable = false, length = 100)
+    @Column(name = "ma_hoa_don_chi_tiet", length = 100)
     private String maHoaDonChiTiet;
 
     @Column(name = "tien_san")
@@ -60,16 +60,18 @@ public class HoaDonChiTiet {
     private Date ngayDenSan;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
-    private boolean deletedAt;
+    private Boolean deletedAt;
 
-    @Column(name = "trang_thai", nullable = false, length = 100)
+    @Column(name = "trang_thai", length = 100)
     private String trangThai;
+
+
 }

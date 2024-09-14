@@ -10,6 +10,7 @@ import com.example.DATN_WebFiveTus.repository.HoaDonChiTietRepository;
 import com.example.DATN_WebFiveTus.repository.HoaDonRepository;
 import com.example.DATN_WebFiveTus.repository.SanCaRepository;
 import com.example.DATN_WebFiveTus.service.HoaDonChiTietService;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,9 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -55,13 +58,13 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
     @Override
     public List<HoaDonChiTietDTO> getAllJoinFetch() {
         return hoaDonChiTietRepository.getAllJoinFetch().stream()
-                .map((hoaDonChiTiet) -> modelMapper.map(hoaDonChiTiet,HoaDonChiTietDTO.class)).collect(Collectors.toList());
+                .map((hoaDonChiTiet) -> modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class)).collect(Collectors.toList());
     }
 
     @Override
     public HoaDonChiTietDTO getOne(Integer id) {
-        return modelMapper.map(hoaDonChiTietRepository.findById(id).orElseThrow(()->
-                new ResourceNotfound("Không tồn tại id: "+id)),HoaDonChiTietDTO.class);
+        return modelMapper.map(hoaDonChiTietRepository.findById(id).orElseThrow(() ->
+                new ResourceNotfound("Không tồn tại id: " + id)), HoaDonChiTietDTO.class);
     }
 
     @Override
@@ -77,6 +80,9 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         hoaDonChiTiet.setHoaDon(hoaDon);
         hoaDonChiTiet.setNgayDenSan(hoaDonChiTietDTO.getNgayDenSan());
         hoaDonChiTiet.setTrangThai("Chờ nhận sân");
+
+        hoaDonChiTiet.setKieuNgayDat(hoaDonChiTietDTO.getKieuNgayDat());
+        hoaDonChiTiet.setDeletedAt(false);
 
         HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
 
@@ -114,7 +120,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
     @Override
     public List<HoaDonChiTietDTO> searchFromHoaDon(Integer idHoaDon) {
         return hoaDonChiTietRepository.searchFromHoaDon(idHoaDon).stream()
-                .map((hoaDonChiTiet) -> modelMapper.map(hoaDonChiTiet,HoaDonChiTietDTO.class)).collect(Collectors.toList());
+                .map((hoaDonChiTiet) -> modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class)).collect(Collectors.toList());
     }
 
     @Override
