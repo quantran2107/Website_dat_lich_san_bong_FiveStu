@@ -16,15 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -99,30 +91,24 @@ public class NuocUongRest {
     @PutMapping("/{id}")
     public ResponseEntity<NuocUongDTO> update(
             @PathVariable("id") Integer id,
-            @RequestParam("NuocUongDTO") String nuocUongDTOJson,
-            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
+            @RequestPart("nuocUongDTO") NuocUongDTO nuocUongDTO,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
 
-        // Chuyển đổi JSON thành đối tượng NuocUongDTO
-        ObjectMapper objectMapper = new ObjectMapper();
-        NuocUongDTO nuocUongDTO = objectMapper.readValue(nuocUongDTOJson, NuocUongDTO.class);
-
-        // Lấy đối tượng NuocUongDTO hiện tại từ dịch vụ để giữ lại ảnh cũ nếu không có file mới
+        // Tìm kiếm đối tượng hiện tại
         NuocUongDTO existingNuocUongDTO = nuocUongService.getOne(id);
 
-        // Nếu không có file mới, giữ lại hình ảnh cũ
-        if (imageFile == null || imageFile.isEmpty()) {
-            nuocUongDTO.setImageData(existingNuocUongDTO.getImageData());
-        } else {
-            // Nếu có file mới, chuyển đổi MultipartFile thành byte[]
-            byte[] imageBytes = imageFile.getBytes();
-            nuocUongDTO.setImageData(imageBytes);
+        // Cập nhật các giá trị mới từ nuocUongDTO
+        existingNuocUongDTO.setTenNuocUong(nuocUongDTO.getTenNuocUong());
+        existingNuocUongDTO.setSoLuong(nuocUongDTO.getSoLuong());
+        existingNuocUongDTO.setDonGia(nuocUongDTO.getDonGia());
+
+        // Cập nhật ảnh nếu có
+        if (imageFile != null && !imageFile.isEmpty()) {
+            existingNuocUongDTO.setImageData(imageFile.getBytes());
         }
 
-        // Đặt ID cho đối tượng NuocUongDTO để cập nhật
-        nuocUongDTO.setId(id);
-
         // Xử lý đối tượng NuocUongDTO và lưu vào dịch vụ
-        NuocUongDTO updatedNuocUongDTO = nuocUongService.save(nuocUongDTO);
+        NuocUongDTO updatedNuocUongDTO = nuocUongService.update(id, existingNuocUongDTO);
 
         return ResponseEntity.ok(updatedNuocUongDTO);
     }
