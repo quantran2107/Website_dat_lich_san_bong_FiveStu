@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -41,5 +42,27 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
             "where sc.deletedAt = false and sb.deletedAt = false and c.deletedAt = false " +
             "and c.id = :idCa and ntt.thuTrongTuan = :thuTrongTuan and sc.trangThai = :trangThai")
     List<SanCa> sanHopLe(@Param("idCa") Integer idCa, @Param("thuTrongTuan") String thuTrongTuan, @Param("trangThai") String trangThai);
+
+    @Query("select sc from SanCa sc " +
+            "join fetch sc.sanBong sb " +
+            "join fetch sc.ca c " +
+            "join fetch sc.ngayTrongTuan ntt " +
+            "where sc.deletedAt = false " +
+            "and sb.deletedAt = false " +
+            "and c.deletedAt = false " +
+            "and sc.trangThai = 'Còn trống' " +
+            "and sb.loaiSan.id = :idLoaiSan " +
+            "and ntt.thuTrongTuan in :thuTrongTuanList " +  // So sánh các thứ trong tuần
+            "and not exists (" +
+            "    select hdct from HoaDonChiTiet hdct " +
+            "    where hdct.sanCa.id = sc.id " +
+            "    and hdct.ngayDenSan between :startDate and :endDate)")
+    List<SanCa> hienThiSanTrong(@Param("idLoaiSan") Integer idLoaiSan,
+                                @Param("thuTrongTuanList") List<String> thuTrongTuanList,  // Danh sách các thứ trong tuần
+                                @Param("startDate") java.util.Date startDate,
+                                @Param("endDate") Date endDate);
+
+
+
 
 }

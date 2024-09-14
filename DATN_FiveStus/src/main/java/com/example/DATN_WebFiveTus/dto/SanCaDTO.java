@@ -38,6 +38,8 @@ public class SanCaDTO {
 
     private Integer idNgayTrongTuan;
 
+    private Integer idLoaiSan;
+
 //    @JsonIgnore
     private String thuTrongTuan;
 

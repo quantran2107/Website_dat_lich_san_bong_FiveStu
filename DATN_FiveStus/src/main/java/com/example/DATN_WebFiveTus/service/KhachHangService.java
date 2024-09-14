@@ -21,6 +21,8 @@ public interface KhachHangService {
 
     KhachHangDTO findById(Integer id);
 
+    KhachHangDTO findBySoDienThoai(String soDienThoai);
+
     Page<KhachHangDTO> getAll(Pageable pageable);
 
     public List<KhachHangDTO> search(String query, int page, int pageSize);

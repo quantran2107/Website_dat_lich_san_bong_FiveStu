@@ -10,6 +10,7 @@ import com.example.DATN_WebFiveTus.repository.HoaDonChiTietRepository;
 import com.example.DATN_WebFiveTus.repository.HoaDonRepository;
 import com.example.DATN_WebFiveTus.repository.SanCaRepository;
 import com.example.DATN_WebFiveTus.service.HoaDonChiTietService;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,9 +18,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -54,18 +58,49 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
     @Override
     public List<HoaDonChiTietDTO> getAllJoinFetch() {
         return hoaDonChiTietRepository.getAllJoinFetch().stream()
-                .map((hoaDonChiTiet) -> modelMapper.map(hoaDonChiTiet,HoaDonChiTietDTO.class)).collect(Collectors.toList());
+                .map((hoaDonChiTiet) -> modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class)).collect(Collectors.toList());
     }
 
     @Override
     public HoaDonChiTietDTO getOne(Integer id) {
-        return modelMapper.map(hoaDonChiTietRepository.findById(id).orElseThrow(()->
-                new ResourceNotfound("Không tồn tại id: "+id)),HoaDonChiTietDTO.class);
+        return modelMapper.map(hoaDonChiTietRepository.findById(id).orElseThrow(() ->
+                new ResourceNotfound("Không tồn tại id: " + id)), HoaDonChiTietDTO.class);
     }
 
     @Override
     public HoaDonChiTietDTO save(HoaDonChiTietDTO hoaDonChiTietDTO) {
-        return null;
+        HoaDonChiTiet hoaDonChiTiet = modelMapper.map(hoaDonChiTietDTO,HoaDonChiTiet.class);
+
+        SanCa sanCa = sanCaRepository.findById(hoaDonChiTietDTO.getIdSanCa()).orElseThrow();
+
+        HoaDon hoaDon = hoaDonRepository.findById(hoaDonChiTietDTO.getIdHoaDon()).orElseThrow();
+
+
+        hoaDonChiTiet.setMaHoaDonChiTiet(generateMaHoaDonChiTiet());
+        hoaDonChiTiet.setSanCa(sanCa);
+        hoaDonChiTiet.setHoaDon(hoaDon);
+        hoaDonChiTiet.setNgayDenSan(hoaDonChiTietDTO.getNgayDenSan());
+        hoaDonChiTiet.setTrangThai("Chờ nhận sân");
+        hoaDonChiTiet.setKieuNgayDat(hoaDonChiTietDTO.getKieuNgayDat());
+        hoaDonChiTiet.setDeletedAt(false);
+        HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
+
+        return modelMapper.map(hoaDonChiTietSave,HoaDonChiTietDTO.class);
+    }
+
+
+
+    private String generateMaHoaDonChiTiet() {
+        String PREFIX = "HDCT";
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        int RANDOM_PART_LENGTH = 6; // Độ dài của phần ngẫu nhiên, để tổng độ dài là 10
+        SecureRandom RANDOM = new SecureRandom();
+        StringBuilder sb = new StringBuilder(PREFIX);
+        for (int i = 0; i < RANDOM_PART_LENGTH; i++) {
+            int index = RANDOM.nextInt(CHARACTERS.length());
+            sb.append(CHARACTERS.charAt(index));
+        }
+        return sb.toString();
     }
 
     @Override
@@ -86,7 +121,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
     @Override
     public List<HoaDonChiTietDTO> searchFromHoaDon(Integer idHoaDon) {
         return hoaDonChiTietRepository.searchFromHoaDon(idHoaDon).stream()
-                .map((hoaDonChiTiet) -> modelMapper.map(hoaDonChiTiet,HoaDonChiTietDTO.class)).collect(Collectors.toList());
+                .map((hoaDonChiTiet) -> modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class)).collect(Collectors.toList());
     }
 
     @Override

@@ -58,4 +58,5 @@ public class HoaDonDTO {
     @Temporal(TemporalType.DATE)
     private Date ngayThanhToan;
 
+
 }

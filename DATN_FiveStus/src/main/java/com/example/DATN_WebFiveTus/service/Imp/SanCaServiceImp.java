@@ -19,6 +19,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -158,6 +162,14 @@ public class SanCaServiceImp implements SanCaService {
     public List<SanCaDTO> findByTrangThai(Integer idCa, String thuTrongTuan, String trangThai) {
         List<SanCa> list = sanCaRepository.sanHopLe(idCa,thuTrongTuan,trangThai);
         return list.stream().map(sanCa -> modelMapper.map(sanCa,SanCaDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SanCaDTO> hienThiSanTrong(Integer idLoaiSan, List<String> thuTrongTuanList, java.util.Date startDate, Date endDate) {
+        List<SanCa> list = sanCaRepository.hienThiSanTrong(idLoaiSan, thuTrongTuanList, startDate, endDate);
+        return list.stream()
+                .map(sanCa -> modelMapper.map(sanCa, SanCaDTO.class))
+                .collect(Collectors.toList());
     }
 
 }

@@ -22,7 +22,7 @@ import java.util.Date;
 @Builder
 public class HoaDonChiTietDTO {
 
-    private int id;
+    private Integer id;
 
     private Integer idHoaDon;
 
@@ -46,6 +46,8 @@ public class HoaDonChiTietDTO {
 
     private String trangThai;
 
+    private String kieuNgayDat;
+
     private String tenSanBong;
 
     private String tenCa;
@@ -63,4 +65,5 @@ public class HoaDonChiTietDTO {
 
     private String emailKhachHang;
 
+    private Boolean deletedAt;
 }
