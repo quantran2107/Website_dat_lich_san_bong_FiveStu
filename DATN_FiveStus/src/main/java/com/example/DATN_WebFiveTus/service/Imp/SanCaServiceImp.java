@@ -172,4 +172,17 @@ public class SanCaServiceImp implements SanCaService {
                 .collect(Collectors.toList());
     }
 
+
+//    public List<SanCaDTO> findSanCaAndNgayDenSanByHoaDonChiTietId(Integer id) {
+//        return sanCaRepository.findSanCaAndNgayDenSanByHoaDonChiTietId(id);
+//    }
+
+    @Override
+    public List<SanCaDTO> findSanCaBySan(Integer idSanBong, Integer idNgayTrongTuan) {
+        return sanCaRepository.findSanCaBySan(idSanBong,idNgayTrongTuan).stream()
+                .map((sanCa) -> modelMapper.map(sanCa,SanCaDTO.class)).collect(Collectors.toList());
+    }
+
+
+
 }

@@ -70,6 +70,7 @@ public class HoaDonServiceImp implements HoaDonService {
 
     @Override
     public HoaDonDTO save(HoaDonDTO hoaDonDTO) {
+
         // Tìm khách hàng theo ID
         KhachHang khachHang = khachHangRepository.findById(hoaDonDTO.getIdKhachHang())
                 .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại với ID: " + hoaDonDTO.getIdKhachHang()));

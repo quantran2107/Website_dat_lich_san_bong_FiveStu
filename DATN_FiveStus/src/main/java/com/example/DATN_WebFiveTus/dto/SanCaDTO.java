@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -50,4 +50,6 @@ public class SanCaDTO {
     private LocalDateTime thoiGianBatDauCa;
 
     private LocalDateTime thoiGianKetThucCa;
+
+    private Date ngayDenSanHoaDonChiTiet;
 }

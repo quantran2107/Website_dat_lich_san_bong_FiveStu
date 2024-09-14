@@ -29,5 +29,6 @@ public interface KhachHangService {
 
     public List<KhachHangDTO> filter(String status, String gender, int page, int pageSize);
 
+
 }
 

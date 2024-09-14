@@ -49,6 +49,9 @@ public class HoaDonChiTiet {
     @Column(name = "tien_san")
     private String tienSan;
 
+    @Column(name = "kieu_ngay_dat")
+    private String kieuNgayDat;
+
     @Column(name = "ghi_chu", length = 200)
     private String ghiChu;
 
@@ -70,7 +73,5 @@ public class HoaDonChiTiet {
     @Column(name = "trang_thai", length = 100)
     private String trangThai;
 
-    @Column(name = "kieu_ngay_dat", length = 100)
-    private String kieuNgayDat;
 
 }

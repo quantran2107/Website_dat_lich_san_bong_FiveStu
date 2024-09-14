@@ -65,5 +65,11 @@ public class HoaDonChiTietDTO {
 
     private String emailKhachHang;
 
+
     private Boolean deletedAt;
+
+    private String tenLoaiSan;
+
+
+
 }

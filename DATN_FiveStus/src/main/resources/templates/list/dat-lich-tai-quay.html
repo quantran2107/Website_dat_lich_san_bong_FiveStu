@@ -170,7 +170,9 @@
                                     <button   id="addInvoiceButton" class="btn btn-outline-primary me-2"
                                             title="Thêm hóa đơn"
                                             type="button">
-                                        <span class="fe fe-plus"></span>
+                                        <a th:href="@{/list-san-ca}">
+                                            <span class="fe fe-plus"></span>
+                                        </a>
                                     </button>
                                 </div>
                             </div>
@@ -752,20 +754,20 @@
         }
     }
 
-    $(document).ready(function() {
-        $('#addInvoiceButton').on('click', function() {
-            $.ajax({
-                url: 'http://localhost:8080/chon-san', // URL của nội dung bạn muốn tải
-                method: 'GET',
-                success: function(response) {
-                    $('#content-ban-hang').html(response); // Cập nhật nội dung của phần tử
-                },
-                error: function(xhr, status, error) {
-                    console.error("An error occurred: " + xhr.responseText);
-                }
-            });
-        });
-    });
+    // $(document).ready(function() {
+    //     $('#addInvoiceButton').on('click', function() {
+    //         $.ajax({
+    //             url: 'http://localhost:8080/chon-san', // URL của nội dung bạn muốn tải
+    //             method: 'GET',
+    //             success: function(response) {
+    //                 $('#content-ban-hang').html(response); // Cập nhật nội dung của phần tử
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 console.error("An error occurred: " + xhr.responseText);
+    //             }
+    //         });
+    //     });
+    // });
 
 
 </script>

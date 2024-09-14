@@ -64,6 +64,11 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
             "And hd.deletedAt = false ")
     List<HoaDonChiTiet> findByNgayDenSan(@Param("ngayDenSan") Date ngayDenSan);
 
-
+    @Query("SELECT COUNT(hdct) FROM HoaDonChiTiet hdct " +
+            "JOIN hdct.sanCa sc " +
+            "WHERE sc.id = :idSanCa " +
+            "AND hdct.ngayDenSan = :ngayDenSan")
+    Long countByIdSanCaAndNgayDenSan(@Param("idSanCa") Long idSanCa,
+                                     @Param("ngayDenSan") LocalDate ngayDenSan);
 
 }

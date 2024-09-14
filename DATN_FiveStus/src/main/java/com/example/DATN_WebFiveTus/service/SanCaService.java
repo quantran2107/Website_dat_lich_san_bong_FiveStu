@@ -3,6 +3,7 @@ package com.example.DATN_WebFiveTus.service;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -31,4 +32,9 @@ public interface SanCaService {
 
 
     List<SanCaDTO> hienThiSanTrong(Integer idLoaiSan, List<String> thuTrongTuanList, java.util.Date startDate, Date endDate);
+
+
+    List<SanCaDTO> findSanCaBySan(@Param("idSanBong") Integer idSanBong,
+                                  @Param("idNgayTrongTuan") Integer idNgayTrongTuan);
+
 }

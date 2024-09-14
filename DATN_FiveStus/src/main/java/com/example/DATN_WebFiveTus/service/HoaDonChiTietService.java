@@ -33,4 +33,7 @@ public interface HoaDonChiTietService {
 
     List<HoaDonChiTietDTO> findByNgayDenSan(Date ngayDenSan);
 
+    HoaDonChiTietDTO save2(HoaDonChiTietDTO hoaDonChiTietDTO);
+
+    public boolean isSanCaBooked(Long idSanCa, LocalDate ngayDenSan);
 }
