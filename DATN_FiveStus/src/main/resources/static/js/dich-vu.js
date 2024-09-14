@@ -122,6 +122,16 @@ function renderTable(items, page, size) {
     items.forEach((item, index) => {
         const row = document.createElement('tr');
         row.dataset.itemId = item.id; // Add identifier for easier update
+
+        // Kiểm tra số lượng để xác định trạng thái
+        let trangThai = item.trangThai;
+        if (item.soLuong && item.soLuong > 0) {
+            trangThai = 'Còn'; // Nếu số lượng > 0 thì trạng thái là "Còn"
+        } else {
+            trangThai = 'Hết'; // Nếu số lượng <= 0 thì trạng thái là "Hết"
+        }
+
+        // Cập nhật nội dung của hàng trong bảng
         row.innerHTML = `
             <td>${index + 1 + page * size}</td>
             <td>${item.tenDoThue || item.tenNuocUong}</td>
@@ -132,9 +142,9 @@ function renderTable(items, page, size) {
             <td>${item.donGia ? item.donGia + ' VND' : 'N/A'}</td>
             <td>${item.soLuong || '0'}</td>
             <td>
-                <span class="${item.trangThai === 'Còn' ? 'custom-4' : 'custom-3'}"
+                <span class="${trangThai === 'Còn' ? 'custom-4' : 'custom-3'}"
                 style="font-size: 14px; width: 84px;">
-                ${item.trangThai || 'N/A'}
+                ${trangThai}
                 </span>
             </td>
             <td>
@@ -153,6 +163,7 @@ function renderTable(items, page, size) {
     tableBody.innerHTML = '';
     tableBody.appendChild(fragment);
 }
+
 
 function updatePagination(totalElements, currentPage, size) {
     const pagination = document.getElementById(`pagination${currentServiceType === 'do_thue' ? 'DoThue' : 'NuocUong'}`);
@@ -390,7 +401,8 @@ function deleteItem(id) {
                             text: 'Xóa dịch vụ thành công',
                             icon: 'success'
                         }).then(() => {
-                            loadData(currentServiceType, 0);
+                            loadData(currentServiceType, 0);//(Bản chất cái này thực hiện xóa được nhưng giao diện vẫn dữ nguyên cái mình vừa xóa, phải reload mới xóa đc)
+                            // window.location.reload();(Buộc phải reload lại thì mới mất được dữ liệu trên form)
                         });
                     } else {
                         response.text().then(text => {
@@ -517,123 +529,142 @@ function showAddForm() {
 
     // Ẩn cardBody1 và làm trống cardBody
     cardBody1.hide();
+    cardBody.empty();
+
     // Tạo giao diện tab và form động
     const tabs = `
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link ${currentServiceType === 'do_thue' ? 'active' : ''}" 
+                   id="tabDoThue-tab" data-toggle="tab" href="#tabDoThue" role="tab" 
+                   aria-controls="tabDoThue" aria-selected="${currentServiceType === 'do_thue'}">
+                   Quản lý đồ thuê
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link ${currentServiceType === 'nuoc_uong' ? 'active' : ''}" 
+                   id="tabNuocUong-tab" data-toggle="tab" href="#tabNuocUong" role="tab" 
+                   aria-controls="tabNuocUong" aria-selected="${currentServiceType === 'nuoc_uong'}">
+                   Quản lý nước uống
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content mt-3" id="myTabContent">
+            <!-- Tab Đồ Thuê -->
+            <div class="tab-pane fade ${currentServiceType === 'do_thue' ? 'show active' : ''}" id="tabDoThue" role="tabpanel" aria-labelledby="tabDoThue-tab">
+                <div class="row">
+                    <!-- Phần nhập liệu bên trái -->
+                    <div class="col-md-6">
+                        <form id="addFormDoThue" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="tenDoThue">Tên</label>
+                                <input type="text" class="form-control" id="tenDoThue" placeholder="Nhập tên">
+                                <span id="errorTenDoThue" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="soLuongDoThue">Số lượng</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="soLuongDoThue" placeholder="Nhập số lượng">
+                                    <span class="input-group-text">#</span>
+                                </div>
+                                <span id="errorSoLuongDoThue" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="donGiaDoThue">Đơn giá</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="donGiaDoThue" placeholder="Nhập đơn giá">
+                                    <span class="input-group-text">VND</span>
+                                </div>
+                                <span id="errorDonGiaDoThue" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="imageDoThue">Chọn Ảnh</label>
+                                <input class="form-control" type="file" id="imageDoThue" onchange="previewImage1(event, 'imagePreviewDoThue')">
+                                <span id="errorImageDoThue" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mt-3">
+                                <button type="submit" class="btn btn-primary" onclick="submitAddFormDoThue(event)">Lưu</button>
+                                <button type="button" class="btn btn-secondary" onclick="cancelAdd()">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Phần hiển thị ảnh bên phải -->
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <img id="imagePreviewDoThue" src="" alt="Ảnh xem trước" style="max-width: 100%; max-height: 300px;"/>
+                    </div>
+                </div>
+            </div>
 
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link ${currentServiceType === 'do_thue' ? 'active' : ''}" 
-                                    id="tabDoThue-tab" data-toggle="tab" href="#tabDoThue" role="tab" 
-                                    aria-controls="tabDoThue" aria-selected="${currentServiceType === 'do_thue'}">Quản lý đồ thuê</a>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link ${currentServiceType === 'nuoc_uong' ? 'active' : ''}" 
-                                    id="tabNuocUong-tab" data-toggle="tab" href="#tabNuocUong" role="tab" 
-                                    aria-controls="tabNuocUong" aria-selected="${currentServiceType === 'nuoc_uong'}
-                    ">Quản lý nước uống</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade ${
-                            currentServiceType === 'do_thue' ? 'show active' : ''
-                        }
-                    " id="tabDoThue" role="tabpanel" aria-labelledby="tabDoThue-tab">
-<!-- Form cho đồ thuê -->
-        <form id="addFormDoThue" enctype="multipart/form-data">
-        <div class="form-row">
-        <div class="form-group col-md-6">
-        <label for="tenDoThue">Tên</label>
-        <input type="text" class="form-control" id="tenDoThue" placeholder="Tên">
-        <span id="errorTenDoThue" class="text-danger"></span>
+            <!-- Tab Nước Uống -->
+            <div class="tab-pane fade ${currentServiceType === 'nuoc_uong' ? 'show active' : ''}" id="tabNuocUong" role="tabpanel" aria-labelledby="tabNuocUong-tab">
+                <div class="row">
+                    <!-- Phần nhập liệu bên trái -->
+                    <div class="col-md-6">
+                        <form id="addFormNuocUong" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="tenNuocUong">Tên</label>
+                                <input type="text" class="form-control" id="tenNuocUong" placeholder="Nhập tên">
+                                <span id="errorTenNuocUong" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="soLuongNuocUong">Số lượng</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="soLuongNuocUong" placeholder="Nhập số lượng">
+                                    <span class="input-group-text">#</span>
+                                </div>
+                                <span id="errorSoLuongNuocUong" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="donGiaNuocUong">Đơn giá</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" id="donGiaNuocUong" placeholder="Nhập đơn giá">
+                                    <span class="input-group-text">VND</span>
+                                </div>
+                                <span id="errorDonGiaNuocUong" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="imageNuocUong">Chọn Ảnh</label>
+                                <input class="form-control" type="file" id="imageNuocUong" onchange="previewImage1(event, 'imagePreviewNuocUong')">
+                                <span id="errorImageNuocUong" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mt-3">
+                                <button type="submit" class="btn btn-primary" onclick="submitAddFormNuocUong(event)">Lưu</button>
+                                <button type="button" class="btn btn-secondary" onclick="cancelAdd()">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Phần hiển thị ảnh bên phải -->
+                    <div class="col-md-6 d-flex align-items-center justify-content-center">
+                        <img id="imagePreviewNuocUong" src="" alt="Ảnh xem trước" style="max-width: 100%; max-height: 300px;"/>
+                    </div>
+                </div>
+            </div>
         </div>
-        </div>
-        <div class="form-row">
-        <div class="form-group col-md-6">
-        <label for="soLuongDoThue">Số lượng</label>
-        <div class="input-group mb-3">
-        <input type="text" class="form-control" id="soLuongDoThue">
-        <span class="input-group-text">#</span>
-        </div>
-        <span id="errorSoLuongDoThue" class="text-danger"></span>
-        </div>
-        </div>
-        <div class="form-row">
-        <div class="form-group col-md-6">
-        <label for="donGiaDoThue">Đơn giá</label>
-        <div class="input-group mb-3">
-        <input type="text" class="form-control" id="donGiaDoThue" placeholder="Đơn giá"
-        aria-label="Đơn giá" aria-describedby="basic-addon2">
-        <span class="input-group-text" id="basic-addon2">VND</span>
-        </div>
-        <span id="errorDonGiaDoThue" class="text-danger"></span>
-        </div>
-        </div>
-        <div class="form-row">
-        <div class="form-group col-md-6">
-        <label for="imageDoThue" class="form-label">Chọn Ảnh</label>
-        <input class="form-control" type="file" id="imageDoThue">
-        <span id="errorImageDoThue" class="text-danger"></span>
-        </div>
-        </div>
-        <button type="submit" class="btn btn-primary" onclick="submitAddFormDoThue(event)">Lưu
-        </button>
-        <button type="button" class="btn btn-success" onclick="cancelAdd()">Hủy</button>
-        </form>
-        </div>
-        <div class="tab-pane fade ${currentServiceType === 'nuoc_uong' ? 'show active' : ''}"
-        id="tabNuocUong" role="tabpanel" aria-labelledby="tabNuocUong-tab">
-            <!-- Form cho nước uống -->
-        <form id="addFormNuocUong" enctype="multipart/form-data">
-        <div class="form-row">
-        <div class="form-group col-md-6">
-        <label for="tenNuocUong">Tên</label>
-        <input type="text" class="form-control" id="tenNuocUong" placeholder="Tên">
-        <span id="errorTenNuocUong" class="text-danger"></span>
-        </div>
-        </div>
-        <div class="form-row">
-        <div class="form-group col-md-6">
-        <label for="soLuongNuocUong">Số lượng</label>
-        <div class="input-group mb-3">
-        <input type="text" class="form-control" id="soLuongNuocUong">
-        <span class="input-group-text">#</span>
-        </div>
-        <span id="errorSoLuongNuocUong" class="text-danger"></span>
-        </div>
-        </div>
-        <div class="form-row">
-        <div class="form-group col-md-6">
-        <label for="donGiaNuocUong">Đơn giá</label>
-        <div class="input-group mb-3">
-        <input type="text" class="form-control" id="donGiaNuocUong"
-        placeholder="Đơn giá" aria-label="Đơn giá"
-        aria-describedby="basic-addon2">
-        <span class="input-group-text" id="basic-addon2">VND</span>
-        </div>
-        <span id="errorDonGiaNuocUong" class="text-danger"></span>
-        </div>
-        </div>
-        <div class="form-row">
-        <div class="form-group col-md-6">
-        <label for="imageNuocUong" class="form-label">Chọn Ảnh</label>
-        <input class="form-control" type="file" id="imageNuocUong">
-        <span id="errorImageNuocUong" class="text-danger"></span>
-        </div>
-        </div>
-        <button type="submit" class="btn btn-primary"
-        onclick="submitAddFormNuocUong(event)">Lưu
-        </button>
-        <button type="button" class="btn btn-success" onclick="cancelAdd()">Hủy</button>
-        </form>
-        </div>
-        </div>
-        `;
+    `;
 
     // Chèn giao diện tab vào cardBody
     cardBody.html(tabs);
 
     // Kích hoạt tab hiện tại
     $('#myTab a[href="#' + currentServiceType + '"]').tab('show');
+}
+
+function previewImage1(event, imgPreviewId) {
+    const input = event.target;
+    const file = input.files[0];
+    const imgPreview = document.getElementById(imgPreviewId);
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            imgPreview.src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    } else {
+        imgPreview.src = ''; // Xóa ảnh xem trước nếu không có file
+    }
 }
 
 // Hàm submit form cho đồ thuê
@@ -661,11 +692,13 @@ function submitAddFormDoThue(event) {
         hasError = true;
     }
 
-    if (isNaN(soLuong) || soLuong <= 0) {
-        $('#errorSoLuongDoThue').text('Số lượng phải là số dương.');
+    // Chỉ báo lỗi khi số lượng là số âm hoặc không phải là số hợp lệ
+    if (isNaN(soLuong) || soLuong < 0) {
+        $('#errorSoLuongDoThue').text('Số lượng không được nhỏ hơn 0.');
         hasError = true;
     }
 
+    // Kiểm tra đơn giá, phải là số dương
     if (!donGia || isNaN(donGia) || donGia <= 0) {
         $('#errorDonGiaDoThue').text('Đơn giá phải là số dương.');
         hasError = true;
@@ -735,6 +768,7 @@ function submitAddFormDoThue(event) {
         }
     });
 }
+
 
 // Hàm submit form cho nước uống
 function submitAddFormNuocUong(event) {
@@ -999,11 +1033,20 @@ function previewImage(event) {
 function submitUpdateFormDoThue(event, id) {
     event.preventDefault(); // Ngăn không cho form reload lại trang
 
+    // Kiểm tra xem `id` có hợp lệ không
+    if (!id) {
+        Swal.fire({
+            title: 'Lỗi!',
+            text: 'ID không hợp lệ!',
+            icon: 'error'
+        });
+        return;
+    }
+
     // Lấy giá trị từ các trường nhập liệu
     const ten = $('#tenDoThue').val().trim();
-    const donGia = $('#donGiaDoThue').val().trim();
-    let trangThai = $('#trangThai').val().trim();
     const soLuong = parseInt($('#soLuongDoThue').val().trim());
+    const donGia = parseFloat($('#donGiaDoThue').val().trim());
     const imageData = $('#imageDoThue')[0].files[0];
 
     // Xóa các thông báo lỗi trước đó
@@ -1021,12 +1064,12 @@ function submitUpdateFormDoThue(event, id) {
         hasError = true;
     }
 
-    if (isNaN(soLuong) || soLuong <= 0) {
+    if (isNaN(soLuong) || soLuong < 0) {
         $('#errorSoLuongDoThue').text('Số lượng phải là một số dương');
         hasError = true;
     }
 
-    if (isNaN(parseFloat(donGia)) || parseFloat(donGia) <= 0) {
+    if (isNaN(donGia) || donGia <= 0) {
         $('#errorDonGiaDoThue').text('Đơn giá phải là một số dương');
         hasError = true;
     }
@@ -1035,43 +1078,75 @@ function submitUpdateFormDoThue(event, id) {
         return; // Dừng lại nếu có lỗi
     }
 
-    // Dữ liệu gửi lên server
+    // Tạo FormData để gửi dữ liệu, bao gồm file ảnh
     const formData = new FormData();
     formData.append('tenDoThue', ten);
     formData.append('soLuong', soLuong);
     formData.append('donGia', donGia);
-    formData.append('trangThai', trangThai);
     if (imageData) {
-        formData.append('imageDoThue', imageData);
+        formData.append('imageFile', imageData);
     }
 
-    // Gửi dữ liệu lên server
-    $.ajax({
-        url: `http://localhost:8080/do_thue/${id}`,
-        type: 'PUT',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            // Xử lý thành công, reload dữ liệu và hiển thị lại bảng
-            alert('Cập nhật thành công');
-            cancelAdd(); // Quay lại bảng dữ liệu
-            loadData(currentServiceType,0)        },
-        error: function (xhr, status, error) {
-            alert('Cập nhật thất bại');
+    // Xác nhận trước khi gửi dữ liệu lên server
+    Swal.fire({
+        title: 'Xác nhận',
+        text: 'Bạn chắc chắn muốn cập nhật thông tin này không?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Gửi dữ liệu lên server qua AJAX
+            $.ajax({
+                url: `http://localhost:8080/do_thue/${id}`, // Sử dụng đúng id
+                type: 'PUT',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Cập nhật thông tin đồ thuê thành công!',
+                        icon: 'success'
+                    }).then(() => {
+                        cancelAdd(); // Quay lại bảng dữ liệu
+                        loadData(currentServiceType, 0); // Reload dữ liệu
+                    });
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: 'Đã xảy ra lỗi khi cập nhật thông tin đồ thuê',
+                        icon: 'error'
+                    });
+                }
+            });
         }
     });
 }
+
+
 
 // Submit form update cho dịch vụ nước uống
 function submitUpdateFormNuocUong(event, id) {
     event.preventDefault(); // Ngăn không cho form reload lại trang
 
+    // Kiểm tra xem `id` có hợp lệ không
+    if (!id) {
+        Swal.fire({
+            title: 'Lỗi!',
+            text: 'ID không hợp lệ!',
+            icon: 'error'
+        });
+        return;
+    }
+
     // Lấy giá trị từ các trường nhập liệu
     const ten = $('#tenNuocUong').val().trim();
-    const donGia = $('#donGiaNuocUong').val().trim();
-    let trangThai = $('#trangThai').val().trim();
     const soLuong = parseInt($('#soLuongNuocUong').val().trim());
+    const donGia = parseFloat($('#donGiaNuocUong').val().trim());
     const imageData = $('#imageNuocUong')[0].files[0];
 
     // Xóa các thông báo lỗi trước đó
@@ -1089,12 +1164,12 @@ function submitUpdateFormNuocUong(event, id) {
         hasError = true;
     }
 
-    if (isNaN(soLuong) || soLuong <= 0) {
+    if (isNaN(soLuong) || soLuong < 0) {
         $('#errorSoLuongNuocUong').text('Số lượng phải là một số dương');
         hasError = true;
     }
 
-    if (isNaN(parseFloat(donGia)) || parseFloat(donGia) <= 0) {
+    if (isNaN(donGia) || donGia <= 0) {
         $('#errorDonGiaNuocUong').text('Đơn giá phải là một số dương');
         hasError = true;
     }
@@ -1103,34 +1178,62 @@ function submitUpdateFormNuocUong(event, id) {
         return; // Dừng lại nếu có lỗi
     }
 
-    // Dữ liệu gửi lên server
+    // Tạo FormData để gửi dữ liệu, bao gồm file ảnh
     const formData = new FormData();
-    formData.append('tenNuocUong', ten);
-    formData.append('soLuong', soLuong);
-    formData.append('donGia', donGia);
-    formData.append('trangThai', trangThai);
+
+    // Định dạng JSON cho nuocUongDTO
+    const nuocUongDTO = {
+        tenNuocUong: ten,
+        soLuong: soLuong,
+        donGia: donGia
+    };
+
+    formData.append('nuocUongDTO', new Blob([JSON.stringify(nuocUongDTO)], { type: "application/json" }));
+
     if (imageData) {
-        formData.append('imageNuocUong', imageData);
+        formData.append('imageFile', imageData);
     }
 
-    // Gửi dữ liệu lên server
-    $.ajax({
-        url: `http://localhost:8080/nuoc_uong/${id}`,
-        type: 'PUT',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            // Xử lý thành công, reload dữ liệu và hiển thị lại bảng
-            alert('Cập nhật thành công');
-            cancelAdd(); // Quay lại bảng dữ liệu
-           loadData(currentServiceType,0)
-        },
-        error: function (xhr, status, error) {
-            alert('Cập nhật thất bại');
+    // Xác nhận trước khi gửi dữ liệu lên server
+    Swal.fire({
+        title: 'Xác nhận',
+        text: 'Bạn chắc chắn muốn cập nhật thông tin này không?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Gửi dữ liệu lên server qua AJAX
+            $.ajax({
+                url: `http://localhost:8080/nuoc_uong/${id}`, // Sử dụng đúng id
+                type: 'PUT',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Cập nhật thông tin nước uống thành công!',
+                        icon: 'success'
+                    }).then(() => {
+                        cancelAdd(); // Quay lại bảng dữ liệu
+                        loadData(currentServiceType, 0); // Reload dữ liệu
+                    });
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: 'Đã xảy ra lỗi khi cập nhật thông tin nước uống',
+                        icon: 'error'
+                    });
+                }
+            });
         }
     });
 }
+
 
 
 

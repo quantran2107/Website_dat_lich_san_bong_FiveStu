@@ -33,7 +33,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("do_thue")
-public class DoThueRest {
+public class    DoThueRest {
     private DoThueService doThueService;
 
     public DoThueRest(DoThueService doThueService) {
@@ -95,32 +95,28 @@ public class DoThueRest {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DoThueDTO> update(
+    public ResponseEntity<DoThueDTO> updateDoThue(
             @PathVariable("id") Integer id,
-            @RequestParam("doThueDTO") String doThueDTOJson,
+            @RequestParam("tenDoThue") String tenDoThue,
+            @RequestParam("soLuong") int soLuong,
+            @RequestParam("donGia") float donGia,
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
 
-        // Chuyển đổi JSON thành đối tượng DoThueDTO
-        ObjectMapper objectMapper = new ObjectMapper();
-        DoThueDTO doThueDTO = objectMapper.readValue(doThueDTOJson, DoThueDTO.class);
-
-        // Lấy đối tượng DoThueDTO hiện tại từ dịch vụ để giữ lại ảnh cũ nếu không có file mới
+        // Lấy đối tượng hiện tại
         DoThueDTO existingDoThueDTO = doThueService.getOne(id);
 
-        // Nếu không có file mới, giữ lại hình ảnh cũ
-        if (imageFile == null || imageFile.isEmpty()) {
-            doThueDTO.setImageData(existingDoThueDTO.getImageData());
-        } else {
-            // Nếu có file mới, chuyển đổi MultipartFile thành byte[]
-            byte[] imageBytes = imageFile.getBytes();
-            doThueDTO.setImageData(imageBytes);
+        // Cập nhật các giá trị mới
+        existingDoThueDTO.setTenDoThue(tenDoThue);
+        existingDoThueDTO.setSoLuong(soLuong);
+        existingDoThueDTO.setDonGia(donGia);
+
+        // Cập nhật ảnh nếu có
+        if (imageFile != null && !imageFile.isEmpty()) {
+            existingDoThueDTO.setImageData(imageFile.getBytes());
         }
 
-        // Đặt ID cho đối tượng DoThueDTO để cập nhật
-        doThueDTO.setId(id);
-
-        // Xử lý đối tượng DoThueDTO và lưu vào dịch vụ
-        DoThueDTO updatedDoThueDTO = doThueService.save(doThueDTO);
+        // Cập nhật đối tượng
+        DoThueDTO updatedDoThueDTO = doThueService.update(id, existingDoThueDTO);
 
         return ResponseEntity.ok(updatedDoThueDTO);
     }
