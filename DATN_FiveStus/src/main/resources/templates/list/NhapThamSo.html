@@ -21,11 +21,6 @@
 
 <div class="container mt-4">
     <h1 class="mb-4">Quản Lý Tham Số</h1>
-
-    <a href="#" class="btn btn-outline-primary mb-3">
-        <i class="bi bi-house-door"></i> Quay lại trang chủ
-    </a>
-
     <div class="mb-4">
         <div class="form-group col-md-4 mr-5">
             <input type="text" class="form-control" id="search"
@@ -63,21 +58,21 @@
                 </div>
                 <div class="modal-body">
                     <form id="addParameterForm">
-                        <div class="mb-3">
-                            <label for="parameterCode" class="form-label">Mã</label>
-                            <input type="text" class="form-control" id="parameterCode" name="ma" required>
-                        </div>
+<!--                        <div class="mb-3">-->
+<!--                            <label for="parameterCode" class="form-label">Mã</label>-->
+<!--                            <input type="text" class="form-control" id="parameterCode" name="ma" required>-->
+<!--                        </div>-->
                         <div class="mb-3">
                             <label for="parameterName" class="form-label">Tên</label>
-                            <input type="text" class="form-control" id="parameterName" name="ten" required>
+                            <input type="text" class="form-control" id="parameterName" name="ten" >
                         </div>
                         <div class="mb-3">
                             <label for="parameterValue" class="form-label">Giá Trị</label>
-                            <input type="text" class="form-control" id="parameterValue" name="giaTri" required>
+                            <input type="text" class="form-control" id="parameterValue" name="giaTri" >
                         </div>
                         <div class="mb-3">
                             <label for="parameterType" class="form-label">Loại Giá Trị</label>
-                            <input type="text" class="form-control" id="parameterType" name="typeGiaTri" required>
+                            <input type="text" class="form-control" id="parameterType" name="typeGiaTri" >
                         </div>
                         <div class="mb-3">
                             <label for="parameterDescription" class="form-label">Mô Tả</label>
@@ -101,7 +96,7 @@
     </div>
 
     <!-- Modal for editing a parameter -->
-    <div class="modal fade" id="editParameterModal" tabindex="-1" aria-labelledby="editParameterModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editParameterModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -161,21 +156,20 @@
         addModal.show();
     });
 
-    function generateRandomCode(length) {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let result = '';
-        for (let i = 0; i < length; i++) {
-            const randomIndex = Math.floor(Math.random() * chars.length);
-            result += chars[randomIndex];
-        }
-        return result;
+    function removeVietnameseTones(str) {
+        str = str.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // Loại bỏ dấu
+        str = str.replace(/đ/g, 'd').replace(/Đ/g, 'D');
+        return str;
     }
 
-    $('#parameterForm').on('submit', function (e) {
-        e.preventDefault();
+    function generateMaThamSoFromName(name) {
+        // Loại bỏ dấu và thay khoảng trắng bằng _
+        let maThamSo = removeVietnameseTones(name).replace(/\s+/g, '_').toUpperCase();
+        return maThamSo;
+    }
 
-        var randomCode = generateRandomCode(5);
-        var maThamSo = 'TS' + randomCode;
+    $('#addParameterForm').on('submit', function (e) {
+        e.preventDefault();
 
         var tenThamSo = $('#parameterName').val();
         var giaTri = $('#parameterValue').val();
@@ -183,10 +177,26 @@
         var moTa = $('#parameterDescription').val();
         var trangThai = $('#parameterStatus').is(':checked');
 
-        if (!tenThamSo) {
+        // Kiểm tra tên tham số
+        if (!tenThamSo.trim()) {
             Swal.fire('Lỗi', 'Vui lòng nhập tên tham số.', 'error');
             return;
         }
+
+        // Kiểm tra giá trị tham số (tuỳ chọn: nếu giá trị tham số là bắt buộc)
+        if (!giaTri.trim()) {
+            Swal.fire('Lỗi', 'Vui lòng nhập giá trị cho tham số.', 'error');
+            return;
+        }
+
+        // Kiểm tra loại giá trị tham số (nếu bắt buộc)
+        if (!typeGiaTri.trim()) {
+            Swal.fire('Lỗi', 'Vui lòng chọn loại giá trị.', 'error');
+            return;
+        }
+
+        // Tạo mã tham số từ tên tham số
+        var maThamSo = 'TS' + generateMaThamSoFromName(tenThamSo);
 
         var formData = {
             ma: maThamSo,
@@ -221,6 +231,7 @@
         });
     });
 
+
     // Edit button
     $(document).on('click', '.edit-button', function() {
         var thamSoId = $(this).data('id');
@@ -228,7 +239,7 @@
             url: 'http://localhost:8080/tham-so/' + thamSoId,
             method: 'GET',
             success: function(data) {
-                $('#editThamSoId').val(data.id);
+                $('#editParameterId').val(data.id);
                 $('#editParameterCode').val(data.ma);
                 $('#editParameterName').val(data.ten);
                 $('#editParameterValue').val(data.giaTri);
@@ -249,7 +260,7 @@
         });
     });
 
-    $('#editForm').on('submit', function (e) {
+    $('#editParameterForm').on('submit', function (e) {
         e.preventDefault();
 
         var tenThamSo = $('#editParameterName').val();
@@ -257,10 +268,23 @@
         var typeGiaTri = $('#editParameterType').val();
         var moTa = $('#editParameterDescription').val();
         var trangThai = $('#editParameterStatus').is(':checked');
-        var id = $('#editThamSoId').val();
+        var id = $('#editParameterId').val();
 
-        if (!tenThamSo) {
+        // Kiểm tra tên tham số
+        if (!tenThamSo.trim()) {
             Swal.fire('Lỗi', 'Vui lòng nhập tên tham số.', 'error');
+            return;
+        }
+
+        // Kiểm tra giá trị tham số (tuỳ chọn: nếu giá trị tham số là bắt buộc)
+        if (!giaTri.trim()) {
+            Swal.fire('Lỗi', 'Vui lòng nhập giá trị cho tham số.', 'error');
+            return;
+        }
+
+        // Kiểm tra loại giá trị tham số (nếu bắt buộc)
+        if (!typeGiaTri.trim()) {
+            Swal.fire('Lỗi', 'Vui lòng chọn loại giá trị.', 'error');
             return;
         }
 

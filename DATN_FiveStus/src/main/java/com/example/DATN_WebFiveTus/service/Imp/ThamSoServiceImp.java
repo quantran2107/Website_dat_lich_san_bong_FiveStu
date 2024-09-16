@@ -44,6 +44,7 @@ public class ThamSoServiceImp implements ThamSoService {
     public ThamSoDTO save(ThamSoDTO thamSoDTO) {
         ThamSo thamSo=modelMapper.map(thamSoDTO,ThamSo.class);
         thamSo.setTrangThai(true);
+        thamSo.setDeletedAt(false);
         ThamSo thamSoSave=thamSoRepository.save(thamSo);
         return modelMapper.map(thamSoSave,ThamSoDTO.class);
     }
