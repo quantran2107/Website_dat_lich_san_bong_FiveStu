@@ -44,7 +44,7 @@ public class LoaiSanServiceImp implements LoaiSanService {
     @Override
     public LoaiSanDTO save(LoaiSanDTO loaiSanDTO) {
         LoaiSan loaiSan=modelMapper.map(loaiSanDTO,LoaiSan.class);
-        loaiSan.setDeletedAt(true);
+        loaiSan.setTrangThai("Hoạt động");
         LoaiSan loaiSanSave=loaiSanRepository.save(loaiSan);
         return modelMapper.map(loaiSanSave,LoaiSanDTO.class);
     }
@@ -56,7 +56,7 @@ public class LoaiSanServiceImp implements LoaiSanService {
         loaiSan.setTenLoaiSan(loaiSanDTO.getTenLoaiSan());
         loaiSan.setTrangThai(loaiSanDTO.getTrangThai());
         LoaiSan loaiSanUpdate=loaiSanRepository.save(loaiSan);
-        return modelMapper.map(loaiSan,LoaiSanDTO.class);
+        return modelMapper.map(loaiSanUpdate,LoaiSanDTO.class);
     }
 
     @Override

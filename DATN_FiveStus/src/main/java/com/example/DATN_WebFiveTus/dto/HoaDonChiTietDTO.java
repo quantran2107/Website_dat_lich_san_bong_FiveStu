@@ -28,6 +28,8 @@ public class HoaDonChiTietDTO {
 
     private String maHoaDon;
 
+    private String maHoaDonChiTiet;
+
     private Integer idSanCa;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -37,8 +39,6 @@ public class HoaDonChiTietDTO {
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date ngayDenSan;
-
-    private String maHoaDonChiTiet;
 
     private String tienSan;
 

@@ -61,6 +61,6 @@ public class SanCa {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = "deleted_at")
+    @Column(name = "deleted_at",  columnDefinition = "BIT(0) DEFAULT 0")
     private boolean deletedAt;
 }

@@ -56,7 +56,6 @@ private LoaiSanRepository loaiSanRepository;
         SanBong sanBong=modelMapper.map(sanBongDTO,SanBong.class);
         sanBong.setLoaiSan(loaiSan);
         sanBong.setTrangThai("Đang hoạt động");
-        sanBong.setDeletedAt(true);
         SanBong sanBongSave=sanBongRepository.save(sanBong);
         return modelMapper.map(sanBongSave,SanBongDTO.class);
     }

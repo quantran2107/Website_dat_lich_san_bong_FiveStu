@@ -176,6 +176,11 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
     }
 
     @Override
+    public void updateTrangThai(Integer id) {
+        hoaDonChiTietRepository.updateTrangThai(id);
+    }
+
+
     public List<HoaDonChiTietDTO> findByNgayDenSan(Date ngayDenSan) {
         // Lấy danh sách HoaDonChiTiet từ repository
         List<HoaDonChiTiet> list = hoaDonChiTietRepository.findByNgayDenSan(ngayDenSan);

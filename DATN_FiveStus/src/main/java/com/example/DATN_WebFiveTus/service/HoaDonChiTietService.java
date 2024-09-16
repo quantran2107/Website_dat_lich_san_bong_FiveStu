@@ -31,9 +31,14 @@ public interface HoaDonChiTietService {
 
     HoaDonChiTietDTO getOneHDCT(Integer id);
 
+
+   void updateTrangThai(Integer id);
+
+
     List<HoaDonChiTietDTO> findByNgayDenSan(Date ngayDenSan);
 
     HoaDonChiTietDTO save2(HoaDonChiTietDTO hoaDonChiTietDTO);
 
-    public boolean isSanCaBooked(Long idSanCa, LocalDate ngayDenSan);
+     boolean isSanCaBooked(Long idSanCa, LocalDate ngayDenSan);
+
 }

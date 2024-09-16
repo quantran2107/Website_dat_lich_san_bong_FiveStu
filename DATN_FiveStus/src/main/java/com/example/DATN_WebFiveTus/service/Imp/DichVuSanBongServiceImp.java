@@ -1,9 +1,18 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.DichVuSanBongDTO;
+import com.example.DATN_WebFiveTus.entity.DichVuSanBong;
+import com.example.DATN_WebFiveTus.entity.DoThue;
+import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
+import com.example.DATN_WebFiveTus.entity.NuocUong;
+import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.DichVuSanBongRepository;
+import com.example.DATN_WebFiveTus.repository.DoThueRepository;
+import com.example.DATN_WebFiveTus.repository.HoaDonChiTietRepository;
+import com.example.DATN_WebFiveTus.repository.NuocUongRepository;
 import com.example.DATN_WebFiveTus.service.DichVuSanBongService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,34 +23,64 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
 
     private DichVuSanBongRepository dichVuSanBongRepository;
 
+    private DoThueRepository doThueRepository;
+
+    private NuocUongRepository nuocUongRepository;
+
+    private HoaDonChiTietRepository hoaDonChiTietRepository;
+
     private ModelMapper modelMapper;
 
-
-
-    public DichVuSanBongServiceImp(DichVuSanBongRepository dichVuSanBongRepository, ModelMapper modelMapper) {
+    @Autowired
+    public DichVuSanBongServiceImp(DichVuSanBongRepository dichVuSanBongRepository, DoThueRepository doThueRepository, NuocUongRepository nuocUongRepository
+            , HoaDonChiTietRepository hoaDonChiTietRepository, ModelMapper modelMapper) {
         this.dichVuSanBongRepository = dichVuSanBongRepository;
+        this.doThueRepository = doThueRepository;
+        this.nuocUongRepository = nuocUongRepository;
+        this.hoaDonChiTietRepository = hoaDonChiTietRepository;
         this.modelMapper = modelMapper;
     }
 
     @Override
     public List<DichVuSanBongDTO> getAll() {
         return dichVuSanBongRepository.findAll().stream()
-                .map((dichVuSanBong) -> modelMapper.map(dichVuSanBong,DichVuSanBongDTO.class)).collect(Collectors.toList());
+                .map((dichVuSanBong) -> modelMapper.map(dichVuSanBong, DichVuSanBongDTO.class)).collect(Collectors.toList());
     }
 
     @Override
     public DichVuSanBongDTO getOne(Integer id) {
-        return null;
+        return modelMapper.map(dichVuSanBongRepository.findById(id).orElseThrow(() -> new ResourceNotfound("Không tồn tại id DVSB: " + id)), DichVuSanBongDTO.class);
     }
 
     @Override
     public DichVuSanBongDTO save(DichVuSanBongDTO dichVuSanBongDTO) {
-        return null;
+        DichVuSanBong dichVuSanBong = modelMapper.map(dichVuSanBongDTO, DichVuSanBong.class);
+        DoThue doThue = doThueRepository.findById(dichVuSanBongDTO.getIdDoThue()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id do thue: " + dichVuSanBongDTO.getIdDoThue()));
+        NuocUong nuocUong = nuocUongRepository.findById(dichVuSanBongDTO.getIdNuocUong()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id nuoc uong: " + dichVuSanBongDTO.getIdNuocUong()));
+        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(dichVuSanBongDTO.getIdHoaDonChiTiet()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id hdct: " + dichVuSanBongDTO.getIdHoaDonChiTiet()));
+        dichVuSanBong.setDoThue(doThue);
+        dichVuSanBong.setNuocUong(nuocUong);
+        dichVuSanBong.setHoaDonChiTiet(hoaDonChiTiet);
+        DichVuSanBong dichVuSanBongSave = dichVuSanBongRepository.save(dichVuSanBong);
+        return modelMapper.map(dichVuSanBongSave, DichVuSanBongDTO.class);
     }
 
     @Override
     public DichVuSanBongDTO update(Integer id, DichVuSanBongDTO dichVuSanBongDTO) {
-        return null;
+        DichVuSanBong dichVuSanBong = dichVuSanBongRepository.findById(id).orElseThrow(() -> new ResourceNotfound("Không tồn tại id DVSB: " + id));
+        DoThue doThue = doThueRepository.findById(dichVuSanBongDTO.getIdDoThue()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id do thue: " + dichVuSanBongDTO.getIdDoThue()));
+        NuocUong nuocUong = nuocUongRepository.findById(dichVuSanBongDTO.getIdNuocUong()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id nuoc uong: " + dichVuSanBongDTO.getIdNuocUong()));
+        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(dichVuSanBongDTO.getIdHoaDonChiTiet()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id hdct: " + dichVuSanBongDTO.getIdHoaDonChiTiet()));
+
+        dichVuSanBong.setDoThue(doThue);
+        dichVuSanBong.setNuocUong(nuocUong);
+        dichVuSanBong.setHoaDonChiTiet(hoaDonChiTiet);
+        dichVuSanBong.setSoLuongDoThue(dichVuSanBongDTO.getSoLuongDoThue());
+        dichVuSanBong.setSoLuongNuocUong(dichVuSanBongDTO.getSoLuongNuocUong());
+        dichVuSanBong.setDonGia(dichVuSanBongDTO.getDonGia());
+        dichVuSanBong.setTrangThai(dichVuSanBongDTO.getTrangThai());
+        DichVuSanBong dichVuSanBongUpdate = dichVuSanBongRepository.save(dichVuSanBong);
+        return modelMapper.map(dichVuSanBongUpdate, DichVuSanBongDTO.class);
     }
 
     @Override

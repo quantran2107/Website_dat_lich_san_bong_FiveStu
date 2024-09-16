@@ -4,6 +4,10 @@ import com.example.DATN_WebFiveTus.dto.SanCaDTO;
 import com.example.DATN_WebFiveTus.dto.ThamSoDTO;
 import com.example.DATN_WebFiveTus.service.ThamSoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +35,11 @@ public class ThamSoController {
     public ThamSoController(RestTemplate restTemplate, ThamSoService thamSoService) {
         this.restTemplate = restTemplate;
         this.thamSoService = thamSoService;
+    }
+
+    @GetMapping("NhapThamSo")
+    public String chuyenTrang(){
+        return "list/NhapThamSo";
     }
 
     @GetMapping("listThamSo")
@@ -125,5 +134,22 @@ public class ThamSoController {
         restTemplate.put("http://localhost:8080/tham-so/{id}", thamSoDTO, thamSoDTO.getId());
         return "redirect:/listThamSo";
     }
+
+    @GetMapping("/thamSo/search")
+    public String search(@RequestParam("keyword") String keyword,
+                         @RequestParam(name = "page", defaultValue = "0") int page,
+                         @RequestParam(name = "size", defaultValue = "10") int size,
+                         Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ThamSoDTO> resultPage = thamSoService.searchThamSo(keyword, pageable);
+        model.addAttribute("thamSo", new ThamSoDTO());
+        model.addAttribute("thamSoDTOList", resultPage.getContent());
+        model.addAttribute("currentPage", resultPage.getNumber());
+        model.addAttribute("totalPages", resultPage.getTotalPages());
+        model.addAttribute("totalElements", resultPage.getTotalElements());
+
+        return "list/quan-ly-tham-so";
+    }
+
 
 }

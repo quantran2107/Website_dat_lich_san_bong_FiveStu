@@ -39,12 +39,12 @@ public class HoaDonChiTiet {
     @JoinColumn(name = "id_hoa_don")
     private HoaDon hoaDon;
 
+    @Column(name = "ma_hoa_don_chi_tiet")
+    private String maHoaDonChiTiet;
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "id_san_ca")
     private SanCa sanCa;
-
-    @Column(name = "ma_hoa_don_chi_tiet", length = 100)
-    private String maHoaDonChiTiet;
 
     @Column(name = "tien_san")
     private String tienSan;

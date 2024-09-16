@@ -79,7 +79,6 @@ public class SanCaServiceImp implements SanCaService {
 
 
         SanCa sanCa=modelMapper.map(sanCaDTO,SanCa.class);
-        sanCa.setDeletedAt(true);
         sanCa.setTrangThai("Đã đặt nhé");
         sanCa.setCa(ca);
         sanCa.setSanBong(sanBong);
