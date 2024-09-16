@@ -135,4 +135,9 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         return dto;
     }
 
+    @Override
+    public void updateTrangThai(Integer id) {
+        hoaDonChiTietRepository.updateTrangThai(id);
+    }
+
 }

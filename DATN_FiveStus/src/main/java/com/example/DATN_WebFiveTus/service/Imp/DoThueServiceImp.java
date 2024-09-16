@@ -1,37 +1,19 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.DoThueDTO;
-import com.example.DATN_WebFiveTus.dto.NuocUongDTO;
-import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import com.example.DATN_WebFiveTus.entity.DoThue;
-import com.example.DATN_WebFiveTus.entity.NhanVien;
-import com.example.DATN_WebFiveTus.entity.NuocUong;
-import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.DoThueRepository;
 import com.example.DATN_WebFiveTus.service.DoThueService;
 import jakarta.persistence.EntityNotFoundException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.format.DateTimeFormatter;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,7 +51,14 @@ public class DoThueServiceImp implements DoThueService {
 
     @Override
     public DoThueDTO update(Integer id, DoThueDTO doThueDTO) {
-        return null;
+        DoThue doThue= doThueRepository.findById(id).orElseThrow(() ->
+                new ResourceNotfound("Không tồn tại do thue ID: " + id));
+        doThue.setTenDoThue(doThueDTO.getTenDoThue());
+        doThue.setDonGia(doThueDTO.getDonGia());
+        doThue.setSoLuong(doThueDTO.getSoLuong());
+        doThue.setTrangThai(doThueDTO.getTrangThai());
+        DoThue doThueUpdate=doThueRepository.save(doThue);
+        return modelMapper.map(doThueUpdate,DoThueDTO.class);
     }
 
     @Override

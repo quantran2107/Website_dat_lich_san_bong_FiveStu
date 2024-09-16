@@ -40,9 +40,6 @@ public class Ca {
     @Column(name = "ten_ca", nullable = false, length = 100)
     private String tenCa;
 
-//    @Column(name = "gia_ca")
-//    private Float giaCa;
-
 
     @Column(name = "thoi_gian_bat_dau")
 //    @Temporal(TemporalType.TIMESTAMP)
@@ -63,6 +60,6 @@ public class Ca {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = "deleted_at")
+    @Column(name = "deleted_at", columnDefinition = "BIT(0) DEFAULT 0")
     private boolean deletedAt;
 }

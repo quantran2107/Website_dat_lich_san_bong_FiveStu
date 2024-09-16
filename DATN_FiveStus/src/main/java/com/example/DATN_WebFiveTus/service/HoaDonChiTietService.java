@@ -29,4 +29,6 @@ public interface HoaDonChiTietService {
 
     HoaDonChiTietDTO getOneHDCT(Integer id);
 
+   void updateTrangThai(Integer id);
+
 }

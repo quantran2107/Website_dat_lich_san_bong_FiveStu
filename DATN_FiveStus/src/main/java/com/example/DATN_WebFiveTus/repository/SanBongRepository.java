@@ -24,7 +24,7 @@ public interface SanBongRepository extends JpaRepository<SanBong,Integer> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE SanBong sb SET sb.deletedAt = FALSE WHERE sb.id = :id")
+    @Query("UPDATE SanBong sb SET sb.deletedAt = TRUE WHERE sb.id = :id")
     void deletedAt(Integer id);
 
     @Query("SELECT sb FROM SanBong sb WHERE sb.loaiSan.id = :loaiSanId")

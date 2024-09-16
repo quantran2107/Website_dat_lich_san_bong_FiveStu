@@ -23,7 +23,7 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE SanCa sc SET sc.deletedAt = FALSE WHERE sc.id = :id")
+    @Query("UPDATE SanCa sc SET sc.deletedAt = TRUE WHERE sc.id = :id")
     void deletedAt(Integer id);
 
 

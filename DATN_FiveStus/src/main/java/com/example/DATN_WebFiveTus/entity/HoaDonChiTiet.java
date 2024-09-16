@@ -39,6 +39,9 @@ public class HoaDonChiTiet {
     @JoinColumn(name = "id_hoa_don", nullable = false)
     private HoaDon hoaDon;
 
+    @Column(name = "ma_hoa_don_chi_tiet")
+    private String maHoaDonChiTiet;
+
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "id_san_ca", nullable = false)
     private SanCa sanCa;

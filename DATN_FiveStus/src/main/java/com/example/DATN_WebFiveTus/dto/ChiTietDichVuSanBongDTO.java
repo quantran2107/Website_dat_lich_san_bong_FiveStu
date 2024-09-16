@@ -26,14 +26,15 @@ public class ChiTietDichVuSanBongDTO {
 
     private Integer idHoaDonChiTiet;
 
+
     private String trangThai;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime updatedAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private boolean deletedAt;
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private LocalDateTime createdAt;
+//
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private LocalDateTime updatedAt;
+//
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private boolean deletedAt;
 }

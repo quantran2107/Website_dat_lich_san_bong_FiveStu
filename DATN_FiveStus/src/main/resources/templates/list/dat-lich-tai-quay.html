@@ -145,9 +145,11 @@
                                         <!-- Tiêu đề của box -->
                                         <h5 class="card-title text-success mb-0">Dịch vụ sử dụng</h5>
                                         <!-- Nút nằm bên phải tiêu đề -->
-                                        <button  class="btn btn-outline-success" title="Thêm dịch vụ" type="button">
+                                        <button class="btn btn-outline-success" title="Thêm dịch vụ" type="button"
+                                                id="openServiceModal">
                                             <span class="fe fe-plus"></span>
                                         </button>
+
                                     </div>
 
                                 </div>
@@ -155,6 +157,41 @@
                         </div>
                     </div>
                 </div>
+
+
+                <div class="modal fade" id="serviceModal" tabindex="-1" role="dialog"
+                     aria-labelledby="serviceModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-warning">
+                                <h5 class="modal-title" id="serviceModalLabel">Thêm Dịch Vụ</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <ul class="nav nav-tabs flex" id="serviceTabs" role="tablist">
+                                    <li class="nav-item flex-grow-1">
+                                        <a class="nav-link active" id="tab1" data-toggle="tab" href="#doThueTab"
+                                           role="tab">Đồ Thuê</a>
+                                    </li>
+                                    <li class="nav-item flex-grow-1">
+                                        <a class="nav-link" id="tab2" data-toggle="tab" href="#nuocUongTab" role="tab">Nước Uống</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="serviceTabContent" style="max-height: 600px; overflow-y: auto;">
+                                    <div class="tab-pane fade show active row" id="doThueTab" role="tabpanel"></div>
+                                    <div class="tab-pane fade row" id="nuocUongTab" role="tabpanel"></div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" onclick="luuDichVu()" class="btn btn-primary">Xác Nhận</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
 
                 <!-- Phần Tabs và Nội dung Tabs bên phải -->
                 <div class="col-md-5">
@@ -167,7 +204,7 @@
                                 <!-- Khung chứa các nút nằm bên phải -->
                                 <div class="d-flex">
                                     <!-- Nút Thêm hóa đơn -->
-                                    <button   id="addInvoiceButton" class="btn btn-outline-primary me-2"
+                                    <button id="addInvoiceButton" class="btn btn-outline-primary me-2"
                                             title="Thêm hóa đơn"
                                             type="button">
                                         <span class="fe fe-plus"></span>
@@ -263,7 +300,388 @@
 </div>
 
 <script th:include="~{fragment/script :: script}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
+
+    function luuDichVu() {
+        // Lấy giá trị của các trường
+        var idDoThue = idDoThues;
+        var idNuocUong= idNuocUongs;
+        var idHoaDonChiTiet = selectedInvoiceId;
+        var donGiaDoThue = donGiaDoThues;
+        var donGiaNuocUong = donGiaNuocUongs;
+        var soLuongDoThue = soLuongChons;
+        var soLuongNuocUong=soLuongNuocUongs;
+
+        // Tạo đối tượng dữ liệu để gửi qua API
+        var data = {
+            "idDoThue": idDoThue,
+            "idHoaDonChiTiet": idHoaDonChiTiet,
+            "idNuocUong": idNuocUong,
+            "donGia": (soLuongDoThue * donGiaDoThue) +(soLuongNuocUong * donGiaNuocUong),
+            "soLuongDoThue": soLuongDoThue,
+            "soLuongNuocUong": soLuongNuocUong,
+            "trangThai":"NTTH2502"
+        };
+
+
+        // Gửi dữ liệu qua API bằng jQuery POST
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8080/dich-vu-san-bong',
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: 'Thêm dịch vụ sân bóng thành công',
+                });
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi!',
+                    text: 'Có lỗi xảy ra khi lưu dữ liệu: ' + error,
+                });
+            }
+        });
+
+        // Hiển thị thông báo dữ liệu đã lưu
+        Swal.fire({
+            icon: 'info',
+            title: 'Dữ liệu đã được lưu',
+            text: `ID Dịch Vụ: ${data.idDoThue}, ID Hóa Đơn Chi Tiết: ${data.idHoaDonChiTiet}, Đơn Giá: ${data.donGia}, Số Lượng: ${data.soLuongDoThue}`,
+        });
+    }
+
+
+
+
+
+    let idDoThues = null;
+    let donGiaDoThues = null;
+    let soLuongDoThues = null;
+    let soLuongChons = null;
+    let tenDoThues = null;
+
+
+
+    function dichVuDo() {
+        if (!selectedInvoiceId) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Chưa chọn hóa đơn',
+                text: 'Vui lòng chọn hóa đơn trước khi thêm dịch vụ.',
+            });
+            return; // Ngừng thực hiện nếu không chọn hóa đơn
+        }
+
+        $.ajax({
+            url: 'http://localhost:8080/do_thue/hien-thi',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                let content = '<div class="row">';
+                data.forEach(item => {
+                    content += `
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="card">
+                        <h5 class="card-title" id="${item.id}">${item.id}</h5>
+                        <img src="${item.imageData}" class="card-img-top" alt="${item.tenDoThue}">
+                        <div class="card-body">
+                            <h5 class="card-title">${item.tenDoThue}</h5>
+                            <p class="card-text text-danger">${item.donGia} VND</p>
+                            <p class="card-text kho-con">Kho còn: ${item.soLuong}</p>
+                            <div class="input-group">
+                            <label>Số lượng chọn</label>
+                                <input type="number" class="form-control so-luong-chon" value="0" min="0" step="1">
+                                <div class="input-group-append">
+                                    <button class="btn btn-success add-btn" data-ten-do-thue="${item.tenDoThue}" data-id="${item.id}" data-don-gia="${item.donGia}" data-so-luong="${item.soLuong}" type="button">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                });
+                content += '</div>'
+                $('#doThueTab').html(content);
+                $('#serviceModal').modal('show');
+
+                $('.add-btn').on('click', function () {
+                    idDoThues = $(this).data('id');
+                    donGiaDoThues = $(this).data('don-gia');
+                    soLuongDoThues = $(this).data('so-luong');
+                    tenDoThues = $(this).data('ten-do-thue');
+                    soLuongChons = $(this).closest('.input-group').find('.so-luong-chon').val();
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Đã thêm',
+                        text: `ID: ${idDoThues}, Đơn giá: ${donGiaDoThues} VND, Số lượng trong kho: ${soLuongDoThues}, Số lượng chọn: ${soLuongChons}, Tên đồ: ${tenDoThues}`,
+                    });
+
+                    if (soLuongChons > soLuongDoThues) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Số lượng chọn không hợp lệ',
+                            text: 'Số lượng chọn không được vượt quá số lượng có sẵn!',
+                        });
+                        return;
+                    }
+
+                    $.ajax({
+                        url: `http://localhost:8080/do_thue/${idDoThues}`,
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            idDoThue: idDoThues,
+                            tenDoThue: tenDoThues,
+                            donGia: donGiaDoThues,
+                            soLuong: soLuongDoThues - soLuongChons,
+                        }),
+                        success: function (response) {
+                            let newSoLuong = soLuongDoThues - soLuongChons;
+
+                            if (newSoLuong <= 0) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Hết hàng',
+                                    text: 'Số lượng trong kho đã hết.',
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Cập nhật thành công',
+                                    text: `Số lượng còn lại: ${newSoLuong}`,
+                                });
+                            }
+
+                            // Cập nhật số lượng còn lại trên giao diện
+                            $(this).closest('.card-body').find('.kho-con').text(`Kho còn: ${newSoLuong}`);
+
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Cập nhật thất bại',
+                                text: 'Có lỗi xảy ra khi cập nhật số lượng.',
+                            });
+                        }
+                    });
+                });
+
+                $('.so-luong-chon').each(function() {
+                    $(this).data('previous-value', 0);
+                });
+
+                $('.so-luong-chon').on('input', function () {
+                    let input = $(this);
+                    let quantityChosen = parseInt(input.val()) || 0;
+                    let stockQuantityElem = input.closest('.input-group').siblings('.kho-con');
+                    let stockQuantity = parseInt(stockQuantityElem.text().replace('Kho còn: ', ''));
+                    let previousQuantity = parseInt(input.data('previous-value')) || 0;
+
+                    if (!isNaN(quantityChosen) && quantityChosen !== previousQuantity) {
+                        if (quantityChosen > previousQuantity) {
+                            stockQuantity -= (quantityChosen - previousQuantity);
+                        } else if (quantityChosen < previousQuantity) {
+                            stockQuantity += (previousQuantity - quantityChosen);
+                        }
+
+                        if (stockQuantity < 0) {
+                            quantityChosen += stockQuantity;
+                            stockQuantity = 0;
+                        }
+
+                        stockQuantityElem.text(`Kho còn: ${stockQuantity}`);
+                        input.val(quantityChosen);
+                        input.data('previous-value', quantityChosen);
+                    } else {
+                        input.val(previousQuantity);
+                    }
+                });
+
+                $('.chon-san-pham').on('change', function() {
+                    let input = $(this).closest('.card-body').find('.so-luong-chon');
+                    input.data('previous-value', 0);
+                    input.val(0);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error('Lỗi khi gọi API:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi dữ liệu',
+                    text: 'Có lỗi xảy ra khi lấy dữ liệu.',
+                });
+            }
+        });
+    }
+
+    // Gọi hàm dichVuDo khi nút #openServiceModal được click
+    $('#openServiceModal').on('click', dichVuDo);
+    let idNuocUongs = null;
+    let donGiaNuocUongs = null;
+    let soLuongNuocUongs = null;
+    let soLuongChonNuocs = null;
+    let tenNuocUongs = null;
+
+
+    function dichVuNuoc() {
+        if (!selectedInvoiceId) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Chưa chọn hóa đơn',
+                text: 'Vui lòng chọn hóa đơn trước khi thêm dịch vụ.',
+            });
+            return;
+        }
+
+        $.ajax({
+            url: 'http://localhost:8080/nuoc_uong/hien-thi',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                let content = '<div class="row">';
+                data.forEach(item => {
+                    content += `
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="card">
+                        <h5 class="card-title" id="${item.id}">${item.id}</h5>
+                        <img src="${item.imageData}" class="card-img-top" alt="${item.tenNuocUong}">
+                        <div class="card-body">
+                            <h5 class="card-title">${item.tenNuocUong}</h5>
+                            <p class="card-text text-danger">${item.donGia} VND</p>
+                            <p class="card-text kho-con" data-so-luong="${item.soLuong}">Kho còn: ${item.soLuong}</p>
+                            <div class="input-group">
+                                <label>Số lượng chọn</label>
+                                <input type="number" class="form-control so-luong-chon" value="0" min="0" step="1">
+                                <div class="input-group-append">
+                                    <button class="btn btn-success add-btn-nuoc" data-ten-nuoc-uong="${item.tenNuocUong}" data-id="${item.id}" data-don-gia="${item.donGia}" data-so-luong="${item.soLuong}" type="button">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                });
+                content += '</div>'
+                $('#nuocUongTab').html(content);
+
+                // Gán sự kiện cho các nút "Thêm"
+                $('.add-btn-nuoc').off('click').on('click', function () {
+                    let button = $(this);
+                     idNuocUongs = button.data('id');
+                     donGiaNuocUongs = button.data('don-gia');
+                     soLuongNuocUongs = button.data('so-luong');
+                     tenNuocUongs = button.data('ten-nuoc-uong');
+                     soLuongChonNuocs = parseInt(button.closest('.input-group').find('.so-luong-chon').val(), 10);
+
+                    if (soLuongChonNuocs > soLuongNuocUongs) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Số lượng chọn không hợp lệ',
+                            text: 'Số lượng chọn không được vượt quá số lượng có sẵn!',
+                        });
+                        return;
+                    }
+
+                    $.ajax({
+                        url: `http://localhost:8080/nuoc_uong/${idNuocUongs}`,
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            idNuocUong: idNuocUongs,
+                            tenNuocUong: tenNuocUongs,
+                            donGia: donGiaNuocUongs,
+                            soLuong: soLuongNuocUongs - soLuongChonNuocs,
+                        }),
+                        success: function (response) {
+                            let newSoLuong = soLuongNuocUongs - soLuongChonNuocs;
+
+                            if (newSoLuong <= 0) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Hết hàng',
+                                    text: 'Số lượng trong kho đã hết.',
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Cập nhật thành công',
+                                    text: `Số lượng còn lại: ${newSoLuong}`,
+                                });
+                            }
+
+                            // Cập nhật số lượng kho trên giao diện
+                            button.closest('.card-body').find('.kho-con').text(`Kho còn: ${newSoLuong}`).data('so-luong', newSoLuong);
+
+                            // Cập nhật số lượng kho khi số lượng chọn thay đổi
+                            $('.so-luong-chon').off('input').on('input', function () {
+                                let input = $(this);
+                                let quantityChosen = parseInt(input.val(), 10) || 0;
+                                let cardBody = input.closest('.card-body');
+                                let khoConElem = cardBody.find('.kho-con');
+                                let stockQuantity = parseInt(khoConElem.data('so-luong'), 10);
+
+                                // Cập nhật số lượng kho dựa trên giá trị trước đó và hiện tại
+                                let previousQuantity = parseInt(input.data('previous-value'), 10) || 0;
+
+                                if (quantityChosen > stockQuantity) {
+                                    input.val(stockQuantity); // Không cho phép chọn nhiều hơn số lượng kho còn lại
+                                    quantityChosen = stockQuantity;
+                                }
+
+                                let newStockQuantity = stockQuantity + previousQuantity - quantityChosen;
+
+                                if (newStockQuantity < 0) {
+                                    quantityChosen += newStockQuantity; // Điều chỉnh số lượng chọn nếu kho không đủ
+                                    newStockQuantity = 0;
+                                }
+
+                                khoConElem.text(`Kho còn: ${newStockQuantity}`);
+                                khoConElem.data('so-luong', newStockQuantity);
+                                input.data('previous-value', quantityChosen); // Cập nhật giá trị trước đó
+                            });
+
+                            // Xử lý sự thay đổi số lượng chọn trong các ô input
+                            $('.so-luong-chon').off('change').on('change', function() {
+                                let input = $(this);
+                                input.data('previous-value', 0);
+                                input.val(0);
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Cập nhật thất bại',
+                                text: 'Có lỗi xảy ra khi cập nhật số lượng.',
+                            });
+                        }
+                    });
+                });
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi dữ liệu',
+                    text: 'Có lỗi xảy ra khi lấy dữ liệu.',
+                });
+            }
+        });
+    }
+
+
+    $('#serviceModal').on('shown.bs.modal', function () {
+        dichVuDo(); // Load "Đồ Thuê" tab content when modal is shown
+        dichVuNuoc();
+    });
+
+    $('#tab1').on('click', dichVuDo);
+    $('#tab2').on('click', dichVuNuoc);
+
+
 
     function showSuccessToast(message) {
         Toastify({
@@ -291,46 +709,151 @@
         }).showToast();
     }
 
+    async function checkIn(id) {
+        try {
+            // Tìm hàng tương ứng với ID trong bảng và lấy giá trị hoVaTenKhachHang và maHoaDonChiTiet
+            const row = document.querySelector(`tr[data-id='${id}']`);
+            if (!row) throw new Error('Không tìm thấy hàng với ID: ' + id);
+
+            const hoVaTenKhachHangCell = row.querySelector('.tenKH');
+            const maHoaDonChiTietCell = row.querySelector('.maHoaDonChiTiet'); // Lấy giá trị từ thuộc tính data
+            const hoVaTenKhachHang = hoVaTenKhachHangCell ? hoVaTenKhachHangCell.textContent.trim() : 'Khách hàng không xác định';
+            const maHoaDonChiTiet = maHoaDonChiTietCell ? maHoaDonChiTietCell.textContent.trim() : 'Mã HDCT không xác định';
+            // Cập nhật trạng thái của bản ghi
+            const response = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({trangThai: 'Đang hoạt động'})
+            });
+
+            if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
+
+            // Lưu lại lịch sử check-in
+            const historyResponse = await fetch('http://localhost:8080/lich-su/checkinLichSu', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: id,
+                    hoVaTenKhachHang: hoVaTenKhachHang,
+                    maHoaDonChiTiet: maHoaDonChiTiet,
+                    trangThai: 'Đang hoạt động'
+                })
+            });
+
+            if (!historyResponse.ok) throw new Error(`Error ${historyResponse.status}: ${await historyResponse.text()}`);
+
+            // Làm mới bảng dữ liệu trong tab "Đang hoạt động"
+            fetchData('Chờ nhận sân', 0, 'cho-nhan-table');
+
+            // Tùy chọn: Hiển thị thông báo thành công
+            showSuccessToast('Cập nhật trạng thái và lưu lịch sử thành công.');
+            // location.reload();
+
+        } catch (error) {
+            console.error('Error during check-in:', error);
+            showErrorToast('Có lỗi xảy ra khi check-in.');
+        }
+    }
+
+
+
+    // Hàm fetch data từ server và hiển thị ra bảng
     async function fetchData(trangThai, page, tableId) {
         try {
-            const pageSize = 3; // Đảm bảo giá trị này khớp với giá trị bạn sử dụng trong backend
+            const pageSize = 3;
             const url = `http://localhost:8080/hoa-don-chi-tiet/trang-thai?trangThai=${encodeURIComponent(trangThai)}&page=${page}&size=${pageSize}`;
-            console.log(`Fetching data from URL: ${url}`); // Debugging URL
+            console.log(`Fetching data from URL: ${url}`);
+
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
 
             const data = await response.json();
-            console.log('Data received:', data); // Debugging response data
+            console.log('Data received:', data);
 
             const tableBody = document.getElementById(tableId);
-            tableBody.innerHTML = '';
+            if (!tableBody) {
+                return;
+            }
+            tableBody.innerHTML = ''; // Xóa nội dung cũ của bảng
 
-            data.content.forEach((item, index) => {
-                const row = document.createElement('tr');
-                row.classList.add('invoice-row');
-                row.setAttribute('data-id', item.id);
-                row.addEventListener('click', showInvoiceDetails); // Gọi showInvoiceDetails với event
-                row.innerHTML = `
-                <td hidden>${item.id}</td>
-                <td>${index + 1 + (page * pageSize)}</td>
-                <td class="tenKH">${item.hoVaTenKhachHang}</td>
-                <td class="sdt">${item.soDienThoaiKhachHang}</td>
-                <td>${item.emailKhachHang}</td>
-                <td>${item.tenSanBong}</td>
-                <td>${item.tenCa}</td>
-                <td>${item.ngayDenSan}</td>
-                <td>
-                    ${trangThai === 'Đang hoạt động' ? '' : `<button class="btn btn-outline-success" onclick="checkIn(${item.id})" title="Check in"><span class="fe fe-check-circle"></span></button>`}
-                </td>
-            `;
-                tableBody.appendChild(row);
-            });
-            updatePagination(data.totalPages, page, tableId);
+            // Tạo bảng động từ dữ liệu
+            if (Array.isArray(data.content)) {
+                data.content.forEach((item, index) => {
+                    const row = document.createElement('tr');
+                    row.classList.add('invoice-row');
+                    row.setAttribute('data-id', item.id); // Gắn id của bản ghi vào thuộc tính data-id
+                    // row.addEventListener('click', showInvoiceDetails2); // Đăng ký sự kiện click
+                    row.addEventListener('click', showInvoiceDetails);
+                    row.innerHTML = `
+                    <td hidden>${item.id}</td>
+                    <td hidden class="maHoaDonChiTiet">${item.maHoaDonChiTiet}</td>
+                    <td>${index + 1 + (page * pageSize)}</td>
+                    <td class="tenKH">${item.hoVaTenKhachHang}</td>
+                    <td class="sdt">${item.soDienThoaiKhachHang}</td>
+                    <td>${item.emailKhachHang}</td>
+                    <td>${item.tenSanBong}</td>
+                    <td>${item.tenCa}</td>
+                    <td>${item.ngayDenSan}</td>
+                    <td>
+                        ${trangThai === 'Đang hoạt động' ? '' : '<button class="btn btn-outline-success check-in-btn"  title="Check in"><span class="fe fe-check-circle"></span></button>'}
+                    </td>
+                `;
+                    tableBody.appendChild(row); // Thêm dòng vào bảng
+                });
+            } else {
+                console.error('Dữ liệu không hợp lệ: data.content không phải là mảng.');
+            }
+
+            updatePagination(data.totalPages, page, tableId); // Cập nhật phân trang
         } catch (error) {
-            console.error('Error fetching data:', error);
             showErrorToast('Có lỗi xảy ra khi tải dữ liệu.');
+            console.error('Error fetching data:', error);
         }
     }
+
+    // Thêm sự kiện cho các nút check-in
+    document.addEventListener('click', function (event) {
+        if (event.target && event.target.matches('.check-in-btn')) {
+            const row = event.target.closest('tr');
+            const id = row.getAttribute('data-id');
+            checkIn(id);
+        }
+    });
+
+
+
+
+    // Sự kiện khi nhấn nút "Thêm dịch vụ"
+    document.getElementById('openServiceModal').addEventListener('click', function (event) {
+        if (selectedInvoiceId) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Thêm dịch vụ',
+                text: `Thêm dịch vụ cho hóa đơn có ID: ${selectedInvoiceId}`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Mở modal nếu hóa đơn đã được chọn
+                    $('#serviceModal').modal('show');
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Chưa chọn hóa đơn',
+                text: 'Vui lòng chọn hóa đơn trước khi thêm dịch vụ.',
+            }).then(() => {
+                event.preventDefault(); // Ngăn chặn việc mở modal
+            });
+        }
+    });
+
+
+
+
 
     function updatePagination(totalPages, currentPage, tableId) {
         const paginationElement = document.getElementById(`pagination${tableId === 'dang-hoat-dong-table' ? 'DangHoatDong' : 'ChoNhan'}`);
@@ -446,125 +969,12 @@
         fetchData('Đang hoạt động', 0, 'dang-hoat-dong-table');
         fetchData('Chờ nhận sân', 0, 'cho-nhan-table');
     }
-
-    // function addTab() {
-    //     if (tabCount < maxTabs) {
-    //         // Xóa form mặc định nếu chưa tạo tab nào
-    //         const defaultForm = document.querySelector('#tabContentRight > form');
-    //         if (defaultForm) {
-    //             defaultForm.remove();
-    //         }
-    //
-    //         // Tăng số lượng tab và tạo ID cho tab mới
-    //         tabCount++;
-    //         const tabId = `tab${tabCount}`;
-    //         const tabTitle = `Lịch đặt ${tabCount}`;
-    //
-    //         // Tạo tab mới với nút xóa
-    //         const newTab = document.createElement('li');
-    //         newTab.classList.add('nav-item');
-    //         newTab.innerHTML = `
-    //         <a class="nav-link ${tabCount === 1 ? 'active' : ''}" id="${tabId}-tab" data-bs-toggle="tab"
-    //            href="#${tabId}" role="tab" aria-controls="${tabId}" aria-selected="${tabCount === 1}">
-    //             ${tabTitle}
-    //             <button type="button" class="close" onclick="removeTab(event, '${tabId}')" title="Xóa">
-    //                 <span class="fe fe-x-circle" style="color: #ff0000; font-size: 15px;"></span>
-    //             </button>
-    //         </a>
-    //     `;
-    //         document.getElementById('tabListRight').appendChild(newTab);
-    //
-    //         // Tạo nội dung tab mới
-    //         const newTabContent = document.createElement('div');
-    //         newTabContent.className = `tab-pane fade ${tabCount === 1 ? 'show active' : ''}`;
-    //         newTabContent.id = tabId;
-    //         newTabContent.setAttribute('role', 'tabpanel');
-    //         newTabContent.setAttribute('aria-labelledby', `${tabId}-tab`);
-    //         newTabContent.innerHTML = `
-    //         <form>
-    //             <div class="row">
-    //                 <!-- Dòng đầu tiên với hai ô -->
-    //         <div class="col-md-6">
-    //         <div class="form-group mb-3">
-    //         <label for="tenKH${tabCount}">Tên khách hàng</label>
-    //         <input type="text" id="tenKH${tabCount}" class="form-control">
-    //         </div>
-    //         <div class="form-group mb-3">
-    //         <label for="sdt${tabCount}">SDT</label>
-    //         <input type="text" id="sdt${tabCount}" class="form-control">
-    //         </div>
-    //         </div>
-    //
-    //             <!-- Dòng thứ hai với hai ô -->
-    //         <div class="col-md-6">
-    //         <div class="form-group mb-3">
-    //         <label for="tenSanCa${tabCount}">Tên sân ca</label>
-    //         <input type="text" id="tenSanCa${tabCount}" class="form-control">
-    //         </div>
-    //         <div class="form-group mb-3">
-    //         <label for="thoiGianDa${tabCount}">Thời gian đá</label>
-    //         <input type="time" id="thoiGianDa${tabCount}" class="form-control">
-    //         </div>
-    //         </div>
-    //         </div>
-    //
-    //         <div class="row">
-    //             <!-- Dòng thứ ba với hai ô -->
-    //         <div class="col-md-6">
-    //         <div class="form-group mb-3">
-    //         <label for="ngayDenSan${tabCount}">Ngày đặt sân</label>
-    //         <input type="date" id="ngayDenSan${tabCount}" class="form-control">
-    //         </div>
-    //         <div class="form-group mb-3">
-    //         <label for="tienCocThua${tabCount}">Tiền cọc thừa</label>
-    //         <input type="text" id="tienCocThua${tabCount}" class="form-control">
-    //         </div>
-    //         </div>
-    //
-    //             <!-- Dòng thứ tư với hai ô -->
-    //         <div class="col-md-6">
-    //         <div class="form-group mb-3">
-    //         <label for="giaSan${tabCount}">Giá sân</label>
-    //         <input type="text" id="giaSan${tabCount}" class="form-control">
-    //         </div>
-    //         <div class="form-group mb-3">
-    //         <label for="giaDichVu${tabCount}">Giá dịch vụ</label>
-    //         <input type="text" id="giaDichVu${tabCount}" class="form-control">
-    //         </div>
-    //         </div>
-    //         </div>
-    //
-    //         <div class="row">
-    //             <!-- Dòng cuối cùng với hai ô -->
-    //         <div class="col-md-6">
-    //         <div class="form-group mb-3">
-    //         <label for="tienPhuPhi${tabCount}">Tiền phụ phí</label>
-    //         <input type="text" id="tienPhuPhi${tabCount}" class="form-control">
-    //         </div>
-    //         </div>
-    //
-    //         <div class="col-md-6">
-    //         <div class="form-group mb-3">
-    //         <label for="tienCocSan${tabCount}">Tiền cọc sân</label>
-    //         <input type="text" id="tienCocSan${tabCount}" class="form-control">
-    //         </div>
-    //         </div>
-    //         </div>
-    //         </form>
-    //         `
-    //
-    //
-    //                 ;
-    //                 document.getElementById('tabContentRight').appendChild(newTabContent);
-    //             } else {
-    //                 showErrorToast('Tối đa 5 tab');
-    //             }
-    //         }
-
+    let selectedInvoiceId = null;
 
     function showInvoiceDetails(event) {
         const row = event.currentTarget; // Lấy dòng hiện tại được chọn
         const invoiceId = row.getAttribute('data-id'); // Lấy id hóa đơn chi tiết từ thuộc tính data-id
+        selectedInvoiceId = row.getAttribute('data-id');
         const tabName =
             `HD ${invoiceId}`
         ;
@@ -752,15 +1162,15 @@
         }
     }
 
-    $(document).ready(function() {
-        $('#addInvoiceButton').on('click', function() {
+    $(document).ready(function () {
+        $('#addInvoiceButton').on('click', function () {
             $.ajax({
                 url: 'http://localhost:8080/chon-san', // URL của nội dung bạn muốn tải
                 method: 'GET',
-                success: function(response) {
+                success: function (response) {
                     $('#content-ban-hang').html(response); // Cập nhật nội dung của phần tử
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error("An error occurred: " + xhr.responseText);
                 }
             });

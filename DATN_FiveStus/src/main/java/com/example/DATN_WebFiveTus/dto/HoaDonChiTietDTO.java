@@ -28,6 +28,8 @@ public class HoaDonChiTietDTO {
 
     private String maHoaDon;
 
+    private String maHoaDonChiTiet;
+
     private Integer idSanCa;
 
     @Temporal(TemporalType.TIMESTAMP)

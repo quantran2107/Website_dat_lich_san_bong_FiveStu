@@ -1,7 +1,5 @@
 package com.example.DATN_WebFiveTus.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -19,6 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 public class DoThueDTO {
+
     private int id;
 
     private float donGia;

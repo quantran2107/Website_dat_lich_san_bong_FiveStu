@@ -1,8 +1,6 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
-import com.example.DATN_WebFiveTus.dto.SanCaDTO;
 import com.example.DATN_WebFiveTus.dto.ThamSoDTO;
-import com.example.DATN_WebFiveTus.entity.SanCa;
 import com.example.DATN_WebFiveTus.entity.ThamSo;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.ThamSoRepository;
@@ -10,6 +8,7 @@ import com.example.DATN_WebFiveTus.service.ThamSoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -69,6 +68,25 @@ public class ThamSoServiceImp implements ThamSoService {
     public void delete(Integer id) {
 
     }
+
+
+    @Override
+    public Page<ThamSoDTO> searchThamSo(String keyword, Pageable pageable) {
+        Page<ThamSo> thamSoPage = thamSoRepository.searchThamSo(keyword, pageable);
+        return thamSoPage.map(thamSo -> modelMapper.map(thamSo, ThamSoDTO.class));
+    }
+
+    @Override
+    public Page<ThamSoDTO> searchThamSoss(String ma, String ten, String typeGiaTri, Boolean trangThai, Pageable pageable) {
+        Page<ThamSo> thamSoPage = thamSoRepository.searchThamSoss(ma, ten, typeGiaTri, trangThai,pageable);
+
+        List<ThamSoDTO> thamSoDTOS = thamSoPage.getContent().stream()
+                .map((thamSo) ->modelMapper.map(thamSo,ThamSoDTO.class))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(thamSoDTOS, pageable, thamSoPage.getTotalElements());
+    }
+
 
     @Override
     public ThamSoDTO findByTenThamSo(String ma) {
