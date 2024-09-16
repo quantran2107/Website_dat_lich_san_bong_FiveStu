@@ -27,4 +27,8 @@ public interface KhachHangRepository extends JpaRepository<KhachHang,Integer> {
 
     @Query("SELECT kh FROM KhachHang kh WHERE kh.trangThai = :status AND kh.gioiTinh = :gender")
     Page<KhachHang> findByStatusAndGender(@Param("status") String status, @Param("gender") boolean gender, Pageable pageable);
+
+    @Query("SELECT kh FROM KhachHang kh WHERE kh.soDienThoai = :soDienThoai ")
+    KhachHang findKhachHangBySoDienThoai(@Param("soDienThoai") String soDienThoai);
+
 }

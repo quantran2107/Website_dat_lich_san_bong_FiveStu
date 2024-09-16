@@ -118,6 +118,12 @@ public class KhachHangImp implements KhachHangService {
     }
 
     @Override
+    public KhachHangDTO findBySoDienThoai(String soDienThoai) {
+        KhachHang khachHang = khachHangRepository.findKhachHangBySoDienThoai(soDienThoai);
+        return modelMapper.map(khachHang, KhachHangDTO.class);
+    }
+
+    @Override
     public Page<KhachHangDTO> getAll(Pageable pageable) {
         Page<KhachHang> khachHangs = khachHangRepository.findAll(pageable);
         return khachHangs.map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class));

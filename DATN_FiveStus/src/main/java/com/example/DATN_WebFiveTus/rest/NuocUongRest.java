@@ -90,8 +90,33 @@ public class NuocUongRest {
     }
 
     @PutMapping("/{id}")
+
     public ResponseEntity<NuocUongDTO> update(@PathVariable("id") Integer id, @RequestBody NuocUongDTO nuocUongDTO){
         return ResponseEntity.ok(nuocUongService.update(id, nuocUongDTO));
+
+//    public ResponseEntity<NuocUongDTO> update(
+//            @PathVariable("id") Integer id,
+//            @RequestPart("nuocUongDTO") NuocUongDTO nuocUongDTO,
+//            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
+//
+//        // Tìm kiếm đối tượng hiện tại
+//        NuocUongDTO existingNuocUongDTO = nuocUongService.getOne(id);
+//
+//        // Cập nhật các giá trị mới từ nuocUongDTO
+//        existingNuocUongDTO.setTenNuocUong(nuocUongDTO.getTenNuocUong());
+//        existingNuocUongDTO.setSoLuong(nuocUongDTO.getSoLuong());
+//        existingNuocUongDTO.setDonGia(nuocUongDTO.getDonGia());
+//
+//        // Cập nhật ảnh nếu có
+//        if (imageFile != null && !imageFile.isEmpty()) {
+//            existingNuocUongDTO.setImageData(imageFile.getBytes());
+//        }
+//
+//        // Xử lý đối tượng NuocUongDTO và lưu vào dịch vụ
+//        NuocUongDTO updatedNuocUongDTO = nuocUongService.update(id, existingNuocUongDTO);
+//
+//        return ResponseEntity.ok(updatedNuocUongDTO);
+
     }
 
 //    @PutMapping("/{id}")

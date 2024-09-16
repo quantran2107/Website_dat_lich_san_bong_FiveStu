@@ -26,7 +26,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("do_thue")
-public class DoThueRest {
+public class    DoThueRest {
     private DoThueService doThueService;
 
     public DoThueRest(DoThueService doThueService) {
@@ -90,6 +90,32 @@ public class DoThueRest {
     @PutMapping("/{id}")
     public ResponseEntity<DoThueDTO> update(@PathVariable("id") Integer id,@RequestBody DoThueDTO doThueDTO){
         return ResponseEntity.ok(doThueService.update(id, doThueDTO));
+//
+//    public ResponseEntity<DoThueDTO> updateDoThue(
+//            @PathVariable("id") Integer id,
+//            @RequestParam("tenDoThue") String tenDoThue,
+//            @RequestParam("soLuong") int soLuong,
+//            @RequestParam("donGia") float donGia,
+//            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
+//
+//        // Lấy đối tượng hiện tại
+//        DoThueDTO existingDoThueDTO = doThueService.getOne(id);
+//
+//        // Cập nhật các giá trị mới
+//        existingDoThueDTO.setTenDoThue(tenDoThue);
+//        existingDoThueDTO.setSoLuong(soLuong);
+//        existingDoThueDTO.setDonGia(donGia);
+//
+//        // Cập nhật ảnh nếu có
+//        if (imageFile != null && !imageFile.isEmpty()) {
+//            existingDoThueDTO.setImageData(imageFile.getBytes());
+//        }
+//
+//        // Cập nhật đối tượng
+//        DoThueDTO updatedDoThueDTO = doThueService.update(id, existingDoThueDTO);
+//
+//        return ResponseEntity.ok(updatedDoThueDTO);
+
     }
 
 //    @PutMapping("/{id}")

@@ -3,7 +3,9 @@ package com.example.DATN_WebFiveTus.service;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface SanCaService {
@@ -25,4 +27,14 @@ public interface SanCaService {
     public List<SanCaDTO> listAllSortPage(Integer pageNum, String sortDirection, int[] totalPageElement);
 
     public List<SanCaDTO> searchKeyWords(Integer pageNum, String keyWords, String sortDirection, int[] totalPageElement, Integer id);
+
+    List<SanCaDTO> findByTrangThai(Integer idCa, String thuTrongTuan ,String trangThai );
+
+
+    List<SanCaDTO> hienThiSanTrong(Integer idLoaiSan, List<String> thuTrongTuanList, java.util.Date startDate, Date endDate);
+
+
+    List<SanCaDTO> findSanCaBySan(@Param("idSanBong") Integer idSanBong,
+                                  @Param("idNgayTrongTuan") Integer idNgayTrongTuan);
+
 }

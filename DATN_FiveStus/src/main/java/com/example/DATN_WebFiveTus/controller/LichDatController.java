@@ -8,6 +8,6 @@ public class LichDatController {
 
     @GetMapping("/quan-ly-lich-dat")
     public String hienThi(){
-        return "list/quan-ly-lich-dat";
+        return "list/lich-dat";
     }
 }

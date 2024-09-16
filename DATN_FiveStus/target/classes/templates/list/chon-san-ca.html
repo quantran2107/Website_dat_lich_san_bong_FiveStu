@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/head :: head"></head>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" rel="stylesheet">
+<script crossorigin="anonymous"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<style>
+    .select-short {
+        width: auto; /* Hoặc bạn có thể đặt một giá trị cụ thể như width: 300px; */
+        min-width: 200px; /* Đặt chiều rộng tối thiểu nếu cần */
+        max-width: 100%; /* Đảm bảo không vượt quá kích thước của phần tử cha */
+    }
+
+    .form-row {
+        align-items: center;
+    }
+
+    .san-ca-content p {
+        margin: 10px 0;
+    }
+
+    .separator {
+        border: 0; /* Xóa đường viền mặc định */
+        height: 1px; /* Độ dày của đường kẻ */
+        background-color: #ddd; /* Màu sắc của đường kẻ */
+        margin: 5px 0; /* Khoảng cách trên và dưới đường kẻ */
+        width: 100%; /* Đảm bảo đường kẻ kéo dài hết chiều ngang */
+        box-sizing: border-box; /* Bao gồm padding và border vào tổng chiều rộng */
+    }
+
+    .card-body {
+        margin-bottom: 10px; /* Add space between cards */
+    }
+
+    .san-ca-box {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 15px;
+        text-align: left; /* Căn lề trái cho nội dung */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .san-ca-header {
+        display: flex;
+        align-items: center; /* Căn chỉnh theo chiều dọc */
+        justify-content: space-between; /* Căn chỉnh hai phần tử trái và phải */
+    }
+
+    .san-ca-header .checkbox-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .san-ca-header .checkbox-container input[type="checkbox"] {
+        margin-right: 5px;
+        margin-bottom: 50px;
+    }
+
+    .san-ca-header .text-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end; /* Căn chỉnh phần tử bên phải */
+        flex-grow: 1; /* Làm cho text container chiếm hết không gian còn lại */
+        text-align: right; /* Căn chỉnh văn bản về phía bên phải */
+    }
+
+    .san-ca-header .text-container h5 {
+        margin: 0;
+    }
+
+    .san-ca-header .text-container .ten-loai-san {
+        margin-top: 5px; /* Khoảng cách giữa tên ca và tên loại sân */
+    }
+
+    .san-ca-content {
+        text-align: left; /* Căn lề trái cho nội dung chi tiết */
+        flex-grow: 1;
+    }
+
+    .san-ca-footer {
+        display: flex;
+        justify-content: flex-end; /* Căn phải cho nút trạng thái */
+    }
+
+    .san-ca-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .checkbox-container {
+        flex-shrink: 0; /* Đảm bảo checkbox không làm thay đổi kích thước của container */
+    }
+
+    .san-ca-section {
+        display: none; /* Hide initially */
+        margin-top: 20px;
+    }
+
+    /* CSS tùy chỉnh cho input ngày */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        background: #007bff; /* Màu nền của calendar */
+        border-radius: 50%;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    input[type="date"]::-webkit-input-placeholder {
+        color: #6c757d;
+    }
+
+    input[type="date"] {
+        font-size: 1rem;
+        padding: 10px;
+        border-radius: 0.25rem;
+        border: 1px solid #ced4da;
+        width: 100%;
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .btn:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
+
+    .custom-modal {
+        max-width: 65%; /* Tăng chiều rộng của modal lên 90% */
+    }
+</style>
+<body class="vertical light">
+<div class="wrapper">
+    <div th:include="fragment/navbar :: navbar"></div>
+    <div th:include="fragment/sidebar :: sidebar"></div>
+    <main class="main-content" role="main">
+        <div class="container-fluid" id="bodyContent">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <h2 class="mb-2 page-title">Quản lý sân ca</h2>
+                    <div class="row my-4">
+                        <div class="col-md-12">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <div class="form-row mb-3">
+                                        <i class="bi bi-calendar3"></i>
+                                        <h4 class="card-title ml-3">Ngày đến sân</h4>
+                                    </div>
+                                    <div class="toolbar row">
+                                        <div class="col">
+                                            <div class="form-row mb-1">
+                                                <div class="input-group col-md-4">
+                                                    <input type="date" id="ngayDenSan" class="form-control" />
+                                                </div>
+                                                <div class="dropdown">
+                                                    <button aria-expanded="false" aria-haspopup="true" class="btn btn-outline-success ml-3 mr-3 dropdown-toggle"
+                                                            data-toggle="dropdown" id="actionMenuButton1" type="button">Chọn loại sân
+                                                    </button>
+                                                    <div id="loaiSanDropdown" aria-labelledby="actionMenuButton1" class="dropdown-menu">
+                                                        <!-- Các mục dropdown sẽ được thêm vào đây từ JavaScript -->
+                                                    </div>
+                                                </div>
+                                                <div class="input-group col-md-2">
+                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#book-modal">Điền thông tin</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="sanCaContainer" class="row my-4">
+                        <!-- Dữ liệu loại sân và chọn sân bóng sẽ được thêm vào đây -->
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="book-modal" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg custom-modal" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Đặt lịch</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Form on the left side -->
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-3">
+                                                    <label for="hoVaTen">Họ và tên</label>
+                                                    <input type="text" id="hoVaTen" class="form-control">
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label for="soDienThoai">Số điện thoại</label>
+                                                    <input type="text" id="soDienThoai" class="form-control">
+                                                </div>
+                                                <div class="form-group mb-3">
+                                                    <label for="ghiChu">Ghi chú</label>
+                                                    <textarea class="form-control" id="ghiChu" rows="4"></textarea>
+                                                </div>
+                                            </div> <!-- /.col -->
+                                            <div class="col-md-8">
+                                                <!-- Table on the right side -->
+                                                <table id="sanCaTable" class="table table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Sân Bóng</th>
+                                                        <th>Ngày</th>
+                                                        <th>Ca</th>
+                                                        <th>Thời Gian</th>
+                                                        <th>Giá</th>
+                                                        <th>Thao tác</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                    <!-- Button to submit the form and book the soccer field -->
+                                    <button type="button" class="btn btn-primary" id="datLich">Đặt lịch</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script th:src="@{/js/chon-san-ca.js}"></script>
+<div th:include="fragment/script :: script"></div>
+</html>

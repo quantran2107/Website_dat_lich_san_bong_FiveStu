@@ -59,6 +59,34 @@ public class DoThueServiceImp implements DoThueService {
         doThue.setTrangThai(doThueDTO.getTrangThai());
         DoThue doThueUpdate=doThueRepository.save(doThue);
         return modelMapper.map(doThueUpdate,DoThueDTO.class);
+
+//        // Tìm kiếm đối tượng DoThue theo ID trong cơ sở dữ liệu
+//        Optional<DoThue> optionalDoThue = doThueRepository.findById(id);
+//        if (!optionalDoThue.isPresent()) {
+//            throw new ResourceNotFoundException("DoThue not found with ID: " + id);
+//        }
+//
+//        // Lấy đối tượng DoThue hiện tại từ Optional
+//        DoThue existingDoThue = optionalDoThue.get();
+//
+//        // Cập nhật các thuộc tính mới từ DoThueDTO
+//        existingDoThue.setTenDoThue(doThueDTO.getTenDoThue());
+//        existingDoThue.setDonGia(doThueDTO.getDonGia());
+//        existingDoThue.setSoLuong(doThueDTO.getSoLuong());
+//        existingDoThue.setTrangThai(doThueDTO.getTrangThai());
+////        existingDoThue.setDeletedAt(doThueDTO.getDeletedAt());
+//
+//        // Cập nhật ảnh nếu có
+//        if (doThueDTO.getImageData() != null) {
+//            existingDoThue.setImageData(doThueDTO.getImageData());
+//        }
+//
+//        // Lưu đối tượng đã cập nhật vào cơ sở dữ liệu
+//        DoThue updatedDoThue = doThueRepository.save(existingDoThue);
+//
+//        // Chuyển đổi từ DoThue entity sang DoThueDTO để trả về
+//        return modelMapper.map(updatedDoThue, DoThueDTO.class);
+
     }
 
     @Override

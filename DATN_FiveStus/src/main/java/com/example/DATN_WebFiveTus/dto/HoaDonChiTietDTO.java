@@ -22,7 +22,7 @@ import java.util.Date;
 @Builder
 public class HoaDonChiTietDTO {
 
-    private int id;
+    private Integer id;
 
     private Integer idHoaDon;
 
@@ -36,16 +36,17 @@ public class HoaDonChiTietDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date ngayTaoHoaDon;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date ngayDenSan;
-
 
     private String tienSan;
 
     private String ghiChu;
 
     private String trangThai;
+
+    private String kieuNgayDat;
 
     private String tenSanBong;
 
@@ -63,5 +64,12 @@ public class HoaDonChiTietDTO {
     private String soDienThoaiKhachHang;
 
     private String emailKhachHang;
+
+
+    private Boolean deletedAt;
+
+    private String tenLoaiSan;
+
+
 
 }

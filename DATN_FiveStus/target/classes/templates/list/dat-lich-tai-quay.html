@@ -572,11 +572,11 @@
                 // Gán sự kiện cho các nút "Thêm"
                 $('.add-btn-nuoc').off('click').on('click', function () {
                     let button = $(this);
-                     idNuocUongs = button.data('id');
-                     donGiaNuocUongs = button.data('don-gia');
-                     soLuongNuocUongs = button.data('so-luong');
-                     tenNuocUongs = button.data('ten-nuoc-uong');
-                     soLuongChonNuocs = parseInt(button.closest('.input-group').find('.so-luong-chon').val(), 10);
+                    idNuocUongs = button.data('id');
+                    donGiaNuocUongs = button.data('don-gia');
+                    soLuongNuocUongs = button.data('so-luong');
+                    tenNuocUongs = button.data('ten-nuoc-uong');
+                    soLuongChonNuocs = parseInt(button.closest('.input-group').find('.so-luong-chon').val(), 10);
 
                     if (soLuongChonNuocs > soLuongNuocUongs) {
                         Swal.fire({

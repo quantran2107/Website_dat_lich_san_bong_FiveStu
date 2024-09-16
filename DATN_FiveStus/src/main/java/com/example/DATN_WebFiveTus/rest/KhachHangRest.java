@@ -59,4 +59,9 @@ public class KhachHangRest {
         return khachHangService.filter(status, gender, page, pageSize);
     }
 
+    @GetMapping("/tim-kiem-kh")
+    public KhachHangDTO findByKhachHang(@RequestParam(defaultValue = "false") String soDienThoai){
+        return khachHangService.findBySoDienThoai(soDienThoai);
+    }
+
 }

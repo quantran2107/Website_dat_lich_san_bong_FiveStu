@@ -59,6 +59,34 @@ public class NuocUongServiceImp implements NuocUongService {
         nuocUong.setTrangThai(nuocUongDTO.getTrangThai());
         NuocUong nuocUongUpdate=nuocUongRepository.save(nuocUong);
         return modelMapper.map(nuocUongUpdate, NuocUongDTO.class);
+
+//        // Tìm kiếm đối tượng DoThue theo ID trong cơ sở dữ liệu
+//        Optional<NuocUong> optionalDoThue = nuocUongRepository.findById(id);
+//        if (!optionalDoThue.isPresent()) {
+//            throw new ResourceNotFoundException("DoThue not found with ID: " + id);
+//        }
+//
+//        // Lấy đối tượng DoThue hiện tại từ Optional
+//        NuocUong existingDoThue = optionalDoThue.get();
+//
+//        // Cập nhật các thuộc tính mới từ DoThueDTO
+//        existingDoThue.setTenNuocUong(nuocUongDTO.getTenNuocUong());
+//        existingDoThue.setDonGia(nuocUongDTO.getDonGia());
+//        existingDoThue.setSoLuong(nuocUongDTO.getSoLuong());
+//        existingDoThue.setTrangThai(nuocUongDTO.getTrangThai());
+////        existingDoThue.setDeletedAt(doThueDTO.getDeletedAt());
+//
+//        // Cập nhật ảnh nếu có
+//        if (nuocUongDTO.getImageData() != null) {
+//            existingDoThue.setImageData(nuocUongDTO.getImageData());
+//        }
+//
+//        // Lưu đối tượng đã cập nhật vào cơ sở dữ liệu
+//        NuocUong updatedNuocUong = nuocUongRepository.save(existingDoThue);
+//
+//        // Chuyển đổi từ DoThue entity sang DoThueDTO để trả về
+//        return modelMapper.map(updatedNuocUong, NuocUongDTO.class);
+
     }
 
 

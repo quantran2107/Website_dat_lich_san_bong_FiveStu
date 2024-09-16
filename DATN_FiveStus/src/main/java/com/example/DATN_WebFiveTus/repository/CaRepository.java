@@ -15,12 +15,12 @@ import java.util.List;
 @Repository
 public interface CaRepository extends JpaRepository<Ca,Integer> {
 
-    @Query("SELECT c FROM Ca c where c.deletedAt=false ")
+    @Query("SELECT c FROM Ca c where c.deletedAt=false")
     List<Ca> getAllJoinFetch();
 
     @Modifying
     @Transactional
-    @Query("update Ca c set c.deletedAt=TRUE ")
+    @Query("update Ca c set c.deletedAt=true ")
     void  deletedAt(Integer id);
 
 

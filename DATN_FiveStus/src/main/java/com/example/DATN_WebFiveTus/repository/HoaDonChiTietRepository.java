@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -39,8 +41,6 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
             "And hd.deletedAt = false ")
     Page<HoaDonChiTiet> findByTrangThai(@Param("trangThai") String trangThai, Pageable pageable);
 
-
-
     @Query("SELECT hdct FROM HoaDonChiTiet hdct " +
             "JOIN FETCH hdct.hoaDon hd " +
             "JOIN FETCH hd.khachHang kh " +
@@ -52,9 +52,30 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
     HoaDonChiTiet findHoaDonChiTietById(@Param("id") Integer id);
 
 
+
     @Modifying
     @Transactional
     @Query("update HoaDonChiTiet hdct set hdct.trangThai='Đang hoạt động'  where hdct.id=:id")
     void  updateTrangThai(Integer id);
+    @Query("SELECT hdct FROM HoaDonChiTiet hdct " +
+            "JOIN FETCH hdct.hoaDon hd " +
+            "JOIN FETCH hd.khachHang kh " +
+            "JOIN FETCH hdct.sanCa sc " +
+            "JOIN FETCH sc.sanBong sb " +
+            "JOIN FETCH sc.ca c " +
+            "JOIN FETCH sc.ngayTrongTuan nt " +
+            "WHERE " +
+            "hdct.ngayDenSan = :ngayDenSan " +
+            "AND hdct.deletedAt = false " +
+            "And hd.deletedAt = false ")
+    List<HoaDonChiTiet> findByNgayDenSan(@Param("ngayDenSan") Date ngayDenSan);
+
+    @Query("SELECT COUNT(hdct) FROM HoaDonChiTiet hdct " +
+            "JOIN hdct.sanCa sc " +
+            "WHERE sc.id = :idSanCa " +
+            "AND hdct.ngayDenSan = :ngayDenSan")
+    Long countByIdSanCaAndNgayDenSan(@Param("idSanCa") Long idSanCa,
+                                     @Param("ngayDenSan") LocalDate ngayDenSan);
+
 
 }
