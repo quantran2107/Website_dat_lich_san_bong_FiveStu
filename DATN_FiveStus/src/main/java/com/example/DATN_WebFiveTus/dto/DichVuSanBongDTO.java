@@ -1,15 +1,11 @@
 package com.example.DATN_WebFiveTus.dto;
 
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,7 +21,9 @@ public class DichVuSanBongDTO {
 
     private Integer idNuocUong;
 
-    private Float donGia;
+    private Integer idHoaDonChiTiet;
+
+    private Double donGia;
 
     private int soLuongDoThue;
 
@@ -33,13 +31,13 @@ public class DichVuSanBongDTO {
 
     private String trangThai;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime updatedAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private boolean deletedAt;
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private LocalDateTime createdAt;
+//
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private LocalDateTime updatedAt;
+//
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private boolean deletedAt;
 }
 

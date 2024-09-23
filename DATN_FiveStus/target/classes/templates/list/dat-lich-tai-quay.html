@@ -232,12 +232,10 @@
                                            role="tab">Đồ Thuê</a>
                                     </li>
                                     <li class="nav-item flex-grow-1">
-                                        <a class="nav-link" id="tab2" data-toggle="tab" href="#nuocUongTab" role="tab">Nước
-                                            Uống</a>
+                                        <a class="nav-link" id="tab2" data-toggle="tab" href="#nuocUongTab" role="tab">Nước Uống</a>
                                     </li>
                                 </ul>
-                                <div class="tab-content" id="serviceTabContent"
-                                     style="max-height: 600px; overflow-y: auto;">
+                                <div class="tab-content" id="serviceTabContent" style="max-height: 600px; overflow-y: auto;">
                                     <div class="tab-pane fade show active row" id="doThueTab" role="tabpanel"></div>
                                     <div class="tab-pane fade row" id="nuocUongTab" role="tabpanel"></div>
                                 </div>
@@ -248,8 +246,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 <!-- Phần Tabs và Nội dung Tabs bên phải -->
                 <div class="col-md-5">
                     <div class="card shadow h-100">
@@ -464,22 +460,21 @@
     function luuDichVu() {
         // Lấy giá trị của các trường
         var idDoThue = idDoThues;
-        var idNuocUong = idNuocUongs;
+        var idNuocUong= idNuocUongs;
         var idHoaDonChiTiet = selectedInvoiceId;
         var donGiaDoThue = donGiaDoThues;
         var donGiaNuocUong = donGiaNuocUongs;
         var soLuongDoThue = soLuongChons;
-        var soLuongNuocUong = soLuongNuocUongs;
-
+        var soLuongNuocUong=soLuongNuocUongs;
         // Tạo đối tượng dữ liệu để gửi qua API
         var data = {
             "idDoThue": idDoThue,
             "idHoaDonChiTiet": idHoaDonChiTiet,
             "idNuocUong": idNuocUong,
-            "donGia": (soLuongDoThue * donGiaDoThue) + (soLuongNuocUong * donGiaNuocUong),
+            "donGia": (soLuongDoThue * donGiaDoThue) +(soLuongNuocUong * donGiaNuocUong),
             "soLuongDoThue": soLuongDoThue,
             "soLuongNuocUong": soLuongNuocUong,
-            "trangThai": "NTTH2502"
+            "trangThai":"NTTH2502"
         };
 
 
@@ -512,15 +507,11 @@
             text: `ID Dịch Vụ: ${data.idDoThue}, ID Hóa Đơn Chi Tiết: ${data.idHoaDonChiTiet}, Đơn Giá: ${data.donGia}, Số Lượng: ${data.soLuongDoThue}`,
         });
     }
-
-
     let idDoThues = null;
     let donGiaDoThues = null;
     let soLuongDoThues = null;
     let soLuongChons = null;
     let tenDoThues = null;
-
-
     function dichVuDo() {
         if (!selectedInvoiceId) {
             Swal.fire({
@@ -625,7 +616,7 @@
                     });
                 });
 
-                $('.so-luong-chon').each(function () {
+                $('.so-luong-chon').each(function() {
                     $(this).data('previous-value', 0);
                 });
 
@@ -655,8 +646,7 @@
                         input.val(previousQuantity);
                     }
                 });
-
-                $('.chon-san-pham').on('change', function () {
+                $('.chon-san-pham').on('change', function() {
                     let input = $(this).closest('.card-body').find('.so-luong-chon');
                     input.data('previous-value', 0);
                     input.val(0);
@@ -799,7 +789,7 @@
                             });
 
                             // Xử lý sự thay đổi số lượng chọn trong các ô input
-                            $('.so-luong-chon').off('change').on('change', function () {
+                            $('.so-luong-chon').off('change').on('change', function() {
                                 let input = $(this);
                                 input.data('previous-value', 0);
                                 input.val(0);
@@ -833,7 +823,6 @@
 
     $('#tab1').on('click', dichVuDo);
     $('#tab2').on('click', dichVuNuoc);
-
 
     function showSuccessToast(message) {
         Toastify({
@@ -911,7 +900,6 @@
         }
     }
 
-
     // Hàm fetch data từ server và hiển thị ra bảng
     async function fetchData(trangThai, page, tableId) {
         try {
@@ -974,8 +962,6 @@
             checkIn(id);
         }
     });
-
-
     // Sự kiện khi nhấn nút "Thêm dịch vụ"
     document.getElementById('openServiceModal').addEventListener('click', function (event) {
         if (selectedInvoiceId) {
@@ -999,8 +985,6 @@
             });
         }
     });
-
-
     function updatePagination(totalPages, currentPage, tableId) {
         const paginationElement = document.getElementById(`pagination${tableId === 'dang-hoat-dong-table' ? 'DangHoatDong' : 'ChoNhan'}`);
         paginationElement.innerHTML = '';
@@ -1115,7 +1099,6 @@
         fetchData('Đang hoạt động', 0, 'dang-hoat-dong-table');
         fetchData('Chờ nhận sân', 0, 'cho-nhan-table');
     }
-
     let selectedInvoiceId = null;
 
     function showInvoiceDetails(event) {
@@ -1449,7 +1432,6 @@
             });
         });
     });
-
     function updateTotalAmount(invoiceId, newTotalAmount) {
         const formattedAmount = formatCurrency(newTotalAmount);
         document.getElementById(`tienSan${invoiceId}`).innerText = formattedAmount + " VNĐ";

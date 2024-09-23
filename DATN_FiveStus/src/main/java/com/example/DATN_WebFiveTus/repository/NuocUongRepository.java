@@ -1,6 +1,5 @@
 package com.example.DATN_WebFiveTus.repository;
 
-import com.example.DATN_WebFiveTus.entity.DoThue;
 import com.example.DATN_WebFiveTus.entity.NuocUong;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

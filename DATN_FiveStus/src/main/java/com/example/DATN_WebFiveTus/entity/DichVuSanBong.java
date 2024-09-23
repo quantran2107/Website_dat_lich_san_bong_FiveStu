@@ -41,8 +41,12 @@ public class DichVuSanBong {
     @JoinColumn(name = "id_nuoc_uong")
     private NuocUong nuocUong;
 
-    @Column(name = "don_gia", precision = 10, scale = 2)
-    private BigDecimal donGia;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "id_hoa_don_chi_tiet")
+    private HoaDonChiTiet hoaDonChiTiet;
+
+    @Column(name = "don_gia")
+    private Double donGia;
 
     @Column(name = "so_luong_do_thue")
     private int soLuongDoThue;

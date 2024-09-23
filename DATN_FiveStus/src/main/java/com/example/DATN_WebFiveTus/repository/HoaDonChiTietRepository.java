@@ -4,9 +4,11 @@ import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -36,8 +38,7 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
             "JOIN FETCH sc.ngayTrongTuan nt " +
             "WHERE hdct.trangThai = :trangThai " +
             "AND hdct.ngayDenSan = CURRENT_DATE " +
-            "AND hdct.deletedAt = false " +
-            "AND hd.trangThai = 'Chờ thanh toán' And hd.deletedAt = false ")
+            "And hd.deletedAt = false ")
     Page<HoaDonChiTiet> findByTrangThai(@Param("trangThai") String trangThai, Pageable pageable);
 
     @Query("SELECT hdct FROM HoaDonChiTiet hdct " +
@@ -51,6 +52,11 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
     HoaDonChiTiet findHoaDonChiTietById(@Param("id") Integer id);
 
 
+
+    @Modifying
+    @Transactional
+    @Query("update HoaDonChiTiet hdct set hdct.trangThai='Đang hoạt động'  where hdct.id=:id")
+    void  updateTrangThai(Integer id);
     @Query("SELECT hdct FROM HoaDonChiTiet hdct " +
             "JOIN FETCH hdct.hoaDon hd " +
             "JOIN FETCH hd.khachHang kh " +
@@ -70,5 +76,6 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
             "AND hdct.ngayDenSan = :ngayDenSan")
     Long countByIdSanCaAndNgayDenSan(@Param("idSanCa") Long idSanCa,
                                      @Param("ngayDenSan") LocalDate ngayDenSan);
+
 
 }
