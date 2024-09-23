@@ -1,6 +1,59 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:include="~{fragment/head :: head}"></head>
+<style>
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-group input {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+    }
+
+    .row {
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    h5.text-primary {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    h5.card-title {
+        color: #28a745;
+    }
+    .text-center {
+        text-align: center;
+    }
+
+    .hidden-field {
+        display: none;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-group input {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+    }
+
+    .row {
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+</style>
 <body class="vertical light">
 <div class="wrapper">
     <div th:include="~{fragment/navbar :: navbar}"></div>
@@ -143,7 +196,10 @@
                                     <!-- Tiêu đề của box -->
                                     <div class="d-flex justify-content-between align-items-center">
                                         <!-- Tiêu đề của box -->
-                                        <h5 class="card-title text-success mb-0">Dịch vụ sử dụng</h5>
+                                        <div id="dichVuDaThueContainer" class="container mt-4">
+                                            <h5>Dịch Vụ Đã Thuê</h5>
+                                            <div id="dichVuThueList" class="row"></div> <!-- Nơi hiển thị dịch vụ đã thuê -->
+                                        </div>
                                         <!-- Nút nằm bên phải tiêu đề -->
                                         <button class="btn btn-outline-success" title="Thêm dịch vụ" type="button"
                                                 id="openServiceModal">
@@ -190,9 +246,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
                 <!-- Phần Tabs và Nội dung Tabs bên phải -->
                 <div class="col-md-5">
                     <div class="card shadow h-100">
@@ -220,74 +273,174 @@
                                 <!-- Nội dung các tab sẽ được tạo động tại đây -->
                                 <form>
                                     <div class="row">
-                                        <!-- Dòng đầu tiên với hai ô -->
+                                        <!-- Customer Information -->
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
-                                                <label for="tenKH">Tên khách hàng</label>
-                                                <input class="form-control" id="tenKH" type="text">
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="sdt">SDT</label>
-                                                <input class="form-control" id="sdt" type="text">
+                                                <label for="hoVaTenKhachHang">Tên khách hàng</label>
+                                                <input class="form-control" id="hoVaTenKhachHang" type="text" readonly placeholder="Chưa có dữ liệu">
                                             </div>
                                         </div>
-
-                                        <!-- Dòng thứ hai với hai ô -->
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
-                                                <label for="tenSanCa">Tên sân ca</label>
-                                                <input class="form-control" id="tenSanCa" type="text">
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="thoiGianDa">Thời gian đá</label>
-                                                <input class="form-control" id="thoiGianDa" type="time">
+                                                <label for="soDienThoaiKhachHang">Số Điện Thoại</label>
+                                                <input class="form-control" id="soDienThoaiKhachHang" type="text" readonly placeholder="Chưa có dữ liệu">
                                             </div>
                                         </div>
                                     </div>
 
+                                    <hr>
+
                                     <div class="row">
-                                        <!-- Dòng thứ ba với hai ô -->
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
-                                                <label for="ngayDenSan">Ngày đặt sân</label>
-                                                <input class="form-control" id="ngayDenSan" type="date">
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="tienCocThua">Tiền cọc thừa</label>
-                                                <input class="form-control" id="tienCocThua" type="text">
+                                                <label for="trangThai">Trạng thái</label>
+                                                <input class="form-control" id="trangThai" type="text" readonly>
                                             </div>
                                         </div>
-
-                                        <!-- Dòng thứ tư với hai ô -->
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
-                                                <label for="giaSan">Giá sân</label>
-                                                <input class="form-control" id="giaSan" type="text">
+                                                <label for="tenSan">Tên sân</label>
+                                                <input class="form-control" id="tenSan" type="text" readonly>
                                             </div>
+                                        </div>
+                                        <div class="col-md-6">
                                             <div class="form-group mb-3">
-                                                <label for="giaDichVu">Giá dịch vụ</label>
-                                                <input class="form-control" id="giaDichVu" type="text">
+                                                <label for="thoiGianBatDau">Thời gian bắt đầu</label>
+                                                <input class="form-control" id="thoiGianBatDau" type="datetime-local" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="thoiGianKetThuc">Thời gian kết thúc</label>
+                                                <input class="form-control" id="thoiGianKetThuc" type="datetime-local" readonly>
                                             </div>
                                         </div>
                                     </div>
 
+                                    <hr>
+
                                     <div class="row">
-                                        <!-- Dòng cuối cùng với hai ô -->
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3">
+                                                <label for="thoiGianTaoHoaDon">Thời gian tạo hóa đơn</label>
+                                                <input class="form-control" id="thoiGianTaoHoaDon" type="text" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
-                                                <label for="tienPhuPhi">Tiền phụ phí</label>
-                                                <input class="form-control" id="tienPhuPhi" type="text">
+                                                <label for="giaSan">Giá Sân</label>
+                                                <input class="form-control" id="giaSan" type="text" readonly placeholder="Chưa có dữ liệu">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="giaDichVu">Giá Dịch Vụ</label>
+                                                <input class="form-control" id="giaDichVu" type="text" readonly placeholder="Chưa có dữ liệu">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="tienCocSan">Tiền Cọc Sân</label>
+                                                <input class="form-control" id="tienCocSan" type="text" readonly placeholder="Chưa có dữ liệu">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="tienCocThua">Tiền Cọc Thừa</label>
+                                                <input class="form-control" id="tienCocThua" type="text" readonly placeholder="Chưa có dữ liệu">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3">
+                                                <label for="tienPhuPhi">Tiền Phụ Phí</label>
+                                                <input class="form-control" id="tienPhuPhi" type="text" readonly placeholder="Chưa có dữ liệu">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4 class="text-success">Thanh Toán</h4>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3">
+                                                <label for="phieuGiamGia">Phiếu Giảm Giá</label>
+                                                <div class="input-group mb-3">
+                                                    <input class="form-control" id="phieuGiamGia" type="text" placeholder="Nhập phiếu giảm giá nếu có">
+                                                    <button class="btn btn-outline-success" type="button" id="btnAddDiscount">+</button>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="form-group mb-3">
-                                                <label for="tienCocSan">Tiền cọc sân</label>
-                                                <input class="form-control" id="tienCocSan" type="text">
+                                                <label>Hình thức thanh toán</label><br>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="hinhThucThanhToan" id="chuyenKhoan" value="chuyenKhoan" checked>
+                                                    <label class="form-check-label" for="chuyenKhoan" style="font-weight: normal;">Chuyển khoản</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="hinhThucThanhToan" id="tienMat" value="tienMat">
+                                                    <label class="form-check-label" for="tienMat" style="font-weight: normal;">Tiền mặt</label>
+                                                </div>
                                             </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3">
+                                                <label for="tienKhachDua">Tiền Khách Đưa</label>
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control" id="tienKhachDua" placeholder="Nhập số tiền khách đưa">
+                                                    <span class="input-group-text">VND</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3">
+                                                <label for="tienTraLai">Tiền Trả Lại</label>
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control" id="tienTraLai" placeholder="Tiền trả lại" readonly>
+                                                    <span class="input-group-text">VND</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3 text-center">
+                                                <label for="tienSan">Tổng Tiền Phải Trả:</label>
+                                                <div id="tienSan" class="text-danger" style="font-size: 1.5em;">0</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 text-center">
+                                            <button id="btnThanhToan1" class="btn btn-success" type="button">Thanh toán</button>
                                         </div>
                                     </div>
                                 </form>
+
+
                             </div>
                         </div>
                     </div>
@@ -313,7 +466,6 @@
         var donGiaNuocUong = donGiaNuocUongs;
         var soLuongDoThue = soLuongChons;
         var soLuongNuocUong=soLuongNuocUongs;
-
         // Tạo đối tượng dữ liệu để gửi qua API
         var data = {
             "idDoThue": idDoThue,
@@ -355,19 +507,11 @@
             text: `ID Dịch Vụ: ${data.idDoThue}, ID Hóa Đơn Chi Tiết: ${data.idHoaDonChiTiet}, Đơn Giá: ${data.donGia}, Số Lượng: ${data.soLuongDoThue}`,
         });
     }
-
-
-
-
-
     let idDoThues = null;
     let donGiaDoThues = null;
     let soLuongDoThues = null;
     let soLuongChons = null;
     let tenDoThues = null;
-
-
-
     function dichVuDo() {
         if (!selectedInvoiceId) {
             Swal.fire({
@@ -502,7 +646,6 @@
                         input.val(previousQuantity);
                     }
                 });
-
                 $('.chon-san-pham').on('change', function() {
                     let input = $(this).closest('.card-body').find('.so-luong-chon');
                     input.data('previous-value', 0);
@@ -681,8 +824,6 @@
     $('#tab1').on('click', dichVuDo);
     $('#tab2').on('click', dichVuNuoc);
 
-
-
     function showSuccessToast(message) {
         Toastify({
             text: message,
@@ -759,8 +900,6 @@
         }
     }
 
-
-
     // Hàm fetch data từ server và hiển thị ra bảng
     async function fetchData(trangThai, page, tableId) {
         try {
@@ -823,10 +962,6 @@
             checkIn(id);
         }
     });
-
-
-
-
     // Sự kiện khi nhấn nút "Thêm dịch vụ"
     document.getElementById('openServiceModal').addEventListener('click', function (event) {
         if (selectedInvoiceId) {
@@ -850,11 +985,6 @@
             });
         }
     });
-
-
-
-
-
     function updatePagination(totalPages, currentPage, tableId) {
         const paginationElement = document.getElementById(`pagination${tableId === 'dang-hoat-dong-table' ? 'DangHoatDong' : 'ChoNhan'}`);
         paginationElement.innerHTML = '';
@@ -1024,80 +1154,204 @@
         newTabContent.setAttribute('role', 'tabpanel');
         newTabContent.innerHTML = `
             <form>
-            <div class="row">
-            <div class="col-md-6">
+    <div class="row">
+        <!-- Customer Information -->
+        <div class="col-md-6">
             <div class="form-group mb-3">
-            <label for="id${invoiceId}">ID</label>
-            <input type="text" id="id${invoiceId}" class="form-control" readonly>
+                <label for="hoVaTenKhachHang${invoiceId}">Tên khách hàng</label>
+                <input class="form-control" id="hoVaTenKhachHang${invoiceId}" type="text" readonly placeholder="Chưa có dữ liệu">
             </div>
+        </div>
+        <div class="col-md-6">
             <div class="form-group mb-3">
-            <label for="idHoaDon${invoiceId}">ID Hóa đơn</label>
-            <input type="text" id="idHoaDon${invoiceId}" class="form-control" readonly>
+                <label for="soDienThoaiKhachHang${invoiceId}">Số Điện Thoại</label>
+                <input class="form-control" id="soDienThoaiKhachHang${invoiceId}" type="text" readonly placeholder="Chưa có dữ liệu">
             </div>
-            <div class="form-group mb-3">
-            <label for="maHoaDon${invoiceId}">Mã Hóa đơn</label>
-            <input type="text" id="maHoaDon${invoiceId}" class="form-control" readonly>
-            </div>
-            <div class="form-group mb-3">
-            <label for="ngayTaoHoaDon${invoiceId}">Ngày tạo Hóa đơn</label>
-            <input type="text" id="ngayTaoHoaDon${invoiceId}" class="form-control" readonly>
-            </div>
-            <div class="form-group mb-3">
-            <label for="ngayDenSan${invoiceId}">Ngày đến sân</label>
-            <input type="text" id="ngayDenSan${invoiceId}" class="form-control" readonly>
-            </div>
-            <div class="form-group mb-3">
-            <label for="tienSan${invoiceId}">Tiền sân</label>
-            <input type="text" id="tienSan${invoiceId}" class="form-control" readonly>
-            </div>
-            </div>
+        </div>
+    </div>
 
-            <div class="col-md-6">
+      <hr>
+    <div class="row">
+         <div class="col-md-6">
             <div class="form-group mb-3">
-            <label for="ghiChu${invoiceId}">Ghi chú</label>
-            <input type="text" id="ghiChu${invoiceId}" class="form-control" readonly>
+                <label for="trangThai${invoiceId}">Trạng thái</label>
+                <input class="form-control" id="trangThai${invoiceId}" type="text" readonly>
             </div>
+        </div>
+        <div class="col-md-6">
             <div class="form-group mb-3">
-            <label for="trangThai${invoiceId}">Trạng thái</label>
-            <input type="text" id="trangThai${invoiceId}" class="form-control" readonly>
+                <label for="tenSanBong${invoiceId}">Tên sân</label>
+                <input class="form-control" id="tenSanBong${invoiceId}" type="text" readonly>
             </div>
+        </div>
+        <div class="col-md-6">
             <div class="form-group mb-3">
-            <label for="tenSanBong${invoiceId}">Tên Sân bóng</label>
-            <input type="text" id="tenSanBong${invoiceId}" class="form-control" readonly>
+                <label for="thoiGianBatDauCa${invoiceId}">Thời gian bắt đầu</label>
+                <input class="form-control" id="thoiGianBatDauCa${invoiceId}" type="datetime-local" readonly>
             </div>
+        </div>
+        <div class="col-md-6">
             <div class="form-group mb-3">
-            <label for="tenCa${invoiceId}">Tên Ca</label>
-            <input type="text" id="tenCa${invoiceId}" class="form-control" readonly>
+                <label for="thoiGianKetThucCa${invoiceId}">Thời gian kết thúc</label>
+                <input class="form-control" id="thoiGianKetThucCa${invoiceId}" type="datetime-local" readonly>
             </div>
-            <div class="form-group mb-3">
-            <label for="thoiGianBatDauCa${invoiceId}">Thời gian bắt đầu Ca</label>
-            <input type="text" id="thoiGianBatDauCa${invoiceId}" class="form-control" readonly>
-            </div>
-            <div class="form-group mb-3">
-            <label for="thoiGianKetThucCa${invoiceId}">Thời gian kết thúc Ca</label>
-            <input type="text" id="thoiGianKetThucCa${invoiceId}" class="form-control" readonly>
-            </div>
-            </div>
-            </div>
+        </div>
+    </div>
 
-            <div class="row">
-            <div class="col-md-6">
+    <!-- Horizontal Rule -->
+    <hr>
+
+    <div class="row">
+        <!-- Invoice Creation Time -->
+        <div class="col-md-12">
             <div class="form-group mb-3">
-            <label for="hoVaTenKhachHang${invoiceId}">Họ và tên Khách hàng</label>
-            <input type="text" id="hoVaTenKhachHang${invoiceId}" class="form-control" readonly>
+                <label for="ngayTaoHoaDon${invoiceId}">Thời gian tạo hóa đơn</label>
+                <input class="form-control" id="ngayTaoHoaDon${invoiceId}" type="text" readonly>
             </div>
+        </div>
+    </div>
+
+    <!-- Horizontal Rule -->
+    <hr>
+
+    <div class="row">
+        <!-- Price Information -->
+        <div class="col-md-6">
             <div class="form-group mb-3">
-            <label for="soDienThoaiKhachHang${invoiceId}">Số điện thoại Khách hàng</label>
-            <input type="text" id="soDienThoaiKhachHang${invoiceId}" class="form-control" readonly>
+                <label for="#">Giá Sân</label>
+                <input class="form-control" id="#" type="text" readonly placeholder="Chưa có dữ liệu">
             </div>
+        </div>
+        <div class="col-md-6">
             <div class="form-group mb-3">
-            <label for="emailKhachHang${invoiceId}">Email Khách hàng</label>
-            <input type="email" id="emailKhachHang${invoiceId}" class="form-control" readonly>
+                <label for="giaDichVu">Giá Dịch Vụ</label>
+                <input class="form-control" id="giaDichVu" type="text" readonly placeholder="Chưa có dữ liệu">
             </div>
+        </div>
+    </div>
+
+    <!-- Horizontal Rule -->
+    <hr>
+
+    <div class="row">
+        <!-- Deposit Information -->
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="tienCocSan">Tiền Cọc Sân</label>
+                <input class="form-control" id="tienCocSan" type="text" readonly placeholder="Chưa có dữ liệu">
             </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group mb-3">
+                <label for="tienCocThua">Tiền Cọc Thừa</label>
+                <input class="form-control" id="tienCocThua type="text" readonly placeholder="Chưa có dữ liệu">
             </div>
-            </form>
-            `;
+        </div>
+    </div>
+
+    <!-- Horizontal Rule -->
+    <hr>
+
+    <div class="row">
+        <!-- Additional Charges -->
+        <div class="col-md-12">
+            <div class="form-group mb-3">
+                <label for="tienPhuPhi">Tiền Phụ Phí</label>
+                <input class="form-control" id="tienPhuPhi" type="text" readonly placeholder="Chưa có dữ liệu">
+            </div>
+        </div>
+    </div>
+
+    <!-- Horizontal Rule -->
+    <hr>
+
+    <div class="row">
+    <!-- Payment Section -->
+    <div class="col-md-12">
+        <h4 class="text-success">Thanh Toán</h4>
+    </div>
+
+    <!-- Discount Voucher -->
+    <div class="col-md-12">
+        <div class="form-group mb-3">
+            <label for="phieuGiamGia">Phiếu Giảm Giá</label>
+            <div class="input-group mb-3">
+                <input class="form-control" id="phieuGiamGia" type="text" placeholder="Nhập phiếu giảm giá nếu có">
+                <button class="btn btn-outline-success" type="button" id="btnAddDiscount">+</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Method (Radio Buttons) -->
+<div class="col-md-12">
+    <div class="form-group mb-3">
+        <label>Hình thức thanh toán</label><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="hinhThucThanhToan" id="chuyenKhoan" value="chuyenKhoan" checked>
+            <label class="form-check-label" for="chuyenKhoan" style="font-weight: normal;">Chuyển khoản</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="hinhThucThanhToan" id="tienMat" value="tienMat">
+            <label class="form-check-label" for="tienMat" style="font-weight: normal;">Tiền mặt</label>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Customer Paid Amount -->
+    <div class="col-md-12">
+        <div class="form-group mb-3">
+            <label for="tienKhachDua">Tiền Khách Đưa</label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="tienKhachDua" placeholder="Nhập số tiền khách đưa" aria-label="Tiền Khách Đưa">
+                <span class="input-group-text" id="basic-addon2">VND</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Amount -->
+    <div class="col-md-12">
+        <div class="form-group mb-3">
+            <label for="tienTraLai">Tiền Trả Lại</label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="tienTraLai" placeholder="Tiền trả lại" readonly>
+                <span class="input-group-text" id="basic-addon3">VND</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Horizontal Rule -->
+    <hr>
+
+    <!-- Total Amount & Payment Button -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group mb-3 text-center">
+            <label for="tienSan${invoiceId}">Tổng Tiền Phải Trả:</label>
+            <div id="tienSan${invoiceId}" class="text-danger" style="font-size: 1.5em;">0</div>
+            </div>
+        </div>
+        <div class="col-md-12 text-center">
+            <button type="button" id="btnThanhToan" class="btn btn-success">Thanh Toán</button>
+        </div>
+    </div>
+
+    <!-- Hidden fields for invoice details -->
+    <div class="row hidden-field">
+        <div class="col-md-12">
+            <input type="hidden" id="id${invoiceId}" class="form-control" readonly>
+            <input type="hidden" id="idHoaDon${invoiceId}" class="form-control" readonly>
+            <input type="hidden" id="maHoaDon${invoiceId}" class="form-control" readonly>
+            <input type="hidden" id="ghiChu${invoiceId}" class="form-control" readonly>
+        </div>
+    </div>
+</form>
+
+
+
+         `;
         tabContentRight.appendChild(newTabContent);
 
         // Tăng giá trị tabCount cho tab tiếp theo
@@ -1112,27 +1366,29 @@
                 document.getElementById(`idHoaDon${invoiceId}`).value = data.idHoaDon;
                 document.getElementById(`maHoaDon${invoiceId}`).value = data.maHoaDon;
                 document.getElementById(`ngayTaoHoaDon${invoiceId}`).value = data.ngayTaoHoaDon;
-                document.getElementById(`ngayDenSan${invoiceId}`).value = data.ngayDenSan;
-                document.getElementById(`tienSan${invoiceId}`).value = data.tienSan;
+                // document.getElementById(`ngayDenSan${invoiceId}`).value = data.ngayDenSan;
+                updateTotalAmount(invoiceId, data.tienSan);
                 document.getElementById(`ghiChu${invoiceId}`).value = data.ghiChu;
                 document.getElementById(`trangThai${invoiceId}`).value = data.trangThai;
                 document.getElementById(`tenSanBong${invoiceId}`).value = data.tenSanBong;
-                document.getElementById(`tenCa${invoiceId}`).value = data.tenCa;
+                // document.getElementById(`tenCa${invoiceId}`).value = data.tenCa;
                 document.getElementById(`thoiGianBatDauCa${invoiceId}`).value = data.thoiGianBatDauCa;
                 document.getElementById(`thoiGianKetThucCa${invoiceId}`).value = data.thoiGianKetThucCa;
                 document.getElementById(`hoVaTenKhachHang${invoiceId}`).value = data.hoVaTenKhachHang;
                 document.getElementById(`soDienThoaiKhachHang${invoiceId}`).value = data.soDienThoaiKhachHang;
-                document.getElementById(`emailKhachHang${invoiceId}`).value = data.emailKhachHang;
+                // document.getElementById(`emailKhachHang${invoiceId}`).value = data.emailKhachHang;
                 console.log(data);
+                handleCustomerPaymentInput(invoiceId);
+                updateTrangThai();
             })
             .catch(error => {
                 console.error('Error fetching invoice details:', error);
             });
-
         // Kích hoạt tab vừa tạo
         const tab = new bootstrap.Tab(document.getElementById(`tab-${invoiceId}`));
         tab.show();
     }
+
 
 
     function removeTab2(event, tabId) {
@@ -1176,6 +1432,72 @@
             });
         });
     });
+    function updateTotalAmount(invoiceId, newTotalAmount) {
+        const formattedAmount = formatCurrency(newTotalAmount);
+        document.getElementById(`tienSan${invoiceId}`).innerText = formattedAmount + " VNĐ";
+    }
+
+    // Hàm định dạng tiền
+    function formatCurrency(amount) {
+        // Chỉ lấy phần nguyên và định dạng
+        const integerPart = Math.floor(amount);
+        return integerPart.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    // Hàm định dạng tiền với dấu chấm
+    function formatMoneyInput(value) {
+        return value.replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Thêm dấu chấm
+    }
+
+    // Hàm xử lý khi người dùng nhập số tiền khách đưa
+    function handleCustomerPaymentInput(invoiceId) {
+        const customerPaymentInput = document.getElementById('tienKhachDua');
+        const changeAmountInput = document.getElementById('tienTraLai');
+        const totalAmountText = document.getElementById(`tienSan${invoiceId}`).innerText;
+        const totalAmount = parseFloat(totalAmountText.replace(/[^\d.-]/g, '')) * 1000; // Chuyển đổi định dạng sang số
+
+        customerPaymentInput.addEventListener('input', function () {
+            // Lưu giá trị đã nhập
+            const inputValue = customerPaymentInput.value.replace(/\./g, ''); // Loại bỏ dấu chấm để tính toán
+            const customerPayment = parseFloat(inputValue) || 0;
+
+            // Định dạng lại giá trị hiển thị với dấu chấm
+            customerPaymentInput.value = formatMoneyInput(inputValue);
+
+            if (customerPayment > totalAmount) {
+                const changeAmount = customerPayment - totalAmount;
+                changeAmountInput.value = formatCurrency(changeAmount) + " VNĐ"; // Cập nhật ô tiền trả lại
+            } else {
+                changeAmountInput.value = "0 VNĐ"; // Nếu tiền đưa nhỏ hơn hoặc bằng tổng, reset về 0
+            }
+        });
+    }
+    function updateTrangThai(){
+        $(document).ready(function() {
+            // Khi nhấn nút Thanh toán
+            $('#btnThanhToan').click(function() {
+
+                const invoiceId = document.getElementById(`id${selectedInvoiceId}`).value; // Lấy ID hóa đơn từ trường ẩn
+                const trangThaiMoi = 'Đã thanh toán'; // Trạng thái mới
+
+                $.ajax({
+                    url: '/hoa-don-chi-tiet/'+ invoiceId,
+                    type: 'PUT',
+                    data: { trangThai: trangThaiMoi },
+                    success: function(response) {
+                        document.getElementById(`trangThai${selectedInvoiceId}`).value = trangThaiMoi;
+                        alert('Trạng thái đã được cập nhật thành công.');
+                        // Cập nhật trạng thái trong form nếu cần
+
+                    },
+                    error: function(xhr, status, error) {
+                        // Xử lý lỗi
+                        console.error('Lỗi khi cập nhật trạng thái:', error);
+                        alert('Có lỗi xảy ra, vui lòng thử lại.');
+                    }
+                });
+            });
+        });
+    }
 
 
 </script>
