@@ -1,6 +1,59 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:include="~{fragment/head :: head}"></head>
+<style>
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-group input {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+    }
+
+    .row {
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    h5.text-primary {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    h5.card-title {
+        color: #28a745;
+    }
+    .text-center {
+        text-align: center;
+    }
+
+    .hidden-field {
+        display: none;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-group input {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+    }
+
+    .row {
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+</style>
 <body class="vertical light">
 <div class="wrapper">
     <div th:include="~{fragment/navbar :: navbar}"></div>
@@ -143,7 +196,10 @@
                                     <!-- Tiêu đề của box -->
                                     <div class="d-flex justify-content-between align-items-center">
                                         <!-- Tiêu đề của box -->
-                                        <h5 class="card-title text-success mb-0">Dịch vụ sử dụng</h5>
+                                        <div id="dichVuDaThueContainer" class="container mt-4">
+                                            <h5>Dịch Vụ Đã Thuê</h5>
+                                            <div id="dichVuThueList" class="row"></div> <!-- Nơi hiển thị dịch vụ đã thuê -->
+                                        </div>
                                         <!-- Nút nằm bên phải tiêu đề -->
                                         <button class="btn btn-outline-success" title="Thêm dịch vụ" type="button"
                                                 id="openServiceModal">
@@ -190,9 +246,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
                 <!-- Phần Tabs và Nội dung Tabs bên phải -->
                 <div class="col-md-5">
                     <div class="card shadow h-100">
@@ -220,74 +273,174 @@
                                 <!-- Nội dung các tab sẽ được tạo động tại đây -->
                                 <form>
                                     <div class="row">
-                                        <!-- Dòng đầu tiên với hai ô -->
+                                        <!-- Customer Information -->
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
-                                                <label for="tenKH">Tên khách hàng</label>
-                                                <input class="form-control" id="tenKH" type="text">
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="sdt">SDT</label>
-                                                <input class="form-control" id="sdt" type="text">
+                                                <label for="hoVaTenKhachHang">Tên khách hàng</label>
+                                                <input class="form-control" id="hoVaTenKhachHang" type="text" readonly placeholder="Chưa có dữ liệu">
                                             </div>
                                         </div>
-
-                                        <!-- Dòng thứ hai với hai ô -->
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
-                                                <label for="tenSanCa">Tên sân ca</label>
-                                                <input class="form-control" id="tenSanCa" type="text">
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="thoiGianDa">Thời gian đá</label>
-                                                <input class="form-control" id="thoiGianDa" type="time">
+                                                <label for="soDienThoaiKhachHang">Số Điện Thoại</label>
+                                                <input class="form-control" id="soDienThoaiKhachHang" type="text" readonly placeholder="Chưa có dữ liệu">
                                             </div>
                                         </div>
                                     </div>
 
+                                    <hr>
+
                                     <div class="row">
-                                        <!-- Dòng thứ ba với hai ô -->
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
-                                                <label for="ngayDenSan">Ngày đặt sân</label>
-                                                <input class="form-control" id="ngayDenSan" type="date">
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="tienCocThua">Tiền cọc thừa</label>
-                                                <input class="form-control" id="tienCocThua" type="text">
+                                                <label for="trangThai">Trạng thái</label>
+                                                <input class="form-control" id="trangThai" type="text" readonly>
                                             </div>
                                         </div>
-
-                                        <!-- Dòng thứ tư với hai ô -->
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
-                                                <label for="giaSan">Giá sân</label>
-                                                <input class="form-control" id="giaSan" type="text">
+                                                <label for="tenSan">Tên sân</label>
+                                                <input class="form-control" id="tenSan" type="text" readonly>
                                             </div>
+                                        </div>
+                                        <div class="col-md-6">
                                             <div class="form-group mb-3">
-                                                <label for="giaDichVu">Giá dịch vụ</label>
-                                                <input class="form-control" id="giaDichVu" type="text">
+                                                <label for="thoiGianBatDau">Thời gian bắt đầu</label>
+                                                <input class="form-control" id="thoiGianBatDau" type="datetime-local" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="thoiGianKetThuc">Thời gian kết thúc</label>
+                                                <input class="form-control" id="thoiGianKetThuc" type="datetime-local" readonly>
                                             </div>
                                         </div>
                                     </div>
 
+                                    <hr>
+
                                     <div class="row">
-                                        <!-- Dòng cuối cùng với hai ô -->
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3">
+                                                <label for="thoiGianTaoHoaDon">Thời gian tạo hóa đơn</label>
+                                                <input class="form-control" id="thoiGianTaoHoaDon" type="text" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
-                                                <label for="tienPhuPhi">Tiền phụ phí</label>
-                                                <input class="form-control" id="tienPhuPhi" type="text">
+                                                <label for="giaSan">Giá Sân</label>
+                                                <input class="form-control" id="giaSan" type="text" readonly placeholder="Chưa có dữ liệu">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="giaDichVu">Giá Dịch Vụ</label>
+                                                <input class="form-control" id="giaDichVu" type="text" readonly placeholder="Chưa có dữ liệu">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="tienCocSan">Tiền Cọc Sân</label>
+                                                <input class="form-control" id="tienCocSan" type="text" readonly placeholder="Chưa có dữ liệu">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="tienCocThua">Tiền Cọc Thừa</label>
+                                                <input class="form-control" id="tienCocThua" type="text" readonly placeholder="Chưa có dữ liệu">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3">
+                                                <label for="tienPhuPhi">Tiền Phụ Phí</label>
+                                                <input class="form-control" id="tienPhuPhi" type="text" readonly placeholder="Chưa có dữ liệu">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4 class="text-success">Thanh Toán</h4>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3">
+                                                <label for="phieuGiamGia">Phiếu Giảm Giá</label>
+                                                <div class="input-group mb-3">
+                                                    <input class="form-control" id="phieuGiamGia" type="text" placeholder="Nhập phiếu giảm giá nếu có">
+                                                    <button class="btn btn-outline-success" type="button" id="btnAddDiscount">+</button>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <div class="form-group mb-3">
-                                                <label for="tienCocSan">Tiền cọc sân</label>
-                                                <input class="form-control" id="tienCocSan" type="text">
+                                                <label>Hình thức thanh toán</label><br>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="hinhThucThanhToan" id="chuyenKhoan" value="chuyenKhoan" checked>
+                                                    <label class="form-check-label" for="chuyenKhoan" style="font-weight: normal;">Chuyển khoản</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="hinhThucThanhToan" id="tienMat" value="tienMat">
+                                                    <label class="form-check-label" for="tienMat" style="font-weight: normal;">Tiền mặt</label>
+                                                </div>
                                             </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3">
+                                                <label for="tienKhachDua">Tiền Khách Đưa</label>
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control" id="tienKhachDua" placeholder="Nhập số tiền khách đưa">
+                                                    <span class="input-group-text">VND</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3">
+                                                <label for="tienTraLai">Tiền Trả Lại</label>
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control" id="tienTraLai" placeholder="Tiền trả lại" readonly>
+                                                    <span class="input-group-text">VND</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3 text-center">
+                                                <label for="tienSan">Tổng Tiền Phải Trả:</label>
+                                                <div id="tienSan" class="text-danger" style="font-size: 1.5em;">0</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 text-center">
+                                            <button id="btnThanhToan1" class="btn btn-success" type="button">Thanh toán</button>
                                         </div>
                                     </div>
                                 </form>
+
+
                             </div>
                         </div>
                     </div>
