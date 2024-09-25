@@ -312,7 +312,7 @@
         var donGiaDoThue = donGiaDoThues;
         var donGiaNuocUong = donGiaNuocUongs;
         var soLuongDoThue = soLuongChons;
-        var soLuongNuocUong=soLuongNuocUongs;
+        var soLuongNuocUong=soLuongChonNuocs;
 
         // Tạo đối tượng dữ liệu để gửi qua API
         var data = {
@@ -416,11 +416,6 @@
                     tenDoThues = $(this).data('ten-do-thue');
                     soLuongChons = $(this).closest('.input-group').find('.so-luong-chon').val();
 
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Đã thêm',
-                        text: `ID: ${idDoThues}, Đơn giá: ${donGiaDoThues} VND, Số lượng trong kho: ${soLuongDoThues}, Số lượng chọn: ${soLuongChons}, Tên đồ: ${tenDoThues}`,
-                    });
 
                     if (soLuongChons > soLuongDoThues) {
                         Swal.fire({
@@ -460,7 +455,7 @@
 
                             // Cập nhật số lượng còn lại trên giao diện
                             $(this).closest('.card-body').find('.kho-con').text(`Kho còn: ${newSoLuong}`);
-
+                            luuDichVu();
                         },
                         error: function (xhr, status, error) {
                             Swal.fire({
@@ -530,6 +525,7 @@
 
 
     function dichVuNuoc() {
+        idDoThues=null;
         if (!selectedInvoiceId) {
             Swal.fire({
                 icon: 'error',
@@ -616,6 +612,7 @@
 
                             // Cập nhật số lượng kho trên giao diện
                             button.closest('.card-body').find('.kho-con').text(`Kho còn: ${newSoLuong}`).data('so-luong', newSoLuong);
+                            luuDichVu();
 
                             // Cập nhật số lượng kho khi số lượng chọn thay đổi
                             $('.so-luong-chon').off('input').on('input', function () {
