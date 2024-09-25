@@ -54,13 +54,35 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
 
     @Override
     public DichVuSanBongDTO save(DichVuSanBongDTO dichVuSanBongDTO) {
+        // Chuyển đổi DTO thành thực thể
         DichVuSanBong dichVuSanBong = modelMapper.map(dichVuSanBongDTO, DichVuSanBong.class);
-        DoThue doThue = doThueRepository.findById(dichVuSanBongDTO.getIdDoThue()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id do thue: " + dichVuSanBongDTO.getIdDoThue()));
-        NuocUong nuocUong = nuocUongRepository.findById(dichVuSanBongDTO.getIdNuocUong()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id nuoc uong: " + dichVuSanBongDTO.getIdNuocUong()));
-        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(dichVuSanBongDTO.getIdHoaDonChiTiet()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id hdct: " + dichVuSanBongDTO.getIdHoaDonChiTiet()));
-        dichVuSanBong.setDoThue(doThue);
-        dichVuSanBong.setNuocUong(nuocUong);
+
+        // Xử lý DoThue
+        if (dichVuSanBongDTO.getIdDoThue() != null) {
+            DoThue doThue = doThueRepository.findById(dichVuSanBongDTO.getIdDoThue())
+                    .orElseThrow(() -> new ResourceNotfound("Không tồn tại id do thue: " + dichVuSanBongDTO.getIdDoThue()));
+            dichVuSanBong.setDoThue(doThue);
+        } else {
+            dichVuSanBong.setDoThue(null); // Thiết lập là null nếu không có id
+            dichVuSanBong.setSoLuongDoThue(0);
+        }
+
+        // Xử lý NuocUong
+        if (dichVuSanBongDTO.getIdNuocUong() != null) {
+            NuocUong nuocUong = nuocUongRepository.findById(dichVuSanBongDTO.getIdNuocUong())
+                    .orElseThrow(() -> new ResourceNotfound("Không tồn tại id nuoc uong: " + dichVuSanBongDTO.getIdNuocUong()));
+            dichVuSanBong.setNuocUong(nuocUong);
+        } else {
+            dichVuSanBong.setNuocUong(null); // Thiết lập là null nếu không có id
+            dichVuSanBong.setSoLuongNuocUong(0);
+        }
+
+        // Xử lý HoaDonChiTiet
+        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(dichVuSanBongDTO.getIdHoaDonChiTiet())
+                .orElseThrow(() -> new ResourceNotfound("Không tồn tại id hdct: " + dichVuSanBongDTO.getIdHoaDonChiTiet()));
         dichVuSanBong.setHoaDonChiTiet(hoaDonChiTiet);
+
+        // Lưu thực thể
         DichVuSanBong dichVuSanBongSave = dichVuSanBongRepository.save(dichVuSanBong);
         return modelMapper.map(dichVuSanBongSave, DichVuSanBongDTO.class);
     }
