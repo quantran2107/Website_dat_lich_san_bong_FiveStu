@@ -101,6 +101,7 @@ private LoaiSanRepository loaiSanRepository;
                 .map(sanBong,SanBongDTO.class)).collect(Collectors.toList());
     }
 
+
     @Override
     public List<SanBongDTO> listAllSortPage(Integer pageNum, String sortDirection, int[] totalPageElement) {
         Sort sortS = Sort.by("tenSanBong");

@@ -194,4 +194,15 @@ public class SanCaRest {
         return ResponseEntity.ok(listSanCa);
     }
 
+    //Ly them
+    @GetMapping("/danh-sach-nhieu-ngay/{idSanBong}")
+    public ResponseEntity<List<SanCaDTO>> danhSachSanCa(
+            @PathVariable("idSanBong") Integer idSanBong,
+            @RequestParam("listIdNgayTrongTuan") List<Integer> listIdNgayTrongTuan) {
+
+        List<SanCaDTO> listSanCa = sanCaService.findSanCaByNhieuNgay(idSanBong, listIdNgayTrongTuan);
+        return ResponseEntity.ok(listSanCa);
+    }
+
+
 }
