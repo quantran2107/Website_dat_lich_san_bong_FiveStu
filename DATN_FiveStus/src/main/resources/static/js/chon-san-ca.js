@@ -1,11 +1,39 @@
+let selectedDayType = 'Theo ngày';
+// Hàm hiển thị ô input ngày theo loại ngày đặt
+function showInput(type) {
+    selectedDayType = type; // Cập nhật loại ngày đã chọn
+    var inputNgayDon = document.getElementById('inputNgayDon');
+    var inputNhieuNgay = document.getElementById('inputNhieuNgay');
+    var dropdownButton = document.getElementById('actionMenuButton2');
+
+    if (type === 'Theo ngày') {
+        inputNgayDon.style.display = 'block';
+        inputNhieuNgay.style.display = 'none';
+        dropdownButton.textContent = 'Theo ngày'; // Cập nhật nội dung nút
+    } else if (type === 'Nhiều ngày') {
+        inputNgayDon.style.display = 'none';
+        inputNhieuNgay.style.display = 'block';
+        dropdownButton.textContent = 'Nhiều ngày'; // Cập nhật nội dung nút
+    } else if (type === 'Theo tuần') {
+        inputNgayDon.style.display = 'none';
+        inputNhieuNgay.style.display = 'none';
+        dropdownButton.textContent = 'Theo tuần'; // Cập nhật nội dung nút
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     const ngayDenSanInput = document.getElementById('ngayDenSan');
+    const ngayBatDauInput = document.getElementById('ngayBatDau');
+    const ngayKetThucInput = document.getElementById('ngayKetThuc');
     let hoaDonChiTietList = []; // Lưu trữ danh sách hóa đơn chi tiết
     const sanCaTableBody = document.querySelector('#sanCaTable tbody');
 
     // Đặt giá trị ngày hiện tại vào ô nhập ngày
     const today = new Date().toISOString().split('T')[0];
     ngayDenSanInput.value = today;
+    ngayBatDauInput.value = today;
+    ngayKetThucInput.value = today;
+
 
     // Lấy danh sách hóa đơn chi tiết từ API
     fetchHoaDonChiTiet();
@@ -27,6 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const date = new Date(dateString);
         return daysOfWeek[date.getDay()];
     }
+
 
     // Hàm hiển thị lỗi cho người dùng
     function showError(message, error) {
@@ -90,18 +119,39 @@ document.addEventListener("DOMContentLoaded", function () {
         return new Date(year, month - 1, day);
     }
 
-    // Hàm tải dữ liệu ca của sân bóng theo ngày đến sân
+
+    // Hàm tải dữ liệu ca của sân bóng theo nhiều ngày
     function loadSanCaDetails(sanBongId) {
         const sanCaDetailsSection = document.getElementById(`sanCaDetails_${sanBongId}`);
         sanCaDetailsSection.innerHTML = ''; // Xóa dữ liệu cũ
 
-        const ngayDenSan = ngayDenSanInput.value;
+        const ngayDenSan = document.getElementById('ngayDenSan').value;
         const idNgayTrongTuan = getDayOfWeek(ngayDenSan);
+        console.log(selectedDayType)
+        if (selectedDayType === 'Theo ngày') {
+            fetch(`http://localhost:8080/san-ca/danh-sach-san-ca/${sanBongId}/${idNgayTrongTuan}`)
+                .then(response => response.json())
+                .then(sanCaList => renderSanCaList(sanCaList, sanCaDetailsSection))
+                .catch(error => showError('Error fetching san ca data:', error));
+        } else if (selectedDayType === 'Nhiều ngày') {
+            const ngayBatDau = document.getElementById('ngayBatDau').value;
+            const ngayKetThuc = document.getElementById('ngayKetThuc').value;
 
-        fetch(`http://localhost:8080/san-ca/danh-sach-san-ca/${sanBongId}/${idNgayTrongTuan}`)
-            .then(response => response.json())
-            .then(sanCaList => renderSanCaList(sanCaList, sanCaDetailsSection))
-            .catch(error => showError('Error fetching san ca data:', error));
+            const listIdNgayTrongTuan = [];
+            let startDate = new Date(ngayBatDau);
+            let endDate = new Date(ngayKetThuc);
+
+            while (startDate <= endDate) {
+                listIdNgayTrongTuan.push(getDayOfWeek(startDate.toISOString().split('T')[0]));
+                startDate.setDate(startDate.getDate() + 1);
+            }
+            console.log(listIdNgayTrongTuan)
+
+            fetch(`http://localhost:8080/san-ca/danh-sach-nhieu-ngay/${sanBongId}?listIdNgayTrongTuan=${listIdNgayTrongTuan.join(',')}`)
+                .then(response => response.json())
+                .then(sanCaList => renderSanCaList(sanCaList, sanCaDetailsSection))
+                .catch(error => showError('Error fetching san ca data:', error));
+        }
     }
 
     // Render danh sách ca sân
@@ -182,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return content;
     }
 
-// Tạo phần header cho mỗi ca sân (Cập nhật để không tạo checkbox nếu trạng thái không phải là "Còn trống")
+    // Tạo phần header cho mỗi ca sân (Cập nhật để không tạo checkbox nếu trạng thái không phải là "Còn trống")
     function createSanCaHeader(sanCa) {
         const header = document.createElement('div');
         header.classList.add('san-ca-header');
@@ -356,7 +406,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-
     // Hàm lấy danh sách loại sân và hiển thị trong dropdown
     function loadLoaiSan() {
         fetch('http://localhost:8080/loai-san/hien-thi')
@@ -394,6 +443,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     flatpickr("#ngayDenSan", {});
+    flatpickr("#ngayBatDau", {});
+    flatpickr("#ngayKetThuc", {});
+
 });
 
 $(document).ready(function() {
@@ -533,6 +585,3 @@ function themHoaDonChiTiet(idHoaDon) {
             });
     });
 }
-
-
-

@@ -151,24 +151,61 @@
                         <div class="col-md-12">
                             <div class="card shadow">
                                 <div class="card-body">
-                                    <div class="form-row mb-3">
+                                    <div class="form-row mb-3 align-items-center">
                                         <i class="bi bi-calendar3"></i>
                                         <h4 class="card-title ml-3">Ngày đến sân</h4>
+
+                                        <!-- Dropdown Chọn loại ngày nằm ngang -->
+                                        <div class="input-group col-md-4 ml-3">
+                                            <div class="dropdown">
+                                                <button aria-expanded="false" aria-haspopup="true" class="btn btn-outline-success ml-3 mr-3 dropdown-toggle"
+                                                        data-toggle="dropdown" id="actionMenuButton2" type="button">Chọn loại ngày
+                                                </button>
+                                                <div id="loaiNgayDropdown" aria-labelledby="actionMenuButton2" class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#" data-value="Theo ngày" onclick="showInput('Theo ngày')">Theo ngày</a>
+                                                    <a class="dropdown-item" href="#" data-value="Theo tuần" onclick="showInput('Theo tuần')">Theo tuần</a>
+                                                    <a class="dropdown-item" href="#" data-value="Nhiều ngày" onclick="showInput('Nhiều ngày')">Nhiều ngày</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
+
                                     <div class="toolbar row">
                                         <div class="col">
                                             <div class="form-row mb-1">
-                                                <div class="input-group col-md-4">
-                                                    <input type="date" id="ngayDenSan" class="form-control" />
+                                                <!-- Ô input ngày -->
+                                                <div class="input-group col-md-4" id="inputNgayDon" >
+                                                    <input type="date" id="ngayDenSan" class="form-control" style="width: 100%;" />
                                                 </div>
+
+                                                <!-- Ô input nhiều ngày (ẩn ban đầu) -->
+                                                <div class="input-group col-md-8" id="inputNhieuNgay" style="display: none;">
+                                                    <div class="row g-3 align-items-center"> <!-- Sử dụng g-3 để tạo khoảng cách đều giữa các ô -->
+                                                        <div class="col-auto">
+                                                            <label for="ngayBatDau" class="col-form-label">Từ</label>
+                                                        </div>
+                                                        <div class="col">
+                                                            <input type="date" id="ngayBatDau" style="width: 100%;" class="form-control" placeholder="Ngày bắt đầu" />
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <label for="ngayKetThuc" class="col-form-label">Đến</label>
+                                                        </div>
+                                                        <div class="col">
+                                                            <input type="date" id="ngayKetThuc" style="width: 100%;" class="form-control" placeholder="Ngày kết thúc" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Dropdown Chọn loại sân -->
                                                 <div class="dropdown">
-                                                    <button aria-expanded="false" aria-haspopup="true" class="btn btn-outline-success ml-3 mr-3 dropdown-toggle"
-                                                            data-toggle="dropdown" id="actionMenuButton1" type="button">Chọn loại sân
+                                                    <button aria-expanded="false" aria-haspopup="true" class="btn btn-outline-success ml-3 mr-3 dropdown-toggle" data-toggle="dropdown" id="actionMenuButton1" type="button">Chọn loại sân
                                                     </button>
                                                     <div id="loaiSanDropdown" aria-labelledby="actionMenuButton1" class="dropdown-menu">
                                                         <!-- Các mục dropdown sẽ được thêm vào đây từ JavaScript -->
                                                     </div>
                                                 </div>
+
                                                 <div class="input-group col-md-2">
                                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#book-modal">Điền thông tin</button>
                                                 </div>

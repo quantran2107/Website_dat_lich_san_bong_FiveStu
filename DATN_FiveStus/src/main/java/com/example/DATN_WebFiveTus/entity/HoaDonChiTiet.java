@@ -73,5 +73,4 @@ public class HoaDonChiTiet {
     @Column(name = "trang_thai", length = 100)
     private String trangThai;
 
-
 }
