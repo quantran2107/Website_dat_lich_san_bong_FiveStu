@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +50,7 @@ public class HoaDonChiTietRest {
     public ResponseEntity<?> getHoaDonChiTietByTrangThai(
             @RequestParam(defaultValue = "false") String trangThai,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "3") Integer size) {
+            @RequestParam(defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         System.out.println("Fetching data for page " + page + " with size " + size);
         Page<HoaDonChiTietDTO> result = hoaDonChiTietService.getHoaDonChiTietByTrangThai(trangThai, pageable);
@@ -68,6 +69,18 @@ public class HoaDonChiTietRest {
         hoaDonChiTietService.updateTrangThai(id);
        return ResponseEntity.ok().build();
     }
+
+    @PutMapping("thanhtoan/{id}")
+    public ResponseEntity<String> updateTrangThaiThanhToan(@PathVariable("id") Integer id) {
+        try {
+            hoaDonChiTietService.updateTrangThaiThanhToan(id);
+            return ResponseEntity.ok("Cập nhật trạng thái thành công");
+        } catch (Exception e) {
+            // Ghi log lỗi và trả về mã lỗi
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi: " + e.getMessage());
+        }
+    }
+
 
     @GetMapping("/ngay-den-san")
     public ResponseEntity<?> finByNgayDenSan(

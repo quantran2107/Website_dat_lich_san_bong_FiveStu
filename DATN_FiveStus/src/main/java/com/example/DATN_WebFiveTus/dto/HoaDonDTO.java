@@ -42,20 +42,14 @@ public class HoaDonDTO {
 
     private Date ngayTao;
 
-    private Float tongTien;
-
-    private Float tienCoc;
-
-    private Float tienConLai;
-
-    private Float tienThua;
-
     private String ghiChu;
 
     private String trangThai;
 
-    @Temporal(TemporalType.DATE)
-    private Date ngayThanhToan;
+    private Double tongTienSan;
 
+    private Double tienCoc;
+
+    private Double tongTien;
 
 }

@@ -14,6 +14,8 @@ public interface PhieuGiamGiaService {
 
     List<PhieuGiamGiaDTO> getAll();
 
+    List<PhieuGiamGiaDTO> fillPGG(Double tongTien);
+
     PhieuGiamGiaDTO getOne(Integer id);
 
     //

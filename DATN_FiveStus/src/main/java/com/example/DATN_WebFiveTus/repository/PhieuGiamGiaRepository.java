@@ -16,6 +16,7 @@ public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, Inte
 
     @Query("SELECT pgg FROM PhieuGiamGia pgg   where pgg.deletedAt=false")
     Page<PhieuGiamGia> getAllJoinFetch(Pageable pageable);
+
     @Query("SELECT pg FROM PhieuGiamGia pg " +
             "WHERE (:keyword IS NULL OR pg.maPhieuGiamGia LIKE %:keyword% OR pg.tenPhieuGiamGia LIKE %:keyword%) " +
             "AND (:doiTuongApDung IS NULL OR pg.doiTuongApDung = :doiTuongApDung) " +
@@ -33,4 +34,9 @@ public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, Inte
             @Param("ngayKetThuc") Date ngayKetThuc,
             Pageable pageable);
 
+    @Query("SELECT pg FROM PhieuGiamGia pg " +
+            "WHERE (pg.trangThai = 'Đang diễn ra') " +
+            "AND (pg.dieuKienSuDung <= :tongTien)")
+    List<PhieuGiamGia> fillPhieuGiamGia(
+            @Param("tongTien") Double tongTien);
 }

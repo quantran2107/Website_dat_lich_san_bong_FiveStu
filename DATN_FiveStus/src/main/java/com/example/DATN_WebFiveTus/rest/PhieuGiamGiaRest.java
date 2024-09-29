@@ -68,6 +68,12 @@ public class PhieuGiamGiaRest {
         return ResponseEntity.ok(phieuGiamGiaList);
     }
 
+    @GetMapping("/fill-PGG")
+    public ResponseEntity<List<PhieuGiamGiaDTO>> fillPGG(@RequestParam("tongTien") Double tongTien) {
+        List<PhieuGiamGiaDTO> phieuGiamGiaList = phieuGiamGiaService.fillPGG(tongTien);
+        return ResponseEntity.ok(phieuGiamGiaList);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<PhieuGiamGiaDTO> getOne(@PathVariable("id") Integer id) {

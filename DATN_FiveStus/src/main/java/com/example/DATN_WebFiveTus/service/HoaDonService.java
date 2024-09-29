@@ -2,6 +2,7 @@ package com.example.DATN_WebFiveTus.service;
 
 import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.entity.HoaDon;
+import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
@@ -18,6 +19,8 @@ public interface HoaDonService {
 
     HoaDonDTO save(HoaDonDTO hoaDonDTO);
 
+    void updateThanhToan(Integer idHoaDonChiTiet);
+
     HoaDonDTO update(Integer id, HoaDonDTO hoaDonDTO);
 
     Page<HoaDonDTO> phanTrang(Pageable pageable);
@@ -26,10 +29,10 @@ public interface HoaDonService {
 
     void deletedAt(Integer id);
 
-    Page<HoaDonDTO> searchAndFilter(@Param("loai") Boolean loai,
-                                    @Param("trangThai") String trangThai,
-                                    @Param("keyword") String keyword,
-                                    @Param("tongTienMin") Float tongTienMin,
-                                    @Param("tongTienMax") Float tongTienMax,
-                                    Pageable pageable);
+//    Page<HoaDonDTO> searchAndFilter(@Param("loai") Boolean loai,
+//                                    @Param("trangThai") String trangThai,
+//                                    @Param("keyword") String keyword,
+//                                    @Param("tongTienMin") Float tongTienMin,
+//                                    @Param("tongTienMax") Float tongTienMax,
+//                                    Pageable pageable);
 }
