@@ -16,7 +16,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -36,10 +40,32 @@ public class PhuPhiHoaDon {
     @JoinColumn(name = "id_hoa_don_chi_tiet")
     private HoaDonChiTiet hoaDonChiTiet;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "thoi_gian_tao")
-    private Date thoiGianTao;
+    @Column(name = "ma", length = 50)
+    private String ma;
+
+    @Column(name = "ten", length = 50)
+    private String ten;
+
+    @Column(name = "tien_phu_phi", length = 50)
+    private Double tienPhuPhi;
+
+    @Column(name = "ghi_chu", length = 50)
+    private String ghiChu;
 
     @Column(name = "trang_thai", length = 50)
     private String trangThai;
+
+    @CreationTimestamp
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private boolean deletedAt;
+
 }

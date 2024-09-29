@@ -203,7 +203,8 @@
                                             <!-- Nơi hiển thị dịch vụ đã thuê -->
                                         </div>
                                         <!-- Nút nằm bên phải tiêu đề -->
-                                        <button class="btn btn-outline-success" id="openServiceModal" title="Thêm dịch vụ"
+                                        <button class="btn btn-outline-success" id="openServiceModal"
+                                                title="Thêm dịch vụ"
                                                 type="button">
                                             <span class="fe fe-plus"></span>
                                         </button>
@@ -281,14 +282,16 @@
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
                                                 <label for="hoVaTenKhachHang">Tên khách hàng</label>
-                                                <input class="form-control" id="hoVaTenKhachHang" placeholder="Chưa có dữ liệu" readonly
+                                                <input class="form-control" id="hoVaTenKhachHang"
+                                                       placeholder="Chưa có dữ liệu" readonly
                                                        type="text">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
                                                 <label for="soDienThoaiKhachHang">Số Điện Thoại</label>
-                                                <input class="form-control" id="soDienThoaiKhachHang" placeholder="Chưa có dữ liệu"
+                                                <input class="form-control" id="soDienThoaiKhachHang"
+                                                       placeholder="Chưa có dữ liệu"
                                                        readonly type="text">
                                             </div>
                                         </div>
@@ -342,14 +345,16 @@
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
                                                 <label for="giaSan">Giá Sân</label>
-                                                <input class="form-control" id="giaSan" placeholder="Chưa có dữ liệu" readonly
+                                                <input class="form-control" id="giaSan" placeholder="Chưa có dữ liệu"
+                                                       readonly
                                                        type="text">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
                                                 <label for="giaDichVu">Giá Dịch Vụ</label>
-                                                <input class="form-control" id="giaDichVu" placeholder="Chưa có dữ liệu" readonly
+                                                <input class="form-control" id="giaDichVu" placeholder="Chưa có dữ liệu"
+                                                       readonly
                                                        type="text">
                                             </div>
                                         </div>
@@ -361,14 +366,16 @@
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
                                                 <label for="tienCocSan">Tiền Cọc Sân</label>
-                                                <input class="form-control" id="tienCocSan" placeholder="Chưa có dữ liệu" readonly
+                                                <input class="form-control" id="tienCocSan"
+                                                       placeholder="Chưa có dữ liệu" readonly
                                                        type="text">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group mb-3">
                                                 <label for="tienCocThua">Tiền Cọc Thừa</label>
-                                                <input class="form-control" id="tienCocThua" placeholder="Chưa có dữ liệu" readonly
+                                                <input class="form-control" id="tienCocThua"
+                                                       placeholder="Chưa có dữ liệu" readonly
                                                        type="text">
                                             </div>
                                         </div>
@@ -380,7 +387,8 @@
                                         <div class="col-md-12">
                                             <div class="form-group mb-3">
                                                 <label for="tienPhuPhi">Tiền Phụ Phí</label>
-                                                <input class="form-control" id="tienPhuPhi" placeholder="Chưa có dữ liệu" readonly
+                                                <input class="form-control" id="tienPhuPhi"
+                                                       placeholder="Chưa có dữ liệu" readonly
                                                        type="text">
                                             </div>
                                         </div>
@@ -397,7 +405,8 @@
                                             <div class="form-group mb-3">
                                                 <label for="phieuGiamGia">Phiếu Giảm Giá</label>
                                                 <div class="input-group mb-3">
-                                                    <input class="form-control" id="phieuGiamGia" placeholder="Nhập phiếu giảm giá nếu có"
+                                                    <input class="form-control" id="phieuGiamGia"
+                                                           placeholder="Nhập phiếu giảm giá nếu có"
                                                            type="text">
                                                     <button class="btn btn-outline-success" id="btnAddDiscount"
                                                             type="button">+
@@ -429,7 +438,8 @@
                                             <div class="form-group mb-3">
                                                 <label for="tienKhachDua">Tiền Khách Đưa</label>
                                                 <div class="input-group mb-3">
-                                                    <input class="form-control" id="tienKhachDua" placeholder="Nhập số tiền khách đưa"
+                                                    <input class="form-control" id="tienKhachDua"
+                                                           placeholder="Nhập số tiền khách đưa"
                                                            type="text">
                                                     <span class="input-group-text">VND</span>
                                                 </div>
@@ -440,7 +450,8 @@
                                             <div class="form-group mb-3">
                                                 <label for="tienTraLai">Tiền Trả Lại</label>
                                                 <div class="input-group mb-3">
-                                                    <input class="form-control" id="tienTraLai" placeholder="Tiền trả lại"
+                                                    <input class="form-control" id="tienTraLai"
+                                                           placeholder="Tiền trả lại"
                                                            readonly type="text">
                                                     <span class="input-group-text">VND</span>
                                                 </div>
@@ -1184,228 +1195,227 @@
         newTabContent.setAttribute('role', 'tabpanel');
         newTabContent.innerHTML = `
             <!-- Nội dung hóa đơn -->
-            <form>
-                <div class="row">
-                    <div class="col-md-6" hidden >
-                                <div class="form-group mb-3" >
-                                <label for="id${invoiceId}">ID</label>
-                                <input type="text" id="id${invoiceId}" class="form-control" readonly >
-                                </div>
-                                <div class="form-group mb-3" hidden>
-                                <label for="idHoaDon${invoiceId}">ID Hóa đơn</label>
-                                <input type="text" id="idHoaDon${invoiceId}" class="form-control" readonly>
-                                </div>
-                    </div>
-                    <div class="col-md-6" hidden>
-                        <div class="form-group mb-3">
-                                <label for="maHoaDon${invoiceId}">Mã hóa đơn</label>
-                                <input type="text" id="maHoaDon${invoiceId}" class="form-control" readonly>
-                                </div>
-                    </div>
-                    <div class="col-md-6" hidden>
-                        <div class="form-group mb-3">
-                                <label for="maHoaDonChiTiet${invoiceId}">Mã hóa đơn chi tiết</label>
-                                <input type="text" id="maHoaDonChiTiet${invoiceId}" class="form-control" readonly>
-                                </div>
-                    </div>
-                </div>
-                                        <!-- Tên Khách Hàng -->
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="hoVaTenKhachHang${invoiceId}">Tên khách hàng</label>
-                                                 <input type="text" id="hoVaTenKhachHang${invoiceId}" class="form-control" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="soDienThoaiKhachHang${invoiceId}">Số Điện Thoại</label>
-                                                <input class="form-control" id="soDienThoaiKhachHang${invoiceId}" type="text" readonly placeholder="Chưa có dữ liệu">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6" hidden>
-                                            <div class="form-group mb-3">
-                                                <label for="trangThai${invoiceId}">Trạng thái</label>
-                                                <input class="form-control" id="trangThai${invoiceId}" type="text" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="form-group mb-3">
-                                                <label for="tenSanBong${invoiceId}">Tên sân</label>
-                                                <input class="form-control" id="tenSanBong${invoiceId}" type="text" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="thoiGianBatDauCa${invoiceId}">Thời gian bắt đầu</label>
-                                                <input class="form-control" id="thoiGianBatDauCa${invoiceId}" type="text" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="thoiGianKetThucCa${invoiceId}">Thời gian kết thúc</label>
-                                                <input class="form-control" id="thoiGianKetThucCa${invoiceId}" type="text" readonly>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="ngayTaoHoaDon${invoiceId}">Ngày tạo hóa đơn</label>
-                                                <input class="form-control" id="ngayTaoHoaDon${invoiceId}" type="text" readonly>
-                                            </div>
-                                        </div>
-                                     <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="ngayDenSan${invoiceId}">Ngày check-in</label>
-                                                <input class="form-control" id="ngayDenSan${invoiceId}" type="text" readonly>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="tienSan${invoiceId}">Giá sân</label>
-                                                <input class="form-control" id="tienSan${invoiceId}" type="text" readonly >
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="tienCoc${invoiceId}">Tiền cọc Sân</label>
-                                                <input class="form-control" id="tienCoc${invoiceId}" type="text" readonly >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="giaDichVu${invoiceId}">Giá dịch Vụ</label>
-                                                <input class="form-control" id="giaDichVu${invoiceId}" type="text" readonly >
-                                            </div>
-                                        </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group mb-3">
-                                                                    <label for="tienPhuPhi">Tiền phụ Phí</label>
-                                                                    <input class="form-control" id="tienPhuPhi" type="text" readonly >
-                                                                </div>
-                                                            </div>
-                                    </div>
-                                        <div class="row">
-                                         <div class="col-md-12">
-                                         <div class="form-group mb-3">
-                                                <label for="phuPhiHoaDon">Phụ phí hóa đơn</label>
-                                                <div class="input-group mb-3">
-                                                    <input class="form-control" id="phuPhiHoaDon" type="text" placeholder="Nhập phụ phí hóa đơn nếu có">
-                                                    <button class="btn btn-outline-success" type="button" id="btnPhuPhi">+</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group mb-3">
-                                                <label for="tongTien${invoiceId}">Tổng tiền</label>
-                                                <input class="form-control" id="tongTien${invoiceId}" type="text" readonly>
-                                            </div>
-                                        </div></div>
-                                    <hr>
-                                    <div class="row">
-    <div class="col-md-12">
+        <form>
+        <div class="row">
+        <div class="col-md-6" hidden >
+        <div class="form-group mb-3" >
+        <label for="id${invoiceId}">ID</label>
+        <input type="text" id="id${invoiceId}" class="form-control" readonly >
+        </div>
+        <div class="form-group mb-3" hidden>
+        <label for="idHoaDon${invoiceId}">ID Hóa đơn</label>
+        <input type="text" id="idHoaDon${invoiceId}" class="form-control" readonly>
+        </div>
+        </div>
+        <div class="col-md-6" hidden>
+        <div class="form-group mb-3">
+        <label for="maHoaDon${invoiceId}">Mã hóa đơn</label>
+        <input type="text" id="maHoaDon${invoiceId}" class="form-control" readonly>
+        </div>
+        </div>
+        <div class="col-md-6" hidden>
+        <div class="form-group mb-3">
+        <label for="maHoaDonChiTiet${invoiceId}">Mã hóa đơn chi tiết</label>
+        <input type="text" id="maHoaDonChiTiet${invoiceId}" class="form-control" readonly>
+        </div>
+        </div>
+        </div>
+            <!-- Tên Khách Hàng -->
+        <div class="row">
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="hoVaTenKhachHang${invoiceId}">Tên khách hàng</label>
+        <input type="text" id="hoVaTenKhachHang${invoiceId}" class="form-control" readonly>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="soDienThoaiKhachHang${invoiceId}">Số Điện Thoại</label>
+        <input class="form-control" id="soDienThoaiKhachHang${invoiceId}" type="text" readonly placeholder="Chưa có dữ liệu">
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6" hidden>
+        <div class="form-group mb-3">
+        <label for="trangThai${invoiceId}">Trạng thái</label>
+        <input class="form-control" id="trangThai${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        <div class="col-md-12">
+        <div class="form-group mb-3">
+        <label for="tenSanBong${invoiceId}">Tên sân</label>
+        <input class="form-control" id="tenSanBong${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="thoiGianBatDauCa${invoiceId}">Thời gian bắt đầu</label>
+        <input class="form-control" id="thoiGianBatDauCa${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="thoiGianKetThucCa${invoiceId}">Thời gian kết thúc</label>
+        <input class="form-control" id="thoiGianKetThucCa${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="ngayTaoHoaDon${invoiceId}">Ngày tạo hóa đơn</label>
+        <input class="form-control" id="ngayTaoHoaDon${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="ngayDenSan${invoiceId}">Ngày check-in</label>
+        <input class="form-control" id="ngayDenSan${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="tienSan${invoiceId}">Giá sân</label>
+        <input class="form-control" id="tienSan${invoiceId}" type="text" readonly >
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="tienCoc${invoiceId}">Tiền cọc Sân</label>
+        <input class="form-control" id="tienCoc${invoiceId}" type="text" readonly >
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="giaDichVu${invoiceId}">Giá dịch Vụ</label>
+        <input class="form-control" id="giaDichVu${invoiceId}" type="text" readonly >
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="tienPhuPhi">Tiền phụ Phí</label>
+        <input class="form-control" id="tienPhuPhi" type="text" readonly >
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-12">
+        <div class="form-group mb-3">
+        <label for="phuPhiHoaDon">Phụ phí hóa đơn</label>
+        <div class="input-group mb-3">
+        <input class="form-control" id="phuPhiHoaDon" type="text" placeholder="Nhập phụ phí hóa đơn nếu có">
+        <button class="btn btn-outline-success" type="button" id="btnPhuPhi">+</button>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-12">
+        <div class="form-group mb-3">
+        <label for="tongTien${invoiceId}">Tổng tiền</label>
+        <input class="form-control" id="tongTien${invoiceId}" type="text" readonly>
+        </div>
+        </div></div>
+        <hr>
+        <div class="row">
+        <div class="col-md-12">
         <h4 class="text-success">Thanh Toán</h4>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-4">
-        <div class="form-group mb-3">
-            <label for="phieuGiamGia">Phiếu Giảm Giá</label>
         </div>
-    </div>
-    <div class="col-md-8">
-        <div class="form-group mb-3">
-            <label for="discountSelect">Chọn Phiếu Giảm Giá</label>
-            <select id="discountSelect" class="form-control" >
-                <option value="">Chọn phiếu giảm giá</option>
-                <!-- Các tùy chọn sẽ được thêm vào đây -->
-            </select>
         </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-4">
+        <div class="row">
+        <div class="col-md-4">
         <div class="form-group mb-3">
-            <label for="tienGiam">Số tiền giảm</label>
+        <label for="phieuGiamGia">Phiếu Giảm Giá</label>
         </div>
-    </div>
-    <div class="col-md-8">
+        </div>
+        <div class="col-md-8">
         <div class="form-group mb-3">
-            <div class="input-group mb-3">
-               <input class="form-control" id="tienGiam" type="text" placeholder="Số tiền giảm" readonly>
-                <span class="input-group-text">VND</span>
-            </div>
+        <select id="discountSelect" class="form-control" >
+        <option value="">Chọn phiếu giảm giá</option>
+            <!-- Các tùy chọn sẽ được thêm vào đây -->
+        </select>
         </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-4">
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-4">
         <div class="form-group mb-3">
-            <label for="tongTienPhaiTra${invoiceId}">Tổng tiền phải trả:</label>
+        <label for="tienGiam">Số tiền giảm</label>
         </div>
-    </div>
-    <div class="col-md-8">
+        </div>
+        <div class="col-md-8">
         <div class="form-group mb-3">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" id="tongTienPhaiTra${invoiceId}" readonly>
-                <span class="input-group-text">VND</span>
-            </div>
+        <div class="input-group mb-3">
+        <input class="form-control" id="tienGiam" type="text" placeholder="Số tiền giảm" readonly>
+        <span class="input-group-text">VND</span>
         </div>
-    </div>
-</div>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-4">
+        <div class="form-group mb-3">
+        <label for="tongTienPhaiTra${invoiceId}">Tổng tiền phải trả:</label>
+        </div>
+        </div>
+        <div class="col-md-8">
+        <div class="form-group mb-3">
+        <div class="input-group mb-3">
+        <input type="text" class="form-control" id="tongTienPhaiTra${invoiceId}" readonly>
+        <span class="input-group-text">VND</span>
+        </div>
+        </div>
+        </div>
+        </div>
 
 
-<div class="row">
-    <div class="col-md-4">
+        <div class="row">
+        <div class="col-md-4">
         <div class="form-group mb-3">
-            <label for="tienKhachDua${invoiceId}">Tiền khách đưa</label>
+        <label for="tienKhachDua${invoiceId}">Tiền khách đưa</label>
         </div>
-    </div>
-    <div class="col-md-8">
+        </div>
+        <div class="col-md-8">
         <div class="form-group mb-3">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" id="tienKhachDua${invoiceId}" placeholder="Nhập số tiền khách đưa">
-                <span class="input-group-text">VND</span>
-            </div>
+        <div class="input-group mb-3">
+        <input type="text" class="form-control" id="tienKhachDua${invoiceId}" placeholder="Nhập số tiền khách đưa">
+        <span class="input-group-text">VND</span>
         </div>
-    </div>
-</div>
+        </div>
+        </div>
+        </div>
 
-<div class="row">
-    <div class="col-md-4">
+        <div class="row">
+        <div class="col-md-4">
         <div class="form-group mb-3">
-            <label for="tienTraLai${invoiceId}">Tiền trả lại</label>
+        <label for="tienTraLai${invoiceId}">Tiền trả lại</label>
         </div>
-    </div>
-    <div class="col-md-8">
+        </div>
+        <div class="col-md-8">
         <div class="form-group mb-3">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" id="tienTraLai${invoiceId}" readonly>
-                <span class="input-group-text">VND</span>
-            </div>
+        <div class="input-group mb-3">
+        <input type="text" class="form-control" id="tienTraLai${invoiceId}" readonly>
+        <span class="input-group-text">VND</span>
         </div>
-    </div>
-</div>
+        </div>
+        </div>
+        </div>
 
-<hr>
+        <hr>
 
-<div class="row">
-    <div class="col-md-12 text-center">
+        <div class="row">
+        <div class="col-md-12 text-center">
         <button class="btn btn-success" type="button" onclick="thanhToan(${invoiceId})">Thanh toán</button>
-    </div>
-</div>
+        </div>
+        </div>
 
-            </form>
-`;
+        </form>
+        `;
         tabContentRight.appendChild(newTabContent);
 
 
@@ -1435,14 +1445,9 @@
                 });
                 document.getElementById(`ngayTaoHoaDon${invoiceId}`).value = data.ngayTaoHoaDon;
                 document.getElementById(`ngayDenSan${invoiceId}`).value = data.ngayDenSan;
-                document.getElementById(`tienSan${invoiceId}`).value = data.tienSan;
-                document.getElementById(`tienCoc${invoiceId}`).value = (data.tienSan * 0.5).toFixed(2);
+                document.getElementById(`tienSan${invoiceId}`).value = data.giaSanCa;
+                document.getElementById(`tienCoc${invoiceId}`).value = (data.giaSanCa * 0.5);
                 // document.getElementById(`ghiChu${invoiceId}`).value = data.ghiChu;
-
-
-                console.log(data);
-                console.log(`Tên khách hàng: ${data.hoVaTenKhachHang}`);
-                console.log(`Số điện thoại: ${data.soDienThoaiKhachHang}`);
 
                 // Gọi API để tìm các dịch vụ sân bóng dựa trên id_hoa_don_chi_tiet
                 fetch(`http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${data.id}`)
@@ -1451,10 +1456,10 @@
                         // Tính tổng tiền từ các dịch vụ
                         const totalCost = services.reduce((sum, service) => sum + service.tongTien, 0);
                         // Hiển thị tổng tiền DVSB lên ô input
-                        document.getElementById(`giaDichVu${invoiceId}`).value = totalCost.toFixed(2);
-                        const totalInvoice = (data.tienSan - (data.tienSan * 0.5)) + totalCost; // Chỉnh sửa ở đây
+                        document.getElementById(`giaDichVu${invoiceId}`).value = totalCost;
+                        const totalInvoice = (data.giaSanCa - (data.giaSanCa * 0.5)) + totalCost; // Chỉnh sửa ở đây
                         // Hiển thị tổng tiền HDCT lên ô input
-                        document.getElementById(`tongTien${invoiceId}`).value = totalInvoice.toFixed(2);
+                        document.getElementById(`tongTien${invoiceId}`).value = totalInvoice;
                         // Gọi API để tìm phiếu giảm giá dựa trên tổng tiền
                         fetch(`http://localhost:8080/api-phieu-giam-gia/fill-PGG?tongTien=${totalInvoice}`)
                             .then(response => response.json())
@@ -1520,11 +1525,11 @@
                     }
 
                     // Hiển thị số tiền giảm trong ô input
-                    document.getElementById("tienGiam").value = tienGiam.toFixed(2); // Hiển thị với 2 chữ số thập phân
+                    document.getElementById("tienGiam").value = tienGiam; // Hiển thị với 2 chữ số thập phân
 
                     // Tính tổng tiền sau khi áp dụng giảm giá
                     const totalAfterDiscount = totalInvoice - tienGiam; // Tính tổng tiền sau khi giảm
-                    document.getElementById(`tongTienPhaiTra${invoiceId}`).value = totalAfterDiscount.toFixed(2); // Hiển thị tổng tiền cuối cùng
+                    document.getElementById(`tongTienPhaiTra${invoiceId}`).value = totalAfterDiscount; // Hiển thị tổng tiền cuối cùng
                 } else {
                     console.error(`Phần tử với ID "tongTien${invoiceId}" không tồn tại.`);
                 }
@@ -1569,7 +1574,7 @@
             const tienTraLai = tienKhachDua - totalInvoice; // Tiền trả lại
 
             // Cập nhật giá trị ô nhập tiền trả lại
-            tienTraLaiElement.value = tienTraLai.toFixed(2); // Hiển thị số tiền trả lại với 2 chữ số thập phân
+            tienTraLaiElement.value = tienTraLai; // Hiển thị số tiền trả lại với 2 chữ số thập phân
         }
 
         // Kích hoạt tab vừa tạo
@@ -1577,6 +1582,7 @@
         tab.show();
 
     }
+
         function thanhToan(invoiceId) {
             const totalToPayElement = document.getElementById(`tongTienPhaiTra${invoiceId}`);
             const changeElement = document.getElementById(`tienTraLai${invoiceId}`);
@@ -1624,16 +1630,16 @@
                             });
 
                             // Kiểm tra xem tất cả phản hồi có thành công không
-                                // Tất cả các yêu cầu đều thành công, hiển thị thông báo thành công bằng SweetAlert
-                                Swal.fire({
-                                    title: 'Thành công!',
-                                    text: 'Thanh toán thành công!',
-                                    icon: 'success',
-                                    confirmButtonText: 'OK'
-                                }).then(() => {
-                                    // Reload lại trang sau khi nhấn OK
-                                    window.location.reload();
-                                });
+                            // Tất cả các yêu cầu đều thành công, hiển thị thông báo thành công bằng SweetAlert
+                            Swal.fire({
+                                title: 'Thành công!',
+                                text: 'Thanh toán thành công!',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                // Reload lại trang sau khi nhấn OK
+                                window.location.reload();
+                            });
 
                         })
                         .catch(err => {
