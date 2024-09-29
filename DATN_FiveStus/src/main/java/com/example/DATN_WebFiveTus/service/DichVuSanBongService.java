@@ -14,5 +14,7 @@ public interface DichVuSanBongService {
 
     DichVuSanBongDTO update(Integer id, DichVuSanBongDTO dichVuSanBongDTO);
 
+    List<DichVuSanBongDTO> findByIdHDCT(Integer idHDCT);
+
     void delete(Integer id);
 }

@@ -160,7 +160,9 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         dto.setIdSanCa(hoaDonChiTiet.getSanCa().getId());
         dto.setNgayTaoHoaDon(hoaDonChiTiet.getHoaDon().getNgayTao());
         dto.setNgayDenSan(hoaDonChiTiet.getNgayDenSan());
-        dto.setTienSan(hoaDonChiTiet.getTienSan());
+        dto.setTongTien(hoaDonChiTiet.getTongTien());
+        dto.setTienGiamGia(hoaDonChiTiet.getTienGiamGia());
+        dto.setTongTienThucTe(hoaDonChiTiet.getTongTienThucTe());
         dto.setGhiChu(hoaDonChiTiet.getGhiChu());
         dto.setTrangThai(hoaDonChiTiet.getTrangThai());
         dto.setTenSanBong(hoaDonChiTiet.getSanCa().getSanBong().getTenSanBong());
@@ -180,6 +182,10 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         hoaDonChiTietRepository.updateTrangThai(id);
     }
 
+    @Override
+    public void updateTrangThaiThanhToan(Integer id) {
+        hoaDonChiTietRepository.updateTrangThaiThanhToan(id);
+    }
 
     public List<HoaDonChiTietDTO> findByNgayDenSan(Date ngayDenSan) {
         // Lấy danh sách HoaDonChiTiet từ repository

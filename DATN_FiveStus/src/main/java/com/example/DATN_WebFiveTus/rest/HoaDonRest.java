@@ -1,6 +1,8 @@
 package com.example.DATN_WebFiveTus.rest;
 
 import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
+import com.example.DATN_WebFiveTus.entity.HoaDon;
+import com.example.DATN_WebFiveTus.repository.HoaDonChiTietRepository;
 import com.example.DATN_WebFiveTus.service.HoaDonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,12 +12,14 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,19 +65,19 @@ public class HoaDonRest {
         return ResponseEntity.ok(hoaDonPage);
     }
 
-    @GetMapping("/search-and-filter")
-    public ResponseEntity<Page<HoaDonDTO>> searchAndFilter(
-            @RequestParam(required = false) Boolean loai,
-            @RequestParam(required = false) String trangThai,
-            @RequestParam(required = false) String key,
-            @RequestParam(required = false) Float tongTienMin,
-            @RequestParam(required = false) Float tongTienMax,
-            @RequestParam(defaultValue = "0") int trang,
-            @RequestParam(defaultValue = "10") int kichThuoc) {
-        Pageable pageable = PageRequest.of(trang, kichThuoc);
-        Page<HoaDonDTO> hoaDonPage = hoaDonService.searchAndFilter(loai, trangThai, key, tongTienMin, tongTienMax, pageable);
-        return ResponseEntity.ok(hoaDonPage);
-    }
+//    @GetMapping("/search-and-filter")
+//    public ResponseEntity<Page<HoaDonDTO>> searchAndFilter(
+//            @RequestParam(required = false) Boolean loai,
+//            @RequestParam(required = false) String trangThai,
+//            @RequestParam(required = false) String key,
+//            @RequestParam(required = false) Float tongTienMin,
+//            @RequestParam(required = false) Float tongTienMax,
+//            @RequestParam(defaultValue = "0") int trang,
+//            @RequestParam(defaultValue = "10") int kichThuoc) {
+//        Pageable pageable = PageRequest.of(trang, kichThuoc);
+//        Page<HoaDonDTO> hoaDonPage = hoaDonService.searchAndFilter(loai, trangThai, key, tongTienMin, tongTienMax, pageable);
+//        return ResponseEntity.ok(hoaDonPage);
+//    }
 
     @PostMapping("/save")
     public ResponseEntity<HoaDonDTO> save(@RequestBody HoaDonDTO hoaDonDTO){
@@ -81,4 +85,16 @@ public class HoaDonRest {
         return ResponseEntity.ok(hoaDonDTOSave);
     }
 
+    // API để cập nhật thanh toán dựa vào idHoaDonChiTiet
+    @PutMapping("/update-thanh-toan/{idHoaDonChiTiet}")
+    public ResponseEntity<String> updateThanhToan(@PathVariable Integer idHoaDonChiTiet) {
+        try {
+            // Gọi service để cập nhật thanh toán
+            hoaDonService.updateThanhToan(idHoaDonChiTiet);
+            return ResponseEntity.ok("Cập nhật thanh toán thành công cho hóa đơn chi tiết với id: " + idHoaDonChiTiet);
+        } catch (RuntimeException e) {
+            // Nếu có lỗi xảy ra, trả về thông báo lỗi và mã HTTP 404
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

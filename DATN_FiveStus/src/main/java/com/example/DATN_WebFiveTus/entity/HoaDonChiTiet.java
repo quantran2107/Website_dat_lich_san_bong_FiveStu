@@ -39,6 +39,10 @@ public class HoaDonChiTiet {
     @JoinColumn(name = "id_hoa_don")
     private HoaDon hoaDon;
 
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "id_phieu_giam_gia", nullable = false)
+    private PhieuGiamGia phieuGiamGia;
+
     @Column(name = "ma_hoa_don_chi_tiet")
     private String maHoaDonChiTiet;
 
@@ -46,8 +50,14 @@ public class HoaDonChiTiet {
     @JoinColumn(name = "id_san_ca")
     private SanCa sanCa;
 
-    @Column(name = "tien_san")
-    private String tienSan;
+    @Column(name = "tong_tien")
+    private Double tongTien;
+
+    @Column(name = "tien_giam_gia")
+    private Double tienGiamGia;
+
+    @Column(name = "tong_tien_thuc_te")
+    private Double tongTienThucTe;
 
     @Column(name = "kieu_ngay_dat")
     private String kieuNgayDat;

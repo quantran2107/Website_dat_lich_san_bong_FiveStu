@@ -15,7 +15,7 @@ import lombok.ToString;
 @Builder
 public class DichVuSanBongDTO {
 
-    private int id;
+    private Integer id;
 
     private Integer idDoThue;
 
@@ -23,11 +23,9 @@ public class DichVuSanBongDTO {
 
     private Integer idHoaDonChiTiet;
 
-    private Double donGia;
+    private Double tongTien;
 
-    private int soLuongDoThue;
-
-    private int soLuongNuocUong;
+    private Integer soLuong;
 
     private String trangThai;
 

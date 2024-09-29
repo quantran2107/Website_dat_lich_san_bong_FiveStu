@@ -64,7 +64,7 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
             dichVuSanBong.setDoThue(doThue);
         } else {
             dichVuSanBong.setDoThue(null); // Thiết lập là null nếu không có id
-            dichVuSanBong.setSoLuongDoThue(0);
+            dichVuSanBong.setSoLuong(0);
         }
 
         // Xử lý NuocUong
@@ -74,7 +74,7 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
             dichVuSanBong.setNuocUong(nuocUong);
         } else {
             dichVuSanBong.setNuocUong(null); // Thiết lập là null nếu không có id
-            dichVuSanBong.setSoLuongNuocUong(0);
+            dichVuSanBong.setSoLuong(0);
         }
 
         // Xử lý HoaDonChiTiet
@@ -97,12 +97,18 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
         dichVuSanBong.setDoThue(doThue);
         dichVuSanBong.setNuocUong(nuocUong);
         dichVuSanBong.setHoaDonChiTiet(hoaDonChiTiet);
-        dichVuSanBong.setSoLuongDoThue(dichVuSanBongDTO.getSoLuongDoThue());
-        dichVuSanBong.setSoLuongNuocUong(dichVuSanBongDTO.getSoLuongNuocUong());
-        dichVuSanBong.setDonGia(dichVuSanBongDTO.getDonGia());
+        dichVuSanBong.setSoLuong(dichVuSanBongDTO.getSoLuong());
+        dichVuSanBong.setTongTien(dichVuSanBongDTO.getTongTien());
         dichVuSanBong.setTrangThai(dichVuSanBongDTO.getTrangThai());
         DichVuSanBong dichVuSanBongUpdate = dichVuSanBongRepository.save(dichVuSanBong);
         return modelMapper.map(dichVuSanBongUpdate, DichVuSanBongDTO.class);
+    }
+
+    @Override
+    public List<DichVuSanBongDTO> findByIdHDCT(Integer idHDCT) {
+        List<DichVuSanBongDTO> list = dichVuSanBongRepository.findDichVuSanBongsByIdHoaDonChiTiet(idHDCT).stream()
+                .map((dichVuSanBong) -> modelMapper.map(dichVuSanBong, DichVuSanBongDTO.class)).collect(Collectors.toList());
+        return list;
     }
 
     @Override

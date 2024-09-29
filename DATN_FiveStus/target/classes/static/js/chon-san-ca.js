@@ -406,7 +406,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-
     // Hàm lấy danh sách loại sân và hiển thị trong dropdown
     function loadLoaiSan() {
         fetch('http://localhost:8080/loai-san/hien-thi')
@@ -442,7 +441,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.error('Lỗi khi tải sân bóng theo loại sân:', error));
     }
-    
+
     flatpickr("#ngayDenSan", {});
     flatpickr("#ngayBatDau", {});
     flatpickr("#ngayKetThuc", {});
