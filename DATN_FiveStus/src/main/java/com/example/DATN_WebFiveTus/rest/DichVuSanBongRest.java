@@ -45,4 +45,9 @@ public class DichVuSanBongRest {
     public ResponseEntity<DichVuSanBongDTO> update(@PathVariable("id") Integer id , @RequestBody DichVuSanBongDTO dichVuSanBongDTO){
         return ResponseEntity.ok(dichVuSanBongService.update(id,dichVuSanBongDTO));
     }
+
+    @GetMapping("tim-theo-idhdct/{id}")
+    public ResponseEntity<?> findByIdHdct(@PathVariable("id") Integer idHDCT){
+        return ResponseEntity.ok(dichVuSanBongService.findByIdHDCT(idHDCT));
+    }
 }

@@ -59,6 +59,14 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
     }
 
     @Override
+    public List<PhieuGiamGiaDTO> fillPGG(Double tongTien) {
+        List<PhieuGiamGia> phieuGiamGiaList = phieuGiamGiaRepository.fillPhieuGiamGia(tongTien);
+        return phieuGiamGiaList.stream()
+                .map(phieuGiamGia -> modelMapper.map(phieuGiamGia, PhieuGiamGiaDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public PhieuGiamGiaDTO getOne(Integer id) {
         return modelMapper.map(phieuGiamGiaRepository.findById(id).orElseThrow(() ->
                 new ResourceNotfound("Không tồn tại phieu giam gia ID: " + id)), PhieuGiamGiaDTO.class);

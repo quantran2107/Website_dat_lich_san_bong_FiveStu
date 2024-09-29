@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.dto;
 
+import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Temporal;
@@ -40,8 +41,6 @@ public class HoaDonChiTietDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date ngayDenSan;
 
-    private String tienSan;
-
     private String ghiChu;
 
     private String trangThai;
@@ -65,11 +64,38 @@ public class HoaDonChiTietDTO {
 
     private String emailKhachHang;
 
-
     private Boolean deletedAt;
 
     private String tenLoaiSan;
 
+    private Double tongTien;
 
+    private Double tienGiamGia;
+
+    private Double tongTienThucTe;
+
+    private Integer idphieuGiamGia;
+
+    private String maPhieuGiamGia;
+
+    private String tenPhieuGiamGia;
+
+    private Integer soLuongPhieuGianGia;
+
+    private Float mucGiamPhieuGianGia;
+
+    private Boolean hinhThucGiamGiaPhieuGianGia;
+
+    private Float dieuKienSuDungPhieuGianGia;
+
+    private Float giaTriToiDaPhieuGianGia;
+
+    private Boolean doiTuongApDungPhieuGianGia;
+
+    private java.sql.Date ngayBatDauPhieuGianGia;
+
+    private java.sql.Date ngayKetThucPhieuGianGia;
+
+    private String trangThaiPhieuGianGia;
 
 }
