@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head th:include="fragment/head :: head"></head>
+<body class="vertical light">
+<div class="wrapper">
+    <div th:include="fragment/navbar :: navbar"></div>
+    <div th:include="fragment/sidebar :: sidebar"></div>
+    <main class="main-content" role="main">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <h2 class="mb-2 page-title">Giao ca</h2>
+                    <div style="display: flex;
+                        align-items: center;">
+                        <div style="margin:0 5px"><i class="fas fa-home"></i></div> <!-- Icon ngôi nhà -->
+                        <div style="margin:0 5px"><i class="fas fa-chevron-right"></i></div> <!-- Icon dấu lớn hơn -->
+                        <div id="giaoca" style="margin:0 5px;cursor: pointer;">
+                            <div>Giao ca</div>
+                        </div>
+
+                    </div>
+
+                    <div class="row my-4">
+                        <div class="col-md-12">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <form id="shiftTransferForm">
+                                        <div class="row" style="text-align: center;color: #0b860d"><h4>Form giao ca</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+
+                                                <input type="hidden" id="id" name="id">
+
+
+                                                <div class="form-group">
+                                                    <label for="nhanVienNhan">Nhân viên nhận ca</label>
+                                                    <select id="nhanVienNhan" class="form-control">
+                                                    </select>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="tienBanDau">Tiền ban đầu</label>
+                                                    <input type="number" step="0.01" class="form-control"
+                                                           id="tienBanDau"
+                                                           name="tienBanDau" required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="tongTienMat">Tổng tiền mặt</label>
+                                                    <input type="number" step="0.01" class="form-control"
+                                                           id="tongTienMat"
+                                                           name="tongTienMat" required>
+                                                </div>
+
+
+                                                <div class="form-group">
+                                                    <label for="tongTienMatCaTruoc">Tổng tiền mặt ca trước</label>
+                                                    <input type="number" step="0.01" class="form-control"
+                                                           id="tongTienMatCaTruoc" name="tongTienMatCaTruoc" required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="tienPhatSinh">Tiền phát sinh</label>
+                                                    <input type="number" step="0.01" class="form-control"
+                                                           id="tienPhatSinh"
+                                                           name="tienPhatSinh" required>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-6">
+
+                                                <div class="form-group">
+                                                    <label for="nhanVienGiao">Nhân viên giao ca</label>
+                                                    <select id="nhanVienGiao" class="form-control">
+                                                    </select>
+                                                </div>
+
+
+                                                <!-- Thời gian kết ca -->
+                                                <div class="form-group">
+                                                    <label for="thoiGianKetCa">Thời gian kết ca</label>
+                                                    <input type="datetime-local" class="form-control" id="thoiGianKetCa"
+                                                           name="thoiGianKetCa" required>
+                                                </div>
+
+
+                                                <!-- Tổng tiền khác -->
+                                                <div class="form-group">
+                                                    <label for="tongTienKhac">Tổng tiền khác</label>
+                                                    <input type="number" step="0.01" class="form-control"
+                                                           id="tongTienKhac"
+                                                           name="tongTienKhac" required>
+                                                </div>
+
+
+                                                <!-- Tổng tiền mặt rút -->
+                                                <div class="form-group">
+                                                    <label for="tongTienMatRut">Tổng tiền mặt rút</label>
+                                                    <input type="number" step="0.01" class="form-control"
+                                                           id="tongTienMatRut"
+                                                           name="tongTienMatRut" required>
+                                                </div>
+
+                                                <!-- Tổng tiền trong ca -->
+                                                <div class="form-group">
+                                                    <label for="tongTienTrongCa">Tổng tiền trong ca</label>
+                                                    <input type="number" step="0.01" class="form-control"
+                                                           id="tongTienTrongCa"
+                                                           name="tongTienTrongCa" required>
+                                                </div>
+
+                                                <!-- Ghi chú phát sinh -->
+                                                <div class="form-group">
+                                                    <label for="ghiChuPhatSinh">Ghi chú phát sinh</label>
+                                                    <textarea class="form-control" id="ghiChuPhatSinh"
+                                                              name="ghiChuPhatSinh"
+                                                              rows="3" placeholder="Ghi chú thêm (nếu có)"></textarea>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <!-- Nút gửi form -->
+                                            <button type="submit" class="btn btn-outline-success">Giao ca</button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div th:include="fragment/script :: script"></div>
+<script src="/js/html5-qrcode.min.js"></script>
+<script src="/js/giaoca.js"></script>
+
+</body>
+</html>
