@@ -2,6 +2,7 @@ package com.example.DATN_WebFiveTus.controller;
 
 import com.example.DATN_WebFiveTus.dto.GiaoCaDTO;
 import com.example.DATN_WebFiveTus.service.GiaoCaService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,24 +16,9 @@ import java.util.Arrays;
 @Controller
 public class GiaoCaController {
 
-    @Autowired
-    private RestTemplate restTemplate;
+    @GetMapping("/giao-ca")
+    public String giaoCa() {
 
-    @Autowired
-    private GiaoCaService giaoCaService;
-
-    @GetMapping("/quan-ly-giao-ca")
-    public String hienThiGC(Model model) {
-        model.addAttribute("listGC",
-                Arrays.asList(restTemplate.getForObject(
-                        "http://localhost:8080/giao-ca/hien-thi", GiaoCaDTO[].class
-                )));
-        return "/list/nhan-vien/lich-su-giao-ca";
-    }
-
-    @PostMapping("/giao-ca")
-    public String giaoCa(@ModelAttribute GiaoCaDTO giaoCaDTO) {
-        giaoCaService.save(giaoCaDTO);
-        return "redirect:/quan-ly-giao-ca";
+        return "/list/nhan-vien/giao-ca";
     }
 }

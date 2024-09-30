@@ -32,6 +32,19 @@ $(document).ready(function () {
         }).showToast();
     }
 
+    $('#btnExcelMau').on('click', function() {
+        // URL tải xuống file Excel từ Google Sheets
+        let url = 'https://docs.google.com/spreadsheets/d/1FxEkgetZJBOfYtFhqDgjrGTLYWw6Z6fJL50evGtrgpg/export?format=xlsx';
+
+        // Tạo một thẻ <a> tạm thời và thiết lập thuộc tính href
+        let $a = $('<a></a>').attr('href', url).attr('download', 'file.xlsx').appendTo('body');
+
+        // Kích hoạt sự kiện click để tải xuống file
+        $a[0].click();
+
+        // Xóa thẻ <a> tạm thời sau khi tải xong
+        $a.remove();
+    });
 
     $('#file').on('change', function () {
         let fileName = '';
@@ -39,12 +52,12 @@ $(document).ready(function () {
 
         if (newFileName) { // Nếu có chọn file mới
             fileName = newFileName; // Lưu tên file mới
-            $('#labelFile').html('<label for="file" style="margin: 15px">' + fileName + '</label>'); // Thay đổi nội dung của label
+            $('#labelFile').html('<label for="file" style="padding: 3px; border-radius: 5px;">' + fileName + '</label>'); // Thay đổi nội dung của label
             $('#btnSubmitFile').show(); // Hiển thị nút btn để gửi file
         } else { // Nếu không chọn file mới
             // Giữ nguyên file đã chọn trước đó, nếu có
             if (fileName) {
-                $('#labelFile').html('<label for="file" style="margin: 15px">' + fileName + '</label>'); // Giữ nguyên nội dung của label
+                $('#labelFile').html('<label for="file" style="padding: 3px; border-radius: 5px;">' + fileName + '</label>'); // Giữ nguyên nội dung của label
                 $('#btnSubmitFile').show(); // Hiển thị nút btn để gửi file
             } else {
                 // Nếu không có file đã chọn trước đó, không làm gì cả
@@ -339,7 +352,7 @@ $(document).ready(function () {
                           </tr>`;
             });
 
-            // Hiển thị dữ liệu vào tbody
+
             $('#tbodyContainer').html(tbody);
             $('.action-button').off('click').on('click', function () {
                 let employeeData = $(this).data('employee');
@@ -576,44 +589,57 @@ $(document).ready(function () {
             if (!valid()) {
                 return;
             }
+            Swal.fire({
+                title: 'Xác nhận',
+                text: 'Xác nhận thêm mới nhân viên ?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Tạo đối tượng dữ liệu nhân viên
+                    let employeeData = {
+                        imageNV: imageData,
+                        hoTen: hoTen,
+                        ngaySinh: ngaySinh,
+                        email: email,
+                        soDienThoai: soDienThoai,
+                        diaChi: diaChi,
+                        gioiTinh: gender,
 
-            // Tạo đối tượng dữ liệu nhân viên
-            let employeeData = {
-                imageNV: imageData,
-                hoTen: hoTen,
-                ngaySinh: ngaySinh,
-                email: email,
-                soDienThoai: soDienThoai,
-                diaChi: diaChi,
-                gioiTinh: gender,
+                        // Thêm các trường dữ liệu khác tùy theo yêu cầu của API
+                    };
+                    console.log(employeeData)
+                    // Gọi API để thêm nhân viên
+                    $.ajax({
+                        url: 'http://localhost:8080/nhan-vien/add', // Đường dẫn API
+                        type: 'POST', // Phương thức gửi dữ liệu
+                        contentType: 'application/json', // Kiểu dữ liệu gửi đi
+                        data: JSON.stringify(employeeData), // Chuyển đối tượng dữ liệu thành JSON
+                        success: function (response) {
+                            if (response === true) {
+                                showSuccessToast('Thêm thành công ');
+                                $(`#tableNhanVien`).show();
+                                loadTable(apiGetAll, '', currentPage, recordsPerPage);
+                                $(`#formAdd`).hide();
+                                $(`#formUpdate`).hide();
+                                $('#imageNVdetail').attr('src', 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg');
+                                imageData = '';
+                                $('#formAdd').find('input').val('');
+                            } else {
+                                showErrorToast('Thêm thất bại');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            showErrorToast("Thêm thất bại")
+                        }
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
 
-                // Thêm các trường dữ liệu khác tùy theo yêu cầu của API
-            };
-            console.log(employeeData)
-            // Gọi API để thêm nhân viên
-            $.ajax({
-                url: 'http://localhost:8080/nhan-vien/add', // Đường dẫn API
-                type: 'POST', // Phương thức gửi dữ liệu
-                contentType: 'application/json', // Kiểu dữ liệu gửi đi
-                data: JSON.stringify(employeeData), // Chuyển đối tượng dữ liệu thành JSON
-                success: function (response) {
-                    if (response === true) {
-                        showSuccessToast('Thêm thành công ');
-                        $(`#tableNhanVien`).show();
-                        loadTable(apiGetAll, '', currentPage, recordsPerPage);
-                        $(`#formAdd`).hide();
-                        $(`#formUpdate`).hide();
-                        $('#imageNVdetail').attr('src', 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg');
-                        imageData = '';
-                        $('#formAdd').find('input').val('');
-                    } else {
-                        showErrorToast('Thêm thất bại');
-                    }
-                },
-                error: function (xhr, status, error) {
-                    showErrorToast("Thêm thất bại")
                 }
             });
+
 
         });
     }
@@ -885,41 +911,53 @@ $(document).ready(function () {
             if (!valid()) {
                 return;
             }
-            let updatedEmployee = {
-                id: nhanV.id,
-                hoTen: hoten,
-                maNhanVien: manv,
-                matKhau: matKhau,
-                tenNhanVien: tennv,
-                email: email,
-                diaChi: diaChi,
-                gioiTinh: gioiTinh,
-                soDienThoai: sdt,
-                trangThai: trangThai,
-                ngaySinh: ngaySinh,
-                imageNV: imageData
-            };
-            $.ajax({
-                url: 'http://localhost:8080/nhan-vien/update',
-                type: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify(updatedEmployee),
-                success: function (response) {
-                    if (response === true) {
-                        showSuccessToast('Cập nhật  thành công');
-                        $(`#tableNhanVien`).show();
-                        loadTable(apiGetAll, '', currentPage, recordsPerPage);
-                        $(`#formAdd`).hide();
-                        $(`#formUpdate`).hide();
-                        $('#imageNVdetail').attr('src', 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg');
-                        imageData = '';
-                        $('#formUpdate').find('input').val('');
-                    } else {
-                        showErrorToast('Không thể cập nhật trạng thái');
-                    }
-                },
-                error: function () {
-                    showErrorToast('Đã xảy ra lỗi, không thể cập nhật trạng thái');
+            Swal.fire({
+                title: 'Xác nhận',
+                text: 'Xác nhận chỉnh sửa ?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let updatedEmployee = {
+                        id: nhanV.id,
+                        hoTen: hoten,
+                        maNhanVien: manv,
+                        matKhau: matKhau,
+                        tenNhanVien: tennv,
+                        email: email,
+                        diaChi: diaChi,
+                        gioiTinh: gioiTinh,
+                        soDienThoai: sdt,
+                        trangThai: trangThai,
+                        ngaySinh: ngaySinh,
+                        imageNV: imageData
+                    };
+                    $.ajax({
+                        url: 'http://localhost:8080/nhan-vien/update',
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        data: JSON.stringify(updatedEmployee),
+                        success: function (response) {
+                            if (response === true) {
+                                showSuccessToast('Cập nhật  thành công');
+                                $(`#tableNhanVien`).show();
+                                loadTable(apiGetAll, '', currentPage, recordsPerPage);
+                                $(`#formAdd`).hide();
+                                $(`#formUpdate`).hide();
+                                $('#imageNVdetail').attr('src', 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg');
+                                imageData = '';
+                                $('#formUpdate').find('input').val('');
+                            } else {
+                                showErrorToast('Không thể cập nhật trạng thái');
+                            }
+                        },
+                        error: function () {
+                            showErrorToast('Đã xảy ra lỗi, không thể cập nhật trạng thái');
+                        }
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
                 }
             });
 

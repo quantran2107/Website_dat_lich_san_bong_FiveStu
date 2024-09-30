@@ -1,9 +1,25 @@
 $(document).ready(function () {
-    let list =[];
+    let list = [];
 
     let apiGetUrl = "http://localhost:8080/lich-lam-viec/hien-thi";
 
     loadTable('', '', '');
+    $.ajax({
+        url: 'http://localhost:8080/nhan-vien/hien-thi',
+        method: 'GET',
+        success: function(response) {
+            response.forEach(function(nv) {
+                let nvValue = JSON.stringify(nv);
+                let option = $('<option></option>')
+                    .val(nvValue)
+                    .text(nv.hoTen);
+                $('#nhanVienSel').append(option);
+
+            });
+        },
+        error: function(xhr, status, error) {
+        }
+    });
 
     function showSuccessToast(message) {
         Toastify({
@@ -31,55 +47,61 @@ $(document).ready(function () {
         }).showToast();
     }
 
-    $('#file').on('change', function() {
-        let fileName = '';
-        let newFileName = $(this).val().split('\\').pop(); // Lấy tên file đã chọn mới
+    $('#btnExcelMauLich').on('click', function () {
+        let url = 'https://docs.google.com/spreadsheets/d/13CPv_VMCRxIpIW5UyuLclM7CibvygO3l-BtLczl_k34/export?format=xlsx';
+        let $a = $('<a></a>').attr('href', url).attr('download', 'file.xlsx').appendTo('body');
 
-        if (newFileName) { // Nếu có chọn file mới
-            fileName = newFileName; // Lưu tên file mới
-            $('#labelFile').html('<label for="file" style="margin: 15px">' + fileName + '</label>'); // Thay đổi nội dung của label
-            $('#btnSubmitFile').show(); // Hiển thị nút btn để gửi file
-        } else { // Nếu không chọn file mới
-            // Giữ nguyên file đã chọn trước đó, nếu có
+        $a[0].click();
+
+        $a.remove();
+    });
+
+    $('#file').on('change', function () {
+        let fileName = '';
+        let newFileName = $(this).val().split('\\').pop();
+
+        if (newFileName) {
+            fileName = newFileName;
+            $('#labelFile').html('<label for="file" style="margin: 15px">' + fileName + '</label>');
+            $('#btnSubmitFile').show();
+        } else {
             if (fileName) {
-                $('#labelFile').html('<label for="file" style="margin: 15px">' + fileName + '</label>'); // Giữ nguyên nội dung của label
-                $('#btnSubmitFile').show(); // Hiển thị nút btn để gửi file
+                $('#labelFile').html('<label for="file" style="margin: 15px">' + fileName + '</label>');
+                $('#btnSubmitFile').show();
             } else {
-                // Nếu không có file đã chọn trước đó, không làm gì cả
             }
         }
     });
-    $('#btnSubmitFile').click(function() {
-        ajaxSubmitForm(); // Gọi hàm ajaxSubmitForm để gửi dữ liệu form
+    $('#btnSubmitFile').click(function () {
+        ajaxSubmitForm();
     });
 
-    // Hàm gửi dữ liệu form bằng AJAX
+
     function ajaxSubmitForm() {
         let form = new FormData();
-        let file = $('#file')[0].files[0]; // Lấy file từ input
-        form.append('file', file); // Thêm file vào FormData
+        let file = $('#file')[0].files[0];
+        form.append('file', file);
 
-        // Vô hiệu hóa nút gửi
         $('#btnSubmitFile').prop('disabled', true);
 
         $.ajax({
             type: 'POST',
             enctype: 'multipart/form-data',
-            url: '/lich-lam-viec/upload', // Đường dẫn API xử lý upload file
+            url: '/lich-lam-viec/upload',
             data: form,
             processData: false,
             contentType: false,
             cache: false,
             timeout: 1000000,
-            success: function() {
+            success: function () {
                 showSuccessToast("Tải lên file thành công!")
-                $('#btnSubmitFile').prop('disabled', false); // Bật lại nút gửi
+                $('#btnSubmitFile').prop('disabled', false);
                 $('#file').val(''); // Xóa giá trị của input file
-                $('#labelFile').html('<label for="file" style="margin: 15px;"><i class="fas fa-file-excel fa-2x"></i></label>'); // Reset label
+                $('#labelFile').html('<label for="file" style="margin: 15px;"><i class="fas fa-file-excel fa-2x"></i></label>');
             },
-            error: function() {
+            error: function () {
                 showErrorToast("Tải lên file thất bại!")
-                $('#btnSubmitFile').prop('disabled', false); // Bật lại nút gửi
+                $('#btnSubmitFile').prop('disabled', false);
             }
         });
     }
@@ -91,7 +113,7 @@ $(document).ready(function () {
         loadTable(key, selectedValue, selectedDate);
     });
     $('#searchInput').on('input', function () {
-        let key = $(this).val().trim(); // Lấy giá trị từ ô input search
+        let key = $(this).val().trim();
         let selectedDate = $('#date-input').val();
         let selectedValue = $('input[name="status"]:checked').val();
         loadTable(key, selectedValue, selectedDate);
@@ -104,23 +126,15 @@ $(document).ready(function () {
     });
 
     function loadTable(keyString = '', ca = '', date = '') {
-        $('#labelFile').hover(
-            function() {
-                $(this).css('background-color', '#2e8b57');
-            },
-            function() {
-                $(this).css('background-color', '#3ad29f');
-                $(this).css('color', 'white');
-            }
-        );
+
         let tbody = '';
         $.getJSON(apiGetUrl, function (data) {
             list = data;
-            console.log(data)
+
             let today = new Date();
 
             let year = today.getFullYear();
-            let month = ('0' + (today.getMonth() + 1)).slice(-2); // Tháng trong JavaScript bắt đầu từ 0
+            let month = ('0' + (today.getMonth() + 1)).slice(-2);
             let day = ('0' + today.getDate()).slice(-2);
 
             let formattedDate = year + '-' + month + '-' + day;
@@ -142,39 +156,42 @@ $(document).ready(function () {
             }
 
             if (date === '' && keyString !== '' & ca !== '') {
-                list = list.filter(lich => lich["ngay"] === formattedDate && lich["gioBatDau"] === ca  &&
+                list = list.filter(lich => lich["ngay"] === formattedDate && lich["gioBatDau"] === ca &&
                     (lich["nhanVien"].maNhanVien.toLowerCase().includes(keyString.toLowerCase()) ||
                         lich["nhanVien"].hoTen.toLowerCase().includes(keyString.toLowerCase())));
             }
 
-            if(date === '' && keyString ==='' && ca!=='') {
-                list = list.filter(lich => lich["ngay"] === formattedDate && lich["gioBatDau"] === ca );
+            if (date === '' && keyString === '' && ca !== '') {
+                list = list.filter(lich => lich["ngay"] === formattedDate && lich["gioBatDau"] === ca);
             }
 
-            if(date === '' && keyString !=='' && ca===''){
+            if (date === '' && keyString !== '' && ca === '') {
                 list = list.filter(lich => lich["ngay"] === formattedDate &&
                     (lich["nhanVien"].maNhanVien.toLowerCase().includes(keyString.toLowerCase()) ||
                         lich["nhanVien"].hoTen.toLowerCase().includes(keyString.toLowerCase())));
             }
 
-
-
-            list.forEach((lich, index) => {
-                let ngayFormatted = new Date(lich["ngay"]).toLocaleDateString('vi-VN');
-                let gioBd = lich["gioBatDau"].slice(0, -3);
-                let giokt = lich["gioKetThuc"].slice(0, -3);
-                tbody += `<tr style="cursor: default">
+            if (list.length === 0) {
+                tbody += `<tr style="cursor: default"><td colspan="8" style="font-size: 18px; padding: 20px">Chưa có dữ liệu</td></tr>`
+                $('#tbodyContainer').html(tbody);
+            } else {
+                list.forEach((lich, index) => {
+                    let ngayFormatted = new Date(lich["ngay"]).toLocaleDateString('vi-VN');
+                    let gioBd = lich["gioBatDau"].slice(0, -3);
+                    let giokt = lich["gioKetThuc"].slice(0, -3);
+                    tbody += `<tr style="cursor: default">
                             <td class="special-td">${index + 1}</td>
                             <td class="special-td">${lich["nhanVien"].maNhanVien}</td>
                             <td class="special-td">${lich["nhanVien"].hoTen}</td>                                                
                             <td class="special-td">${lich["viTri"]}</td>
-                            <td class="special-td">${lich["gioBatDau"] === '06:30:00' ? 'Ca sáng' : 'Ca chiều'}</td>
+                            <td class="special-td">${lich["gioBatDau"] > '00:30:00' &&  lich["gioKetThuc"] <'13:00:00'? 'Ca sáng' : 'Ca chiều'}</td>
                             <td class="special-td">${gioBd}</td>
                             <td class="special-td">${giokt}</td>
                             <td class="special-td">${ngayFormatted}</td>
                         </tr>`;
-            });
-            $('#tbodyContainer').html(tbody);
+                });
+                $('#tbodyContainer').html(tbody);
+            }
         });
     }
 

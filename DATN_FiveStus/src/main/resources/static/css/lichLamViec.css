@@ -1,0 +1,199 @@
+#calendar {
+    margin-top: 50px;
+    overflow: visible;
+    position: relative;
+}
+
+.fc .fc-event {
+    max-height: 80%; /* Giới hạn chiều cao sự kiện */
+    overflow: hidden; /* Ẩn phần tràn ra */
+    white-space: nowrap; /* Ngăn ngừa xuống dòng */
+    text-overflow: ellipsis; /* Hiển thị dấu ba chấm nếu có nội dung bị cắt */
+}
+.fc-toolbar-title {
+    text-transform: capitalize;
+}
+
+.fc-toolbar .fc-button-group > .fc-button:focus,
+.fc .fc-prev-button:focus,
+.fc .fc-next-button:focus,
+.fc-toolbar .fc-button-group > .fc-button:hover,
+.fc .fc-prev-button:hover,
+.fc .fc-next-button:hover {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.fc-toolbar .fc-button-group > .fc-button:active,
+.fc .fc-prev-button:active,
+.fc .fc-next-button:active {
+    background-color: #4CAF50 !important;
+    color: #fff !important;
+    border-color: #4CAF50 !important;
+}
+
+.fc-toolbar .fc-button-group > .fc-button {
+    background-color: #fff;
+    color: #4CAF50;
+    border: 1px solid #4CAF50;
+}
+
+.fc-toolbar .fc-button-group > .fc-button.fc-button-active {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.fc .fc-daygrid-day-frame {
+    height: 100px; /* Chiều cao cố định cho mỗi ô ngày */
+}
+
+.fc .fc-daygrid-day {
+    width: 100px; /* Chiều rộng cố định cho mỗi ô ngày */
+    min-width: 100px; /* Đảm bảo không bị co lại */
+}
+
+
+.fc .fc-prev-button, .fc .fc-next-button {
+    background-color: #fff;
+    color: #4CAF50;
+    border: 1px solid #4CAF50;
+}
+
+.fc .fc-prev-button:hover, .fc .fc-next-button:hover {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.fc-daygrid-block-event .fc-event-time, .fc-daygrid-block-event .fc-event-title {
+    color: #fff;
+}
+
+.fc-daygrid-event {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    color: #fff;
+}
+
+.fc-daygrid-day-bg .fc-highlight {
+    background-color: #cfe2ff;
+}
+
+
+/* Menu phụ */
+#context-menu {
+    position: absolute;
+    display: none;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 200px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
+}
+
+#context-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#context-menu ul li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
+}
+
+#context-menu ul li:hover {
+    background-color: #f4f4f4;
+}
+
+#context-menu ul li:last-child {
+    border-bottom: none;
+}
+
+#context-menu ul li i {
+    margin-right: 8px;
+    color: #4CAF50;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s ease;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-group textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
