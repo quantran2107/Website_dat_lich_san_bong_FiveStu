@@ -14,6 +14,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -25,11 +30,11 @@ import lombok.ToString;
 public class ChiTietHinhThucThanhToan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name = "id_hoa_don")
-    private HoaDon hoaDon;
+    @JoinColumn(name = "id_hoa_don_chi_tiet")
+    private HoaDonChiTiet hoaDonChiTiet;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "id_hinh_thuc_thanh_toan")
@@ -37,4 +42,15 @@ public class ChiTietHinhThucThanhToan {
 
     @Column(name = "trang_thai", length = 50)
     private String trangThai;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private boolean deletedAt;
 }

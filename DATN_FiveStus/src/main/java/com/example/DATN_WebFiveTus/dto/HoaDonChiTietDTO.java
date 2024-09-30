@@ -99,6 +99,6 @@ public class HoaDonChiTietDTO {
 
     private String trangThaiPhieuGianGia;
 
-
+    private Double giaSanCa;
 
 }
