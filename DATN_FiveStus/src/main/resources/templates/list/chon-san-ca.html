@@ -137,6 +137,23 @@
     .custom-modal {
         max-width: 65%; /* Tăng chiều rộng của modal lên 90% */
     }
+
+    .btn-booking {
+        background-color: #28a745; /* Màu xanh lá cây */
+        color: white; /* Màu chữ trắng */
+        border: none; /* Không có viền */
+        padding: 10px 20px; /* Khoảng cách bên trong */
+        border-radius: 5px; /* Bo góc */
+        font-size: 16px; /* Kích thước chữ */
+        cursor: pointer; /* Con trỏ khi di chuột */
+        float: right; /* Đưa nút sang bên phải */
+        margin-top: 10px; /* Khoảng cách phía trên */
+    }
+
+    .btn-booking:hover {
+        background-color: #218838; /* Màu xanh lá cây đậm hơn khi hover */
+    }
+
 </style>
 <body class="vertical light">
 <div class="wrapper">
@@ -151,24 +168,61 @@
                         <div class="col-md-12">
                             <div class="card shadow">
                                 <div class="card-body">
-                                    <div class="form-row mb-3">
+                                    <div class="form-row mb-3 align-items-center">
                                         <i class="bi bi-calendar3"></i>
                                         <h4 class="card-title ml-3">Ngày đến sân</h4>
+
+                                        <!-- Dropdown Chọn loại ngày nằm ngang -->
+                                        <div class="input-group col-md-4 ml-3">
+                                            <div class="dropdown">
+                                                <button aria-expanded="false" aria-haspopup="true" class="btn btn-outline-success ml-3 mr-3 dropdown-toggle"
+                                                        data-toggle="dropdown" id="actionMenuButton2" type="button">Chọn loại ngày
+                                                </button>
+                                                <div id="loaiNgayDropdown" aria-labelledby="actionMenuButton2" class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#" data-value="Theo ngày">Theo ngày</a>
+                                                    <a class="dropdown-item" href="#" data-value="Theo tuần">Theo tuần</a>
+                                                    <a class="dropdown-item" href="#" data-value="Nhiều ngày">Nhiều ngày</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
+
                                     <div class="toolbar row">
                                         <div class="col">
                                             <div class="form-row mb-1">
-                                                <div class="input-group col-md-4">
-                                                    <input type="date" id="ngayDenSan" class="form-control" />
+                                                <!-- Ô input ngày -->
+                                                <div class="input-group col-md-4" id="inputNgayDon" >
+                                                    <input type="date" id="ngayDenSan" class="form-control" style="width: 100%;" />
                                                 </div>
+
+                                                <!-- Ô input nhiều ngày (ẩn ban đầu) -->
+                                                <div class="input-group col-md-8" id="inputNhieuNgay" style="display: none;">
+                                                    <div class="row g-3 align-items-center"> <!-- Sử dụng g-3 để tạo khoảng cách đều giữa các ô -->
+                                                        <div class="col-auto">
+                                                            <label for="ngayBatDau" class="col-form-label">Từ</label>
+                                                        </div>
+                                                        <div class="col">
+                                                            <input type="date" id="ngayBatDau" style="width: 100%;" class="form-control" placeholder="Ngày bắt đầu" />
+                                                        </div>
+                                                        <div class="col-auto">
+                                                            <label for="ngayKetThuc" class="col-form-label">Đến</label>
+                                                        </div>
+                                                        <div class="col">
+                                                            <input type="date" id="ngayKetThuc" style="width: 100%;" class="form-control" placeholder="Ngày kết thúc" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Dropdown Chọn loại sân -->
                                                 <div class="dropdown">
-                                                    <button aria-expanded="false" aria-haspopup="true" class="btn btn-outline-success ml-3 mr-3 dropdown-toggle"
-                                                            data-toggle="dropdown" id="actionMenuButton1" type="button">Chọn loại sân
+                                                    <button aria-expanded="false" aria-haspopup="true" class="btn btn-outline-success ml-3 mr-3 dropdown-toggle" data-toggle="dropdown" id="actionMenuButton1" type="button">Chọn loại sân
                                                     </button>
                                                     <div id="loaiSanDropdown" aria-labelledby="actionMenuButton1" class="dropdown-menu">
                                                         <!-- Các mục dropdown sẽ được thêm vào đây từ JavaScript -->
                                                     </div>
                                                 </div>
+
                                                 <div class="input-group col-md-2">
                                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#book-modal">Điền thông tin</button>
                                                 </div>
@@ -183,7 +237,7 @@
                         <!-- Dữ liệu loại sân và chọn sân bóng sẽ được thêm vào đây -->
                     </div>
 
-                    <!-- Modal -->
+                    <!-- Modal Đặt lịch -->
                     <div class="modal fade" id="book-modal" tabindex="-1" role="dialog"
                          aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg custom-modal" role="document">
@@ -201,7 +255,14 @@
                                             <div class="col-md-4">
                                                 <div class="form-group mb-3">
                                                     <label for="hoVaTen">Họ và tên</label>
-                                                    <input type="text" id="hoVaTen" class="form-control">
+                                                    <div class="input-group">
+                                                        <input type="text" id="hoVaTen" class="form-control">
+                                                        <div class="input-group-append">
+                                                            <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                                                                    data-target="#selectCustomerModal">Chọn khách hàng
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="form-group mb-3">
                                                     <label for="soDienThoai">Số điện thoại</label>
@@ -217,11 +278,13 @@
                                                 <table id="sanCaTable" class="table table-bordered">
                                                     <thead>
                                                     <tr>
+                                                        <th>STT</th>
                                                         <th>Sân Bóng</th>
                                                         <th>Ngày</th>
                                                         <th>Ca</th>
                                                         <th>Thời Gian</th>
                                                         <th>Giá</th>
+                                                        <th>Trạng Thái</th>
                                                         <th>Thao tác</th>
                                                     </tr>
                                                     </thead>
@@ -241,6 +304,45 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Modal chọn khách hàng -->
+                    <div class="modal fade" id="selectCustomerModal" tabindex="-1" role="dialog"
+                         aria-labelledby="selectCustomerModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="selectCustomerModalLabel">Chọn khách hàng</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Search field -->
+                                    <div class="form-group">
+                                        <input type="text" id="searchCustomer" class="form-control" placeholder="Tìm kiếm khách hàng...">
+                                    </div>
+                                    <!-- Table to display customers -->
+                                    <table id="customerTable" class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Họ và tên</th>
+                                            <th>Số điện thoại</th>
+                                            <th>Chọn</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!-- Dữ liệu khách hàng sẽ được thêm vào đây -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

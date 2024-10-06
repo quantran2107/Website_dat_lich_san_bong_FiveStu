@@ -78,4 +78,10 @@ public class SanBongRest {
         List<SanBongDTO> sanBongs = sanBongService.getSanBongsByLoaiSanId(loaiSanId);
         return ResponseEntity.ok(sanBongs);
     }
+
+    @GetMapping("/findByName")
+    public ResponseEntity<SanBongDTO> getSanBongByName(@RequestParam("tenSanBong") String tenSanBong){
+        SanBongDTO sanBongDTO = sanBongService.getSanBongByName(tenSanBong);
+        return ResponseEntity.ok(sanBongDTO);
+    }
 }

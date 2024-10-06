@@ -1778,16 +1778,8 @@
     // Sự kiện khi nhấn nút "Thêm dịch vụ"
     document.getElementById('openServiceModal').addEventListener('click', function (event) {
         if (selectedInvoiceId) {
-            Swal.fire({
-                icon: 'info',
-                title: 'Thêm dịch vụ',
-                text: `Thêm dịch vụ cho hóa đơn có ID: ${selectedInvoiceId}`,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Mở modal nếu hóa đơn đã được chọn
-                    $('#serviceModal').modal('show');
-                }
-            });
+            // Mở modal nếu hóa đơn đã được chọn
+            $('#serviceModal').modal('show');
         } else {
             Swal.fire({
                 icon: 'warning',

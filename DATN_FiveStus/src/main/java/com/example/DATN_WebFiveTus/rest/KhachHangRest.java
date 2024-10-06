@@ -6,6 +6,7 @@ import com.example.DATN_WebFiveTus.entity.KhachHang;
 import com.example.DATN_WebFiveTus.service.KhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -62,6 +63,17 @@ public class KhachHangRest {
     @GetMapping("/tim-kiem-kh")
     public KhachHangDTO findByKhachHang(@RequestParam(defaultValue = "false") String soDienThoai){
         return khachHangService.findBySoDienThoai(soDienThoai);
+    }
+
+    @GetMapping("/search-active")
+    public ResponseEntity<Page<KhachHangDTO>> searchKhachHangActive(
+            @RequestParam(defaultValue = "") String query,
+            @RequestParam(defaultValue = "active") String trangThai,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<KhachHangDTO> khachHangDTOPage = khachHangService.searchActive(query, trangThai, pageable);
+        return ResponseEntity.ok(khachHangDTOPage);
     }
 
 }
