@@ -1,6 +1,5 @@
 package com.example.DATN_WebFiveTus.rest;
 
-import com.example.DATN_WebFiveTus.dto.CaDTO;
 import com.example.DATN_WebFiveTus.dto.DichVuSanBongDTO;
 import com.example.DATN_WebFiveTus.service.DichVuSanBongService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,27 +26,34 @@ public class DichVuSanBongRest {
     }
 
     @GetMapping("hien-thi")
-    public ResponseEntity<List> getAll(){
+    public ResponseEntity<List> getAll() {
         return ResponseEntity.ok(dichVuSanBongService.getAllJoinFetch());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DichVuSanBongDTO> getOne(@PathVariable("id") Integer id){
+    public ResponseEntity<DichVuSanBongDTO> getOne(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(dichVuSanBongService.getOne(id));
     }
 
     @PostMapping
-    public ResponseEntity<DichVuSanBongDTO> save(@RequestBody DichVuSanBongDTO dichVuSanBongDTO){
+    public ResponseEntity<DichVuSanBongDTO> save(@RequestBody DichVuSanBongDTO dichVuSanBongDTO) {
         return ResponseEntity.ok(dichVuSanBongService.save(dichVuSanBongDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DichVuSanBongDTO> update(@PathVariable("id") Integer id , @RequestBody DichVuSanBongDTO dichVuSanBongDTO){
-        return ResponseEntity.ok(dichVuSanBongService.update(id,dichVuSanBongDTO));
+    public ResponseEntity<DichVuSanBongDTO> update(@PathVariable("id") Integer id, @RequestBody DichVuSanBongDTO dichVuSanBongDTO) {
+        return ResponseEntity.ok(dichVuSanBongService.update(id, dichVuSanBongDTO));
     }
 
+
     @GetMapping("dichVuSanBongTheoHoaDon/{idHoaDonChiTiet}")
-    public ResponseEntity<List> searchDichVuSanBong(@PathVariable("idHoaDonChiTiet") Integer idHoaDonChiTiet){
+    public ResponseEntity<List> searchDichVuSanBong(@PathVariable("idHoaDonChiTiet") Integer idHoaDonChiTiet) {
         return ResponseEntity.ok(dichVuSanBongService.searchDichVuSanBong(idHoaDonChiTiet));
+
+//    @GetMapping("tim-theo-idhdct/{id}")
+//    public ResponseEntity<?> findByIdHdct(@PathVariable("id") Integer idHDCT){
+//        return ResponseEntity.ok(dichVuSanBongService.findByIdHDCT(idHDCT));
+//
+//    }
     }
 }

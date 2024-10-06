@@ -40,6 +40,6 @@ public interface NuocUongRepository extends JpaRepository<NuocUong,Integer> {
 
     @Query("SELECT nc FROM NuocUong nc  " +
             "WHERE nc.id = :id AND nc.id IN  (SELECT  dvsb.nuocUong.id FROM DichVuSanBong dvsb" +
-            " where nc.deletedAt=false and dvsb.hoaDonChiTiet.id=:idHoaDonChiTiet and dvsb.nuocUong.id=:id)")
+            " where nc.deletedAt=false and dvsb.hoaDonChiTiet.id=:idHoaDonChiTiet and dvsb.nuocUong.id=:id and dvsb.nuocUong.trangThai like '%Đã chọn%')")
     Optional<NuocUong> checkIdDichVuNuocUong(Integer id, Integer idHoaDonChiTiet);
 }

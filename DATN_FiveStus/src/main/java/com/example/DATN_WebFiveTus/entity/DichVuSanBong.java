@@ -45,14 +45,11 @@ public class DichVuSanBong {
     @JoinColumn(name = "id_hoa_don_chi_tiet")
     private HoaDonChiTiet hoaDonChiTiet;
 
-    @Column(name = "don_gia")
-    private Double donGia;
+    @Column(name = "tong_tien")
+    private Double tongTien;
 
-    @Column(name = "so_luong_do_thue")
-    private int soLuongDoThue;
-
-    @Column(name = "so_luong_nuoc_uong")
-    private int soLuongNuocUong;
+    @Column(name = "so_luong")
+    private Integer soLuong;
 
     @Column(name = "trang_thai", length = 50)
     private String trangThai;

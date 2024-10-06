@@ -41,7 +41,7 @@ public interface DoThueRepository extends JpaRepository<DoThue,Integer> {
 
     @Query("SELECT dt FROM DoThue dt  " +
             "WHERE dt.id = :id AND dt.id IN  (SELECT  dvsb.doThue.id FROM DichVuSanBong dvsb" +
-            " where dt.deletedAt=false and dvsb.hoaDonChiTiet.id=:idHoaDonChiTiet and dvsb.doThue.id=:id)")
+            " where dt.deletedAt=false and dvsb.hoaDonChiTiet.id=:idHoaDonChiTiet and dvsb.doThue.id=:id and dvsb.doThue.trangThai like '%Đã chọn%')")
     Optional<DoThue> checkIdDichVuDoThue(Integer id,Integer idHoaDonChiTiet);
 
 

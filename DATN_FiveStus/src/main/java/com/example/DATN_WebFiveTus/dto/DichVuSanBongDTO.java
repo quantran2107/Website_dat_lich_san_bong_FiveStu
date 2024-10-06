@@ -1,6 +1,5 @@
 package com.example.DATN_WebFiveTus.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +15,7 @@ import lombok.ToString;
 @Builder
 public class DichVuSanBongDTO {
 
-    private int id;
+    private Integer id;
 
     private Integer idDoThue;
 
@@ -32,17 +31,17 @@ public class DichVuSanBongDTO {
 
     private Integer idHoaDonChiTiet;
 
-    private Double donGia;
+    private Double tongTien;
 
     private int soLuongsDoThue;
 
-    private int soLuongDoThue;
+//    private int soLuongDoThue;
 
-    private int soLuongNuocUong;
+//    private int soLuongNuocUong;
+
+    private Integer soLuong;
 
     private int soLuongsNuocUong;
-
-
 
     private String trangThai;
 

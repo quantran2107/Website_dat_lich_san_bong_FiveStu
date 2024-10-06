@@ -39,9 +39,6 @@ public class HoaDon {
     @JoinColumn(name = "id_nhan_vien", nullable = false)
     private NhanVien nhanVien;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "id_phieu_giam_gia", nullable = false)
-    private PhieuGiamGia phieuGiamGia;
 
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "id_khach_hang", nullable = false)
@@ -57,27 +54,20 @@ public class HoaDon {
     @Column(name = "loai")
     private Boolean loai;
 
-    @Column(name = "tong_tien")
-    private Float tongTien;
+    @Column(name = "tong_tien_san")
+    private Double tongTienSan;
 
     @Column(name = "tien_coc")
-    private Float tienCoc;
+    private Double tienCoc;
 
-    @Column(name = "tien_con_lai")
-    private Float tienConLai;
-
-    @Column(name = "tien_thua")
-    private Float tienThua;
+    @Column(name = "tong_tien")
+    private Double tongTien;
 
     @Column(name = "ghi_chu", nullable = false, length = 100)
     private String ghiChu;
 
     @Column(name = "trang_thai", nullable = false, length = 100)
     private String trangThai;
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "ngay_thanh_toan")
-    private Date ngayThanhToan;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
