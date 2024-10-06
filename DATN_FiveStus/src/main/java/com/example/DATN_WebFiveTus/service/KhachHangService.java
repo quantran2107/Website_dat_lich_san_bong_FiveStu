@@ -1,8 +1,6 @@
 package com.example.DATN_WebFiveTus.service;
 
 import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
-import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
-import com.example.DATN_WebFiveTus.entity.KhachHang;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
@@ -29,6 +27,7 @@ public interface KhachHangService {
 
     public List<KhachHangDTO> filter(String status, String gender, int page, int pageSize);
 
+    Page<KhachHangDTO> searchActive(String query, String trangThai, Pageable pageable);
 
 }
 

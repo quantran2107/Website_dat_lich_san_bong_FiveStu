@@ -141,4 +141,9 @@ private LoaiSanRepository loaiSanRepository;
                 .map(sanBong -> modelMapper.map(sanBong, SanBongDTO.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public SanBongDTO getSanBongByName(String tenSanBong) {
+        return modelMapper.map(sanBongRepository.getSanBongByName(tenSanBong),SanBongDTO.class);
+    }
 }

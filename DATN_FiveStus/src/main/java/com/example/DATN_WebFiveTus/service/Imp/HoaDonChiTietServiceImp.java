@@ -119,9 +119,22 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
     @Override
     public List<HoaDonChiTietDTO> searchFromHoaDon(Integer idHoaDon) {
-        return hoaDonChiTietRepository.searchFromHoaDon(idHoaDon).stream()
-                .map((hoaDonChiTiet) -> modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class)).collect(Collectors.toList());
+        List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietRepository.searchFromHoaDon(idHoaDon);
+        List<HoaDonChiTietDTO> dtoList = new ArrayList<>();
+
+        for (HoaDonChiTiet hoaDonChiTiet : hoaDonChiTietList) {
+            HoaDonChiTietDTO dto = modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class);
+
+            // Thêm các trường tùy chỉnh vào DTO
+            dto.setMaHoaDon(hoaDonChiTiet.getHoaDon().getMaHoaDon()); // Lấy maHoaDon từ đối tượng hoaDon
+            dto.setMaHoaDonChiTiet(hoaDonChiTiet.getMaHoaDonChiTiet()); // Lấy maHoaDonChiTiet
+
+            dtoList.add(dto);
+        }
+
+        return dtoList;
     }
+
 
     @Override
     public Page<HoaDonChiTietDTO> getHoaDonChiTietByTrangThai(String trangThai, Pageable pageable) {
@@ -236,6 +249,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         hoaDonChiTiet.setNgayDenSan(hoaDonChiTietDTO.getNgayDenSan());
         hoaDonChiTiet.setTrangThai("Chờ nhận sân");
         hoaDonChiTiet.setKieuNgayDat("Theo ngày");
+        hoaDonChiTiet.setTongTien(hoaDonChiTietDTO.getTongTien());
 
         HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
 
