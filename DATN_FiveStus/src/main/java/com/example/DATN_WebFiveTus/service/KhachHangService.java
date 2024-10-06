@@ -29,5 +29,7 @@ public interface KhachHangService {
 
     Page<KhachHangDTO> searchActive(String query, String trangThai, Pageable pageable);
 
+    KhachHangDTO save2(KhachHangDTO khachHangDTO);
+
 }
 

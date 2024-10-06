@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.rest;
 
+import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
 import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
 import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import com.example.DATN_WebFiveTus.entity.KhachHang;
@@ -11,11 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -69,11 +66,17 @@ public class KhachHangRest {
     public ResponseEntity<Page<KhachHangDTO>> searchKhachHangActive(
             @RequestParam(defaultValue = "") String query,
             @RequestParam(defaultValue = "active") String trangThai,
-            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<KhachHangDTO> khachHangDTOPage = khachHangService.searchActive(query, trangThai, pageable);
         return ResponseEntity.ok(khachHangDTOPage);
+    }
+
+    @PostMapping("/save2")
+    public ResponseEntity<KhachHangDTO> save2(@RequestBody KhachHangDTO khachHangDTO){
+        KhachHangDTO khachHangDTOSave = khachHangService.save2(khachHangDTO);
+        return ResponseEntity.ok(khachHangDTOSave);
     }
 
 }

@@ -719,14 +719,27 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error('Lỗi khi tải sân bóng theo loại sân:', error));
     }
 
-    // Giả lập dữ liệu khách hàng (bạn có thể thay bằng dữ liệu từ API)
-    const customers = [
-        { id: 1, name: 'Nguyễn Văn A', phone: '0123456789' },
-        { id: 2, name: 'Trần Thị B', phone: '0987654321' }
-        // Thêm các khách hàng khác ở đây
-    ];
+    let customers = []; // Biến lưu danh sách khách hàng từ API
 
-    // Tìm kiếm khách hàng
+// Lấy danh sách khách hàng từ API khi trang được tải
+    async function fetchCustomers() {
+        try {
+            const response = await fetch('http://localhost:8080/khach-hang/search-active?page=0&pageSize=5');
+            const data = await response.json();
+            customers = data.content.map(customer => ({
+                id: customer.id,
+                name: customer.hoVaTen,
+                phone: customer.soDienThoai
+            }));
+
+            // Hiển thị danh sách khách hàng ban đầu
+            displayCustomers(customers);
+        } catch (error) {
+            console.error('Lỗi khi gọi API:', error);
+        }
+    }
+
+// Tìm kiếm khách hàng
     document.getElementById('searchCustomer').addEventListener('input', function () {
         const query = this.value.toLowerCase();
         const filteredCustomers = customers.filter(customer =>
@@ -735,7 +748,7 @@ document.addEventListener("DOMContentLoaded", function () {
         displayCustomers(filteredCustomers);
     });
 
-    // Hiển thị danh sách khách hàng
+// Hiển thị danh sách khách hàng
     function displayCustomers(customerList) {
         const tbody = document.querySelector('#customerTable tbody');
         tbody.innerHTML = ''; // Xóa nội dung cũ
@@ -743,20 +756,20 @@ document.addEventListener("DOMContentLoaded", function () {
         customerList.forEach((customer, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${customer.name}</td>
-                <td>${customer.phone}</td>
-                <td>
-                    <button type="button" class="btn btn-sm btn-primary" data-id="${customer.id}" data-name="${customer.name}" data-phone="${customer.phone}">
-                        Chọn
-                    </button>
-                </td>
-            `;
+            <td>${index + 1}</td>
+            <td>${customer.name}</td>
+            <td>${customer.phone}</td>
+            <td>
+                <button type="button" class="btn btn-sm btn-primary" data-id="${customer.id}" data-name="${customer.name}" data-phone="${customer.phone}">
+                    Chọn
+                </button>
+            </td>
+        `;
             tbody.appendChild(row);
         });
     }
 
-    // Gán sự kiện click cho nút "Chọn" khách hàng
+// Gán sự kiện click cho nút "Chọn" khách hàng
     document.querySelector('#customerTable').addEventListener('click', function (event) {
         if (event.target.tagName === 'BUTTON') {
             const selectedCustomer = {
@@ -774,38 +787,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Hiển thị toàn bộ danh sách khách hàng ban đầu
-    displayCustomers(customers);
+// Gọi API khi trang được tải
+    fetchCustomers();
 
     flatpickr("#ngayDenSan", {});
     flatpickr("#ngayBatDau", {});
     flatpickr("#ngayKetThuc", {});
-});
-
-$(document).ready(function() {
-    $('#soDienThoai').on('input', function() {
-        var soDienThoai = $(this).val();
-
-        if (soDienThoai.length >= 10) { // Chỉ thực hiện tìm kiếm khi số điện thoại có ít nhất 10 ký tự
-            $.ajax({
-                url: 'http://localhost:8080/khach-hang/tim-kiem-kh',
-                type: 'GET',
-                data: { soDienThoai: soDienThoai },
-                success: function(response) {
-                    if (response) {
-                        $('#hoVaTen').val(response.hoVaTen); // Cập nhật tên khách hàng vào ô tên
-                    } else {
-                        $('#hoVaTen').val(''); // Nếu không tìm thấy khách hàng, xóa ô tên
-                    }
-                },
-                error: function() {
-                    $('#hoVaTen').val(''); // Nếu có lỗi trong gọi API, xóa ô tên
-                }
-            });
-        } else {
-            $('#hoVaTen').val(''); // Xóa ô tên khi số điện thoại không đủ dài
-        }
-    });
 });
 
 document.querySelector('#datLich').addEventListener('click', function () {
@@ -822,16 +809,17 @@ document.querySelector('#datLich').addEventListener('click', function () {
 
     // Nếu phát hiện có dòng có trạng thái "Đã được đặt", hiện thông báo và dừng thực thi
     if (hasBookedSlot) {
-        alert('Có sân đã được đặt, vui lòng chọn sân khác.');
+        showWarningToast('Có sân đã được đặt, vui lòng chọn sân khác.');
         return;
     }
 
     // Lấy số điện thoại từ input
     var soDienThoai = document.getElementById('soDienThoai').value;
+    var hoVaTen = document.getElementById('hoVaTen').value;
 
     // Kiểm tra xem số điện thoại có hợp lệ không
     if (!soDienThoai) {
-        alert('Vui lòng nhập số điện thoại!');
+        showWarningToast('Vui lòng nhập số điện thoại!');
         return;
     }
 
@@ -839,19 +827,30 @@ document.querySelector('#datLich').addEventListener('click', function () {
     fetch('http://localhost:8080/khach-hang/tim-kiem-kh?soDienThoai=' + soDienThoai)
         .then(response => {
             if (!response.ok) {
-                throw new Error('Không tìm thấy khách hàng với số điện thoại này.');
+                // Nếu không tìm thấy khách hàng, trả về null để xử lý tạo khách hàng mới
+                return null;
             }
             return response.json();
         })
         .then(data => {
-            // Lấy idKhachHang từ kết quả trả về
-            var idKhachHang = data.id;
-
-            // Kiểm tra nếu không tìm thấy khách hàng
-            if (!idKhachHang) {
-                alert('Không tìm thấy khách hàng.');
-                return;
+            // Nếu không tìm thấy khách hàng, gọi API để thêm mới
+            if (!data) {
+                return fetch('http://localhost:8080/khach-hang/save2', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        hoVaTen: hoVaTen, // Thay thế bằng giá trị từ form nếu có
+                        soDienThoai: soDienThoai
+                    })
+                }).then(response => response.json());
             }
+            return data; // Trả về data của khách hàng nếu tìm thấy
+        })
+        .then(data => {
+            // Lấy idKhachHang từ khách hàng vừa tìm thấy hoặc vừa tạo
+            var idKhachHang = data.id;
 
             // Tạo payload cho API tạo hóa đơn
             var payload = {
@@ -877,13 +876,13 @@ document.querySelector('#datLich').addEventListener('click', function () {
             themHoaDonChiTiet(idHoaDon);
 
             // Đóng modal sau khi đặt lịch thành công
-            alert('Đặt lịch thành công!');
+            showSuccessToast('Đặt lịch thành công!');
             $('#book-modal').modal('hide');
             window.location.href = 'http://localhost:8080/dat-lich-tai-quay';
         })
         .catch(error => {
             console.error('Lỗi khi thêm hóa đơn:', error);
-            alert('Lỗi khi thêm hóa đơn: ' + error.message);
+            showErrorToast('Lỗi khi thêm hóa đơn: ' + error.message);
         });
 });
 
@@ -1065,6 +1064,32 @@ function showErrorToast(message) {
         position: "right",
         style: {
             background: "#FF0000", // Màu đỏ cho thông báo lỗi
+        },
+        stopOnFocus: true
+    }).showToast();
+}
+
+function showWarningToast(message) {
+    Toastify({
+        text: message,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        style: {
+            background: "#d9b038", // Màu đỏ cho thông báo lỗi
+        },
+        stopOnFocus: true
+    }).showToast();
+}
+
+function showSuccessToast(message) {
+    Toastify({
+        text: message,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        style: {
+            background: "#4CAF50", // Màu đỏ cho thông báo lỗi
         },
         stopOnFocus: true
     }).showToast();

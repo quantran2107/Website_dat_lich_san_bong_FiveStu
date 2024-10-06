@@ -5,6 +5,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
+import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -190,6 +191,34 @@ public class KhachHangImp implements KhachHangService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(khachHangDTOList, pageable, khachHangList.size());
+    }
+
+    @Override
+    public KhachHangDTO save2(KhachHangDTO khachHangDTO) {
+        KhachHang khachHang = modelMapper.map(khachHangDTO,KhachHang.class);
+
+        khachHang.setMaKhachHang(generateMaKhachHang());
+        khachHang.setHoVaTen(khachHangDTO.getHoVaTen());
+        khachHang.setSoDienThoai(khachHangDTO.getSoDienThoai());
+        khachHang.setTrangThai("active");
+        khachHang.setGioiTinh(true);
+
+        KhachHang khachHangSave = khachHangRepository.save(khachHang);
+
+        return modelMapper.map(khachHangSave, KhachHangDTO.class);
+    }
+
+    private String generateMaKhachHang() {
+        String PREFIX = "KH";
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        int RANDOM_PART_LENGTH = 8; // Độ dài của phần ngẫu nhiên, để tổng độ dài là 10
+        SecureRandom RANDOM = new SecureRandom();
+        StringBuilder sb = new StringBuilder(PREFIX);
+        for (int i = 0; i < RANDOM_PART_LENGTH; i++) {
+            int index = RANDOM.nextInt(CHARACTERS.length());
+            sb.append(CHARACTERS.charAt(index));
+        }
+        return sb.toString();
     }
 
 }
