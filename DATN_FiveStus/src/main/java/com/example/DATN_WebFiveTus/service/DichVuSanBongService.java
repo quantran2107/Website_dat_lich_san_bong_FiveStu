@@ -1,6 +1,7 @@
 package com.example.DATN_WebFiveTus.service;
 
 import com.example.DATN_WebFiveTus.dto.DichVuSanBongDTO;
+import com.example.DATN_WebFiveTus.entity.DichVuSanBong;
 
 import java.util.List;
 
@@ -17,4 +18,8 @@ public interface DichVuSanBongService {
     List<DichVuSanBongDTO> findByIdHDCT(Integer idHDCT);
 
     void delete(Integer id);
+
+    List<DichVuSanBongDTO> searchDichVuSanBong(Integer idHoaDonChiTiet);
+
+    List<DichVuSanBongDTO> getAllJoinFetch();
 }

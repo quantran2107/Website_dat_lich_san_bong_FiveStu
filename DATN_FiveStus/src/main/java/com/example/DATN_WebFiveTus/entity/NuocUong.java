@@ -32,13 +32,13 @@ public class NuocUong {
     private int id;
 
     @Column(name = "don_gia", precision = 10)
-    private float donGia;
+    private float donGias;
 
     @Column(name = "image", length = 255)
     private String image;
 
     @Column(name = "so_luong")
-    private int soLuong;
+    private int soLuongs;
 
     @Column(name = "ten_nuoc_uong", length = 255)
     private String tenNuocUong;
@@ -57,7 +57,6 @@ public class NuocUong {
     @Column(name = "deleted_at")
     private boolean deletedAt;
 
-    @Lob
-    @Column(name = "image_data", columnDefinition = "LONGBLOB")
+    @Column(name = "image_data")
     private byte[] imageData;
 }

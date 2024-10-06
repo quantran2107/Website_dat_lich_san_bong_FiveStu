@@ -1,9 +1,7 @@
 package com.example.DATN_WebFiveTus.rest;
 
-import com.example.DATN_WebFiveTus.dto.DoThueDTO;
 import com.example.DATN_WebFiveTus.dto.NuocUongDTO;
 import com.example.DATN_WebFiveTus.service.NuocUongService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +34,7 @@ public class NuocUongRest {
 
     @GetMapping("hien-thi")
     public ResponseEntity<List> GetAll2() {
-        List<NuocUongDTO> nuocUongDTOList = nuocUongService.getAll();
+        List<NuocUongDTO> nuocUongDTOList = nuocUongService.getAllJoinFetch2();
         return ResponseEntity.ok(nuocUongDTOList);
     }
 
@@ -69,7 +67,7 @@ public class NuocUongRest {
 
     @PostMapping("save")
     public ResponseEntity<NuocUongDTO> save(@ModelAttribute NuocUongDTO nuocUongDTO,
-                                          @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+                                            @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
 
         // Xử lý hình ảnh
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -91,7 +89,7 @@ public class NuocUongRest {
 
     @PutMapping("/{id}")
 
-    public ResponseEntity<NuocUongDTO> update(@PathVariable("id") Integer id, @RequestBody NuocUongDTO nuocUongDTO){
+    public ResponseEntity<NuocUongDTO> update(@PathVariable("id") Integer id, @RequestBody NuocUongDTO nuocUongDTO) {
         return ResponseEntity.ok(nuocUongService.update(id, nuocUongDTO));
 
 //    public ResponseEntity<NuocUongDTO> update(
@@ -161,5 +159,11 @@ public class NuocUongRest {
             nuocUongService.delete(id);
         }
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/check-id-nuoc-uong")
+    public ResponseEntity<Boolean> checkIdDichVuDoThue(@RequestParam("id") Integer id, @RequestParam("idHoaDonChiTiet") Integer idHoaDonChiTiet) {
+        Boolean exists = nuocUongService.checkIdDichVuNuocUong(id, idHoaDonChiTiet);
+        return ResponseEntity.ok(exists);
     }
 }
