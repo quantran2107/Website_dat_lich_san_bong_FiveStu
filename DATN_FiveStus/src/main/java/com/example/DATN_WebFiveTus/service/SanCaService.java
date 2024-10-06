@@ -37,6 +37,10 @@ public interface SanCaService {
     List<SanCaDTO> findSanCaBySan(@Param("idSanBong") Integer idSanBong,
                                   @Param("idNgayTrongTuan") Integer idNgayTrongTuan);
 
+    SanCaDTO getOneSanCaByAll(@Param("idSanBong") Integer idSanBong,
+                                    @Param("idNgayTrongTuan") Integer idNgayTrongTuan,
+                                    @Param("idCa") Integer idCa);
+
     //Ly them
     List<SanCaDTO> findSanCaByNhieuNgay(@Param("idSanBong") Integer idSanBong,
                                   @Param("listIdNgayTrongTuan") List<Integer> listIdNgayTrongTuan);

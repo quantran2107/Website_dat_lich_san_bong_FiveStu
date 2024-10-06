@@ -194,6 +194,14 @@ public class SanCaRest {
         return ResponseEntity.ok(listSanCa);
     }
 
+    @GetMapping("/danh-sach-san-ca/{idSanBong}/{idNgayTrongTuan}/{idCa}")
+    public ResponseEntity<SanCaDTO> getOneSanCaByAll(@PathVariable("idSanBong") Integer idSanBong,
+                                              @PathVariable("idNgayTrongTuan") Integer idNgayTrongTuan,
+                                                 @PathVariable("idCa") Integer idCa){
+        SanCaDTO sanCaDTO = sanCaService.getOneSanCaByAll(idSanBong,idNgayTrongTuan,idCa);
+        return ResponseEntity.ok(sanCaDTO);
+    }
+
     //Ly them
     @GetMapping("/danh-sach-nhieu-ngay/{idSanBong}")
     public ResponseEntity<List<SanCaDTO>> danhSachSanCa(

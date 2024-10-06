@@ -31,4 +31,6 @@ public interface SanBongService {
     public List<SanBongDTO> listAllSortPage(Integer pageNum, String sortDirection, int[] totalPageElement);
 
     public List<SanBongDTO> searchKeyWords(Integer pageNum, String keyWords, String sortDirection, int[] totalPageElement, Integer id);
+
+    SanBongDTO getSanBongByName(String tenSanBong);
 }

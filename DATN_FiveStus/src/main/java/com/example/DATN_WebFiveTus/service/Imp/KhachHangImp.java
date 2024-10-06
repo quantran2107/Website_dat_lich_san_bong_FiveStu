@@ -1,14 +1,11 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
-import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
-import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 import com.example.DATN_WebFiveTus.dto.DiaChiKhachHangDTO;
@@ -169,6 +166,30 @@ public class KhachHangImp implements KhachHangService {
         return khachHangs.stream()
                 .map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<KhachHangDTO> searchActive(String query, String trangThai, Pageable pageable) {
+        List<KhachHang> khachHangList = khachHangRepository.searchByNamePhoneOrEmailActive(query,trangThai,pageable);
+
+        // Phân trang thủ công
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<KhachHang> list;
+
+        if (khachHangList.size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, khachHangList.size());
+            list = khachHangList.subList(startItem, toIndex);
+        }
+
+        List<KhachHangDTO> khachHangDTOList = list.stream()
+                .map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(khachHangDTOList, pageable, khachHangList.size());
     }
 
 }
