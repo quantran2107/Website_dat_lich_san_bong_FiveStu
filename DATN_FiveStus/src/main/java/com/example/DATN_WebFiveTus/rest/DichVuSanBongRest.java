@@ -28,7 +28,7 @@ public class DichVuSanBongRest {
 
     @GetMapping("hien-thi")
     public ResponseEntity<List> getAll(){
-        return ResponseEntity.ok(dichVuSanBongService.getAll());
+        return ResponseEntity.ok(dichVuSanBongService.getAllJoinFetch());
     }
 
     @GetMapping("/{id}")
@@ -44,5 +44,10 @@ public class DichVuSanBongRest {
     @PutMapping("/{id}")
     public ResponseEntity<DichVuSanBongDTO> update(@PathVariable("id") Integer id , @RequestBody DichVuSanBongDTO dichVuSanBongDTO){
         return ResponseEntity.ok(dichVuSanBongService.update(id,dichVuSanBongDTO));
+    }
+
+    @GetMapping("dichVuSanBongTheoHoaDon/{idHoaDonChiTiet}")
+    public ResponseEntity<List> searchDichVuSanBong(@PathVariable("idHoaDonChiTiet") Integer idHoaDonChiTiet){
+        return ResponseEntity.ok(dichVuSanBongService.searchDichVuSanBong(idHoaDonChiTiet));
     }
 }

@@ -1,4 +1,5 @@
 package com.example.DATN_WebFiveTus.entity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +16,6 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -32,10 +32,10 @@ public class DoThue {
     private int id;
 
     @Column(name = "don_gia", precision = 10)
-    private float donGia;
+    private float donGias;
 
     @Column(name = "so_luong")
-    private int soLuong;
+    private int soLuongs;
 
     @Column(name = "ten_do_thue", length = 255)
     private String tenDoThue;

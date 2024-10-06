@@ -19,9 +19,9 @@ public class DoThueDTO {
 
     private int id;
 
-    private float donGia;
+    private float donGias;
 
-    private int soLuong;
+    private int soLuongs;
 
     private String tenDoThue;
 

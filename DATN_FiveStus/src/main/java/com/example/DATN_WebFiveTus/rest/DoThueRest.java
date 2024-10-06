@@ -35,7 +35,7 @@ public class    DoThueRest {
 
     @GetMapping("hien-thi")
     public ResponseEntity<List> getAll2(){
-        List<DoThueDTO>thueDTOList=doThueService.getAll();
+        List<DoThueDTO>thueDTOList=doThueService.getAllJoinFetch2();
         return ResponseEntity.ok(thueDTOList);
     }
 
@@ -163,9 +163,10 @@ public class    DoThueRest {
     }
 
 
-
-
-
-
+    @GetMapping("/check-id-do-thue")
+    public ResponseEntity<Boolean> checkIdDichVuDoThue(@RequestParam("id") Integer id, @RequestParam("idHoaDonChiTiet") Integer idHoaDonChiTiet) {
+        Boolean exists = doThueService.checkIdDichVuDoThue(id, idHoaDonChiTiet);
+        return ResponseEntity.ok(exists);
+    }
 
 }

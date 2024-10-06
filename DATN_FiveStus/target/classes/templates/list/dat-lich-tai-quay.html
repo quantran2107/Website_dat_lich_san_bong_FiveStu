@@ -53,6 +53,68 @@
     .form-group {
         margin-bottom: 20px;
     }
+
+    /*#dichVuDaThueContainer {*/
+    /*    padding: 20px; !* Padding cho container *!*/
+    /*    max-height: 400px; !* Chiều cao tối đa cho container *!*/
+    /*    overflow-y: auto; !* Thêm thanh cuộn dọc khi vượt quá chiều cao *!*/
+    /*    border: 1px solid #dee2e6; !* Viền cho container *!*/
+    /*    border-radius: 10px; !* Bo tròn góc *!*/
+    /*    width: 250px; !* Chiều rộng cho container *!*/
+    /*    height: 300px; !* Chiều cao cho container *!*/
+    /*}*/
+
+    #colTest {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-body {
+        flex: 1;
+    }
+
+    .d-flex {
+        flex-wrap: wrap;
+    }
+
+    #dichVuDaThueContainer {
+        flex: 0 0 250px; /* Set width to 250px */
+    }
+
+
+    #dichVuThueList {
+        overflow-y: auto;
+        padding: 10px;
+    }
+
+
+    /*#colTest {*/
+    /*    display: flex;*/
+    /*    flex-direction: column;*/
+    /*    height: 250px; !* Set height to 330px *!*/
+    /*}*/
+
+    /*.card-body {*/
+    /*    flex: 1;*/
+    /*}*/
+
+    /*.d-flex {*/
+    /*    flex-wrap: wrap;*/
+    /*}*/
+
+    /*#dichVuDaThueContainer {*/
+    /*    flex: 0 0 250px; !* Set width to 250px *!*/
+    /*}*/
+
+    /*#dichVuThueList {*/
+    /*    overflow-y: auto; !* Enable vertical scrolling if content overflows *!*/
+    /*    padding: 10px;*/
+    /*    height: calc(250px  !* Height of other elements if any *!);*/
+    /*}*/
+
+
+
+
 </style>
 <body class="vertical light">
 <div class="wrapper">
@@ -190,27 +252,30 @@
                         </div>
 
                         <!-- Phần dưới bên trái -->
-                        <div class="col-12">
+                        <div class="col-12" id="colTest">
                             <div class="card shadow h-100">
                                 <div class="card-body">
                                     <!-- Tiêu đề của box -->
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <!-- Tiêu đề của box -->
-                                        <div id="dichVuDaThueContainer" class="container mt-4">
-                                            <h5>Dịch Vụ Đã Thuê</h5>
-                                            <div id="dichVuThueList" class="row"></div> <!-- Nơi hiển thị dịch vụ đã thuê -->
-                                        </div>
-                                        <!-- Nút nằm bên phải tiêu đề -->
-                                        <button class="btn btn-outline-success" title="Thêm dịch vụ" type="button"
-                                                id="openServiceModal">
+                                        <h5>Dịch Vụ Đã Thuê</h5>
+                                        <button class="btn btn-outline-success" title="Thêm dịch vụ" type="button" id="openServiceModal">
                                             <span class="fe fe-plus"></span>
                                         </button>
-
                                     </div>
-
+                                    <div id="dichVuDaThueContainer" class="mt-4">
+                                        <div id="dichVuThueList" class="row" style="max-height: 600px; overflow-y: auto;">
+                                            <div class="col-4">
+                                                <!-- Nội dung dịch vụ đã thuê sẽ ở đây -->
+                                            </div>
+                                            <div class="col-4">
+                                                <!-- Có thể thêm nhiều cột hơn nếu cần -->
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -235,17 +300,45 @@
                                         <a class="nav-link" id="tab2" data-toggle="tab" href="#nuocUongTab" role="tab">Nước Uống</a>
                                     </li>
                                 </ul>
+<!--                                <button id="showSelectedServices">Danh sách dịch vụ đã chọn</button>-->
+                                <div id="selectedServices"></div> <!-- Div để hiển thị dịch vụ đã chọn -->
+
                                 <div class="tab-content" id="serviceTabContent" style="max-height: 600px; overflow-y: auto;">
                                     <div class="tab-pane fade show active row" id="doThueTab" role="tabpanel"></div>
                                     <div class="tab-pane fade row" id="nuocUongTab" role="tabpanel"></div>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" onclick="luuDichVu()" class="btn btn-primary">Xác Nhận</button>
+                                <button id="showSelectedServices2" type="button" class="btn btn-primary">Xác Nhận</button>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="modal fade" id="serviceModal2" tabindex="-1" role="dialog"
+                     aria-labelledby="serviceModalLabel2" aria-hidden="true">
+                    <div class="modal-dialog modal-xl" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header bg-warning">
+                                <h5 class="modal-title" id="serviceModalLabel2">Dịch Vụ Sử Dụng</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="selectedServices2"></div> <!-- Div để hiển thị dịch vụ đã chọn -->
+
+                                <div class="tab-content" id="serviceTabContent2" style="max-height: 600px; overflow-y: auto;">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button  type="button" class="btn btn-primary">Ahuhu</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <!-- Phần Tabs và Nội dung Tabs bên phải -->
                 <div class="col-md-5">
                     <div class="card shadow h-100">
@@ -457,6 +550,477 @@
 
 <script>
 
+    $(document).ready(function() {
+        // Hàm chuyển tab
+        function switchTab(tabId) {
+            if (tabId === 'cho-nhan-tab') {
+                $('#colTest').hide(); // Ẩn phần dịch vụ đã thuê
+            } else {
+                $('#colTest').show(); // Hiện phần dịch vụ đã thuê
+            }
+        }
+
+        // Gọi hàm switchTab khi một tab được nhấn
+        $('#tabList .nav-link').on('click', function() {
+            const tabId = $(this).attr('id'); // Lấy ID của tab được nhấn
+            switchTab(tabId); // Gọi hàm switchTab với ID của tab
+        });
+
+        // Khởi tạo hiển thị ban đầu
+        const initialTabId = $('#tabList .nav-link.active').attr('id'); // Lấy ID của tab active đầu tiên
+        switchTab(initialTabId); // Gọi hàm switchTab với tab active ban đầu
+    });
+
+
+
+    $(document).ready(function () {
+        $('#showSelectedServices2').on('click', function () {
+            console.log('Nút Xác Nhận đã được nhấn'); // Dòng kiểm tra sự kiện
+            const selectedInvoiceId = getSelectedInvoiceId();
+
+            if (!selectedInvoiceId) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Chưa chọn hóa đơn',
+                    text: 'Vui lòng chọn hóa đơn trước khi xem danh sách dịch vụ.',
+                });
+                return;
+            }
+
+            fillDichVuChoHoaDon(selectedInvoiceId);
+        });
+    });
+
+
+
+    function fillDichVuChoHoaDon(invoiceId) {
+        $.ajax({
+            url: `http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${invoiceId}`,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                let content = '<div class="row">';
+                data.forEach(item => {
+                    let ids = '';
+                    let tenDichVu = '';
+                    let donGia = '';
+                    let soLuong = '';
+                    let soLuongKho = '';
+
+                    // Check if the item is DoThue or NuocUong
+                    if (item.idDoThue) {
+                        ids = item.idDoThue;
+                        tenDichVu = item.tenDoThue;
+                        donGia = item.donGiasDoThue;
+                        soLuong = item.soLuongDoThue;
+                        soLuongKho = item.soLuongsDoThue;
+                    } else if (item.idNuocUong) {
+                        ids = item.idNuocUong;
+                        tenDichVu = item.tenNuocUong;
+                        donGia = item.donGiasNuocUong;
+                        soLuong = item.soLuongNuocUong;
+                        soLuongKho = item.soLuongsNuocUong;
+                    }
+
+                    content += `
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card">
+                            <h5 class="card-title" id="${item.id}">${item.id}</h5>
+                            <img src="${item.imageData}" class="card-img-top" alt="${tenDichVu}">
+                            <div class="card-body">
+                                <h5 class="card-title">${ids}</h5>
+                                <h5 class="card-title">${tenDichVu}</h5>
+                                <p class="card-text text-danger">${donGia} VND</p>
+                                <p class="card-text kho-con">Kho còn: ${soLuongKho}</p>
+                                <div class="input-group">
+                                    <label>Số lượng chọn</label>
+                                    <input type="number" class="form-control so-luong-chon" value="${soLuong}" min="0" step="1">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-warning add-btnS"
+                                            data-ten-dich-vu="${tenDichVu}"
+                                            data-id="${item.id}"
+                                            data-id-do-thue="${item.idDoThue}"
+                                            data-id-nuoc-uong="${item.idNuocUong}"
+                                            data-don-gia="${donGia}"
+                                            data-so-luong-kho="${soLuongKho}"
+                                            data-so-luong-kho-do-thue="${item.soLuongsDoThue}"
+                                            data-so-luong-kho-nuoc-uong="${item.soLuongsNuocUong}"
+                                            type="button">Cập nhật</button>
+
+                                        <button class="btn btn-danger cancel-btns2 ms-2"
+                                         data-ten-dich-vu="${tenDichVu}"
+                                            data-id="${item.id}"
+                                            data-id-do-thue="${item.idDoThue}"
+                                            data-id-nuoc-uong="${item.idNuocUong}"
+                                            data-don-gia="${donGia}"
+                                            data-so-luong-kho-do-thue="${item.soLuongsDoThue}"
+                                            data-so-luong-kho-nuoc-uong="${item.soLuongsNuocUong}"
+                                        type="button">Hủy</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                content += '</div>';
+
+                // Gán nội dung vào phần tử #dichVuThueList
+                $('#dichVuThueList').html(content);
+                $('#serviceModal').modal('hide');
+                // $('#serviceModal2').modal('show');
+
+                $('.add-btnS').on('click', function (event) {
+                    event.preventDefault();
+                    // Khởi tạo giá trị trước đó cho tất cả các ô input
+                    $('.so-luong-chon').each(function () {
+                        let initialQuantity = parseInt($(this).val()) || 0; // Lấy giá trị hiện tại từ ô input
+                        $(this).data('previous-value', initialQuantity); // Gán giá trị hiện tại là giá trị trước đó
+                    });
+
+                    let input = $(this);
+                    let quantityChosen = parseInt(input.val()) || 0; // Lấy giá trị hiện tại của input
+                    let stockQuantityElem = input.closest('.input-group').siblings('.kho-con'); // Lấy phần tử chứa số lượng kho
+                    let stockQuantity = parseInt(stockQuantityElem.text().replace('Kho còn: ', '')); // Lấy số lượng kho hiện tại
+                    let previousQuantity = parseInt(input.data('previous-value')) || 0; // Lấy giá trị trước đó của input
+
+                    // Chỉ tiếp tục nếu giá trị đã thay đổi
+                    if (quantityChosen !== previousQuantity) {
+                        // Tính toán sự thay đổi
+                        let changeInQuantity = quantityChosen - previousQuantity;
+
+                        // Cập nhật hàng tồn kho
+                        stockQuantity -= changeInQuantity;
+
+                        // Kiểm tra nếu kho còn âm
+                        if (stockQuantity < 0) {
+                            quantityChosen += stockQuantity; // Điều chỉnh số lượng chọn
+                            stockQuantity = 0; // Đặt kho còn lại bằng 0
+                        }
+
+                        // Cập nhật giao diện hiển thị kho và giá trị input
+                        stockQuantityElem.text(`Kho còn: ${stockQuantity}`);
+                        input.val(quantityChosen); // Đảm bảo input không vượt quá kho
+                        input.data('previous-value', quantityChosen); // Cập nhật giá trị trước đó
+
+                    } else {
+                        // Nếu không thay đổi, giữ lại giá trị trước đó
+                        input.val(previousQuantity);
+                    }
+                    const $this = $(this);
+                    let id = $this.data('id');
+                    let idDoThue = $this.data('id-do-thue');
+                    let idNuocUong = $this.data('id-nuoc-uong');
+                    let donGias = $this.data('don-gia');
+                    let tenDichVu = $this.data('ten-dich-vu');
+                    let soLuongKho = $this.data('so-luong-kho');
+                    // let soLuongKhoDoThue = $this.data('so-luong-kho-do-thue');
+                    // let soLuongKhoNuocUong = $this.data('so-luong-kho-nuoc-uong');
+                    let soLuongChons = $this.closest('.input-group').find('.so-luong-chon').val();
+
+                    // Validation: Check if selected quantity is valid
+                    if (soLuongChons > soLuongKho) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Số lượng chọn không hợp lệ',
+                            text: 'Số lượng chọn không được vượt quá số lượng có sẵn!',
+                        });
+                        return;
+                    }
+                    let idHoaDonChiTiet = selectedInvoiceId; // Gán giá trị cho idHoaDonChiTiet
+
+                    $.ajax({
+                        url: `http://localhost:8080/dich-vu-san-bong/${id}`,
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            id: id,
+                            idDoThue: idDoThue,
+                            idNuocUong: idNuocUong,
+                            donGia: (soLuongChons * donGias), // Cập nhật đơn giá dựa trên số lượng chọn
+                            soLuongDoThue: idDoThue ? soLuongChons : null, // Cập nhật số lượng đồ thuê
+                            soLuongNuocUong: idNuocUong ? soLuongChons : null,
+                            idHoaDonChiTiet: idHoaDonChiTiet
+                        }),
+
+
+                        success: function (response) {
+
+                            let newSoLuongKho = stockQuantity - soLuongChons;
+                            // Check if the new stock is 0 or below
+                            if (newSoLuongKho <= 0) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Hết hàng',
+                                    text: 'Số lượng trong kho đã hết.',
+                                });
+                                return;
+                            }
+
+                            // Cập nhật số lượng đồ thuê nếu tồn tại idDoThue
+                            if (idDoThue) {
+                                $.ajax({
+                                    url: `http://localhost:8080/do_thue/${idDoThue}`,
+                                    type: 'PUT',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify({
+                                        idDoThue: idDoThue,
+                                        tenDoThue: tenDichVu, // Sử dụng tên dịch vụ từ dữ liệu
+                                        donGias: donGias, // Sử dụng đơn giá từ dữ liệu
+                                        soLuongs: stockQuantity // Cập nhật lại số lượng trong kho
+                                    }),
+                                    success: function (response) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Thành công!',
+                                            text: 'Số lượng đồ thuê cập nhật thành công',
+                                            showConfirmButton: false, // Ẩn nút xác nhận
+                                            timer: 2000 // Thời gian tự động đóng (2000 ms = 2 giây)
+                                        });
+
+                                    },
+                                    error: function (error) {
+                                        console.error("Lỗi khi cập nhật số lượng đồ thuê:", error);
+                                    }
+                                });
+                            }
+
+                            // Cập nhật số lượng nước uống nếu tồn tại idNuocUong
+                            if (idNuocUong) {
+                                $.ajax({
+                                    url: `http://localhost:8080/nuoc_uong/${idNuocUong}`,
+                                    type: 'PUT',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify({
+                                        idNuocUong: idNuocUong,
+                                        tenNuocUong: tenDichVu, // Sử dụng tên dịch vụ từ dữ liệu
+                                        donGias: donGias, // Sử dụng đơn giá từ dữ liệu
+                                        soLuongs: stockQuantity // Cập nhật lại số lượng trong kho
+                                    }),
+                                    success: function (response) {
+                                        alert("Số lượng nước uống cập nhật thành công");
+                                    },
+                                    error: function (error) {
+                                        console.error("Lỗi khi cập nhật số lượng nước uống:", error);
+                                    }
+                                });
+                            }
+
+
+                            // Cập nhật giao diện hiển thị kho và giá trị input
+                            stockQuantityElem.text(`Kho còn: ${stockQuantity}`);
+                            input.val(quantityChosen); // Đảm bảo input không vượt quá kho
+                            input.data('previous-value', quantityChosen);
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Cập nhật thất bại',
+                                text: 'Có lỗi xảy ra khi cập nhật số lượng.',
+                            });
+                        }
+                    });
+                });
+
+                // Khởi tạo giá trị trước đó cho tất cả các ô input
+                $('.so-luong-chon').each(function () {
+                    let initialQuantity = parseInt($(this).val()) || 0; // Lấy giá trị hiện tại từ ô input
+                    $(this).data('previous-value', initialQuantity); // Gán giá trị hiện tại là giá trị trước đó
+                });
+
+              // Sự kiện khi thay đổi giá trị input
+                $('.so-luong-chon').on('input', function () {
+                    let input = $(this);
+                    let quantityChosen = parseInt(input.val()) || 0; // Lấy giá trị hiện tại của input
+                    let stockQuantityElem = input.closest('.input-group').siblings('.kho-con'); // Lấy phần tử chứa số lượng kho
+                    let stockQuantity = parseInt(stockQuantityElem.text().replace('Kho còn: ', '')); // Lấy số lượng kho hiện tại
+                    let previousQuantity = parseInt(input.data('previous-value')) || 0; // Lấy giá trị trước đó của input
+
+                    // Chỉ tiếp tục nếu giá trị đã thay đổi
+                    if (quantityChosen !== previousQuantity) {
+                        // Tính toán sự thay đổi
+                        let changeInQuantity = quantityChosen - previousQuantity;
+
+                        // Cập nhật hàng tồn kho
+                        stockQuantity -= changeInQuantity;
+
+                        // Kiểm tra nếu kho còn âm
+                        if (stockQuantity < 0) {
+                            quantityChosen += stockQuantity; // Điều chỉnh số lượng chọn
+                            stockQuantity = 0; // Đặt kho còn lại bằng 0
+                        }
+
+                        // Cập nhật giao diện hiển thị kho và giá trị input
+                        stockQuantityElem.text(`Kho còn: ${stockQuantity}`);
+                        input.val(quantityChosen); // Đảm bảo input không vượt quá kho
+                        input.data('previous-value', quantityChosen); // Cập nhật giá trị trước đó
+
+                    } else {
+                        // Nếu không thay đổi, giữ lại giá trị trước đó
+                        input.val(previousQuantity);
+                    }
+                });
+
+            },
+            error: function (xhr, status, error) {
+                console.error('Lỗi khi gọi API:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi dữ liệu',
+                    text: 'Có lỗi xảy ra khi lấy dữ liệu.',
+                });
+            }
+        });
+    }
+
+    $(document).on('click', '.cancel-btns2', function () {
+        // Khởi tạo giá trị trước đó cho tất cả các ô input
+        $('.so-luong-chon').each(function () {
+            let initialQuantity = parseInt($(this).val()) || 0; // Lấy giá trị hiện tại từ ô input
+            $(this).data('previous-value', initialQuantity); // Gán giá trị hiện tại là giá trị trước đó
+        });
+
+        let input = $(this);
+        let quantityChosen = parseInt(input.val()) || 0; // Lấy giá trị hiện tại của input
+        let stockQuantityElem = input.closest('.input-group').siblings('.kho-con'); // Lấy phần tử chứa số lượng kho
+        let stockQuantity = parseInt(stockQuantityElem.text().replace('Kho còn: ', '')); // Lấy số lượng kho hiện tại
+        let previousQuantity = parseInt(input.data('previous-value')) || 0; // Lấy giá trị trước đó của input
+
+        // Chỉ tiếp tục nếu giá trị đã thay đổi
+        if (quantityChosen !== previousQuantity) {
+            // Tính toán sự thay đổi
+            let changeInQuantity = quantityChosen - previousQuantity;
+
+            // Cập nhật hàng tồn kho
+            stockQuantity -= changeInQuantity;
+
+            // Kiểm tra nếu kho còn âm
+            if (stockQuantity < 0) {
+                quantityChosen += stockQuantity; // Điều chỉnh số lượng chọn
+                stockQuantity = 0; // Đặt kho còn lại bằng 0
+            }
+
+            // Cập nhật giao diện hiển thị kho và giá trị input
+            stockQuantityElem.text(`Kho còn: ${stockQuantity}`);
+            input.val(quantityChosen); // Đảm bảo input không vượt quá kho
+            input.data('previous-value', quantityChosen); // Cập nhật giá trị trước đó
+
+        } else {
+            // Nếu không thay đổi, giữ lại giá trị trước đó
+            input.val(previousQuantity);
+        }
+
+
+        const $this = $(this);
+        let id = $this.data('id');
+        let idDoThue = $this.data('id-do-thue');
+        let idNuocUong = $this.data('id-nuoc-uong');
+        let donGias = $this.data('don-gia');
+        let tenDichVu = $this.data('ten-dich-vu');
+        let soLuongKhoDoThue = parseInt($this.data('so-luong-kho-do-thue')) || 0;
+        let soLuongKhoNuocUong = parseInt($this.data('so-luong-kho-nuoc-uong')) || 0;
+        let soLuongChons = parseInt($this.closest('.input-group').find('.so-luong-chon').val()) || 0;
+        let idHoaDonChiTiet = selectedInvoiceId;
+        // let soLuongKho = $this.data('so-luong-kho');
+        // Hiển thị hộp thoại xác nhận
+        Swal.fire({
+            title: 'Xác nhận huỷ',
+            text: "Bạn có chắc chắn muốn huỷ dịch vụ này không?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Có, huỷ!',
+            cancelButtonText: 'Không, quay lại!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `http://localhost:8080/dich-vu-san-bong/${id}`,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        id: id,
+                        idDoThue: idDoThue,
+                        idNuocUong: idNuocUong,
+                        donGia: 0,
+                        soLuongDoThue: 0,
+                        soLuongNuocUong: 0,
+                        idHoaDonChiTiet: idHoaDonChiTiet,
+                        trangThai: "Đã huỷ",
+                        deletedAt: true
+                    }),
+                    success: function (response) {
+                        if (idDoThue) {
+                            $.ajax({
+                                url: `http://localhost:8080/do_thue/${idDoThue}`,
+                                type: 'PUT',
+                                contentType: 'application/json',
+                                data: JSON.stringify({
+                                    idDoThue: idDoThue,
+                                    tenDoThue: tenDichVu,
+                                    donGias: donGias,
+                                    soLuongs: stockQuantity+soLuongChons
+                                }),
+                                success: function (response) {
+                                    Swal.fire({
+                                        title: 'Thành công!',
+                                        text: 'Số lượng đồ thuê cập nhật hủy thành công',
+                                        icon: 'success',
+                                        showConfirmButton: false, // Ẩn nút xác nhận
+                                        timer: 2000 // Thời gian tự động đóng thông báo (2000ms = 2 giây)
+                                    });
+                                    $this.closest('.card-body').find('.kho-con').text(`Kho còn: ${stockQuantity+soLuongChons}`);
+                                },
+                                error: function (error) {
+                                    console.error("Lỗi khi cập nhật số lượng đồ thuê:", error);
+                                }
+                            });
+                        }
+
+                        if (idNuocUong) {
+                            $.ajax({
+                                url: `http://localhost:8080/nuoc_uong/${idNuocUong}`,
+                                type: 'PUT',
+                                contentType: 'application/json',
+                                data: JSON.stringify({
+                                    idNuocUong: idNuocUong,
+                                    tenNuocUong: tenDichVu,
+                                    donGias: donGias,
+                                    soLuongs: stockQuantity+soLuongChons
+                                }),
+                                success: function (response) {
+                                    $this.closest('.card-body').find('.kho-con').text(`Kho còn: ${stockQuantity+soLuongChons}`);
+                                },
+                                error: function (error) {
+                                    console.error("Lỗi khi cập nhật số lượng nước uống:", error);
+                                }
+                            });
+                        }
+
+                        $this.closest('.input-group').find('.so-luong-chon').val(0);
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Cập nhật thất bại',
+                            text: 'Có lỗi xảy ra khi cập nhật số lượng.',
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+
+
+
+
+    function getSelectedInvoiceId() {
+        // Hàm này cần được định nghĩa để trả về ID của hóa đơn được chọn
+        // Ví dụ:
+        return selectedInvoiceId; // Thay thế bằng biến chứa ID của hóa đơn
+    }
+
+
     function luuDichVu() {
         // Lấy giá trị của các trường
         var idDoThue = idDoThues;
@@ -475,7 +1039,7 @@
             "donGia": (soLuongDoThue * donGiaDoThue) +(soLuongNuocUong * donGiaNuocUong),
             "soLuongDoThue": soLuongDoThue,
             "soLuongNuocUong": soLuongNuocUong,
-            "trangThai":"NTTH2502"
+            "trangThai":"Đã đặt"
         };
 
 
@@ -522,6 +1086,10 @@
 
 
     function dichVuDo() {
+        idNuocUongs = null;
+        donGiaNuocUongs = null;
+        soLuongChonNuocs = null;
+
         if (!selectedInvoiceId) {
             Swal.fire({
                 icon: 'error',
@@ -545,30 +1113,40 @@
                         <img src="${item.imageData}" class="card-img-top" alt="${item.tenDoThue}">
                         <div class="card-body">
                             <h5 class="card-title">${item.tenDoThue}</h5>
-                            <p class="card-text text-danger">${item.donGia} VND</p>
-                            <p class="card-text kho-con">Kho còn: ${item.soLuong}</p>
+                            <p class="card-text text-danger">${item.donGias} VND</p>
+                            <p class="card-text kho-con">Kho còn: ${item.soLuongs}</p>
                             <div class="input-group">
-                            <label>Số lượng chọn</label>
+                                <label>Số lượng chọn</label>
                                 <input type="number" class="form-control so-luong-chon" value="0" min="0" step="1">
                                 <div class="input-group-append">
-                                    <button class="btn btn-success add-btn" data-ten-do-thue="${item.tenDoThue}" data-id="${item.id}" data-don-gia="${item.donGia}" data-so-luong="${item.soLuong}" type="button">Thêm</button>
+                                    <button class="btn btn-success add-btn" data-ten-do-thue="${item.tenDoThue}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button">Thêm</button>
+                                    <button class="btn btn-danger cancel-btn" data-ten-do-thue="${item.tenDoThue}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button">Hủy</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>`;
                 });
-                content += '</div>'
+                content += '</div>';
                 $('#doThueTab').html(content);
                 $('#serviceModal').modal('show');
 
                 $('.add-btn').on('click', function () {
-                    idDoThues = $(this).data('id');
-                    donGiaDoThues = $(this).data('don-gia');
-                    soLuongDoThues = $(this).data('so-luong');
-                    tenDoThues = $(this).data('ten-do-thue');
-                    soLuongChons = $(this).closest('.input-group').find('.so-luong-chon').val();
+                    const $this = $(this);
+                     idDoThues = $this.data('id');
+                     donGiaDoThues = $this.data('don-gia');
+                     soLuongDoThues = $this.data('so-luong');
+                     tenDoThues = $this.data('ten-do-thue');
+                     soLuongChons = $this.closest('.input-group').find('.so-luong-chon').val();
 
+                    if (soLuongChons <= 0) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Nhập số lượng',
+                            text: 'Số lượng chọn tối thiểu là 1',
+                        });
+                        return;
+                    }
 
                     if (soLuongChons > soLuongDoThues) {
                         Swal.fire({
@@ -578,46 +1156,81 @@
                         });
                         return;
                     }
-
+                    const idHoaDonChiTiet = selectedInvoiceId;
+                    // Kiểm tra xem dịch vụ đã tồn tại trong hóa đơn hay chưa
                     $.ajax({
-                        url: `http://localhost:8080/do_thue/${idDoThues}`,
-                        type: 'PUT',
-                        contentType: 'application/json',
-                        data: JSON.stringify({
-                            idDoThue: idDoThues,
-                            tenDoThue: tenDoThues,
-                            donGia: donGiaDoThues,
-                            soLuong: soLuongDoThues - soLuongChons,
-                        }),
-                        success: function (response) {
-                            let newSoLuong = soLuongDoThues - soLuongChons;
-
-                            if (newSoLuong <= 0) {
+                        url: `http://localhost:8080/do_thue/check-id-do-thue?id=${idDoThues}&idHoaDonChiTiet=${idHoaDonChiTiet}`,
+                        type: 'GET',
+                        success: function (exists) {
+                            // Kiểm tra xem dịch vụ đã tồn tại hay chưa
+                            if (exists) { // Nếu có kết quả từ API, nghĩa là dịch vụ đã tồn tại
                                 Swal.fire({
-                                    icon: 'warning',
-                                    title: 'Hết hàng',
-                                    text: 'Số lượng trong kho đã hết.',
+                                    icon: 'error',
+                                    title: 'Dịch vụ đã tồn tại',
+                                    text: 'Dịch vụ này đã được thêm vào hóa đơn hiện tại. Không thể thêm lại.',
                                 });
-                            } else {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Cập nhật thành công',
-                                    text: `Số lượng còn lại: ${newSoLuong}`,
-                                });
+                                return; // Ngừng thực hiện nếu dịch vụ đã tồn tại
                             }
+                            // Nếu không tồn tại, tiếp tục thực hiện cập nhật dịch vụ
+                            $.ajax({
+                                url: `http://localhost:8080/do_thue/${idDoThues}`,
+                                type: 'PUT',
+                                contentType: 'application/json',
+                                data: JSON.stringify({
+                                    idDoThue: idDoThues,
+                                    tenDoThue: tenDoThues,
+                                    donGias: donGiaDoThues,
+                                    soLuongs: soLuongDoThues - soLuongChons,
+                                }),
+                                success: function (response) {
+                                    let newSoLuong = soLuongDoThues - soLuongChons;
 
-                            // Cập nhật số lượng còn lại trên giao diện
-                            $(this).closest('.card-body').find('.kho-con').text(`Kho còn: ${newSoLuong}`);
-                            luuDichVu();
+                                    if (newSoLuong <= 0) {
+                                        Swal.fire({
+                                            icon: 'warning',
+                                            title: 'Hết hàng',
+                                            text: 'Số lượng trong kho đã hết.',
+                                        });
+                                        return;
+                                    }
+
+                                    if (soLuongChons == 0) {
+                                        Swal.fire({
+                                            icon: 'warning',
+                                            title: 'Chọn số lượng',
+                                            text: 'Số lượng tối thiểu phải là 1.',
+                                        });
+                                        return;
+                                    }
+
+                                    // Đặt lại giá trị ô input về 0 sau khi thêm thành công
+                                    let input = $this.closest('.input-group').find('.so-luong-chon');
+                                    input.data('previous-value', 0); // Reset giá trị lưu trữ
+                                    input.val(0); // Đặt lại giá trị ô input về 0
+                                    // Cập nhật số lượng còn lại trên giao diện
+                                    $(this).closest('.card-body').find('.kho-con').text(`Kho còn: ${newSoLuong}`);
+                                    luuDichVu();
+                                    // fillDichVuChoHoaDon(getSelectedInvoiceId());
+
+                                },
+                                error: function (xhr, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Cập nhật thất bại',
+                                        text: 'Có lỗi xảy ra khi cập nhật số lượng.',
+                                    });
+                                }
+                            });
                         },
                         error: function (xhr, status, error) {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Cập nhật thất bại',
-                                text: 'Có lỗi xảy ra khi cập nhật số lượng.',
+                                title: 'Lỗi kiểm tra',
+                                text: 'Có lỗi xảy ra khi kiểm tra dịch vụ.',
                             });
                         }
                     });
+
                 });
 
                 $('.so-luong-chon').each(function() {
@@ -651,11 +1264,6 @@
                     }
                 });
 
-                $('.chon-san-pham').on('change', function() {
-                    let input = $(this).closest('.card-body').find('.so-luong-chon');
-                    input.data('previous-value', 0);
-                    input.val(0);
-                });
             },
             error: function (xhr, status, error) {
                 console.error('Lỗi khi gọi API:', error);
@@ -666,7 +1274,86 @@
                 });
             }
         });
+
     }
+
+
+
+
+
+
+
+
+
+
+    // Sử dụng event delegation để bắt sự kiện click
+    $(document).on('click', '.cancel-btn', function () {
+        // Lấy thông tin cần thiết
+        let idDoThues = $(this).data('id');
+        let donGiaDoThues = $(this).data('don-gia');
+        let soLuongDoThues = $(this).data('so-luong');
+        let tenDoThues = $(this).data('ten-do-thue');
+        let soLuongChons = parseInt($(this).closest('.input-group').find('.so-luong-chon').val()) || 0; // Đảm bảo giá trị là số
+
+        // Hiển thị hộp thoại xác nhận trước khi thực hiện hủy
+        Swal.fire({
+            title: 'Xác nhận hủy',
+            text: `Bạn có chắc chắn muốn hủy dịch vụ ${tenDoThues} không?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Có, hủy!',
+            cancelButtonText: 'Không, quay lại'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Thực hiện gọi AJAX để cập nhật số lượng
+                $.ajax({
+                    url: `http://localhost:8080/do_thue/${idDoThues}`,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        idDoThue: idDoThues,
+                        tenDoThue: tenDoThues,
+                        donGias: donGiaDoThues,
+                        soLuongs: soLuongDoThues, // Tính toán số lượng mới
+                    }),
+                    success: function (response) {
+                        let newSoLuong = soLuongDoThues; // Tính toán lại số lượng mới
+
+                        if (newSoLuong <= 0) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Hết hàng',
+                                text: 'Số lượng trong kho đã hết.',
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Đã hủy thành công',
+                                text: `Số lượng còn lại: ${newSoLuong}`,
+                            });
+                        }
+
+                        // Cập nhật số lượng còn lại trên giao diện
+                        $(this).closest('.card-body').find('.kho-con').text(`Kho còn: ${newSoLuong}`);
+
+                    }.bind(this), // Bind đúng ngữ cảnh this để sử dụng bên trong success callback
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Cập nhật thất bại',
+                            text: 'Có lỗi xảy ra khi cập nhật số lượng.',
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+
+
+
 
     // Gọi hàm dichVuDo khi nút #openServiceModal được click
     $('#openServiceModal').on('click', dichVuDo);
@@ -679,6 +1366,8 @@
 
     function dichVuNuoc() {
         idDoThues=null;
+        donGiaDoThues = null;
+        soLuongChons = null;
         if (!selectedInvoiceId) {
             Swal.fire({
                 icon: 'error',
@@ -702,13 +1391,14 @@
                         <img src="${item.imageData}" class="card-img-top" alt="${item.tenNuocUong}">
                         <div class="card-body">
                             <h5 class="card-title">${item.tenNuocUong}</h5>
-                            <p class="card-text text-danger">${item.donGia} VND</p>
-                            <p class="card-text kho-con" data-so-luong="${item.soLuong}">Kho còn: ${item.soLuong}</p>
+                            <p class="card-text text-danger">${item.donGias} VND</p>
+                            <p class="card-text kho-con" data-so-luong="${item.soLuongs}">Kho còn: ${item.soLuongs}</p>
                             <div class="input-group">
                                 <label>Số lượng chọn</label>
                                 <input type="number" class="form-control so-luong-chon" value="0" min="0" step="1">
                                 <div class="input-group-append">
-                                    <button class="btn btn-success add-btn-nuoc" data-ten-nuoc-uong="${item.tenNuocUong}" data-id="${item.id}" data-don-gia="${item.donGia}" data-so-luong="${item.soLuong}" type="button">Thêm</button>
+                                    <button class="btn btn-success add-btn-nuoc" data-ten-nuoc-uong="${item.tenNuocUong}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button">Thêm</button>
+                                    <button class="btn btn-danger cancel-btn2" data-ten-nuoc-uong="${item.tenNuocUong}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button">Hủy</button>
                                 </div>
                             </div>
                         </div>
@@ -727,6 +1417,15 @@
                     tenNuocUongs = button.data('ten-nuoc-uong');
                     soLuongChonNuocs = parseInt(button.closest('.input-group').find('.so-luong-chon').val(), 10);
 
+                    if (soLuongChonNuocs <= 0) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Nhập số lượng',
+                            text: 'Số lượng chọn tối thiểu là 1',
+                        });
+                        return;
+                    }
+
                     if (soLuongChonNuocs > soLuongNuocUongs) {
                         Swal.fire({
                             icon: 'error',
@@ -736,81 +1435,74 @@
                         return;
                     }
 
-                    $.ajax({
-                        url: `http://localhost:8080/nuoc_uong/${idNuocUongs}`,
-                        type: 'PUT',
-                        contentType: 'application/json',
-                        data: JSON.stringify({
-                            idNuocUong: idNuocUongs,
-                            tenNuocUong: tenNuocUongs,
-                            donGia: donGiaNuocUongs,
-                            soLuong: soLuongNuocUongs - soLuongChonNuocs,
-                        }),
-                        success: function (response) {
-                            let newSoLuong = soLuongNuocUongs - soLuongChonNuocs;
+                    const idHoaDonChiTiet = selectedInvoiceId; // Lấy ID hóa đơn chi tiết
 
-                            if (newSoLuong <= 0) {
+                    // Kiểm tra xem dịch vụ đã tồn tại trong hóa đơn hay chưa
+                    $.ajax({
+                        url: `http://localhost:8080/nuoc_uong/check-id-nuoc-uong?id=${idNuocUongs}&idHoaDonChiTiet=${idHoaDonChiTiet}`,
+                        type: 'GET',
+                        success: function (exists) {
+                            if (exists) {
                                 Swal.fire({
-                                    icon: 'warning',
-                                    title: 'Hết hàng',
-                                    text: 'Số lượng trong kho đã hết.',
+                                    icon: 'error',
+                                    title: 'Dịch vụ đã tồn tại',
+                                    text: 'Dịch vụ này đã được thêm vào hóa đơn hiện tại. Không thể thêm lại.',
                                 });
-                            } else {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Cập nhật thành công',
-                                    text: `Số lượng còn lại: ${newSoLuong}`,
-                                });
+                                return; // Ngừng thực hiện nếu dịch vụ đã tồn tại
                             }
 
-                            // Cập nhật số lượng kho trên giao diện
-                            button.closest('.card-body').find('.kho-con').text(`Kho còn: ${newSoLuong}`).data('so-luong', newSoLuong);
-                            luuDichVu();
+                            // Nếu không tồn tại, tiếp tục thực hiện cập nhật dịch vụ
+                            $.ajax({
+                                url: `http://localhost:8080/nuoc_uong/${idNuocUongs}`,
+                                type: 'PUT',
+                                contentType: 'application/json',
+                                data: JSON.stringify({
+                                    idNuocUong: idNuocUongs,
+                                    tenNuocUong: tenNuocUongs,
+                                    donGias: donGiaNuocUongs,
+                                    soLuongs: soLuongNuocUongs - soLuongChonNuocs,
+                                }),
+                                success: function (response) {
+                                    let newSoLuong = soLuongNuocUongs - soLuongChonNuocs;
 
-                            // Cập nhật số lượng kho khi số lượng chọn thay đổi
-                            $('.so-luong-chon').off('input').on('input', function () {
-                                let input = $(this);
-                                let quantityChosen = parseInt(input.val(), 10) || 0;
-                                let cardBody = input.closest('.card-body');
-                                let khoConElem = cardBody.find('.kho-con');
-                                let stockQuantity = parseInt(khoConElem.data('so-luong'), 10);
+                                    if (newSoLuong <= 0) {
+                                        Swal.fire({
+                                            icon: 'warning',
+                                            title: 'Hết hàng',
+                                            text: 'Số lượng trong kho đã hết.',
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Cập nhật thành công',
+                                            text: `Số lượng còn lại: ${newSoLuong}`,
+                                        });
+                                    }
 
-                                // Cập nhật số lượng kho dựa trên giá trị trước đó và hiện tại
-                                let previousQuantity = parseInt(input.data('previous-value'), 10) || 0;
-
-                                if (quantityChosen > stockQuantity) {
-                                    input.val(stockQuantity); // Không cho phép chọn nhiều hơn số lượng kho còn lại
-                                    quantityChosen = stockQuantity;
+                                    // Cập nhật số lượng kho trên giao diện
+                                    button.closest('.card-body').find('.kho-con').text(`Kho còn: ${newSoLuong}`).data('so-luong', newSoLuong);
+                                    luuDichVu();
+                                    // fillDichVuChoHoaDon(getSelectedInvoiceId());
+                                },
+                                error: function (xhr, status, error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Cập nhật thất bại',
+                                        text: 'Có lỗi xảy ra khi cập nhật số lượng.',
+                                    });
                                 }
-
-                                let newStockQuantity = stockQuantity + previousQuantity - quantityChosen;
-
-                                if (newStockQuantity < 0) {
-                                    quantityChosen += newStockQuantity; // Điều chỉnh số lượng chọn nếu kho không đủ
-                                    newStockQuantity = 0;
-                                }
-
-                                khoConElem.text(`Kho còn: ${newStockQuantity}`);
-                                khoConElem.data('so-luong', newStockQuantity);
-                                input.data('previous-value', quantityChosen); // Cập nhật giá trị trước đó
-                            });
-
-                            // Xử lý sự thay đổi số lượng chọn trong các ô input
-                            $('.so-luong-chon').off('change').on('change', function() {
-                                let input = $(this);
-                                input.data('previous-value', 0);
-                                input.val(0);
                             });
                         },
                         error: function (xhr, status, error) {
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Cập nhật thất bại',
-                                text: 'Có lỗi xảy ra khi cập nhật số lượng.',
+                                title: 'Lỗi kiểm tra',
+                                text: 'Có lỗi xảy ra khi kiểm tra dịch vụ.',
                             });
                         }
                     });
                 });
+
             },
             error: function (xhr, status, error) {
                 Swal.fire({
@@ -831,6 +1523,71 @@
     $('#tab1').on('click', dichVuDo);
     $('#tab2').on('click', dichVuNuoc);
 
+
+    // Sử dụng event delegation để bắt sự kiện click
+    $(document).on('click', '.cancel-btn2', function () {
+        // Lấy thông tin cần thiết
+        let idNuocUongs = $(this).data('id');
+        let donGiaNuocUongs = $(this).data('don-gia');
+        let soLuongNuocUongs = $(this).data('so-luong');
+        let tenNuocUongs = $(this).data('ten-nuoc-uong');
+        let soLuongChons = parseInt($(this).closest('.input-group').find('.so-luong-chon').val()) || 0; // Đảm bảo giá trị là số
+
+        // Hiển thị hộp thoại xác nhận trước khi thực hiện hủy
+        Swal.fire({
+            title: 'Xác nhận hủy',
+            text: `Bạn có chắc chắn muốn hủy dịch vụ ${tenNuocUongs} không?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Có, hủy!',
+            cancelButtonText: 'Không, quay lại'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Thực hiện gọi AJAX để cập nhật số lượng
+                $.ajax({
+                    url: `http://localhost:8080/nuoc_uong/${idNuocUongs}`,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        idNuocUong: idNuocUongs,
+                        tenNuocUong: tenNuocUongs,
+                        donGias: donGiaNuocUongs,
+                        soLuongs: soLuongNuocUongs, // Tính toán số lượng mới
+                    }),
+                    success: function (response) {
+                        let newSoLuong = soLuongNuocUongs; // Tính toán lại số lượng mới
+
+                        if (newSoLuong <= 0) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Hết hàng',
+                                text: 'Số lượng trong kho đã hết.',
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Đã hủy thành công',
+                                text: `Số lượng còn lại: ${newSoLuong}`,
+                            });
+                        }
+
+                        // Cập nhật số lượng còn lại trên giao diện
+                        $(this).closest('.card-body').find('.kho-con').text(`Kho còn: ${newSoLuong}`);
+
+                    }.bind(this), // Bind đúng ngữ cảnh this để sử dụng bên trong success callback
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Cập nhật thất bại',
+                            text: 'Có lỗi xảy ra khi cập nhật số lượng.',
+                        });
+                    }
+                });
+            }
+        });
+    });
 
 
     function showSuccessToast(message) {
@@ -1125,6 +1882,15 @@
         const row = event.currentTarget; // Lấy dòng hiện tại được chọn
         const invoiceId = row.getAttribute('data-id'); // Lấy id hóa đơn chi tiết từ thuộc tính data-id
         selectedInvoiceId = row.getAttribute('data-id');
+        if (!selectedInvoiceId) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Chưa chọn hóa đơn',
+                text: 'Vui lòng chọn hóa đơn trước khi xem danh sách dịch vụ.',
+            });
+            return;
+        }
+        fillDichVuChoHoaDon(selectedInvoiceId)
         const tabName =
             `HD ${invoiceId}`
         ;
