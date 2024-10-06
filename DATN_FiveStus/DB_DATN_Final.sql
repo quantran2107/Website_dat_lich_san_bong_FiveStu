@@ -1,4 +1,4 @@
-CREATE DATABASE DuAnTotNghiep;
+drop DATABASE DuAnTotNghiep;
 
 USE DuAnTotNghiep;
 
@@ -255,25 +255,23 @@ CREATE TABLE hoa_don_chi_tiet (
 -- Table: hinh_thuc_thanh_toan
 CREATE TABLE hinh_thuc_thanh_toan (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  id_hoa_don_chi_tiet INT,
   hinh_thuc_thanh_toan VARCHAR(100) NOT NULL,
   trang_thai VARCHAR(100),
   created_at DATETIME, 
   updated_at DATETIME,
-  deleted_at bit,
-  CONSTRAINT fk_hinhThucThanhToan_hoaDonChiTiet FOREIGN KEY (id_hoa_don_chi_tiet) REFERENCES hoa_don_chi_tiet(id)
+  deleted_at bit
 );
 
 -- Table: chi_tiet_hinh_thuc_thanh_toan
 CREATE TABLE chi_tiet_hinh_thuc_thanh_toan (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  id_hoa_don INT,
+  id_hoa_don_chi_tiet INT,
   id_hinh_thuc_thanh_toan INT,
   trang_thai VARCHAR(50),
   created_at DATETIME, 
   updated_at DATETIME,
   deleted_at bit,
-  CONSTRAINT fk_chiTietHinhThucThanhToan_hoaDon FOREIGN KEY (id_hoa_don) REFERENCES hoa_don(id),
+  CONSTRAINT fk_chiTietHinhThucThanhToan_hoaDonChiTiet FOREIGN KEY (id_hoa_don_chi_tiet) REFERENCES hoa_don_chi_tiet(id),
   CONSTRAINT fk_chiTietHinhThucThanhToan_hinhThucThanhToan FOREIGN KEY (id_hinh_thuc_thanh_toan) REFERENCES hinh_thuc_thanh_toan(id)
 );
 
@@ -343,26 +341,18 @@ CREATE TABLE dich_vu_san_bong (
 -- phu-phi
 
 -- Table: phu_phi_hoa_don
-CREATE TABLE phu_phi (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  ten_phu_phi VARCHAR(100),
-  trang_thai VARCHAR(100),
-    created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit 
-  );
--- Table: phu_phi_hoa_don
 CREATE TABLE phu_phi_hoa_don (
   id INT AUTO_INCREMENT PRIMARY KEY,
   id_hoa_don_chi_tiet INT,
-  id_phu_phi INT,
-  thoi_gian_tao DATETIME,
+  ma VARCHAR(100),
+  ten VARCHAR(100),
+  tien_phu_phi DECIMAL(10, 2),
+  ghi_chu VARCHAR(50),
   trang_thai VARCHAR(50),
   created_at DATETIME, 
   updated_at DATETIME,
   deleted_at bit,
-  CONSTRAINT fk_phuPhiHoaDon_hoaDonChiTiet FOREIGN KEY (id_hoa_don_chi_tiet) REFERENCES hoa_don_chi_tiet(id),
-   CONSTRAINT fk_phuPhiHoaDon_phiPhi FOREIGN KEY (id_phu_phi) REFERENCES phu_phi(id)
+  CONSTRAINT fk_phuPhiHoaDon_hoaDonChiTiet FOREIGN KEY (id_hoa_don_chi_tiet) REFERENCES hoa_don_chi_tiet(id)
 );
 
 -- Table: loai_tham_so
@@ -2247,13 +2237,13 @@ VALUES
 
 
 
-INSERT INTO hinh_thuc_thanh_toan (hinh_thuc_thanh_toan, trang_thai, created_at, updated_at, deleted_at)
-VALUES
-  ('Thanh toan 1', 'active', NOW(), NOW(), 1),
-  ( 'Thanh toan 2', 'active', NOW(), NOW(), 1),
-  ( 'Thanh toan 3', 'inactive', NOW(), NOW(), 1),
-  ('Thanh toan 4', 'active', NOW(), NOW(), 1),
-  ('Thanh toan 5', 'active', NOW(), NOW(), 0);
+-- INSERT INTO hinh_thuc_thanh_toan (hinh_thuc_thanh_toan, trang_thai, created_at, updated_at, deleted_at)
+-- VALUES
+--   ('Thanh toan 1', 'active', NOW(), NOW(), 1),
+--   ( 'Thanh toan 2', 'active', NOW(), NOW(), 1),
+--   ( 'Thanh toan 3', 'inactive', NOW(), NOW(), 1),
+--   ('Thanh toan 4', 'active', NOW(), NOW(), 1),
+--   ('Thanh toan 5', 'active', NOW(), NOW(), 0);
 
 
 INSERT INTO lich_su_hoa_don (id_hoa_don, hanh_dong, loai_hanh_dong, ngay_tao, ngay_cap_nhat, ten_nguoi_tao, ten_nguoi_cap_nhat, so_lan_thay_doi, trang_thai, created_at, updated_at, deleted_at)
@@ -2380,24 +2370,48 @@ INSERT INTO dich_vu_san_bong (id_do_thue, id_nuoc_uong, id_hoa_don_chi_tiet, ton
 (12, NULL, 63, 84.00, 2, 'Đã đặt', NOW(), NOW(), 0),
 (NULL, 12, 64, 26.00, 4, 'Đã đặt', NOW(), NOW(), 0);
 
+INSERT INTO phu_phi_hoa_don (id_hoa_don_chi_tiet, ma, ten, tien_phu_phi, ghi_chu, trang_thai, created_at, updated_at, deleted_at)
+VALUES (1, 'PP001', 'Phí giao hàng', 50000.00, 'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
+       (2, 'PP002', 'Phí đóng gói', 20000.00, 'Đóng gói cẩn thận', 'Hoàn tất', NOW(), NOW(), 0),
+       (3, 'PP003', 'Phí giao hàng', 45000.00, 'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
+       (4, 'PP004', 'Phí dịch vụ', 10000.00,'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
+       (5, 'PP005', 'Phí giao hàng', 30000.00,  'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
+       (6, 'PP006', 'Phí bảo hiểm', 15000.00, 'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
+       (7, 'PP007', 'Phí giao hàng', 25000.00, 'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
+       (8, 'PP008', 'Phí dịch vụ', 12000.00,  'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
+       (9, 'PP009', 'Phí giao hàng', 40000.00,  'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
+       (10, 'PP010', 'Phí bảo hiểm', 17000.00,'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
+       (11, 'PP011', 'Phí giao hàng', 35000.00,  'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
+       (12, 'PP012', 'Phí dịch vụ', 13000.00, 'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
+       (13, 'PP013', 'Phí giao hàng', 48000.00,  'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
+       (14, 'PP014', 'Phí bảo hiểm', 18000.00, 'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
+       (15, 'PP015', 'Phí giao hàng', 32000.00,  'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
+       (16, 'PP016', 'Phí dịch vụ', 14000.00, 'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
+       (17, 'PP017', 'Phí giao hàng', 50000.00,  'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
+       (18, 'PP018', 'Phí bảo hiểm', 19000.00, 'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
+       (19, 'PP019', 'Phí giao hàng', 38000.00, 'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
+       (20, 'PP020', 'Phí dịch vụ', 15000.00,  'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
+       (21, 'PP021', 'Phí giao hàng', 51000.00,'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
+       (22, 'PP022', 'Phí bảo hiểm', 16000.00,  'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
+       (23, 'PP023', 'Phí giao hàng', 40000.00, 'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
+       (24, 'PP024', 'Phí dịch vụ', 17000.00, 'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
+       (25, 'PP025', 'Phí giao hàng', 52000.00,  'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
+       (26, 'PP026', 'Phí bảo hiểm', 18000.00,  'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
+       (27, 'PP027', 'Phí giao hàng', 33000.00,  'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
+       (28, 'PP028', 'Phí dịch vụ', 19000.00, 'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
+       (29, 'PP029', 'Phí giao hàng', 47000.00,  'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
+       (30, 'PP030', 'Phí bảo hiểm', 20000.00,  'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
+       (31, 'PP031', 'Phí giao hàng', 36000.00,  'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
+       (32, 'PP032', 'Phí dịch vụ', 21000.00,  'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
+       (33, 'PP033', 'Phí giao hàng', 55000.00,  'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
+       (34, 'PP034', 'Phí bảo hiểm', 22000.00,  'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
+       (35, 'PP035', 'Phí giao hàng', 39000.00,  'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
+       (36, 'PP036', 'Phí dịch vụ', 23000.00, 'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
+       (37, 'PP037', 'Phí giao hàng', 56000.00, 'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
+       (38, 'PP038', 'Phí bảo hiểm', 24000.00,  'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
+       (39, 'PP039', 'Phí giao hàng', 42000.00,  'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
+       (40, 'PP040', 'Phí dịch vụ', 25000.00,  'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0);
 
-
-
-
-INSERT INTO phu_phi (ten_phu_phi, trang_thai, created_at, updated_at, deleted_at) VALUES
-('Phí vệ sinh', 'Hoạt động', '2023-06-01 10:00:00', '2023-06-01 10:00:00', 1),
-('Phí bảo trì', 'Đang bảo trì', '2023-06-02 11:00:00', '2023-06-02 11:00:00', 1),
-('Phí an ninh', 'Hoạt động', '2023-06-03 12:00:00', '2023-06-03 12:00:00', 1),
-('Phí quản lý', 'Đóng cửa', '2023-06-04 13:00:00', '2023-06-04 13:00:00',1),
-('Phí tiện ích', 'Hoạt động', '2023-06-05 14:00:00', '2023-06-05 14:00:00', 1);
-
-INSERT INTO phu_phi_hoa_don (id_hoa_don_chi_tiet, id_phu_phi,thoi_gian_tao, trang_thai, created_at, updated_at, deleted_at)
-VALUES
-  (1, 1,NOW(), 'active', NOW(), NOW(), 1),
-  (2, 2,NOW(), 'active', NOW(), NOW(), 1),
-  (3,3, NOW(), 'inactive', NOW(), NOW(), 1),
-  (4,4, NOW(), 'active', NOW(), NOW(), 0),
-  (5,5, NOW(), 'active', NOW(), NOW(), 0);
 
 INSERT INTO loai_tham_so (ten, trang_thai, created_at, updated_at, deleted_at)
 VALUES
@@ -2441,3 +2455,4 @@ VALUES
 ('TS008', 'Thời Gian Đặt Trước', '1', 'ngày', 'Thời gian tối thiểu để đặt sân trước ngày đá', 1, 0),
 ('TS009', 'Giá Thuê Bóng', '50000', 'VND', 'Giá thuê bóng trong 1 trận', 1, 0),
 ('TS010', 'Phí Huấn Luyện Viên', '300000', 'VND', 'Phí thuê huấn luyện viên theo giờ', 1, 0);
+

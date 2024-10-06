@@ -326,7 +326,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         // Nếu totalAvailableDays = 0, hiển thị thông báo và không thực hiện hành động tiếp theo
                         if (totalAvailableDays === 0) {
-                            alert('Không có ngày nào còn trống cho sân này.');
+                            showErrorToast('Không có ngày nào còn trống cho sân này.');
                             return; // Kết thúc sự kiện nếu không còn ngày trống
                         }
 
@@ -1055,4 +1055,17 @@ function convertDateFormat(dateString) {
 
     // Trả về định dạng mới yyyy-mm-dd
     return `${year}-${month}-${day}`;
+}
+
+function showErrorToast(message) {
+    Toastify({
+        text: message,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        style: {
+            background: "#FF0000", // Màu đỏ cho thông báo lỗi
+        },
+        stopOnFocus: true
+    }).showToast();
 }

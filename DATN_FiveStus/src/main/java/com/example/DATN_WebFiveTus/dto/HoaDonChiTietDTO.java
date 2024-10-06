@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.dto;
 
+import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
 import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -97,5 +98,7 @@ public class HoaDonChiTietDTO {
     private java.sql.Date ngayKetThucPhieuGianGia;
 
     private String trangThaiPhieuGianGia;
+
+    private Double giaSanCa;
 
 }
