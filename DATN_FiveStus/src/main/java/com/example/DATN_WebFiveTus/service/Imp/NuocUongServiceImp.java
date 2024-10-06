@@ -54,8 +54,8 @@ public class NuocUongServiceImp implements NuocUongService {
         NuocUong nuocUong= nuocUongRepository.findById(id).orElseThrow(() ->
                 new ResourceNotfound("Không tồn tại nuoc uong ID: " + id));
         nuocUong.setTenNuocUong(nuocUongDTO.getTenNuocUong());
-        nuocUong.setDonGia(nuocUongDTO.getDonGia());
-        nuocUong.setSoLuong(nuocUongDTO.getSoLuong());
+        nuocUong.setDonGias(nuocUongDTO.getDonGias());
+        nuocUong.setSoLuongs(nuocUongDTO.getSoLuongs());
         nuocUong.setTrangThai(nuocUongDTO.getTrangThai());
         NuocUong nuocUongUpdate=nuocUongRepository.save(nuocUong);
         return modelMapper.map(nuocUongUpdate, NuocUongDTO.class);
@@ -121,5 +121,18 @@ public class NuocUongServiceImp implements NuocUongService {
 
         // Trả về đối tượng PageImpl với tổng số bản ghi từ Page
         return new PageImpl<>(nuocUongDTOList, pageable, nuocUongPage.getTotalElements());
+    }
+
+    @Override
+    public List<NuocUongDTO> getAllJoinFetch2() {
+        List<NuocUong> nuocUongList = nuocUongRepository.getAllJoinFetch2();
+        return nuocUongList.stream()
+                .map(nuocUong -> modelMapper.map(nuocUong, NuocUongDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Boolean checkIdDichVuNuocUong(Integer id, Integer idHoaDonChiTiet) {
+        return nuocUongRepository.checkIdDichVuNuocUong(id, idHoaDonChiTiet).isPresent();
     }
 }

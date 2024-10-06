@@ -62,9 +62,10 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
             DoThue doThue = doThueRepository.findById(dichVuSanBongDTO.getIdDoThue())
                     .orElseThrow(() -> new ResourceNotfound("Không tồn tại id do thue: " + dichVuSanBongDTO.getIdDoThue()));
             dichVuSanBong.setDoThue(doThue);
+//            dichVuSanBong.setSoLuong(0);
         } else {
             dichVuSanBong.setDoThue(null); // Thiết lập là null nếu không có id
-            dichVuSanBong.setSoLuong(0);
+//            dichVuSanBong.setSoLuong(0);
         }
 
         // Xử lý NuocUong
@@ -74,14 +75,14 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
             dichVuSanBong.setNuocUong(nuocUong);
         } else {
             dichVuSanBong.setNuocUong(null); // Thiết lập là null nếu không có id
-            dichVuSanBong.setSoLuong(0);
+//            dichVuSanBong.setSoLuong(0);
         }
 
         // Xử lý HoaDonChiTiet
         HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(dichVuSanBongDTO.getIdHoaDonChiTiet())
                 .orElseThrow(() -> new ResourceNotfound("Không tồn tại id hdct: " + dichVuSanBongDTO.getIdHoaDonChiTiet()));
         dichVuSanBong.setHoaDonChiTiet(hoaDonChiTiet);
-
+        dichVuSanBong.setDeletedAt(false);
         // Lưu thực thể
         DichVuSanBong dichVuSanBongSave = dichVuSanBongRepository.save(dichVuSanBong);
         return modelMapper.map(dichVuSanBongSave, DichVuSanBongDTO.class);
@@ -90,16 +91,38 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
     @Override
     public DichVuSanBongDTO update(Integer id, DichVuSanBongDTO dichVuSanBongDTO) {
         DichVuSanBong dichVuSanBong = dichVuSanBongRepository.findById(id).orElseThrow(() -> new ResourceNotfound("Không tồn tại id DVSB: " + id));
-        DoThue doThue = doThueRepository.findById(dichVuSanBongDTO.getIdDoThue()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id do thue: " + dichVuSanBongDTO.getIdDoThue()));
-        NuocUong nuocUong = nuocUongRepository.findById(dichVuSanBongDTO.getIdNuocUong()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id nuoc uong: " + dichVuSanBongDTO.getIdNuocUong()));
+//        DoThue doThue = doThueRepository.findById(dichVuSanBongDTO.getIdDoThue()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id do thue: " + dichVuSanBongDTO.getIdDoThue()));
+//        NuocUong nuocUong = nuocUongRepository.findById(dichVuSanBongDTO.getIdNuocUong()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id nuoc uong: " + dichVuSanBongDTO.getIdNuocUong()));
         HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(dichVuSanBongDTO.getIdHoaDonChiTiet()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id hdct: " + dichVuSanBongDTO.getIdHoaDonChiTiet()));
 
-        dichVuSanBong.setDoThue(doThue);
-        dichVuSanBong.setNuocUong(nuocUong);
+        // Xử lý DoThue
+        if (dichVuSanBongDTO.getIdDoThue() != null) {
+            DoThue doThue = doThueRepository.findById(dichVuSanBongDTO.getIdDoThue())
+                    .orElseThrow(() -> new ResourceNotfound("Không tồn tại id do thue: " + dichVuSanBongDTO.getIdDoThue()));
+            dichVuSanBong.setDoThue(doThue);
+//            dichVuSanBong.setSoLuong(0);
+        } else {
+            dichVuSanBong.setDoThue(null); // Thiết lập là null nếu không có id
+//            dichVuSanBong.setSoLuong(0);
+        }
+
+        // Xử lý NuocUong
+        if (dichVuSanBongDTO.getIdNuocUong() != null) {
+            NuocUong nuocUong = nuocUongRepository.findById(dichVuSanBongDTO.getIdNuocUong())
+                    .orElseThrow(() -> new ResourceNotfound("Không tồn tại id nuoc uong: " + dichVuSanBongDTO.getIdNuocUong()));
+            dichVuSanBong.setNuocUong(nuocUong);
+        } else {
+            dichVuSanBong.setNuocUong(null); // Thiết lập là null nếu không có id
+//            dichVuSanBong.setSoLuong(0);
+        }
+
+//        dichVuSanBong.setDoThue(doThue);
+//        dichVuSanBong.setNuocUong(nuocUong);
         dichVuSanBong.setHoaDonChiTiet(hoaDonChiTiet);
         dichVuSanBong.setSoLuong(dichVuSanBongDTO.getSoLuong());
         dichVuSanBong.setTongTien(dichVuSanBongDTO.getTongTien());
         dichVuSanBong.setTrangThai(dichVuSanBongDTO.getTrangThai());
+        dichVuSanBong.setDeletedAt(dichVuSanBongDTO.isDeletedAt());
         DichVuSanBong dichVuSanBongUpdate = dichVuSanBongRepository.save(dichVuSanBong);
         return modelMapper.map(dichVuSanBongUpdate, DichVuSanBongDTO.class);
     }
@@ -114,5 +137,17 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
     @Override
     public void delete(Integer id) {
 
+    }
+
+    @Override
+    public List<DichVuSanBongDTO> searchDichVuSanBong(Integer idHoaDonChiTiet) {
+        return dichVuSanBongRepository.searchDichVuSanBong(idHoaDonChiTiet).stream()
+                .map((dichVuSanBong) -> modelMapper.map(dichVuSanBong, DichVuSanBongDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DichVuSanBongDTO> getAllJoinFetch() {
+        return dichVuSanBongRepository.getAllJoinFetch().stream()
+                .map((dichVuSanBong) -> modelMapper.map(dichVuSanBong, DichVuSanBongDTO.class)).collect(Collectors.toList());
     }
 }

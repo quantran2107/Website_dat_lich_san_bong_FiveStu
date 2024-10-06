@@ -68,9 +68,9 @@ public class ExcelUploadController {
 
             NuocUongDTO nuocUongDTO = new NuocUongDTO();
             nuocUongDTO.setTenNuocUong(row.getCell(0).getStringCellValue());
-            nuocUongDTO.setDonGia((float) row.getCell(1).getNumericCellValue());
-            nuocUongDTO.setSoLuong((int) row.getCell(1).getNumericCellValue());
-            if(nuocUongDTO.getSoLuong()==0){
+            nuocUongDTO.setDonGias((float) row.getCell(1).getNumericCellValue());
+            nuocUongDTO.setSoLuongs((int) row.getCell(1).getNumericCellValue());
+            if(nuocUongDTO.getSoLuongs()==0){
                 nuocUongDTO.setTrangThai("Hết");
             }else{
                 nuocUongDTO.setTrangThai("Còn");
@@ -94,9 +94,9 @@ public class ExcelUploadController {
 
             DoThueDTO doThueDTO = new DoThueDTO();
             doThueDTO.setTenDoThue(row.getCell(0).getStringCellValue());
-            doThueDTO.setDonGia((float) row.getCell(1).getNumericCellValue());
-            doThueDTO.setSoLuong((int) row.getCell(1).getNumericCellValue());
-            if(doThueDTO.getSoLuong()==0){
+            doThueDTO.setDonGias((float) row.getCell(1).getNumericCellValue());
+            doThueDTO.setSoLuongs((int) row.getCell(1).getNumericCellValue());
+            if(doThueDTO.getSoLuongs()==0){
                 doThueDTO.setTrangThai("Hết");
             }else{
                 doThueDTO.setTrangThai("Còn");

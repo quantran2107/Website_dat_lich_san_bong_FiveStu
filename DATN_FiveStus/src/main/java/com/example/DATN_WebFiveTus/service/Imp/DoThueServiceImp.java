@@ -54,8 +54,8 @@ public class DoThueServiceImp implements DoThueService {
         DoThue doThue= doThueRepository.findById(id).orElseThrow(() ->
                 new ResourceNotfound("Không tồn tại do thue ID: " + id));
         doThue.setTenDoThue(doThueDTO.getTenDoThue());
-        doThue.setDonGia(doThueDTO.getDonGia());
-        doThue.setSoLuong(doThueDTO.getSoLuong());
+        doThue.setDonGias(doThueDTO.getDonGias());
+        doThue.setSoLuongs(doThueDTO.getSoLuongs());
         doThue.setTrangThai(doThueDTO.getTrangThai());
         DoThue doThueUpdate=doThueRepository.save(doThue);
         return modelMapper.map(doThueUpdate,DoThueDTO.class);
@@ -125,8 +125,18 @@ public class DoThueServiceImp implements DoThueService {
         return new PageImpl<>(doThueDTOList, pageable, doThuePage.getTotalElements());
     }
 
+    @Override
+    public List<DoThueDTO> getAllJoinFetch2() {
+        List<DoThue> doThues = doThueRepository.getAllJoinFetch2();
+        return doThues.stream()
+                .map(dothue -> modelMapper.map(dothue, DoThueDTO.class))
+                .collect(Collectors.toList());
+    }
 
-
+    @Override
+    public Boolean checkIdDichVuDoThue(Integer id, Integer idHoaDonChiTiet) {
+        return doThueRepository.checkIdDichVuDoThue(id, idHoaDonChiTiet).isPresent();
+    }
 
 
 }
