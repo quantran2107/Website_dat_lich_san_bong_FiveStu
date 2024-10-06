@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:include="~{fragment/head :: head}"></head>
 <style>
+
+
     .form-group label {
         font-weight: bold;
     }
@@ -483,6 +485,112 @@
                                                            placeholder="Tiền trả lại"
                                                            readonly type="text">
                                                     <span class="input-group-text">VND</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--                                        Mở modal thanh toán-->
+                                        <div class="col-md-12">
+                                            <div class="form-group mb-3" style="display: flex;align-items: center">
+                                                <label>Khách hàng thanh toán</label>
+                                                <button type="button" class="btn-outline-warning" style="
+                                                                margin-left: 20px;
+                                                                display: flex;
+                                                                align-items: center;
+                                                                padding: 10px 15px;
+                                                                border: none;
+                                                                border-radius: 5px;
+                                                                cursor: pointer;
+                                                                font-size: 16px;
+                                                            " data-toggle="modal" data-target="#exampleModal">
+                                                    <i class="fas fa-credit-card" style="margin-right: 5px;"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!--                                        Modal thanh toán-->
+                                        <div class="modal fade" id="exampleModal" tabindex="-1"
+                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h3 class="modal-title" id="exampleModalLabel"
+                                                            style="text-align: center ;flex: 1">Thanh toán</h3>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Đóng">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <!--                                                        Nội dung của Modal-->
+                                                        <div style="align-items: center;justify-content: center;">
+                                                            <div style="display: flex;margin-bottom: 10px">
+                                                                <label style="flex:1"><h5>Tổng tiền hàng</h5></label>
+                                                                <p style="float: right"></p>
+                                                            </div>
+                                                            <div style="display: flex;justify-content: center; margin-bottom: 10px">
+                                                                <button type="button"
+                                                                        style="border: 2px solid #28a745; background-color: transparent; color: #28a745; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s, color 0.3s;"
+                                                                        onmouseover="this.style.backgroundColor='#28a745'; this.style.color='#fff';"
+                                                                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#28a745';"
+                                                                        onclick="maGDInput(true)">
+                                                                    Chuyển khoản<i style="margin-left: 5px"
+                                                                                   class="fas fa-university"></i>
+                                                                </button>
+                                                                <button type="button"
+                                                                        style="border: 2px solid #28a745; background-color: transparent; color: #28a745; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; margin-left: 5px; transition: background-color 0.3s, color 0.3s;"
+                                                                        onmouseover="this.style.backgroundColor='#28a745'; this.style.color='#fff';"
+                                                                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#28a745';"
+                                                                        onclick="maGDInput(false)">
+                                                                    Tiền mặt<i style="margin-left: 5px"
+                                                                               class="fas fa-money-bill-wave"></i>
+                                                                </button>
+                                                            </div>
+                                                            <div style="margin-bottom: 10px">
+                                                                <label for="customInput" style="font-weight: bold;">Tiền
+                                                                khách đưa:</label>
+                                                                <div style="display: flex">
+                                                                    <input type="text"
+                                                                           id="customInput"
+                                                                           class="form-control"
+                                                                           placeholder="Nhập tiền khách đưa"
+                                                                           style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none;  "
+                                                                           onfocus="this.style.borderBottom='2px solid #0056b3';"
+                                                                           onblur="this.style.borderBottom='2px solid #007bff';">
+                                                                    <input type="text"
+                                                                           id="maGD"
+                                                                           class="form-control"
+                                                                           placeholder="Mã giao dịch"
+                                                                           style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none; display: none"
+                                                                           onfocus="this.style.borderBottom='2px solid #0056b3';"
+                                                                           onblur="this.style.borderBottom='2px solid #007bff';">
+                                                                </div>
+                                                            </div>
+                                                            <div style="margin-bottom: 60px;">
+                                                                <table class="table table-hover">
+                                                                    <thead >
+
+                                                                        <th>STT</th>
+                                                                        <th>Mã giao dịch</th>
+                                                                        <th>Phương thức</th>
+                                                                        <th>Số tiền</th>
+                                                                        <th>Hành động</th>
+
+                                                                    </thead>
+                                                                    <tbody id="tbodyModalThanhToan"></tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div style="display: flex">
+                                                                <label style="flex:1"><h5>Tiền còn thiếu</h5></label>
+                                                                <p style="float: right"></p>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-success"
+                                                                data-dismiss="modal">Xác nhận
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1447,19 +1555,40 @@
 
 
         <div class="row">
-        <div class="col-md-4">
-        <div class="form-group mb-3">
-        <label for="tienKhachDua${invoiceId}">Tiền khách đưa</label>
-        </div>
-        </div>
-        <div class="col-md-8">
-        <div class="form-group mb-3">
-        <div class="input-group mb-3">
-        <input type="text" class="form-control" id="tienKhachDua${invoiceId}" placeholder="Nhập số tiền khách đưa">
-        <span class="input-group-text">VND</span>
-        </div>
-        </div>
-        </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="tienKhachDua${invoiceId}">Tiền khách đưa</label>
+                </div>
+            </div>
+             <div class="col-md-8">
+                <div class="form-group mb-3">
+                    <div class="input-group mb-3">
+
+                    <!--     nút mở modal-->
+
+                         <div class="form-group mb-3" style="display: flex;align-items: center">
+
+                              <button type="button" class="btn-outline-warning" style="
+                                                                            display: flex;
+                                                                            align-items: center;
+                                                                            padding: 10px 15px;
+                                                                            border: none;
+                                                                            border-radius: 5px;
+                                                                            cursor: pointer;
+                                                                            font-size: 16px;
+                                                                        " data-toggle="modal" data-target="#exampleModal${invoiceId}">
+                                   <i class="fas fa-credit-card" style="margin-right: 5px;"></i>
+                              </button>
+                         </div>
+
+                    </div>
+<!--                    ket thuc nut modal-->
+                    <div class="input-group mb-3" hidden>
+                            <input type="text" class="form-control" id="tienKhachDua${invoiceId}" placeholder="Nhập số tiền khách đưa">
+                            <span class="input-group-text">VND</span>
+                    </div>
+                </div>
+             </div>
         </div>
 
         <div class="row">
@@ -1478,6 +1607,104 @@
         </div>
         </div>
 
+
+<!--         Modal-->
+         <div class="modal fade" id="exampleModal${invoiceId}" tabindex="-1"
+                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h3 class="modal-title" id="exampleModalLabel"
+                                                            style="text-align: center ;flex: 1">Thanh toán</h3>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Đóng">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <!--                                                        Nội dung của Modal-->
+                                                        <div style="align-items: center;justify-content: center;">
+                                                            <div style="display: flex;margin-bottom: 10px">
+                                                                <label style="flex:1"><h5>Tổng tiền hàng</h5></label>
+                                                                <h5 id="tongTienHang${invoiceId}"  style="float: right"></h5>
+                                                                <h5>₫</h5>
+                                                            </div>
+                                                            <div style="display: flex;justify-content: center; margin-bottom: 10px">
+                                                                <button type="button"
+                                                                        style="border: 2px solid #28a745; background-color: transparent; color: #28a745; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s, color 0.3s;"
+                                                                        onmouseover="this.style.backgroundColor='#28a745'; this.style.color='#fff';"
+                                                                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#28a745';"
+                                                                        onclick="maGDInput(true,${invoiceId})">
+                                                                    Chuyển khoản<i style="margin-left: 5px"
+                                                                                   class="fas fa-university"></i>
+                                                                </button>
+                                                                <button type="button"
+                                                                        style="border: 2px solid #28a745; background-color: transparent; color: #28a745; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; margin-left: 5px; transition: background-color 0.3s, color 0.3s;"
+                                                                        onmouseover="this.style.backgroundColor='#28a745'; this.style.color='#fff';"
+                                                                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#28a745';"
+                                                                        onclick="maGDInput(false,${invoiceId})">
+                                                                    Tiền mặt<i style="margin-left: 5px"
+                                                                               class="fas fa-money-bill-wave"></i>
+                                                                </button>
+                                                            </div>
+                                                            <div style="margin-bottom: 10px">
+                                                                <label for="khachDua${invoiceId}" style="font-weight: bold;">Tiền
+                                                                khách đưa:</label>
+                                                                <div style="display: flex">
+                                                                    <input type="number"
+                                                                           id="khachDua${invoiceId}"
+                                                                           class="form-control"
+                                                                           placeholder="Nhập tiền khách đưa"
+                                                                           style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none;  "
+                                                                           oninput="calculator(${invoiceId})"
+                                                                           onfocus="this.style.borderBottom='2px solid #0056b3';"
+                                                                           onblur="this.style.borderBottom='2px solid #007bff';">
+                                                                    <input type="text"
+                                                                           id="maGD${invoiceId}"
+                                                                           class="form-control"
+                                                                           placeholder="Mã giao dịch"
+                                                                           style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none; display: none"
+                                                                           onfocus="this.style.borderBottom='2px solid #0056b3';"
+                                                                           onblur="this.style.borderBottom='2px solid #007bff';">
+                                                                </div>
+                                                            </div>
+                                                            <div style="margin-bottom: 60px;">
+                                                                <table class="table table-hover">
+                                                                    <thead >
+
+                                                                        <th>STT</th>
+                                                                        <th>Mã giao dịch</th>
+                                                                        <th>Phương thức</th>
+                                                                        <th>Số tiền</th>
+                                                                        <th>Hành động</th>
+
+                                                                    </thead>
+                                                                    <tbody id="tbody${invoiceId}">
+                                                                        <tr>
+                                                                        <td style=" text-align: center" colspan="5">Chưa có thông tin</td>
+                                                                        </tr>
+                                                                     </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div style="display: flex">
+                                                                <label style="flex:1"><h5>Tiền còn thiếu</h5></label>
+
+                                                                <h5 id="tienConThieu${invoiceId}" style="float: right"></h5>
+                                                                                                                               <h5>₫</h5>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-success"
+                                                                onclick="thanhToan(${invoiceId},this)">Xác nhận
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
         <hr>
 
         <div class="row">
@@ -1495,21 +1722,72 @@
         tabCount++;
 
         // Gọi API để lấy dữ liệu và điền vào form
-            fetch(`http://localhost:8080/hoa-don-chi-tiet/${invoiceId}`)
-                .then(response => response.json())
-                .then(data => {
-                    // Điền dữ liệu vào các trường trong form
-                    document.getElementById(`id${invoiceId}`).value = data.id;
-                    document.getElementById(`idHoaDon${invoiceId}`).value = data.idHoaDon;
-                    document.getElementById(`maHoaDon${invoiceId}`).value = data.maHoaDon;
-                    document.getElementById(`maHoaDonChiTiet${invoiceId}`).value = data.maHoaDonChiTiet;
-                    document.getElementById(`hoVaTenKhachHang${invoiceId}`).value = data.hoVaTenKhachHang;
-                    document.getElementById(`soDienThoaiKhachHang${invoiceId}`).value = data.soDienThoaiKhachHang;
-                    document.getElementById(`trangThai${invoiceId}`).value = data.trangThai;
-                    document.getElementById(`tenSanBong${invoiceId}`).value = data.tenSanBong;
-                    document.getElementById(`thoiGianBatDauCa${invoiceId}`).value = new Date(data.thoiGianBatDauCa).toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit'
+        fetch(`http://localhost:8080/hoa-don-chi-tiet/${invoiceId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Điền dữ liệu vào các trường trong form
+                document.getElementById(`id${invoiceId}`).value = data.id;
+                document.getElementById(`idHoaDon${invoiceId}`).value = data.idHoaDon;
+                document.getElementById(`maHoaDon${invoiceId}`).value = data.maHoaDon;
+                document.getElementById(`maHoaDonChiTiet${invoiceId}`).value = data.maHoaDonChiTiet;
+                document.getElementById(`hoVaTenKhachHang${invoiceId}`).value = data.hoVaTenKhachHang;
+                document.getElementById(`soDienThoaiKhachHang${invoiceId}`).value = data.soDienThoaiKhachHang;
+                document.getElementById(`trangThai${invoiceId}`).value = data.trangThai;
+                document.getElementById(`tenSanBong${invoiceId}`).value = data.tenSanBong;
+                document.getElementById(`thoiGianBatDauCa${invoiceId}`).value = new Date(data.thoiGianBatDauCa).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                document.getElementById(`thoiGianKetThucCa${invoiceId}`).value = new Date(data.thoiGianKetThucCa).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                document.getElementById(`ngayTaoHoaDon${invoiceId}`).value = data.ngayTaoHoaDon;
+                document.getElementById(`ngayDenSan${invoiceId}`).value = data.ngayDenSan;
+                document.getElementById(`tienSan${invoiceId}`).value = data.giaSanCa;
+                document.getElementById(`tienCoc${invoiceId}`).value = (data.giaSanCa * 0.5);
+
+                // document.getElementById(`ghiChu${invoiceId}`).value = data.ghiChu;
+
+                // Gọi API để tìm các dịch vụ sân bóng dựa trên id_hoa_don_chi_tiet
+                fetch(`http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${data.id}`)
+                    .then(response => response.json())
+                    .then(services => {
+                        // Tính tổng tiền từ các dịch vụ
+                        const totalCost = services.reduce((sum, service) => sum + service.tongTien, 0);
+                        // Hiển thị tổng tiền DVSB lên ô input
+                        document.getElementById(`giaDichVu${invoiceId}`).value = totalCost;
+                        const totalInvoice = (data.giaSanCa - (data.giaSanCa * 0.5)) + totalCost; // Chỉnh sửa ở đây
+                        // Hiển thị tổng tiền HDCT lên ô input
+                        document.getElementById(`tongTien${invoiceId}`).value = totalInvoice;
+                        // Gọi API để tìm phiếu giảm giá dựa trên tổng tiền
+                        fetch(`http://localhost:8080/api-phieu-giam-gia/fill-PGG?tongTien=${totalInvoice}`)
+                            .then(response => response.json())
+                            .then(discountVouchers => {
+                                // Làm sạch dropdown trước khi thêm các phiếu giảm giá mới
+                                const discountSelect = document.getElementById("discountSelect");
+                                discountSelect.innerHTML = ""; // Xóa các lựa chọn hiện tại
+
+                                // Thêm các phiếu giảm giá vào dropdown
+                                discountVouchers.forEach(voucher => {
+                                    const option = document.createElement("option");
+                                    option.value = voucher.maPhieuGiamGia; // Giá trị mà bạn muốn lưu
+                                    option.textContent = `Mã: ${voucher.maPhieuGiamGia} - Giảm: ${voucher.mucGiam} ${voucher.hinhThucGiamGia ? 'VND' : '%'}`; // Hiển thị trong dropdown
+                                    option.dataset.voucher = JSON.stringify(voucher); // Gán dữ liệu voucher
+                                    discountSelect.appendChild(option);
+                                });
+
+                                // Cập nhật số tiền giảm ngay sau khi nhận được phiếu giảm giá
+                                updateDiscountInput(invoiceId);
+
+                            })
+                            .catch(error => {
+                                console.error('Error fetching discount vouchers:', error);
+                            });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching services:', error);
+
                     });
                     document.getElementById(`thoiGianKetThucCa${invoiceId}`).value = new Date(data.thoiGianKetThucCa).toLocaleTimeString([], {
                         hour: '2-digit',
@@ -1836,6 +2114,8 @@
                     // Tính tổng tiền sau khi áp dụng giảm giá
                     const totalAfterDiscount = totalInvoice - tienGiam; // Tính tổng tiền sau khi giảm
                     document.getElementById(`tongTienPhaiTra${invoiceId}`).value = totalAfterDiscount; // Hiển thị tổng tiền cuối cùng
+                    document.getElementById(`tongTienHang${invoiceId}`).textContent =totalAfterDiscount;// Hiển thị tổng tiền trong Modal
+                     document.getElementById(`tienConThieu${invoiceId}`).textContent = totalAfterDiscount ;// Hiển hị tiền còn thiếu trong
                 } else {
                     console.error(`Phần tử với ID "tongTien${invoiceId}" không tồn tại.`);
                 }
@@ -1889,121 +2169,179 @@
 
     }
 
-        function thanhToan(invoiceId) {
-            const totalToPayElement = document.getElementById(`tongTienPhaiTra${invoiceId}`);
-            const changeElement = document.getElementById(`tienTraLai${invoiceId}`);
+    function thanhToan(invoiceId,buttonElement) {
+        // const totalToPayElement = document.getElementById(`tongTienPhaiTra${invoiceId}`);
+        // const changeElement = document.getElementById(`tienTraLai${invoiceId}`);
 
-            const totalToPay = parseFloat(totalToPayElement.value) || 0;
-            const change = parseFloat(changeElement.value);
+        // const totalToPay = parseFloat(totalToPayElement.value) || 0;
+        // const change = parseFloat(changeElement.value);
 
-            if (isNaN(change) || change < 0) {
-                showErrorToast("Số tiền trả lại không hợp lệ.");
-                return;
-            }
+        // if (isNaN(change) || change < 0) {
+        //     showErrorToast("Số tiền trả lại không hợp lệ.");
+        //     return;
+        // }
+        //
+        // if (totalToPay <= 0) {
+        //     showErrorToast("Tổng tiền phải trả không hợp lệ.");
+        //     return;
+        // }
 
-            if (totalToPay <= 0) {
-                showErrorToast("Tổng tiền phải trả không hợp lệ.");
-                return;
-            }
+        let  tongTien = parseFloat(document.getElementById(`tongTienHang${invoiceId}`).textContent);
 
-            Swal.fire({
-                title: 'Xác nhận thanh toán',
-                text: "Bạn có chắc chắn thanh toán không?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Có',
-                cancelButtonText: 'Không'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const api1 = fetch(`http://localhost:8080/hoa-don-chi-tiet/thanhtoan/${invoiceId}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
+        let httt;
+        let inputElement = document.getElementById(`maGD${invoiceId}`);
+        let khachDua = document.getElementById(`khachDua${invoiceId}`).value;
+        // kiem tra la chuyen khoan hay la tien mat
+        let isVisible = inputElement.offsetWidth > 0 && inputElement.offsetHeight > 0;
 
-                    const api2 = fetch(`http://localhost:8080/hoa-don/update-thanh-toan/${invoiceId}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    Promise.all([api1, api2])
-                        .then(responses => {
-                            responses.forEach(response => {
-                                console.log(`Response from ${response.url}: ${response.status}`);
-                            });
-
-                            // Kiểm tra xem tất cả phản hồi có thành công không
-                            // Tất cả các yêu cầu đều thành công, hiển thị thông báo thành công bằng SweetAlert
-                            Swal.fire({
-                                title: 'Thành công!',
-                                text: 'Thanh toán thành công!',
-                                icon: 'success',
-                                confirmButtonText: 'OK'
-                            }).then(() => {
-                                // Reload lại trang sau khi nhấn OK
-                                window.location.reload();
-                            });
-
-                        })
-                        .catch(err => {
-                            console.error('Có lỗi xảy ra:', err);
-                            // Xử lý lỗi chung (nếu cần)
-                            Swal.fire({
-                                title: 'Lỗi!',
-                                text: 'Đã xảy ra lỗi trong quá trình thanh toán.',
-                                icon: 'error',
-                                confirmButtonText: 'OK'
-                            });
-                        });
-                }
-            });
-        }
-
-
-        function removeTab2(event, tabId) {
-            event.stopPropagation(); // Ngăn sự kiện bấm vào tab
-
-            // Xóa tab khỏi danh sách tab
-            const tabElement = document.getElementById(tabId);
-            if (tabElement) {
-                tabElement.parentElement.remove();
-            }
-
-            // Xóa nội dung tương ứng của tab
-            const contentId = tabId.replace('tab-', 'content-');
-            const contentElement = document.getElementById(contentId);
-            if (contentElement) {
-                contentElement.remove();
-            }
-
-            // Nếu tab bị xóa đang được hiển thị thì kích hoạt tab trước đó
-            if (tabElement.classList.contains('active')) {
-                const tabListRight = document.getElementById('tabListRight');
-                const firstTab = tabListRight.querySelector('.nav-link');
-                if (firstTab) {
-                    const firstTabInstance = new bootstrap.Tab(firstTab);
-                    firstTabInstance.show();
-                }
-            }
-        }
-
-        $(document).ready(function () {
-            $('#addInvoiceButton').on('click', function () {
-                $.ajax({
-                    url: 'http://localhost:8080/chon-san',
-                    method: 'GET',
-                    success: function (response) {
-                        $('#content-ban-hang').html(response);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("An error occurred: " + xhr.responseText);
+        httt= isVisible ? true:false;
+         Swal.fire({
+            title: 'Xác nhận thanh toán',
+            text: "Bạn có chắc chắn thanh toán không?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const api1 = fetch(`http://localhost:8080/hoa-don-chi-tiet/thanhtoan/${invoiceId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
                 });
+
+                const api2 = fetch(`http://localhost:8080/hoa-don/update-thanh-toan/${invoiceId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                Promise.all([api1, api2])
+                    .then(responses => {
+                        responses.forEach(response => {
+                            console.log(`Response from ${response.url}: ${response.status}`);
+                        });
+
+
+                        Swal.fire({
+                            title: 'Thành công!',
+                            text: 'Thanh toán thành công!',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            // Reload lại trang sau khi nhấn OK
+                            // window.location.reload();
+                            let tbody = document.getElementById(`tbody${invoiceId}`)
+                            tbody.innerHTML= ''
+
+                            let newRowHTML = `
+                                    <tr>
+                                         <td>1</td>
+                                         <td></td>
+                                         <td>${httt ? "Chuyển khoản":"Tiền mặt"}</td>
+                                         <td>${khachDua>tongTien? tongTien:khachDua}</td>
+                                         <td></td>
+                                        </tr>
+                                    `;
+
+                            // Cập nhật nội dung tbody
+                            tbody.innerHTML += newRowHTML;
+                            document.getElementById(`khachDua${invoiceId}`).disabled=true;
+                            buttonElement.disabled = true;
+                            resetFilters();
+                        });
+
+                    })
+                    .catch(err => {
+                        console.error('Có lỗi xảy ra:', err);
+                        // Xử lý lỗi chung (nếu cần)
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Đã xảy ra lỗi trong quá trình thanh toán.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+            }
+        });
+    }
+
+
+    function removeTab2(event, tabId) {
+        event.stopPropagation(); // Ngăn sự kiện bấm vào tab
+
+        // Xóa tab khỏi danh sách tab
+        const tabElement = document.getElementById(tabId);
+        if (tabElement) {
+            tabElement.parentElement.remove();
+        }
+
+        // Xóa nội dung tương ứng của tab
+        const contentId = tabId.replace('tab-', 'content-');
+        const contentElement = document.getElementById(contentId);
+        if (contentElement) {
+            contentElement.remove();
+        }
+
+        // Nếu tab bị xóa đang được hiển thị thì kích hoạt tab trước đó
+        if (tabElement.classList.contains('active')) {
+            const tabListRight = document.getElementById('tabListRight');
+            const firstTab = tabListRight.querySelector('.nav-link');
+            if (firstTab) {
+                const firstTabInstance = new bootstrap.Tab(firstTab);
+                firstTabInstance.show();
+            }
+        }
+    }
+
+    $(document).ready(function () {
+        $('#addInvoiceButton').on('click', function () {
+            $.ajax({
+                url: 'http://localhost:8080/chon-san',
+                method: 'GET',
+                success: function (response) {
+                    $('#content-ban-hang').html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error("An error occurred: " + xhr.responseText);
+                }
             });
         });
+
+    });
+
+    // func hiển thị mã giao dịch khi click chuyển tiền hoặc tiền mặt
+    function maGDInput(check,id) {
+        const myDiv = document.getElementById(`maGD`+id);
+
+        if (check === true) {
+            myDiv.style.display = "block";
+        } else {
+            myDiv.style.display = "none";
+        }
+    }
+
+    // func tính toán input
+    function calculator(id) {
+
+        let  tongTien = parseFloat(document.getElementById(`tongTienHang${id}`).textContent);
+        let khachDua =parseFloat(document.getElementById(`khachDua${id}`).value);
+        let displayText = document.getElementById(`tienConThieu${id}`);
+        document.getElementById(`tienTraLai${id}`).value = 0;
+        if (khachDua <=0){
+            displayText.textContent = tongTien;
+        }else if(khachDua>tongTien) {
+            document.getElementById(`khachDua${id}`).value =khachDua
+            document.getElementById(`tienTraLai${id}`).value = khachDua - tongTien;
+            displayText.textContent = 0;
+        } else {
+            displayText.textContent =tongTien-khachDua
+        }
+    }
+
+
 </script>
 </body>
 </html>
