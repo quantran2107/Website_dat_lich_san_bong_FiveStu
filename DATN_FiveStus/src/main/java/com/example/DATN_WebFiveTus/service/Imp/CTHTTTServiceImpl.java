@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
+import com.example.DATN_WebFiveTus.dto.ChiTietHinhThucThanhToanDTO;
 import com.example.DATN_WebFiveTus.dto.HTTTDto;
 import com.example.DATN_WebFiveTus.entity.ChiTietHinhThucThanhToan;
 import com.example.DATN_WebFiveTus.entity.HinhThucThanhToan;
@@ -9,6 +10,7 @@ import com.example.DATN_WebFiveTus.repository.HinhThucThanhToanRepository;
 import com.example.DATN_WebFiveTus.repository.HoaDonChiTietRepository;
 import com.example.DATN_WebFiveTus.service.CTHTTTService;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,8 @@ public class CTHTTTServiceImpl implements CTHTTTService {
 
     @Autowired
     private HinhThucThanhToanRepository hinhThucThanhToanRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public List<HTTTDto> getHtttById(int id) {
@@ -52,6 +56,12 @@ public class CTHTTTServiceImpl implements CTHTTTService {
         return false;
     }
 
-
+    @Override
+    public List<ChiTietHinhThucThanhToanDTO> findByHoaDonChiTietId(int hoaDonChiTietId) {
+        List<ChiTietHinhThucThanhToan> chiTietHinhThucThanhToanList = chiTietHinhThucThanhToanRepository.findByHoaDonChiTiet_Id(hoaDonChiTietId);
+        return chiTietHinhThucThanhToanList.stream()
+                .map(chiTietHinhThucThanhToan -> modelMapper.map(chiTietHinhThucThanhToan, ChiTietHinhThucThanhToanDTO.class))
+                .collect(Collectors.toList());
+    }
 
 }
