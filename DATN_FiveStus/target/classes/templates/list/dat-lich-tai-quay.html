@@ -533,6 +533,49 @@
                                     </div>
                                 </form>
 
+                                <!-- Modal để thêm phụ phí -->
+                                <div id="phuPhiModal" class="modal fade" tabindex="-1" aria-labelledby="phuPhiModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-success text-white">
+                                                <h5 class="modal-title" id="phuPhiModalLabel">Thêm Phụ Phí</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="phuPhiForm">
+                                                    <div class="form-group mb-3">
+                                                        <label for="tenPhuPhi">Tên Phụ Phí</label>
+                                                        <input type="text" id="tenPhuPhi" class="form-control" placeholder="Tên Phụ Phí" required>
+                                                    </div>
+                                                    <div class="form-group mb-3">
+                                                        <label for="giaPhuPhi">Giá Phụ Phí</label>
+                                                        <div class="input-group">
+                                                            <input type="number" id="giaPhuPhi" class="form-control" placeholder="0" required>
+                                                            <span class="input-group-text">VND</span>
+                                                        </div>
+                                                    </div>
+                                                    <button type="button" class="btn btn-success" id="btnThemPhuPhi">Thêm Phụ Phí</button>
+                                                </form>
+                                                <table class="table mt-3">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Tên Phụ Phí</th>
+                                                        <th>Giá Phụ Phí</th>
+                                                        <th>Chọn</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="phuPhiList">
+                                                    <tr>
+                                                        <!--                                Hiển thị phụ phí hóa đơn-->
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                             </div>
                         </div>
@@ -1915,15 +1958,7 @@
         const row = event.currentTarget; // Lấy dòng hiện tại được chọn
         const invoiceId = row.getAttribute('data-id'); // Lấy id hóa đơn chi tiết từ thuộc tính data-id
         selectedInvoiceId = row.getAttribute('data-id');
-        if (!selectedInvoiceId) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Chưa chọn hóa đơn',
-                text: 'Vui lòng chọn hóa đơn trước khi xem danh sách dịch vụ.',
-            });
-            return;
-        }
-        fillDichVuChoHoaDon(selectedInvoiceId)
+        fillDichVuChoHoaDon(selectedInvoiceId);
         const tabName =
             `HD ${invoiceId}`
         ;
@@ -1954,8 +1989,6 @@
         const newTab = document.createElement('li');
         newTab.classList.add('nav-item');
         newTab.innerHTML =
-
-
             `
             <a class="nav-link" id="tab-${invoiceId}" data-bs-toggle="tab" href="#content-${invoiceId}" role="tab">
                 ${tabName}
@@ -1972,82 +2005,352 @@
         newTabContent.setAttribute('id', `content-${invoiceId}`);
         newTabContent.setAttribute('role', 'tabpanel');
         newTabContent.innerHTML = `
-            <form>
-            <div class="row">
-            <div class="col-md-6">
-            <div class="form-group mb-3">
-            <label for="id${invoiceId}">ID</label>
-            <input type="text" id="id${invoiceId}" class="form-control" readonly>
-            </div>
-            <div class="form-group mb-3">
-            <label for="idHoaDon${invoiceId}">ID Hóa đơn</label>
-            <input type="text" id="idHoaDon${invoiceId}" class="form-control" readonly>
-            </div>
-            <div class="form-group mb-3">
-            <label for="maHoaDon${invoiceId}">Mã Hóa đơn</label>
-            <input type="text" id="maHoaDon${invoiceId}" class="form-control" readonly>
-            </div>
-            <div class="form-group mb-3">
-            <label for="ngayTaoHoaDon${invoiceId}">Ngày tạo Hóa đơn</label>
-            <input type="text" id="ngayTaoHoaDon${invoiceId}" class="form-control" readonly>
-            </div>
-            <div class="form-group mb-3">
-            <label for="ngayDenSan${invoiceId}">Ngày đến sân</label>
-            <input type="text" id="ngayDenSan${invoiceId}" class="form-control" readonly>
-            </div>
-            <div class="form-group mb-3">
-            <label for="tienSan${invoiceId}">Tiền sân</label>
-            <input type="text" id="tienSan${invoiceId}" class="form-control" readonly>
-            </div>
-            </div>
+            <!-- Nội dung hóa đơn -->
+        <form>
+        <div class="row">
+        <div class="col-md-6" hidden >
+        <div class="form-group mb-3" >
+        <label for="id${invoiceId}">ID</label>
+        <input type="text" id="id${invoiceId}" class="form-control" readonly >
+        </div>
+        <div class="form-group mb-3" hidden>
+        <label for="idHoaDon${invoiceId}">ID Hóa đơn</label>
+        <input type="text" id="idHoaDon${invoiceId}" class="form-control" readonly>
+        </div>
+        </div>
+        <div class="col-md-6" hidden>
+        <div class="form-group mb-3">
+        <label for="maHoaDon${invoiceId}">Mã hóa đơn</label>
+        <input type="text" id="maHoaDon${invoiceId}" class="form-control" readonly>
+        </div>
+        </div>
+        <div class="col-md-6" hidden>
+        <div class="form-group mb-3">
+        <label for="maHoaDonChiTiet${invoiceId}">Mã hóa đơn chi tiết</label>
+        <input type="text" id="maHoaDonChiTiet${invoiceId}" class="form-control" readonly>
+        </div>
+        </div>
+        </div>
+            <!-- Tên Khách Hàng -->
+        <div class="row">
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="hoVaTenKhachHang${invoiceId}">Tên khách hàng</label>
+        <input type="text" id="hoVaTenKhachHang${invoiceId}" class="form-control" readonly>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="soDienThoaiKhachHang${invoiceId}">Số Điện Thoại</label>
+        <input class="form-control" id="soDienThoaiKhachHang${invoiceId}" type="text" readonly placeholder="Chưa có dữ liệu">
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6" hidden>
+        <div class="form-group mb-3">
+        <label for="trangThai${invoiceId}">Trạng thái</label>
+        <input class="form-control" id="trangThai${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        <div class="col-md-12">
+        <div class="form-group mb-3">
+        <label for="tenSanBong${invoiceId}">Tên sân</label>
+        <input class="form-control" id="tenSanBong${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="thoiGianBatDauCa${invoiceId}">Thời gian bắt đầu</label>
+        <input class="form-control" id="thoiGianBatDauCa${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="thoiGianKetThucCa${invoiceId}">Thời gian kết thúc</label>
+        <input class="form-control" id="thoiGianKetThucCa${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="ngayTaoHoaDon${invoiceId}">Ngày tạo hóa đơn</label>
+<input class="form-control" id="ngayTaoHoaDon${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="ngayDenSan${invoiceId}">Ngày check-in</label>
+        <input class="form-control" id="ngayDenSan${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="tienSan${invoiceId}">Giá sân</label>
+        <input class="form-control" id="tienSan${invoiceId}" type="text" readonly >
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="tienCoc${invoiceId}">Tiền cọc Sân</label>
+        <input class="form-control" id="tienCoc${invoiceId}" type="text" readonly >
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="giaDichVu${invoiceId}">Giá dịch Vụ</label>
+        <input class="form-control" id="giaDichVu${invoiceId}" type="text" readonly >
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="tienPhuPhi${invoiceId}">Tiền phụ Phí</label>
+        <input class="form-control" id="tienPhuPhi${invoiceId}" type="text" readonly >
+        </div>
+        </div>
+        </div>
+        <div class="row">
+   <div class="col-md-12">
+    <div class="form-group mb-3">
+        <label for="phuPhiSelect${invoiceId}">Phụ phí hóa đơn</label>
+        <div class="input-group mb-3">
+            <!-- Dropdown danh sách phụ phí -->
+            <select id="phuPhiSelect${invoiceId}" class="form-control">
+                <option value="">Chưa có phụ phí hóa đơn !!!</option>
+            </select>
+            <button class="btn btn-outline-success" type="button" id="btnAddPhuPhi${invoiceId}">+</button>
+        </div>
+    </div>
+</div>
+</div>
+        <div class="row">
+        <div class="col-md-12">
+        <div class="form-group mb-3">
+        <label for="tongTien${invoiceId}">Tổng tiền</label>
+        <input class="form-control" id="tongTien${invoiceId}" type="text" readonly>
+        </div>
+        </div></div>
+        <hr>
+        <div class="row">
+        <div class="col-md-12">
+        <h4 class="text-success">Thanh Toán</h4>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-4">
+        <div class="form-group mb-3">
+        <label for="phieuGiamGia">Phiếu Giảm Giá</label>
+        </div>
+        </div>
+        <div class="col-md-8">
+        <div class="form-group mb-3">
+        <select id="discountSelect" class="form-control" >
+        <option value="">Chọn phiếu giảm giá</option>
+            <!-- Các tùy chọn sẽ được thêm vào đây -->
+        </select>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-4">
+<div class="form-group mb-3">
+        <label for="tienGiam">Số tiền giảm</label>
+        </div>
+        </div>
+        <div class="col-md-8">
+        <div class="form-group mb-3">
+        <div class="input-group mb-3">
+        <input class="form-control" id="tienGiam" type="text" placeholder="Số tiền giảm" readonly>
+        <span class="input-group-text">VND</span>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-4">
+        <div class="form-group mb-3">
+        <label for="tongTienPhaiTra${invoiceId}">Tổng tiền phải trả:</label>
+        </div>
+        </div>
+        <div class="col-md-8">
+        <div class="form-group mb-3">
+        <div class="input-group mb-3">
+        <input type="text" class="form-control" id="tongTienPhaiTra${invoiceId}" readonly>
+        <span class="input-group-text">VND</span>
+        </div>
+        </div>
+        </div>
+        </div>
 
-            <div class="col-md-6">
-            <div class="form-group mb-3">
-            <label for="ghiChu${invoiceId}">Ghi chú</label>
-            <input type="text" id="ghiChu${invoiceId}" class="form-control" readonly>
-            </div>
-            <div class="form-group mb-3">
-            <label for="trangThai${invoiceId}">Trạng thái</label>
-            <input type="text" id="trangThai${invoiceId}" class="form-control" readonly>
-            </div>
-            <div class="form-group mb-3">
-            <label for="tenSanBong${invoiceId}">Tên Sân bóng</label>
-            <input type="text" id="tenSanBong${invoiceId}" class="form-control" readonly>
-            </div>
-            <div class="form-group mb-3">
-            <label for="tenCa${invoiceId}">Tên Ca</label>
-            <input type="text" id="tenCa${invoiceId}" class="form-control" readonly>
-            </div>
-            <div class="form-group mb-3">
-            <label for="thoiGianBatDauCa${invoiceId}">Thời gian bắt đầu Ca</label>
-            <input type="text" id="thoiGianBatDauCa${invoiceId}" class="form-control" readonly>
-            </div>
-            <div class="form-group mb-3">
-            <label for="thoiGianKetThucCa${invoiceId}">Thời gian kết thúc Ca</label>
-            <input type="text" id="thoiGianKetThucCa${invoiceId}" class="form-control" readonly>
-            </div>
-            </div>
-            </div>
 
-            <div class="row">
-            <div class="col-md-6">
-            <div class="form-group mb-3">
-            <label for="hoVaTenKhachHang${invoiceId}">Họ và tên Khách hàng</label>
-            <input type="text" id="hoVaTenKhachHang${invoiceId}" class="form-control" readonly>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="tienKhachDua${invoiceId}">Tiền khách đưa</label>
+                </div>
             </div>
-            <div class="form-group mb-3">
-            <label for="soDienThoaiKhachHang${invoiceId}">Số điện thoại Khách hàng</label>
-            <input type="text" id="soDienThoaiKhachHang${invoiceId}" class="form-control" readonly>
-            </div>
-            <div class="form-group mb-3">
-            <label for="emailKhachHang${invoiceId}">Email Khách hàng</label>
-            <input type="email" id="emailKhachHang${invoiceId}" class="form-control" readonly>
-            </div>
-            </div>
-            </div>
-            </form>
-            `;
+             <div class="col-md-8">
+                <div class="form-group mb-3">
+                    <div class="input-group mb-3">
+
+                    <!--     nút mở modal-->
+
+                         <div class="form-group mb-3" style="display: flex;align-items: center">
+
+                              <button type="button" class="btn-outline-warning" style="
+                                                                            display: flex;
+                                                                            align-items: center;
+                                                                            padding: 10px 15px;
+                                                                            border: none;
+                                                                            border-radius: 5px;
+                                                                            cursor: pointer;
+                                                                            font-size: 16px;
+                                                                        " data-toggle="modal" data-target="#exampleModal${invoiceId}">
+                                   <i class="fas fa-credit-card" style="margin-right: 5px;"></i>
+                              </button>
+                         </div>
+
+                    </div>
+<!--                    ket thuc nut modal-->
+                    <div class="input-group mb-3" hidden>
+                            <input type="text" class="form-control" id="tienKhachDua${invoiceId}" placeholder="Nhập số tiền khách đưa">
+                            <span class="input-group-text">VND</span>
+                    </div>
+                </div>
+             </div>
+        </div>
+
+        <div class="row">
+<div class="col-md-4">
+        <div class="form-group mb-3">
+        <label for="tienTraLai${invoiceId}">Tiền trả lại</label>
+        </div>
+        </div>
+        <div class="col-md-8">
+        <div class="form-group mb-3">
+        <div class="input-group mb-3">
+        <input type="text" class="form-control" id="tienTraLai${invoiceId}" readonly>
+        <span class="input-group-text">VND</span>
+        </div>
+        </div>
+        </div>
+        </div>
+
+
+<!--         Modal-->
+         <div class="modal fade" id="exampleModal${invoiceId}" tabindex="-1"
+                                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h3 class="modal-title" id="exampleModalLabel"
+                                                            style="text-align: center ;flex: 1">Thanh toán</h3>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Đóng">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <!--                                                        Nội dung của Modal-->
+                                                        <div style="align-items: center;justify-content: center;">
+                                                            <div style="display: flex;margin-bottom: 10px">
+                                                                <label style="flex:1"><h5>Tổng tiền hàng</h5></label>
+                                                                <h5 id="tongTienHang${invoiceId}"  style="float: right"></h5>
+                                                                <h5>₫</h5>
+                                                            </div>
+                                                            <div style="display: flex;justify-content: center; margin-bottom: 10px">
+                                                                <button type="button"
+                                                                        style="border: 2px solid #28a745; background-color: transparent; color: #28a745; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s, color 0.3s;"
+onmouseover="this.style.backgroundColor='#28a745'; this.style.color='#fff';"
+                                                                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#28a745';"
+                                                                        onclick="maGDInput(true,${invoiceId})">
+                                                                    Chuyển khoản<i style="margin-left: 5px"
+                                                                                   class="fas fa-university"></i>
+                                                                </button>
+                                                                <button type="button"
+                                                                        style="border: 2px solid #28a745; background-color: transparent; color: #28a745; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; margin-left: 5px; transition: background-color 0.3s, color 0.3s;"
+                                                                        onmouseover="this.style.backgroundColor='#28a745'; this.style.color='#fff';"
+                                                                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#28a745';"
+                                                                        onclick="maGDInput(false,${invoiceId})">
+                                                                    Tiền mặt<i style="margin-left: 5px"
+                                                                               class="fas fa-money-bill-wave"></i>
+                                                                </button>
+                                                            </div>
+                                                            <div style="margin-bottom: 10px">
+                                                                <label for="khachDua${invoiceId}" style="font-weight: bold;">Tiền
+                                                                khách đưa:</label>
+                                                                <div style="display: flex">
+                                                                    <input type="number"
+                                                                           id="khachDua${invoiceId}"
+                                                                           class="form-control"
+                                                                           placeholder="Nhập tiền khách đưa"
+                                                                           style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none;  "
+                                                                           oninput="calculator(${invoiceId})"
+onfocus="this.style.borderBottom='2px solid #0056b3';"
+                                                                           onblur="this.style.borderBottom='2px solid #007bff';">
+                                                                    <input type="text"
+                                                                           id="maGD${invoiceId}"
+                                                                           class="form-control"
+                                                                           placeholder="Mã giao dịch"
+                                                                           style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none; display: none"
+                                                                           onfocus="this.style.borderBottom='2px solid #0056b3';"
+                                                                           onblur="this.style.borderBottom='2px solid #007bff';">
+                                                                </div>
+                                                            </div>
+                                                            <div style="margin-bottom: 60px;">
+                                                                <table class="table table-hover">
+                                                                    <thead >
+
+                                                                        <th>STT</th>
+                                                                        <th>Mã giao dịch</th>
+                                                                        <th>Phương thức</th>
+                                                                        <th>Số tiền</th>
+                                                                        <th>Hành động</th>
+
+                                                                    </thead>
+                                                                    <tbody id="tbody${invoiceId}">
+                                                                        <tr>
+                                                                        <td style=" text-align: center" colspan="5">Chưa có thông tin</td>
+                                                                        </tr>
+                                                                     </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div style="display: flex">
+                                                                <label style="flex:1"><h5>Tiền còn thiếu</h5></label>
+
+                                                                <h5 id="tienConThieu${invoiceId}" style="float: right"></h5>
+<h5>₫</h5>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-success"
+                                                                onclick="thanhToan(${invoiceId},this)">Xác nhận
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+        <hr>
+
+        <div class="row">
+        <div class="col-md-12 text-center">
+        <button class="btn btn-success" type="button" onclick="thanhToan(${invoiceId})">Thanh toán</button>
+        </div>
+        </div>
+
+        </form>
+        `;
         tabContentRight.appendChild(newTabContent);
+
 
         // Tăng giá trị tabCount cho tab tiếp theo
         tabCount++;
@@ -2060,27 +2363,388 @@
                 document.getElementById(`id${invoiceId}`).value = data.id;
                 document.getElementById(`idHoaDon${invoiceId}`).value = data.idHoaDon;
                 document.getElementById(`maHoaDon${invoiceId}`).value = data.maHoaDon;
-                document.getElementById(`ngayTaoHoaDon${invoiceId}`).value = data.ngayTaoHoaDon;
-                document.getElementById(`ngayDenSan${invoiceId}`).value = data.ngayDenSan;
-                document.getElementById(`tienSan${invoiceId}`).value = data.tienSan;
-                document.getElementById(`ghiChu${invoiceId}`).value = data.ghiChu;
-                document.getElementById(`trangThai${invoiceId}`).value = data.trangThai;
-                document.getElementById(`tenSanBong${invoiceId}`).value = data.tenSanBong;
-                document.getElementById(`tenCa${invoiceId}`).value = data.tenCa;
-                document.getElementById(`thoiGianBatDauCa${invoiceId}`).value = data.thoiGianBatDauCa;
-                document.getElementById(`thoiGianKetThucCa${invoiceId}`).value = data.thoiGianKetThucCa;
+                document.getElementById(`maHoaDonChiTiet${invoiceId}`).value = data.maHoaDonChiTiet;
                 document.getElementById(`hoVaTenKhachHang${invoiceId}`).value = data.hoVaTenKhachHang;
                 document.getElementById(`soDienThoaiKhachHang${invoiceId}`).value = data.soDienThoaiKhachHang;
-                document.getElementById(`emailKhachHang${invoiceId}`).value = data.emailKhachHang;
-                console.log(data);
+                document.getElementById(`trangThai${invoiceId}`).value = data.trangThai;
+                document.getElementById(`tenSanBong${invoiceId}`).value = data.tenSanBong;
+                document.getElementById(`thoiGianBatDauCa${invoiceId}`).value = new Date(data.thoiGianBatDauCa).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                document.getElementById(`thoiGianKetThucCa${invoiceId}`).value = new Date(data.thoiGianKetThucCa).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                document.getElementById(`ngayTaoHoaDon${invoiceId}`).value = data.ngayTaoHoaDon;
+                document.getElementById(`ngayDenSan${invoiceId}`).value = data.ngayDenSan;
+                document.getElementById(`tienSan${invoiceId}`).value = data.giaSanCa;
+                document.getElementById(`tienCoc${invoiceId}`).value = (data.giaSanCa * 0.5);
+                // document.getElementById(`ghiChu${invoiceId}`).value = data.ghiChu;
+                //Hàm xóa phụ phí
+                document.addEventListener('click', function (event) {
+                    if (event.target && event.target.classList.contains('btn-danger')) {
+                        const phuPhiId = event.target.getAttribute('data-id');
+
+                        // Gọi API để cập nhật deletedAt = true (không cần confirm)
+                        fetch(`http://localhost:8080/api/phu-phi-hoa-don/delete/${phuPhiId}`, {
+                            method: 'PUT', // Phương thức PUT để cập nhật dữ liệu
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
+                            .then(() => {
+                                // Sau khi xóa thành công, xóa dòng khỏi bảng
+                                const row = event.target.closest('tr');
+                                const tableBody = document.getElementById('phuPhiList');
+                                row.remove(); // Xóa dòng khỏi bảng
+
+                                // Cập nhật lại <select> bên ngoài modal để bỏ mục phụ phí đã xóa
+                                const phuPhiSelect = document.getElementById(`phuPhiSelect${invoiceId}`);
+                                // Nếu không có phụ phí, hiển thị thông báo trong <select> và bảng
+                                const option = document.createElement("option");
+                                option.value = '';
+                                option.textContent = 'Chưa có phụ phí nào!';
+                                phuPhiSelect.appendChild(option);
+                                const optionToRemove = phuPhiSelect.querySelector(`option[value="${phuPhiId}"]`);
+                                if (optionToRemove) {
+                                    optionToRemove.remove();
+                                }
+                                fetch(`http://localhost:8080/api/phu-phi-hoa-don/${invoiceId}`)
+                                    .then(response => response.json())
+                                    .then(updatedPhuPhis => {
+                                        let totalPhuPhi = 0;
+                                        updatedPhuPhis.forEach(phuPhi => {
+                                            totalPhuPhi += parseFloat(phuPhi.tienPhuPhi);
+                                        });
+                                        document.getElementById(`tienPhuPhi${invoiceId}`).value = totalPhuPhi.toLocaleString('vi-VN') + ' VND';
+                                    })
+                                    .catch(error => {
+                                        console.error('Error fetching updated phu phi:', error);
+                                    });
+                                // Nếu không còn hàng nào, hiển thị hàng rỗng
+                                if (tableBody.rows.length === 0) {
+                                    const emptyRow = `<tr class="empty-row">
+                        <td colspan="4">Không có phụ phí nào</td>
+                    </tr>`;
+                                    tableBody.insertAdjacentHTML('beforeend', emptyRow);
+                                } else {
+                                    // Nếu vẫn còn hàng, đảm bảo không có hàng rỗng
+                                    const emptyRowElement = tableBody.querySelector('.empty-row');
+                                    if (emptyRowElement) {
+                                        emptyRowElement.remove(); // Xóa hàng rỗng nếu có
+                                    }
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error updating deleteAt for phu phi:', error);
+                            });
+                    }
+                });
+                //hàm mở modal phụ phí
+                document.getElementById(`btnAddPhuPhi${invoiceId}`).addEventListener('click', function() {
+                    const addPhuPhiModal = new bootstrap.Modal(document.getElementById('phuPhiModal'));
+                    addPhuPhiModal.show();
+                    document.getElementById('tenPhuPhi').value = '';
+                    document.getElementById('giaPhuPhi').value = '';
+                    document.getElementById('btnThemPhuPhi').onclick = function() {
+                        const tenPhuPhi = document.getElementById('tenPhuPhi').value;
+                        const giaPhuPhi = document.getElementById('giaPhuPhi').value;
+                        const idHoaDonChiTiet = document.getElementById(`id${invoiceId}`).value;
+
+                        // Kiểm tra nếu có trường nào trống
+                        if (!tenPhuPhi || !giaPhuPhi) {
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: 'Vui lòng điền đầy đủ thông tin!',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                            return; // Dừng lại nếu có trường trống
+                        }
+
+                        // Gọi API để thêm phụ phí mới
+                        fetch('http://localhost:8080/api/phu-phi-hoa-don/add', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                ten: tenPhuPhi,
+                                tienPhuPhi: giaPhuPhi,
+                                hoaDonChiTietId: idHoaDonChiTiet,
+                                ghiChu: "Ly lon",
+                                trangThai: "Quan lon"
+                            })
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
+                            .then(phuPhi => {
+                                // Cập nhật danh sách phụ phí trong bảng
+                                const tableBody = document.getElementById('phuPhiList');
+                                const row = `<tr>
+            <td>${tableBody.rows.length + 1}</td>
+            <td>${phuPhi.ten}</td>
+            <td>${parseInt(phuPhi.tienPhuPhi).toLocaleString('vi-VN')} VND</td>
+            <td><button class="btn btn-danger btn-sm" data-id="${phuPhi.id}">Xóa</button></td>
+        </tr>`;
+                                tableBody.insertAdjacentHTML('afterbegin', row); // Thêm ở đầu bảng
+
+                                // Cập nhật <select> bên ngoài modal
+                                const phuPhiSelect = document.getElementById(`phuPhiSelect${invoiceId}`);
+                                const option = document.createElement("option");
+                                option.value = phuPhi.id;
+                                option.textContent = `${phuPhi.ten} - Số tiền: ${parseInt(phuPhi.tienPhuPhi).toLocaleString('vi-VN')}`;
+                                option.selected = true;
+                                phuPhiSelect.appendChild(option);
+                                Swal.fire({
+                                    title: 'Thành công!',
+                                    text: 'Thêm phụ phí thành công!',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
+                                if (tableBody.rows.length === 0) {
+                                    const emptyRow = `<tr class="empty-row">
+                    <td colspan="4">Không có phụ phí nào</td>
+                </tr>`;
+                                    tableBody.insertAdjacentHTML('beforeend', emptyRow);
+                                } else {
+                                    // Nếu vẫn còn hàng, đảm bảo không có hàng rỗng
+                                    const emptyRowElement = tableBody.querySelector('.empty-row');
+                                    if (emptyRowElement) {
+                                        emptyRowElement.remove(); // Xóa hàng rỗng nếu có
+                                    }
+                                }
+                                fetch(`http://localhost:8080/api/phu-phi-hoa-don/${invoiceId}`)
+                                    .then(response => response.json())
+                                    .then(updatedPhuPhis => {
+                                        let totalPhuPhi = 0;
+                                        updatedPhuPhis.forEach(phuPhi => {
+                                            totalPhuPhi += parseFloat(phuPhi.tienPhuPhi);
+                                        });
+                                        document.getElementById(`tienPhuPhi${invoiceId}`).value = totalPhuPhi.toLocaleString('vi-VN');
+                                    })
+                                    .catch(error => {
+                                        console.error('Error fetching updated phu phi:', error);
+                                    });
+                            })
+                            .catch(error => {
+                                console.error('Error adding new phu phi:', error);
+                            });
+                    };
+                });
+                // Gọi API để tìm các dịch vụ sân bóng dựa trên id_hoa_don_chi_tiet
+                fetch(`http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${data.id}`)
+                    .then(response => response.json())
+                    .then(services => {
+// Tính tổng tiền từ các dịch vụ
+                        const totalCost = services.reduce((sum, service) => sum + service.tongTien, 0);
+                        // Hiển thị tổng tiền DVSB lên ô input
+                        document.getElementById(`giaDichVu${invoiceId}`).value = totalCost;
+                        const totalInvoice = (data.giaSanCa - (data.giaSanCa * 0.5)) + totalCost; // Chỉnh sửa ở đây
+                        // Hiển thị tổng tiền HDCT lên ô input
+                        document.getElementById(`tongTien${invoiceId}`).value = totalInvoice;
+                        // Gọi API để tìm phiếu giảm giá dựa trên tổng tiền
+                        fetch(`http://localhost:8080/api-phieu-giam-gia/fill-PGG?tongTien=${totalInvoice}`)
+                            .then(response => response.json())
+                            .then(discountVouchers => {
+                                // Làm sạch dropdown trước khi thêm các phiếu giảm giá mới
+                                const discountSelect = document.getElementById("discountSelect");
+                                discountSelect.innerHTML = ""; // Xóa các lựa chọn hiện tại
+
+                                // Thêm các phiếu giảm giá vào dropdown
+                                discountVouchers.forEach(voucher => {
+                                    const option = document.createElement("option");
+                                    option.value = voucher.maPhieuGiamGia; // Giá trị mà bạn muốn lưu
+                                    option.textContent = `Mã: ${voucher.maPhieuGiamGia} - Giảm: ${voucher.mucGiam} ${voucher.hinhThucGiamGia ? 'VND' : '%'}`; // Hiển thị trong dropdown
+                                    option.dataset.voucher = JSON.stringify(voucher); // Gán dữ liệu voucher
+                                    discountSelect.appendChild(option);
+                                });
+
+                                // Cập nhật số tiền giảm ngay sau khi nhận được phiếu giảm giá
+                                updateDiscountInput(invoiceId);
+
+                            })
+                            .catch(error => {
+                                console.error('Error fetching discount vouchers:', error);
+                            });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching services:', error);
+                    });
+                // Gọi API để lấy danh sách phụ phí theo id hóa đơn chi tiết
+                fetch(`http://localhost:8080/api/phu-phi-hoa-don/${invoiceId}`)
+                    .then(response => response.json())
+                    .then(phuPhis => {
+                        console.log(phuPhis); // Kiểm tra dữ liệu API trả về
+
+                        // 1. Hiển thị dữ liệu trong thẻ <select> ngoài modal
+                        const phuPhiSelect = document.getElementById(`phuPhiSelect${invoiceId}`);
+                        phuPhiSelect.innerHTML = ''; // Xóa các lựa chọn hiện tại trước khi thêm mới
+
+                        // 2. Hiển thị dữ liệu trong bảng của modal
+                        const tableBody = document.getElementById('phuPhiList');
+                        tableBody.textContent = ''; // Xóa nội dung cũ của bảng trước khi thêm mới
+
+                        // Tính tổng tiền của tất cả các phụ phí
+                        let totalPhuPhi = 0;
+
+                        // Kiểm tra nếu phuPhis là một mảng
+                        if (Array.isArray(phuPhis)) {
+                            if (phuPhis.length > 0) {
+                                // Nếu có phụ phí, hiển thị vào cả <select> và bảng
+                                phuPhis.forEach((phuPhi, index) => {
+                                    // Tính tổng số tiền phụ phí
+                                    totalPhuPhi += parseFloat(phuPhi.tienPhuPhi); // Cộng dồn tiền phụ phí
+
+                                    // Thêm vào thẻ select
+                                    const option = document.createElement("option");
+                                    option.value = phuPhi.id; // Giá trị mà bạn muốn lưu
+                                    option.textContent = `${phuPhi.ten} - Số tiền: ${parseInt(phuPhi.tienPhuPhi).toLocaleString('vi-VN')} VND`; // Text hiển thị
+                                    option.selected = true; // Đánh dấu đã chọn
+                                    phuPhiSelect.appendChild(option);
+
+                                    // Thêm vào bảng trong modal
+                                    const row = `<tr>
+                        <td>${index + 1}</td>
+                        <td>${phuPhi.ten}</td>
+                        <td>${parseInt(phuPhi.tienPhuPhi).toLocaleString('vi-VN')} VND</td>
+                        <td><button class="btn btn-danger btn-sm" data-id="${phuPhi.id}" onclick="#">Xóa</button></td>
+                    </tr>`;
+                                    tableBody.insertAdjacentHTML('beforeend', row);
+                                });
+                            } else {
+                                // Nếu không có phụ phí, hiển thị thông báo trong <select> và bảng
+                                const option = document.createElement("option");
+                                option.value = '';
+                                option.textContent = 'Chưa có phụ phí nào!';
+                                phuPhiSelect.appendChild(option);
+                                if (tableBody.rows.length === 0) {
+                                    const emptyRow = `<tr class="empty-row">
+                    <td colspan="4">Không có phụ phí nào</td>
+                </tr>`;
+                                    tableBody.insertAdjacentHTML('beforeend', emptyRow);
+                                } else {
+                                    // Nếu vẫn còn hàng, đảm bảo không có hàng rỗng
+                                    const emptyRowElement = tableBody.querySelector('.empty-row');
+                                    if (emptyRowElement) {
+                                        emptyRowElement.remove(); // Xóa hàng rỗng nếu có
+                                    }
+                                }
+                                tableBody.insertAdjacentHTML('beforeend', emptyRow);
+                            }
+                        } else {
+                            console.error("Dữ liệu API không phải là một mảng.");
+                        }
+
+                        // Hiển thị tổng tiền phụ phí vào ô "Tiền phụ phí"
+                        document.getElementById(`tienPhuPhi${invoiceId}`).value = totalPhuPhi.toLocaleString('vi-VN');
+
+                    })
+                    .catch(error => {
+                        console.error('Error fetching phu phi:', error);
+                    });
             })
             .catch(error => {
                 console.error('Error fetching invoice details:', error);
             });
 
+        function updateDiscountInput(invoiceId) {
+            const discountSelect = document.getElementById("discountSelect");
+            const selectedOption = discountSelect.options[discountSelect.selectedIndex];
+
+            // Kiểm tra nếu có phiếu giảm giá được chọn và có dữ liệu voucher
+            if (selectedOption.value && selectedOption.dataset.voucher) {
+                const voucher = JSON.parse(selectedOption.dataset.voucher); // Lấy thông tin voucher từ data-attribute
+
+                // Lấy tổng tiền từ ô input tổng tiền
+                const totalInvoiceElement = document.getElementById(`tongTien${invoiceId}`);
+
+                if (totalInvoiceElement) {
+                    const totalInvoice = parseFloat(totalInvoiceElement.value) || 0; // Lấy giá trị tổng tiền
+
+                    let tienGiam;
+                    if (voucher.hinhThucGiamGia) {
+                        // Nếu hinhThucGiamGia là true, thì tienGiam = mucGiam (VND)
+                        tienGiam = voucher.mucGiam;
+                    } else {
+                        // Nếu hinhThucGiamGia là false, thì tienGiam = totalInvoice * mucGiam
+                        tienGiam = totalInvoice * (voucher.mucGiam / 100); // Giả sử mucGiam là phần trăm
+                    }
+
+                    // Đặt giá trị tối đa cho tiền giảm từ voucher
+                    const giaTriToiDa = voucher.giaTriToiDa; // Lấy giá trị tối đa từ voucher
+                    if (tienGiam > giaTriToiDa) {
+                        tienGiam = giaTriToiDa; // Sử dụng giá trị tối đa nếu tiền giảm lớn hơn
+                    }
+
+                    // Hiển thị số tiền giảm trong ô input
+                    document.getElementById("tienGiam").value = tienGiam; // Hiển thị với 2 chữ số thập phân
+
+                    // Tính tổng tiền sau khi áp dụng giảm giá
+                    const totalAfterDiscount = totalInvoice - tienGiam; // Tính tổng tiền sau khi giảm
+                    document.getElementById(`tongTienPhaiTra${invoiceId}`).value = totalAfterDiscount; // Hiển thị tổng tiền cuối cùng
+                } else {
+                    console.error(`Phần tử với ID "tongTien${invoiceId}" không tồn tại.`);
+                }
+            } else {
+                // Nếu không có phiếu giảm giá nào được chọn
+                document.getElementById("tienGiam").value = '';
+                document.getElementById(`tongTienPhaiTra${invoiceId}`).value = ''; // Xóa tổng tiền phải trả
+            }
+        }
+
+
+        // Thêm event listener cho dropdown
+        document.getElementById("discountSelect").addEventListener("change", function () {
+            updateDiscountInput(invoiceId);
+        });
+
+        // Thêm event listener cho ô nhập tiền khách đưa
+        document.getElementById(`tienKhachDua${invoiceId}`).addEventListener("input", function () {
+            updateChangeInput(invoiceId); // Gọi hàm cập nhật tiền trả lại khi người dùng nhập tiền
+        });
+
+        // Thêm event listener cho ô tổng tiền phải trả
+        document.getElementById(`tongTienPhaiTra${invoiceId}`).addEventListener("input", function () {
+            updateChangeInput(invoiceId); // Gọi hàm cập nhật tiền trả lại khi tổng tiền phải trả thay đổi
+        });
+
+        function updateChangeInput(invoiceId) {
+            const tienKhachDuaElement = document.getElementById(`tienKhachDua${invoiceId}`);
+            const totalInvoiceElement = document.getElementById(`tongTienPhaiTra${invoiceId}`);
+            const tienTraLaiElement = document.getElementById(`tienTraLai${invoiceId}`);
+
+            // Kiểm tra sự tồn tại của các phần tử
+            if (!tienKhachDuaElement || !totalInvoiceElement || !tienTraLaiElement) {
+                console.error(`Không tìm thấy phần tử với ID "tienKhachDua${invoiceId}", "tongTienPhaiTra${invoiceId}", hoặc "tienTraLai${invoiceId}".`);
+                return; // Kết thúc hàm nếu không tìm thấy phần tử
+            }
+
+            const tienKhachDua = parseFloat(tienKhachDuaElement.value) || 0; // Lấy giá trị tiền khách đưa
+            const totalInvoice = parseFloat(totalInvoiceElement.value) || 0; // Lấy giá trị tổng tiền phải trả
+
+            // Tính tiền trả lại
+            const tienTraLai = tienKhachDua - totalInvoice; // Tiền trả lại
+
+            // Cập nhật giá trị ô nhập tiền trả lại
+            tienTraLaiElement.value = tienTraLai; // Hiển thị số tiền trả lại với 2 chữ số thập phân
+        }
+
         // Kích hoạt tab vừa tạo
         const tab = new bootstrap.Tab(document.getElementById(`tab-${invoiceId}`));
         tab.show();
+
     }
 
 
@@ -2113,18 +2777,11 @@
 
     $(document).ready(function () {
         $('#addInvoiceButton').on('click', function () {
-            $.ajax({
-                url: 'http://localhost:8080/chon-san', // URL của nội dung bạn muốn tải
-                method: 'GET',
-                success: function (response) {
-                    $('#content-ban-hang').html(response); // Cập nhật nội dung của phần tử
-                },
-                error: function (xhr, status, error) {
-                    console.error("An error occurred: " + xhr.responseText);
-                }
-            });
+            // Thay toàn bộ nội dung của trang bằng URL mới
+            window.location.href = 'http://localhost:8080/chon-san';
         });
     });
+
 
 
 </script>

@@ -49,11 +49,10 @@ public class DichVuSanBongRest {
     @GetMapping("dichVuSanBongTheoHoaDon/{idHoaDonChiTiet}")
     public ResponseEntity<List> searchDichVuSanBong(@PathVariable("idHoaDonChiTiet") Integer idHoaDonChiTiet) {
         return ResponseEntity.ok(dichVuSanBongService.searchDichVuSanBong(idHoaDonChiTiet));
+    }
 
-//    @GetMapping("tim-theo-idhdct/{id}")
-//    public ResponseEntity<?> findByIdHdct(@PathVariable("id") Integer idHDCT){
-//        return ResponseEntity.ok(dichVuSanBongService.findByIdHDCT(idHDCT));
-//
-//    }
+    @GetMapping("tim-theo-idhdct/{id}")
+    public ResponseEntity<?> findByIdHdct(@PathVariable("id") Integer idHDCT){
+        return ResponseEntity.ok(dichVuSanBongService.findByIdHDCT(idHDCT));
     }
 }
