@@ -5,16 +5,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class LoginController {
-    @GetMapping("/dang-nhap")
-    public String ht(){
-        return "list/Login";
+
+    @GetMapping("/loginPages")
+    public String logins(){
+        return "/login";
     }
-    @GetMapping("/dang-ky")
-    public String htDK(){
-        return "list/dang-ky";
-    }
-    @GetMapping("/quen-mk")
-    public String htQMK(){
-        return "list/quen-mk";
-    }
+
+
 }
