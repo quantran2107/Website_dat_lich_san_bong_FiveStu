@@ -2200,9 +2200,9 @@
                     <label for="tienKhachDua${invoiceId}">Tiền khách đưa</label>
                 </div>
             </div>
-             <div class="col-md-8">
+            <div class="col-md-8">
                 <div class="form-group mb-3">
-                    <div class="input-group mb-3">
+                    <div class="input-group mb-3" >
 
                     <!--     nút mở modal-->
 
@@ -2219,14 +2219,14 @@
                                                                         " data-toggle="modal" data-target="#exampleModal${invoiceId}" onclick="fillHttt(${invoiceId})">
                                    <i class="fas fa-credit-card" style="margin-right: 5px;"></i>
                               </button>
+                                <input type="text" style="margin-left: 82px" class="form-control" id="tienKhachDua${invoiceId}" readonly >
+                                    <span class="input-group-text">VND</span>
                          </div>
+
 
                     </div>
 <!--                    ket thuc nut modal-->
-                    <div class="input-group mb-3" >
-                            <input type="text" class="form-control" id="tienKhachDua${invoiceId}">
-                            <span class="input-group-text">VND</span>
-                    </div>
+
                 </div>
              </div>
         </div>
@@ -2296,7 +2296,7 @@ onmouseover="this.style.backgroundColor='#28a745'; this.style.color='#fff';"
                                                                            class="form-control"
                                                                            placeholder="Nhập tiền khách đưa"
                                                                            style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none;  "
-                                                                           oninput="calculator(${invoiceId})"
+
 onfocus="this.style.borderBottom='2px solid #0056b3';"
                                                                            onblur="this.style.borderBottom='2px solid #007bff';">
                                                                     <input type="text"
@@ -2826,7 +2826,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
 
             // Tính tiền trả lại
             const tienTraLai = tienKhachDua - totalInvoice; // Tiền trả lại
-            console.log(tienKhachDua,totalInvoice,tienTraLai)
+            console.log(tienKhachDua, totalInvoice, tienTraLai)
             // Cập nhật giá trị ô nhập tiền trả lại với định dạng tiền
             tienTraLaiElement.value = tienTraLai.toLocaleString('vi-VN'); // Hiển thị số tiền trả lại với 2 chữ số thập phân
         }
@@ -2907,11 +2907,18 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
 
 
         });
-        let tienThieu = parseFloat($(`#tongTienPhaiTra${invoiceId}`).val()) - parseFloat(tongTien);
+        let tienThieuText =  $(`#tienConThieu${invoiceId}`);
 
-        $(`#tienConThieu${invoiceId}`).text(tienThieu);
+        let tienThieu = parseFloat($(`#tongTienPhaiTra${invoiceId}`).val()) - parseFloat(tongTien);
+        // console.log(tienThieu)
+
+
+        $(`#tienKhachDua${invoiceId}`).val(tongTien)
         if (tienThieu < 0) {
+            tienThieuText.text(0);
             $(`#tienTraLai${invoiceId}`).val(-tienThieu);
+        } else {
+            tienThieuText.text(tienThieu);
         }
 
 
@@ -2928,13 +2935,11 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
             dataType: 'json',
             success: function (response) {
                 if (Array.isArray(response) && response.length === 0) {
-                    console.log("Không có dữ liệu!")
+                    let tienThieuText =  $(`#tienConThieu${invoiceId}`);
+                    tienThieuText.text($(`#tongTienPhaiTra${invoiceId}`).val());
                 } else {
                     loadTableHtttInModal(response, invoiceId);
-
                 }
-
-                // Xử lý dữ liệu response tại đây
             },
             error: function (xhr, status, error) {
                 console.error("Lỗi khi gửi yêu cầu:", error);
@@ -2955,32 +2960,44 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
             idHttt: httt,
             soTien: khachDua
         }
-        console.log(a)
-        Swal.fire({
-            title: 'Xác nhận',
-            text: "Xác nhận thanh toán ?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Có',
-            cancelButtonText: 'Không'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: 'http://localhost:8080/httt/add', // Thay đổi URL theo server của bạn
-                    type: 'POST', // Phương thức POST để gửi dữ liệu
-                    contentType: 'application/json', // Định dạng gửi dữ liệu là JSON
-                    data: JSON.stringify(a), // Dữ liệu được gửi dưới dạng chuỗi JSON
-                    success: function (response) {
-                        fillHttt(invoiceId);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Lỗi khi gửi dữ liệu:', error);
-                    }
+
+        if (khachDua ===''|| khachDua<=0){
+            Swal.fire({
+                title: 'Trống!',
+                text: 'Xin mời điền lại số tiền khách hàng đã đưa!',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        $.ajax({
+            url: 'http://localhost:8080/httt/add', // Thay đổi URL theo server của bạn
+            type: 'POST', // Phương thức POST để gửi dữ liệu
+            contentType: 'application/json', // Định dạng gửi dữ liệu là JSON
+            data: JSON.stringify(a), // Dữ liệu được gửi dưới dạng chuỗi JSON
+            success: function (response) {
+
+                $(`#khachDua${invoiceId}`).val('');
+                fillHttt(invoiceId);
+                Swal.fire({
+                    title: 'Thành công!',
+                    text: 'Thêm thành công!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                })
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    title: 'Thất bại!',
+                    text: 'Có lỗi xảy ra!',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
                 });
+                return;
             }
         });
+
     }
 
     //Thanh toán
