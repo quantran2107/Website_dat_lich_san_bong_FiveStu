@@ -40,6 +40,9 @@ public class ChiTietHinhThucThanhToan {
     @JoinColumn(name = "id_hinh_thuc_thanh_toan")
     private HinhThucThanhToan hinhThucThanhToan;
 
+    @Column(name = "so_tien")
+    private Double soTien;
+
     @Column(name = "trang_thai", length = 50)
     private String trangThai;
 
