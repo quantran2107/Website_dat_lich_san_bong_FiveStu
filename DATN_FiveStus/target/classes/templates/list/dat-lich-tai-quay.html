@@ -702,10 +702,10 @@
                             <h5 class="card-title" id="${item.id}">${item.id}</h5>
                             <img src="${item.imageData}" class="card-img-top" alt="${tenDichVu}">
                             <div class="card-body">
-                                <h5 class="card-title">${ids}</h5>
+                                <h5 class="card-title" hidden>${ids}</h5>
                                 <h5 class="card-title">${tenDichVu}</h5>
-                                <p class="card-text text-danger">${donGia} VND</p>
-                                <p class="card-text kho-con">Kho còn: ${soLuongKho}</p>
+                                <p class="card-text text-danger">Đơn giá: ${donGia} VND</p>
+                                <p class="card-text kho-con" hidden>Kho còn: ${soLuongKho}</p>
                                 <div class="input-group">
                                     <label>Số lượng chọn</label>
                                     <input type="number" class="form-control so-luong-chon" value="${soLuong}" min="0" step="1">
@@ -2149,30 +2149,30 @@
         </div>
         </div>
         <div class="row">
-        <div class="col-md-4">
+    <div class="col-md-4">
         <div class="form-group mb-3">
-        <label for="phieuGiamGia">Phiếu Giảm Giá</label>
+            <label for="phieuGiamGia${invoiceId}">Phiếu Giảm Giá</label>
         </div>
-        </div>
-        <div class="col-md-8">
+    </div>
+    <div class="col-md-8">
         <div class="form-group mb-3">
-        <select id="discountSelect" class="form-control" >
-        <option value="">Chọn phiếu giảm giá</option>
-            <!-- Các tùy chọn sẽ được thêm vào đây -->
-        </select>
+            <div class="input-group mb-3">
+                <input class="form-control" id="phieuGiamGia${invoiceId}" type="text" placeholder="Phiếu Giảm Giá" readonly>
+            </div>
         </div>
-        </div>
-        </div>
+    </div>
+</div>
+
         <div class="row">
         <div class="col-md-4">
-<div class="form-group mb-3">
-        <label for="tienGiam">Số tiền giảm</label>
+        <div class="form-group mb-3">
+        <label for="tienGiam${invoiceId}">Số tiền giảm</label>
         </div>
         </div>
         <div class="col-md-8">
         <div class="form-group mb-3">
         <div class="input-group mb-3">
-        <input class="form-control" id="tienGiam" type="text" placeholder="Số tiền giảm" readonly>
+        <input class="form-control" id="tienGiam${invoiceId}" type="text" placeholder="Số tiền giảm" readonly>
         <span class="input-group-text">VND</span>
         </div>
         </div>
@@ -2201,9 +2201,9 @@
                     <label for="tienKhachDua${invoiceId}">Tiền khách đưa</label>
                 </div>
             </div>
-             <div class="col-md-8">
+            <div class="col-md-8">
                 <div class="form-group mb-3">
-                    <div class="input-group mb-3">
+                    <div class="input-group mb-3" >
 
                     <!--     nút mở modal-->
 
@@ -2220,14 +2220,14 @@
                                                                         " data-toggle="modal" data-target="#exampleModal${invoiceId}" onclick="fillHttt(${invoiceId})">
                                    <i class="fas fa-credit-card" style="margin-right: 5px;"></i>
                               </button>
+                                <input type="text" style="margin-left: 82px" class="form-control" id="tienKhachDua${invoiceId}" readonly >
+                                    <span class="input-group-text">VND</span>
                          </div>
+
 
                     </div>
 <!--                    ket thuc nut modal-->
-                    <div class="input-group mb-3" hidden>
-                            <input type="text" class="form-control" id="tienKhachDua${invoiceId}" placeholder="Nhập số tiền khách đưa">
-                            <span class="input-group-text">VND</span>
-                    </div>
+
                 </div>
              </div>
         </div>
@@ -2297,7 +2297,7 @@ onmouseover="this.style.backgroundColor='#28a745'; this.style.color='#fff';"
                                                                            class="form-control"
                                                                            placeholder="Nhập tiền khách đưa"
                                                                            style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none;  "
-                                                                           oninput="calculator(${invoiceId})"
+
 onfocus="this.style.borderBottom='2px solid #0056b3';"
                                                                            onblur="this.style.borderBottom='2px solid #007bff';">
                                                                     <input type="text"
@@ -2327,10 +2327,10 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                                                                      </tbody>
                                                                 </table>
                                                             </div>
-                                                            <div style="display: flex">
-                                                                <label style="flex:1"><h5>Tiền còn thiếu</h5></label>
+                                                            <div style="display: flex" >
+                                                                <label style="flex:1" ><h5>Tiền còn thiếu</h5></label>
 
-                                                                <h5 id="tienConThieu${invoiceId}" style="float: right"></h5>
+                                                                <h5 id="tienConThieu${invoiceId}" style="float: right" ></h5>
 <h5>₫</h5>
                                                             </div>
                                                         </div>
@@ -2386,8 +2386,8 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                 });
                 document.getElementById(`ngayTaoHoaDon${invoiceId}`).value = data.ngayTaoHoaDon;
                 document.getElementById(`ngayDenSan${invoiceId}`).value = data.ngayDenSan;
-                document.getElementById(`tienSan${invoiceId}`).value = data.giaSanCa;
-                document.getElementById(`tienCoc${invoiceId}`).value = (data.giaSanCa * 0.5);
+                document.getElementById(`tienSan${invoiceId}`).value = parseInt(data.giaSanCa).toLocaleString('vi-VN');
+                document.getElementById(`tienCoc${invoiceId}`).value = parseInt(data.giaSanCa * 0.5).toLocaleString('vi-VN');
                 // document.getElementById(`ghiChu${invoiceId}`).value = data.ghiChu;
                 //Hàm xóa phụ phí
                 document.addEventListener('click', function (event) {
@@ -2551,51 +2551,39 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                             });
                     };
                 });
+
+
                 // Gọi API để tìm các dịch vụ sân bóng dựa trên id_hoa_don_chi_tiet
+                let totalInvoice; // Định nghĩa biến ở đây
+
                 fetch(`http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${data.id}`)
-                    .then(response => response.json())
-                    .then(services => {
-// Tính tổng tiền từ các dịch vụ
-                        const totalCost = services.reduce((sum, service) => sum + service.tongTien, 0);
-                        // Hiển thị tổng tiền DVSB lên ô input
-                        document.getElementById(`giaDichVu${invoiceId}`).value = totalCost;
-                        const totalInvoice = (data.giaSanCa - (data.giaSanCa * 0.5)) + totalCost; // Chỉnh sửa ở đây
-                        // Hiển thị tổng tiền HDCT lên ô input
-                        document.getElementById(`tongTien${invoiceId}`).value = totalInvoice;
-                        // Gọi API để tìm phiếu giảm giá dựa trên tổng tiền
-                        fetch(`http://localhost:8080/api-phieu-giam-gia/fill-PGG?tongTien=${totalInvoice}`)
-                            .then(response => response.json())
-                            .then(discountVouchers => {
-                                // Làm sạch dropdown trước khi thêm các phiếu giảm giá mới
-                                const discountSelect = document.getElementById("discountSelect");
-                                discountSelect.innerHTML = ""; // Xóa các lựa chọn hiện tại
-
-                                // Thêm các phiếu giảm giá vào dropdown
-                                discountVouchers.forEach(voucher => {
-                                    const option = document.createElement("option");
-                                    option.value = voucher.maPhieuGiamGia; // Giá trị mà bạn muốn lưu
-                                    option.textContent = `Mã: ${voucher.maPhieuGiamGia} - Giảm: ${voucher.mucGiam} ${voucher.hinhThucGiamGia ? 'VND' : '%'}`; // Hiển thị trong dropdown
-                                    option.dataset.voucher = JSON.stringify(voucher); // Gán dữ liệu voucher
-                                    discountSelect.appendChild(option);
-                                });
-
-                                // Cập nhật số tiền giảm ngay sau khi nhận được phiếu giảm giá
-                                updateDiscountInput(invoiceId);
-
-                            })
-                            .catch(error => {
-                                console.error('Error fetching discount vouchers:', error);
-                            });
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
                     })
-                    .catch(error => {
-                        console.error('Error fetching services:', error);
-                    });
-                // Gọi API để lấy danh sách phụ phí theo id hóa đơn chi tiết
-                fetch(`http://localhost:8080/api/phu-phi-hoa-don/${invoiceId}`)
-                    .then(response => response.json())
-                    .then(phuPhis => {
-                        console.log(phuPhis); // Kiểm tra dữ liệu API trả về
+                    .then(services => {
+                        // Tính tổng tiền từ các dịch vụ
+                        const totalCost = services.reduce((sum, service) => sum + service.tongTien, 0);
 
+                        // Hiển thị tổng tiền DVSB lên ô input
+                        document.getElementById(`giaDichVu${invoiceId}`).value = totalCost.toLocaleString('vi-VN');
+
+                        // Tính tổng tiền hóa đơn
+                        totalInvoice = (data.giaSanCa - (data.giaSanCa * 0.5)) + totalCost; // Chỉnh sửa ở đây
+                        document.getElementById(`tongTien${invoiceId}`).value = totalInvoice.toLocaleString('vi-VN');
+
+                        // Gọi API để lấy danh sách phụ phí theo id hóa đơn chi tiết
+                        return fetch(`http://localhost:8080/api/phu-phi-hoa-don/${invoiceId}`);
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(phuPhis => {
                         // 1. Hiển thị dữ liệu trong thẻ <select> ngoài modal
                         const phuPhiSelect = document.getElementById(`phuPhiSelect${invoiceId}`);
                         phuPhiSelect.innerHTML = ''; // Xóa các lựa chọn hiện tại trước khi thêm mới
@@ -2637,21 +2625,14 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                                 option.value = '';
                                 option.textContent = 'Chưa có phụ phí nào!';
                                 phuPhiSelect.appendChild(option);
-
                                 if (tableBody.rows.length === 0) {
                                     const emptyRow = `<tr class="empty-row">
+
                     <td colspan="4">Không có phụ phí nào</td>
                 </tr>`;
-                                    tableBody.insertAdjacentHTML('beforeend', emptyRow);
-                                } else {
-                                    // Nếu vẫn còn hàng, đảm bảo không có hàng rỗng
-                                    const emptyRowElement = tableBody.querySelector('.empty-row');
-                                    if (emptyRowElement) {
-                                        emptyRowElement.remove(); // Xóa hàng rỗng nếu có
-                                    }
-                                }
                                 tableBody.insertAdjacentHTML('beforeend', emptyRow);
                             }
+                                }
                         } else {
                             console.error("Dữ liệu API không phải là một mảng.");
                         }
@@ -2659,64 +2640,116 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                         // Hiển thị tổng tiền phụ phí vào ô "Tiền phụ phí"
                         document.getElementById(`tienPhuPhi${invoiceId}`).value = totalPhuPhi.toLocaleString('vi-VN');
 
+                        // Cập nhật tổng tiền hóa đơn sau khi có phụ phí
+                        const updatedTotalInvoice = totalInvoice + totalPhuPhi;
+                        document.getElementById(`tongTien${invoiceId}`).value = updatedTotalInvoice.toLocaleString('vi-VN');
+
+                        // Gọi API để tìm phiếu giảm giá dựa trên tổng tiền
+                        return fetch(`http://localhost:8080/api-phieu-giam-gia/fill-PGG?tongTien=${updatedTotalInvoice}`);
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(discountVouchers => {
+                        // Kiểm tra nếu discountVouchers là một mảng
+                        if (!Array.isArray(discountVouchers)) {
+                            console.error('Expected discount vouchers to be an array');
+                            return;
+                        }
+
+                        // Tìm phiếu giảm giá có giá trị giảm cao nhất
+                        let maxDiscountVoucher = null;
+                        let maxDiscountValue = 0;
+                        // Cập nhật giá trị của updatedTotalInvoice
+                        updatedTotalInvoice = document.getElementById(`tongTien${invoiceId}`).value;
+
+                        // Loại bỏ dấu chấm để xử lý đúng định dạng số
+                        const updatedTotalInvoiceFormatted = updatedTotalInvoice.replace(/\./g, ''); // Loại bỏ tất cả dấu chấm
+
+                        const updatedTotalInvoiceNumber = parseFloat(updatedTotalInvoiceFormatted); // Chuyển đổi thành số
+
+                        discountVouchers.forEach(voucher => {
+                            let tienGiam;
+
+                            // Tính số tiền giảm
+                            if (voucher.hinhThucGiamGia) {
+                                // Nếu hinhThucGiamGia là true, thì tienGiam = mucGiam (VND)
+                                tienGiam = voucher.mucGiam;
+                            } else {
+                                // Nếu hinhThucGiamGiam là false, thì tienGiam = updatedTotalInvoice * mucGiam
+                                tienGiam = updatedTotalInvoiceNumber * (voucher.mucGiam / 100); // Giả sử mucGiam là phần trăm
+                            }
+
+                            // Kiểm tra xem giá trị giảm này có lớn hơn giá trị lớn nhất chưa
+                            if (tienGiam > maxDiscountValue) {
+                                maxDiscountValue = tienGiam;
+                                maxDiscountVoucher = voucher;
+                            }
+                        });
+
+                        // Nếu tìm thấy phiếu giảm giá, áp dụng nó
+                        if (maxDiscountVoucher) {
+                            const giaTriToiDa = maxDiscountVoucher.giaTriToiDa;
+                            let tienGiamToUse = Math.min(maxDiscountValue, giaTriToiDa); // Sử dụng giá trị tối đa nếu tiền giảm lớn hơn
+
+                            // Hiển thị số tiền giảm trong ô input
+                            const tienGiamInput = document.getElementById(`tienGiam${invoiceId}`);
+
+                            tienGiamInput.value = tienGiamToUse.toLocaleString('vi-VN');
+
+                            console.log(tienGiamToUse.toLocaleString('vi-VN'))
+                            // Hiển thị thông tin của phiếu giảm giá
+                            const phieuGiamGiaMa = document.getElementById(`phieuGiamGia${invoiceId}`);
+
+                            phieuGiamGiaMa.value = `${maxDiscountVoucher.maPhieuGiamGia} - ${maxDiscountVoucher.tenPhieuGiamGia}`;
+
+                            // Kiểm tra nếu updatedTotalInvoiceNumber là một số hợp lệ
+                            if (isNaN(updatedTotalInvoiceNumber)) {
+                                return; // Ngăn không thực hiện tiếp nếu giá trị không hợp lệ
+                            }
+
+                            // Tính tổng tiền sau khi áp dụng giảm giá
+                            const totalAfterDiscount = updatedTotalInvoiceNumber - tienGiamToUse; // Tính tổng tiền sau khi giảm
+                            const tongTienPhaiTraInput = document.getElementById(`tongTienPhaiTra${invoiceId}`);
+                            tongTienPhaiTraInput.value = totalAfterDiscount.toLocaleString('vi-VN'); // Hiển thị tổng tiền cuối cùng
+
+
+                        } else {
+                            // Không có phiếu giảm giá nào
+                            const tienGiamInput = document.getElementById(`tienGiam${invoiceId}`);
+                            if (tienGiamInput) {
+                                tienGiamInput.value = '0.00'; // Không có giảm giá
+                            }
+
+                        }
                     })
                     .catch(error => {
-                        console.error('Error fetching phu phi:', error);
+                        console.error('Error fetching discount vouchers:', error);
                     });
+                fetch(`http://localhost:8080/httt/find-by-id-hdct/${invoiceId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(invoiceDetails => {
+                        // Tính tổng số tiền từ invoiceDetails
+                        const totalTienKhachDua = invoiceDetails
+                            .filter(detail => detail.soTien !== null) // Lọc các giá trị không null
+                            .reduce((sum, detail) => sum + detail.soTien, 0); // Tính tổng soTien
+
+                        // Hiển thị tổng tiền vào ô input (ví dụ: id là totalSoTien)
+                        document.getElementById(`tienKhachDua${invoiceId}`).value = totalTienKhachDua.toLocaleString('vi-VN');
+
+                    })
             })
             .catch(error => {
                 console.error('Error fetching invoice details:', error);
             });
-        function updateDiscountInput(invoiceId) {
-            const discountSelect = document.getElementById("discountSelect");
-            const selectedOption = discountSelect.options[discountSelect.selectedIndex];
-
-            // Kiểm tra nếu có phiếu giảm giá được chọn và có dữ liệu voucher
-            if (selectedOption.value && selectedOption.dataset.voucher) {
-                const voucher = JSON.parse(selectedOption.dataset.voucher); // Lấy thông tin voucher từ data-attribute
-
-                // Lấy tổng tiền từ ô input tổng tiền
-                const totalInvoiceElement = document.getElementById(`tongTien${invoiceId}`);
-
-                if (totalInvoiceElement) {
-                    const totalInvoice = parseFloat(totalInvoiceElement.value) || 0; // Lấy giá trị tổng tiền
-
-                    let tienGiam;
-                    if (voucher.hinhThucGiamGia) {
-                        // Nếu hinhThucGiamGia là true, thì tienGiam = mucGiam (VND)
-                        tienGiam = voucher.mucGiam;
-                    } else {
-                        // Nếu hinhThucGiamGia là false, thì tienGiam = totalInvoice * mucGiam
-                        tienGiam = totalInvoice * (voucher.mucGiam / 100); // Giả sử mucGiam là phần trăm
-                    }
-
-                    // Đặt giá trị tối đa cho tiền giảm từ voucher
-                    const giaTriToiDa = voucher.giaTriToiDa; // Lấy giá trị tối đa từ voucher
-                    if (tienGiam > giaTriToiDa) {
-                        tienGiam = giaTriToiDa; // Sử dụng giá trị tối đa nếu tiền giảm lớn hơn
-                    }
-
-                    // Hiển thị số tiền giảm trong ô input
-                    document.getElementById("tienGiam").value = tienGiam; // Hiển thị với 2 chữ số thập phân
-
-                    // Tính tổng tiền sau khi áp dụng giảm giá
-                    const totalAfterDiscount = totalInvoice - tienGiam; // Tính tổng tiền sau khi giảm
-                    document.getElementById(`tongTienPhaiTra${invoiceId}`).value = totalAfterDiscount; // Hiển thị tổng tiền cuối cùng
-                } else {
-                    console.error(`Phần tử với ID "tongTien${invoiceId}" không tồn tại.`);
-                }
-            } else {
-                // Nếu không có phiếu giảm giá nào được chọn
-                document.getElementById("tienGiam").value = '';
-                document.getElementById(`tongTienPhaiTra${invoiceId}`).value = ''; // Xóa tổng tiền phải trả
-            }
-        }
-
-
-        // Thêm event listener cho dropdown
-        document.getElementById("discountSelect").addEventListener("change", function () {
-            updateDiscountInput(invoiceId);
-        });
 
         // Thêm event listener cho ô nhập tiền khách đưa
         document.getElementById(`tienKhachDua${invoiceId}`).addEventListener("input", function () {
@@ -2739,15 +2772,17 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                 return; // Kết thúc hàm nếu không tìm thấy phần tử
             }
 
-            const tienKhachDua = parseFloat(tienKhachDuaElement.value) || 0; // Lấy giá trị tiền khách đưa
-            const totalInvoice = parseFloat(totalInvoiceElement.value) || 0; // Lấy giá trị tổng tiền phải trả
+            // Lấy giá trị tiền khách đưa và tổng tiền phải trả, loại bỏ dấu chấm
+            const tienKhachDua = parseFloat(tienKhachDuaElement.value.replace(/\./g, '').replace(',', '.')) || 0; // Lấy giá trị tiền khách đưa
+            const totalInvoice = parseFloat(totalInvoiceElement.value.replace(/\./g, '').replace(',', '.')) || 0; // Lấy giá trị tổng tiền phải trả
 
             // Tính tiền trả lại
             const tienTraLai = tienKhachDua - totalInvoice; // Tiền trả lại
-
-            // Cập nhật giá trị ô nhập tiền trả lại
-            tienTraLaiElement.value = tienTraLai; // Hiển thị số tiền trả lại với 2 chữ số thập phân
+            console.log(tienKhachDua, totalInvoice, tienTraLai)
+            // Cập nhật giá trị ô nhập tiền trả lại với định dạng tiền
+            tienTraLaiElement.value = tienTraLai.toLocaleString('vi-VN'); // Hiển thị số tiền trả lại với 2 chữ số thập phân
         }
+
 
         // Kích hoạt tab vừa tạo
         const tab = new bootstrap.Tab(document.getElementById(`tab-${invoiceId}`));
@@ -2786,7 +2821,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
     $(document).ready(function () {
         $('#addInvoiceButton').on('click', function () {
             // Thay toàn bộ nội dung của trang bằng URL mới
-            window.location.href = 'http://localhost:8080/chon-san';
+            window.location.href = 'http://localhost:8080/list-san-ca';
         });
     });
 
@@ -2807,7 +2842,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
     function loadTableHtttInModal(response, invoiceId) {
         let tbody = $(`#tbody${invoiceId}`);
         tbody.empty();
-        let tongTien=0;
+        let tongTien = 0;
         // Duyệt qua từng đối tượng trong response và thêm hàng vào tbody
         $.each(response, function (index, item) {
             const row = `
@@ -2824,10 +2859,19 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
 
 
         });
-        let tienThieu = parseFloat($(`#tongTienPhaiTra${invoiceId}`).val()) - parseFloat(tongTien);
+        let tienThieuText =  $(`#tienConThieu${invoiceId}`);
 
-        $(`#tienConThieu${invoiceId}`).text(tienThieu);
-        if (tienThieu<0){$(`#tienTraLai${invoiceId}`).val(-tienThieu);}
+        let tienThieu = parseFloat($(`#tongTienPhaiTra${invoiceId}`).val()) - parseFloat(tongTien);
+        // console.log(tienThieu)
+
+
+        $(`#tienKhachDua${invoiceId}`).val(tongTien)
+        if (tienThieu < 0) {
+            tienThieuText.text(0);
+            $(`#tienTraLai${invoiceId}`).val(-tienThieu);
+        } else {
+            tienThieuText.text(tienThieu);
+        }
 
 
     }
@@ -2843,13 +2887,11 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
             dataType: 'json',
             success: function (response) {
                 if (Array.isArray(response) && response.length === 0) {
-                    console.log("Không có dữ liệu!")
+                    let tienThieuText =  $(`#tienConThieu${invoiceId}`);
+                    tienThieuText.text($(`#tongTienPhaiTra${invoiceId}`).val());
                 } else {
                     loadTableHtttInModal(response, invoiceId);
-
                 }
-
-                // Xử lý dữ liệu response tại đây
             },
             error: function (xhr, status, error) {
                 console.error("Lỗi khi gửi yêu cầu:", error);
@@ -2870,30 +2912,116 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
             idHttt: httt,
             soTien: khachDua
         }
-        console.log(a)
+
+        if (khachDua ===''|| khachDua<=0){
+            Swal.fire({
+                title: 'Trống!',
+                text: 'Xin mời điền lại số tiền khách hàng đã đưa!',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        $.ajax({
+            url: 'http://localhost:8080/httt/add', // Thay đổi URL theo server của bạn
+            type: 'POST', // Phương thức POST để gửi dữ liệu
+            contentType: 'application/json', // Định dạng gửi dữ liệu là JSON
+            data: JSON.stringify(a), // Dữ liệu được gửi dưới dạng chuỗi JSON
+            success: function (response) {
+
+                $(`#khachDua${invoiceId}`).val('');
+                fillHttt(invoiceId);
+                Swal.fire({
+                    title: 'Thành công!',
+                    text: 'Thêm thành công!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                })
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    title: 'Thất bại!',
+                    text: 'Có lỗi xảy ra!',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+        });
+
+    }
+
+    //Thanh toán
+    function thanhToan(invoiceId) {
+        const totalToPayElement = document.getElementById(`tongTienPhaiTra${invoiceId}`);
+        const changeElement = document.getElementById(`tienTraLai${invoiceId}`);
+
+        const totalToPay = parseFloat(totalToPayElement.value) || 0;
+        const change = parseFloat(changeElement.value);
+
+        if (isNaN(change) || change < 0) {
+            showErrorToast("Số tiền trả lại không hợp lệ.");
+            return;
+        }
+
+        if (totalToPay <= 0) {
+            showErrorToast("Tổng tiền phải trả không hợp lệ.");
+            return;
+        }
+
         Swal.fire({
-            title: 'Xác nhận',
-            text: "Xác nhận thanh toán ?",
+            title: 'Xác nhận thanh toán',
+            text: "Bạn có chắc chắn thanh toán không?",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
             confirmButtonText: 'Có',
             cancelButtonText: 'Không'
         }).then((result) => {
             if (result.isConfirmed) {
-                $.ajax({
-                    url: 'http://localhost:8080/httt/add', // Thay đổi URL theo server của bạn
-                    type: 'POST', // Phương thức POST để gửi dữ liệu
-                    contentType: 'application/json', // Định dạng gửi dữ liệu là JSON
-                    data: JSON.stringify(a), // Dữ liệu được gửi dưới dạng chuỗi JSON
-                    success: function (response) {
-                        fillHttt(invoiceId);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Lỗi khi gửi dữ liệu:', error);
+                const api1 = fetch(`http://localhost:8080/hoa-don-chi-tiet/thanhtoan/${invoiceId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
                 });
+
+                const api2 = fetch(`http://localhost:8080/hoa-don/update-thanh-toan/${invoiceId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                Promise.all([api1, api2])
+                    .then(responses => {
+                        responses.forEach(response => {
+                            console.log(`Response from ${response.url}: ${response.status}`);
+                        });
+
+                        // Kiểm tra xem tất cả phản hồi có thành công không
+                        // Tất cả các yêu cầu đều thành công, hiển thị thông báo thành công bằng SweetAlert
+                        Swal.fire({
+                            title: 'Thành công!',
+                            text: 'Thanh toán thành công!',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            // Reload lại trang sau khi nhấn OK
+                            window.location.reload();
+                        });
+
+                    })
+                    .catch(err => {
+                        console.error('Có lỗi xảy ra:', err);
+                        // Xử lý lỗi chung (nếu cần)
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Đã xảy ra lỗi trong quá trình thanh toán.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    });
             }
         });
     }
@@ -3044,17 +3172,15 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
         <p>Email: contact@fivestu.com | Số điện thoại: (028) 1234 5678</p>
     </footer>
 </div>
-
-
     `;
 
         // Chuyển đổi HTML thành PDF
         const element = document.createElement('div');
         element.innerHTML = template;
-
         // Sử dụng html2pdf để tạo và tải file PDF
         html2pdf().from(element).save(`hoa_don_${invoiceId}.pdf`);
     }
+
 </script>
 </body>
 </html>

@@ -12,4 +12,5 @@ import java.util.List;
 public interface ChiTietHinhThucThanhToanRepository extends JpaRepository<ChiTietHinhThucThanhToan,Integer> {
     @Query("SELECT c FROM ChiTietHinhThucThanhToan c WHERE c.hoaDonChiTiet.id = :idHoaDonChiTiet")
     List<ChiTietHinhThucThanhToan> findByIdHdct(@Param("idHoaDonChiTiet") int id);
+    List<ChiTietHinhThucThanhToan> findByHoaDonChiTiet_Id(int hoaDonChiTietId);
 }
