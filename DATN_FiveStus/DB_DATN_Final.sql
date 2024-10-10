@@ -2239,12 +2239,9 @@ VALUES
 
 INSERT INTO hinh_thuc_thanh_toan (hinh_thuc_thanh_toan, trang_thai, created_at, updated_at, deleted_at)
 VALUES
-  ('Thanh toan 1', 'active', NOW(), NOW(), 1),
-  ( 'Thanh toan 2', 'active', NOW(), NOW(), 1),
-  ( 'Thanh toan 3', 'inactive', NOW(), NOW(), 1),
-  ('Thanh toan 4', 'active', NOW(), NOW(), 1),
-  ('Thanh toan 5', 'active', NOW(), NOW(), 0);
-
+  ('Chuyển khoản', 'active', NOW(), NOW(), 0),
+  ( 'Tiền mặt', 'active', NOW(), NOW(), 0);
+  
 
 INSERT INTO lich_su_hoa_don (id_hoa_don, hanh_dong, loai_hanh_dong, ngay_tao, ngay_cap_nhat, ten_nguoi_tao, ten_nguoi_cap_nhat, so_lan_thay_doi, trang_thai, created_at, updated_at, deleted_at)
 VALUES
