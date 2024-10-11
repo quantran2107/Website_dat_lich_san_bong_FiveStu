@@ -60,8 +60,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 let currentServiceType = 'do_thue';
 let currentSearchQuery = '';
 let currentStatusFilter = '';
-let currentDonGiaMin = '';
-let currentDonGiaMax = '';
+let currentdonGiasMin = '';
+let currentdonGiasMax = '';
 
 const pageSize = 10;
 const debounceDelay = 300;
@@ -99,8 +99,8 @@ async function loadData(serviceType, page = 0) {
     // Thêm các tham số lọc vào URL
     if (currentSearchQuery) apiUrl += `&keyword=${encodeURIComponent(currentSearchQuery)}`;
     if (currentStatusFilter) apiUrl += `&trangThai=${encodeURIComponent(currentStatusFilter)}`;
-    if (currentDonGiaMin !== undefined && currentDonGiaMax !== undefined) {
-        apiUrl += `&donGiaMin=${encodeURIComponent(currentDonGiaMin)}&donGiaMax=${encodeURIComponent(currentDonGiaMax)}`;
+    if (currentdonGiasMin !== undefined && currentdonGiasMax !== undefined) {
+        apiUrl += `&donGiasMin=${encodeURIComponent(currentdonGiasMin)}&donGiasMax=${encodeURIComponent(currentdonGiasMax)}`;
     }
 
     // Fetch dữ liệu từ API
@@ -125,7 +125,7 @@ function renderTable(items, page, size) {
 
         // Kiểm tra số lượng để xác định trạng thái
         let trangThai = item.trangThai;
-        if (item.soLuong && item.soLuong > 0) {
+        if (item.soLuongs && item.soLuongs > 0) {
             trangThai = 'Còn'; // Nếu số lượng > 0 thì trạng thái là "Còn"
         } else {
             trangThai = 'Hết'; // Nếu số lượng <= 0 thì trạng thái là "Hết"
@@ -136,11 +136,11 @@ function renderTable(items, page, size) {
             <td>${index + 1 + page * size}</td>
             <td>${item.tenDoThue || item.tenNuocUong}</td>
             <td>
-                <img src="${item.imageData ? 'data:image/jpeg;base64,' + item.imageData : 'default-image.png'}" alt="${item.tenDoThue || item.tenNuocUong || 'No image'}"
+                <img src="${item.imageData}" alt="${item.tenDoThue || item.tenNuocUong || 'No image'}"
                 style="width: 70px; height: 70px; object-fit: cover;">
             </td>
-            <td>${item.donGia ? item.donGia + ' VND' : 'N/A'}</td>
-            <td>${item.soLuong || '0'}</td>
+            <td>${item.donGias ? item.donGias + ' VND' : 'N/A'}</td>
+            <td>${item.soLuongs || '0'}</td>
             <td>
                 <span class="${trangThai === 'Còn' ? 'custom-4' : 'custom-3'}"
                 style="font-size: 14px; width: 84px;">
@@ -268,15 +268,15 @@ function debounce(func, delay) {
 }
 
 
-const debouncedSearchDonGia = debounce(function (min, current, max) {
-    currentDonGiaMin = min;
-    currentDonGiaMax = current;
+const debouncedSearchdonGias = debounce(function (min, current, max) {
+    currentdonGiasMin = min;
+    currentdonGiasMax = current;
     loadData(currentServiceType, 0); // Load data with updated price range
 }, debounceDelay);
 
 function updatePriceRange(value) {
     document.getElementById('rangeValue').textContent = value;
-    searchDonGia(value);
+    searchdonGias(value);
 }
 
 function showLoading() {
@@ -325,8 +325,8 @@ function resetFilters() {
     // Đặt lại các bộ lọc
     currentSearchQuery = '';
     currentStatusFilter = '';
-    currentDonGiaMin = ''; // Hoặc giá trị mặc định bạn muốn
-    currentDonGiaMax = ''; // Hoặc giá trị mặc định bạn muốn
+    currentdonGiasMin = ''; // Hoặc giá trị mặc định bạn muốn
+    currentdonGiasMax = ''; // Hoặc giá trị mặc định bạn muốn
 
     // Cập nhật giao diện
     document.getElementById('search').value = '';
@@ -349,11 +349,11 @@ function changeTab(serviceType) {
     });
 }
 
-function searchDonGia(value) {
+function searchdonGias(value) {
     const min = document.getElementById('customRange2').min;
     const max = document.getElementById('customRange2').max;
-    currentDonGiaMin = min;
-    currentDonGiaMax = value;
+    currentdonGiasMin = min;
+    currentdonGiasMax = value;
     loadData(currentServiceType, 0);
 }
 
@@ -363,10 +363,10 @@ async function fetchPriceRange(serviceType) {
     let apiUrl = `http://localhost:8080/${serviceType}/hien-thi`;
     const data = await fetchData(apiUrl);
     if (data) {
-        const donGia = data.map(item => item.donGia).filter(donGia => typeof donGia === 'number');
-        if (donGia.length > 0) {
-            const minPrice = Math.min(...donGia);
-            const maxPrice = Math.max(...donGia);
+        const donGiass = data.map(item => item.donGiass).filter(donGiass => typeof donGiass === 'number');
+        if (donGiass.length > 0) {
+            const minPrice = Math.min(...donGias);
+            const maxPrice = Math.max(...donGias);
             initializePriceRange(minPrice, maxPrice);
         } else {
             console.warn('No valid prices found.');
@@ -496,8 +496,8 @@ async function exportToExcel(serviceType) {
                 row.innerHTML = `
                     <td>${index + 1}</td>
                     <td>${item.tenDoThue || item.tenNuocUong}</td>
-                    <td>${item.donGia ? item.donGia + ' VND' : 'N/A'}</td>
-                    <td>${item.soLuong || '0'}</td>
+                    <td>${item.donGias ? item.donGias + ' VND' : 'N/A'}</td>
+                    <td>${item.soLuongs || '0'}</td>
                     <td>${item.trangThai || 'N/A'}</td>
                 `;
                 tbody.appendChild(row);
@@ -562,20 +562,20 @@ function showAddForm() {
                                 <span id="errorTenDoThue" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label for="soLuongDoThue">Số lượng</label>
+                                <label for="soLuongsDoThue">Số lượng</label>
                                 <div class="input-group">
-                                    <input type="number" class="form-control" id="soLuongDoThue" placeholder="Nhập số lượng">
+                                    <input type="number" class="form-control" id="soLuongsDoThue" placeholder="Nhập số lượng">
                                     <span class="input-group-text">#</span>
                                 </div>
-                                <span id="errorSoLuongDoThue" class="text-danger"></span>
+                                <span id="errorsoLuongsDoThue" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label for="donGiaDoThue">Đơn giá</label>
+                                <label for="donGiasDoThue">Đơn giá</label>
                                 <div class="input-group">
-                                    <input type="number" class="form-control" id="donGiaDoThue" placeholder="Nhập đơn giá">
+                                    <input type="number" class="form-control" id="donGiasDoThue" placeholder="Nhập đơn giá">
                                     <span class="input-group-text">VND</span>
                                 </div>
-                                <span id="errorDonGiaDoThue" class="text-danger"></span>
+                                <span id="errordonGiasDoThue" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label for="imageDoThue">Chọn Ảnh</label>
@@ -607,20 +607,20 @@ function showAddForm() {
                                 <span id="errorTenNuocUong" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label for="soLuongNuocUong">Số lượng</label>
+                                <label for="soLuongsNuocUong">Số lượng</label>
                                 <div class="input-group">
-                                    <input type="number" class="form-control" id="soLuongNuocUong" placeholder="Nhập số lượng">
+                                    <input type="number" class="form-control" id="soLuongsNuocUong" placeholder="Nhập số lượng">
                                     <span class="input-group-text">#</span>
                                 </div>
-                                <span id="errorSoLuongNuocUong" class="text-danger"></span>
+                                <span id="errorsoLuongsNuocUong" class="text-danger"></span>
                             </div>
                             <div class="form-group">
-                                <label for="donGiaNuocUong">Đơn giá</label>
+                                <label for="donGiasNuocUong">Đơn giá</label>
                                 <div class="input-group">
-                                    <input type="number" class="form-control" id="donGiaNuocUong" placeholder="Nhập đơn giá">
+                                    <input type="number" class="form-control" id="donGiasNuocUong" placeholder="Nhập đơn giá">
                                     <span class="input-group-text">VND</span>
                                 </div>
-                                <span id="errorDonGiaNuocUong" class="text-danger"></span>
+                                <span id="errordonGiasNuocUong" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label for="imageNuocUong">Chọn Ảnh</label>
@@ -673,14 +673,14 @@ function submitAddFormDoThue(event) {
 
     // Lấy giá trị từ các trường nhập liệu
     const ten = $('#tenDoThue').val().trim();
-    const donGia = $('#donGiaDoThue').val().trim();
-    const soLuong = parseInt($('#soLuongDoThue').val().trim());
+    const donGias = $('#donGiasDoThue').val().trim();
+    const soLuongs = parseInt($('#soLuongsDoThue').val().trim());
     const imageFile = $('#imageDoThue')[0].files[0];
 
     // Xóa các thông báo lỗi trước đó
     $('#errorTenDoThue').text('');
-    $('#errorSoLuongDoThue').text('');
-    $('#errorDonGiaDoThue').text('');
+    $('#errorsoLuongsDoThue').text('');
+    $('#errordonGiasDoThue').text('');
     $('#errorImageDoThue').text('');
 
     // Biến để kiểm tra lỗi
@@ -693,14 +693,14 @@ function submitAddFormDoThue(event) {
     }
 
     // Chỉ báo lỗi khi số lượng là số âm hoặc không phải là số hợp lệ
-    if (isNaN(soLuong) || soLuong < 0) {
-        $('#errorSoLuongDoThue').text('Số lượng không được nhỏ hơn 0.');
+    if (isNaN(soLuongs) || soLuongs < 0) {
+        $('#errorsoLuongsDoThue').text('Số lượng không được nhỏ hơn 0.');
         hasError = true;
     }
 
     // Kiểm tra đơn giá, phải là số dương
-    if (!donGia || isNaN(donGia) || donGia <= 0) {
-        $('#errorDonGiaDoThue').text('Đơn giá phải là số dương.');
+    if (!donGias || isNaN(donGias) || donGias <= 0) {
+        $('#errordonGiasDoThue').text('Đơn giá phải là số dương.');
         hasError = true;
     }
 
@@ -716,14 +716,14 @@ function submitAddFormDoThue(event) {
     }
 
     // Xác định trạng thái dịch vụ
-    let trangThai = soLuong === 0 ? 'Hết' : 'Còn';
+    let trangThai = soLuongs === 0 ? 'Hết' : 'Còn';
 
     // Xác định URL API
     const apiUrl = 'http://localhost:8080/do_thue/save';
     const formData = new FormData();
     formData.append("tenDoThue", ten);
-    formData.append("donGia", donGia);
-    formData.append("soLuong", soLuong);
+    formData.append("donGias", donGias);
+    formData.append("soLuongs", soLuongs);
     formData.append("trangThai", trangThai);
     formData.append("imageFile", imageFile);
 
@@ -776,14 +776,14 @@ function submitAddFormNuocUong(event) {
 
     // Lấy giá trị từ các trường nhập liệu
     const ten = $('#tenNuocUong').val().trim();
-    const donGia = $('#donGiaNuocUong').val().trim();
-    const soLuong = parseInt($('#soLuongNuocUong').val().trim());
+    const donGias = $('#donGiasNuocUong').val().trim();
+    const soLuongs = parseInt($('#soLuongsNuocUong').val().trim());
     const imageFile = $('#imageNuocUong')[0].files[0];
 
     // Xóa các thông báo lỗi trước đó
     $('#errorTenNuocUong').text('');
-    $('#errorSoLuongNuocUong').text('');
-    $('#errorDonGiaNuocUong').text('');
+    $('#errorsoLuongsNuocUong').text('');
+    $('#errordonGiasNuocUong').text('');
     $('#errorImageNuocUong').text('');
 
     // Biến để kiểm tra lỗi
@@ -795,13 +795,13 @@ function submitAddFormNuocUong(event) {
         hasError = true;
     }
 
-    if (isNaN(soLuong) || soLuong <= 0) {
-        $('#errorSoLuongNuocUong').text('Số lượng phải là số dương.');
+    if (isNaN(soLuongs) || soLuongs <= 0) {
+        $('#errorsoLuongsNuocUong').text('Số lượng phải là số dương.');
         hasError = true;
     }
 
-    if (!donGia || isNaN(donGia) || donGia <= 0) {
-        $('#errorDonGiaNuocUong').text('Đơn giá phải là số dương.');
+    if (!donGias || isNaN(donGias) || donGias <= 0) {
+        $('#errordonGiasNuocUong').text('Đơn giá phải là số dương.');
         hasError = true;
     }
 
@@ -817,14 +817,14 @@ function submitAddFormNuocUong(event) {
     }
 
     // Xác định trạng thái dịch vụ
-    let trangThai = soLuong === 0 ? 'Hết' : 'Còn';
+    let trangThai = soLuongs === 0 ? 'Hết' : 'Còn';
 
     // Xác định URL API
     const apiUrl = 'http://localhost:8080/nuoc_uong/save';
     const formData = new FormData();
     formData.append("tenNuocUong", ten);
-    formData.append("donGia", donGia);
-    formData.append("soLuong", soLuong);
+    formData.append("donGias", donGias);
+    formData.append("soLuongs", soLuongs);
     formData.append("trangThai", trangThai);
     formData.append("imageFile", imageFile);
 
@@ -907,22 +907,22 @@ function editItem(id) {
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="soLuongDoThue">Số lượng</label>
+                            <label for="soLuongsDoThue">Số lượng</label>
                             <div class="input-group mb-3">
-                                <input type="number" class="form-control" id="soLuongDoThue" value="${data.soLuong}">
+                                <input type="number" class="form-control" id="soLuongsDoThue" value="${data.soLuongs}">
                                 <span class="input-group-text">#</span>
                             </div>
-                            <span id="errorSoLuongDoThue" class="text-danger"></span>
+                            <span id="errorsoLuongsDoThue" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="donGiaDoThue">Đơn giá</label>
+                            <label for="donGiasDoThue">Đơn giá</label>
                             <div class="input-group mb-3">
-                                <input type="number" step="0.01" class="form-control" id="donGiaDoThue" value="${data.donGia}" placeholder="Đơn giá" aria-label="Đơn giá" aria-describedby="basic-addon2">
+                                <input type="number" step="0.01" class="form-control" id="donGiasDoThue" value="${data.donGias}" placeholder="Đơn giá" aria-label="Đơn giá" aria-describedby="basic-addon2">
                                 <span class="input-group-text" id="basic-addon2">VND</span>
                             </div>
-                            <span id="errorDonGiaDoThue" class="text-danger"></span>
+                            <span id="errordonGiasDoThue" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-row">
@@ -962,22 +962,22 @@ function editItem(id) {
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="soLuongNuocUong">Số lượng</label>
+                            <label for="soLuongsNuocUong">Số lượng</label>
                             <div class="input-group mb-3">
-                                <input type="number" class="form-control" id="soLuongNuocUong" value="${data.soLuong}">
+                                <input type="number" class="form-control" id="soLuongsNuocUong" value="${data.soLuongs}">
                                 <span class="input-group-text">#</span>
                             </div>
-                            <span id="errorSoLuongNuocUong" class="text-danger"></span>
+                            <span id="errorsoLuongsNuocUong" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="donGiaNuocUong">Đơn giá</label>
+                            <label for="donGiasNuocUong">Đơn giá</label>
                             <div class="input-group mb-3">
-                                <input type="number" step="0.01" class="form-control" id="donGiaNuocUong" value="${data.donGia}" placeholder="Đơn giá" aria-label="Đơn giá" aria-describedby="basic-addon2">
+                                <input type="number" step="0.01" class="form-control" id="donGiasNuocUong" value="${data.donGias}" placeholder="Đơn giá" aria-label="Đơn giá" aria-describedby="basic-addon2">
                                 <span class="input-group-text" id="basic-addon2">VND</span>
                             </div>
-                            <span id="errorDonGiaNuocUong" class="text-danger"></span>
+                            <span id="errordonGiasNuocUong" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-row">
@@ -1045,14 +1045,14 @@ function submitUpdateFormDoThue(event, id) {
 
     // Lấy giá trị từ các trường nhập liệu
     const ten = $('#tenDoThue').val().trim();
-    const soLuong = parseInt($('#soLuongDoThue').val().trim());
-    const donGia = parseFloat($('#donGiaDoThue').val().trim());
+    const soLuongs = parseInt($('#soLuongsDoThue').val().trim());
+    const donGias = parseFloat($('#donGiasDoThue').val().trim());
     const imageData = $('#imageDoThue')[0].files[0];
 
     // Xóa các thông báo lỗi trước đó
     $('#errorTenDoThue').text('');
-    $('#errorSoLuongDoThue').text('');
-    $('#errorDonGiaDoThue').text('');
+    $('#errorsoLuongsDoThue').text('');
+    $('#errordonGiasDoThue').text('');
     $('#errorImageDoThue').text('');
 
     // Biến để kiểm tra lỗi
@@ -1064,13 +1064,13 @@ function submitUpdateFormDoThue(event, id) {
         hasError = true;
     }
 
-    if (isNaN(soLuong) || soLuong < 0) {
-        $('#errorSoLuongDoThue').text('Số lượng phải là một số dương');
+    if (isNaN(soLuongs) || soLuongs < 0) {
+        $('#errorsoLuongsDoThue').text('Số lượng phải là một số dương');
         hasError = true;
     }
 
-    if (isNaN(donGia) || donGia <= 0) {
-        $('#errorDonGiaDoThue').text('Đơn giá phải là một số dương');
+    if (isNaN(donGias) || donGias <= 0) {
+        $('#errordonGiasDoThue').text('Đơn giá phải là một số dương');
         hasError = true;
     }
 
@@ -1081,8 +1081,8 @@ function submitUpdateFormDoThue(event, id) {
     // Tạo FormData để gửi dữ liệu, bao gồm file ảnh
     const formData = new FormData();
     formData.append('tenDoThue', ten);
-    formData.append('soLuong', soLuong);
-    formData.append('donGia', donGia);
+    formData.append('soLuongs', soLuongs);
+    formData.append('donGias', donGias);
     if (imageData) {
         formData.append('imageFile', imageData);
     }
@@ -1145,14 +1145,14 @@ function submitUpdateFormNuocUong(event, id) {
 
     // Lấy giá trị từ các trường nhập liệu
     const ten = $('#tenNuocUong').val().trim();
-    const soLuong = parseInt($('#soLuongNuocUong').val().trim());
-    const donGia = parseFloat($('#donGiaNuocUong').val().trim());
+    const soLuongs = parseInt($('#soLuongsNuocUong').val().trim());
+    const donGias = parseFloat($('#donGiasNuocUong').val().trim());
     const imageData = $('#imageNuocUong')[0].files[0];
 
     // Xóa các thông báo lỗi trước đó
     $('#errorTenNuocUong').text('');
-    $('#errorSoLuongNuocUong').text('');
-    $('#errorDonGiaNuocUong').text('');
+    $('#errorsoLuongsNuocUong').text('');
+    $('#errordonGiasNuocUong').text('');
     $('#errorImageNuocUong').text('');
 
     // Biến để kiểm tra lỗi
@@ -1164,13 +1164,13 @@ function submitUpdateFormNuocUong(event, id) {
         hasError = true;
     }
 
-    if (isNaN(soLuong) || soLuong < 0) {
-        $('#errorSoLuongNuocUong').text('Số lượng phải là một số dương');
+    if (isNaN(soLuongs) || soLuongs < 0) {
+        $('#errorsoLuongsNuocUong').text('Số lượng phải là một số dương');
         hasError = true;
     }
 
-    if (isNaN(donGia) || donGia <= 0) {
-        $('#errorDonGiaNuocUong').text('Đơn giá phải là một số dương');
+    if (isNaN(donGias) || donGias <= 0) {
+        $('#errordonGiasNuocUong').text('Đơn giá phải là một số dương');
         hasError = true;
     }
 
@@ -1184,8 +1184,8 @@ function submitUpdateFormNuocUong(event, id) {
     // Định dạng JSON cho nuocUongDTO
     const nuocUongDTO = {
         tenNuocUong: ten,
-        soLuong: soLuong,
-        donGia: donGia
+        soLuongs: soLuongs,
+        donGias: donGias
     };
 
     formData.append('nuocUongDTO', new Blob([JSON.stringify(nuocUongDTO)], { type: "application/json" }));

@@ -31,6 +31,6 @@ public class NuocUongDTO {
 
     private LocalDateTime createdAt;
 
-    private byte[] imageData;
+    private String imageData;
 
 }

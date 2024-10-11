@@ -31,9 +31,14 @@ public class DoThueServiceImp implements DoThueService {
     public List<DoThueDTO> getAll() {
         List<DoThue> doThues = doThueRepository.getAll();
         return doThues.stream()
-                .map(dothue -> modelMapper.map(dothue, DoThueDTO.class))
+                .map(dothue -> {
+                    DoThueDTO dto = modelMapper.map(dothue, DoThueDTO.class);
+                    dto.setImageData(dothue.getImageData()); // Lưu trữ URL hình ảnh
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public DoThueDTO getOne(Integer id) {

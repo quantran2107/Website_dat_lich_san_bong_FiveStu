@@ -1186,28 +1186,26 @@
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                let content = '<div class="row">';
+                let content = '<div class="row" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">';
+
                 data.forEach(item => {
                     content += `
-                <div class="col-md-3 col-sm-6 mb-3">
-                    <div class="card">
-                        <h5 class="card-title" id="${item.id}">${item.id}</h5>
-                        <img src="${item.imageData}" class="card-img-top" alt="${item.tenDoThue}">
-                        <div class="card-body">
-                            <h5 class="card-title">${item.tenDoThue}</h5>
-                            <p class="card-text text-danger">${item.donGias} VND</p>
-                            <p class="card-text kho-con">Kho còn: ${item.soLuongs}</p>
-                            <div class="input-group">
-                                <label>Số lượng chọn</label>
-                                <input type="number" class="form-control so-luong-chon" value="0" min="0" step="1">
-                                <div class="input-group-append">
-                                    <button class="btn btn-success add-btn" data-ten-do-thue="${item.tenDoThue}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button">Thêm</button>
-                                    <button class="btn btn-danger cancel-btn" data-ten-do-thue="${item.tenDoThue}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button">Hủy</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
+            <div class="product-card" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); width: 250px; background-color: #ffffff; padding: 15px; text-align: center; position: relative;">
+               <div class="price-tag" style="position: absolute; top: 10px; right: 10px; background-color: #ff4d4d; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 14px;">
+                    ${formatCurrency(item.donGias)} <!-- Gọi hàm formatCurrency để định dạng giá -->
+                </div>
+                <img src="${item.imageData}" class="card-img-top" alt="${item.tenDoThue}" style="width: 100%; height: 160px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;"> <!-- Điều chỉnh kích thước hình ảnh -->
+                <h5 class="card-title" style="margin: 10px 0; font-size: 18px; font-weight: bold; color: #333;">${item.tenDoThue}</h5> <!-- Đưa tên xuống dưới hình -->
+                <p class="card-text kho-con" style="margin: 5px 0; font-size: 14px; color: #666;">Kho Còn: ${item.soLuongs}</p>
+                <div class="input-group" style="margin: 10px 0;">
+                    <input type="number" class="form-control so-luong-chon" value="1" min="1" style="width: 60px; display: inline-block;">
+                </div>
+                <div class="input-group-append" style="margin-top: 10px;">
+                    <button class="btn btn-success add-btn" data-ten-do-thue="${item.tenDoThue}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button" style="width: 100%; margin-bottom: 5px;">Thêm</button>
+                </div>
+            </div>`;
+                  // Hàm xóa nếu muốn thêm vào
+                    // <button className="btn btn-danger cancel-btn" data-ten-do-thue="${item.tenDoThue}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button" style="width: 100%;">Hủy</button>
                 });
                 content += '</div>';
                 $('#doThueTab').html(content);
@@ -1323,30 +1321,36 @@
 
                 $('.so-luong-chon').on('input', function () {
                     let input = $(this);
-                    let quantityChosen = parseInt(input.val()) || 0;
-                    let stockQuantityElem = input.closest('.input-group').siblings('.kho-con');
-                    let stockQuantity = parseInt(stockQuantityElem.text().replace('Kho còn: ', ''));
-                    let previousQuantity = parseInt(input.data('previous-value')) || 0;
+                    let quantityChosen = parseInt(input.val()) || 0; // Số lượng người dùng chọn
+                    let stockQuantityElem = input.closest('.product-card').find('.kho-con'); // Phần tử chứa thông tin kho còn lại
+                    let stockQuantity = parseInt(stockQuantityElem.text().replace('Kho Còn: ', '')); // Số lượng còn lại trong kho
+                    let previousQuantity = parseInt(input.data('previous-value')) || 0; // Số lượng trước đó được lưu
 
+                    // Kiểm tra nếu số lượng mới được chọn khác với số lượng trước đó
                     if (!isNaN(quantityChosen) && quantityChosen !== previousQuantity) {
+                        // Tính toán số lượng kho còn lại sau khi chọn
                         if (quantityChosen > previousQuantity) {
-                            stockQuantity -= (quantityChosen - previousQuantity);
+                            stockQuantity -= (quantityChosen - previousQuantity); // Trừ đi số lượng mới chọn
                         } else if (quantityChosen < previousQuantity) {
-                            stockQuantity += (previousQuantity - quantityChosen);
+                            stockQuantity += (previousQuantity - quantityChosen); // Cộng lại số lượng khi giảm
                         }
 
+                        // Nếu kho còn ít hơn 0, không cho chọn quá số lượng trong kho
                         if (stockQuantity < 0) {
-                            quantityChosen += stockQuantity;
+                            quantityChosen += stockQuantity; // Điều chỉnh lại số lượng được chọn
                             stockQuantity = 0;
                         }
 
-                        stockQuantityElem.text(`Kho còn: ${stockQuantity}`);
-                        input.val(quantityChosen);
-                        input.data('previous-value', quantityChosen);
+                        // Cập nhật số lượng kho còn lại trên giao diện
+                        stockQuantityElem.text(`Kho Còn: ${stockQuantity}`);
+                        input.val(quantityChosen); // Cập nhật số lượng chọn trong ô input
+                        input.data('previous-value', quantityChosen); // Lưu lại số lượng hiện tại để sử dụng sau
                     } else {
+                        // Nếu nhập không hợp lệ, trả về giá trị trước đó
                         input.val(previousQuantity);
                     }
                 });
+
 
             },
             error: function (xhr, status, error) {
@@ -1360,8 +1364,6 @@
         });
 
     }
-
-
     // Sử dụng event delegation để bắt sự kiện click
     $(document).on('click', '.cancel-btn', function () {
         // Lấy thông tin cần thiết
@@ -1457,28 +1459,24 @@
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                let content = '<div class="row">';
+                let content = '<div class="row" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">';
+
                 data.forEach(item => {
                     content += `
-                <div class="col-md-3 col-sm-6 mb-3">
-                    <div class="card">
-                        <h5 class="card-title" id="${item.id}">${item.id}</h5>
-                        <img src="${item.imageData}" class="card-img-top" alt="${item.tenNuocUong}">
-                        <div class="card-body">
-                            <h5 class="card-title">${item.tenNuocUong}</h5>
-                            <p class="card-text text-danger">${item.donGias} VND</p>
-                            <p class="card-text kho-con" data-so-luong="${item.soLuongs}">Kho còn: ${item.soLuongs}</p>
-                            <div class="input-group">
-                                <label>Số lượng chọn</label>
-                                <input type="number" class="form-control so-luong-chon" value="0" min="0" step="1">
-                                <div class="input-group-append">
-                                    <button class="btn btn-success add-btn-nuoc" data-ten-nuoc-uong="${item.tenNuocUong}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button">Thêm</button>
-                                    <button class="btn btn-danger cancel-btn2" data-ten-nuoc-uong="${item.tenNuocUong}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button">Hủy</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
+        <div class="product-card" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); width: 250px; background-color: #ffffff; padding: 15px; text-align: center; position: relative;">
+            <div class="price-tag" style="position: absolute; top: 10px; right: 10px; background-color: #ff4d4d; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 14px;">
+                ${formatCurrency(item.donGias)} <!-- Gọi hàm formatCurrency để định dạng giá -->
+            </div>
+            <img src="${item.imageData}" class="card-img-top" alt="${item.tenNuocUong}" style="width: 100%; height: 160px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;">
+            <h5 class="card-title" style="margin: 10px 0; font-size: 18px; font-weight: bold; color: #333;">${item.tenNuocUong}</h5>
+            <p class="card-text kho-con" style="margin: 5px 0; font-size: 14px; color: #666;">Kho Còn: ${item.soLuongs}</p>
+            <div class="input-group" style="margin: 10px 0;">
+                <input type="number" class="form-control so-luong-chon" value="1" min="1" style="width: 60px; display: inline-block;">
+            </div>
+            <div class="input-group-append" style="margin-top: 10px;">
+                <button class="btn btn-success add-btn-nuoc" data-ten-nuoc-uong="${item.tenNuocUong}" data-id="${item.id}" data-don-gia="${formatCurrency(item.donGias)}" data-so-luong="${item.soLuongs}" type="button" style="width: 100%; margin-bottom: 5px;">Thêm</button>
+            </div>
+        </div>`;
                 });
                 content += '</div>'
                 $('#nuocUongTab').html(content);
@@ -1751,7 +1749,7 @@
     // Hàm fetch data từ server và hiển thị ra bảng
     async function fetchData(trangThai, page, tableId) {
         try {
-            const pageSize = 3;
+            const pageSize = 5;
             const url = `http://localhost:8080/hoa-don-chi-tiet/trang-thai?trangThai=${encodeURIComponent(trangThai)}&page=${page}&size=${pageSize}`;
             console.log(`Fetching data from URL: ${url}`);
 
@@ -3180,7 +3178,9 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
         // Sử dụng html2pdf để tạo và tải file PDF
         html2pdf().from(element).save(`hoa_don_${invoiceId}.pdf`);
     }
-
+    function formatCurrency(value) {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VNĐ"; // Thêm " VNĐ" ở cuối
+    }
 </script>
 </body>
 </html>

@@ -45,6 +45,7 @@ public class DichVuSanBongDTO {
 
     private String trangThai;
 
+//    private  String imageData;
 //    @JsonIgnore
     private boolean deletedAt;
 
