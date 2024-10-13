@@ -31,5 +31,8 @@ public class DoThueDTO {
 
     private LocalDateTime createdAt;
 
-    private byte[] imageData;
+    private String imageData;
+
+
+//    private byte[] imageData;
 }

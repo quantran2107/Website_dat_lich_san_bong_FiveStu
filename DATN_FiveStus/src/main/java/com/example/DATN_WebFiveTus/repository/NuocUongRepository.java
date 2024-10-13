@@ -42,4 +42,12 @@ public interface NuocUongRepository extends JpaRepository<NuocUong,Integer> {
             "WHERE nc.id = :id AND nc.id IN  (SELECT  dvsb.nuocUong.id FROM DichVuSanBong dvsb" +
             " where nc.deletedAt=false and dvsb.hoaDonChiTiet.id=:idHoaDonChiTiet and dvsb.nuocUong.id=:id and dvsb.nuocUong.trangThai like '%Đã chọn%')")
     Optional<NuocUong> checkIdDichVuNuocUong(Integer id, Integer idHoaDonChiTiet);
+
+
+    @Query("SELECT dvsb.id FROM DichVuSanBong dvsb where dvsb.nuocUong.id=:idNuocUong and dvsb.hoaDonChiTiet.id=:idHoaDonChiTiet")
+    int getIdNuocUong(Integer idNuocUong, Integer idHoaDonChiTiet );
+
+    @Query("SELECT nu FROM NuocUong nu where nu.tenNuocUong like %:tenNuocUong%")
+    List<NuocUong> searchTenNuocUong(String tenNuocUong);
+
 }

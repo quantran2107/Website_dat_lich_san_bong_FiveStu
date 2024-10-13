@@ -31,9 +31,21 @@ public class DoThueServiceImp implements DoThueService {
     public List<DoThueDTO> getAll() {
         List<DoThue> doThues = doThueRepository.getAll();
         return doThues.stream()
-                .map(dothue -> modelMapper.map(dothue, DoThueDTO.class))
+                .map(dothue -> {
+                    DoThueDTO dto = modelMapper.map(dothue, DoThueDTO.class);
+                    dto.setImageData(dothue.getImageData()); // Lưu trữ URL hình ảnh
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
+
+//    @Override
+//    public List<DoThueDTO> getAll() {
+//        List<DoThue> doThues = doThueRepository.getAll();
+//        return doThues.stream()
+//                .map(dothue -> modelMapper.map(dothue, DoThueDTO.class))
+//                .collect(Collectors.toList());
+//    }
 
     @Override
     public DoThueDTO getOne(Integer id) {
@@ -136,6 +148,18 @@ public class DoThueServiceImp implements DoThueService {
     @Override
     public Boolean checkIdDichVuDoThue(Integer id, Integer idHoaDonChiTiet) {
         return doThueRepository.checkIdDichVuDoThue(id, idHoaDonChiTiet).isPresent();
+    }
+
+    @Override
+    public int getIdDoThue(Integer idDoThue, Integer idHoaDonChiTiet) {
+        return doThueRepository.getIdDoThue(idDoThue,idHoaDonChiTiet);
+    }
+
+    @Override
+    public List<DoThueDTO> searchTenDoThue(String tenDoThue) {
+        return doThueRepository.searchTenDoThue(tenDoThue).stream()
+                .map(dothue -> modelMapper.map(dothue, DoThueDTO.class))
+                .collect(Collectors.toList());
     }
 
 

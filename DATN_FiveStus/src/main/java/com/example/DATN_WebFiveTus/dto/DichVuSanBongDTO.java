@@ -48,6 +48,10 @@ public class DichVuSanBongDTO {
 //    @JsonIgnore
     private boolean deletedAt;
 
+    private String imageDataDoThue;
+
+    private String imageDataNuocUong;
+
 //    @Temporal(TemporalType.TIMESTAMP)
 //    private LocalDateTime createdAt;
 //
