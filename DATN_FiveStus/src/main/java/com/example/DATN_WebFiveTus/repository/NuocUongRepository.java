@@ -47,7 +47,7 @@ public interface NuocUongRepository extends JpaRepository<NuocUong,Integer> {
     @Query("SELECT dvsb.id FROM DichVuSanBong dvsb where dvsb.nuocUong.id=:idNuocUong and dvsb.hoaDonChiTiet.id=:idHoaDonChiTiet")
     int getIdNuocUong(Integer idNuocUong, Integer idHoaDonChiTiet );
 
-    @Query("SELECT nu FROM NuocUong nu where nu.tenNuocUong like %:tenNuocUong%")
+    @Query("SELECT nu FROM NuocUong nu where nu.tenNuocUong like %:tenNuocUong% and nu.soLuongs>0 and nu.deletedAt=false")
     List<NuocUong> searchTenNuocUong(String tenNuocUong);
 
 }

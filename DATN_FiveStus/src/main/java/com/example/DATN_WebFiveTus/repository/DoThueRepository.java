@@ -25,7 +25,7 @@ public interface DoThueRepository extends JpaRepository<DoThue,Integer> {
             "WHERE (:keyword IS NULL OR dt.tenDoThue LIKE %:keyword%) " +
             "AND (:trangThai IS NULL OR dt.trangThai = :trangThai) " +
             "AND (:donGiaMin IS NULL OR :donGiaMax IS NULL OR dt.donGias BETWEEN :donGiaMin AND :donGiaMax ) " +
-            "AND dt.deletedAt=false")
+            "AND dt.deletedAt=false and dt.soLuongs>0 ")
     Page<DoThue> searchDoThue(
             @Param("keyword") String keyword,
             @Param("trangThai") String trangThai,
@@ -47,7 +47,7 @@ public interface DoThueRepository extends JpaRepository<DoThue,Integer> {
     @Query("SELECT dvsb.id FROM DichVuSanBong dvsb where dvsb.doThue.id=:idDoThue and dvsb.hoaDonChiTiet.id=:idHoaDonChiTiet ")
     int getIdDoThue(Integer idDoThue, Integer idHoaDonChiTiet );
 
-    @Query("SELECT dt FROM DoThue dt where dt.tenDoThue like %:tenDoThue%")
+    @Query("SELECT dt FROM DoThue dt where dt.tenDoThue like %:tenDoThue% and dt.soLuongs>0 and dt.deletedAt=false")
     List<DoThue> searchTenDoThue(@Param("tenDoThue") String tenDoThue);
 
 
