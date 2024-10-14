@@ -1,4 +1,4 @@
-//package com.example.DATN_WebFiveTus.service;
-//
-//public interface AccountService {
-//}
+package com.example.DATN_WebFiveTus.service;
+
+public interface AccountService {
+}

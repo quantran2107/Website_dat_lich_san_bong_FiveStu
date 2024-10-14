@@ -53,7 +53,10 @@ public class DoThue {
     @Column(name = "deleted_at")
     private boolean deletedAt;
 
-    @Lob
-    @Column(name = "image_data", columnDefinition = "LONGBLOB")
-    private byte[] imageData;
+    @Column(name = "image_data")
+    private String imageData;
+
+//    @Lob
+//    @Column(name = "image_data", columnDefinition = "LONGBLOB")
+//    private byte[] imageData;
 }

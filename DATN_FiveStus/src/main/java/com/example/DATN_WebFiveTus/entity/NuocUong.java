@@ -58,5 +58,8 @@ public class NuocUong {
     private boolean deletedAt;
 
     @Column(name = "image_data")
-    private byte[] imageData;
+    private String imageData;
+
+//    @Column(name = "image_data")
+//    private byte[] imageData;
 }

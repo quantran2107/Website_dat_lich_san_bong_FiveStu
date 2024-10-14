@@ -4,12 +4,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class LoginController {
+public class Link {
 
-    @GetMapping("/loginPages")
+    @GetMapping("listThamSo")
     public String logins(){
-        return "/list/index";
+        return "list/quan-ly-tham-so";
     }
-
 
 }
