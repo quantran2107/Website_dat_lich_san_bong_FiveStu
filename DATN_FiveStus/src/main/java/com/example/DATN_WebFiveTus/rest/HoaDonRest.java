@@ -30,7 +30,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/hoa-don/" ,produces = MediaType.APPLICATION_JSON_VALUE)
 public class HoaDonRest {
-
+    @Autowired
     private HoaDonService hoaDonService;
 
     @Autowired
@@ -63,6 +63,10 @@ public class HoaDonRest {
         Pageable pageable = PageRequest.of(trang, kichThuoc);
         Page<HoaDonDTO> hoaDonPage = hoaDonService.phanTrang(pageable);
         return ResponseEntity.ok(hoaDonPage);
+    }
+    @GetMapping("search-for-nv/{id}")
+    public ResponseEntity<?> getHoaDonForIdNV(@PathVariable("id") int id){
+        return ResponseEntity.ok(hoaDonService.getHDforNV(id));
     }
 
 //    @GetMapping("/search-and-filter")
