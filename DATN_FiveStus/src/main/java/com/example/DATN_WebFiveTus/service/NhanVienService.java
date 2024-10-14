@@ -21,4 +21,6 @@ public interface NhanVienService {
     Boolean addMore(MultipartFile file);
 
     ResponseEntity<?> getOneNv(int id);
+
+    ResponseEntity<?> getForCode(String maNV);
 }

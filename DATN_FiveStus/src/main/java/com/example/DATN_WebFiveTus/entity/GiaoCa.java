@@ -66,6 +66,6 @@ public class GiaoCa {
     private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
-    private boolean deletedAt;
+    private Boolean deletedAt;
 
 }

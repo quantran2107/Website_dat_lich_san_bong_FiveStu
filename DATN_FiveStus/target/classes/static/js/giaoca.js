@@ -6,7 +6,41 @@ $(document).ready(function () {
     });
 
     function loadDataModalGC() {
-        let id = 2
+        let id = 0;
+        $.ajax({
+            url: `http://localhost:8080/giao-ca/nvgc`, // URL
+            type: 'GET', // Phương thức HTTP
+            dataType: 'json', // Định dạng dữ liệu mong muốn
+            success: function (response) {
+               id =response;
+            },
+            error: function (jqxhr, textStatus, error) {
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Đã xảy ra lỗi!',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        container: 'swal-gc' // Thêm class tùy chỉnh
+                    }
+                });
+            }
+        });
+        if (id ===0){
+            Swal.fire({
+                title: 'Lỗi!',
+                text: 'Đã xảy ra lỗi!',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                customClass: {
+                    container: 'swal-gc' // Thêm class tùy chỉnh
+                }
+            });
+
+            return;
+        }
+
+
         let idGC;
 
         $.ajax({
@@ -98,24 +132,24 @@ $(document).ready(function () {
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
-                    let formConfirm ={
-                        idNhanVien:'',
-                        tienMatTrongCa :'',
-                        tienChuyenKhoanTrongCa:'',
-                        tongTienTrongCa:'',
-                        tongTienMatThucTe:'',
-                        tongTienPhatSinh:'',
-                        ghiChu:'',
-                        trangThai:'off'
+                    let formConfirm = {
+                        idNhanVien: '',
+                        tienMatTrongCa: '',
+                        tienChuyenKhoanTrongCa: '',
+                        tongTienTrongCa: '',
+                        tongTienMatThucTe: '',
+                        tongTienPhatSinh: '',
+                        ghiChu: '',
+                        trangThai: 'off'
                     }
                     $.ajax({
-                        url: 'http://localhost:8080/giao-ca/change-gc/'+idGC,
+                        url: 'http://localhost:8080/giao-ca/change-gc/' + idGC,
                         type: 'PUT',
                         contentType: 'application/json',
                         data: JSON.stringify(formConfirm),
-                        success: function(response) {
-                            if (response){
-                                window.location.pathname='/loginPages'
+                        success: function (response) {
+                            if (response) {
+                                window.location.pathname = '/loginPages'
                             } else {
                                 Swal.fire({
                                     title: 'Lỗi!',
@@ -128,10 +162,10 @@ $(document).ready(function () {
                                 });
                             }
                         },
-                        error: function(jqXHR, textStatus, errorThrown) {
+                        error: function (jqXHR, textStatus, errorThrown) {
                             Swal.fire({
                                 title: 'Lỗi!',
-                                text: 'Đã xảy ra lỗi trong quá trình thanh toán.',
+                                text: 'Đã xảy ra lỗi!',
                                 icon: 'error',
                                 confirmButtonText: 'OK',
                                 customClass: {

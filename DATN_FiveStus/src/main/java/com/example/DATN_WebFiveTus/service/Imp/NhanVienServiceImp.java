@@ -154,6 +154,15 @@ public class NhanVienServiceImp implements NhanVienService {
                 .body("null");
     }
 
+    @Override
+    public ResponseEntity<?> getForCode(String maNV) {
+        NhanVien nv = nhanVienReposity.findByMaNhanVien(maNV);
+        if (nv!= null){
+            return ResponseEntity.ok(modelMapper.map(nv,NhanVienDTO.class));
+        }
+        return ResponseEntity.ok(maNV);
+    }
+
     private NhanVien createNhanVienFormRow(Row row, DateTimeFormatter dateTimeFormatter) {
         NhanVien nhanVien = new NhanVien();
         try {
