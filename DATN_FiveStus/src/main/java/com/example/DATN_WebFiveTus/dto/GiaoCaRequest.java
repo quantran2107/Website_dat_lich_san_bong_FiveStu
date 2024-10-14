@@ -1,11 +1,9 @@
 package com.example.DATN_WebFiveTus.dto;
 
 import com.example.DATN_WebFiveTus.entity.NhanVien;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,13 +11,11 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Builder
-public class GiaoCaDTO {
+public class GiaoCaRequest {
 
     private Integer id;
 
-    private NhanVien nhanVienNhan;
-
-    private BigDecimal tienMatCaTruoc;
+    private int idNhanVien;
 
     private BigDecimal tienMatTrongCa;
 

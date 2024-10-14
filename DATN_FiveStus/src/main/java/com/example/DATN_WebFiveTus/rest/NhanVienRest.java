@@ -52,4 +52,14 @@ public class NhanVienRest {
         }
         return ResponseEntity.ok(nhanVienService.addMore(file));
     }
+
+    @GetMapping("{id}")
+    public ResponseEntity<?> getOne(@PathVariable("id") int id){
+        return nhanVienService.getOneNv(id);
+    }
+
+    @GetMapping("search-for-code/{code}")
+    public ResponseEntity<?> getNVForCode(@PathVariable("code") String maNV){
+        return nhanVienService.getForCode(maNV);
+    }
 }
