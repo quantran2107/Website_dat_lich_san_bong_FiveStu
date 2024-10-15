@@ -1,6 +1,8 @@
 package com.example.DATN_WebFiveTus.rest;
 
 import com.example.DATN_WebFiveTus.dto.DoThueDTO;
+import com.example.DATN_WebFiveTus.entity.DoThue;
+import com.example.DATN_WebFiveTus.repository.DoThueRepository;
 import com.example.DATN_WebFiveTus.service.DoThueService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.data.domain.Page;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,10 +26,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("do_thue")
-public class    DoThueRest {
+public class DoThueRest {
+    private DoThueRepository doThueRepository;
     private DoThueService doThueService;
 
     public DoThueRest(DoThueService doThueService) {
@@ -34,8 +39,8 @@ public class    DoThueRest {
     }
 
     @GetMapping("hien-thi")
-    public ResponseEntity<List> getAll2(){
-        List<DoThueDTO>thueDTOList=doThueService.getAllJoinFetch2();
+    public ResponseEntity<List<DoThueDTO>> getAll2() {
+        List<DoThueDTO> thueDTOList = doThueService.getAll();
         return ResponseEntity.ok(thueDTOList);
     }
 

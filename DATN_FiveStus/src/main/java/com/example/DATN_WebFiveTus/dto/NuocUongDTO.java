@@ -33,7 +33,4 @@ public class NuocUongDTO {
 
     private String imageData;
 
-
-//    private byte[] imageData;
-
 }

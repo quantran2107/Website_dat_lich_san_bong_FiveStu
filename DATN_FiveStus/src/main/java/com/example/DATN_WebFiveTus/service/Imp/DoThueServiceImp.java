@@ -39,13 +39,6 @@ public class DoThueServiceImp implements DoThueService {
                 .collect(Collectors.toList());
     }
 
-//    @Override
-//    public List<DoThueDTO> getAll() {
-//        List<DoThue> doThues = doThueRepository.getAll();
-//        return doThues.stream()
-//                .map(dothue -> modelMapper.map(dothue, DoThueDTO.class))
-//                .collect(Collectors.toList());
-//    }
 
     @Override
     public DoThueDTO getOne(Integer id) {

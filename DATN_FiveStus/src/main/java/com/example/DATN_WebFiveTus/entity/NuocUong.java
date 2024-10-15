@@ -34,9 +34,6 @@ public class NuocUong {
     @Column(name = "don_gia", precision = 10)
     private float donGias;
 
-    @Column(name = "image", length = 255)
-    private String image;
-
     @Column(name = "so_luong")
     private int soLuongs;
 
@@ -57,9 +54,7 @@ public class NuocUong {
     @Column(name = "deleted_at")
     private boolean deletedAt;
 
-    @Column(name = "image_data")
+    @Column(name = "image_data",length = 255)
     private String imageData;
 
-//    @Column(name = "image_data")
-//    private byte[] imageData;
 }

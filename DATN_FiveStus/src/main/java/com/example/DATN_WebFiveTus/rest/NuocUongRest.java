@@ -69,12 +69,11 @@ public class NuocUongRest {
     public ResponseEntity<NuocUongDTO> save(@ModelAttribute NuocUongDTO nuocUongDTO,
                                             @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
 
-        // Xử lý tệp hình ảnh
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String fileName = imageFile.getOriginalFilename();
-            nuocUongDTO.setImageData(fileName);
-        }
-
+            // Xử lý tệp hình ảnh
+            if (imageFile != null && !imageFile.isEmpty()) {
+                String fileName = imageFile.getOriginalFilename();
+                nuocUongDTO.setImageData(fileName);
+            }
         // Lưu đối tượng NuocUongDTO
         NuocUongDTO savedNuocUong = nuocUongService.save(nuocUongDTO);
 
