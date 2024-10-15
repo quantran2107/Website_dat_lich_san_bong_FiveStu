@@ -299,7 +299,8 @@
 
                                     </li>
                                     <li class="nav-item flex-grow-1">
-                                        <a class="nav-link" id="tab2" data-toggle="tab" href="#nuocUongTab" role="tab">Nước Uống</a>
+                                        <a class="nav-link" id="tab2" data-toggle="tab" href="#nuocUongTab" role="tab">Nước
+                                            Uống</a>
 
                                     </li>
                                 </ul>
@@ -626,13 +627,14 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 <script th:include="~{fragment/script :: script}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         // Lắng nghe sự kiện nhập liệu trên ô tìm kiếm
-        $('.search-input').on('input', function() {
+        $('.search-input').on('input', function () {
             const searchTerm = $(this).val();
             const activeTab = $('#serviceModal .nav-link.active').attr('href');  // Lấy ID của tab hiện tại
             // alert("Tab hien tạI "+activeTab)
@@ -640,11 +642,11 @@
 
             if (activeTab === '#doThueTab') {
                 apiUrl = `http://localhost:8080/do_thue/searchTenDoThue?tenDoThue=${searchTerm}`;
-                console.log("doThue: "+apiUrl)
+                console.log("doThue: " + apiUrl)
                 dichVuDo(searchTerm);
             } else if (activeTab === '#nuocUongTab') {
                 apiUrl = `http://localhost:8080/nuoc_uong/searchTenNuocUong?tenNuocUong=${searchTerm}`;
-                console.log("nuocUong: "+apiUrl)
+                console.log("nuocUong: " + apiUrl)
                 dichVuNuoc(searchTerm);
             }
 
@@ -681,7 +683,7 @@
         $.ajax({
             url: apiUrl,
             method: 'GET',
-            success: function(data) {
+            success: function (data) {
                 let content = '<div class="row">';
                 data.forEach(item => {
                     content += `
@@ -707,9 +709,9 @@
                 });
                 content += '</div>';
                 $('#doThueTab').html(content);
-              // Hiển thị kết quả tìm kiếm
+                // Hiển thị kết quả tìm kiếm
             },
-            error: function(err) {
+            error: function (err) {
                 console.error("Có lỗi xảy ra khi gọi API:", err);
             }
         });
@@ -777,7 +779,6 @@
                         });
                         return;
                     }
-
 
 
                     const idHoaDonChiTiet = selectedInvoiceId;
@@ -880,8 +881,6 @@
     }
 
 
-
-
     $(document).ready(function () {
         // Hàm chuyển tab
         function switchTab(tabId) {
@@ -944,14 +943,14 @@
                         donGia = item.donGiasDoThue;
                         soLuong = item.soLuong;
                         soLuongKho = item.soLuongsDoThue;
-                        images=item.imageDataDoThue;
+                        images = item.imageDataDoThue;
                     } else if (item.idNuocUong) {
                         ids = item.idNuocUong;
                         tenDichVu = item.tenNuocUong;
                         donGia = item.donGiasNuocUong;
                         soLuong = item.soLuong;
                         soLuongKho = item.soLuongsNuocUong;
-                        images=item.imageDataNuocUong;
+                        images = item.imageDataNuocUong;
                     }
 
                     content += `
@@ -1030,7 +1029,7 @@
 
                         // Kiểm tra nếu kho còn âm
                         if (stockQuantity < 0) {
-                            quantityChosen += stockQuantity+soLuongKho; // Điều chỉnh số lượng chọn
+                            quantityChosen += stockQuantity + soLuongKho; // Điều chỉnh số lượng chọn
                             stockQuantity = 0; // Đặt kho còn lại bằng 0
 
                         }
@@ -1097,7 +1096,7 @@
                             tongTien: (soLuongChons * donGias), // Cập nhật đơn giá dựa trên số lượng chọn
                             soLuong: soLuongChons, // Cập nhật số lượng đồ thuê
                             idHoaDonChiTiet: idHoaDonChiTiet,
-                            trangThai:'Đã đặt'
+                            trangThai: 'Đã đặt'
                         }),
 
 
@@ -1113,7 +1112,7 @@
                                         tenDoThue: tenDichVu, // Sử dụng tên dịch vụ từ dữ liệu
                                         donGias: donGias, // Sử dụng đơn giá từ dữ liệu
                                         soLuongs: stockQuantity, // Cập nhật lại số lượng trong kho
-                                        trangThai:'Đã chọn'
+                                        trangThai: 'Đã chọn'
                                     }),
                                     success: function (response) {
                                         Swal.fire({
@@ -1142,7 +1141,7 @@
                                         tenNuocUong: tenDichVu, // Sử dụng tên dịch vụ từ dữ liệu
                                         donGias: donGias, // Sử dụng đơn giá từ dữ liệu
                                         soLuongs: stockQuantity, // Cập nhật lại số lượng trong kho
-                                        trangThai:'Đã chọn'
+                                        trangThai: 'Đã chọn'
                                     }),
                                     success: function (response) {
                                         Swal.fire({
@@ -1203,7 +1202,6 @@
                             quantityChosen += stockQuantity; // Điều chỉnh số lượng chọn
                             stockQuantity = 0; // Đặt kho còn lại bằng 0
                         }
-
 
 
                         // Cập nhật giao diện hiển thị kho và giá trị input
@@ -1378,7 +1376,7 @@
     function luuDichVu() {
         // Lấy giá trị của các trường
         var idDoThue = idDoThues;
-        var idNuocUong= idNuocUongs;
+        var idNuocUong = idNuocUongs;
         var idHoaDonChiTiet = selectedInvoiceId;
         var donGiaDoThue = donGiaDoThues;
         var donGiaNuocUong = donGiaNuocUongs;
@@ -1392,10 +1390,9 @@
             "idHoaDonChiTiet": idHoaDonChiTiet,
             "idNuocUong": idNuocUong,
             "tongTien": (idDoThue ? (soLuongDoThue * donGiaDoThue) : 0) + (idNuocUong ? (soLuongNuocUong * donGiaNuocUong) : 0),
-            "soLuong": (idDoThue ? soLuongDoThue  : soLuongNuocUong),
-            "trangThai":"Đã đặt"
+            "soLuong": (idDoThue ? soLuongDoThue : soLuongNuocUong),
+            "trangThai": "Đã đặt"
         };
-
 
 
         // Gửi dữ liệu qua API bằng jQuery POST
@@ -1429,7 +1426,6 @@
     }
 
 
-
     let idDoThues = null;
     let donGiaDoThues = null;
     // let soLuongDoThues = null;
@@ -1438,7 +1434,7 @@
     let soLuongs = null
 
 
-    function dichVuDo(tenSearchAPI ) {
+    function dichVuDo(tenSearchAPI) {
         idNuocUongs = null;
         donGiaNuocUongs = null;
         soLuongChonNuocs = null;
@@ -1457,28 +1453,24 @@
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                let content = '<div class="row">';
+                let content = '<div class="row" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">';
+
                 data.forEach(item => {
                     content += `
-                <div class="col-md-3 col-sm-6 mb-3">
-                    <div class="card">
-                        <h5 class="card-title" id="${item.id}" hidden>${item.id}</h5>
-                        <img src="${item.imageData}" class="card-img-top" alt="${item.tenDoThue}">
-                        <div class="card-body">
-                            <h5 class="card-title">${item.tenDoThue}</h5>
-                            <p class="card-text text-danger">${item.donGias} VND</p>
-                            <p class="card-text kho-con">Kho còn: ${item.soLuongs}</p>
-                            <div class="input-group">
-                                <label>Số lượng chọn</label>
-                                <input type="number" class="form-control so-luong-chon" value="0" min="0" step="1">
-                                <div class="input-group-append">
-                                    <button class="btn btn-success add-btn" data-ten-do-thue="${item.tenDoThue}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button">Thêm</button>
-                                    <button class="btn btn-danger cancel-btn" data-ten-do-thue="${item.tenDoThue}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button">Hủy</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
+            <div class="product-card" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); width: 250px; background-color: #ffffff; padding: 15px; text-align: center; position: relative;">
+               <div class="price-tag" style="position: absolute; top: 10px; right: 10px; background-color: #ff4d4d; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 14px;">
+                    ${formatCurrency(item.donGias)} <!-- Gọi hàm formatCurrency để định dạng giá -->
+                </div>
+                <img src="${item.imageData}" class="card-img-top" alt="${item.tenDoThue}" style="width: 100%; height: 160px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;"> <!-- Điều chỉnh kích thước hình ảnh -->
+                <h5 class="card-title" style="margin: 10px 0; font-size: 18px; font-weight: bold; color: #333;">${item.tenDoThue}</h5> <!-- Đưa tên xuống dưới hình -->
+                <p class="card-text kho-con" style="margin: 5px 0; font-size: 14px; color: #666;">Kho Còn: ${item.soLuongs}</p>
+                <div class="input-group" style="margin: 10px 0;">
+                    <input type="number" class="form-control so-luong-chon" value="1" min="1" style="width: 60px; display: inline-block;">
+                </div>
+                <div class="input-group-append" style="margin-top: 10px;">
+                    <button class="btn btn-success add-btn" data-ten-do-thue="${item.tenDoThue}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button" style="width: 100%; margin-bottom: 5px;">Thêm</button>
+                </div>
+            </div>`;
                 });
                 content += '</div>';
                 $('#doThueTab').html(content);
@@ -1535,7 +1527,7 @@
                                     tenDoThue: tenDoThues,
                                     donGias: donGiaDoThues,
                                     soLuongs: soLuongs - soLuongChons,
-                                    trangThai:"Đã chọn"
+                                    trangThai: "Đã chọn"
                                 }),
                                 success: function (response) {
                                     let newSoLuong = soLuongs - soLuongChons;
@@ -1570,43 +1562,48 @@
 
                 });
 
-                $('.so-luong-chon').each(function() {
+                $('.so-luong-chon').each(function () {
                     $(this).data('previous-value', 0);
                 });
 
                 $('.so-luong-chon').on('input', function () {
                     let input = $(this);
-                    let quantityChosen = parseInt(input.val()) || 0;
-                    let stockQuantityElem = input.closest('.input-group').siblings('.kho-con');
-                    let stockQuantity = parseInt(stockQuantityElem.text().replace('Kho còn: ', ''));
-                    let previousQuantity = parseInt(input.data('previous-value')) || 0;
+                    let quantityChosen = parseInt(input.val()) || 0; // Số lượng người dùng chọn
+                    let stockQuantityElem = input.closest('.product-card').find('.kho-con'); // Phần tử chứa thông tin kho còn lại
+                    let stockQuantity = parseInt(stockQuantityElem.text().replace('Kho Còn: ', '')); // Số lượng còn lại trong kho
+                    let previousQuantity = parseInt(input.data('previous-value')) || 0; // Số lượng trước đó được lưu
 
+                    // Kiểm tra nếu số lượng mới được chọn khác với số lượng trước đó
                     if (!isNaN(quantityChosen) && quantityChosen !== previousQuantity) {
+                        // Tính toán số lượng kho còn lại sau khi chọn
                         if (quantityChosen > previousQuantity) {
-                            stockQuantity -= (quantityChosen - previousQuantity);
+                            stockQuantity -= (quantityChosen - previousQuantity); // Trừ đi số lượng mới chọn
                         } else if (quantityChosen < previousQuantity) {
-                            stockQuantity += (previousQuantity - quantityChosen);
+                            stockQuantity += (previousQuantity - quantityChosen); // Cộng lại số lượng khi giảm
                         }
 
+                        // Nếu kho còn ít hơn 0, không cho chọn quá số lượng trong kho
                         if (stockQuantity < 0) {
-                            quantityChosen += stockQuantity;
+                            quantityChosen += stockQuantity; // Điều chỉnh lại số lượng được chọn
                             stockQuantity = 0;
                         }
 
-                        stockQuantityElem.text(`Kho còn: ${stockQuantity}`);
-                        input.val(quantityChosen);
-                        input.data('previous-value', quantityChosen);
+                        // Cập nhật số lượng kho còn lại trên giao diện
+                        stockQuantityElem.text(`Kho Còn: ${stockQuantity}`);
+                        input.val(quantityChosen); // Cập nhật số lượng chọn trong ô input
+                        input.data('previous-value', quantityChosen); // Lưu lại số lượng hiện tại để sử dụng sau
                     } else {
+                        // Nếu nhập không hợp lệ, trả về giá trị trước đó
                         input.val(previousQuantity);
                     }
                 });
+
 
             },
 
         });
 
     }
-
 
     // Sử dụng event delegation để bắt sự kiện click
     $(document).on('click', '.cancel-btn', function () {
@@ -1683,7 +1680,7 @@
     let soLuongChonNuocs = null;
     let tenNuocUongs = null
 
-    function dichVuNuoc(tenSearchAPI ) {
+    function dichVuNuoc(tenSearchAPI) {
         idDoThues = null;
         donGiaDoThues = null;
         soLuongChons = null;
@@ -1693,28 +1690,24 @@
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                let content = '<div class="row">';
+                let content = '<div class="row" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">';
+
                 data.forEach(item => {
                     content += `
-                <div class="col-md-3 col-sm-6 mb-3">
-                    <div class="card">
-                        <h5 class="card-title" id="${item.id}" hidden>${item.id}</h5>
-                        <img src="${item.imageData}" class="card-img-top" alt="${item.tenNuocUong}">
-                        <div class="card-body">
-                            <h5 class="card-title">${item.tenNuocUong}</h5>
-                            <p class="card-text text-danger">${item.donGias} VND</p>
-                            <p class="card-text kho-con" data-so-luong="${item.soLuongs}">Kho còn: ${item.soLuongs}</p>
-                            <div class="input-group">
-                                <label>Số lượng chọn</label>
-                                <input type="number" class="form-control so-luong-chon" value="0" min="0" step="1">
-                                <div class="input-group-append">
-                                    <button class="btn btn-success add-btn-nuoc" data-ten-nuoc-uong="${item.tenNuocUong}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button">Thêm</button>
-                                    <button class="btn btn-danger cancel-btn2" data-ten-nuoc-uong="${item.tenNuocUong}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button">Hủy</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
+        <div class="product-card" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); width: 250px; background-color: #ffffff; padding: 15px; text-align: center; position: relative;">
+            <div class="price-tag" style="position: absolute; top: 10px; right: 10px; background-color: #ff4d4d; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 14px;">
+                ${formatCurrency(item.donGias)} <!-- Gọi hàm formatCurrency để định dạng giá -->
+            </div>
+            <img src="${item.imageData}" class="card-img-top" alt="${item.tenNuocUong}" style="width: 100%; height: 160px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;">
+            <h5 class="card-title" style="margin: 10px 0; font-size: 18px; font-weight: bold; color: #333;">${item.tenNuocUong}</h5>
+            <p class="card-text kho-con" style="margin: 5px 0; font-size: 14px; color: #666;">Kho Còn: ${item.soLuongs}</p>
+            <div class="input-group" style="margin: 10px 0;">
+                <input type="number" class="form-control so-luong-chon" value="1" min="1" style="width: 60px; display: inline-block;">
+            </div>
+            <div class="input-group-append" style="margin-top: 10px;">
+                <button class="btn btn-success add-btn-nuoc" data-ten-nuoc-uong="${item.tenNuocUong}" data-id="${item.id}" data-don-gia="${formatCurrency(item.donGias)}" data-so-luong="${item.soLuongs}" type="button" style="width: 100%; margin-bottom: 5px;">Thêm</button>
+            </div>
+        </div>`;
                 });
                 content += '</div>';
                 $('#nuocUongTab').html(content);
@@ -1745,7 +1738,6 @@
                         });
                         return;
                     }
-
 
 
                     const idHoaDonChiTiet = selectedInvoiceId;
@@ -1846,8 +1838,6 @@
             // }
         });
     }
-
-
 
 
     $('#serviceModal').on('shown.bs.modal', function () {
@@ -2006,7 +1996,7 @@
     // Hàm fetch data từ server và hiển thị ra bảng
     async function fetchData(trangThai, page, tableId) {
         try {
-            const pageSize = 3;
+            const pageSize = 5;
             const url = `http://localhost:8080/hoa-don-chi-tiet/trang-thai?trangThai=${encodeURIComponent(trangThai)}&page=${page}&size=${pageSize}`;
             console.log(`Fetching data from URL: ${url}`);
 
@@ -2712,12 +2702,12 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                     }
                 });
                 //hàm mở modal phụ phí
-                document.getElementById(`btnAddPhuPhi${invoiceId}`).addEventListener('click', function() {
+                document.getElementById(`btnAddPhuPhi${invoiceId}`).addEventListener('click', function () {
                     const addPhuPhiModal = new bootstrap.Modal(document.getElementById('phuPhiModal'));
                     addPhuPhiModal.show();
                     document.getElementById('tenPhuPhi').value = '';
                     document.getElementById('giaPhuPhi').value = '';
-                    document.getElementById('btnThemPhuPhi').onclick = function() {
+                    document.getElementById('btnThemPhuPhi').onclick = function () {
                         const tenPhuPhi = document.getElementById('tenPhuPhi').value;
                         const giaPhuPhi = document.getElementById('giaPhuPhi').value;
                         const idHoaDonChiTiet = document.getElementById(`id${invoiceId}`).value;
@@ -3044,64 +3034,65 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
         const tab = new bootstrap.Tab(document.getElementById(`tab-${invoiceId}`));
         tab.show();
 
+
     }
 
 
-        function removeTab2(event, tabId) {
-            event.stopPropagation(); // Ngăn sự kiện bấm vào tab
+    function removeTab2(event, tabId) {
+        event.stopPropagation(); // Ngăn sự kiện bấm vào tab
 
-            // Xóa tab khỏi danh sách tab
-            const tabElement = document.getElementById(tabId);
-            if (tabElement) {
-                tabElement.parentElement.remove();
-            }
-
-            // Xóa nội dung tương ứng của tab
-            const contentId = tabId.replace('tab-', 'content-');
-            const contentElement = document.getElementById(contentId);
-            if (contentElement) {
-                contentElement.remove();
-            }
-
-            // Nếu tab bị xóa đang được hiển thị thì kích hoạt tab trước đó
-            if (tabElement.classList.contains('active')) {
-                const tabListRight = document.getElementById('tabListRight');
-                const firstTab = tabListRight.querySelector('.nav-link');
-                if (firstTab) {
-                    const firstTabInstance = new bootstrap.Tab(firstTab);
-                    firstTabInstance.show();
-                }
-            }
+        // Xóa tab khỏi danh sách tab
+        const tabElement = document.getElementById(tabId);
+        if (tabElement) {
+            tabElement.parentElement.remove();
         }
 
-        $(document).ready(function () {
-            $('#addInvoiceButton').on('click', function () {
-                // Thay toàn bộ nội dung của trang bằng URL mới
-                window.location.href = 'http://localhost:8080/list-san-ca';
-            });
+        // Xóa nội dung tương ứng của tab
+        const contentId = tabId.replace('tab-', 'content-');
+        const contentElement = document.getElementById(contentId);
+        if (contentElement) {
+            contentElement.remove();
+        }
+
+        // Nếu tab bị xóa đang được hiển thị thì kích hoạt tab trước đó
+        if (tabElement.classList.contains('active')) {
+            const tabListRight = document.getElementById('tabListRight');
+            const firstTab = tabListRight.querySelector('.nav-link');
+            if (firstTab) {
+                const firstTabInstance = new bootstrap.Tab(firstTab);
+                firstTabInstance.show();
+            }
+        }
+    }
+
+    $(document).ready(function () {
+        $('#addInvoiceButton').on('click', function () {
+            // Thay toàn bộ nội dung của trang bằng URL mới
+            window.location.href = 'http://localhost:8080/list-san-ca';
         });
+    });
 
 
-        // FE input hidden/show
-        function maGDInput(check, id) {
-            const myDiv = document.getElementById(`maGD` + id);
+    // FE input hidden/show
+    function maGDInput(check, id) {
+        const myDiv = document.getElementById(`maGD` + id);
 
-            if (check === true) {
-                myDiv.style.display = "block";
-            } else {
-                myDiv.style.display = "none";
-            }
+        if (check === true) {
+            myDiv.style.display = "block";
+        } else {
+            myDiv.style.display = "none";
         }
+    }
 
 
-        // sử dụng load Table trong Modal Httt
-        function loadTableHtttInModal(response, invoiceId) {
-            let tbody = $(`#tbody${invoiceId}`);
-            tbody.empty();
-            let tongTien = 0;
-            // Duyệt qua từng đối tượng trong response và thêm hàng vào tbody
-            $.each(response, function (index, item) {
-                const row = `
+    // sử dụng load Table trong Modal Httt
+    function loadTableHtttInModal(response, invoiceId) {
+        let tbody = $(`#tbody${invoiceId}`);
+        tbody.empty();
+        let tongTien = 0;
+        // Duyệt qua từng đối tượng trong response và thêm hàng vào tbody
+        $.each(response, function (index, item) {
+            const row = `
             <tr>
               <td>${index + 1}</td>
               <td></td>
@@ -3110,337 +3101,335 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
               <td></td>
             </tr>
           `;
-                tbody.append(row);
-                tongTien += item.soTien;
+            tbody.append(row);
+            tongTien += item.soTien;
 
 
-            });
-            let tienThieuText =  $(`#tienConThieu${invoiceId}`);
+        });
+        let tienThieuText = $(`#tienConThieu${invoiceId}`);
 
-            let tienThieu = parseFloat($(`#tongTienPhaiTra${invoiceId}`).val()) - parseFloat(tongTien);
-            // console.log(tienThieu)
-
-
-            $(`#tienKhachDua${invoiceId}`).val(tongTien)
-            if (tienThieu < 0) {
-                tienThieuText.text(0);
-                $(`#tienTraLai${invoiceId}`).val(-tienThieu);
-            } else {
-                tienThieuText.text(tienThieu);
-            }
+        let tienThieu = parseFloat($(`#tongTienPhaiTra${invoiceId}`).val()) - parseFloat(tongTien);
+        // console.log(tienThieu)
 
 
+        $(`#tienKhachDua${invoiceId}`).val(tongTien)
+        if (tienThieu < 0) {
+            tienThieuText.text(0);
+            $(`#tienTraLai${invoiceId}`).val(-tienThieu);
+        } else {
+            tienThieuText.text(tienThieu);
         }
 
-        // load api httt
-        function fillHttt(invoiceId) {
-            let tongTien = $(`#tongTienHang${invoiceId}`);
-            tongTien.text($(`#tongTienPhaiTra${invoiceId}`).val());
 
-            $.ajax({
-                url: `http://localhost:8080/httt/${invoiceId}`,
-                type: 'GET',
-                dataType: 'json',
-                success: function (response) {
-                    if (Array.isArray(response) && response.length === 0) {
-                        let tienThieuText =  $(`#tienConThieu${invoiceId}`);
-                        tienThieuText.text($(`#tongTienPhaiTra${invoiceId}`).val());
-                    } else {
-                        loadTableHtttInModal(response, invoiceId);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Lỗi khi gửi yêu cầu:", error);
+    }
+
+    // load api httt
+    function fillHttt(invoiceId) {
+        let tongTien = $(`#tongTienHang${invoiceId}`);
+        tongTien.text($(`#tongTienPhaiTra${invoiceId}`).val());
+
+        $.ajax({
+            url: `http://localhost:8080/httt/${invoiceId}`,
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                if (Array.isArray(response) && response.length === 0) {
+                    let tienThieuText = $(`#tienConThieu${invoiceId}`);
+                    tienThieuText.text($(`#tongTienPhaiTra${invoiceId}`).val());
+                } else {
+                    loadTableHtttInModal(response, invoiceId);
                 }
-            });
+            },
+            error: function (xhr, status, error) {
+                console.error("Lỗi khi gửi yêu cầu:", error);
+            }
+        });
+    }
+
+    function changerHttt(invoiceId) {
+
+        let httt, a;
+
+        let inputElement = document.getElementById(`maGD${invoiceId}`);
+        let isVisible = inputElement.offsetWidth > 0 && inputElement.offsetHeight > 0;
+        let khachDua = document.getElementById(`khachDua${invoiceId}`).value;
+        httt = isVisible ? 1 : 2;
+        a = {
+            idHD: invoiceId,
+            idHttt: httt,
+            soTien: khachDua
         }
 
-        function changerHttt(invoiceId) {
+        if (khachDua === '' || khachDua <= 0) {
+            Swal.fire({
+                title: 'Trống!',
+                text: 'Xin mời điền lại số tiền khách hàng đã đưa!',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
 
-            let httt, a;
+        $.ajax({
+            url: 'http://localhost:8080/httt/add', // Thay đổi URL theo server của bạn
+            type: 'POST', // Phương thức POST để gửi dữ liệu
+            contentType: 'application/json', // Định dạng gửi dữ liệu là JSON
+            data: JSON.stringify(a), // Dữ liệu được gửi dưới dạng chuỗi JSON
+            success: function (response) {
 
-            let inputElement = document.getElementById(`maGD${invoiceId}`);
-            let isVisible = inputElement.offsetWidth > 0 && inputElement.offsetHeight > 0;
-            let khachDua = document.getElementById(`khachDua${invoiceId}`).value;
-            httt = isVisible ? 1 : 2;
-            a = {
-                idHD: invoiceId,
-                idHttt: httt,
-                soTien: khachDua
-            }
-
-            if (khachDua ===''|| khachDua<=0){
+                $(`#khachDua${invoiceId}`).val('');
+                fillHttt(invoiceId);
                 Swal.fire({
-                    title: 'Trống!',
-                    text: 'Xin mời điền lại số tiền khách hàng đã đưa!',
-                    icon: 'warning',
+                    title: 'Thành công!',
+                    text: 'Thêm thành công!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                })
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    title: 'Thất bại!',
+                    text: 'Có lỗi xảy ra!',
+                    icon: 'error',
                     confirmButtonText: 'OK'
                 });
                 return;
             }
+        });
 
-            $.ajax({
-                url: 'http://localhost:8080/httt/add', // Thay đổi URL theo server của bạn
-                type: 'POST', // Phương thức POST để gửi dữ liệu
-                contentType: 'application/json', // Định dạng gửi dữ liệu là JSON
-                data: JSON.stringify(a), // Dữ liệu được gửi dưới dạng chuỗi JSON
-                success: function (response) {
+    }
 
-                    $(`#khachDua${invoiceId}`).val('');
-                    fillHttt(invoiceId);
-                    Swal.fire({
-                        title: 'Thành công!',
-                        text: 'Thêm thành công!',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    })
-                },
-                error: function (xhr, status, error) {
-                    Swal.fire({
-                        title: 'Thất bại!',
-                        text: 'Có lỗi xảy ra!',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                    return;
-                }
-            });
+    //Thanh toán
+    function thanhToan(invoiceId) {
+        const totalToPayElement = document.getElementById(`tongTienPhaiTra${invoiceId}`);
+        const changeElement = document.getElementById(`tienTraLai${invoiceId}`);
 
+        const totalToPay = parseFloat(totalToPayElement.value) || 0;
+        const change = parseFloat(changeElement.value);
+
+        if (isNaN(change) || change < 0) {
+            showErrorToast("Số tiền trả lại không hợp lệ.");
+            return;
+        }
+        if (totalToPay <= 0) {
+            showErrorToast("Tổng tiền phải trả không hợp lệ.");
+            return;
         }
 
-        //Thanh toán
-        function thanhToan(invoiceId) {
-            const totalToPayElement = document.getElementById(`tongTienPhaiTra${invoiceId}`);
-            const changeElement = document.getElementById(`tienTraLai${invoiceId}`);
+        Swal.fire({
+            title: 'Xác nhận thanh toán',
+            text: "Bạn có chắc chắn thanh toán không?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Có',
+            cancelButtonText: 'Không'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const api1 = fetch(`http://localhost:8080/hoa-don-chi-tiet/thanhtoan/${invoiceId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
 
-            const totalToPay = parseFloat(totalToPayElement.value) || 0;
-            const change = parseFloat(changeElement.value);
+                const api2 = fetch(`http://localhost:8080/hoa-don/update-thanh-toan/${invoiceId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
 
-            if (isNaN(change) || change < 0) {
-                showErrorToast("Số tiền trả lại không hợp lệ.");
-                return;
-            }
-
-            if (totalToPay <= 0) {
-                showErrorToast("Tổng tiền phải trả không hợp lệ.");
-                return;
-            }
-
-            Swal.fire({
-                title: 'Xác nhận thanh toán',
-                text: "Bạn có chắc chắn thanh toán không?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Có',
-                cancelButtonText: 'Không'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const api1 = fetch(`http://localhost:8080/hoa-don-chi-tiet/thanhtoan/${invoiceId}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    const api2 = fetch(`http://localhost:8080/hoa-don/update-thanh-toan/${invoiceId}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    Promise.all([api1, api2])
-                        .then(responses => {
-                            responses.forEach(response => {
-                                console.log(`Response from ${response.url}: ${response.status}`);
-                            });
-
-                            // Kiểm tra xem tất cả phản hồi có thành công không
-                            // Tất cả các yêu cầu đều thành công, hiển thị thông báo thành công bằng SweetAlert
-                            Swal.fire({
-                                title: 'Thành công!',
-                                text: 'Thanh toán thành công!',
-                                icon: 'success',
-                                confirmButtonText: 'OK'
-                            }).then(() => {
-                                // Reload lại trang sau khi nhấn OK
-                                window.location.reload();
-                            });
-
-                        })
-                        .catch(err => {
-                            console.error('Có lỗi xảy ra:', err);
-                            // Xử lý lỗi chung (nếu cần)
-                            Swal.fire({
-                                title: 'Lỗi!',
-                                text: 'Đã xảy ra lỗi trong quá trình thanh toán.',
-                                icon: 'error',
-                                confirmButtonText: 'OK'
-                            });
+                Promise.all([api1, api2])
+                    .then(responses => {
+                        responses.forEach(response => {
+                            console.log(`Response from ${response.url}: ${response.status}`);
                         });
-                }
-            });
-        }
-        function exportPDFWithTemplate(invoiceId) {
-            // Lấy dữ liệu từ form
-            const hoVaTenKhachHang = document.getElementById(`hoVaTenKhachHang${invoiceId}`).value || "Nguyễn Văn A";
-            const soDienThoaiKhachHang = document.getElementById(`soDienThoaiKhachHang${invoiceId}`).value || "0123456789";
-            const idHoaDon= document.getElementById(`idHoaDon${invoiceId}`).value;
-            const tenSanBong = document.getElementById(`tenSanBong${invoiceId}`).value || "Sân A";
-            const thoiGianBatDauCa = document.getElementById(`thoiGianBatDauCa${invoiceId}`).value || "8:00 AM";
-            const thoiGianKetThucCa = document.getElementById(`thoiGianKetThucCa${invoiceId}`).value || "10:00 AM";
-            const ngayTaoHoaDon = document.getElementById(`ngayTaoHoaDon${invoiceId}`).value || "01/02/2024";
-            const tongTien = document.getElementById(`tongTien${invoiceId}`).value || "500,000";
-            // const tienCoc = document.getElementById(`tienCoc${invoiceId}`).value || "100,000";
-            const phuPhi = document.getElementById(`tienPhuPhi${invoiceId}`).value || "500,000";
-            const tienSan = document.getElementById(`tienSan${invoiceId}`).value || "500,000";
 
-            // Tạo một đoạn HTML dựa trên template
-            const template = `
+                        // Kiểm tra xem tất cả phản hồi có thành công không
+                        // Tất cả các yêu cầu đều thành công, hiển thị thông báo thành công bằng SweetAlert
+                        Swal.fire({
+                            title: 'Thành công!',
+                            text: 'Thanh toán thành công!',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            // Reload lại trang sau khi nhấn OK
+                            window.location.reload();
+                        });
+
+                    })
+                    .catch(err => {
+                        console.error('Có lỗi xảy ra:', err);
+                        // Xử lý lỗi chung (nếu cần)
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Đã xảy ra lỗi trong quá trình thanh toán.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+            }
+        });
+    }
+
+    function exportPDFWithTemplate(invoiceId) {
+        // Lấy dữ liệu từ form
+        const hoVaTenKhachHang = document.getElementById(`hoVaTenKhachHang${invoiceId}`).value || "Nguyễn Văn A";
+        const soDienThoaiKhachHang = document.getElementById(`soDienThoaiKhachHang${invoiceId}`).value || "0123456789";
+        const idHoaDon = document.getElementById(`idHoaDon${invoiceId}`).value;
+        const tenSanBong = document.getElementById(`tenSanBong${invoiceId}`).value || "Sân A";
+        const thoiGianBatDauCa = document.getElementById(`thoiGianBatDauCa${invoiceId}`).value || "8:00 AM";
+        const thoiGianKetThucCa = document.getElementById(`thoiGianKetThucCa${invoiceId}`).value || "10:00 AM";
+        const ngayTaoHoaDon = document.getElementById(`ngayTaoHoaDon${invoiceId}`).value || "01/02/2024";
+        const tongTien = document.getElementById(`tongTien${invoiceId}`).value || "500,000";
+        // const tienCoc = document.getElementById(`tienCoc${invoiceId}`).value || "100,000";
+        const phuPhi = document.getElementById(`tienPhuPhi${invoiceId}`).value || "500,000";
+        const tienSan = document.getElementById(`tienSan${invoiceId}`).value || "500,000";
+
+        // Tạo một đoạn HTML dựa trên template
+        const template = `
        <div style="max-width: 800px; margin: auto; padding: 30px; border: 1px solid #eee; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #555;">
     <table cellpadding="0" cellspacing="0" style="width: 100%; text-align: left;">
         <!-- Header -->
         <tr class="top">
-            <td colspan="2" style="padding-bottom: 20px;">
-                <table style="width: 100%;">
-                    <tr>
-                        <td style="text-align: left; vertical-align: top;">
-                            <img src="/img/logo.png" alt="Logo" style="width: 100px; vertical-align: middle;">
-                            <div style="display: inline-block; vertical-align: middle; margin-left: 10px;">
-                                <h2 style="font-size: 18px; font-weight: bold; margin: 0; color: #65da7d;">FIVE STU</h2>
-                                <h3 style="font-size: 12px; font-weight: normal; margin: 0; color: #28a745;">Đáp ứng mọi nhu cầu đặt lịch của bạn</h3>
-                            </div>
-                        </td>
-                        <td style="text-align: right;">
-                            <strong style="font-size: 30px; color: #28a745;">HÓA ĐƠN</strong><br>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-
-        <!-- Thông tin khách hàng -->
-       <tr class="information">
-    <td colspan="2" style="padding-bottom: 20px;">
+        <td colspan="2" style="padding-bottom: 20px;">
         <table style="width: 100%;">
-            <tr>
-                <td>
-                    <strong style="color: #65da7d;">Hóa đơn cho:</strong><br>
-                    ${hoVaTenKhachHang}<br>
-                    SĐT: ${soDienThoaiKhachHang}
-                </td>
-                <td style="text-align: right;">
-                    <strong style="color: #65da7d;">Ngày tạo:</strong> ${ngayTaoHoaDon}<br>
-                    <strong style="color: #65da7d;">Hóa đơn #:</strong> ${idHoaDon}<br>
-                </td>
-            </tr>
+        <tr>
+        <td style="text-align: left; vertical-align: top;">
+        <img src="/img/logo.png" alt="Logo" style="width: 100px; vertical-align: middle;">
+        <div style="display: inline-block; vertical-align: middle; margin-left: 10px;">
+        <h2 style="font-size: 18px; font-weight: bold; margin: 0; color: #65da7d;">FIVE STU</h2>
+        <h3 style="font-size: 12px; font-weight: normal; margin: 0; color: #28a745;">Đáp ứng mọi nhu cầu đặt lịch của bạn</h3>
+        </div>
+        </td>
+        <td style="text-align: right;">
+        <strong style="font-size: 30px; color: #28a745;">HÓA ĐƠN</strong><br>
+        </td>
+        </tr>
         </table>
-    </td>
-</tr>
+        </td>
+        </tr>
 
-
-        <!-- Thông tin hóa đơn -->
+            <!-- Thông tin khách hàng -->
+        <tr class="information">
+        <td colspan="2" style="padding-bottom: 20px;">
+        <table style="width: 100%;">
+        <tr>
+        <td>
+        <strong style="color: #65da7d;">Hóa đơn cho:</strong><br>
+        ${hoVaTenKhachHang}<br>
+        SĐT: ${soDienThoaiKhachHang}
+        </td>
+        <td style="text-align: right;">
+        <strong style="color: #65da7d;">Ngày tạo:</strong> ${ngayTaoHoaDon}<br>
+        <strong style="color: #65da7d;">Hóa đơn #:</strong> ${idHoaDon}<br>
+        </td>
+        </tr>
+        </table>
+        </td>
+        </tr>
+            <!-- Thông tin hóa đơn -->
         <tr class="heading">
-            <td colspan="2" style="padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 16px;">
-                <strong style="color: #65da7d;">Thông tin hóa đơn</strong>
-            </td>
+        <td colspan="2" style="padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 16px;">
+        <strong style="color: #65da7d;">Thông tin hóa đơn</strong>
+        </td>
         </tr>
         <tr class="item">
-            <td>Tên sân:</td>
-            <td style="text-align: right;">${tenSanBong}</td>
+        <td>Tên sân:</td>
+        <td style="text-align: right;">${tenSanBong}</td>
         </tr>
         <tr class="item">
-            <td>Thời gian bắt đầu:</td>
-            <td style="text-align: right;">${thoiGianBatDauCa}</td>
+        <td>Thời gian bắt đầu:</td>
+        <td style="text-align: right;">${thoiGianBatDauCa}</td>
         </tr>
         <tr class="item">
-            <td>Thời gian kết thúc:</td>
-            <td style="text-align: right;">${thoiGianKetThucCa}</td>
+        <td>Thời gian kết thúc:</td>
+        <td style="text-align: right;">${thoiGianKetThucCa}</td>
         </tr>
 
-        <!-- Chi tiết dịch vụ đã thuê -->
+            <!-- Chi tiết dịch vụ đã thuê -->
         <tr class="heading">
-            <td colspan="2" style="padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 16px;">
-                <strong style="color: #65da7d;">Chi tiết dịch vụ đã thuê</strong>
-            </td>
+        <td colspan="2" style="padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 16px;">
+        <strong style="color: #65da7d;">Chi tiết dịch vụ đã thuê</strong>
+        </td>
         </tr>
 
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-            <thead>
-                <tr style="background-color: #f1f1f1;">
-                    <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">STT</th>
-                    <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Tên dịch vụ</th>
-                    <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Số lượng</th>
-                    <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Giá (VND)</th>
-                    <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Tổng tiền (VND)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="border: 1px solid #eee; padding: 8px;">1</td>
-                    <td style="border: 1px solid #eee; padding: 8px;">Dịch vụ A</td>
-                    <td style="border: 1px solid #eee; padding: 8px; text-align: center;">2</td>
-                    <td style="border: 1px solid #eee; padding: 8px; text-align: right;">500,000</td>
-                    <td style="border: 1px solid #eee; padding: 8px; text-align: right;">1,000,000</td>
-                </tr>
-                <tr>
-                    <td style="border: 1px solid #eee; padding: 8px;">2</td>
-                    <td style="border: 1px solid #eee; padding: 8px;">Dịch vụ B</td>
-                    <td style="border: 1px solid #eee; padding: 8px; text-align: center;">1</td>
-                    <td style="border: 1px solid #eee; padding: 8px; text-align: right;">300,000</td>
-                    <td style="border: 1px solid #eee; padding: 8px; text-align: right;">300,000</td>
-                </tr>
-            </tbody>
+        <thead>
+        <tr style="background-color: #f1f1f1;">
+        <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">STT</th>
+        <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Tên dịch vụ</th>
+        <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Số lượng</th>
+        <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Giá (VND)</th>
+        <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Tổng tiền (VND)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td style="border: 1px solid #eee; padding: 8px;">1</td>
+        <td style="border: 1px solid #eee; padding: 8px;">Dịch vụ A</td>
+        <td style="border: 1px solid #eee; padding: 8px; text-align: center;">2</td>
+        <td style="border: 1px solid #eee; padding: 8px; text-align: right;">500,000</td>
+        <td style="border: 1px solid #eee; padding: 8px; text-align: right;">1,000,000</td>
+        </tr>
+        <tr>
+        <td style="border: 1px solid #eee; padding: 8px;">2</td>
+        <td style="border: 1px solid #eee; padding: 8px;">Dịch vụ B</td>
+        <td style="border: 1px solid #eee; padding: 8px; text-align: center;">1</td>
+        <td style="border: 1px solid #eee; padding: 8px; text-align: right;">300,000</td>
+        <td style="border: 1px solid #eee; padding: 8px; text-align: right;">300,000</td>
+        </tr>
+        </tbody>
         </table>
 
-        <!-- Chi phí khác -->
+            <!-- Chi phí khác -->
         <tr class="heading">
-            <td colspan="2" style="border-bottom: 2px solid #eee; padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 16px; background-color: #f9f9f9;">
-                <strong style="color: #65da7d;">💰 Chi phí khác</strong>
-            </td>
+        <td colspan="2" style="border-bottom: 2px solid #eee; padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 16px; background-color: #f9f9f9;">
+        <strong style="color: #65da7d;">💰 Chi phí khác</strong>
+        </td>
         </tr>
         <table style="width: 100%; border-collapse: collapse;">
-            <tr class="item">
-                <td style="border: 1px solid #eee; padding: 8px;">Phụ phí:</td>
-                <td style="border: 1px solid #eee; padding: 8px; text-align: right;">${phuPhi} VND</td>
-            </tr>
-            <tr class="item">
-                <td style="border: 1px solid #eee; padding: 8px;">Tiền sân:</td>
-                <td style="border: 1px solid #eee; padding: 8px; text-align: right;">${tienSan} VND</td>
-            </tr>
+        <tr class="item">
+        <td style="border: 1px solid #eee; padding: 8px;">Phụ phí:</td>
+        <td style="border: 1px solid #eee; padding: 8px; text-align: right;">${phuPhi} VND</td>
+        </tr>
+        <tr class="item">
+        <td style="border: 1px solid #eee; padding: 8px;">Tiền sân:</td>
+        <td style="border: 1px solid #eee; padding: 8px; text-align: right;">${tienSan} VND</td>
+        </tr>
 
         </table>
-    </table>
-        <!-- Tổng chi phí -->
-   <div style="padding-top: 20px; font-weight: bold; font-size: 16px; text-align: right; color: #d9534f;">
+        </table>
+            <!-- Tổng chi phí -->
+        <div style="padding-top: 20px; font-weight: bold; font-size: 16px; text-align: right; color: #d9534f;">
         Tổng tiền: <span style="font-size: 20px; font-weight: bold;">${tongTien} VND</span>
-    </div>
+        </div>
 
 
-    <br>
+        <br>
 
-    <!-- Cảm ơn -->
-    <p style="text-align: center; font-size: 14px; color: #777;">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
+            <!-- Cảm ơn -->
+        <p style="text-align: center; font-size: 14px; color: #777;">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
 
-    <!-- Footer -->
-    <footer style="text-align: center; font-size: 12px; color: #999;">
+            <!-- Footer -->
+        <footer style="text-align: center; font-size: 12px; color: #999;">
         <p>FIVE STU | Địa chỉ: 123 Đường ABC, TP. HCM</p>
         <p>Email: contact@fivestu.com | Số điện thoại: (028) 1234 5678</p>
-    </footer>
-</div>
-    `;
+        </footer>
+        </div>
+        `
+        ;
 
-            // Chuyển đổi HTML thành PDF
-            const element = document.createElement('div');
-            element.innerHTML = template;
-            // Sử dụng html2pdf để tạo và tải file PDF
-            html2pdf().from(element).save(`hoa_don_${invoiceId}.pdf`);
-        }
-        function formatCurrency(value) {
-            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VNĐ"; // Thêm " VNĐ" ở cuối
-        }
+        // Chuyển đổi HTML thành PDF
+        const element = document.createElement('div');
+        element.innerHTML = template;
+        // Sử dụng html2pdf để tạo và tải file PDF
+        html2pdf().from(element).save(`hoa_don_${invoiceId}.pdf`);
+    }
 
-
+    function formatCurrency(value) {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VNĐ"; // Thêm " VNĐ" ở cuối
+    }
 </script>
 </body>
 </html>
