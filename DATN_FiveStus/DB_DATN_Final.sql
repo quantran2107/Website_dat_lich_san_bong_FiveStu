@@ -410,36 +410,6 @@ CREATE TABLE lich_su_checkin (
   CONSTRAINT fk_lichSuCheckin_hoaDonChiTiet FOREIGN KEY (id_hoa_don_chi_tiet ) REFERENCES hoa_don_chi_tiet(id)
 );
 
--- Tạo bảng Roles
-CREATE TABLE Roles (
-    role_id INT AUTO_INCREMENT PRIMARY KEY,
-    ma VARCHAR(255) NOT NULL UNIQUE,  -- Đảm bảo cột ma là duy nhất
-    authority VARCHAR(50) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deleted_at TINYINT(1) DEFAULT 0
-);
-
--- Tạo bảng Account
-CREATE TABLE Account (
-    ma VARCHAR(255) PRIMARY KEY,
-    username VARCHAR(50),
-    email VARCHAR(50),
-    passwords VARCHAR(200),  -- Đổi tên từ passwords thành password
-    enableds TINYINT(1),     -- Đổi tên từ enableds thành enabled
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deleted_at bit(1) DEFAULT 0
-);
-
--- Tạo bảng account_roles
-CREATE TABLE account_roles (
-    account_id VARCHAR(255),
-    role_id INT,
-    PRIMARY KEY (account_id, role_id),
-    FOREIGN KEY (account_id) REFERENCES Account(ma),
-    FOREIGN KEY (role_id) REFERENCES Roles(role_id)
-);
 
 -- INserttt 
 
@@ -2425,20 +2395,3 @@ VALUES
 ('TS009', 'Giá Thuê Bóng', '50000', 'VND', 'Giá thuê bóng trong 1 trận', 1, 0),
 ('TS010', 'Phí Huấn Luyện Viên', '300000', 'VND', 'Phí thuê huấn luyện viên theo giờ', 1, 0);
 
--- Thêm dữ liệu mẫu vào bảng Roles
-INSERT INTO Roles (ma, authority) VALUES
-('HaiPham1', 'ROLE_ADMIN'),
-('HaiPham2', 'ROLE_MANAGER'),
-('HaiPham3', 'ROLE_MEMBER');
-
--- Thêm dữ liệu mẫu vào bảng Account
-INSERT INTO Account (ma, username, email, passwords, enableds) VALUES
-('HaiPham1', 'HaiPham1a', 'haipham1@example.com', '{bcrypt}$2a$12$obX4V6PHLY.KfhaE4gzm/eEjm/.ouHIl9GBaPIoHrSn0lSSH0/TGS', 1),
-('HaiPham2', 'HaiPham2a', 'haipham2@example.com', '{bcrypt}$2a$12$AKF6CI2rVqeB7mhZZlHwZu8KITfRg3Opsl/RmOqwATq12.KhE4MGa', 1),
-('HaiPham3', 'HaiPham3a', 'haipham3@example.com', '{bcrypt}$2a$12$u98XNCiRG5TRya/9jYDp1.uz6mJ6ShmnjuFIRstFoZmPCEnHxnIr.', 1);
-
--- Thêm dữ liệu mẫu vào bảng account_roles
-INSERT INTO account_roles (account_id, role_id) VALUES
-('HaiPham1', (SELECT role_id FROM Roles WHERE ma = 'HaiPham1')),
-('HaiPham2', (SELECT role_id FROM Roles WHERE ma = 'HaiPham2')),
-('HaiPham3', (SELECT role_id FROM Roles WHERE ma = 'HaiPham3'));
