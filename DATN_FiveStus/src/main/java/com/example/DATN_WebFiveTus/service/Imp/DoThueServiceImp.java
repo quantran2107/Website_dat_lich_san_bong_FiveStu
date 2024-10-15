@@ -143,5 +143,17 @@ public class DoThueServiceImp implements DoThueService {
         return doThueRepository.checkIdDichVuDoThue(id, idHoaDonChiTiet).isPresent();
     }
 
+    @Override
+    public int getIdDoThue(Integer idDoThue, Integer idHoaDonChiTiet) {
+        return doThueRepository.getIdDoThue(idDoThue,idHoaDonChiTiet);
+    }
+
+    @Override
+    public List<DoThueDTO> searchTenDoThue(String tenDoThue) {
+        return doThueRepository.searchTenDoThue(tenDoThue).stream()
+                .map(dothue -> modelMapper.map(dothue, DoThueDTO.class))
+                .collect(Collectors.toList());
+    }
+
 
 }

@@ -21,4 +21,9 @@ public class GiaoCaController {
 
         return "/list/nhan-vien/giao-ca";
     }
+
+    @GetMapping("/nhan-ca")
+    public String nhanCa(){
+        return "/list/nhan-vien/nhan-ca";
+    }
 }

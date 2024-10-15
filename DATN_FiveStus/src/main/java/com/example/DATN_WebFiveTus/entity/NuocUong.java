@@ -56,4 +56,5 @@ public class NuocUong {
 
     @Column(name = "image_data",length = 255)
     private String imageData;
+
 }

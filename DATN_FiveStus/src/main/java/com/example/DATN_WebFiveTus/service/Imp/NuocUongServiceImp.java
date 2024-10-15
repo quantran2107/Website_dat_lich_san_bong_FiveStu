@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
+import com.example.DATN_WebFiveTus.dto.DoThueDTO;
 import com.example.DATN_WebFiveTus.dto.NuocUongDTO;
 import com.example.DATN_WebFiveTus.entity.NuocUong;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
@@ -34,6 +35,14 @@ public class NuocUongServiceImp implements NuocUongService {
                 .map(nuocUong -> modelMapper.map(nuocUong, NuocUongDTO.class))
                 .collect(Collectors.toList());
     }
+
+//    @Override
+//    public List<NuocUongDTO> getAll() {
+//        List<NuocUong> nuocUongList = nuocUongRepository.getAll();
+//        return nuocUongList.stream()
+//                .map(nuocUong -> modelMapper.map(nuocUong, NuocUongDTO.class))
+//                .collect(Collectors.toList());
+//    }
 
     @Override
     public NuocUongDTO getOne(Integer id) {
@@ -134,5 +143,17 @@ public class NuocUongServiceImp implements NuocUongService {
     @Override
     public Boolean checkIdDichVuNuocUong(Integer id, Integer idHoaDonChiTiet) {
         return nuocUongRepository.checkIdDichVuNuocUong(id, idHoaDonChiTiet).isPresent();
+    }
+
+    @Override
+    public int getIdNuocUong(Integer idNuocUong, Integer idHoaDonChiTiet) {
+        return nuocUongRepository.getIdNuocUong(idNuocUong,idHoaDonChiTiet);
+    }
+
+    @Override
+    public List<NuocUongDTO> searchTenNuocUong(String tenNuocUong) {
+        return nuocUongRepository.searchTenNuocUong(tenNuocUong).stream()
+                .map(dothue -> modelMapper.map(dothue, NuocUongDTO.class))
+                .collect(Collectors.toList());
     }
 }

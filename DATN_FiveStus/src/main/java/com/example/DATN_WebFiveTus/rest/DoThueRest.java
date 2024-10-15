@@ -70,7 +70,6 @@ public class DoThueRest {
         return ResponseEntity.ok(doThueDTOPage);
     }
 
-
     @PostMapping("save")
     public ResponseEntity<DoThueDTO> save(@ModelAttribute DoThueDTO doThueDTO,
                                           @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
@@ -85,6 +84,21 @@ public class DoThueRest {
 
         return ResponseEntity.ok(savedDoThue);
     }
+
+//    @PostMapping("save")
+//    public ResponseEntity<DoThueDTO> save(@ModelAttribute DoThueDTO doThueDTO,
+//                                          @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+//        // Xử lý hình ảnh
+//        if (imageFile != null && !imageFile.isEmpty()) {
+//            byte[] imageData = imageFile.getBytes();
+//            doThueDTO.setImageData(imageData);
+//        }
+//
+//        // Lưu đối tượng DoThueDTO
+//        DoThueDTO savedDoThue = doThueService.save(doThueDTO);
+//
+//        return ResponseEntity.ok(savedDoThue);
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<DoThueDTO> getOne(@PathVariable("id") Integer id) {
@@ -172,6 +186,17 @@ public class DoThueRest {
     public ResponseEntity<Boolean> checkIdDichVuDoThue(@RequestParam("id") Integer id, @RequestParam("idHoaDonChiTiet") Integer idHoaDonChiTiet) {
         Boolean exists = doThueService.checkIdDichVuDoThue(id, idHoaDonChiTiet);
         return ResponseEntity.ok(exists);
+    }
+
+    @GetMapping("getIdDoThue")
+    public ResponseEntity<Integer> getIdDoThues(@RequestParam Integer idDoThue,
+                                                @RequestParam Integer idHoaDonChiTiet){
+        return ResponseEntity.ok(doThueService.getIdDoThue(idDoThue,idHoaDonChiTiet));
+    }
+
+    @GetMapping("searchTenDoThue")
+    public ResponseEntity<List<DoThueDTO>> searchTenDoThues(@RequestParam("tenDoThue") String tenDoThue){
+        return ResponseEntity.ok(doThueService.searchTenDoThue(tenDoThue));
     }
 
 }
