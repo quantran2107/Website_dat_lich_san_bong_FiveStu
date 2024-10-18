@@ -2,20 +2,23 @@ package com.example.DATN_WebFiveTus.service;
 
 import com.example.DATN_WebFiveTus.dto.GiaoCaDTO;
 import com.example.DATN_WebFiveTus.dto.GiaoCaRequest;
+import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
 import com.example.DATN_WebFiveTus.dto.request.GiaoCaFormRequest;
-import com.example.DATN_WebFiveTus.entity.GiaoCa;
-
-import java.util.List;
+import jakarta.servlet.http.HttpServletRequest;
 
 public interface GiaoCaService {
 
     GiaoCaDTO getRowforId(int id);
 
-    Boolean changeGCN(int id, GiaoCaRequest request);
-
-    GiaoCaDTO getLastRow();
-
     Boolean addRow(GiaoCaFormRequest request);
 
-    Integer getIdNVG();
+    Integer getIdNVG(HttpServletRequest request);
+
+    Boolean changeGCN(GiaoCaRequest request);
+
+    Boolean getLastRow(HttpServletRequest request);
+
+    GiaoCaDTO checkNhanCa();
+
+    NhanVienDTO getNV(HttpServletRequest request);
 }

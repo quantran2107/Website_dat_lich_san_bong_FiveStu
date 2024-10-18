@@ -92,7 +92,7 @@ public class AuthServiceImpl implements AuthService {
         return ResponseEntity.ok(
                 ApiResponseDto.builder()
                         .status(String.valueOf(ResponseStatus.SUCCESS))
-                        .message("Sign in successfull!")
+                        .message("Sign in successfull! Role")
                         .response(signInResponseDto)
                         .build()
         );

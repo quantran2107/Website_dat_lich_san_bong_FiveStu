@@ -21,17 +21,17 @@ public class NhanVienRest {
     }
 
     @GetMapping("hien-thi")
-    public ResponseEntity<List> getAll(){
+    public ResponseEntity<?> getAll(){
         return ResponseEntity.ok(nhanVienService.getAll());
     }
 
     @GetMapping("active")
-    public ResponseEntity<List> getActive(){
+    public ResponseEntity<?> getActive(){
         return ResponseEntity.ok(nhanVienService.getActiveNV());
     }
 
     @GetMapping("inactive")
-    public ResponseEntity<List> getInactive(){
+    public ResponseEntity<?> getInactive(){
         return ResponseEntity.ok(nhanVienService.getInactiveNV());
     }
 
@@ -62,4 +62,6 @@ public class NhanVienRest {
     public ResponseEntity<?> getNVForCode(@PathVariable("code") String maNV){
         return nhanVienService.getForCode(maNV);
     }
+
+    
 }

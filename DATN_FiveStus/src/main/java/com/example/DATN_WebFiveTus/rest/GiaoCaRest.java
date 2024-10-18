@@ -4,6 +4,7 @@ import com.example.DATN_WebFiveTus.dto.GiaoCaDTO;
 import com.example.DATN_WebFiveTus.dto.GiaoCaRequest;
 import com.example.DATN_WebFiveTus.dto.request.GiaoCaFormRequest;
 import com.example.DATN_WebFiveTus.service.GiaoCaService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
@@ -27,15 +28,11 @@ public class GiaoCaRest {
         return ResponseEntity.ok(giaoCaService.getRowforId(id));
     }
 
-    @PutMapping("change-gc/{id}")
-    public ResponseEntity<?> changeGC(@PathVariable("id") int id, @RequestBody GiaoCaRequest request){
-        return ResponseEntity.ok(giaoCaService.changeGCN(id,request));
+    @PutMapping("change-gc")
+    public ResponseEntity<?> changeGC( @RequestBody GiaoCaRequest request){
+        return ResponseEntity.ok(giaoCaService.changeGCN(request));
     }
 
-    @GetMapping("last-row")
-    public ResponseEntity<?> getLastRow(){
-        return ResponseEntity.ok(giaoCaService.getLastRow());
-    }
 
     @PostMapping("add-row")
     public ResponseEntity<?> addRow(@RequestBody GiaoCaFormRequest request){
@@ -43,7 +40,17 @@ public class GiaoCaRest {
     }
 
     @GetMapping("nvgc")
-    public ResponseEntity<?> getIDNV(){
-        return ResponseEntity.ok(giaoCaService.getIdNVG());
+    public ResponseEntity<?> getIDNV(HttpServletRequest request){
+        return ResponseEntity.ok(giaoCaService.getIdNVG(request));
+    }
+
+    @GetMapping("check-nhan-ca")
+    public ResponseEntity<?> checkNhanCa(){
+        return ResponseEntity.ok(giaoCaService.checkNhanCa());
+    }
+
+    @GetMapping("getNV")
+    public ResponseEntity<?> getNV(HttpServletRequest request){
+        return ResponseEntity.ok(giaoCaService.getNV(request));
     }
 }

@@ -52,7 +52,7 @@ public class GiaoCa {
     private BigDecimal tongTienPhatSinh;
 
     @Column(name = "trang_thai")
-    private String trangThai;
+    private Boolean trangThai;
 
     @Column(name = "ghi_chu")
     private String ghiChu;
