@@ -44,6 +44,6 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Integer> {
     @Query("SELECT hd FROM HoaDon hd LEFT JOIN FETCH hd.khachHang WHERE hd.id = :id")
     HoaDon findByIdWithKhachHang(@Param("id") Integer id);
 
-    @Query("select a from HoaDon  a where a.nhanVien.id =:id and DATE(a.createdAt) = DATE(:today)")
+    @Query("select a from HoaDon  a where a.nhanVien.id =:id and DATE(a.createdAt) = DATE(:today) and a.trangThai='Đã thanh toán'")
     List<HoaDon> findByIdNV(@Param("id") int id, @Param("today")LocalDate today);
 }

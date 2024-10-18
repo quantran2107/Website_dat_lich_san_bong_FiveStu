@@ -156,7 +156,11 @@ public class HoaDonServiceImp implements HoaDonService {
     @Override
     public List<HoaDonDTO> getHDforNV(int id) {
         LocalDate today = LocalDate.now();
-        return hoaDonRepository.findByIdNV(id,today).stream().map(hoaDon -> modelMapper.map(hoaDon,HoaDonDTO.class)).toList();
+        List<HoaDon> list = hoaDonRepository.findByIdNV(id,today);
+        if (!list.isEmpty()){
+            return hoaDonRepository.findByIdNV(id,today).stream().map(hoaDon -> modelMapper.map(hoaDon,HoaDonDTO.class)).toList();
+        }
+        return null;
     }
 
 

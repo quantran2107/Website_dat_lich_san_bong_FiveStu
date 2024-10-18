@@ -33,5 +33,5 @@ public class GiaoCaDTO {
 
     private String ghiChu;
 
-    private String trangThai;
+    private Boolean trangThai;
 }
