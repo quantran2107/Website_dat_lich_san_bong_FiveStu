@@ -195,5 +195,11 @@ public class SanCaServiceImp implements SanCaService {
                 .map((sanCa) -> modelMapper.map(sanCa,SanCaDTO.class)).collect(Collectors.toList());
     }
 
+    @Override
+    public List<SanCaDTO> getAllSanCaByLoaiSan(Integer idLoaiSan, Integer idNgayTrongTuan, Integer idCa) {
+        return sanCaRepository.getAllSanCaByLoaiSan(idLoaiSan,idNgayTrongTuan,idCa).stream()
+                .map(sanCa -> modelMapper.map(sanCa,SanCaDTO.class)).collect(Collectors.toList());
+    }
+
 
 }
