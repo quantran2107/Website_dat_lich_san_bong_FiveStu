@@ -27,46 +27,17 @@ $(document).ready(function () {
 
     function conFirm() {
         $("#btnConfirm").click(function () {
+            let tienMatCaTruoc = $("#tienMatCaTruoc").val();
             let tongTienMatThucTe = ($("#tongTienMatThucTe").val());
-            let tongTienPhatSinh =  ($("#tongTienPhatSinh").text());
-            let ghiChuPhatSinh = ($("#ghiChuPhatSinh").text());
+            let tongTienPhatSinh = ($("#tongTienPhatSinh").val());
+            let ghiChuPhatSinh = $("#ghiChuPhatSinh").val();
             let tienMatTrongCa = ($("#tienMatTrongCa").val());
             let tienChuyenKhoanTrongCa = ($("#tienChuyenKhoanTrongCa").val());
-            let tongTienTrongCa = ($("#tongTien").text().trim().slice(0, -2));
+            let tongTienTrongCa = $("#tongTien").text();
 
-
-            // if ( parseFloat(tongTienMatThucTe)<0 ) {
-            //     $('#tongTienMatThucTe').addClass('is-invalid');
-            //     $('#tongTienMatThucTeError').remove();
-            //     $('#tongTienMatThucTe').after('<div id="tongTienMatThucTeError" class="invalid-feedback">Mời điền thông tin.</div>');
-            //     return;
-            // }
-            // if (parseFloat(tongTienPhatSinh)<0) {
-            //     $('#tongTienPhatSinh').addClass('is-invalid');
-            //     $('#tongTienPhatSinhError').remove();
-            //     $('#tongTienPhatSinh').after('<div id="tongTienPhatSinhError" class="invalid-feedback">Mời điền thông tin.</div>');
-            //     return;
-            // }
-            // // if (ghiChuPhatSinh.trim()==='') {
-            // //     $('#ghiChuPhatSinh').addClass('is-invalid');
-            // //     $('#ghiChuPhatSinhError').remove();
-            // //     $('#ghiChuPhatSinh').after('<div id="ghiChuPhatSinhError" class="invalid-feedback">Mời điền thông tin.</div>');
-            // //     return;
-            // // }
-            // if ( parseFloat(tienMatTrongCa)) {
-            //     $('#tienMatTrongCa').addClass('is-invalid');
-            //     $('#tienMatTrongCaError').remove();
-            //     $('#tienMatTrongCa').after('<div id="tienMatTrongCaError" class="invalid-feedback">Mời điền thông tin.</div>');
-            //     return;
-            // }
-            // if (parseFloat(tienChuyenKhoanTrongCa)) {
-            //     $('#tienChuyenKhoanTrongCa').addClass('is-invalid');
-            //     $('#tienChuyenKhoanTrongCaError').remove();
-            //     $('#tienChuyenKhoanTrongCa').after('<div id="tienChuyenKhoanTrongCaError" class="invalid-feedback">Mời điền thông tin.</div>');
-            //     return;
-            // }
-            let caculator = parseInt(tienMatTrongCa)+parseInt(tienChuyenKhoanTrongCa) -parseInt(tongTienTrongCa);
-            if (caculator!==0){
+            let cacu = parseInt(tongTienTrongCa)+parseInt(tienMatCaTruoc)-parseInt(tongTienPhatSinh) -parseInt(tongTienMatThucTe)
+            let caculator = parseInt(tienMatTrongCa) + parseInt(tienChuyenKhoanTrongCa) - parseInt(tongTienTrongCa);
+            if (caculator !== 0) {
                 Swal.fire({
                     title: 'Cảnh báo!',
                     text: 'Tiền chuyển khoản trong ca + tiền mặt trong ca = Tổng tiền!',
@@ -78,15 +49,27 @@ $(document).ready(function () {
                 });
                 return;
             }
-                let formConfirm = {
-                    tienMatTrongCa: tienMatTrongCa,
-                    tienChuyenKhoanTrongCa: tienChuyenKhoanTrongCa,
-                    tongTienTrongCa: tongTienTrongCa,
-                    tongTienMatThucTe: tongTienMatThucTe,
-                    tongTienPhatSinh: tongTienPhatSinh,
-                    ghiChu: ghiChuPhatSinh,
-                    trangThai: false,
-                }
+            if (cacu !== 0) {
+                Swal.fire({
+                    title: 'Cảnh báo!',
+                    text: 'Tổng tiền hóa đơn + tiền mặt ca trước = Tiền mặt thực tế + tiền phát sinh!',
+                    icon: 'warning',
+                    showConfirmButton: true,
+                    customClass: {
+                        container: 'swal-gc'
+                    }
+                });
+                return;
+            }
+            let formConfirm = {
+                tienMatTrongCa: tienMatTrongCa,
+                tienChuyenKhoanTrongCa: tienChuyenKhoanTrongCa,
+                tongTienTrongCa: tongTienTrongCa,
+                tongTienMatThucTe: tongTienMatThucTe,
+                tongTienPhatSinh: tongTienPhatSinh,
+                ghiChu: ghiChuPhatSinh,
+                trangThai: false,
+            }
             $.ajax({
                 url: 'http://localhost:8080/giao-ca/change-gc',
                 type: 'PUT',
@@ -98,7 +81,7 @@ $(document).ready(function () {
                         text: 'Đã cập nhật giao ca thành công!',
                         icon: 'success',
                         showConfirmButton: false,
-                        timer: 2000,
+                        timer: 4000,
                         customClass: {
                             container: 'swal-gc'
                         }
@@ -129,24 +112,14 @@ $(document).ready(function () {
         }
 
 
-
         $.ajax({
             url: `http://localhost:8080/hoa-don/search-for-nv/${id}`,
             type: 'GET',
             dataType: 'json',
             success: function (response) {
-                if (response === null) {
-                    let newRow = `
-                        <tr>
-                            <td colspan="7" style="text-align: center; font-weight: bold;">
-                                Không có dữ liệu
-                            </td>
-                        </tr>`;
-                    $('#tableGiaoCa').append(newRow);
-                    return;
-                }
+
                 let tongTien = 0;
-                let hd =  response[0];
+                let hd = response[0];
                 $("#maNVGC").text(hd["maNhanVien"])
                 response.forEach((hoaDon, index) => {
                     let newRow = `
@@ -162,11 +135,16 @@ $(document).ready(function () {
                     $('#tableGiaoCa').append(newRow);
                     tongTien += hoaDon["tongTien"];
                 });
-                $("#tongTien").text(tongTien + " ₫")
+                $("#tongTien").text(tongTien)
             },
-            error: function (jqxhr, textStatus, error) {
-                let err = textStatus + ", " + error;
-                console.error("Request Failed: " + err);
+            error: function () {
+                let newRow = `
+                        <tr>
+                            <td colspan="7" style="text-align: center; font-weight: bold;">
+                                Không có dữ liệu
+                            </td>
+                        </tr>`;
+                $('#tableGiaoCa').append(newRow);
             }
         });
         $.ajax({
