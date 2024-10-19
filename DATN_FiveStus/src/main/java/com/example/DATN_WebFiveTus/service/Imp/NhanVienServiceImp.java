@@ -15,6 +15,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -139,6 +141,26 @@ public class NhanVienServiceImp implements NhanVienService {
             e.printStackTrace();
             throw new RuntimeException();
         }
+    }
+
+    @Override
+    public ResponseEntity<?> getOneNv(int id) {
+        NhanVien nv = nhanVienReposity.findById(id).orElse(null);
+        if (nv!=null){
+           return ResponseEntity.ok( modelMapper.map(nv,NhanVienDTO.class));
+        }
+        return ResponseEntity
+                .badRequest()
+                .body("null");
+    }
+
+    @Override
+    public ResponseEntity<?> getForCode(String maNV) {
+        NhanVien nv = nhanVienReposity.findByMaNhanVien(maNV);
+        if (nv!= null){
+            return ResponseEntity.ok(modelMapper.map(nv,NhanVienDTO.class));
+        }
+        return ResponseEntity.ok(maNV);
     }
 
     private NhanVien createNhanVienFormRow(Row row, DateTimeFormatter dateTimeFormatter) {

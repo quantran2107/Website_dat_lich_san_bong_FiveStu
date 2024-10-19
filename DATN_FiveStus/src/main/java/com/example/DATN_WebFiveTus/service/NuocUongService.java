@@ -1,12 +1,9 @@
 package com.example.DATN_WebFiveTus.service;
 
-import com.example.DATN_WebFiveTus.dto.DoThueDTO;
 import com.example.DATN_WebFiveTus.dto.NuocUongDTO;
-import com.example.DATN_WebFiveTus.entity.NuocUong;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.sql.Date;
 import java.util.List;
 
 public interface NuocUongService {
@@ -29,4 +26,8 @@ public interface NuocUongService {
     List<NuocUongDTO> getAllJoinFetch2();
 
     Boolean checkIdDichVuNuocUong(Integer id, Integer idHoaDonChiTiet);
+
+    int getIdNuocUong(Integer idNuocUong, Integer idHoaDonChiTiet );
+
+    List<NuocUongDTO> searchTenNuocUong(String tenNuocUong);
 }
