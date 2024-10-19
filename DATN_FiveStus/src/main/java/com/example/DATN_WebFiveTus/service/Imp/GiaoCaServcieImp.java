@@ -41,40 +41,11 @@ public class GiaoCaServcieImp implements GiaoCaService {
     public GiaoCaDTO getRowforId(int id) {
         LocalDate today = LocalDate.now();
         GiaoCa giaoCa = giaoCaRepository.findByIdNhanVien(id, today);
-        System.out.println(giaoCa);
         if (giaoCa != null) {
             return modelMapper.map(giaoCa, GiaoCaDTO.class);
         }
         return null;
     }
-
-    //
-//    @Override
-//    public Boolean changeGCN(int id, GiaoCaRequest request) {
-//        GiaoCa giaoCa = giaoCaRepository.findById(id).orElse(null);
-//        if (giaoCa != null) {
-//            giaoCa.setTienMatTrongCa(request.getTienMatTrongCa());
-//            giaoCa.setTienChuyenKhoanTrongCa(request.getTienChuyenKhoanTrongCa());
-//            giaoCa.setTongTienTrongCa(request.getTongTienTrongCa());
-//            giaoCa.setTongTienMatThucTe(request.getTongTienMatThucTe());
-//            giaoCa.setTongTienPhatSinh(request.getTongTienPhatSinh());
-//            giaoCa.setTrangThai(request.getTrangThai());
-//            giaoCa.setGhiChu(request.getGhiChu());
-//            giaoCaRepository.save(giaoCa);
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//    @Override
-//    public GiaoCaDTO getLastRow() {
-//        List<GiaoCa> list = giaoCaRepository.findAll();
-//        if (list.isEmpty()) {
-//            return null;
-//        }
-//        return modelMapper.map(list.get(list.size() - 1), GiaoCaDTO.class);
-//    }
-//
     @Override
     public Boolean addRow(GiaoCaFormRequest request) {
         NhanVien nhanVien = nhanVienReposity.findByMaNhanVien(request.getCodeNhanVien());
@@ -126,6 +97,14 @@ public class GiaoCaServcieImp implements GiaoCaService {
             if (nv != null) {
                 GiaoCa giaoCa = giaoCaRepository.getRowLast();
                 LocalDate today = LocalDate.now();
+                if (giaoCa.getCreatedAt().toLocalDate().isBefore(today)){
+                    GiaoCa giaoCa1 = new GiaoCa();
+                    giaoCa1.setTienMatCaTruoc(BigDecimal.valueOf(100000));
+                    giaoCa1.setNhanVienNhan(nv);
+                    giaoCa1.setTrangThai(true);
+                    giaoCaRepository.save(giaoCa1);
+                    return true;
+                }
                 return today.equals(giaoCa.getCreatedAt().toLocalDate()) && giaoCa.getTrangThai() && nv.getId() == giaoCa.getNhanVienNhan().getId();
             }
             return false;
