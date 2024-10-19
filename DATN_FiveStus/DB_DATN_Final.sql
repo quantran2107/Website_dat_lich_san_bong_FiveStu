@@ -391,7 +391,7 @@ CREATE TABLE giao_ca (
   tong_tien_mat_thuc_te DECIMAL(10,2),
   tong_tien_phat_sinh DECIMAL(10,2),
   ghi_chu VARCHAR(255),
-  trang_thai VARCHAR(255),
+  trang_thai bit,
   created_at DATETIME, 
   updated_at DATETIME,
   deleted_at bit,
@@ -439,11 +439,11 @@ VALUES
 
 INSERT INTO nhan_vien (ten_nhan_vien, ma_nhan_vien, mat_khau, ho_ten, email, gioi_tinh, so_dien_thoai, dia_chi, trang_thai, created_at, updated_at, deleted_at)
 VALUES
-  ('Nhan vien 1', 'NV001', 'password1', 'Nguyen Van A', 'nguyenvana@gmail.com', true, '0123456789', 'Dia chi 1', 'active', NOW(), NOW(), 1),
-  ('Nhan vien 2', 'NV002', 'password2', 'Nguyen Van B', 'nguyenvanb@gmail.com', false, '0987654321', 'Dia chi 2', 'active', NOW(), NOW(), 1),
-  ('Nhan vien 3', 'NV003', 'password3', 'Nguyen Van C', 'nguyenvanc@gmail.com', true, '0123456789', 'Dia chi 3', 'inactive', NOW(), NOW(), 1),
-  ('Nhan vien 4', 'NV004', 'password4', 'Nguyen Van D', 'nguyenvand@gmail.com', false, '0987654321', 'Dia chi 4', 'active', NOW(), NOW(), 0),
-  ('Nhan vien 5', 'NV005', 'password5', 'Nguyen Van E', 'nguyenvane@gmail.com', true, '0123456789', 'Dia chi 5', 'active', NOW(), NOW(), 0);
+  ('truongvmph39949', 'NV001', '123456', 'Vũ Mạnh Trường', 'truongvmph39949@gmail.com', true, '0123456789', 'Dia chi 1', 'active', NOW(), NOW(), 1),
+  ('quantaph12345', 'NV002', '123456', 'Trần Anh Quân', 'quantaph12345@gmail.com', false, '0987654321', 'Dia chi 2', 'active', NOW(), NOW(), 1),
+  ('bangdxph39949', 'NV003', '123456', 'Đoàn Xuân Bằng', 'bangdxph39949@gmail.com', true, '0123456789', 'Dia chi 3', 'inactive', NOW(), NOW(), 1),
+  ('lynhkph12345', 'NV004', '123456', 'Nguyễn Hoàng Khánh Ly', 'lynhkph12345@gmail.com', false, '0987654321', 'Dia chi 4', 'active', NOW(), NOW(), 0),
+  ('haipnph39949', 'NV005', '123456', 'Phạm Ngọc Hải', 'haipnph39949@gmail.com', true, '0123456789', 'Dia chi 5', 'active', NOW(), NOW(), 0);
 
 
 INSERT INTO diem_danh (ten_chuc_vu, gio_vao, gio_ra, ghi_chu, trang_thai, id_nhan_vien, created_at, updated_at, deleted_at)
@@ -2394,4 +2394,61 @@ VALUES
 ('TS008', 'Thời Gian Đặt Trước', '1', 'ngày', 'Thời gian tối thiểu để đặt sân trước ngày đá', 1, 0),
 ('TS009', 'Giá Thuê Bóng', '50000', 'VND', 'Giá thuê bóng trong 1 trận', 1, 0),
 ('TS010', 'Phí Huấn Luyện Viên', '300000', 'VND', 'Phí thuê huấn luyện viên theo giờ', 1, 0);
+
+
+CREATE TABLE `user` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    `enabled` BOOLEAN NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE (`username`),
+    UNIQUE (`email`)
+);
+
+
+CREATE TABLE `roles` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `name` ENUM('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER','ROLE_EMPLOYEE') NOT NULL, -- Thay 'ROLE_OTHER' bằng các vai trò khác nếu cần
+    PRIMARY KEY (`id`)
+);
+CREATE TABLE `user_roles` (
+    `user_id` BIGINT NOT NULL,
+    `role_id` INT NOT NULL,
+    PRIMARY KEY (`user_id`, `role_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`role_id`) REFERENCES `roles`(`id`) ON DELETE CASCADE
+);
+
+
+
+INSERT INTO `duantotnghiep`.`user`
+(`id`,
+`email`,
+`enabled`,
+`password`,
+`username`)
+VALUES
+(1,'truongvmph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','truongvmph39949'),
+(2,'quantaph12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','quantaph12345'),
+(3,'bangdxph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','bangdxph39949'),
+(4,'lynhkph12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','lynhkph12345'),
+(5,'haipnph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','haipnph39949');
+
+
+INSERT INTO `duantotnghiep`.`roles`
+(`id`,
+`name`)
+VALUES
+(1,'ROLE_USER'),
+(2,'ROLE_EMPLOYEE'),
+(3,'ROLE_MANAGER'),
+(4,'ROLE_ADMIN');
+
+INSERT INTO `duantotnghiep`.`user_roles`
+(`user_id`,
+`role_id`)
+VALUES
+(1,1),(1,4),(2,1),(2,4),(3,1),(3,4),(4,1),(4,4),(5,1),(5,4);
 

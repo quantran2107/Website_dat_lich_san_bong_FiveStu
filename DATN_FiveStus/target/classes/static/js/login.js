@@ -1,6 +1,12 @@
-$(document).ready(function() {
+$(document).ready(function () {
 
-    $('#loginForm').on('submit', function(event) {
+    $('#maNVNC').on('click', function () {
+        $('#username').remove('is-invalid');
+        $('#password').remove('is-invalid');
+        $('#passwordError').remove();
+    })
+
+    $('#loginForm').on('submit', function (event) {
         event.preventDefault(); // Ngăn chặn việc gửi form mặc định
 
         // Lấy dữ liệu từ form
@@ -8,27 +14,56 @@ $(document).ready(function() {
             username: $('#username').val(),
             password: $('#password').val()
         };
-        // Gửi yêu cầu đăng nhập và nhận token từ server
+
         $.ajax({
             url: '/api/auth/sign-in',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),
-            success: function(response) {
+            success: function (response) {
 
                 let tokenJWT = response.response["token"];
                 // Lưu token vào cookie
-                Cookies.set('authToken', tokenJWT, { path: '/', secure: true, sameSite: 'Strict' });
+                Cookies.set('authToken', tokenJWT, {path: '/', secure: true, sameSite: 'Strict'});
                 $.ajaxSetup({
                     headers: {
                         'Authorization': 'Bearer ' + tokenJWT
                     }
                 });
-                window.location.href ='/quan-ly-nhan-vien';
+                let roles = response.response["roles"];
+
+
+                if (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_MANAGER")) {
+                    window.location.href = '/quan-ly-nhan-vien';
+                } else if (roles.includes("ROLE_EMPLOYEE")) {
+                    window.location.href = '/nhan-ca'
+                } else {
+                    window.location.href = '/home';
+                }
             },
-            error: function() {
-                alert("Tài khoản hoặc mật khẩu sai!")
+            error: function () {
+                $('#username').addClass('is-invalid');
+                $('#password').addClass('is-invalid');
+                $('#passwordError').remove();
+                $('#password').after('<div id="passwordError" class="invalid-feedback">Tên tài khoản hoặc mật khẩu sai.</div>');
             }
         });
+
+        // alert("hello")
+        // $.ajax({
+        //     url: 'http://localhost:8080/giao-ca/last-row/'+ $('#username').val(),
+        //     type: 'GET',
+        //     dataType: 'json',
+        //     success: function (response){
+        //         if (response){
+        //             window.location.href = '/quan-ly-nhan-vien';
+        //         }else {
+        //             window.location.href = '/nhan-ca';
+        //         }
+        //     }
+        // })
     });
+    function check(){
+
+    }
 });

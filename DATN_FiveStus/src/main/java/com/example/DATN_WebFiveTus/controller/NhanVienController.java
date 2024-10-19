@@ -14,7 +14,7 @@ public class NhanVienController {
 
     @GetMapping("/quan-ly-nhan-vien")
     public String hienThi(HttpServletRequest request) {
-        return checkRole.checkAdmin(request) ? "/list/nhan-vien/quan-ly-nhan-vien":"redirect:/login";
+        return checkRole.checkAdmin(request) || checkRole.checkEmployee(request) ||checkRole.checkManager(request) ? "/list/nhan-vien/quan-ly-nhan-vien":"redirect:/login";
     }
 
 }
