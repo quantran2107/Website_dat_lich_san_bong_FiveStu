@@ -48,22 +48,5 @@ $(document).ready(function () {
                 $('#password').after('<div id="passwordError" class="invalid-feedback">Tên tài khoản hoặc mật khẩu sai.</div>');
             }
         });
-
-        // alert("hello")
-        // $.ajax({
-        //     url: 'http://localhost:8080/giao-ca/last-row/'+ $('#username').val(),
-        //     type: 'GET',
-        //     dataType: 'json',
-        //     success: function (response){
-        //         if (response){
-        //             window.location.href = '/quan-ly-nhan-vien';
-        //         }else {
-        //             window.location.href = '/nhan-ca';
-        //         }
-        //     }
-        // })
     });
-    function check(){
-
-    }
 });
