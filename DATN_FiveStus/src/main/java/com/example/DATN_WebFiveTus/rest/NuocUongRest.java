@@ -192,4 +192,10 @@ public class NuocUongRest {
     public ResponseEntity<List> searchTenNuocUongs(@RequestParam("tenNuocUong") String tenNuocUong){
         return ResponseEntity.ok(nuocUongService.searchTenNuocUong(tenNuocUong));
     }
+
+    @PutMapping("updateSoLuong/{id}")
+    public ResponseEntity<?> updateSoLuong(@PathVariable Integer id, @RequestBody NuocUongDTO nuocUongDTO) {
+        return ResponseEntity.ok(nuocUongService.updateSoLuong(id, nuocUongDTO));
+    }
+
 }

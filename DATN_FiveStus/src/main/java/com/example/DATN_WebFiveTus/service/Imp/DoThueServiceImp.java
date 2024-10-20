@@ -155,5 +155,14 @@ public class DoThueServiceImp implements DoThueService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public DoThueDTO updateSoLuong(Integer id, DoThueDTO doThueDTO) {
+        DoThue doThue= doThueRepository.findById(id).orElseThrow();
+
+        doThue.setSoLuongs(doThueDTO.getSoLuongs());
+        DoThue doThueUpdate=doThueRepository.save(doThue);
+        return modelMapper.map(doThueUpdate,DoThueDTO.class);
+    }
+
 
 }
