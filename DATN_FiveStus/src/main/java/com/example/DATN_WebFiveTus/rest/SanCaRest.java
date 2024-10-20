@@ -212,5 +212,28 @@ public class SanCaRest {
         return ResponseEntity.ok(listSanCa);
     }
 
+    @PostMapping("/add/{idLoanSan}")
+    public ResponseEntity<String> addSanCa(
+            @PathVariable Integer idLoanSan,
+            @RequestBody SanCaDTO sanCaDTO
+    ) {
+        try {
+            sanCaService.addSanCaForSanBongWithIdLoaiSan2(idLoanSan, sanCaDTO);
+            return ResponseEntity.ok("Thêm sân ca thành công.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Lỗi: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("listSanCaExists/{idLoaiSan}/{idSanBong}/{idNgayTrongTuan}/{idCa}")
+    public ResponseEntity<List<SanCaDTO>> getListSanCaExists(
+            @PathVariable("idLoaiSan") Integer idLoaiSan,
+            @PathVariable("idSanBong") List<Integer> idSanBong,
+            @PathVariable("idNgayTrongTuan") List<Integer> idNgayTrongTuan,
+            @PathVariable("idCa") List<Integer> idCa) {
+
+        return ResponseEntity.ok(sanCaService.getListSanCaExits(idLoaiSan, idSanBong, idNgayTrongTuan, idCa));
+    }
+
 
 }
