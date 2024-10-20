@@ -304,7 +304,7 @@ CREATE TABLE do_thue (
   created_at DATETIME, 
   updated_at DATETIME,
   deleted_at bit default 0,
-  image_data LONGBLOB
+  image_data VARCHAR(255)default'https://res.cloudinary.com/dsuehugin/image/upload/v1728565365/g7xqdec1fnavzvacfu2k.jpg'
 );
 
 
@@ -318,7 +318,7 @@ CREATE TABLE nuoc_uong (
   created_at DATETIME, 
   updated_at DATETIME,
   deleted_at bit default 0,
-  image_data LONGBLOB
+  image_data VARCHAR(255) 
 );
 
 -- Table: dich_vu_san_bong
@@ -383,24 +383,19 @@ CREATE TABLE tham_so (
 -- Table: giao_ca
 CREATE TABLE giao_ca (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  id_nv_nhan_ca INT,
-  id_nv_ban_giao INT,
-  tien_phat_sinh DECIMAL(10,2),
-thoi_gian_ket_ca DATETIME,
-  tien_ban_dau DECIMAL(10,2),
-  tong_tien_khac DECIMAL(10,2),
-  tong_tien_mat DECIMAL(10,2),
-  tong_tien_mat_ca_truoc DECIMAL(10,2),
-  tong_tien_mat_rut DECIMAL(10,2),
+  id_nhan_vien INT,
+  tien_mat_ca_truoc DECIMAL(10,2),
+  tien_mat_trong_ca DECIMAL(10,2),
+  tien_ck_trong_ca DECIMAL(10,2),
   tong_tien_trong_ca DECIMAL(10,2),
-  tien_con_lai DECIMAL(10,2),
-  ghi_chu_phat_sinh VARCHAR(255),
-  trang_thai VARCHAR(255),
+  tong_tien_mat_thuc_te DECIMAL(10,2),
+  tong_tien_phat_sinh DECIMAL(10,2),
+  ghi_chu VARCHAR(255),
+  trang_thai bit,
   created_at DATETIME, 
   updated_at DATETIME,
   deleted_at bit,
-  CONSTRAINT fk_giaoCa_nvNhanCa FOREIGN KEY (id_nv_nhan_ca) REFERENCES nhan_vien(id),
-  CONSTRAINT fk_giaoCa_nvBanGiao FOREIGN KEY (id_nv_ban_giao) REFERENCES nhan_vien(id)
+  CONSTRAINT fk_giaoCa_nvGiaoCa FOREIGN KEY ( id_nhan_vien) REFERENCES nhan_vien(id)
 );
 
 -- Table: lich_su_checkin
@@ -414,6 +409,7 @@ CREATE TABLE lich_su_checkin (
   deleted_at BIT DEFAULT 0,
   CONSTRAINT fk_lichSuCheckin_hoaDonChiTiet FOREIGN KEY (id_hoa_don_chi_tiet ) REFERENCES hoa_don_chi_tiet(id)
 );
+
 
 -- INserttt 
 
@@ -443,11 +439,11 @@ VALUES
 
 INSERT INTO nhan_vien (ten_nhan_vien, ma_nhan_vien, mat_khau, ho_ten, email, gioi_tinh, so_dien_thoai, dia_chi, trang_thai, created_at, updated_at, deleted_at)
 VALUES
-  ('Nhan vien 1', 'NV001', 'password1', 'Nguyen Van A', 'nguyenvana@gmail.com', true, '0123456789', 'Dia chi 1', 'active', NOW(), NOW(), 1),
-  ('Nhan vien 2', 'NV002', 'password2', 'Nguyen Van B', 'nguyenvanb@gmail.com', false, '0987654321', 'Dia chi 2', 'active', NOW(), NOW(), 1),
-  ('Nhan vien 3', 'NV003', 'password3', 'Nguyen Van C', 'nguyenvanc@gmail.com', true, '0123456789', 'Dia chi 3', 'inactive', NOW(), NOW(), 1),
-  ('Nhan vien 4', 'NV004', 'password4', 'Nguyen Van D', 'nguyenvand@gmail.com', false, '0987654321', 'Dia chi 4', 'active', NOW(), NOW(), 0),
-  ('Nhan vien 5', 'NV005', 'password5', 'Nguyen Van E', 'nguyenvane@gmail.com', true, '0123456789', 'Dia chi 5', 'active', NOW(), NOW(), 0);
+  ('truongvmph39949', 'NV001', '123456', 'Vũ Mạnh Trường', 'truongvmph39949@gmail.com', true, '0123456789', 'Dia chi 1', 'active', NOW(), NOW(), 1),
+  ('quantaph12345', 'NV002', '123456', 'Trần Anh Quân', 'quantaph12345@gmail.com', false, '0987654321', 'Dia chi 2', 'active', NOW(), NOW(), 1),
+  ('bangdxph39949', 'NV003', '123456', 'Đoàn Xuân Bằng', 'bangdxph39949@gmail.com', true, '0123456789', 'Dia chi 3', 'inactive', NOW(), NOW(), 1),
+  ('lynhkph12345', 'NV004', '123456', 'Nguyễn Hoàng Khánh Ly', 'lynhkph12345@gmail.com', false, '0987654321', 'Dia chi 4', 'active', NOW(), NOW(), 0),
+  ('haipnph39949', 'NV005', '123456', 'Phạm Ngọc Hải', 'haipnph39949@gmail.com', true, '0123456789', 'Dia chi 5', 'active', NOW(), NOW(), 0);
 
 
 INSERT INTO diem_danh (ten_chuc_vu, gio_vao, gio_ra, ghi_chu, trang_thai, id_nhan_vien, created_at, updated_at, deleted_at)
@@ -2239,12 +2235,9 @@ VALUES
 
 INSERT INTO hinh_thuc_thanh_toan (hinh_thuc_thanh_toan, trang_thai, created_at, updated_at, deleted_at)
 VALUES
-  ('Thanh toan 1', 'active', NOW(), NOW(), 1),
-  ( 'Thanh toan 2', 'active', NOW(), NOW(), 1),
-  ( 'Thanh toan 3', 'inactive', NOW(), NOW(), 1),
-  ('Thanh toan 4', 'active', NOW(), NOW(), 1),
-  ('Thanh toan 5', 'active', NOW(), NOW(), 0);
-
+  ('Chuyển khoản', 'active', NOW(), NOW(), 0),
+  ( 'Tiền mặt', 'active', NOW(), NOW(), 0);
+  
 
 INSERT INTO lich_su_hoa_don (id_hoa_don, hanh_dong, loai_hanh_dong, ngay_tao, ngay_cap_nhat, ten_nguoi_tao, ten_nguoi_cap_nhat, so_lan_thay_doi, trang_thai, created_at, updated_at, deleted_at)
 VALUES
@@ -2254,55 +2247,45 @@ VALUES
   (4, 'Tao hoa don', 'Tao', NOW(), NOW(), 'Nguyen Van D', 'Nguyen Van D', 4, 'active', NOW(), NOW(), 0),
   (5, 'Cap nhat hoa don', 'Cap nhat', NOW(), NOW(), 'Nguyen Van E', 'Nguyen Van E', 5, 'active', NOW(), NOW(), 0);
 
--- Chèn dữ liệu vào bảng do_thue
 INSERT INTO do_thue (don_gia, so_luong, ten_do_thue, trang_thai, created_at, updated_at, deleted_at, image_data)
 VALUES
-  (100000, 10, 'Do thue 1', 'Còn', NOW(), NOW(), 0, NULL),
-  (200000, 20, 'Do thue 2', 'Còn', NOW(), NOW(), 0, NULL),
-  (300000, 0, 'Do thue 3', 'Hết', NOW(), NOW(), 0, NULL),
-  (400000, 40, 'Do thue 4', 'Còn', NOW(), NOW(), 0, NULL),
-  (500000, 50, 'Do thue 5', 'Còn', NOW(), NOW(), 0, NULL),
-  (600000, 0, 'Do thue 6', 'Hết', NOW(), NOW(), 0, NULL),
-  (700000, 70, 'Do thue 7', 'Còn', NOW(), NOW(), 0, NULL),
-  (800000, 80, 'Do thue 8', 'Còn', NOW(), NOW(), 0, NULL),
-  (900000, 0, 'Do thue 9', 'Hết', NOW(), NOW(), 0, NULL),
-  (1000000, 0, 'Do thue 10', 'Hết', NOW(), NOW(), 0, NULL),
-  (1100000, 110, 'Do thue 11', 'Còn', NOW(), NOW(), 0, NULL),
-  (1200000, 120, 'Do thue 12', 'Còn', NOW(), NOW(), 0, NULL),
-  (1300000, 0, 'Do thue 13', 'Hết', NOW(), NOW(), 0, NULL),
-  (1400000, 140, 'Do thue 14', 'Còn', NOW(), NOW(), 0, NULL),
-  (1500000, 150, 'Do thue 15', 'Còn', NOW(), NOW(), 0, NULL),
-  (1600000, 0, 'Do thue 16', 'Hết', NOW(), NOW(), 0, NULL),
-  (1700000, 170, 'Do thue 17', 'Còn', NOW(), NOW(), 0, NULL),
-  (1800000, 0, 'Do thue 18', 'Hết', NOW(), NOW(), 0, NULL),
-  (1900000, 190, 'Do thue 19', 'Còn', NOW(), NOW(), 0, NULL),
-  (2000000, 200, 'Do thue 20', 'Còn', NOW(), NOW(), 0, NULL);
+(100000, 150, 'Bóng đá 1', 'Chưa chọn', NOW(), NOW(), 0, default),
+(100000, 130, 'Bóng đá 2', 'Chưa chọn', NOW(), NOW(), 0, default),
+(100000, 20, 'Áo thi đấu 1', 'Chưa chọn', NOW(), NOW(), 0, default),
+(100000, 10, 'Giày đá bóng 1', 'Chưa chọn', NOW(), NOW(), 0, default),
+(100000, 10, 'Bóng đá 3', 'Đã chọn', NOW(), NOW(), 0, default),
+(100000, 10, 'Áo thi đấu 2', 'Đã chọn', NOW(), NOW(), 0, default),
+(100000, 10, 'Giày đá bóng 2', 'Đã chọn', NOW(), NOW(), 0, default),
+(100000, 10, 'Khung gôn 1', 'Đã chọn', NOW(), NOW(), 0, default),
+(100000, 10, 'Khung gôn 2', 'Đã chọn', NOW(), NOW(), 0, default),
+(100000, 10, 'Bóng đá 4', 'Đã chọn', NOW(), NOW(), 0, default),
+(100000, 10, 'Bóng đá 5', 'Đã chọn', NOW(), NOW(), 0, default),
+(100000, 10, 'Giày đá bóng 3', 'Đã chọn', NOW(), NOW(), 0, default);
+
+
 
 
 INSERT INTO nuoc_uong (don_gia, so_luong, ten_nuoc_uong, trang_thai, created_at, updated_at, image_data)
 VALUES
-(50.00, 20, 'Nước Uống A', 'Còn', NOW(), NOW(), NULL),
-(55.00, 5, 'Nước Uống B', 'Còn', NOW(), NOW(), NULL),
-(60.00, 0, 'Nước Uống C', 'Hết', NOW(), NOW(), NULL),
-(65.00, 10, 'Nước Uống D', 'Còn', NOW(), NOW(), NULL),
-(70.00, 3, 'Nước Uống E', 'Còn', NOW(), NOW(), NULL),
-(75.00, 0, 'Nước Uống F', 'Hết', NOW(), NOW(), NULL),
-(80.00, 25, 'Nước Uống G', 'Còn', NOW(), NOW(), NULL),
-(85.00, 0, 'Nước Uống H', 'Hết', NOW(), NOW(), NULL),
-(90.00, 7, 'Nước Uống I', 'Còn', NOW(), NOW(), NULL),
-(95.00, 15, 'Nước Uống J', 'Còn', NOW(), NOW(), NULL),
-(100.00, 2, 'Nước Uống K', 'Còn', NOW(), NOW(), NULL),
-(105.00, 0, 'Nước Uống L', 'Hết', NOW(), NOW(), NULL),
-(110.00, 8, 'Nước Uống M', 'Còn', NOW(), NOW(), NULL),
-(115.00, 0, 'Nước Uống N', 'Hết', NOW(), NOW(), NULL),
-(120.00, 4, 'Nước Uống O', 'Còn', NOW(), NOW(), NULL),
-(125.00, 0, 'Nước Uống P', 'Hết', NOW(), NOW(), NULL),
-(130.00, 6, 'Nước Uống Q', 'Còn', NOW(), NOW(), NULL),
-(135.00, 0, 'Nước Uống R', 'Hết', NOW(), NOW(), NULL),
-(140.00, 9, 'Nước Uống S', 'Còn', NOW(), NOW(), NULL),
-(145.00, 0, 'Nước Uống T', 'Hết', NOW(), NOW(), NULL),
-(150.00, 11, 'Nước Uống U', 'Còn', NOW(), NOW(), NULL),
-(155.00, 0, 'Nước Uống V', 'Hết', NOW(), NOW(), NULL);
+(10000, 100, 'Coca-Cola', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728555252/z99tddvdeoa6w4ly0kgq.jpg'),
+(6000, 100, 'Aquarius', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557484/qqqmb3yshzdzrmmhd51y.jpg'),
+(10000, 100, 'Bia Tiger', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557484/xhvmdut9zoevmi3svoqp.jpg'),
+(12000, 100, 'C2 vị ổi', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557485/mzglgz7asrvx9exu6eif.jpg'),
+(12000, 100, 'C2 vị vải', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557485/pn4m4ejzovsgw7xyoz4y.jpg'),
+(12000, 100, 'C2 vị dưa lưới', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557485/jd4zfwzkrmeeud7cxsnf.jpg'),
+(12000, 100, 'C2 vị chanh', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/myhoe4wud22s8zlfxffy.jpg'),
+(18000, 100, 'Monster', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557485/anpzvx0de9cqnmbdtpnt.jpg'),
+(10000, 100, 'Chanh muối', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557485/qraj7exeeu1t1mytlvu0.jpg'),
+(5000, 100, 'Nước lọc lavie', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/r9aquezhhpnqamaddht3.jpg'),
+(10000, 100, 'Revive', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/qxredswehibjzdesgmaj.jpg'),
+(13000, 0, 'Lon String đỏ', 'Chưa chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/hfi20eyzmlebh4yvcro8.jpg'),
+(10000, 100, 'Chai String đỏ', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/unmmsmqazh03kuf7qrxt.jpg'),
+(13000, 100, 'Bò húc', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/kw0x902gsd2vhd7nrxam.jpg'),
+(1000, 0, 'Chai String vàng', 'Chưa chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/erv95mjtarcdvbhpfgng.jpg'),
+(10000, 100, 'Trà xanh không độ', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/aos6ljsh4zhz2yu8vccr.jpg'),
+(20000, 100, 'Warrior', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/fsvne0ghubuvnbowgzs1.jpg'),
+(13000, 100, 'Lon String vàng', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/nhtnwvsvnyarpp2yqw9v.jpg');
+
 
 INSERT INTO dich_vu_san_bong (id_do_thue, id_nuoc_uong, id_hoa_don_chi_tiet, tong_tien, so_luong, trang_thai, created_at, updated_at, deleted_at) VALUES
 (1, NULL, 1, 50.00, 3, 'Đã đặt', NOW(), NOW(), 0),
@@ -2315,36 +2298,6 @@ INSERT INTO dich_vu_san_bong (id_do_thue, id_nuoc_uong, id_hoa_don_chi_tiet, ton
 (NULL, 4, 8, 30.00, 2, 'Đã đặt', NOW(), NOW(), 0),
 (5, NULL, 9, 55.00, 3, 'Đã đặt', NOW(), NOW(), 0),
 (NULL, 5, 10, 22.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(6, NULL, 11, 70.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 6, 12, 18.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(7, NULL, 13, 90.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 7, 14, 28.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(8, NULL, 15, 45.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 8, 16, 35.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(9, NULL, 17, 65.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 9, 18, 20.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(10, NULL, 19, 77.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 10, 20, 19.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(11, NULL, 21, 66.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 11, 22, 33.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(12, NULL, 23, 88.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 12, 24, 25.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(13, NULL, 25, 72.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 13, 26, 17.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(14, NULL, 27, 92.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 14, 28, 29.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(15, NULL, 29, 56.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 15, 30, 24.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(16, NULL, 31, 78.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 16, 32, 21.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(17, NULL, 33, 68.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 17, 34, 26.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(18, NULL, 35, 64.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 18, 36, 20.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(19, NULL, 37, 90.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 19, 38, 32.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(20, NULL, 39, 70.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 20, 40, 14.00, 4, 'Đã đặt', NOW(), NOW(), 0),
 (1, NULL, 41, 52.50, 3, 'Đã đặt', NOW(), NOW(), 0),
 (NULL, 1, 42, 21.00, 4, 'Đã đặt', NOW(), NOW(), 0),
 (2, NULL, 43, 80.00, 1, 'Đã đặt', NOW(), NOW(), 0),
@@ -2353,22 +2306,8 @@ INSERT INTO dich_vu_san_bong (id_do_thue, id_nuoc_uong, id_hoa_don_chi_tiet, ton
 (NULL, 3, 46, 24.00, 3, 'Đã đặt', NOW(), NOW(), 0),
 (4, NULL, 47, 85.00, 1, 'Đã đặt', NOW(), NOW(), 0),
 (NULL, 4, 48, 27.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(5, NULL, 49, 58.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 5, 50, 20.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(6, NULL, 51, 72.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 6, 52, 22.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(7, NULL, 53, 75.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 7, 54, 30.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(8, NULL, 55, 54.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 8, 56, 18.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(9, NULL, 57, 62.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 9, 58, 29.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(10, NULL, 59, 67.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 10, 60, 23.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(11, NULL, 61, 76.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 11, 62, 32.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(12, NULL, 63, 84.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 12, 64, 26.00, 4, 'Đã đặt', NOW(), NOW(), 0);
+(5, NULL, 49, 58.00, 4, 'Đã đặt', NOW(), NOW(), 0);
+
 
 INSERT INTO phu_phi_hoa_don (id_hoa_don_chi_tiet, ma, ten, tien_phu_phi, ghi_chu, trang_thai, created_at, updated_at, deleted_at)
 VALUES (1, 'PP001', 'Phí giao hàng', 50000.00, 'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
@@ -2422,15 +2361,15 @@ VALUES
   ('Loai tham so 5', 1, NOW(), NOW(), 0);
 
 
-INSERT INTO giao_ca (id_nv_nhan_ca, id_nv_ban_giao, tien_phat_sinh, thoi_gian_ket_ca, tien_ban_dau, tong_tien_khac, tong_tien_mat, tong_tien_mat_ca_truoc, tong_tien_mat_rut, tong_tien_trong_ca, tien_con_lai, ghi_chu_phat_sinh, trang_thai, created_at, updated_at, deleted_at)
-VALUES
-  (1, 2, 100000.00, '2022-01-01 08:00:00', 200000.00, 300000.00, 400000.00, 500000.00, 600000.00, 700000.00, 800000.00, 'Ghi chu 1', 'active', NOW(), NOW(), 0),
-  (2, 3, 200000.00, '2022-01-02 08:00:00', 300000.00, 400000.00, 500000.00, 600000.00, 700000.00, 800000.00, 900000.00, 'Ghi chu 2', 'active', NOW(), NOW(), 0),
-  (3, 4, 300000.00, '2022-01-03 08:00:00', 400000.00, 500000.00, 600000.00, 700000.00, 800000.00, 900000.00, 1000000.00, 'Ghi chu 3', 'inactive', NOW(), NOW(), 0),
-  (4, 5, 400000.00, '2022-01-04 08:00:00', 500000.00, 600000.00, 700000.00, 800000.00, 900000.00, 1000000.00, 1100000.00, 'Ghi chu 4', 'active', NOW(), NOW(), 0),
-  (5, 1, 500000.00, '2022-01-05 08:00:00', 600000.00, 700000.00, 800000.00, 900000.00, 1000000.00, 1100000.00, 1200000.00, 'Ghi chu 5', 'active', NOW(), NOW(), 0);
-  
-  INSERT INTO lich_su_checkin (id_hoa_don_chi_tiet, thoi_gian_checkin, mo_ta)
+INSERT INTO giao_ca (id_nhan_vien, tien_mat_ca_truoc, tien_mat_trong_ca, tien_ck_trong_ca, tong_tien_trong_ca, tong_tien_mat_thuc_te, tong_tien_phat_sinh, ghi_chu)
+VALUES 
+    (1, 1000000, 500000, 200000, 1700000, 1700000, 50000, 'Giao ca buổi sáng'),
+    (2, 1500000, 600000, 300000, 2400000, 2400000, 60000, 'Giao ca buổi chiều'),
+    (3, 1200000, 700000, 400000, 2300000, 2300000, 40000, 'Giao ca tối'),
+    (4, 1300000, 800000, 350000, 2450000, 2450000, 70000, 'Giao ca buổi sáng ngày 2'),
+    (5, 1100000, 400000, 250000, 1750000, 1750000, 30000, 'Giao ca buổi chiều ngày 2');
+
+INSERT INTO lich_su_checkin (id_hoa_don_chi_tiet, thoi_gian_checkin, mo_ta)
 VALUES
   (21, '2024-08-25 08:30:00', 'Khách hàng check-in vào sáng sớm'),
   (22, '2024-08-25 09:45:00', 'Khách hàng check-in vào buổi sáng'),
@@ -2455,4 +2394,61 @@ VALUES
 ('TS008', 'Thời Gian Đặt Trước', '1', 'ngày', 'Thời gian tối thiểu để đặt sân trước ngày đá', 1, 0),
 ('TS009', 'Giá Thuê Bóng', '50000', 'VND', 'Giá thuê bóng trong 1 trận', 1, 0),
 ('TS010', 'Phí Huấn Luyện Viên', '300000', 'VND', 'Phí thuê huấn luyện viên theo giờ', 1, 0);
+
+
+CREATE TABLE `user` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    `enabled` BOOLEAN NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE (`username`),
+    UNIQUE (`email`)
+);
+
+
+CREATE TABLE `roles` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `name` ENUM('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER','ROLE_EMPLOYEE') NOT NULL, -- Thay 'ROLE_OTHER' bằng các vai trò khác nếu cần
+    PRIMARY KEY (`id`)
+);
+CREATE TABLE `user_roles` (
+    `user_id` BIGINT NOT NULL,
+    `role_id` INT NOT NULL,
+    PRIMARY KEY (`user_id`, `role_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`role_id`) REFERENCES `roles`(`id`) ON DELETE CASCADE
+);
+
+
+
+INSERT INTO `duantotnghiep`.`user`
+(`id`,
+`email`,
+`enabled`,
+`password`,
+`username`)
+VALUES
+(1,'truongvmph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','truongvmph39949'),
+(2,'quantaph12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','quantaph12345'),
+(3,'bangdxph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','bangdxph39949'),
+(4,'lynhkph12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','lynhkph12345'),
+(5,'haipnph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','haipnph39949');
+
+
+INSERT INTO `duantotnghiep`.`roles`
+(`id`,
+`name`)
+VALUES
+(1,'ROLE_USER'),
+(2,'ROLE_EMPLOYEE'),
+(3,'ROLE_MANAGER'),
+(4,'ROLE_ADMIN');
+
+INSERT INTO `duantotnghiep`.`user_roles`
+(`user_id`,
+`role_id`)
+VALUES
+(1,1),(1,4),(2,1),(2,4),(3,1),(3,4),(4,1),(4,4),(5,1),(5,4);
 

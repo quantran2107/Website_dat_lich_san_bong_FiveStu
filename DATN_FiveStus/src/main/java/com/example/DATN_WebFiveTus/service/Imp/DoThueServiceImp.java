@@ -39,13 +39,6 @@ public class DoThueServiceImp implements DoThueService {
                 .collect(Collectors.toList());
     }
 
-//    @Override
-//    public List<DoThueDTO> getAll() {
-//        List<DoThue> doThues = doThueRepository.getAll();
-//        return doThues.stream()
-//                .map(dothue -> modelMapper.map(dothue, DoThueDTO.class))
-//                .collect(Collectors.toList());
-//    }
 
     @Override
     public DoThueDTO getOne(Integer id) {
@@ -160,6 +153,15 @@ public class DoThueServiceImp implements DoThueService {
         return doThueRepository.searchTenDoThue(tenDoThue).stream()
                 .map(dothue -> modelMapper.map(dothue, DoThueDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public DoThueDTO updateSoLuong(Integer id, DoThueDTO doThueDTO) {
+        DoThue doThue= doThueRepository.findById(id).orElseThrow();
+
+        doThue.setSoLuongs(doThueDTO.getSoLuongs());
+        DoThue doThueUpdate=doThueRepository.save(doThue);
+        return modelMapper.map(doThueUpdate,DoThueDTO.class);
     }
 
 

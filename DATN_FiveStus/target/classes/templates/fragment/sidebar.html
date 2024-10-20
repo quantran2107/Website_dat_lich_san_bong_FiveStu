@@ -1,5 +1,95 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="sidebar">
+    <!--            Modal-->
+    <div class="modal fade" id="logout" tabindex="-1" style="z-index: 10000"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 800px">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #198754; color: white">
+                    <h1 class="modal-title" id="exampleModalLabel"
+                        style="text-align: center ;flex: 1">Giao ca</h1>
+                    <button type="button" class="close" data-bs-dismiss="modal"
+                            aria-label="Đóng">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="invoice">
+                        <div class="mb-4">
+                            <div>Ngày: <strong>10/10/2024</strong></div>
+                            <div>Mã nhân viên: <strong id="maNVGC"></strong></div>
+                        </div>
+                        <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                            <table class="table table-striped table-bordered">
+                                <thead >
+                                <tr>
+                                    <th style="position: sticky; top: 0; background-color: #f8f9fa; z-index: 10;">#</th>
+                                    <th style="position: sticky; top: 0; background-color: #f8f9fa; z-index: 10;">Mã hóa đơn</th>
+                                    <th style="position: sticky; top: 0; background-color: #f8f9fa; z-index: 10;">Người tạo</th>
+                                    <th style="position: sticky; top: 0; background-color: #f8f9fa; z-index: 10;">Khách hàng</th>
+                                    <th style="position: sticky; top: 0; background-color: #f8f9fa; z-index: 10;">Tiền cọc</th>
+                                    <th style="position: sticky; top: 0; background-color: #f8f9fa; z-index: 10;">Tổng tiền</th>
+                                    <th style="position: sticky; top: 0; background-color: #f8f9fa; z-index: 10;">Trạng thái</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tableGiaoCa">
+                                </tbody>
+                            </table>
+                        </div>
+                        <hr>
+                        <div style="display: flex; float: right"><label>Tổng tiền : </label><strong id="tongTien">0</strong><strong>₫</strong></div>
+                        <hr>
+                        <div class="mb-4" style="margin-top: 30px">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">Tiền mặt ca trước:</div>
+                                    <div  class="form-group">Tiền mặt trong ca:</div>
+                                    <div class="form-group">Tiền chuyển khoản trong ca:</div>
+                                    <div class="form-group">Tổng tiền mặt thực tế:</div>
+                                </div>
+                                <div class="col-4">
+                                    <div style="display:flex; margin-bottom: 5px">
+                                        <input id="tienMatCaTruoc" type="number" readonly style="border: none; border-bottom: 1px solid #6c757d; outline: none;" class="form-control" placeholder="Nhập dữ liệu...">
+                                        <strong >₫</strong>
+                                    </div>
+                                    <div style="display:flex; margin-bottom: 5px">
+                                        <input id="tienMatTrongCa" type="number" style="border: none; border-bottom: 1px solid #6c757d; outline: none;" class="form-control" placeholder="Nhập dữ liệu...">
+                                        <strong >₫</strong>
+                                    </div>
+                                    <div style="display:flex; margin-bottom: 5px">
+                                        <input id="tienChuyenKhoanTrongCa" type="number" style="border: none; border-bottom: 1px solid #6c757d; outline: none;" class="form-control" placeholder="Nhập dữ liệu...">
+                                        <strong >₫</strong>
+                                    </div>
+                                    <div style="display:flex; margin-bottom: 5px">
+                                        <input id="tongTienMatThucTe" type="number" style="border: none; border-bottom: 1px solid #6c757d; outline: none;" class="form-control" placeholder="Nhập dữ liệu...">
+                                        <strong >₫</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tongTienPhatSinh" class="form-label">Tổng tiền phát sinh:</label>
+                            <input type="number" class="form-control" id="tongTienPhatSinh"
+                                   placeholder="Nhập số tiền phát sinh...">
+                        </div>
+                        <div class="mb-3">
+                            <label for="ghiChuPhatSinh" class="form-label">Ghi chú (tiền phát sinh):</label>
+                            <textarea type="text" rows="4" class="form-control" id="ghiChuPhatSinh"
+                                      placeholder="Ghi chú..." style="resize :none; overflow: auto"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-" data-bs-dismiss="modal"
+                    >Đóng
+                    </button>
+                    <button type="button" class="btn btn-outline-warning" id="btnConfirm"
+                    >Xác nhận
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <aside class="sidebar-left border-right bg-white shadow" data-simplebar id="leftSidebar">
         <a class="btn collapseSidebar toggle-btn d-lg-none text-muted ml-2 mt-3" data-toggle="toggle" href="#">
             <i class="fe fe-x"><span class="sr-only"></span></i>
@@ -110,6 +200,15 @@
                     </a>
                 </li>
             </ul>
+            <ul class="navbar-nav flex-fill w-100 mb-3">
+                <li class="nav-item active">
+                    <a class="nav-link pl-3" href="" id="logoutGC" data-bs-toggle="modal" data-bs-target="#logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="ml-3 item-text">Đăng xuất</span>
+                    </a>
+                </li>
+            </ul>
+
 
             <!--            <li class="nav-item dropdown">-->
             <!--                <a aria-expanded="false" class="dropdown-toggle nav-link pl-3" data-toggle="collapse"-->
@@ -407,4 +506,6 @@
             <!--            </div>-->
         </nav>
     </aside>
+    <script src="/js/giaoca.js"></script>
+
 </div>

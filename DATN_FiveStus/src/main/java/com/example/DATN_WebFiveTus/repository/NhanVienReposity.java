@@ -18,4 +18,7 @@ public interface NhanVienReposity extends JpaRepository<NhanVien,Integer> {
 
     @Query("select a from NhanVien a where a.maNhanVien = :maNhanVien")
     NhanVien findByMaNhanVien(@Param("maNhanVien") String maNhanVien);
+
+    @Query("select a from NhanVien a where a.email=:username or a.tenNhanVien=:username")
+    NhanVien findByUsername(@Param("username") String username);
 }

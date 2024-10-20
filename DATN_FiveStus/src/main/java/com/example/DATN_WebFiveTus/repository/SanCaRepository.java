@@ -111,4 +111,12 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
 
 
 
+    @Query("SELECT sc FROM SanCa  sc WHERE sc.ngayTrongTuan.id = :idNgayTrongTuan " +
+                    "AND sc.ca.id = :idCa " +
+                    "AND sc.sanBong.loaiSan.id = :idLoaiSan")
+    List<SanCa> getAllSanCaByLoaiSan(@Param("idLoaiSan") Integer idLoaiSan,
+                                     @Param("idNgayTrongTuan") Integer idNgayTrongTuan,
+                                     @Param("idCa") Integer idCa);
+
+
 }

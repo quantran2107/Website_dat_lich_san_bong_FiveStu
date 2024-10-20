@@ -212,6 +212,7 @@ public class SanCaRest {
         return ResponseEntity.ok(listSanCa);
     }
 
+
     @PostMapping("/add/{idLoanSan}")
     public ResponseEntity<String> addSanCa(
             @PathVariable Integer idLoanSan,
@@ -233,6 +234,15 @@ public class SanCaRest {
             @PathVariable("idCa") List<Integer> idCa) {
 
         return ResponseEntity.ok(sanCaService.getListSanCaExits(idLoaiSan, idSanBong, idNgayTrongTuan, idCa));
+    }
+
+    @GetMapping("/danh-sach-doi-lich/{idLoaiSan}/{idNgayTrongTuan}/{idCa}")
+    public ResponseEntity<List<SanCaDTO>> danhSachDoiLich(@PathVariable("idLoaiSan") Integer idLoaiSan,
+                                                    @PathVariable("idNgayTrongTuan") Integer idNgayTrongTuan,
+                                                    @PathVariable("idCa") Integer idCa){
+        List<SanCaDTO> sanCaDTOList = sanCaService.getAllSanCaByLoaiSan(idLoaiSan,idNgayTrongTuan,idCa);
+        return ResponseEntity.ok(sanCaDTOList);
+
     }
 
 

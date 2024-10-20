@@ -253,6 +253,10 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
         HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
 
+        System.out.println("idSanCa: " + hoaDonChiTietDTO.getIdSanCa());
+        System.out.println("idHoaDon: " + hoaDonChiTietDTO.getIdHoaDon());
+        System.out.println("tongTien: " + hoaDonChiTietDTO.getTongTien());
+
         return modelMapper.map(hoaDonChiTietSave,HoaDonChiTietDTO.class);
     }
 
@@ -261,6 +265,5 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         Long count = hoaDonChiTietRepository.countByIdSanCaAndNgayDenSan(idSanCa, ngayDenSan);
         return count > 0;  // Nếu count > 0 tức là sân ca đã được đặt
     }
-
 
 }
