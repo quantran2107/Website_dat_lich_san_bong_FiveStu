@@ -35,13 +35,13 @@ public class HoaDonChiTietRest {
     }
 
     @GetMapping("hien-thi/{idHoaDon}")
-    public ResponseEntity<List> getAll(@PathVariable("idHoaDon") Integer idHoaDon) {
+    public ResponseEntity<?> getAll(@PathVariable("idHoaDon") Integer idHoaDon) {
         List<HoaDonChiTietDTO> listHoaDon = hoaDonChiTietService.searchFromHoaDon(idHoaDon);
         return ResponseEntity.ok(listHoaDon);
     }
 
     @GetMapping("hien-thi")
-    public ResponseEntity<List> getAll2() {
+    public ResponseEntity<?> getAll2() {
         List<HoaDonChiTietDTO> listHoaDon = hoaDonChiTietService.getAllJoinFetch();
         return ResponseEntity.ok(listHoaDon);
     }

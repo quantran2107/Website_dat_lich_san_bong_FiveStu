@@ -156,4 +156,13 @@ public class NuocUongServiceImp implements NuocUongService {
                 .map(dothue -> modelMapper.map(dothue, NuocUongDTO.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public NuocUongDTO updateSoLuong(Integer id, NuocUongDTO nuocUongDTO) {
+        NuocUong nuocUong= nuocUongRepository.findById(id).orElseThrow();
+
+        nuocUong.setSoLuongs(nuocUongDTO.getSoLuongs());
+        NuocUong nuocUongUpdate=nuocUongRepository.save(nuocUong);
+        return modelMapper.map(nuocUongUpdate, NuocUongDTO.class);
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.DATN_WebFiveTus.service;
 
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
+import com.example.DATN_WebFiveTus.entity.SanCa;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
@@ -44,4 +45,9 @@ public interface SanCaService {
     //Ly them
     List<SanCaDTO> findSanCaByNhieuNgay(@Param("idSanBong") Integer idSanBong,
                                   @Param("listIdNgayTrongTuan") List<Integer> listIdNgayTrongTuan);
+
+    List<SanCaDTO> getAllSanCaByLoaiSan(@Param("idLoaiSan") Integer idLoaiSan,
+                                     @Param("idNgayTrongTuan") Integer idNgayTrongTuan,
+                                     @Param("idCa") Integer idCa);
+    
 }

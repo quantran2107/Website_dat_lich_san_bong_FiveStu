@@ -199,4 +199,9 @@ public class DoThueRest {
         return ResponseEntity.ok(doThueService.searchTenDoThue(tenDoThue));
     }
 
+    @PutMapping("updateSoLuong/{id}")
+    public ResponseEntity<?> updateSoLuong(@PathVariable Integer id, @RequestBody DoThueDTO doThueDTO){
+        return ResponseEntity.ok(doThueService.updateSoLuong(id, doThueDTO));
+    }
+
 }

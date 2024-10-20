@@ -30,4 +30,8 @@ public interface NuocUongService {
     int getIdNuocUong(Integer idNuocUong, Integer idHoaDonChiTiet );
 
     List<NuocUongDTO> searchTenNuocUong(String tenNuocUong);
+
+    NuocUongDTO updateSoLuong(Integer id,NuocUongDTO nuocUongDTO);
+
+
 }

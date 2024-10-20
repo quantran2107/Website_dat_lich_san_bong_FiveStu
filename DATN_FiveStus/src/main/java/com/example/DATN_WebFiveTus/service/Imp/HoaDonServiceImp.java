@@ -90,6 +90,7 @@ public class HoaDonServiceImp implements HoaDonService {
         hoaDon.setTrangThai("Chờ thanh toán");
         Date now = Date.from(Instant.now());
         hoaDon.setKhachHang(khachHang);
+        hoaDon.setTongTienSan(hoaDonDTO.getTongTienSan());
         hoaDon.setNgayTao(now);
         hoaDon.setDeletedAt(false);
         HoaDon hoaDonSave = hoaDonRepository.save(hoaDon);
