@@ -659,22 +659,13 @@
     $(document).ready(function () {
         $('#showSelectedServices2').on('click', function () {
             console.log('Nút Xác Nhận đã được nhấn'); // Dòng kiểm tra sự kiện
-            const selectedInvoiceId = getSelectedInvoiceId();
 
-            if (!selectedInvoiceId) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Chưa chọn hóa đơn',
-                    text: 'Vui lòng chọn hóa đơn trước khi xem danh sách dịch vụ.',
-                });
-                return;
-            }
-
-            fillDichVuChoHoaDon(selectedInvoiceId);
+            $('#serviceModal').modal('hide');
         });
     });
 
     function fillDichVuChoHoaDon(idHDCT) {
+        updateServiceCost();
         $.ajax({
             url: `http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${idHDCT}`,
             type: 'GET',
@@ -768,8 +759,10 @@
                                 deletedAt: false
                             }, itemId);
 
+                            updateServiceCost();
                             // Gọi hàm updateStockWithCurrentAmount để cập nhật số lượng tồn kho
                             updateStockWithCurrentAmount(apiUrl, updateUrl, itemId, soLuongTruoc, soLuongSau);
+                            showSuccessToast("Cập nhật số lượng thành công!");
                         },
                         error: function (error) {
                             showErrorToast('Lỗi khi lấy thông tin kho!');
@@ -797,6 +790,7 @@
                         trangThai: "Đã hủy",
                         deletedAt: true
                     }, itemId, idDoThue, idNuocUong, soLuongTruoc);
+
                 });
             },
             error: function (error) {
@@ -951,6 +945,10 @@
         return selectedInvoiceId; // Thay thế bằng biến chứa ID của hóa đơn
     }
 
+    function setSelectedInvoiceId(invoiceId) {
+        selectedInvoiceId = invoiceId;
+    }
+
     function luuDichVu() {
         // Lấy giá trị của các trường
         var idDoThue = idDoThues;
@@ -1096,6 +1094,7 @@
                             const apiUrl = `http://localhost:8080/do_thue/${idDoThue}`;
                             const updateUrl = `http://localhost:8080/do_thue/updateSoLuong/${idDoThue}`;
 
+                            updateServiceCost();
                             updateStockWithCurrentAmount(apiUrl, updateUrl, idDoThue, 0, soLuongChon);
 
                             showSuccessToast("Cập nhật số lượng thành công!");
@@ -1131,6 +1130,7 @@
                                         const apiUrl = `http://localhost:8080/do_thue/${idDoThue}`;
                                         const updateUrl = `http://localhost:8080/do_thue/updateSoLuong/${idDoThue}`;
 
+                                        updateServiceCost();
                                         updateStockWithCurrentAmount(apiUrl, updateUrl, idDoThue, 0, soLuongChon);
 
                                         fillDichVuChoHoaDon(selectedInvoiceId);
@@ -1245,8 +1245,8 @@
                             const apiUrl = `http://localhost:8080/nuoc_uong/${idNuocUong}`;
                             const updateUrl = `http://localhost:8080/nuoc_uong/updateSoLuong/${idNuocUong}`;
 
+                            updateServiceCost();
                             updateStockWithCurrentAmount(apiUrl, updateUrl, idNuocUong, 0, soLuongChon);
-
 
                             showSuccessToast("Cập nhật số lượng thành công!");
                         },
@@ -1284,6 +1284,7 @@
                                         const apiUrl = `http://localhost:8080/nuoc_uong/${idNuocUong}`;
                                         const updateUrl = `http://localhost:8080/nuoc_uong/updateSoLuong/${idNuocUong}`;
 
+                                        updateServiceCost();
                                         updateStockWithCurrentAmount(apiUrl, updateUrl, idNuocUong, 0, soLuongChon);
 
                                         fillDichVuChoHoaDon(selectedInvoiceId);
@@ -1709,7 +1710,8 @@
         newTab.classList.add('nav-item');
         newTab.innerHTML =
             `
-            <a class="nav-link" id="tab-${invoiceId}" data-bs-toggle="tab" href="#content-${invoiceId}" role="tab">
+            <a class="nav-link" id="tab-${invoiceId}" data-bs-toggle="tab" href="#content-${invoiceId}" role="tab"
+                onclick="fillDichVuChoHoaDon(${invoiceId}); setSelectedInvoiceId(${invoiceId});" >
                 ${tabName}
             <button type="button" class="close" onclick="removeTab2(event, 'tab-${invoiceId}')" title="Xóa">
             <span class="fe fe-x-circle" style="color: #ff0000; font-size: 15px;"></span>
@@ -2954,6 +2956,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                             'success'
                         );
                         fillDichVuChoHoaDon(payload.idHoaDonChiTiet);
+                        updateServiceCost();
 
                         // Chỉ cập nhật số lượng kho khi xóa thành công
                         if (idDoThue) {
@@ -3063,6 +3066,61 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
             },
             stopOnFocus: true
         }).showToast();
+    }
+
+    async function updateServiceCost() {
+        try {
+            console.log(selectedInvoiceId);
+
+            // Gọi API để lấy thông tin hóa đơn chi tiết
+            const invoiceResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${selectedInvoiceId}`, { cache: "no-store" });
+            const invoiceData = await invoiceResponse.json();
+
+            // Gọi API để lấy danh sách dịch vụ
+            const servicesResponse = await fetch(`http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${invoiceData.id}`, { cache: "no-store" });
+            const services = await servicesResponse.json();
+
+            let totalInvoice = 0; // Khai báo biến tổng hóa đơn
+
+            // Kiểm tra nếu danh sách dịch vụ trống
+            if (Array.isArray(services) && services.length > 0) {
+                // Tính tổng tiền từ các dịch vụ
+                const totalCost = services.reduce((sum, service) => {
+                    return sum + (parseFloat(service.tongTien) || 0); // Đảm bảo chuyển đổi sang số
+                }, 0);
+
+                // Cập nhật giá dịch vụ
+                document.getElementById(`giaDichVu${selectedInvoiceId}`).value = totalCost.toLocaleString('vi-VN');
+
+                // Tính tổng tiền hóa đơn
+                totalInvoice = (invoiceData.giaSanCa - (invoiceData.giaSanCa * 0.5)) + totalCost;
+                document.getElementById(`tongTien${selectedInvoiceId}`).value = totalInvoice.toLocaleString('vi-VN');
+
+                // Tính tổng tiền phải trả
+                const tongTien = parseFloat(document.getElementById(`tongTien${selectedInvoiceId}`).value.replace(/\./g, '').replace(/,/g, '.')) || 0;
+                const tienGiam = parseFloat(document.getElementById(`tienGiam${selectedInvoiceId}`).value.replace(/\./g, '').replace(/,/g, '.')) || 0;
+                const tongTienPhaiTra = tongTien - tienGiam;
+
+                // Hiển thị tổng tiền phải trả
+                document.getElementById(`tongTienPhaiTra${selectedInvoiceId}`).value = tongTienPhaiTra.toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            } else {
+                // Nếu không còn dịch vụ nào, hiển thị 0 cho tổng tiền dịch vụ
+                document.getElementById(`giaDichVu${selectedInvoiceId}`).value = '0';
+                document.getElementById(`tongTien${selectedInvoiceId}`).value = '0';
+            }
+
+            // Gọi API để lấy phụ phí nếu có
+            const feesResponse = await fetch(`http://localhost:8080/api/phu-phi-hoa-don/${selectedInvoiceId}`, { cache: "no-store" });
+            const fees = await feesResponse.json();
+
+            if (totalInvoice) {
+                const additionalFees = fees.reduce((sum, fee) => sum + (parseFloat(fee.amount) || 0), 0); // Đảm bảo chuyển đổi sang số
+                const finalInvoiceTotal = totalInvoice + additionalFees;
+                document.getElementById(`tongTien${selectedInvoiceId}`).value = finalInvoiceTotal.toLocaleString('vi-VN');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 
 </script>

@@ -80,7 +80,7 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
                 .orElseThrow(() -> new ResourceNotfound("Không tồn tại id hdct: " + dichVuSanBongDTO.getIdHoaDonChiTiet()));
         dichVuSanBong.setHoaDonChiTiet(hoaDonChiTiet);
         dichVuSanBong.setSoLuong(dichVuSanBongDTO.getSoLuong());
-        dichVuSanBong.setTongTien(hoaDonChiTiet.getTongTien());
+        dichVuSanBong.setTongTien(dichVuSanBongDTO.getTongTien());
         dichVuSanBong.setTrangThai("Đã đặt");
         dichVuSanBong.setDeletedAt(false);
         // Lưu thực thể
