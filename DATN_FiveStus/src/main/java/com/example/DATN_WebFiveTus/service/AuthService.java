@@ -1,9 +1,19 @@
 package com.example.DATN_WebFiveTus.service;
 
-import com.example.DATN_WebFiveTus.dto.JwtAuthResponse;
-import com.example.DATN_WebFiveTus.dto.LoginDTO;
+import com.example.DATN_WebFiveTus.dto.ApiResponseDto;
 
+import com.example.DATN_WebFiveTus.dto.request.SignInRequestDto;
+import com.example.DATN_WebFiveTus.dto.request.SignUpRequestDto;
+import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
+import com.example.DATN_WebFiveTus.exception.UserAlreadyExistsException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+@Service
 public interface AuthService {
+    ResponseEntity<ApiResponseDto<?>> signUp(SignUpRequestDto signUpRequestDto) throws UserAlreadyExistsException, RoleNotFoundException;
+    ResponseEntity<ApiResponseDto<?>> signIn(SignInRequestDto signInRequestDto);
 
-    JwtAuthResponse login(LoginDTO loginDto);
+
+    ResponseEntity<?> logout(String userName);
 }

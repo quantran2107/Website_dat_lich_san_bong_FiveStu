@@ -13,10 +13,6 @@ import java.math.BigDecimal;
 @Builder
 public class GiaoCaRequest {
 
-    private Integer id;
-
-    private int idNhanVien;
-
     private BigDecimal tienMatTrongCa;
 
     private BigDecimal tienChuyenKhoanTrongCa;
@@ -29,5 +25,5 @@ public class GiaoCaRequest {
 
     private String ghiChu;
 
-    private String trangThai;
+    private Boolean trangThai;
 }

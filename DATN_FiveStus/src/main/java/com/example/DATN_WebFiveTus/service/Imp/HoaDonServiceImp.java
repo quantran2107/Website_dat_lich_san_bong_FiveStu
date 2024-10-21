@@ -90,6 +90,7 @@ public class HoaDonServiceImp implements HoaDonService {
         hoaDon.setTrangThai("Chờ thanh toán");
         Date now = Date.from(Instant.now());
         hoaDon.setKhachHang(khachHang);
+        hoaDon.setTongTienSan(hoaDonDTO.getTongTienSan());
         hoaDon.setNgayTao(now);
         hoaDon.setDeletedAt(false);
         HoaDon hoaDonSave = hoaDonRepository.save(hoaDon);
@@ -156,7 +157,11 @@ public class HoaDonServiceImp implements HoaDonService {
     @Override
     public List<HoaDonDTO> getHDforNV(int id) {
         LocalDate today = LocalDate.now();
-        return hoaDonRepository.findByIdNV(id,today).stream().map(hoaDon -> modelMapper.map(hoaDon,HoaDonDTO.class)).toList();
+        List<HoaDon> list = hoaDonRepository.findByIdNV(id,today);
+        if (!list.isEmpty()){
+            return hoaDonRepository.findByIdNV(id,today).stream().map(hoaDon -> modelMapper.map(hoaDon,HoaDonDTO.class)).toList();
+        }
+        return null;
     }
 
 

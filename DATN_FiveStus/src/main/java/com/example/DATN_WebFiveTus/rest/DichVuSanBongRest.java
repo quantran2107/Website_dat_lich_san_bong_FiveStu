@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -55,4 +56,21 @@ public class DichVuSanBongRest {
     public ResponseEntity<?> findByIdHdct(@PathVariable("id") Integer idHDCT){
         return ResponseEntity.ok(dichVuSanBongService.findByIdHDCT(idHDCT));
     }
+
+    @GetMapping("/tim-dvsb-do-thue")
+    public ResponseEntity<?> findDVSBbyIdHDCTandIdDoThue(
+            @RequestParam Integer idHDCT,
+            @RequestParam Integer idDoThue
+    ){
+        return ResponseEntity.ok(dichVuSanBongService.findDVSBbyIdHDCTandIdDoThue(idHDCT, idDoThue));
+    }
+
+    @GetMapping("/tim-dvsb-nuoc-uong")
+    public ResponseEntity<?> findDVSBbyIdHDCTandIdNuocUong(
+            @RequestParam Integer idHDCT,
+            @RequestParam Integer idNuocUong
+    ){
+        return ResponseEntity.ok(dichVuSanBongService.findDVSBbyIdHDCTandIdNuocUong(idHDCT, idNuocUong));
+    }
+
 }

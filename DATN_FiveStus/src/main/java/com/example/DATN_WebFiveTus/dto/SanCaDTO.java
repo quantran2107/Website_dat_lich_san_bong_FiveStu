@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,20 +25,24 @@ public class SanCaDTO {
 
     private Integer idCa;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     private String tenCa;
 
     private Integer idSanBong;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     private String tenSanBong;
 
-
+    //
     private Integer idNgayTrongTuan;
+
+    private List<Integer> idSanBongList;
+    private List<Integer> idCaList; // Danh sách ID ca
+    private List<Integer> idNgayTrongTuanList;
 
     private Integer idLoaiSan;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     private String thuTrongTuan;
 
     private String trangThai;
@@ -49,4 +54,5 @@ public class SanCaDTO {
     private LocalDateTime thoiGianKetThucCa;
 
     private Date ngayDenSanHoaDonChiTiet;
+
 }

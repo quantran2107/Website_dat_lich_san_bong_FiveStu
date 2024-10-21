@@ -98,7 +98,25 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
     List<SanCa> findSanCaByNhieuNgay(@Param("idSanBong") Integer idSanBong,
                                      @Param("listIdNgayTrongTuan") List<Integer> listIdNgayTrongTuan);
 
+    @Query("SELECT sc FROM SanCa sc " +
+            "WHERE sc.sanBong.loaiSan.id = :idLoaiSan " +
+            "AND sc.sanBong.id IN :idSanBong " +
+            "AND sc.ngayTrongTuan.id IN :idNgayTrongTuan " + // Sử dụng IN cho danh sách
+            "AND sc.ca.id IN :idCa") // Sử dụng IN cho danh sách
+    List<SanCa> getListSanCaExits(@Param("idLoaiSan") Integer idLoaiSan,
+                                  @Param("idSanBong") List<Integer>  idSanBong,
+                                  @Param("idNgayTrongTuan") List<Integer> idNgayTrongTuan,
+                                  @Param("idCa") List<Integer> idCa);
 
+
+
+
+    @Query("SELECT sc FROM SanCa  sc WHERE sc.ngayTrongTuan.id = :idNgayTrongTuan " +
+                    "AND sc.ca.id = :idCa " +
+                    "AND sc.sanBong.loaiSan.id = :idLoaiSan")
+    List<SanCa> getAllSanCaByLoaiSan(@Param("idLoaiSan") Integer idLoaiSan,
+                                     @Param("idNgayTrongTuan") Integer idNgayTrongTuan,
+                                     @Param("idCa") Integer idCa);
 
 
 }

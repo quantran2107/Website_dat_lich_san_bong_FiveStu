@@ -37,4 +37,6 @@ public interface DoThueService {
 
     List<DoThueDTO> searchTenDoThue(String tenDoThue);
 
+    DoThueDTO updateSoLuong(Integer id,DoThueDTO doThueDTO);
+
 }
