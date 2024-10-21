@@ -1,6 +1,10 @@
 package com.example.DATN_WebFiveTus.rest;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import com.example.DATN_WebFiveTus.dto.DoThueDTO;
 import com.example.DATN_WebFiveTus.dto.NuocUongDTO;
+import com.example.DATN_WebFiveTus.service.Imp.DoThueServiceImp;
 import com.example.DATN_WebFiveTus.service.NuocUongService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,10 +30,14 @@ import java.util.Map;
 @RestController
 @RequestMapping("nuoc_uong")
 public class NuocUongRest {
+    private final Cloudinary cloudinary;
+    private final DoThueServiceImp doThueServiceImp;
     private NuocUongService nuocUongService;
 
-    public NuocUongRest(NuocUongService nuocUongService) {
+    public NuocUongRest(NuocUongService nuocUongService, Cloudinary cloudinary, DoThueServiceImp doThueServiceImp) {
         this.nuocUongService = nuocUongService;
+        this.cloudinary = cloudinary;
+        this.doThueServiceImp = doThueServiceImp;
     }
 
     @GetMapping("hien-thi")
@@ -69,15 +77,18 @@ public class NuocUongRest {
     public ResponseEntity<NuocUongDTO> save(@ModelAttribute NuocUongDTO nuocUongDTO,
                                             @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
 
-            // Xử lý tệp hình ảnh
-            if (imageFile != null && !imageFile.isEmpty()) {
-                String fileName = imageFile.getOriginalFilename();
-                nuocUongDTO.setImageData(fileName);
-            }
-        // Lưu đối tượng NuocUongDTO
-        NuocUongDTO savedNuocUong = nuocUongService.save(nuocUongDTO);
+        if (imageFile != null && !imageFile.isEmpty()) {
+            // Upload ảnh lên Cloudinary
+            Map uploadResult = cloudinary.uploader().upload(imageFile.getBytes(),
+                    ObjectUtils.asMap("resource_type", "auto"));
+            String imageUrl = uploadResult.get("secure_url").toString();
+            nuocUongDTO.setImageData(imageUrl);
+        }
 
-        return ResponseEntity.ok(savedNuocUong);
+        // Lưu đối tượng DoThueDTO
+        NuocUongDTO saveNuocUong = nuocUongService.save(nuocUongDTO);
+
+        return ResponseEntity.ok(saveNuocUong);
     }
 
 //    @PostMapping("save")
@@ -103,33 +114,25 @@ public class NuocUongRest {
     }
 
     @PutMapping("/{id}")
+    public ResponseEntity<NuocUongDTO> update(
+            @PathVariable("id") Integer id,
+            @ModelAttribute NuocUongDTO nuocUongDTO, // Không ánh xạ imageData từ request
+            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
 
-    public ResponseEntity<NuocUongDTO> update(@PathVariable("id") Integer id, @RequestBody NuocUongDTO nuocUongDTO) {
-        return ResponseEntity.ok(nuocUongService.update(id, nuocUongDTO));
+        // Xử lý ảnh nếu có tệp ảnh được tải lên
+        if (imageFile != null && !imageFile.isEmpty()) {
+            // Upload ảnh lên Cloudinary
+            Map uploadResult = cloudinary.uploader().upload(imageFile.getBytes(),
+                    ObjectUtils.asMap("resource_type", "auto"));
+            String imageUrl = uploadResult.get("secure_url").toString();
 
-//    public ResponseEntity<NuocUongDTO> update(
-//            @PathVariable("id") Integer id,
-//            @RequestPart("nuocUongDTO") NuocUongDTO nuocUongDTO,
-//            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
-//
-//        // Tìm kiếm đối tượng hiện tại
-//        NuocUongDTO existingNuocUongDTO = nuocUongService.getOne(id);
-//
-//        // Cập nhật các giá trị mới từ nuocUongDTO
-//        existingNuocUongDTO.setTenNuocUong(nuocUongDTO.getTenNuocUong());
-//        existingNuocUongDTO.setSoLuong(nuocUongDTO.getSoLuong());
-//        existingNuocUongDTO.setDonGia(nuocUongDTO.getDonGia());
-//
-//        // Cập nhật ảnh nếu có
-//        if (imageFile != null && !imageFile.isEmpty()) {
-//            existingNuocUongDTO.setImageData(imageFile.getBytes());
-//        }
-//
-//        // Xử lý đối tượng NuocUongDTO và lưu vào dịch vụ
-//        NuocUongDTO updatedNuocUongDTO = nuocUongService.update(id, existingNuocUongDTO);
-//
-//        return ResponseEntity.ok(updatedNuocUongDTO);
+            // Set URL ảnh vào doThueDTO
+            nuocUongDTO.setImageData(imageUrl);  // Cập nhật URL của ảnh sau khi upload
+        }
 
+        // Gọi service để xử lý cập nhật
+        NuocUongDTO updatedNuocUong = nuocUongService.update(id, nuocUongDTO);
+        return ResponseEntity.ok(updatedNuocUong);
     }
 
 //    @PutMapping("/{id}")

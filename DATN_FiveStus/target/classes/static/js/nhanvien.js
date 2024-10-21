@@ -655,7 +655,7 @@ $(document).ready(function () {
         $(`#linkUpdate`).show();
         if (nhanV["imageNV"]) {
             imageData = nhanV["imageNV"]
-            $('#previewImageU').attr('src', 'data:image/jpeg;base64,' + nhanV["imageNV"]);
+            $('#previewImageU').attr('src', imageData);
         } else {
             $('#previewImageU').attr('src', 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg');
 

@@ -34,7 +34,7 @@ public class NhanVienDTO {
 
     private LocalDateTime createdAt;
 
-    private byte[] imageNV;
+    private String imageNV;
 
     private Boolean gioiTinh;
 
