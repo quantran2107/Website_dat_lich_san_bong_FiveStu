@@ -49,9 +49,8 @@ public class NhanVien {
     @Column(name = "so_dien_thoai", nullable = false, length = 100)
     private String soDienThoai;
 
-    @Lob
-    @Column(name = "image_nv", columnDefinition = "LONGBLOB")
-    private byte[] imageNV;
+    @Column(name = "image_nv")
+    private String imageNV;
 
 
     @Column(name = "dia_chi", nullable = false, length = 100)
