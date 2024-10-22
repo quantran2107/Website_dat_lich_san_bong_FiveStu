@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -22,7 +23,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "giao_ca")
 
-
 public class GiaoCa {
 
     @Id
@@ -30,43 +30,32 @@ public class GiaoCa {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id_nv_nhan_ca")
+    @JoinColumn(name = "id_nhan_vien")
     private NhanVien nhanVienNhan;
 
-    @ManyToOne
-    @JoinColumn(name = "id_nv_ban_giao")
-    private NhanVien nhanVienGiao;
+    @Column(name = "tien_mat_ca_truoc", precision = 38, scale = 2)
+    private BigDecimal tienMatCaTruoc;
 
-    @Column(name = "tien_phat_sinh")
-    private Float tienPhatSinh;
+    @Column(name = "tien_mat_trong_ca", precision = 38, scale = 2)
+    private BigDecimal tienMatTrongCa;
 
-    @Column(name = "thoi_gian_ket_ca", length = 100)
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime thoiGianKetCa;
+    @Column(name = "tien_ck_trong_ca", precision = 38, scale = 2)
+    private BigDecimal tienChuyenKhoanTrongCa;
 
-    @Column(name = "tien_ban_dau", length = 50)
-    private Float tienBanDau;
+    @Column(name = "tong_tien_trong_ca", precision = 38, scale = 2)
+    private BigDecimal tongTienTrongCa;
 
-    @Column(name = "tong_tien_khac", length = 50)
-    private Float tongTienKhac;
+    @Column(name = "tong_tien_mat_thuc_te", precision = 38, scale = 2)
+    private BigDecimal tongTienMatThucTe;
 
-    @Column(name = "tong_tien_mat", length = 50)
-    private Float tongTienMat;
+    @Column(name = "tong_tien_phat_sinh", precision = 38, scale = 2)
+    private BigDecimal tongTienPhatSinh;
 
-    @Column(name = "tong_tien_mat_ca_truoc", length = 50)
-    private Float tongTienMatCaTruoc;
+    @Column(name = "trang_thai")
+    private Boolean trangThai;
 
-    @Column(name = "tong_tien_mat_rut", length = 50)
-    private Float tongTienMatRut;
-
-    @Column(name = "tong_tien_trong_ca", length = 50)
-    private Float tongTienTrongCa;
-
-    @Column(name = "ghi_chu_phat_sinh", length = 50)
-    private String ghiChuPhatSinh;
-
-    @Column(name = "trang_thai", length = 50)
-    private String trangThai;
+    @Column(name = "ghi_chu")
+    private String ghiChu;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -77,6 +66,6 @@ public class GiaoCa {
     private LocalDateTime updatedAt;
 
     @Column(name = "deleted_at")
-    private boolean deletedAt;
+    private Boolean deletedAt;
 
 }

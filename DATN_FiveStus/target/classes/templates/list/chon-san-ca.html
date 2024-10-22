@@ -34,6 +34,11 @@
         box-sizing: border-box; /* Bao gồm padding và border vào tổng chiều rộng */
     }
 
+    .doi-san-flex-20 {
+        flex: 0 0 auto;
+        width: 20%;
+    }
+
     .card-body {
         margin-bottom: 10px; /* Add space between cards */
     }
@@ -135,7 +140,7 @@
     }
 
     .custom-modal {
-        max-width: 65%; /* Tăng chiều rộng của modal lên 90% */
+        max-width: 75%; /* Tăng chiều rộng của modal lên 90% */
     }
 
     .btn-booking {
@@ -297,8 +302,8 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
+                                    <span id="tongTien" style="margin-right: auto; font-weight: bold;">Tổng tiền: 0 VNĐ</span>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                    <!-- Button to submit the form and book the soccer field -->
                                     <button type="button" class="btn btn-primary" id="datLich">Đặt lịch</button>
                                 </div>
                             </div>
@@ -335,6 +340,28 @@
                                         <!-- Dữ liệu khách hàng sẽ được thêm vào đây -->
                                         </tbody>
                                     </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal đổi lịch -->
+                    <div class="modal fade" id="change-schedule-modal" tabindex="-1" role="dialog" aria-labelledby="changeScheduleLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="changeScheduleLabel">Đổi lịch</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="doiLichContainer" class="row my-4">
+                                        <!-- Dữ liệu loại sân và chọn sân bóng sẽ được thêm vào đây -->
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>

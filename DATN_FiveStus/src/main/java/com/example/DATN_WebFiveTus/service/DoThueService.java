@@ -32,4 +32,10 @@ public interface DoThueService {
 
      Boolean checkIdDichVuDoThue(Integer id, Integer idHoaDonChiTiet);
 
+    int getIdDoThue(Integer idDoThue, Integer idHoaDonChiTiet );
+
+    List<DoThueDTO> searchTenDoThue(String tenDoThue);
+
+    DoThueDTO updateSoLuong(Integer id,DoThueDTO doThueDTO);
+
 }

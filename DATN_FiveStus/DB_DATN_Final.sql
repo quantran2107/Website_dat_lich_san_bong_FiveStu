@@ -56,7 +56,6 @@ CREATE TABLE nhan_vien (
   so_dien_thoai VARCHAR(100) NOT NULL,
   dia_chi VARCHAR(100) NOT NULL,
   trang_thai VARCHAR(100) NOT NULL,
-  image_nv VARCHAR(255),
   created_at DATETIME, 
   updated_at DATETIME,
   deleted_at bit
@@ -392,7 +391,7 @@ CREATE TABLE giao_ca (
   tong_tien_mat_thuc_te DECIMAL(10,2),
   tong_tien_phat_sinh DECIMAL(10,2),
   ghi_chu VARCHAR(255),
-  trang_thai VARCHAR(255),
+  trang_thai bit,
   created_at DATETIME, 
   updated_at DATETIME,
   deleted_at bit,
@@ -411,36 +410,6 @@ CREATE TABLE lich_su_checkin (
   CONSTRAINT fk_lichSuCheckin_hoaDonChiTiet FOREIGN KEY (id_hoa_don_chi_tiet ) REFERENCES hoa_don_chi_tiet(id)
 );
 
--- Tạo bảng Roles
-CREATE TABLE Roles (
-    role_id INT AUTO_INCREMENT PRIMARY KEY,
-    ma VARCHAR(255) NOT NULL UNIQUE,  -- Đảm bảo cột ma là duy nhất
-    authority VARCHAR(50) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deleted_at TINYINT(1) DEFAULT 0
-);
-
--- Tạo bảng Account
-CREATE TABLE Account (
-    ma VARCHAR(255) PRIMARY KEY,
-    username VARCHAR(50),
-    email VARCHAR(50),
-    passwords VARCHAR(200),  -- Đổi tên từ passwords thành password
-    enableds TINYINT(1),     -- Đổi tên từ enableds thành enabled
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deleted_at bit(1) DEFAULT 0
-);
-
--- Tạo bảng account_roles
-CREATE TABLE account_roles (
-    account_id VARCHAR(255),
-    role_id INT,
-    PRIMARY KEY (account_id, role_id),
-    FOREIGN KEY (account_id) REFERENCES Account(ma),
-    FOREIGN KEY (role_id) REFERENCES Roles(role_id)
-);
 
 -- INserttt 
 
@@ -468,13 +437,13 @@ VALUES
   ('Chuc vu 5', 'NV005', 'active', NOW(), NOW(), 0);
 
 
-INSERT INTO nhan_vien (ten_nhan_vien, ma_nhan_vien, mat_khau, ho_ten, email, gioi_tinh, so_dien_thoai, dia_chi, trang_thai, image_nv, created_at, updated_at, deleted_at)
+INSERT INTO nhan_vien (ten_nhan_vien, ma_nhan_vien, mat_khau, ho_ten, email, gioi_tinh, so_dien_thoai, dia_chi, trang_thai, created_at, updated_at, deleted_at)
 VALUES
-  ('Nhan vien 1', 'NV001', 'password1', 'Nguyen Van A', 'nguyenvana@gmail.com', true, '0123456789', 'Dia chi 1', 'active','https://res.cloudinary.com/dsuehugin/image/upload/v1729247413/dtm9hgcxv9xkmb09idpk.jpg', NOW(), NOW(), 1),
-  ('Nhan vien 2', 'NV002', 'password2', 'Nguyen Van B', 'nguyenvanb@gmail.com', false, '0987654321', 'Dia chi 2', 'active','https://res.cloudinary.com/dsuehugin/image/upload/v1729247413/dtm9hgcxv9xkmb09idpk.jpg', NOW(), NOW(), 1),
-  ('Nhan vien 3', 'NV003', 'password3', 'Nguyen Van C', 'nguyenvanc@gmail.com', true, '0123456789', 'Dia chi 3', 'inactive','https://res.cloudinary.com/dsuehugin/image/upload/v1729247413/dtm9hgcxv9xkmb09idpk.jpg', NOW(), NOW(), 1),
-  ('Nhan vien 4', 'NV004', 'password4', 'Nguyen Van D', 'nguyenvand@gmail.com', false, '0987654321', 'Dia chi 4', 'active','https://res.cloudinary.com/dsuehugin/image/upload/v1729247413/dtm9hgcxv9xkmb09idpk.jpg', NOW(), NOW(), 0),
-  ('Nhan vien 5', 'NV005', 'password5', 'Nguyen Van E', 'nguyenvane@gmail.com', true, '0123456789', 'Dia chi 5', 'active','https://res.cloudinary.com/dsuehugin/image/upload/v1729247413/dtm9hgcxv9xkmb09idpk.jpg', NOW(), NOW(), 0);
+  ('truongvmph39949', 'NV001', '123456', 'Vũ Mạnh Trường', 'truongvmph39949@gmail.com', true, '0123456789', 'Dia chi 1', 'active', NOW(), NOW(), 1),
+  ('quantaph12345', 'NV002', '123456', 'Trần Anh Quân', 'quantaph12345@gmail.com', false, '0987654321', 'Dia chi 2', 'active', NOW(), NOW(), 1),
+  ('bangdxph39949', 'NV003', '123456', 'Đoàn Xuân Bằng', 'bangdxph39949@gmail.com', true, '0123456789', 'Dia chi 3', 'inactive', NOW(), NOW(), 1),
+  ('lynhkph12345', 'NV004', '123456', 'Nguyễn Hoàng Khánh Ly', 'lynhkph12345@gmail.com', false, '0987654321', 'Dia chi 4', 'active', NOW(), NOW(), 0),
+  ('haipnph39949', 'NV005', '123456', 'Phạm Ngọc Hải', 'haipnph39949@gmail.com', true, '0123456789', 'Dia chi 5', 'active', NOW(), NOW(), 0);
 
 
 INSERT INTO diem_danh (ten_chuc_vu, gio_vao, gio_ra, ghi_chu, trang_thai, id_nhan_vien, created_at, updated_at, deleted_at)
@@ -2317,29 +2286,6 @@ VALUES
 (20000, 100, 'Warrior', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/fsvne0ghubuvnbowgzs1.jpg'),
 (13000, 100, 'Lon String vàng', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/nhtnwvsvnyarpp2yqw9v.jpg');
 
-
-INSERT INTO dich_vu_san_bong (id_do_thue, id_nuoc_uong, id_hoa_don_chi_tiet, tong_tien, so_luong, trang_thai, created_at, updated_at, deleted_at) VALUES
-(1, NULL, 1, 50.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 1, 2, 20.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(2, NULL, 3, 75.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 2, 4, 15.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(3, NULL, 5, 60.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 3, 6, 25.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(4, NULL, 7, 80.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 4, 8, 30.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(5, NULL, 9, 55.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 5, 10, 22.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(1, NULL, 41, 52.50, 3, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 1, 42, 21.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(2, NULL, 43, 80.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 2, 44, 19.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(3, NULL, 45, 65.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 3, 46, 24.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(4, NULL, 47, 85.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 4, 48, 27.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(5, NULL, 49, 58.00, 4, 'Đã đặt', NOW(), NOW(), 0);
-
-
 INSERT INTO phu_phi_hoa_don (id_hoa_don_chi_tiet, ma, ten, tien_phu_phi, ghi_chu, trang_thai, created_at, updated_at, deleted_at)
 VALUES (1, 'PP001', 'Phí giao hàng', 50000.00, 'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
        (2, 'PP002', 'Phí đóng gói', 20000.00, 'Đóng gói cẩn thận', 'Hoàn tất', NOW(), NOW(), 0),
@@ -2426,20 +2372,64 @@ VALUES
 ('TS009', 'Giá Thuê Bóng', '50000', 'VND', 'Giá thuê bóng trong 1 trận', 1, 0),
 ('TS010', 'Phí Huấn Luyện Viên', '300000', 'VND', 'Phí thuê huấn luyện viên theo giờ', 1, 0);
 
--- Thêm dữ liệu mẫu vào bảng Roles
-INSERT INTO Roles (ma, authority) VALUES
-('HaiPham1', 'ROLE_ADMIN'),
-('HaiPham2', 'ROLE_MANAGER'),
-('HaiPham3', 'ROLE_MEMBER');
 
--- Thêm dữ liệu mẫu vào bảng Account
-INSERT INTO Account (ma, username, email, passwords, enableds) VALUES
-('HaiPham1', 'HaiPham1a', 'haipham1@example.com', '{bcrypt}$2a$12$obX4V6PHLY.KfhaE4gzm/eEjm/.ouHIl9GBaPIoHrSn0lSSH0/TGS', 1),
-('HaiPham2', 'HaiPham2a', 'haipham2@example.com', '{bcrypt}$2a$12$AKF6CI2rVqeB7mhZZlHwZu8KITfRg3Opsl/RmOqwATq12.KhE4MGa', 1),
-('HaiPham3', 'HaiPham3a', 'haipham3@example.com', '{bcrypt}$2a$12$u98XNCiRG5TRya/9jYDp1.uz6mJ6ShmnjuFIRstFoZmPCEnHxnIr.', 1);
+CREATE TABLE `user` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(255) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    `enabled` BOOLEAN NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE (`username`),
+    UNIQUE (`email`)
+);
 
--- Thêm dữ liệu mẫu vào bảng account_roles
-INSERT INTO account_roles (account_id, role_id) VALUES
-('HaiPham1', (SELECT role_id FROM Roles WHERE ma = 'HaiPham1')),
-('HaiPham2', (SELECT role_id FROM Roles WHERE ma = 'HaiPham2')),
-('HaiPham3', (SELECT role_id FROM Roles WHERE ma = 'HaiPham3'));
+
+CREATE TABLE `roles` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `name` ENUM('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER','ROLE_EMPLOYEE') NOT NULL, -- Thay 'ROLE_OTHER' bằng các vai trò khác nếu cần
+    PRIMARY KEY (`id`)
+);
+CREATE TABLE `user_roles` (
+    `user_id` BIGINT NOT NULL,
+    `role_id` INT NOT NULL,
+    PRIMARY KEY (`user_id`, `role_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`role_id`) REFERENCES `roles`(`id`) ON DELETE CASCADE
+);
+
+
+
+INSERT INTO `duantotnghiep`.`user`
+(`id`,
+`email`,
+`enabled`,
+`password`,
+`username`)
+VALUES
+(1,'truongvmph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','truongvmph39949'),
+(2,'quantaph12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','quantaph12345'),
+(3,'bangdxph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','bangdxph39949'),
+(4,'lynhkph12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','lynhkph12345'),
+(5,'haipnph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','haipnph39949'),
+(6,'ly12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','ly12345');
+
+
+INSERT INTO `duantotnghiep`.`roles`
+(`id`,
+`name`)
+VALUES
+(1,'ROLE_USER'),
+(2,'ROLE_EMPLOYEE'),
+(3,'ROLE_MANAGER'),
+(4,'ROLE_ADMIN');
+
+INSERT INTO `duantotnghiep`.`user_roles`
+(`user_id`,
+`role_id`)
+VALUES
+(1,1),(1,4),(2,1),(2,4),(3,1),(3,4),(4,1),(4,4),(5,1),(5,4),(6,1);
+
+select * From dich_vu_san_bong;
+select * From nuoc_uong;
+select * From dich_vu_san_bong

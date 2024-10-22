@@ -4,6 +4,7 @@ import com.example.DATN_WebFiveTus.entity.NhanVien;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -16,27 +17,21 @@ public class GiaoCaDTO {
 
     private Integer id;
 
-    private NhanVien nhanVienGiao;
-
     private NhanVien nhanVienNhan;
 
-    private Float tienPhatSinh;
+    private BigDecimal tienMatCaTruoc;
 
-    private LocalDateTime thoiGianKetCa;
+    private BigDecimal tienMatTrongCa;
 
-    private Float tienBanDau;
+    private BigDecimal tienChuyenKhoanTrongCa;
 
-    private Float tongTienKhac;
+    private BigDecimal tongTienTrongCa;
 
-    private Float tongTienMat;
+    private BigDecimal tongTienMatThucTe;
 
-    private Float tongTienMatCaTruoc;
+    private BigDecimal tongTienPhatSinh;
 
-    private Float tongTienMatRut;
+    private String ghiChu;
 
-    private Float tongTienTrongCa;
-
-    private String ghiChuPhatSinh;
-
-    private String trangThai;
+    private Boolean trangThai;
 }

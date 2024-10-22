@@ -2,6 +2,7 @@ package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
 import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
+import com.example.DATN_WebFiveTus.dto.HoaDonRequest;
 import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import com.example.DATN_WebFiveTus.entity.HoaDon;
 import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
@@ -20,10 +21,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +48,8 @@ public class HoaDonServiceImp implements HoaDonService {
     private KhachHangRepository khachHangRepository;
 
     private ModelMapper modelMapper;
+    @Autowired
+    private HoaDonService hoaDonService;
 
     @Autowired
     public HoaDonServiceImp(HoaDonRepository hoaDonRepository, NhanVienReposity nhanVienReposity, PhieuGiamGiaRepository phieuGiamGiaRepository, KhachHangRepository khachHangRepository, ModelMapper modelMapper) {
@@ -85,6 +90,7 @@ public class HoaDonServiceImp implements HoaDonService {
         hoaDon.setTrangThai("Chờ thanh toán");
         Date now = Date.from(Instant.now());
         hoaDon.setKhachHang(khachHang);
+        hoaDon.setTongTienSan(hoaDonDTO.getTongTienSan());
         hoaDon.setNgayTao(now);
         hoaDon.setDeletedAt(false);
         HoaDon hoaDonSave = hoaDonRepository.save(hoaDon);
@@ -147,6 +153,17 @@ public class HoaDonServiceImp implements HoaDonService {
     public void deletedAt(Integer id) {
 
     }
+
+    @Override
+    public List<HoaDonDTO> getHDforNV(int id) {
+        LocalDate today = LocalDate.now();
+        List<HoaDon> list = hoaDonRepository.findByIdNV(id,today);
+        if (!list.isEmpty()){
+            return hoaDonRepository.findByIdNV(id,today).stream().map(hoaDon -> modelMapper.map(hoaDon,HoaDonDTO.class)).toList();
+        }
+        return null;
+    }
+
 
 //    @Override
 //    public Page<HoaDonDTO> searchAndFilter(@Param("loai") Boolean loai,

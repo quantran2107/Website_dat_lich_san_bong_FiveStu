@@ -69,17 +69,32 @@ public class NuocUongRest {
     public ResponseEntity<NuocUongDTO> save(@ModelAttribute NuocUongDTO nuocUongDTO,
                                             @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
 
-        // Xử lý hình ảnh
-        if (imageFile != null && !imageFile.isEmpty()) {
-            byte[] imageData = imageFile.getBytes();
-            nuocUongDTO.setImageData(imageData);
-        }
-
+            // Xử lý tệp hình ảnh
+            if (imageFile != null && !imageFile.isEmpty()) {
+                String fileName = imageFile.getOriginalFilename();
+                nuocUongDTO.setImageData(fileName);
+            }
         // Lưu đối tượng NuocUongDTO
         NuocUongDTO savedNuocUong = nuocUongService.save(nuocUongDTO);
 
         return ResponseEntity.ok(savedNuocUong);
     }
+
+//    @PostMapping("save")
+//    public ResponseEntity<NuocUongDTO> save(@ModelAttribute NuocUongDTO nuocUongDTO,
+//                                            @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+//
+//        // Xử lý hình ảnh
+//        if (imageFile != null && !imageFile.isEmpty()) {
+//            byte[] imageData = imageFile.getBytes();
+//            nuocUongDTO.setImageData(imageData);
+//        }
+//
+//        // Lưu đối tượng NuocUongDTO
+//        NuocUongDTO savedNuocUong = nuocUongService.save(nuocUongDTO);
+//
+//        return ResponseEntity.ok(savedNuocUong);
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<NuocUongDTO> getOne(@PathVariable("id") Integer id) {
@@ -166,4 +181,21 @@ public class NuocUongRest {
         Boolean exists = nuocUongService.checkIdDichVuNuocUong(id, idHoaDonChiTiet);
         return ResponseEntity.ok(exists);
     }
+
+    @GetMapping("getIdNuocUong")
+    public ResponseEntity<Integer> getIdNuocUongs(@RequestParam Integer idNuocUong,
+                                                @RequestParam Integer idHoaDonChiTiet){
+        return ResponseEntity.ok(nuocUongService.getIdNuocUong(idNuocUong,idHoaDonChiTiet));
+    }
+
+    @GetMapping("searchTenNuocUong")
+    public ResponseEntity<List> searchTenNuocUongs(@RequestParam("tenNuocUong") String tenNuocUong){
+        return ResponseEntity.ok(nuocUongService.searchTenNuocUong(tenNuocUong));
+    }
+
+    @PutMapping("updateSoLuong/{id}")
+    public ResponseEntity<?> updateSoLuong(@PathVariable Integer id, @RequestBody NuocUongDTO nuocUongDTO) {
+        return ResponseEntity.ok(nuocUongService.updateSoLuong(id, nuocUongDTO));
+    }
+
 }

@@ -1,19 +1,12 @@
 package com.example.DATN_WebFiveTus.controller;
 
-import com.example.DATN_WebFiveTus.config.ExcelExporter;
 import com.example.DATN_WebFiveTus.dto.CaDTO;
 import com.example.DATN_WebFiveTus.dto.LoaiSanDTO;
 import com.example.DATN_WebFiveTus.dto.NgayTrongTuanDTO;
-import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
-import com.example.DATN_WebFiveTus.entity.Ca;
-import com.example.DATN_WebFiveTus.entity.NgayTrongTuan;
-import com.example.DATN_WebFiveTus.entity.SanBong;
-import com.example.DATN_WebFiveTus.entity.SanCa;
 import com.example.DATN_WebFiveTus.rest.SanCaRest;
 import com.example.DATN_WebFiveTus.service.CaService;
-import com.example.DATN_WebFiveTus.service.LoaiSanService;
 import com.example.DATN_WebFiveTus.service.NgayTrongTuanService;
 import com.example.DATN_WebFiveTus.service.SanBongService;
 import com.example.DATN_WebFiveTus.service.SanCaService;
@@ -169,13 +162,13 @@ public class SanCaController {
         return "redirect:/listSanCa";
     }
 
-    @GetMapping("/export/excels")
-    public void exportExcel(HttpServletResponse httpServletResponse) throws IOException {
-        List<SanCaDTO> listExcel = sanCaService.getAllJoinFetch();
-        System.out.println("HAHA excel: "+listExcel);
-        ExcelExporter excelExporter = new ExcelExporter();
-        excelExporter.Export(listExcel, httpServletResponse);
-    }
+//    @GetMapping("/export/excels")
+//    public void exportExcel(HttpServletResponse httpServletResponse) throws IOException {
+//        List<SanCaDTO> listExcel = sanCaService.getAllJoinFetch();
+//        System.out.println("HAHA excel: "+listExcel);
+//        ExcelExporter excelExporter = new ExcelExporter();
+//        excelExporter.Export(listExcel, httpServletResponse);
+//    }
 
 //    @PostMapping("/sanCa/add")
 //    public String addSanCa(@ModelAttribute("sanCa") SanCaDTO sanCaDTO,

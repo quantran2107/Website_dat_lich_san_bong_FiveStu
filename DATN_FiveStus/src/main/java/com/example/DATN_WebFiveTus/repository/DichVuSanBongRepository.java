@@ -12,7 +12,7 @@ import java.util.List;
 public interface DichVuSanBongRepository extends JpaRepository<DichVuSanBong,Integer> {
 
 
-    @Query("SELECT dvsb FROM DichVuSanBong dvsb where dvsb.trangThai like '%Đang hoạt động%' and dvsb.deletedAt=false")
+    @Query("SELECT dvsb FROM DichVuSanBong dvsb where dvsb.trangThai like '%Đã đặt%' and dvsb.deletedAt=false")
     List<DichVuSanBong> getAllJoinFetch();
 
     @Query("SELECT DISTINCT dvsb FROM DichVuSanBong dvsb" +
@@ -26,5 +26,22 @@ public interface DichVuSanBongRepository extends JpaRepository<DichVuSanBong,Int
             "WHERE hdct.id = :idHDCT  AND dvsb.deletedAt = false")
     List<DichVuSanBong> findDichVuSanBongsByIdHoaDonChiTiet(@Param("idHDCT") Integer idHDCT);
 
+    @Query("SELECT dvsb FROM DichVuSanBong dvsb " +
+            "JOIN FETCH dvsb.hoaDonChiTiet hdct " +
+            "JOIN FETCH dvsb.doThue dt " +
+            "WHERE hdct.id = :idHDCT " +
+            "AND dt.id = :idDoThue " +
+            "AND dvsb.deletedAt = false")
+    DichVuSanBong findDVSBbyIdHDCTandIdDoThue(@Param("idHDCT") Integer idHDCT,
+                                                    @Param("idDoThue") Integer idDoThue);
+
+    @Query("SELECT dvsb FROM DichVuSanBong dvsb " +
+            "JOIN FETCH dvsb.hoaDonChiTiet hdct " +
+            "JOIN FETCH dvsb.nuocUong nu " +
+            "WHERE hdct.id = :idHDCT " +
+            "AND nu.id = :idNuocUong " +
+            "AND dvsb.deletedAt = false")
+    DichVuSanBong findDVSBbyIdHDCTandIdNuocUong(@Param("idHDCT") Integer idHDCT,
+                                                      @Param("idNuocUong") Integer idNuocUong);
 
 }
