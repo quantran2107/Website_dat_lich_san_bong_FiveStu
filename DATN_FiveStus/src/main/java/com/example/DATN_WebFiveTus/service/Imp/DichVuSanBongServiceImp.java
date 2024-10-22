@@ -62,10 +62,8 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
             DoThue doThue = doThueRepository.findById(dichVuSanBongDTO.getIdDoThue())
                     .orElseThrow(() -> new ResourceNotfound("Không tồn tại id do thue: " + dichVuSanBongDTO.getIdDoThue()));
             dichVuSanBong.setDoThue(doThue);
-//            dichVuSanBong.setSoLuong(0);
         } else {
-            dichVuSanBong.setDoThue(null); // Thiết lập là null nếu không có id
-//            dichVuSanBong.setSoLuong(0);
+            dichVuSanBong.setDoThue(null);
         }
 
         // Xử lý NuocUong
@@ -74,14 +72,16 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
                     .orElseThrow(() -> new ResourceNotfound("Không tồn tại id nuoc uong: " + dichVuSanBongDTO.getIdNuocUong()));
             dichVuSanBong.setNuocUong(nuocUong);
         } else {
-            dichVuSanBong.setNuocUong(null); // Thiết lập là null nếu không có id
-//            dichVuSanBong.setSoLuong(0);
+            dichVuSanBong.setNuocUong(null);
         }
 
         // Xử lý HoaDonChiTiet
         HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(dichVuSanBongDTO.getIdHoaDonChiTiet())
                 .orElseThrow(() -> new ResourceNotfound("Không tồn tại id hdct: " + dichVuSanBongDTO.getIdHoaDonChiTiet()));
         dichVuSanBong.setHoaDonChiTiet(hoaDonChiTiet);
+        dichVuSanBong.setSoLuong(dichVuSanBongDTO.getSoLuong());
+        dichVuSanBong.setTongTien(dichVuSanBongDTO.getTongTien());
+        dichVuSanBong.setTrangThai("Đã đặt");
         dichVuSanBong.setDeletedAt(false);
         // Lưu thực thể
         DichVuSanBong dichVuSanBongSave = dichVuSanBongRepository.save(dichVuSanBong);
@@ -91,8 +91,6 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
     @Override
     public DichVuSanBongDTO update(Integer id, DichVuSanBongDTO dichVuSanBongDTO) {
         DichVuSanBong dichVuSanBong = dichVuSanBongRepository.findById(id).orElseThrow(() -> new ResourceNotfound("Không tồn tại id DVSB: " + id));
-//        DoThue doThue = doThueRepository.findById(dichVuSanBongDTO.getIdDoThue()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id do thue: " + dichVuSanBongDTO.getIdDoThue()));
-//        NuocUong nuocUong = nuocUongRepository.findById(dichVuSanBongDTO.getIdNuocUong()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id nuoc uong: " + dichVuSanBongDTO.getIdNuocUong()));
         HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(dichVuSanBongDTO.getIdHoaDonChiTiet()).orElseThrow(() -> new ResourceNotfound("Không tồn tại id hdct: " + dichVuSanBongDTO.getIdHoaDonChiTiet()));
 
         // Xử lý DoThue
@@ -100,10 +98,8 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
             DoThue doThue = doThueRepository.findById(dichVuSanBongDTO.getIdDoThue())
                     .orElseThrow(() -> new ResourceNotfound("Không tồn tại id do thue: " + dichVuSanBongDTO.getIdDoThue()));
             dichVuSanBong.setDoThue(doThue);
-//            dichVuSanBong.setSoLuong(0);
         } else {
             dichVuSanBong.setDoThue(null); // Thiết lập là null nếu không có id
-//            dichVuSanBong.setSoLuong(0);
         }
 
         // Xử lý NuocUong
@@ -113,11 +109,8 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
             dichVuSanBong.setNuocUong(nuocUong);
         } else {
             dichVuSanBong.setNuocUong(null); // Thiết lập là null nếu không có id
-//            dichVuSanBong.setSoLuong(0);
         }
 
-//        dichVuSanBong.setDoThue(doThue);
-//        dichVuSanBong.setNuocUong(nuocUong);
         dichVuSanBong.setHoaDonChiTiet(hoaDonChiTiet);
         dichVuSanBong.setSoLuong(dichVuSanBongDTO.getSoLuong());
         dichVuSanBong.setTongTien(dichVuSanBongDTO.getTongTien());
@@ -149,5 +142,18 @@ public class DichVuSanBongServiceImp implements DichVuSanBongService {
     public List<DichVuSanBongDTO> getAllJoinFetch() {
         return dichVuSanBongRepository.getAllJoinFetch().stream()
                 .map((dichVuSanBong) -> modelMapper.map(dichVuSanBong, DichVuSanBongDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public DichVuSanBongDTO findDVSBbyIdHDCTandIdDoThue(Integer idHDCT, Integer idDoThue) {
+        return modelMapper.map(dichVuSanBongRepository.
+                findDVSBbyIdHDCTandIdDoThue(idHDCT,idDoThue), DichVuSanBongDTO.class);
+
+    }
+
+    @Override
+    public DichVuSanBongDTO findDVSBbyIdHDCTandIdNuocUong(Integer idHDCT, Integer idNuocUong) {
+        return modelMapper.map(dichVuSanBongRepository.
+                findDVSBbyIdHDCTandIdNuocUong(idHDCT,idNuocUong), DichVuSanBongDTO.class);
     }
 }

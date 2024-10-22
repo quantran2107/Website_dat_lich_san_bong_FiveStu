@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface DoThueService {
 
     DoThueDTO save(DoThueDTO doThueDTO);
 
-    DoThueDTO update(Integer id,DoThueDTO doThueDTO);
+    DoThueDTO update(Integer id, DoThueDTO doThueDTO);
 
     void delete (Integer id);
 
@@ -35,5 +36,7 @@ public interface DoThueService {
     int getIdDoThue(Integer idDoThue, Integer idHoaDonChiTiet );
 
     List<DoThueDTO> searchTenDoThue(String tenDoThue);
+
+    DoThueDTO updateSoLuong(Integer id,DoThueDTO doThueDTO);
 
 }

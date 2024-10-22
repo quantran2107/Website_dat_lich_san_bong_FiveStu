@@ -170,6 +170,204 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    function createDoiSanContent(sanCa, ngayChon) {
+        const content = document.createElement('div');
+        content.classList.add('san-ca-content', 'justify-content-between', 'align-items-center');
+
+        // Thời gian của sân ca
+        const batDau = new Date(sanCa.thoiGianBatDauCa).getHours();
+        const ketThuc = new Date(sanCa.thoiGianKetThucCa).getHours();
+        const thoiGian = document.createElement('p');
+        thoiGian.innerHTML = `<i class="bi bi-clock-fill"></i> ${batDau}:00 - ${ketThuc}:00`;
+
+        // Giá của sân ca
+        const gia = document.createElement('p');
+        gia.innerHTML = `<i class="bi bi-currency-dollar"></i> ${sanCa.gia.toLocaleString()} VNĐ`;
+
+        // Thêm thông tin thời gian và giá vào content
+        const infoContainer = document.createElement('div');
+        infoContainer.classList.add('info-container'); // Áp dụng class cho container
+        infoContainer.appendChild(thoiGian);
+        infoContainer.appendChild(gia);
+
+        // Tạo phần tử để hiển thị trạng thái
+        const statusParagraph = document.createElement('p');
+        statusParagraph.textContent = 'Đang tải...'; // Hiển thị trạng thái tạm thời
+
+        // Kiểm tra trạng thái của sân ca với ngày được chọn
+        fetch(`http://localhost:8080/hoa-don-chi-tiet/kiem-tra-dat?idSanCa=${sanCa.id}&ngayDenSan=${ngayChon}`)
+            .then(response => response.text())
+            .then(status => {
+                if (status === 'Còn trống') {
+                    statusParagraph.classList.add('custom-1'); // Áp dụng class custom-1 cho trạng thái "Còn trống"
+                    statusParagraph.textContent = 'Còn trống';
+                } else if (status === 'Đã được đặt') {
+                    statusParagraph.classList.add('custom-3'); // Áp dụng class custom-3 cho trạng thái "Đã được đặt"
+                    statusParagraph.textContent = 'Đã được đặt';
+                } else {
+                    statusParagraph.textContent = 'Không xác định';
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi khi kiểm tra trạng thái:', error);
+                statusParagraph.textContent = 'Lỗi khi kiểm tra trạng thái';
+            });
+
+        // Nút "Đổi lịch"
+        const doiLichButton = document.createElement('button');
+        doiLichButton.classList.add('btn', 'btn-booking');
+        doiLichButton.textContent = 'Đổi lịch';
+
+        // Gán sự kiện cho nút "Đổi lịch"
+        doiLichButton.addEventListener('click', function () {
+            console.log('Đổi lịch cho sân ca:', sanCa.id);
+
+            // Lấy thông tin của sân ca hiện tại
+            const row = doiLichButton.closest('tr'); // Tìm dòng <tr> chứa nút
+            const idSanCa = sanCa.id; // Lấy ID sân ca từ đối tượng sanCa
+            const idNgayTrongTuan = getDayOfWeek(ngayChon);
+
+            const sanCaTableBody = document.querySelector('#sanCaTable tbody');
+            const rows = sanCaTableBody.querySelectorAll('tr');
+
+            rows.forEach(row => {
+                const rowId = row.id; // Lấy id của dòng hiện tại
+                if (rowId.endsWith(ngayChon)) {
+                    // Nếu id kết thúc bằng suffixToRemove, xóa dòng
+                    sanCaTableBody.removeChild(row);
+                    console.log(`Đã xóa dòng với id: ${rowId}`);
+                }
+            });
+
+            // Gọi API để lấy thông tin mới cho sân ca
+            fetch(`http://localhost:8080/san-ca/danh-sach-san-ca/${sanCa.idSanBong}/${idNgayTrongTuan}/${sanCa.idCa}`)
+                .then(response => response.json())
+                .then(data => {
+
+                    const newRow = document.createElement('tr');
+                    newRow.id = `sanCaRow_${data.id}_${ngayChon}`; // Gán ID cho dòng mới
+
+                    const soThuTuCell = document.createElement('td');
+                    soThuTuCell.textContent = sanCaTableBody.children.length + 1; // Cập nhật số thứ tự
+                    newRow.appendChild(soThuTuCell);
+
+                    const sanBongCell = document.createElement('td');
+                    sanBongCell.textContent = data.tenSanBong; // Tên sân bóng mới
+                    newRow.appendChild(sanBongCell);
+
+                    const ngayCell = document.createElement('td');
+                    ngayCell.textContent = convertDateFormat(ngayChon); // Ngày đã chọn
+                    newRow.appendChild(ngayCell);
+
+                    const tenCaCell = document.createElement('td');
+                    tenCaCell.textContent = data.tenCa; // Tên ca mới
+                    newRow.appendChild(tenCaCell);
+
+                    const thoiGianCell = document.createElement('td');
+                    thoiGianCell.innerHTML = `${batDau}:00 - ${ketThuc}:00`;
+                    newRow.appendChild(thoiGianCell);
+
+                    const giaCell = document.createElement('td');
+                    giaCell.innerHTML = `${data.gia.toLocaleString()} VNĐ`; // Giá mới
+                    newRow.appendChild(giaCell);
+
+                    const trangThaiCell = document.createElement('td');
+                    trangThaiCell.textContent = 'Đang tải...'; // Hiển thị trạng thái tạm thời
+                    newRow.appendChild(trangThaiCell);
+
+                    const thaoTacCell = document.createElement('td');
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('btn', 'btn-outline-danger');
+                    deleteButton.setAttribute('type', 'button');
+                    deleteButton.setAttribute('title', 'Xóa');
+
+                    const deleteIcon = document.createElement('p');
+                    deleteIcon.classList.add('fe', 'fe-trash-2');
+                    deleteButton.appendChild(deleteIcon);
+
+                    deleteButton.addEventListener('click', () => {
+                        sanCaTableBody.removeChild(newRow);
+                        updateSTT(); // Cập nhật lại STT sau khi xóa dòng
+                        calculateTotalPrice();
+                    });
+
+                    thaoTacCell.appendChild(deleteButton);
+
+                    newRow.appendChild(thaoTacCell);
+
+                    fetch(`http://localhost:8080/hoa-don-chi-tiet/kiem-tra-dat?idSanCa=${data.id}&ngayDenSan=${ngayChon}`)
+                        .then(response => response.text())
+                        .then(status => {
+                            if (status === 'Còn trống') {
+                                trangThaiCell.classList.add('custom-1');
+                                trangThaiCell.textContent = 'Còn trống';
+                            } else if (status === 'Đã được đặt') {
+                                trangThaiCell.classList.add('custom-3');
+                                trangThaiCell.textContent = 'Đã được đặt';
+                            } else {
+                                trangThaiCell.textContent = 'Không xác định';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Lỗi khi kiểm tra trạng thái:', error);
+                            trangThaiCell.textContent = 'Lỗi';
+                        });
+
+                    sanCaTableBody.appendChild(newRow);
+                })
+                .catch(error => {
+                    console.error('Lỗi khi lấy thông tin sân ca mới:', error);
+                });
+        });
+
+        // Thêm thông tin trạng thái và nút vào content
+        content.appendChild(infoContainer);
+        content.appendChild(statusParagraph);
+        content.appendChild(doiLichButton);
+
+        return content;
+    }
+
+    function createDoiSanHeader(sanCa) {
+        const header = document.createElement('div');
+        header.classList.add('san-ca-header'); // Áp dụng class cho header
+
+        const tenCa = document.createElement('h5');
+        tenCa.textContent = sanCa.tenCa;
+
+        const tenLoaiSan = document.createElement('p');
+        tenLoaiSan.classList.add('ten-loai-san'); // Áp dụng class cho tên loại sân
+        tenLoaiSan.textContent = sanCa.tenLoaiSan;
+
+        header.appendChild(tenCa);
+        header.appendChild(tenLoaiSan);
+
+        return header;
+    }
+
+    function renderDoiSanList(sanCaList, modalContainer, ngayChon) {
+        modalContainer.innerHTML = ''; // Xóa dữ liệu cũ trong modal trước khi render dữ liệu mới
+
+        sanCaList.forEach(sanCa => {
+            const sanCaBox = document.createElement('div');
+            sanCaBox.classList.add('san-ca-box', 'doi-san-flex-20'); // Áp dụng class san-ca-box
+
+            // Tạo header cho sân ca
+            const sanCaHeader = createDoiSanHeader(sanCa);
+
+            // Tạo nội dung cho sân ca, truyền thêm 'ngayChon' vào hàm createDoiSanContent
+            const sanCaContent = createDoiSanContent(sanCa, ngayChon);
+
+            // Thêm header, separator, và content vào sanCaBox
+            sanCaBox.appendChild(sanCaHeader);
+            sanCaBox.appendChild(createSeparator()); // Thêm separator giữa header và content
+            sanCaBox.appendChild(sanCaContent);
+
+            // Thêm sanCaBox vào modal container
+            modalContainer.appendChild(sanCaBox);
+        });
+    }
+
     // Hàm tính tổng số ngày (nếu chọn Nhiều ngày)
     function calculateTotalDays(ngayBatDau, ngayKetThuc) {
         const start = new Date(ngayBatDau);
@@ -194,6 +392,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Tạo phần content cho mỗi ca sân
     function createSanCaContent(sanCa) {
+
         const content = document.createElement('div');
         content.classList.add('san-ca-content');
 
@@ -385,6 +584,26 @@ document.addEventListener("DOMContentLoaded", function () {
                             // Gọi API để lấy idSanCa và kiểm tra trạng thái
                             const idNgayTrongTuan = getDayOfWeek(formattedDate); // Lấy idNgàyTrongTuan
 
+                            const thaoTacCell = document.createElement('td');
+                            const deleteButton = document.createElement('button');
+                            deleteButton.classList.add('btn', 'btn-outline-danger');
+                            deleteButton.setAttribute('type', 'button');
+                            deleteButton.setAttribute('title', 'Xóa');
+
+                            const deleteIcon = document.createElement('p');
+                            deleteIcon.classList.add('fe', 'fe-trash-2');
+                            deleteButton.appendChild(deleteIcon);
+
+                            deleteButton.addEventListener('click', () => {
+                                sanCaTableBody.removeChild(row);
+                                updateSTT(); // Cập nhật lại STT sau khi xóa dòng
+                                calculateTotalPrice();
+                            });
+
+                            thaoTacCell.appendChild(deleteButton);
+
+                            row.appendChild(thaoTacCell);
+
                             fetch(`http://localhost:8080/san-ca/danh-sach-san-ca/${sanCa.idSanBong}/${idNgayTrongTuan}/${sanCa.idCa}`)
                                 .then(response => response.json())
                                 .then(data => {
@@ -401,6 +620,46 @@ document.addEventListener("DOMContentLoaded", function () {
                                     } else if (status === 'Đã được đặt') {
                                         trangThaiCell.classList.add('custom-3');
                                         trangThaiCell.textContent = 'Đã được đặt';
+
+                                        // Nút Đổi lịch
+                                        const changeButton = document.createElement('button');
+                                        changeButton.classList.add('btn', 'btn-outline-primary', 'changeButton');
+                                        changeButton.setAttribute('type', 'button');
+                                        changeButton.setAttribute('title', 'Đổi lịch');
+
+                                        const changeIcon = document.createElement('p');
+                                        changeIcon.classList.add('fe', 'fe-edit');
+                                        changeButton.appendChild(changeIcon);
+
+                                        changeButton.addEventListener('click', async () => {
+                                            const row = changeButton.closest('tr');
+
+                                            const tenSanBong = row.cells[1].textContent.trim();
+
+                                            const ca = row.cells[3].textContent.trim();
+                                            const idCa = getLastCharacterAsNumber(ca); // Hàm lấy idCa từ chuỗi ca
+
+                                            const ngayDenSan = convertDateFormat(row.cells[2].textContent.trim()); // Định dạng lại ngày
+                                            const idNgayTrongTuan = getDayOfWeek(ngayDenSan); // Lấy id ngày trong tuần
+
+                                            const idLoaiSan = await getLoaiSanId(tenSanBong); // Hàm async để lấy ID loại sân từ tên sân bóng
+
+                                            if (idLoaiSan) {
+                                                fetch(`http://localhost:8080/san-ca/danh-sach-doi-lich/${idLoaiSan}/${idNgayTrongTuan}/${idCa}`)
+                                                    .then(response => response.json())
+                                                    .then(sanCaList => {
+                                                        renderDoiSanList(sanCaList, document.getElementById('doiLichContainer'), ngayDenSan);
+                                                        // displayDoiSan(sanCaList); // Hàm để hiển thị danh sách sân ca
+                                                    })
+                                                    .catch(error => {
+                                                        console.error('Lỗi khi lấy danh sách sân ca:', error);
+                                                    });
+                                            }
+
+                                            $('#change-schedule-modal').modal('show');
+                                        });
+
+                                        thaoTacCell.appendChild(changeButton);
                                     } else {
                                         trangThaiCell.textContent = 'Không xác định';
                                     }
@@ -409,29 +668,10 @@ document.addEventListener("DOMContentLoaded", function () {
                                     console.error('Lỗi khi kiểm tra trạng thái:', error);
                                     trangThaiCell.textContent = 'Lỗi';
                                 });
-
-                            // Thao tác (Button để xóa hàng)
-                            const thaoTacCell = document.createElement('td');
-                            const deleteButton = document.createElement('button');
-                            deleteButton.classList.add('btn', 'btn-outline-danger');
-                            deleteButton.setAttribute('type', 'button');
-                            deleteButton.setAttribute('title', 'Xóa');
-                            deleteButton.style.justifyContent = 'center';
-
-                            const deleteIcon = document.createElement('span');
-                            deleteIcon.classList.add('fe', 'fe-trash-2');
-                            deleteButton.appendChild(deleteIcon);
-
-                            deleteButton.addEventListener('click', () => {
-                                sanCaTableBody.removeChild(row);
-                            });
-
-                            thaoTacCell.appendChild(deleteButton);
-                            row.appendChild(thaoTacCell);
-
                             // Thêm dòng vào bảng
                             sanCaTableBody.appendChild(row);
                         }
+                        calculateTotalPrice();
 
                         // Hiển thị modal sau khi thêm dữ liệu mới
                         $('#book-modal').modal('show');
@@ -584,6 +824,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         sanCaTableBody.removeChild(row);
                         checkbox.checked = false;
                         updateSTT(); // Cập nhật lại STT sau khi xóa dòng
+                        calculateTotalPrice();
                     });
 
                     thaoTacCell.appendChild(deleteButton);
@@ -594,6 +835,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     // Cập nhật STT sau khi thêm dòng
                     updateSTT();
+                    calculateTotalPrice();
                 })
                 .catch(error => showError('Error fetching san ca data:', error));
         } else {
@@ -601,6 +843,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (row) {
                 sanCaTableBody.removeChild(row);
                 updateSTT(); // Cập nhật lại STT sau khi xóa dòng
+                calculateTotalPrice();
             }
         }
     }
@@ -721,6 +964,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let customers = []; // Biến lưu danh sách khách hàng từ API
 
+    // Gọi API khi trang được tải
+    fetchCustomers();
+
 // Lấy danh sách khách hàng từ API khi trang được tải
     async function fetchCustomers() {
         try {
@@ -739,8 +985,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-// Tìm kiếm khách hàng
-    document.getElementById('searchCustomer').addEventListener('input', function () {
+    // Tìm kiếm khách hàng
+    const searchInput = document.getElementById('searchCustomer');
+    searchInput.addEventListener('input', function () {
+        console.log("Đang tìm kiếm khách hàng...");
         const query = this.value.toLowerCase();
         const filteredCustomers = customers.filter(customer =>
             customer.name.toLowerCase().includes(query) || customer.phone.includes(query)
@@ -769,8 +1017,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-// Gán sự kiện click cho nút "Chọn" khách hàng
-    document.querySelector('#customerTable').addEventListener('click', function (event) {
+    $('#customerTable').off('click').on('click', function (event) {
         if (event.target.tagName === 'BUTTON') {
             const selectedCustomer = {
                 id: event.target.getAttribute('data-id'),
@@ -787,27 +1034,29 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-// Gọi API khi trang được tải
-    fetchCustomers();
-
     flatpickr("#ngayDenSan", {});
     flatpickr("#ngayBatDau", {});
     flatpickr("#ngayKetThuc", {});
 });
 
 document.querySelector('#datLich').addEventListener('click', function () {
-    // Lặp qua tất cả các hàng trong bảng để kiểm tra trạng thái
-    const rows = document.querySelectorAll('#sanCaTableBody tr');
+    console.log("Button Đặt Lịch đã được nhấn."); // Để xác nhận rằng hàm đã được gọi
+    // Lấy danh sách các dòng sân ca từ bảng
+    const rows = document.querySelectorAll("#sanCaTable tbody tr");
     let hasBookedSlot = false;
 
     rows.forEach(row => {
-        const trangThaiCell = row.querySelector('td:nth-child(6)'); // Giả sử trạng thái nằm ở cột thứ 6
-        if (trangThaiCell && trangThaiCell.textContent.trim() === 'Đã được đặt') {
-            hasBookedSlot = true;
+        const trangThaiCell = row.querySelector('td:nth-child(7)'); // Giả sử trạng thái nằm ở cột thứ 6
+        if (trangThaiCell) {
+            if (trangThaiCell.textContent.trim() === 'Đã được đặt') {
+                hasBookedSlot = true;
+            }
+        } else {
+            console.log("Không tìm thấy ô trạng thái trong dòng này.");
         }
     });
 
-    // Nếu phát hiện có dòng có trạng thái "Đã được đặt", hiện thông báo và dừng thực thi
+
     if (hasBookedSlot) {
         showWarningToast('Có sân đã được đặt, vui lòng chọn sân khác.');
         return;
@@ -849,12 +1098,16 @@ document.querySelector('#datLich').addEventListener('click', function () {
             return data; // Trả về data của khách hàng nếu tìm thấy
         })
         .then(data => {
-            // Lấy idKhachHang từ khách hàng vừa tìm thấy hoặc vừa tạo
             var idKhachHang = data.id;
 
-            // Tạo payload cho API tạo hóa đơn
+            var tongTienElement = document.getElementById("tongTien");
+            var tongTienText = tongTienElement.textContent || tongTienElement.innerText;
+
+            var tongTienSan = parseInt(tongTienText.replace(/\D/g, ''), 10); // Chỉ lấy số
+
             var payload = {
-                idKhachHang: idKhachHang
+                idKhachHang: idKhachHang,
+                tongTienSan: tongTienSan
             };
 
             // Gọi API để tạo hóa đơn
@@ -874,11 +1127,6 @@ document.querySelector('#datLich').addEventListener('click', function () {
 
             // Gọi hàm thêm hóa đơn chi tiết sau khi thêm hóa đơn thành công
             themHoaDonChiTiet(idHoaDon);
-
-            // Đóng modal sau khi đặt lịch thành công
-            showSuccessToast('Đặt lịch thành công!');
-            $('#book-modal').modal('hide');
-            window.location.href = 'http://localhost:8080/dat-lich-tai-quay';
         })
         .catch(error => {
             console.error('Lỗi khi thêm hóa đơn:', error);
@@ -897,7 +1145,7 @@ async function themHoaDonChiTiet(idHoaDon) {
         // Lấy tên sân bóng từ bảng (Giả sử tên sân bóng ở cột 0)
         const tenSanBong = row.cells[1].textContent.trim(); // Thay đổi chỉ số cột nếu cần
 
-        // Lấy idCa từ cột "Ca" (Giả sử cột Ca ở vị trí thứ 1)
+        // Lấy idCa từ cột "Ca" (Giả sử cột Ca ở vị trí thứ 3)
         const ca = row.cells[3].textContent.trim();
         const idCa = getLastCharacterAsNumber(ca);
 
@@ -921,10 +1169,14 @@ async function themHoaDonChiTiet(idHoaDon) {
 
         const idSanCa = sanCa.id; // Giả sử bạn nhận được idSanCa từ API
 
-        // Lấy giá từ ô tương ứng trong dòng bảng (Giả sử cột giá ở vị trí thứ 5)
         const gia = row.cells[5].textContent.trim();
-        const tongTien = gia.replace(/\./g, '').replace(' VNĐ', ''); // Xóa dấu chấm và ' VNĐ' để chuyển đổi thành số
-        const tongTienSo = parseFloat(tongTien); // Chuyển đổi chuỗi sang số
+        console.log("Giá trị trong cột giá:", gia); // Kiểm tra giá trị gốc
+
+        const tongTien = gia.replace(/\./g, '').replace(/,/g, '').replace(' VNĐ', '');
+        console.log("Giá trị sau khi loại bỏ dấu chấm, dấu phẩy và ' VNĐ':", tongTien); // Kiểm tra giá trị sau khi loại bỏ
+
+        const tongTienSo = Number(tongTien); // Chuyển đổi chuỗi sang số
+        console.log("Giá trị số tổng tiền:", tongTienSo); // Kiểm tra giá trị số
 
         console.log("idSanCa:", idSanCa); // Kiểm tra idSanCa
         console.log("ngayDenSan:", ngayDenSan); // Kiểm tra ngày đến sân
@@ -978,6 +1230,11 @@ async function themHoaDonChiTiet(idHoaDon) {
 
     // Chờ tất cả các yêu cầu API hoàn thành
     await Promise.all(promises);
+
+    // Đóng modal sau khi đặt lịch thành công
+    showSuccessToast('Đặt lịch thành công!');
+    $('#book-modal').modal('hide');
+    window.location.href = 'http://localhost:8080/dat-lich-tai-quay';
 }
 
 // Hàm lấy idSanBong từ API dựa trên tên sân bóng
@@ -1093,4 +1350,31 @@ function showSuccessToast(message) {
         },
         stopOnFocus: true
     }).showToast();
+}
+
+function calculateTotalPrice() {
+    let total = 0;
+    const rows = document.querySelectorAll('#sanCaTable tbody tr');
+
+    // Duyệt qua từng dòng trong bảng
+    rows.forEach(row => {
+        const priceCell = row.querySelector('td:nth-child(6)'); // Cột giá nằm ở vị trí thứ 6
+        if (priceCell) {
+            const priceText = priceCell.textContent.replace(/\D/g, ''); // Xóa các ký tự không phải số
+            const price = parseInt(priceText);
+            if (!isNaN(price)) {
+                total += price;
+            }
+        }
+    });
+
+    // Cập nhật tổng tiền trong modal footer
+    document.getElementById('tongTien').textContent = `Tổng tiền: ${total.toLocaleString()} VNĐ`;
+}
+
+// Hàm giả lập lấy idSanBong từ tên sân bóng
+async function getLoaiSanId(tenSanBong) {
+    const response = await fetch(`http://localhost:8080/san-bong/findByName?tenSanBong=${tenSanBong}`);
+    const data = await response.json();
+    return data.idLoaiSan;
 }

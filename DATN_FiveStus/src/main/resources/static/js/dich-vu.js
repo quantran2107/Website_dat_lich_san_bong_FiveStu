@@ -887,126 +887,127 @@ function editItem(id) {
         let imageDisplay = '';
 
         // URL của ảnh hiện tại
-        const imageUrl = `data:image/jpeg;base64,${data.imageData}`;
+        const imageUrl = `${data.imageData}`;
 
         if (currentServiceType === 'do_thue') {
             imageDisplay = `
-                <div class="form-group col-md-6">
-                    <label>Ảnh Hiện Tại:</label>
-                    <img id="currentImage" src="${imageUrl}" alt="Hình Ảnh" style="width: 100%; max-width: 300px;">
-                </div>`;
+        <div class="form-group col-md-6">
+            <label>Ảnh Hiện Tại:</label>
+            <img id="currentImage" src="${imageUrl || ''}" alt="Hình Ảnh" style="width: 100%; max-width: 300px;">
+        </div>`;
             formContent = `
-                <form id="updateDichVu" enctype="multipart/form-data">
-                    <input type="text" class="form-control" id="id" value="${data.id}" hidden>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="tenDoThue">Tên</label>
-                            <input type="text" class="form-control" id="tenDoThue" value="${data.tenDoThue}" placeholder="Tên">
-                            <span id="errorTenDoThue" class="text-danger"></span>
-                        </div>
+        <form id="updateDichVu" enctype="multipart/form-data">
+            <input type="text" class="form-control" id="id" value="${data.id}" hidden>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="tenDoThue">Tên</label>
+                    <input type="text" class="form-control" id="tenDoThue" value="${data.tenDoThue}" placeholder="Tên" required>
+                    <span id="errorTenDoThue" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="soLuongsDoThue">Số lượng</label>
+                    <div class="input-group mb-3">
+                        <input type="number" class="form-control" id="soLuongsDoThue" value="${data.soLuongs}" required>
+                        <span class="input-group-text">#</span>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="soLuongsDoThue">Số lượng</label>
-                            <div class="input-group mb-3">
-                                <input type="number" class="form-control" id="soLuongsDoThue" value="${data.soLuongs}">
-                                <span class="input-group-text">#</span>
-                            </div>
-                            <span id="errorsoLuongsDoThue" class="text-danger"></span>
-                        </div>
+                    <span id="errorsoLuongsDoThue" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="donGiasDoThue">Đơn giá</label>
+                    <div class="input-group mb-3">
+                        <input type="number" step="0.01" class="form-control" id="donGiasDoThue" value="${data.donGias}" placeholder="Đơn giá" aria-label="Đơn giá" aria-describedby="basic-addon2" required>
+                        <span class="input-group-text" id="basic-addon2">VND</span>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="donGiasDoThue">Đơn giá</label>
-                            <div class="input-group mb-3">
-                                <input type="number" step="0.01" class="form-control" id="donGiasDoThue" value="${data.donGias}" placeholder="Đơn giá" aria-label="Đơn giá" aria-describedby="basic-addon2">
-                                <span class="input-group-text" id="basic-addon2">VND</span>
-                            </div>
-                            <span id="errordonGiasDoThue" class="text-danger"></span>
-                        </div>
+                    <span id="errordonGiasDoThue" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="trangThai">Trạng thái</label>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="trangThai" value="${data.trangThai}" disabled>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="trangThai">Trạng thái</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="trangThai" value="${data.trangThai}" disabled>
-                            </div>
-                            <span id="errorTrangThai" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="imageDoThue" class="form-label">Chọn Ảnh</label>
-                            <input class="form-control" type="file" id="imageDoThue" onchange="previewImage(event)">
-                            <span id="errorImageDoThue" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary" onclick="submitUpdateFormDoThue(event, ${data.id})">Lưu</button>
-                    <button type="button" class="btn btn-success" onclick="cancelAdd()">Hủy</button>
-                </form>`;
+                    <span id="errorTrangThai" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="imageDoThue" class="form-label">Chọn Ảnh</label>
+                    <input class="form-control" type="file" id="imageDoThue" onchange="previewImage(event)">
+                    <span id="errorImageDoThue" class="text-danger"></span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="submitUpdateFormDoThue(event, ${data.id})">Lưu</button>
+            <button type="button" class="btn btn-success" onclick="cancelAdd()">Hủy</button>
+        </form>`;
         } else if (currentServiceType === 'nuoc_uong') {
             imageDisplay = `
-                <div class="form-group col-md-6">
-                    <label>Ảnh Hiện Tại:</label>
-                    <img id="currentImage" src="${imageUrl}" alt="Hình Ảnh" style="width: 100%; max-width: 300px;">
-                </div>`;
+        <div class="form-group col-md-6">
+            <label>Ảnh Hiện Tại:</label>
+            <img id="currentImage" src="${imageUrl || ''}" alt="Hình Ảnh" style="width: 100%; max-width: 300px;">
+        </div>`;
             formContent = `
-                <form id="updateDichVu" enctype="multipart/form-data">
-                    <input type="text" class="form-control" id="id" value="${data.id}" hidden>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="tenNuocUong">Tên</label>
-                            <input type="text" class="form-control" id="tenNuocUong" value="${data.tenNuocUong}" placeholder="Tên">
-                            <span id="errorTenNuocUong" class="text-danger"></span>
-                        </div>
+        <form id="updateDichVu" enctype="multipart/form-data">
+            <input type="text" class="form-control" id="id" value="${data.id}" hidden>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="tenNuocUong">Tên</label>
+                    <input type="text" class="form-control" id="tenNuocUong" value="${data.tenNuocUong}" placeholder="Tên" required>
+                    <span id="errorTenNuocUong" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="soLuongsNuocUong">Số lượng</label>
+                    <div class="input-group mb-3">
+                        <input type="number" class="form-control" id="soLuongsNuocUong" value="${data.soLuongs}" required>
+                        <span class="input-group-text">#</span>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="soLuongsNuocUong">Số lượng</label>
-                            <div class="input-group mb-3">
-                                <input type="number" class="form-control" id="soLuongsNuocUong" value="${data.soLuongs}">
-                                <span class="input-group-text">#</span>
-                            </div>
-                            <span id="errorsoLuongsNuocUong" class="text-danger"></span>
-                        </div>
+                    <span id="errorsoLuongsNuocUong" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="donGiasNuocUong">Đơn giá</label>
+                    <div class="input-group mb-3">
+                        <input type="number" step="0.01" class="form-control" id="donGiasNuocUong" value="${data.donGias}" placeholder="Đơn giá" aria-label="Đơn giá" aria-describedby="basic-addon2" required>
+                        <span class="input-group-text" id="basic-addon2">VND</span>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="donGiasNuocUong">Đơn giá</label>
-                            <div class="input-group mb-3">
-                                <input type="number" step="0.01" class="form-control" id="donGiasNuocUong" value="${data.donGias}" placeholder="Đơn giá" aria-label="Đơn giá" aria-describedby="basic-addon2">
-                                <span class="input-group-text" id="basic-addon2">VND</span>
-                            </div>
-                            <span id="errordonGiasNuocUong" class="text-danger"></span>
-                        </div>
+                    <span id="errordonGiasNuocUong" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="trangThai">Trạng thái</label>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="trangThai" value="${data.trangThai}" disabled>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="trangThai">Trạng thái</label>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="trangThai" value="${data.trangThai}" disabled>
-                            </div>
-                            <span id="errorTrangThai" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="imageNuocUong" class="form-label">Chọn Ảnh</label>
-                            <input class="form-control" type="file" id="imageNuocUong" onchange="previewImage(event)">
-                            <span id="errorImageNuocUong" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary" onclick="submitUpdateFormNuocUong(event, ${data.id})">Lưu</button>
-                    <button type="button" class="btn btn-success" onclick="cancelAdd()">Hủy</button>
-                </form>`;
+                    <span id="errorTrangThai" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="imageNuocUong" class="form-label">Chọn Ảnh</label>
+                    <input class="form-control" type="file" id="imageNuocUong" onchange="previewImage(event)">
+                    <span id="errorImageNuocUong" class="text-danger"></span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="submitUpdateFormNuocUong(event, ${data.id})">Lưu</button>
+            <button type="button" class="btn btn-success" onclick="cancelAdd()">Hủy</button>
+        </form>`;
         }
 
-        // Thêm phần hiển thị ảnh vào formContent
+// Thêm phần hiển thị ảnh vào formContent
         cardBody.html(`
-            <div class="row">
-                <div class="col-md-6">${formContent}</div>
-                <div class="col-md-6">${imageDisplay}</div>
-            </div>`);
+    <div class="row">
+        <div class="col-md-6">${formContent}</div>
+        <div class="col-md-6">${imageDisplay}</div>
+    </div>`);
+
     });
 }
 
@@ -1047,7 +1048,7 @@ function submitUpdateFormDoThue(event, id) {
     const ten = $('#tenDoThue').val().trim();
     const soLuongs = parseInt($('#soLuongsDoThue').val().trim());
     const donGias = parseFloat($('#donGiasDoThue').val().trim());
-    const imageData = $('#imageDoThue')[0].files[0];
+    const imageFile = $('#imageDoThue')[0].files[0]; // Thay đổi biến tên cho rõ ràng hơn
 
     // Xóa các thông báo lỗi trước đó
     $('#errorTenDoThue').text('');
@@ -1083,8 +1084,10 @@ function submitUpdateFormDoThue(event, id) {
     formData.append('tenDoThue', ten);
     formData.append('soLuongs', soLuongs);
     formData.append('donGias', donGias);
-    if (imageData) {
-        formData.append('imageFile', imageData);
+
+    // Ghi đè `imageFile` bằng hình ảnh mới (nếu có)
+    if (imageFile) {
+        formData.append('imageFile', imageFile); // Sử dụng tên `imageFile` thay vì `imageData`
     }
 
     // Xác nhận trước khi gửi dữ liệu lên server
@@ -1093,8 +1096,8 @@ function submitUpdateFormDoThue(event, id) {
         text: 'Bạn chắc chắn muốn cập nhật thông tin này không?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'Cancel',
+        confirmButtonText: 'Có',
+        cancelButtonText: 'Hủy',
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
@@ -1116,9 +1119,11 @@ function submitUpdateFormDoThue(event, id) {
                     });
                 },
                 error: function(xhr, status, error) {
+                    // Hiển thị lỗi chi tiết từ server
+                    const errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'Đã xảy ra lỗi khi cập nhật thông tin đồ thuê';
                     Swal.fire({
                         title: 'Lỗi!',
-                        text: 'Đã xảy ra lỗi khi cập nhật thông tin đồ thuê',
+                        text: errorMessage,
                         icon: 'error'
                     });
                 }
@@ -1129,11 +1134,12 @@ function submitUpdateFormDoThue(event, id) {
 
 
 
+
+
 // Submit form update cho dịch vụ nước uống
 function submitUpdateFormNuocUong(event, id) {
     event.preventDefault(); // Ngăn không cho form reload lại trang
 
-    // Kiểm tra xem `id` có hợp lệ không
     if (!id) {
         Swal.fire({
             title: 'Lỗi!',
@@ -1143,22 +1149,15 @@ function submitUpdateFormNuocUong(event, id) {
         return;
     }
 
-    // Lấy giá trị từ các trường nhập liệu
     const ten = $('#tenNuocUong').val().trim();
     const soLuongs = parseInt($('#soLuongsNuocUong').val().trim());
     const donGias = parseFloat($('#donGiasNuocUong').val().trim());
-    const imageData = $('#imageNuocUong')[0].files[0];
+    const imageFile = $('#imageNuocUong')[0].files[0];
 
-    // Xóa các thông báo lỗi trước đó
-    $('#errorTenNuocUong').text('');
-    $('#errorsoLuongsNuocUong').text('');
-    $('#errordonGiasNuocUong').text('');
-    $('#errorImageNuocUong').text('');
+    $('#errorTenNuocUong, #errorsoLuongsNuocUong, #errordonGiasNuocUong').text(''); // Xóa lỗi trước đó
 
-    // Biến để kiểm tra lỗi
     let hasError = false;
 
-    // Kiểm tra các trường nhập liệu
     if (!ten) {
         $('#errorTenNuocUong').text('Tên không được để trống');
         hasError = true;
@@ -1178,36 +1177,27 @@ function submitUpdateFormNuocUong(event, id) {
         return; // Dừng lại nếu có lỗi
     }
 
-    // Tạo FormData để gửi dữ liệu, bao gồm file ảnh
     const formData = new FormData();
+    formData.append('tenNuocUong', ten); // Gửi tên
+    formData.append('soLuongs', soLuongs); // Gửi số lượng
+    formData.append('donGias', donGias); // Gửi đơn giá
 
-    // Định dạng JSON cho nuocUongDTO
-    const nuocUongDTO = {
-        tenNuocUong: ten,
-        soLuongs: soLuongs,
-        donGias: donGias
-    };
-
-    formData.append('nuocUongDTO', new Blob([JSON.stringify(nuocUongDTO)], { type: "application/json" }));
-
-    if (imageData) {
-        formData.append('imageFile', imageData);
+    if (imageFile) {
+        formData.append('imageFile', imageFile); // Gửi ảnh
     }
 
-    // Xác nhận trước khi gửi dữ liệu lên server
     Swal.fire({
         title: 'Xác nhận',
         text: 'Bạn chắc chắn muốn cập nhật thông tin này không?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'Cancel',
+        confirmButtonText: 'Có',
+        cancelButtonText: 'Hủy',
         reverseButtons: true
     }).then((result) => {
         if (result.isConfirmed) {
-            // Gửi dữ liệu lên server qua AJAX
             $.ajax({
-                url: `http://localhost:8080/nuoc_uong/${id}`, // Sử dụng đúng id
+                url: `http://localhost:8080/nuoc_uong/${id}`,
                 type: 'PUT',
                 data: formData,
                 processData: false,
@@ -1222,10 +1212,11 @@ function submitUpdateFormNuocUong(event, id) {
                         loadData(currentServiceType, 0); // Reload dữ liệu
                     });
                 },
-                error: function(xhr, status, error) {
+                error: function(xhr) {
+                    const errorMessage = xhr.responseJSON ? xhr.responseJSON.message : 'Đã xảy ra lỗi khi cập nhật thông tin nước uống';
                     Swal.fire({
                         title: 'Lỗi!',
-                        text: 'Đã xảy ra lỗi khi cập nhật thông tin nước uống',
+                        text: errorMessage,
                         icon: 'error'
                     });
                 }
@@ -1233,8 +1224,6 @@ function submitUpdateFormNuocUong(event, id) {
         }
     });
 }
-
-
 
 
 //Cancel Add

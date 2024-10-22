@@ -1,5 +1,7 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.DATN_WebFiveTus.dto.DoThueDTO;
 import com.example.DATN_WebFiveTus.entity.DoThue;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
@@ -12,19 +14,24 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class DoThueServiceImp implements DoThueService {
+    private final Cloudinary cloudinary;
     private  DoThueRepository doThueRepository;
 
     private ModelMapper modelMapper;
 
-    public DoThueServiceImp(DoThueRepository doThueRepository, ModelMapper modelMapper) {
+    public DoThueServiceImp(DoThueRepository doThueRepository, ModelMapper modelMapper, Cloudinary cloudinary) {
         this.doThueRepository = doThueRepository;
         this.modelMapper = modelMapper;
+        this.cloudinary = cloudinary;
     }
 
     @Override
@@ -56,43 +63,27 @@ public class DoThueServiceImp implements DoThueService {
 
     @Override
     public DoThueDTO update(Integer id, DoThueDTO doThueDTO) {
-        DoThue doThue= doThueRepository.findById(id).orElseThrow(() ->
-                new ResourceNotfound("Không tồn tại do thue ID: " + id));
+        // Tìm bản ghi dựa trên ID
+        DoThue doThue = doThueRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotfound("Không tồn tại do thue ID: " + id));
+
+        // Cập nhật các trường dữ liệu từ doThueDTO
         doThue.setTenDoThue(doThueDTO.getTenDoThue());
         doThue.setDonGias(doThueDTO.getDonGias());
         doThue.setSoLuongs(doThueDTO.getSoLuongs());
-        doThue.setTrangThai(doThueDTO.getTrangThai());
-        DoThue doThueUpdate=doThueRepository.save(doThue);
-        return modelMapper.map(doThueUpdate,DoThueDTO.class);
+//        doThue.setTrangThai(doThueDTO.getTrangThai());
 
-//        // Tìm kiếm đối tượng DoThue theo ID trong cơ sở dữ liệu
-//        Optional<DoThue> optionalDoThue = doThueRepository.findById(id);
-//        if (!optionalDoThue.isPresent()) {
-//            throw new ResourceNotFoundException("DoThue not found with ID: " + id);
-//        }
-//
-//        // Lấy đối tượng DoThue hiện tại từ Optional
-//        DoThue existingDoThue = optionalDoThue.get();
-//
-//        // Cập nhật các thuộc tính mới từ DoThueDTO
-//        existingDoThue.setTenDoThue(doThueDTO.getTenDoThue());
-//        existingDoThue.setDonGia(doThueDTO.getDonGia());
-//        existingDoThue.setSoLuong(doThueDTO.getSoLuong());
-//        existingDoThue.setTrangThai(doThueDTO.getTrangThai());
-////        existingDoThue.setDeletedAt(doThueDTO.getDeletedAt());
-//
-//        // Cập nhật ảnh nếu có
-//        if (doThueDTO.getImageData() != null) {
-//            existingDoThue.setImageData(doThueDTO.getImageData());
-//        }
-//
-//        // Lưu đối tượng đã cập nhật vào cơ sở dữ liệu
-//        DoThue updatedDoThue = doThueRepository.save(existingDoThue);
-//
-//        // Chuyển đổi từ DoThue entity sang DoThueDTO để trả về
-//        return modelMapper.map(updatedDoThue, DoThueDTO.class);
+        // Cập nhật URL ảnh nếu có
+        if (doThueDTO.getImageData() != null) {
+            doThue.setImageData(doThueDTO.getImageData());
+        }
 
+        // Lưu lại bản ghi đã cập nhật
+        DoThue updatedEntity = doThueRepository.save(doThue);
+        return modelMapper.map(updatedEntity, DoThueDTO.class);
     }
+
+
 
     @Override
     @Transactional
@@ -153,6 +144,15 @@ public class DoThueServiceImp implements DoThueService {
         return doThueRepository.searchTenDoThue(tenDoThue).stream()
                 .map(dothue -> modelMapper.map(dothue, DoThueDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public DoThueDTO updateSoLuong(Integer id, DoThueDTO doThueDTO) {
+        DoThue doThue= doThueRepository.findById(id).orElseThrow();
+
+        doThue.setSoLuongs(doThueDTO.getSoLuongs());
+        DoThue doThueUpdate=doThueRepository.save(doThue);
+        return modelMapper.map(doThueUpdate,DoThueDTO.class);
     }
 
 

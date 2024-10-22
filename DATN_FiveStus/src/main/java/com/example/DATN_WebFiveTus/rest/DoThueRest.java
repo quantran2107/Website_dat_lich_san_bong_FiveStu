@@ -1,5 +1,7 @@
 package com.example.DATN_WebFiveTus.rest;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.DATN_WebFiveTus.dto.DoThueDTO;
 import com.example.DATN_WebFiveTus.entity.DoThue;
 import com.example.DATN_WebFiveTus.repository.DoThueRepository;
@@ -31,11 +33,13 @@ import java.util.Optional;
 @RestController
 @RequestMapping("do_thue")
 public class DoThueRest {
+    private final Cloudinary cloudinary;
     private DoThueRepository doThueRepository;
     private DoThueService doThueService;
 
-    public DoThueRest(DoThueService doThueService) {
+    public DoThueRest(DoThueService doThueService, Cloudinary cloudinary) {
         this.doThueService = doThueService;
+        this.cloudinary = cloudinary;
     }
 
     @GetMapping("hien-thi")
@@ -73,10 +77,12 @@ public class DoThueRest {
     @PostMapping("save")
     public ResponseEntity<DoThueDTO> save(@ModelAttribute DoThueDTO doThueDTO,
                                           @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
-        // Xử lý hình ảnh
         if (imageFile != null && !imageFile.isEmpty()) {
-            String fileName = imageFile.getOriginalFilename();
-            doThueDTO.setImageData(fileName);
+            // Upload ảnh lên Cloudinary
+            Map uploadResult = cloudinary.uploader().upload(imageFile.getBytes(),
+                    ObjectUtils.asMap("resource_type", "auto"));
+            String imageUrl = uploadResult.get("secure_url").toString();
+            doThueDTO.setImageData(imageUrl);
         }
 
         // Lưu đối tượng DoThueDTO
@@ -107,66 +113,28 @@ public class DoThueRest {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DoThueDTO> update(@PathVariable("id") Integer id,@RequestBody DoThueDTO doThueDTO){
-        return ResponseEntity.ok(doThueService.update(id, doThueDTO));
-//
-//    public ResponseEntity<DoThueDTO> updateDoThue(
-//            @PathVariable("id") Integer id,
-//            @RequestParam("tenDoThue") String tenDoThue,
-//            @RequestParam("soLuong") int soLuong,
-//            @RequestParam("donGia") float donGia,
-//            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
-//
-//        // Lấy đối tượng hiện tại
-//        DoThueDTO existingDoThueDTO = doThueService.getOne(id);
-//
-//        // Cập nhật các giá trị mới
-//        existingDoThueDTO.setTenDoThue(tenDoThue);
-//        existingDoThueDTO.setSoLuong(soLuong);
-//        existingDoThueDTO.setDonGia(donGia);
-//
-//        // Cập nhật ảnh nếu có
-//        if (imageFile != null && !imageFile.isEmpty()) {
-//            existingDoThueDTO.setImageData(imageFile.getBytes());
-//        }
-//
-//        // Cập nhật đối tượng
-//        DoThueDTO updatedDoThueDTO = doThueService.update(id, existingDoThueDTO);
-//
-//        return ResponseEntity.ok(updatedDoThueDTO);
+    public ResponseEntity<DoThueDTO> update(
+            @PathVariable("id") Integer id,
+            @ModelAttribute DoThueDTO doThueDTO, // Không ánh xạ imageData từ request
+            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
 
+        // Xử lý ảnh nếu có tệp ảnh được tải lên
+        if (imageFile != null && !imageFile.isEmpty()) {
+            // Upload ảnh lên Cloudinary
+            Map uploadResult = cloudinary.uploader().upload(imageFile.getBytes(),
+                    ObjectUtils.asMap("resource_type", "auto"));
+            String imageUrl = uploadResult.get("secure_url").toString();
+
+            // Set URL ảnh vào doThueDTO
+            doThueDTO.setImageData(imageUrl);  // Cập nhật URL của ảnh sau khi upload
+        }
+
+        // Gọi service để xử lý cập nhật
+        DoThueDTO updatedDoThue = doThueService.update(id, doThueDTO);
+        return ResponseEntity.ok(updatedDoThue);
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<DoThueDTO> update(
-//            @PathVariable("id") Integer id,
-//            @RequestParam("doThueDTO") String doThueDTOJson,
-//            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
-//
-//        // Chuyển đổi JSON thành đối tượng DoThueDTO
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        DoThueDTO doThueDTO = objectMapper.readValue(doThueDTOJson, DoThueDTO.class);
-//
-//        // Lấy đối tượng DoThueDTO hiện tại từ dịch vụ để giữ lại ảnh cũ nếu không có file mới
-//        DoThueDTO existingDoThueDTO = doThueService.getOne(id);
-//
-//        // Nếu không có file mới, giữ lại hình ảnh cũ
-//        if (imageFile == null || imageFile.isEmpty()) {
-//            doThueDTO.setImageData(existingDoThueDTO.getImageData());
-//        } else {
-//            // Nếu có file mới, chuyển đổi MultipartFile thành byte[]
-//            byte[] imageBytes = imageFile.getBytes();
-//            doThueDTO.setImageData(imageBytes);
-//        }
-//
-//        // Đặt ID cho đối tượng DoThueDTO để cập nhật
-//        doThueDTO.setId(id);
-//
-//        // Xử lý đối tượng DoThueDTO và lưu vào dịch vụ
-//        DoThueDTO updatedDoThueDTO = doThueService.save(doThueDTO);
-//
-//        return ResponseEntity.ok(updatedDoThueDTO);
-//    }
+
 
     @PutMapping("/delete-soft/{id}")
     public ResponseEntity<Void> deleteSoft(@PathVariable Integer id, @RequestBody(required = false) Map<String, Boolean> requestBody) {
@@ -197,6 +165,11 @@ public class DoThueRest {
     @GetMapping("searchTenDoThue")
     public ResponseEntity<List<DoThueDTO>> searchTenDoThues(@RequestParam("tenDoThue") String tenDoThue){
         return ResponseEntity.ok(doThueService.searchTenDoThue(tenDoThue));
+    }
+
+    @PutMapping("updateSoLuong/{id}")
+    public ResponseEntity<?> updateSoLuong(@PathVariable Integer id, @RequestBody DoThueDTO doThueDTO){
+        return ResponseEntity.ok(doThueService.updateSoLuong(id, doThueDTO));
     }
 
 }
