@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7c378c79-3247-40c7-b305-bfbeb21aa9f1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/GiaoCaServcieImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/GiaoCaServcieImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/giaoca.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/giaoca.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/fragment/sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/fragment/sidebar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/RoleDataSeeder.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/GiaoCaServcieImp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/GiaoCaServcieImp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/static/js/giaoca.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/js/giaoca.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,11 +48,14 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-Database detector&quot;: &quot;Database detector&quot;,
+    &quot;Notification.DoNotAsk-Database detector&quot;: &quot;true&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Spring Boot.DatnWebFiveTusApplication (1).executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;nhanhTruong2&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
@@ -68,6 +65,10 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -227,8 +228,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-2c89be11f927-intellij.indexing.shared.core-IU-243.18137.10" />
-        <option value="bundled-js-predefined-d6986cc7102b-b86d7ee83eed-JavaScript-IU-243.18137.10" />
+        <option value="bundled-jdk-9823dce3aa75-2c89be11f927-intellij.indexing.shared.core-IU-243.19420.21" />
+        <option value="bundled-js-predefined-d6986cc7102b-b86d7ee83eed-JavaScript-IU-243.19420.21" />
       </set>
     </attachedChunks>
   </component>
@@ -333,6 +334,11 @@
       <workItem from="1729243578865" duration="5021000" />
       <workItem from="1729250243394" duration="12972000" />
       <workItem from="1729313904700" duration="2041000" />
+      <workItem from="1729436935130" duration="124000" />
+      <workItem from="1729437068134" duration="409000" />
+      <workItem from="1729437751109" duration="303000" />
+      <workItem from="1729565893893" duration="500000" />
+      <workItem from="1729571033266" duration="1094000" />
     </task>
     <servers />
   </component>
