@@ -12,7 +12,7 @@ public interface GiaoCaService {
 
     Boolean addRow(GiaoCaFormRequest request);
 
-    Integer getIdNVG(HttpServletRequest request);
+    NhanVienDTO getIdNVG(HttpServletRequest request);
 
     Boolean changeGCN(GiaoCaRequest request);
 
