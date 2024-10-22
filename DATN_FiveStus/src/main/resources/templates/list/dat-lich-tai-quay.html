@@ -1659,7 +1659,6 @@
         const invoiceId = row.getAttribute('data-id'); // Lấy id hóa đơn chi tiết từ thuộc tính data-id
         selectedInvoiceId = row.getAttribute('data-id');
         fillDichVuChoHoaDon(invoiceId);
-
         const tabName =
             `HD ${invoiceId}`
         ;
@@ -2425,23 +2424,23 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                     .catch(error => {
                         console.error('Error fetching discount vouchers:', error);
                     });
-                fetch(`http://localhost:8080/httt/find-by-id-hdct/${invoiceId}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok ' + response.statusText);
+
+                $.ajax({
+                    url: `http://localhost:8080/httt/${invoiceId}`,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (Array.isArray(response) && response.length === 0) {
+                            let tienThieuText = $(`#tienConThieu${invoiceId}`);
+                            tienThieuText.text($(`#tongTienPhaiTra${invoiceId}`).val());
+                        } else {
+                            loadTableHtttInModal(response, invoiceId);
                         }
-                        return response.json();
-                    })
-                    .then(invoiceDetails => {
-                        // Tính tổng số tiền từ invoiceDetails
-                        const totalTienKhachDua = invoiceDetails
-                            .filter(detail => detail.soTien !== null) // Lọc các giá trị không null
-                            .reduce((sum, detail) => sum + detail.soTien, 0); // Tính tổng soTien
-
-                        // Hiển thị tổng tiền vào ô input (ví dụ: id là totalSoTien)
-                        document.getElementById(`tienKhachDua${invoiceId}`).value = totalTienKhachDua.toLocaleString('vi-VN');
-
-                    })
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Lỗi khi gửi yêu cầu:", error);
+                    }
+                });
             })
             .catch(error => {
                 console.error('Error fetching invoice details:', error);
@@ -2580,6 +2579,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
 
     // load api httt
     function fillHttt(invoiceId) {
+        console.log("invoiceId: " + invoiceId);
         let tongTien = $(`#tongTienHang${invoiceId}`);
         tongTien.text($(`#tongTienPhaiTra${invoiceId}`).val());
 
@@ -3060,11 +3060,11 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
             console.log(selectedInvoiceId);
 
             // Gọi API để lấy thông tin hóa đơn chi tiết
-            const invoiceResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${selectedInvoiceId}`, { cache: "no-store" });
+            const invoiceResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${selectedInvoiceId}`, {cache: "no-store"});
             const invoiceData = await invoiceResponse.json();
 
             // Gọi API để lấy danh sách dịch vụ
-            const servicesResponse = await fetch(`http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${invoiceData.id}`, { cache: "no-store" });
+            const servicesResponse = await fetch(`http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${invoiceData.id}`, {cache: "no-store"});
             const services = await servicesResponse.json();
 
             let totalInvoice = 0; // Khai báo biến tổng hóa đơn
@@ -3089,7 +3089,10 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                 const tongTienPhaiTra = tongTien - tienGiam;
 
                 // Hiển thị tổng tiền phải trả
-                document.getElementById(`tongTienPhaiTra${selectedInvoiceId}`).value = tongTienPhaiTra.toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                document.getElementById(`tongTienPhaiTra${selectedInvoiceId}`).value = tongTienPhaiTra.toLocaleString('de-DE', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
             } else {
                 // Nếu không còn dịch vụ nào, hiển thị 0 cho tổng tiền dịch vụ
                 document.getElementById(`giaDichVu${selectedInvoiceId}`).value = '0';
@@ -3097,7 +3100,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
             }
 
             // Gọi API để lấy phụ phí nếu có
-            const feesResponse = await fetch(`http://localhost:8080/api/phu-phi-hoa-don/${selectedInvoiceId}`, { cache: "no-store" });
+            const feesResponse = await fetch(`http://localhost:8080/api/phu-phi-hoa-don/${selectedInvoiceId}`, {cache: "no-store"});
             const fees = await feesResponse.json();
 
             if (totalInvoice) {
@@ -3110,6 +3113,17 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
         }
     }
 
+    function convertToFixedFormat(numberStr) {
+        // Thay dấu phẩy bằng dấu chấm
+        let result = numberStr.replace(',', '.');
+
+        // Nếu kết quả chưa có đủ 3 chữ số sau dấu chấm, thêm '0' vào cuối
+        if (result.split('.')[1].length < 3) {
+            result += '0';
+        }
+
+        return result;
+    }
 
 </script>
 </body>
