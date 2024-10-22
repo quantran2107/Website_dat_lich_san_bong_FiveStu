@@ -36,6 +36,8 @@ $(document).ready(function () {
                     window.location.href = '/quan-ly-nhan-vien';
                 } else if (roles.includes("ROLE_EMPLOYEE")) {
                     window.location.href = '/nhan-ca'
+                } else if (roles.includes("ROLE_USER")) {
+                    window.location.href = '/khach-hang/dat-san'
                 } else {
                     window.location.href = '/home';
                 }
