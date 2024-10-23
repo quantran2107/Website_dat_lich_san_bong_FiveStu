@@ -2410,8 +2410,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                             const totalAfterDiscount = updatedTotalInvoiceNumber - tienGiamToUse; // Tính tổng tiền sau khi giảm
                             const tongTienPhaiTraInput = document.getElementById(`tongTienPhaiTra${invoiceId}`);
                             tongTienPhaiTraInput.value = totalAfterDiscount.toLocaleString('vi-VN'); // Hiển thị tổng tiền cuối cùng
-
-
+                            
                         } else {
                             // Không có phiếu giảm giá nào
                             const tienGiamInput = document.getElementById(`tienGiam${invoiceId}`);
