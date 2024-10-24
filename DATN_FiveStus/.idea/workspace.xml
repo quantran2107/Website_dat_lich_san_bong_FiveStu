@@ -5,20 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="018b60b0-d2c3-4cfd-bb75-5683c5533e27" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/controller/client/TestController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/client/css/sidebarClient.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/client/js/customer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/client/san-da-dat.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/fragment/client/sidebarClient.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/controller/client/ClientCustomerController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/client/ClientAcount.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/client/js/sidebarClient.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/giaoca.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/giaoca.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/security/jwt/JwtUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/security/jwt/JwtUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/controller/client/TestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/controller/client/TestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/KhachHangRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/KhachHangRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/client/js/customer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/client/js/customer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/fragment/headClient.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/fragment/headClient.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/fragment/sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/fragment/sidebar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/static/js/giaoca.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/js/giaoca.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/client/san-da-dat.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/client/profile-customer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/fragment/client/sidebarClient.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/fragment/client/sidebarClient.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/security/jwt/JwtUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/security/jwt/JwtUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/UserServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/UserServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/UserService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/static/js/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/js/login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/fragment/headClient.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/fragment/headClient.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/fragment/sidebar.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/fragment/sidebar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/fragment/client/sidebarClient.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/fragment/client/sidebarClient.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +33,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="JavaScript File" />
         <option value="Class" />
       </list>
     </option>
@@ -104,6 +109,7 @@
       <recent name="C:\Users\puddi\OneDrive\Documents\Máy tính\Clone test\Website_dat_lich_san_bong_FiveStu\DATN_FiveStus\src\main\resources\templates\auth" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.example.DATN_WebFiveTus.controller.client" />
       <recent name="com.example.DATN_WebFiveTus.service.Imp" />
       <recent name="com.example.DATN_WebFiveTus.service" />
       <recent name="com.example.DATN_WebFiveTus.rest" />
@@ -359,6 +365,8 @@
       <workItem from="1729663580290" duration="9000" />
       <workItem from="1729737550068" duration="17164000" />
       <workItem from="1729758543482" duration="122000" />
+      <workItem from="1729758797371" duration="23000" />
+      <workItem from="1729761433560" duration="9577000" />
     </task>
     <servers />
   </component>

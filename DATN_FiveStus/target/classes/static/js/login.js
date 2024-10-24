@@ -37,7 +37,7 @@ $(document).ready(function () {
                 } else if (roles.includes("ROLE_EMPLOYEE")) {
                     window.location.href = '/nhan-ca'
                 } else if (roles.includes("ROLE_USER")) {
-                    window.location.href = '/khach-hang/dat-san'
+                    window.location.href = '/customer-details'
                 } else {
                     window.location.href = '/khach-hang/trang-chu';
                 }

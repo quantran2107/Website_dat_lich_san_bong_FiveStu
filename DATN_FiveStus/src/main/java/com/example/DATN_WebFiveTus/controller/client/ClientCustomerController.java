@@ -4,9 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class TestController {
-    @GetMapping("test-sidebar")
+public class ClientCustomerController {
+    @GetMapping("customer-details")
     public String testSidebar() {
-        return "profile-customer";
+        return "client/profile-customer";
     }
 }
