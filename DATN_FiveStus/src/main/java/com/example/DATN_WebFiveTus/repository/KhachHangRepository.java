@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.repository;
 
+import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
 import com.example.DATN_WebFiveTus.entity.KhachHang;
 
 import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
@@ -36,5 +37,6 @@ public interface KhachHangRepository extends JpaRepository<KhachHang,Integer> {
     List<KhachHang> searchByNamePhoneOrEmailActive(@Param("query") String query,
                                                    @Param("trangThai") String trangThai,
                                                    Pageable pageable);
-
+    @Query("SELECT kh FROM KhachHang kh WHERE kh.email =:email")
+    KhachHang findKhachHangByEmail(@Param("email") String email);
 }
