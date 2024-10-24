@@ -39,7 +39,7 @@ $(document).ready(function () {
                 } else if (roles.includes("ROLE_USER")) {
                     window.location.href = '/khach-hang/dat-san'
                 } else {
-                    window.location.href = '/home';
+                    window.location.href = '/khach-hang/trang-chu';
                 }
             },
             error: function () {

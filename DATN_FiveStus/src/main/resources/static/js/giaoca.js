@@ -2,6 +2,13 @@ $(document).ready(function () {
 
 
     $("#logoutGC").click(function (event) {
+        let today = new Date();
+        let day = String(today.getDate()).padStart(2, '0');
+        let month = String(today.getMonth() + 1).padStart(2, '0'); // Tháng tính từ 0, nên cần +1
+        let year = today.getFullYear();
+
+        let formattedDate = `${day}-${month}-${year}`;
+        $(`#today`).text(formattedDate);
         event.preventDefault();
         $.ajax({
             url: `http://localhost:8080/giao-ca/nvgc`, // URL
