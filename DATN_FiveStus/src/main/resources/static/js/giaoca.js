@@ -2,13 +2,21 @@ $(document).ready(function () {
 
 
     $("#logoutGC").click(function (event) {
+        let today = new Date();
+        let day = String(today.getDate()).padStart(2, '0');
+        let month = String(today.getMonth() + 1).padStart(2, '0'); // Tháng tính từ 0, nên cần +1
+        let year = today.getFullYear();
+
+        let formattedDate = `${day}-${month}-${year}`;
+        $(`#today`).text(formattedDate);
         event.preventDefault();
         $.ajax({
             url: `http://localhost:8080/giao-ca/nvgc`, // URL
             type: 'GET', // Phương thức HT
             dataType: 'json', // Định dạng dữ liệu mong muốn
             success: function (response) {
-                loadDataModalGC(response);
+                $("#maNVGC").text(response["maNhanVien"])
+                loadDataModalGC(response.id);
             },
             error: function () {
                 Swal.fire({
@@ -111,6 +119,8 @@ $(document).ready(function () {
             return;
         }
 
+        $('#tableGiaoCa').empty();
+
 
         $.ajax({
             url: `http://localhost:8080/hoa-don/search-for-nv/${id}`,
@@ -120,7 +130,7 @@ $(document).ready(function () {
 
                 let tongTien = 0;
                 let hd = response[0];
-                $("#maNVGC").text(hd["maNhanVien"])
+
                 response.forEach((hoaDon, index) => {
                     let newRow = `
                     <tr>
