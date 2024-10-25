@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.rest;
 
+import com.example.DATN_WebFiveTus.dto.ApiResponseDto;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
 import com.example.DATN_WebFiveTus.service.SanCaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -245,5 +246,11 @@ public class SanCaRest {
 
     }
 
+
+    //
+    @GetMapping("for-customer-profile/{id}")
+    public ResponseEntity<ApiResponseDto<?>> getForCustomer(@PathVariable("id") Integer id){
+        return sanCaService.findForCustomer(id);
+    }
 
 }
