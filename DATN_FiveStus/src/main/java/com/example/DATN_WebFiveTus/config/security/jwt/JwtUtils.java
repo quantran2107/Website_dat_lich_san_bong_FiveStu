@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.config.security.jwt;
 
+import com.example.DATN_WebFiveTus.entity.auth.User;
 import com.example.DATN_WebFiveTus.service.Imp.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -109,4 +110,5 @@ public class JwtUtils {
         }
         return false;
     }
+
 }

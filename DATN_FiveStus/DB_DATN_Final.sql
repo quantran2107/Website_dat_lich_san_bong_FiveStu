@@ -416,7 +416,7 @@ CREATE TABLE lich_su_checkin (
 
 INSERT INTO khach_hang (ma_khach_hang, mat_khau, ho_va_ten, email, gioi_tinh, so_dien_thoai, trang_thai, created_at, updated_at, deleted_at)
 VALUES
-  ('KH001', 'password1', 'Nguyen Van A', 'lyly1062004@gmail.com', true, '0987456321', 'active', NOW(), NOW(), 1),
+  ('KH001', 'password1', 'Nguyen Van A', 'nguyenvana@gmail.com', true, '0987456321', 'active', NOW(), NOW(), 1),
   ('KH002', 'password2', 'Nguyen Van B', 'nguyenvanb@gmail.com', false, '0963258741', 'active', NOW(), NOW(), 1),
   ('KH003', 'password3', 'Nguyen Van C', 'nguyenvanc@gmail.com', true, '0321456987', 'inactive', NOW(), NOW(), 1),
   ('KH004', 'password4', 'Nguyen Van D', 'nguyenvand@gmail.com', false, '0369852147', 'active', NOW(), NOW(), 0),
@@ -2286,6 +2286,29 @@ VALUES
 (20000, 100, 'Warrior', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/fsvne0ghubuvnbowgzs1.jpg'),
 (13000, 100, 'Lon String vàng', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/nhtnwvsvnyarpp2yqw9v.jpg');
 
+
+INSERT INTO dich_vu_san_bong (id_do_thue, id_nuoc_uong, id_hoa_don_chi_tiet, tong_tien, so_luong, trang_thai, created_at, updated_at, deleted_at) VALUES
+(1, NULL, 1, 50.00, 3, 'Đã đặt', NOW(), NOW(), 0),
+(NULL, 1, 2, 20.00, 2, 'Đã đặt', NOW(), NOW(), 0),
+(2, NULL, 3, 75.00, 1, 'Đã đặt', NOW(), NOW(), 0),
+(NULL, 2, 4, 15.00, 4, 'Đã đặt', NOW(), NOW(), 0),
+(3, NULL, 5, 60.00, 2, 'Đã đặt', NOW(), NOW(), 0),
+(NULL, 3, 6, 25.00, 3, 'Đã đặt', NOW(), NOW(), 0),
+(4, NULL, 7, 80.00, 1, 'Đã đặt', NOW(), NOW(), 0),
+(NULL, 4, 8, 30.00, 2, 'Đã đặt', NOW(), NOW(), 0),
+(5, NULL, 9, 55.00, 3, 'Đã đặt', NOW(), NOW(), 0),
+(NULL, 5, 10, 22.00, 4, 'Đã đặt', NOW(), NOW(), 0),
+(1, NULL, 41, 52.50, 3, 'Đã đặt', NOW(), NOW(), 0),
+(NULL, 1, 42, 21.00, 4, 'Đã đặt', NOW(), NOW(), 0),
+(2, NULL, 43, 80.00, 1, 'Đã đặt', NOW(), NOW(), 0),
+(NULL, 2, 44, 19.00, 2, 'Đã đặt', NOW(), NOW(), 0),
+(3, NULL, 45, 65.00, 2, 'Đã đặt', NOW(), NOW(), 0),
+(NULL, 3, 46, 24.00, 3, 'Đã đặt', NOW(), NOW(), 0),
+(4, NULL, 47, 85.00, 1, 'Đã đặt', NOW(), NOW(), 0),
+(NULL, 4, 48, 27.00, 2, 'Đã đặt', NOW(), NOW(), 0),
+(5, NULL, 49, 58.00, 4, 'Đã đặt', NOW(), NOW(), 0);
+
+
 INSERT INTO phu_phi_hoa_don (id_hoa_don_chi_tiet, ma, ten, tien_phu_phi, ghi_chu, trang_thai, created_at, updated_at, deleted_at)
 VALUES (1, 'PP001', 'Phí giao hàng', 50000.00, 'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
        (2, 'PP002', 'Phí đóng gói', 20000.00, 'Đóng gói cẩn thận', 'Hoàn tất', NOW(), NOW(), 0),
@@ -2412,7 +2435,11 @@ VALUES
 (3,'bangdxph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','bangdxph39949'),
 (4,'lynhkph12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','lynhkph12345'),
 (5,'haipnph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','haipnph39949'),
-(6,'ly12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','ly12345');
+(6,'nguyenvana@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanA'),
+(7,'nguyenvanb@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanB'),
+(8,'nguyenvanc@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanC'),
+(9,'nguyenvand@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanD'),
+(10,'nguyenvane@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanE');
 
 
 INSERT INTO `duantotnghiep`.`roles`
@@ -2428,8 +2455,4 @@ INSERT INTO `duantotnghiep`.`user_roles`
 (`user_id`,
 `role_id`)
 VALUES
-(1,1),(1,4),(2,1),(2,4),(3,1),(3,4),(4,1),(4,4),(5,1),(5,4),(6,1);
-
-select * From dich_vu_san_bong;
-select * From nuoc_uong;
-select * From dich_vu_san_bong
+(1,1),(1,4),(2,1),(2,4),(3,1),(3,4),(4,1),(4,4),(5,1),(5,4),(6,1),(7,1),(8,1),(9,1),(10,1);

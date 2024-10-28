@@ -32,15 +32,14 @@ $(document).ready(function () {
                 });
                 let roles = response.response["roles"];
 
-
                 if (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_MANAGER")) {
                     window.location.href = '/quan-ly-nhan-vien';
                 } else if (roles.includes("ROLE_EMPLOYEE")) {
                     window.location.href = '/nhan-ca'
                 } else if (roles.includes("ROLE_USER")) {
-                    window.location.href = '/khach-hang/dat-san'
+                    window.location.href = '/customer-details'
                 } else {
-                    window.location.href = '/home';
+                    window.location.href = '/khach-hang/trang-chu';
                 }
             },
             error: function () {
@@ -51,4 +50,8 @@ $(document).ready(function () {
             }
         });
     });
+
+    function addGC(){
+
+    }
 });

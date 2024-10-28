@@ -46,6 +46,7 @@ public class GiaoCaServcieImp implements GiaoCaService {
         }
         return null;
     }
+
     @Override
     public Boolean addRow(GiaoCaFormRequest request) {
         NhanVien nhanVien = nhanVienReposity.findByMaNhanVien(request.getCodeNhanVien());
@@ -61,17 +62,17 @@ public class GiaoCaServcieImp implements GiaoCaService {
     }
 
     @Override
-    public Integer getIdNVG(HttpServletRequest request) {
+    public NhanVienDTO getIdNVG(HttpServletRequest request) {
         String token = CookieUtils.getCookie(request, "authToken");
         if (token != null && jwtUtils.validateJwtToken(token) && jwtUtils.checkBlackList(token)) {
             String username = jwtUtils.getUserNameFromJwtToken(token);
             NhanVien nv = nhanVienReposity.findByUsername(username);
             if (nv != null) {
-                return nv.getId();
+                return modelMapper.map(nv, NhanVienDTO.class);
             }
-            return 0;
+            return null;
         }
-        return 0;
+        return null;
     }
 
     @Override
@@ -97,7 +98,7 @@ public class GiaoCaServcieImp implements GiaoCaService {
             if (nv != null) {
                 GiaoCa giaoCa = giaoCaRepository.getRowLast();
                 LocalDate today = LocalDate.now();
-                if (giaoCa.getCreatedAt().toLocalDate().isBefore(today)){
+                if (giaoCa == null || giaoCa.getCreatedAt() == null || giaoCa.getCreatedAt().toLocalDate().isBefore(today)) {
                     GiaoCa giaoCa1 = new GiaoCa();
                     giaoCa1.setTienMatCaTruoc(BigDecimal.valueOf(100000));
                     giaoCa1.setNhanVienNhan(nv);
