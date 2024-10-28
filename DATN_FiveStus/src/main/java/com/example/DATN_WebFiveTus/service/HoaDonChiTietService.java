@@ -28,7 +28,7 @@ public interface HoaDonChiTietService {
 
     List<HoaDonChiTietDTO> searchFromHoaDon(Integer idHoaDon);
 
-    Page<HoaDonChiTietDTO> getHoaDonChiTietByTrangThai(String trangThai, Pageable pageable);
+    Page<HoaDonChiTietDTO> getHoaDonChiTietByTrangThai(String trangThai, String soDienThoaiKhachHang, Pageable pageable);
 
     HoaDonChiTietDTO getOneHDCT(Integer id);
 

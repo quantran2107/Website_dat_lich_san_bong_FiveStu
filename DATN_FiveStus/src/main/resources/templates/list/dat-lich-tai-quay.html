@@ -118,6 +118,14 @@
     /*    height: calc(250px  !* Height of other elements if any *!);*/
     /*}*/
 
+    #filter {
+        padding: 8px;
+        margin-right: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        color: #333;
+    }
 
 </style>
 <body class="vertical light">
@@ -152,11 +160,11 @@
                                                 <div class="form-group"
                                                      style="flex-grow: 1; display: flex; align-items: center;">
                                                     <label class="me-2" for="search">Tìm kiếm</label>
-                                                    <input class="form-control me-2" id="search"
-
-                                                           placeholder="Tìm kiếm theo số điện thoại"
-                                                           style="width: 400px;"
-                                                           type="text">
+                                                    <input class="form-control me-2" id="search" placeholder="Tìm kiếm theo số điện thoại" style="width: 400px;" type="text" oninput="searchByPhone()">
+                                                    <select id="filter">
+                                                        <option value="motHoaDon">-Thanh toán [Một hóa đơn]-</option>
+                                                        <option value="nhieuHoaDon">-Thanh toán [Nhiều hóa đơn]-</option>
+                                                    </select>
                                                     <!-- Nút Reset -->
                                                     <button class="btn btn-primary me-2" onclick="resetFilters()"
                                                             title="Reset" type="button">
@@ -1141,6 +1149,64 @@
     let soLuongChonNuocs = null;
     let tenNuocUongs = null
 
+    async function updateServiceCost() {
+        try {
+            // console.log(selectedInvoiceId);
+
+            // Gọi API để lấy thông tin hóa đơn chi tiết
+            const invoiceResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${selectedInvoiceId}`, {cache: "no-store"});
+            const invoiceData = await invoiceResponse.json();
+
+            // Gọi API để lấy danh sách dịch vụ
+            const servicesResponse = await fetch(`http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${invoiceData.id}`, {cache: "no-store"});
+            const services = await servicesResponse.json();
+
+            let totalInvoice = 0; // Khai báo biến tổng hóa đơn
+
+            // Kiểm tra nếu danh sách dịch vụ trống
+            if (Array.isArray(services) && services.length > 0) {
+                // Tính tổng tiền từ các dịch vụ
+                const totalCost = services.reduce((sum, service) => {
+                    return sum + (parseFloat(service.tongTien) || 0); // Đảm bảo chuyển đổi sang số
+                }, 0);
+
+                // Cập nhật giá dịch vụ
+                document.getElementById(`giaDichVu${selectedInvoiceId}`).value = totalCost.toLocaleString('vi-VN');
+
+                // Tính tổng tiền hóa đơn
+                totalInvoice = (invoiceData.giaSanCa - (invoiceData.giaSanCa * 0.5)) + totalCost;
+                document.getElementById(`tongTien${selectedInvoiceId}`).value = totalInvoice.toLocaleString('vi-VN');
+
+                // Tính tổng tiền phải trả
+                const tongTien = parseFloat(document.getElementById(`tongTien${selectedInvoiceId}`).value.replace(/\./g, '').replace(/,/g, '.')) || 0;
+                const tienGiam = parseFloat(document.getElementById(`tienGiam${selectedInvoiceId}`).value.replace(/\./g, '').replace(/,/g, '.')) || 0;
+                const tongTienPhaiTra = tongTien - tienGiam;
+
+                // Hiển thị tổng tiền phải trả
+                document.getElementById(`tongTienPhaiTra${selectedInvoiceId}`).value = tongTienPhaiTra.toLocaleString('de-DE', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
+            } else {
+                // Nếu không còn dịch vụ nào, hiển thị 0 cho tổng tiền dịch vụ
+                document.getElementById(`giaDichVu${selectedInvoiceId}`).value = '0';
+                document.getElementById(`tongTien${selectedInvoiceId}`).value = '0';
+            }
+
+            // Gọi API để lấy phụ phí nếu có
+            const feesResponse = await fetch(`http://localhost:8080/api/phu-phi-hoa-don/${selectedInvoiceId}`, {cache: "no-store"});
+            const fees = await feesResponse.json();
+
+            if (totalInvoice) {
+                const additionalFees = fees.reduce((sum, fee) => sum + (parseFloat(fee.amount) || 0), 0); // Đảm bảo chuyển đổi sang số
+                const finalInvoiceTotal = totalInvoice + additionalFees;
+                document.getElementById(`tongTien${selectedInvoiceId}`).value = finalInvoiceTotal.toLocaleString('vi-VN');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
     function dichVuNuoc(tenSearchAPI) {
         idDoThues = null;
         donGiaDoThues = null;
@@ -1427,7 +1493,7 @@
             if (!historyResponse.ok) throw new Error(`Error ${historyResponse.status}: ${await historyResponse.text()}`);
 
             // Làm mới bảng dữ liệu trong tab "Đang hoạt động"
-            fetchData('Chờ nhận sân', 0, 'cho-nhan-table');
+            await fetchData('Chờ nhận sân', 0, 'cho-nhan-table');
 
             // Tùy chọn: Hiển thị thông báo thành công
             showSuccessToast('Cập nhật trạng thái và lưu lịch sử thành công.');
@@ -1439,12 +1505,144 @@
         }
     }
 
+    let currentPage = 0;
+
+    // Hàm tìm kiếm theo số điện thoại
+    async function searchByPhone() {
+        const trangThai = "Đang hoạt động"; // Điều chỉnh trạng thái theo nhu cầu
+        const tableId = "yourTableId"; // ID của bảng để hiển thị dữ liệu
+        const soDienThoaiKhachHang = document.getElementById("search").value.trim();
+
+        // Gọi lại hàm fetchData với tham số tìm kiếm
+        await fetchData(trangThai, currentPage, tableId, soDienThoaiKhachHang);
+    }
+
+    // Thêm sự kiện input cho ô tìm kiếm để gọi fetchData mỗi khi người dùng nhập ký tự mới
+    document.getElementById('search').addEventListener('input', function() {
+        const soDienThoaiKhachHang = this.value; // Lấy giá trị hiện tại từ ô tìm kiếm
+        fetchData('Đang hoạt động', 0, 'dang-hoat-dong-table', soDienThoaiKhachHang);
+        fetchData('Chờ nhận sân', 0, 'cho-nhan-table', soDienThoaiKhachHang);
+    });
+
+    function checkUniquePhoneNumber(data) {
+        const phoneNumbers = data.map(item => item.soDienThoaiKhachHang);
+        return new Set(phoneNumbers).size === 1; // Trả về true nếu tất cả số điện thoại giống nhau
+    }
+
+    document.getElementById('filter').addEventListener('change', function() {
+        const selectedValue = this.value;
+        const trangThaiDangHoatDong = 'Đang hoạt động';
+
+        // Lấy số điện thoại từ ô input tìm kiếm
+        const soDienThoaiKhachHang = document.getElementById('search').value;
+
+        // Lấy dữ liệu cho cả hai trạng thái với số điện thoại
+        fetchData(trangThaiDangHoatDong, 0, 'dang-hoat-dong-table', soDienThoaiKhachHang);
+    });
+
+    async function createPriceForm(apiUrl) {
+        try {
+            const response = await fetch(apiUrl); // Gọi API với URL truyền vào
+            const data = await response.json();
+
+            if (data.content && Array.isArray(data.content)) {
+                // Lấy thông tin từ hóa đơn đầu tiên
+                const hoVaTenKhachHang = data.content[0].hoVaTenKhachHang;
+                const soDienThoaiKhachHang = data.content[0].soDienThoaiKhachHang;
+
+                // Tính tổng `giaSanCa` từ tất cả các hóa đơn
+                const totalGiaSanCa = data.content.reduce((total, item) => total + item.giaSanCa, 0);
+                const depositAmount = totalGiaSanCa / 2; // Tính tiền cọc bằng 1 nửa tổng tiền sân
+
+                // Tính tổng `tienPhuPhi` bằng cách gọi API phụ phí cho từng `invoiceId`
+                let totalPhuPhi = 0;
+                let totalDichVu = 0;
+                for (const item of data.content) {
+                    const invoiceId = item.id;
+                    const phuPhiResponse = await fetch(`http://localhost:8080/api/phu-phi-hoa-don/${invoiceId}`);
+                    const phuPhiData = await phuPhiResponse.json();
+
+                    // Tính tổng `tienPhuPhi` cho mỗi hóa đơn và cộng vào `totalPhuPhi`
+                    totalPhuPhi += phuPhiData.reduce((sum, phuPhiItem) => sum + phuPhiItem.tienPhuPhi, 0);
+
+                    const dichVuResponse = await fetch(`http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${invoiceId}`);
+                    const dichVuData = await dichVuResponse.json();
+
+                    totalDichVu += dichVuData.reduce((sum, dichVuItem) => sum + dichVuItem.tongTien, 0);
+                }
+
+                const totalTongTien = totalGiaSanCa + totalPhuPhi + totalDichVu - depositAmount;
+
+                // Tạo HTML cho form với các thông tin cần hiển thị
+                const formHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="customerName">Tên khách hàng</label>
+                            <input class="form-control" id="customerName" type="text" value="${hoVaTenKhachHang}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="customerPhone">Số điện thoại</label>
+                            <input class="form-control" id="customerPhone" type="text" value="${soDienThoaiKhachHang}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="totalPrice">Tổng giá sân</label>
+                            <input class="form-control" id="totalPrice" type="text" value="${totalGiaSanCa}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="depositAmount">Tiền cọc</label>
+                            <input class="form-control" id="depositAmount" type="text" value="${depositAmount}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="totalDichVu">Tiền dịch vụ</label>
+                            <input class="form-control" id="totalDichVu" type="text" value="${totalDichVu}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="totalPhuPhi">Tiền phụ phí</label>
+                            <input class="form-control" id="totalPhuPhi" type="text" value="${totalPhuPhi}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group mb-3">
+                            <label for="totalTongTien">Tổng tiền</label>
+                            <input class="form-control" id="totalTongTien" type="text" value="${totalTongTien}" readonly>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+                // Ghi HTML vào div có id là tabContentRight
+                document.getElementById('tabContentRight').innerHTML = formHTML;
+            } else {
+                throw new Error("Dữ liệu không hợp lệ");
+            }
+        } catch (error) {
+            console.error("Lỗi khi gọi API:", error);
+            document.getElementById('tabContentRight').innerHTML = `<p>Không thể tạo form.</p>`;
+        }
+    }
 
     // Hàm fetch data từ server và hiển thị ra bảng
-    async function fetchData(trangThai, page, tableId) {
+    async function fetchData(trangThai, page, tableId, soDienThoaiKhachHang = '') {
         try {
             const pageSize = 5;
-            const url = `http://localhost:8080/hoa-don-chi-tiet/trang-thai?trangThai=${encodeURIComponent(trangThai)}&page=${page}&size=${pageSize}`;
+            const url = `http://localhost:8080/hoa-don-chi-tiet/trang-thai?trangThai=${encodeURIComponent(trangThai)}&page=${page}&size=${pageSize}&soDienThoaiKhachHang=${encodeURIComponent(soDienThoaiKhachHang)}`;
             console.log(`Fetching data from URL: ${url}`);
 
             const response = await fetch(url);
@@ -1464,8 +1662,7 @@
                 data.content.forEach((item, index) => {
                     const row = document.createElement('tr');
                     row.classList.add('invoice-row');
-                    row.setAttribute('data-id', item.id); // Gắn id của bản ghi vào thuộc tính data-id
-                    // row.addEventListener('click', showInvoiceDetails2); // Đăng ký sự kiện click
+                    row.setAttribute('data-id', item.id);
                     row.addEventListener('click', showInvoiceDetails);
                     row.innerHTML = `
                     <td hidden>${item.id}</td>
@@ -1478,11 +1675,25 @@
                     <td>${item.tenCa}</td>
                     <td>${item.ngayDenSan}</td>
                     <td>
-                        ${trangThai === 'Đang hoạt động' ? '' : '<button class="btn btn-outline-success check-in-btn"  title="Check in"><span class="fe fe-check-circle"></span></button>'}
+                        ${trangThai === 'Đang hoạt động' ? '' : '<button class="btn btn-outline-success check-in-btn" title="Check in"><span class="fe fe-check-circle"></span></button>'}
                     </td>
                 `;
+
+                    // Thêm checkbox nếu tùy chọn "Nhiều hóa đơn" được chọn
+                    if (document.getElementById('filter').value === 'nhieuHoaDon') {
+                        const checkboxCell = document.createElement('td');
+                        checkboxCell.innerHTML = `<input type="checkbox" class="invoice-checkbox" checked data-id="${item.id}">`;
+                        row.appendChild(checkboxCell);
+                        createPriceForm(url);
+                    }
+
                     tableBody.appendChild(row); // Thêm dòng vào bảng
                 });
+
+                // Kiểm tra số điện thoại có đồng nhất không
+                const uniquePhoneNumber = checkUniquePhoneNumber(data.content);
+                const filterSelect = document.getElementById('filter');
+                filterSelect.style.display = uniquePhoneNumber ? 'block' : 'none'; // Hiện/ẩn select
             } else {
                 console.error('Dữ liệu không hợp lệ: data.content không phải là mảng.');
             }
@@ -1609,12 +1820,14 @@
 
     function handlePageClick(page, tableId) {
         const trangThai = tableId === 'dang-hoat-dong-table' ? 'Đang hoạt động' : 'Chờ nhận sân';
-        fetchData(trangThai, page, tableId);
+        const soDienThoaiKhachHang = document.getElementById('search').value; // Lấy giá trị từ ô tìm kiếm
+        fetchData(trangThai, page, tableId, soDienThoaiKhachHang);
     }
 
     function loadTabData(tabId) {
         const trangThai = tabId === 'dang-hoat-dong' ? 'Đang hoạt động' : 'Chờ nhận sân';
-        fetchData(trangThai, 0, `${tabId}-table`);
+        const soDienThoaiKhachHang = document.getElementById('search').value; // Lấy giá trị từ ô tìm kiếm
+        fetchData(trangThai, 0, `${tabId}-table`, soDienThoaiKhachHang);
     }
 
 
@@ -1645,10 +1858,10 @@
     }
 
     function resetFilters() {
-        // Logic to reset filters
         document.getElementById('search').value = '';
-        fetchData('Đang hoạt động', 0, 'dang-hoat-dong-table');
-        fetchData('Chờ nhận sân', 0, 'cho-nhan-table');
+
+        fetchData('Đang hoạt động', 0, 'dang-hoat-dong-table', '');
+        fetchData('Chờ nhận sân', 0, 'cho-nhan-table', '');
     }
 
     let selectedInvoiceId = null;
@@ -1824,7 +2037,7 @@
             <select id="phuPhiSelect${invoiceId}" class="form-control">
                 <option value="">Chưa có phụ phí hóa đơn !!!</option>
             </select>
-            <button class="btn btn-outline-success" type="button" id="btnAddPhuPhi${invoiceId}">+</button>
+            <button class="btn btn-outline-success" type="button" id="btnAddPhuPhi${invoiceId}" data-invoice-id="${invoiceId}">+</button>
         </div>
     </div>
 </div>
@@ -2149,103 +2362,115 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                             });
                     }
                 });
+
                 //hàm mở modal phụ phí
                 document.getElementById(`btnAddPhuPhi${invoiceId}`).addEventListener('click', function () {
-                    const addPhuPhiModal = new bootstrap.Modal(document.getElementById('phuPhiModal'));
-                    addPhuPhiModal.show();
-                    document.getElementById('tenPhuPhi').value = '';
-                    document.getElementById('giaPhuPhi').value = '';
-                    document.getElementById('btnThemPhuPhi').onclick = function () {
-                        const tenPhuPhi = document.getElementById('tenPhuPhi').value;
-                        const giaPhuPhi = document.getElementById('giaPhuPhi').value;
-                        const idHoaDonChiTiet = document.getElementById(`id${invoiceId}`).value;
+                    // Gọi API để lấy danh sách phụ phí hiện tại cho hóa đơn
+                    fetch(`http://localhost:8080/api/phu-phi-hoa-don/${invoiceId}`)
+                        .then(response => response.json())
+                        .then(phuPhis => {
+                            // Cập nhật danh sách phụ phí trong bảng trước khi mở modal
+                            const tableBody = document.getElementById('phuPhiList');
+                            tableBody.innerHTML = ''; // Xóa nội dung bảng hiện tại
 
-                        // Kiểm tra nếu có trường nào trống
-                        if (!tenPhuPhi || !giaPhuPhi) {
-                            Swal.fire({
-                                title: 'Lỗi!',
-                                text: 'Vui lòng điền đầy đủ thông tin!',
-                                icon: 'error',
-                                confirmButtonText: 'OK'
-                            });
-                            return; // Dừng lại nếu có trường trống
-                        }
-
-                        // Gọi API để thêm phụ phí mới
-                        fetch('http://localhost:8080/api/phu-phi-hoa-don/add', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                ten: tenPhuPhi,
-                                tienPhuPhi: giaPhuPhi,
-                                hoaDonChiTietId: idHoaDonChiTiet,
-                                ghiChu: "Ly lon",
-                                trangThai: "Quan lon"
-                            })
-                        })
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error(`HTTP error! status: ${response.status}`);
-                                }
-                                return response.json();
-                            })
-                            .then(phuPhi => {
-                                // Cập nhật danh sách phụ phí trong bảng
-                                const tableBody = document.getElementById('phuPhiList');
-                                const row = `<tr>
-            <td>${tableBody.rows.length + 1}</td>
-            <td>${phuPhi.ten}</td>
-            <td>${parseInt(phuPhi.tienPhuPhi).toLocaleString('vi-VN')} VND</td>
-            <td><button class="btn btn-danger btn-sm" data-id="${phuPhi.id}">Xóa</button></td>
-        </tr>`;
-                                tableBody.insertAdjacentHTML('afterbegin', row); // Thêm ở đầu bảng
-
-                                // Cập nhật <select> bên ngoài modal
-                                const phuPhiSelect = document.getElementById(`phuPhiSelect${selectedInvoiceId}`);
-                                const option = document.createElement("option");
-                                option.value = phuPhi.id;
-                                option.textContent = `${phuPhi.ten} - Số tiền: ${parseInt(phuPhi.tienPhuPhi).toLocaleString('vi-VN')}`;
-                                option.selected = true;
-                                phuPhiSelect.appendChild(option);
-                                Swal.fire({
-                                    title: 'Thành công!',
-                                    text: 'Thêm phụ phí thành công!',
-                                    icon: 'success',
-                                    confirmButtonText: 'OK'
-                                });
-                                if (tableBody.rows.length === 0) {
-                                    const emptyRow = `<tr class="empty-row">
+                            if (phuPhis.length === 0) {
+                                // Nếu không có phụ phí, hiển thị hàng rỗng
+                                const emptyRow = `<tr class="empty-row">
                     <td colspan="4">Không có phụ phí nào</td>
                 </tr>`;
-                                    tableBody.insertAdjacentHTML('beforeend', emptyRow);
-                                } else {
-                                    // Nếu vẫn còn hàng, đảm bảo không có hàng rỗng
-                                    const emptyRowElement = tableBody.querySelector('.empty-row');
-                                    if (emptyRowElement) {
-                                        emptyRowElement.remove(); // Xóa hàng rỗng nếu có
-                                    }
+                                tableBody.insertAdjacentHTML('beforeend', emptyRow);
+                            } else {
+                                // Thêm từng phụ phí vào bảng
+                                phuPhis.forEach((phuPhi, index) => {
+                                    const row = `<tr>
+                        <td>${index + 1}</td>
+                        <td>${phuPhi.ten}</td>
+                        <td>${parseInt(phuPhi.tienPhuPhi).toLocaleString('vi-VN')} VND</td>
+                        <td><button class="btn btn-danger btn-sm" data-id="${phuPhi.id}">Xóa</button></td>
+                    </tr>`;
+                                    tableBody.insertAdjacentHTML('beforeend', row);
+                                });
+                            }
+
+                            // Sau khi bảng đã được cập nhật, mở modal
+                            const addPhuPhiModal = new bootstrap.Modal(document.getElementById('phuPhiModal'));
+                            addPhuPhiModal.show();
+
+                            // Reset lại giá trị các trường trong modal
+                            document.getElementById('tenPhuPhi').value = '';
+                            document.getElementById('giaPhuPhi').value = '';
+
+                            // Gán sự kiện thêm phụ phí mới khi người dùng bấm nút "Thêm Phụ Phí"
+                            document.getElementById('btnThemPhuPhi').onclick = function () {
+                                const tenPhuPhi = document.getElementById('tenPhuPhi').value;
+                                const giaPhuPhi = document.getElementById('giaPhuPhi').value;
+                                const idHoaDonChiTiet = document.getElementById(`id${invoiceId}`).value;
+
+                                // Kiểm tra nếu có trường nào trống
+                                if (!tenPhuPhi || !giaPhuPhi) {
+                                    Swal.fire({
+                                        title: 'Lỗi!',
+                                        text: 'Vui lòng điền đầy đủ thông tin!',
+                                        icon: 'error',
+                                        confirmButtonText: 'OK'
+                                    });
+                                    return; // Dừng lại nếu có trường trống
                                 }
-                                fetch(`http://localhost:8080/api/phu-phi-hoa-don/${selectedInvoiceId}`)
-                                    .then(response => response.json())
-                                    .then(updatedPhuPhis => {
+
+                                // Gọi API để thêm phụ phí mới
+                                fetch('http://localhost:8080/api/phu-phi-hoa-don/add', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        ten: tenPhuPhi,
+                                        tienPhuPhi: giaPhuPhi,
+                                        hoaDonChiTietId: idHoaDonChiTiet,
+                                        ghiChu: "Ly lon",
+                                        trangThai: "Quan lon"
+                                    })
+                                })
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error(`HTTP error! status: ${response.status}`);
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(phuPhi => {
+                                        // Cập nhật lại bảng sau khi thêm phụ phí mới
+                                        const newRow = `<tr>
+                        <td>${tableBody.rows.length + 1}</td>
+                        <td>${phuPhi.ten}</td>
+                        <td>${parseInt(phuPhi.tienPhuPhi).toLocaleString('vi-VN')} VND</td>
+                        <td><button class="btn btn-danger btn-sm" data-id="${phuPhi.id}">Xóa</button></td>
+                    </tr>`;
+                                        tableBody.insertAdjacentHTML('afterbegin', newRow); // Thêm hàng mới ở đầu bảng
+
+                                        Swal.fire({
+                                            title: 'Thành công!',
+                                            text: 'Thêm phụ phí thành công!',
+                                            icon: 'success',
+                                            confirmButtonText: 'OK'
+                                        });
+
+                                        // Cập nhật lại tổng phụ phí của hóa đơn
                                         let totalPhuPhi = 0;
-                                        updatedPhuPhis.forEach(phuPhi => {
+                                        phuPhis.push(phuPhi); // Thêm phụ phí mới vào mảng phuPhis để tính tổng lại
+                                        phuPhis.forEach(phuPhi => {
                                             totalPhuPhi += parseFloat(phuPhi.tienPhuPhi);
                                         });
                                         document.getElementById(`tienPhuPhi${invoiceId}`).value = totalPhuPhi.toLocaleString('vi-VN');
                                     })
                                     .catch(error => {
-                                        console.error('Error fetching updated phu phi:', error);
+                                        console.error('Error adding new phu phi:', error);
                                     });
-                            })
-                            .catch(error => {
-                                console.error('Error adding new phu phi:', error);
-                            });
-                    };
+                            };
+                        })
+                        .catch(error => {
+                            console.error('Error fetching phu phis:', error);
+                        });
                 });
-
 
                 // Gọi API để tìm các dịch vụ sân bóng dựa trên id_hoa_don_chi_tiet
                 let totalInvoice; // Định nghĩa biến ở đây
@@ -2336,7 +2561,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
 
                         // Cập nhật tổng tiền hóa đơn sau khi có phụ phí
                         const updatedTotalInvoice = totalInvoice + totalPhuPhi;
-                        document.getElementById(`tongTien${invoiceId}`).value = updatedTotalInvoice.toLocaleString('vi-VN');
+                        // document.getElementById(`tongTien${invoiceId}`).value = updatedTotalInvoice.toLocaleString('vi-VN');
 
                         // Gọi API để tìm phiếu giảm giá dựa trên tổng tiền
                         return fetch(`http://localhost:8080/api-phieu-giam-gia/fill-PGG?tongTien=${updatedTotalInvoice}`);
@@ -2409,7 +2634,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                             const totalAfterDiscount = updatedTotalInvoiceNumber - tienGiamToUse; // Tính tổng tiền sau khi giảm
                             const tongTienPhaiTraInput = document.getElementById(`tongTienPhaiTra${invoiceId}`);
                             tongTienPhaiTraInput.value = totalAfterDiscount.toLocaleString('vi-VN'); // Hiển thị tổng tiền cuối cùng
-                            
+
                         } else {
                             // Không có phiếu giảm giá nào
                             const tienGiamInput = document.getElementById(`tienGiam${invoiceId}`);
@@ -2484,7 +2709,6 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
 
     }
 
-
     function removeTab2(event, tabId) {
         event.stopPropagation(); // Ngăn sự kiện bấm vào tab
 
@@ -2501,13 +2725,23 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
             contentElement.remove();
         }
 
-        // Nếu tab bị xóa đang được hiển thị thì kích hoạt tab trước đó
-        if (tabElement.classList.contains('active')) {
+        // Nếu tab bị xóa đang được hiển thị thì kích hoạt tab đầu tiên còn lại
+        if (tabElement && tabElement.classList.contains('active')) {
             const tabListRight = document.getElementById('tabListRight');
             const firstTab = tabListRight.querySelector('.nav-link');
+
+            // Kiểm tra xem có tab nào còn lại không
             if (firstTab) {
                 const firstTabInstance = new bootstrap.Tab(firstTab);
                 firstTabInstance.show();
+
+                // Lấy ID của tab đầu tiên còn lại
+                const firstTabId = firstTab.id.replace('tab-', '');
+                setSelectedInvoiceId(firstTabId)
+                fillDichVuChoHoaDon(getSelectedInvoiceId());
+            }else{
+                setSelectedInvoiceId(0);
+                fillDichVuChoHoaDon(getSelectedInvoiceId());
             }
         }
     }
@@ -3084,76 +3318,6 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
             },
             stopOnFocus: true
         }).showToast();
-    }
-
-    async function updateServiceCost() {
-        try {
-            console.log(selectedInvoiceId);
-
-            // Gọi API để lấy thông tin hóa đơn chi tiết
-            const invoiceResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${selectedInvoiceId}`, {cache: "no-store"});
-            const invoiceData = await invoiceResponse.json();
-
-            // Gọi API để lấy danh sách dịch vụ
-            const servicesResponse = await fetch(`http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${invoiceData.id}`, {cache: "no-store"});
-            const services = await servicesResponse.json();
-
-            let totalInvoice = 0; // Khai báo biến tổng hóa đơn
-
-            // Kiểm tra nếu danh sách dịch vụ trống
-            if (Array.isArray(services) && services.length > 0) {
-                // Tính tổng tiền từ các dịch vụ
-                const totalCost = services.reduce((sum, service) => {
-                    return sum + (parseFloat(service.tongTien) || 0); // Đảm bảo chuyển đổi sang số
-                }, 0);
-
-                // Cập nhật giá dịch vụ
-                document.getElementById(`giaDichVu${selectedInvoiceId}`).value = totalCost.toLocaleString('vi-VN');
-
-                // Tính tổng tiền hóa đơn
-                totalInvoice = (invoiceData.giaSanCa - (invoiceData.giaSanCa * 0.5)) + totalCost;
-                document.getElementById(`tongTien${selectedInvoiceId}`).value = totalInvoice.toLocaleString('vi-VN');
-
-                // Tính tổng tiền phải trả
-                const tongTien = parseFloat(document.getElementById(`tongTien${selectedInvoiceId}`).value.replace(/\./g, '').replace(/,/g, '.')) || 0;
-                const tienGiam = parseFloat(document.getElementById(`tienGiam${selectedInvoiceId}`).value.replace(/\./g, '').replace(/,/g, '.')) || 0;
-                const tongTienPhaiTra = tongTien - tienGiam;
-
-                // Hiển thị tổng tiền phải trả
-                document.getElementById(`tongTienPhaiTra${selectedInvoiceId}`).value = tongTienPhaiTra.toLocaleString('de-DE', {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
-                });
-            } else {
-                // Nếu không còn dịch vụ nào, hiển thị 0 cho tổng tiền dịch vụ
-                document.getElementById(`giaDichVu${selectedInvoiceId}`).value = '0';
-                document.getElementById(`tongTien${selectedInvoiceId}`).value = '0';
-            }
-
-            // Gọi API để lấy phụ phí nếu có
-            const feesResponse = await fetch(`http://localhost:8080/api/phu-phi-hoa-don/${selectedInvoiceId}`, {cache: "no-store"});
-            const fees = await feesResponse.json();
-
-            if (totalInvoice) {
-                const additionalFees = fees.reduce((sum, fee) => sum + (parseFloat(fee.amount) || 0), 0); // Đảm bảo chuyển đổi sang số
-                const finalInvoiceTotal = totalInvoice + additionalFees;
-                document.getElementById(`tongTien${selectedInvoiceId}`).value = finalInvoiceTotal.toLocaleString('vi-VN');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
-
-    function convertToFixedFormat(numberStr) {
-        // Thay dấu phẩy bằng dấu chấm
-        let result = numberStr.replace(',', '.');
-
-        // Nếu kết quả chưa có đủ 3 chữ số sau dấu chấm, thêm '0' vào cuối
-        if (result.split('.')[1].length < 3) {
-            result += '0';
-        }
-
-        return result;
     }
 
 </script>
