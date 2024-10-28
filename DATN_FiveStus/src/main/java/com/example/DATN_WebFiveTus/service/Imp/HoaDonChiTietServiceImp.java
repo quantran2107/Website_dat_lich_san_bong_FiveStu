@@ -137,8 +137,8 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
 
     @Override
-    public Page<HoaDonChiTietDTO> getHoaDonChiTietByTrangThai(String trangThai, Pageable pageable) {
-        Page<HoaDonChiTiet> page = hoaDonChiTietRepository.findByTrangThai(trangThai, pageable);
+    public Page<HoaDonChiTietDTO> getHoaDonChiTietByTrangThai(String trangThai, String soDienThoaiKhachHang, Pageable pageable) {
+        Page<HoaDonChiTiet> page = hoaDonChiTietRepository.findByTrangThai(trangThai, soDienThoaiKhachHang, pageable);
         List<HoaDonChiTietDTO> list = page.getContent().stream()
                 .map(hoaDonChiTiet -> {
                     HoaDonChiTietDTO dto = modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class);
