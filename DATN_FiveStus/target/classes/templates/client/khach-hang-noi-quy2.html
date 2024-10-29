@@ -149,6 +149,7 @@
                 <li><a href="/terms-of-service" target="_blank">Điều khoản dịch vụ</a></li>
             </ul>
         </div>
+        <p id="thoi-gian-dat-san"></p>
     </footer>
 
 </div>
@@ -174,6 +175,9 @@
                         <div class="gia-tri">Giá Trị: ${item.giaTri} ${item.typeGiaTri}</div>
                     </div>`;
                     container.append(itemHtml);
+
+                    // Cập nhật thẻ p với giá trị giaTri
+                    $('#thoi-gian-dat-san').text(`Thời gian đặt sân: ${item.giaTri}`);
                 });
             },
             error: function(xhr, status, error) {
