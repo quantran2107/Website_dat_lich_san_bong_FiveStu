@@ -1,6 +1,7 @@
 package com.example.DATN_WebFiveTus.repository;
 
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
+import com.example.DATN_WebFiveTus.dto.response.HistoryCustomerBookFieldResponse;
 import com.example.DATN_WebFiveTus.entity.SanCa;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -118,5 +119,35 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
                                      @Param("idNgayTrongTuan") Integer idNgayTrongTuan,
                                      @Param("idCa") Integer idCa);
 
+    @Query(value = """
 
+            SELECT
+               san.ten_san_bong as tenSanBong,
+               ca.thoi_gian_bat_dau as thoiGianBatDau,
+        	   hdc.created_at as ngayDat,
+               hdc.trang_thai as trangThaiCheckIn,
+               hd.ma_hoa_don as maHoaDon,
+               hd.tien_coc as tienCoc,
+               hd.trang_thai as trangThaiHoaDon,
+               hd.tong_tien as tongTien,
+               SUM(hdc.tien_giam_gia) AS tongGiamGia
+        FROM duantotnghiep.san_ca sc
+        JOIN duantotnghiep.san_bong san ON san.id = sc.id_san_bong
+        JOIN duantotnghiep.ca ca ON ca.id = sc.id_ca
+        JOIN duantotnghiep.hoa_don_chi_tiet hdc ON sc.id = hdc.id_san_ca
+        JOIN duantotnghiep.hoa_don hd ON hdc.id_hoa_don = hd.id
+        WHERE hd.id_khach_hang = '2'
+        GROUP BY sc.id,
+                 tenSanBong,
+                 thoiGianBatDau,
+                 trangThaiCheckIn,
+                 maHoaDon,
+                 tienCoc,
+                 trangThaiHoaDon,
+                tongTien,
+        		 ngayDat
+        ORDER BY   ngayDat ASC
+        
+        """, nativeQuery = true)
+    List<HistoryCustomerBookFieldResponse> findHistoryCustomerBookFieldResponse(Integer id);
 }

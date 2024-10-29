@@ -11,6 +11,11 @@ public class KhachHangNoiQuyController {
         return "client/khach-hang-noi-quy";
     }
 
+    @GetMapping("khach-hang-noi-quy2")
+    public String dieuHuongKhachHangNoiQuy2(){
+        return "client/khach-hang-noi-quy2";
+    }
+
     @GetMapping("listThamSo")
     public String dieuHuongThamSo(){
         return "list/quan-ly-tham-so";

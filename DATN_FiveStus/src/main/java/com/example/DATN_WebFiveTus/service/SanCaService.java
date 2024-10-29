@@ -1,10 +1,12 @@
 package com.example.DATN_WebFiveTus.service;
 
+import com.example.DATN_WebFiveTus.dto.ApiResponseDto;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
 import com.example.DATN_WebFiveTus.entity.SanCa;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
 import java.util.List;
@@ -54,6 +56,7 @@ public interface SanCaService {
     List<SanCaDTO> getAllSanCaByLoaiSan(@Param("idLoaiSan") Integer idLoaiSan,
                                      @Param("idNgayTrongTuan") Integer idNgayTrongTuan,
                                      @Param("idCa") Integer idCa);
-    
 
+
+    ResponseEntity<ApiResponseDto<?>> findForCustomer(Integer id);
 }
