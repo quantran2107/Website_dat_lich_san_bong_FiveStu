@@ -650,7 +650,7 @@
             url: `http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${idHDCT}`,
             type: 'GET',
             success: function (data) {
-                console.log(data); // Kiểm tra dữ liệu trả về
+                // console.log(data); // Kiểm tra dữ liệu trả về
 
                 let content = '<div class="row" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start;">';
 
@@ -2394,7 +2394,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
 
                             tienGiamInput.value = tienGiamToUse.toLocaleString('vi-VN');
 
-                            console.log(tienGiamToUse.toLocaleString('vi-VN'))
+                            // console.log(tienGiamToUse.toLocaleString('vi-VN'))
                             // Hiển thị thông tin của phiếu giảm giá
                             const phieuGiamGiaMa = document.getElementById(`phieuGiamGia${invoiceId}`);
 
@@ -2476,12 +2476,9 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
             // Cập nhật giá trị ô nhập tiền trả lại với định dạng tiền
             tienTraLaiElement.value = tienTraLai.toLocaleString('vi-VN'); // Hiển thị số tiền trả lại với 2 chữ số thập phân
         }
-
-
         // Kích hoạt tab vừa tạo
         const tab = new bootstrap.Tab(document.getElementById(`tab-${invoiceId}`));
-        tab.show();
-
+        tab.show()
 
     }
 
@@ -2578,7 +2575,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
 
     // load api httt
     function fillHttt(invoiceId) {
-        console.log("invoiceId: " + invoiceId);
+
         let tongTien = $(`#tongTienHang${invoiceId}`);
         tongTien.text($(`#tongTienPhaiTra${invoiceId}`).val());
 
@@ -2696,7 +2693,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                 Promise.all([api1, api2])
                     .then(responses => {
                         responses.forEach(response => {
-                            console.log(`Response from ${response.url}: ${response.status}`);
+                            // console.log(`Response from ${response.url}: ${response.status}`);
                         });
 
                         // Hiển thị thông báo thành công
@@ -2933,7 +2930,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                 deletedAt: payload.deletedAt
             }),
             success: function (response) {
-                console.log('Cập nhật thành công:', response);
+                // console.log('Cập nhật thành công:', response);
                 // Cập nhật lại danh sách dịch vụ (có thể gọi lại hàm fillDichVuChoHoaDon)
                 fillDichVuChoHoaDon(payload.idHoaDonChiTiet);
             },
@@ -3089,7 +3086,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
 
     async function updateServiceCost() {
         try {
-            console.log(selectedInvoiceId);
+            // console.log(selectedInvoiceId);
 
             // Gọi API để lấy thông tin hóa đơn chi tiết
             const invoiceResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${selectedInvoiceId}`, {cache: "no-store"});

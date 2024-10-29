@@ -1,11 +1,14 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
+import com.example.DATN_WebFiveTus.dto.ApiResponseDto;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
+import com.example.DATN_WebFiveTus.dto.response.HistoryCustomerBookFieldResponse;
 import com.example.DATN_WebFiveTus.entity.Ca;
 import com.example.DATN_WebFiveTus.entity.LoaiSan;
 import com.example.DATN_WebFiveTus.entity.NgayTrongTuan;
 import com.example.DATN_WebFiveTus.entity.SanBong;
 import com.example.DATN_WebFiveTus.entity.SanCa;
+import com.example.DATN_WebFiveTus.entity.auth.ResponseStatus;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.CaRepository;
 import com.example.DATN_WebFiveTus.repository.LoaiSanRepository;
@@ -19,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
@@ -276,6 +280,14 @@ public class SanCaServiceImp implements SanCaService {
                 .map(sanCa -> modelMapper.map(sanCa,SanCaDTO.class)).collect(Collectors.toList());
     }
 
+    @Override
+    public ResponseEntity<ApiResponseDto<?>> findForCustomer(Integer id) {
+        List<HistoryCustomerBookFieldResponse> list = sanCaRepository.findHistoryCustomerBookFieldResponse(id);
+        if (list.isEmpty()) {
+            return ResponseEntity.ok(ApiResponseDto.builder().status(String.valueOf(ResponseStatus.FAIL)).message("Not Found").response(null).build());
+        }
+        return ResponseEntity.ok(ApiResponseDto.builder().status(String.valueOf(ResponseStatus.SUCCESS)).message("List here!").response(list).build());
+    }
 
 
 }

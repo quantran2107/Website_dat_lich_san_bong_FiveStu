@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.service;
 
+import com.example.DATN_WebFiveTus.dto.ApiResponseDto;
 import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.dto.HoaDonRequest;
 import com.example.DATN_WebFiveTus.entity.HoaDon;
@@ -32,6 +33,7 @@ public interface HoaDonService {
     void deletedAt(Integer id);
 
     List<HoaDonDTO> getHDforNV(int id);
+
 
 
 //    Page<HoaDonDTO> searchAndFilter(@Param("loai") Boolean loai,

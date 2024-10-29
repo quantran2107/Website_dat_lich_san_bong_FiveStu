@@ -416,7 +416,7 @@ CREATE TABLE lich_su_checkin (
 
 INSERT INTO khach_hang (ma_khach_hang, mat_khau, ho_va_ten, email, gioi_tinh, so_dien_thoai, trang_thai, created_at, updated_at, deleted_at)
 VALUES
-  ('KH001', 'password1', 'Nguyen Van A', 'lyly1062004@gmail.com', true, '0987456321', 'active', NOW(), NOW(), 1),
+  ('KH001', 'password1', 'Nguyen Van A', 'nguyenvana@gmail.com', true, '0987456321', 'active', NOW(), NOW(), 1),
   ('KH002', 'password2', 'Nguyen Van B', 'nguyenvanb@gmail.com', false, '0963258741', 'active', NOW(), NOW(), 1),
   ('KH003', 'password3', 'Nguyen Van C', 'nguyenvanc@gmail.com', true, '0321456987', 'inactive', NOW(), NOW(), 1),
   ('KH004', 'password4', 'Nguyen Van D', 'nguyenvand@gmail.com', false, '0369852147', 'active', NOW(), NOW(), 0),
@@ -2412,7 +2412,11 @@ VALUES
 (3,'bangdxph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','bangdxph39949'),
 (4,'lynhkph12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','lynhkph12345'),
 (5,'haipnph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','haipnph39949'),
-(6,'ly12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','ly12345');
+(6,'nguyenvana@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanA'),
+(7,'nguyenvanb@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanB'),
+(8,'nguyenvanc@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanC'),
+(9,'nguyenvand@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanD'),
+(10,'nguyenvane@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanE');
 
 
 INSERT INTO `duantotnghiep`.`roles`
@@ -2428,8 +2432,4 @@ INSERT INTO `duantotnghiep`.`user_roles`
 (`user_id`,
 `role_id`)
 VALUES
-(1,1),(1,4),(2,1),(2,4),(3,1),(3,4),(4,1),(4,4),(5,1),(5,4),(6,1);
-
-select * From dich_vu_san_bong;
-select * From nuoc_uong;
-select * From dich_vu_san_bong
+(1,1),(1,4),(2,1),(2,4),(3,1),(3,4),(4,1),(4,4),(5,1),(5,4),(6,1),(7,1),(8,1),(9,1),(10,1);
