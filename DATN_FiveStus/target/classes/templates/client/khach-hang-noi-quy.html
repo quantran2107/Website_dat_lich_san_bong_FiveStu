@@ -1,10 +1,240 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hiển Thị Tham Số</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f0f4f8;
+      color: #333;
+    }
+    h1, h2 {
+      color: #007BFF;
+      text-align: left; /* Đặt căn trái cho tiêu đề */
+      margin-bottom: 20px;
+    }
+    .tham-so-container {
+      display: block; /* Đảm bảo các card được xếp dọc */
+      max-width: 600px; /* Giới hạn độ rộng của container */
+      margin: 0 auto; /* Căn giữa container */
+    }
+    .tham-so-item {
+      border: 1px solid #007BFF;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 10px 0;
+      background-color: #ffffff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+    .tham-so-item:hover {
+      transform: scale(1.02);
+    }
+    .tham-so-title {
+      font-weight: bold;
+      font-size: 20px;
+      color: #007BFF;
+    }
+    .mo-ta {
+      margin-top: 10px;
+    }
+    .gia-tri {
+      font-weight: bold;
+      margin-top: 10px;
+      color: #28a745;
+    }
+  </style>
 </head>
 <body>
 
+<header>
+  <h1>ĐIỀU KHOẢN SỬ DỤNG NỀN TẢNG ĐẶT LỊCH SÂN BÓNG FIVE_STUS</h1>
+</header>
+<main>
+  <section>
+    <h2>Giới thiệu</h2>
+    <p>Five_stus là nền tảng trực tuyến cho phép người dùng đặt lịch sân bóng, giúp kết nối giữa người cho thuê và người thuê một cách dễ dàng và nhanh chóng.</p>
+  </section>
+  <section>
+    <h2>I. Nguyên tắc chung</h2>
+    <ol>
+      <li><strong>Quản lý và vận hành</strong>: Nền tảng Five_stus do Công ty Cổ phần Phần mềm Vitex Việt Nam thực hiện và quản lý.</li>
+      <li><strong>Thành viên</strong>: Mọi thương nhân, tổ chức, cá nhân có nhu cầu sử dụng dịch vụ của Five_stus đều có thể đăng ký trở thành thành viên.</li>
+      <li><strong>Thỏa thuận tự do</strong>: Các bên có quyền thỏa thuận trên cơ sở tôn trọng quyền lợi và nghĩa vụ hợp pháp.</li>
+      <li><strong>Minh bạch</strong>: Tất cả thông tin về giá cả và dịch vụ phải được công khai, rõ ràng.</li>
+      <li><strong>Tuân thủ pháp luật</strong>: Tất cả hoạt động trên nền tảng phải tuân thủ quy định của pháp luật Việt Nam.</li>
+    </ol>
+  </section>
+  <section>
+    <h2>II. Quy định chung</h2>
+    <p><strong>Tên miền</strong>: Nền tảng Five_stus có tên miền là <a href="https://www.five_stus.com">www.five_stus.com</a>.</p>
+    <p><strong>Định nghĩa chung</strong>:</p>
+    <ul>
+      <li><strong>Người cho thuê</strong>: Là các cơ sở thể thao có nhu cầu cho thuê sân bóng trên nền tảng.</li>
+      <li><strong>Người thuê</strong>: Là các cá nhân hoặc tổ chức có nhu cầu đặt sân bóng để thi đấu hoặc tập luyện.</li>
+      <li><strong>Thành viên</strong>: Bao gồm cả người cho thuê và người thuê.</li>
+    </ul>
+  </section>
+  <section>
+    <h2>III. Quy trình đặt sân</h2>
+    <h3>1. Quy trình dành cho người đặt sân:</h3>
+    <ol>
+      <li>Bước 1: Đăng ký tài khoản trên Five_stus.</li>
+      <li>Bước 2: Đăng nhập vào hệ thống.</li>
+      <li>Bước 3: Tìm kiếm sân bằng cách chọn môn thể thao và địa điểm.</li>
+      <li>Bước 4: Chọn thời gian và địa điểm phù hợp.</li>
+      <li>Bước 5: Nhấn nút "Đặt sân".</li>
+      <li>Bước 6: Kiểm tra thông tin đặt sân.</li>
+      <li>Bước 7: Nhận thông báo xác nhận đặt sân thành công.</li>
+    </ol>
+    <h3>2. Quy trình dành cho người quản lý sân:</h3>
+    <ol>
+      <li>Bước 1: Đăng ký và ký hợp đồng hợp tác với Five_stus.</li>
+      <li>Bước 2: Đăng nhập vào hệ thống quản lý.</li>
+      <li>Bước 3: Quản lý thông tin đặt sân và trạng thái thanh toán.</li>
+      <li>Bước 4: Cập nhật thông tin sân và dịch vụ cho thuê.</li>
+    </ol>
+  </section>
+</main>
+
+<h2>Điều Khoản Sân Bóng</h2>
+<div class="tham-so-container" id="tham-so-container">
+  <!-- Dữ liệu sẽ được thêm vào đây -->
+</div>
+
+<footer>
+  <p>&copy; 2024 Five_stus. Tất cả quyền được bảo lưu.</p>
+</footer>
+
+<script>
+  $(document).ready(function() {
+    $.ajax({
+      url: 'http://localhost:8080/tham-so/hien-thi',
+      type: 'GET',
+      success: function(data) {
+        const container = $('#tham-so-container');
+        container.empty(); // Xóa nội dung cũ
+
+        data.forEach(function(item) {
+          const itemHtml = `
+                    <div class="tham-so-item">
+                        <div class="tham-so-title">${item.ten} (${item.ma})</div>
+                        <div class="mo-ta">Mô Tả: ${item.moTa}</div>
+                        <div class="gia-tri">Giá Trị: ${item.giaTri} ${item.typeGiaTri}</div>
+                    </div>`;
+          container.append(itemHtml);
+        });
+      },
+      error: function(xhr, status, error) {
+        console.error('Có lỗi xảy ra:', error);
+      }
+    });
+  });
+</script>
+
 </body>
 </html>
+
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="vi">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title>Hiển Thị Tham Số</title>-->
+<!--  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+<!--  <style>-->
+<!--    body {-->
+<!--      font-family: Arial, sans-serif;-->
+<!--      margin: 0;-->
+<!--      padding: 20px;-->
+<!--      background-color: #f0f4f8;-->
+<!--      color: #333;-->
+<!--    }-->
+<!--    h2 {-->
+<!--      color: #007BFF;-->
+<!--      text-align: center;-->
+<!--      margin-bottom: 20px;-->
+<!--    }-->
+<!--    .tham-so-container {-->
+<!--      display: flex;-->
+<!--      flex-wrap: wrap;-->
+<!--      justify-content: center;-->
+<!--    }-->
+<!--    .tham-so-item {-->
+<!--      border: 1px solid #007BFF;-->
+<!--      border-radius: 8px;-->
+<!--      padding: 20px;-->
+<!--      margin: 10px;-->
+<!--      width: 300px; /* Độ rộng của card */-->
+<!--      background-color: #ffffff;-->
+<!--      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);-->
+<!--      transition: transform 0.2s;-->
+<!--    }-->
+<!--    .tham-so-item:hover {-->
+<!--      transform: scale(1.05);-->
+<!--    }-->
+<!--    .tham-so-title {-->
+<!--      font-weight: bold;-->
+<!--      font-size: 20px;-->
+<!--      color: #007BFF;-->
+<!--    }-->
+<!--    .mo-ta {-->
+<!--      margin-top: 10px;-->
+<!--    }-->
+<!--    .gia-tri {-->
+<!--      font-weight: bold;-->
+<!--      margin-top: 10px;-->
+<!--      color: #28a745;-->
+<!--    }-->
+<!--    .trang-thai {-->
+<!--      margin-top: 10px;-->
+<!--      font-style: italic;-->
+<!--      color: #6c757d;-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<h2>Danh Sách Tham Số</h2>-->
+<!--<div class="tham-so-container" id="tham-so-container">-->
+<!--  &lt;!&ndash; Dữ liệu sẽ được thêm vào đây &ndash;&gt;-->
+<!--</div>-->
+
+<!--<script>-->
+<!--  $(document).ready(function() {-->
+<!--    $.ajax({-->
+<!--      url: 'http://localhost:8080/tham-so/hien-thi',-->
+<!--      type: 'GET',-->
+<!--      success: function(data) {-->
+<!--        const container = $('#tham-so-container');-->
+<!--        container.empty(); // Xóa nội dung cũ-->
+
+<!--        data.forEach(function(item) {-->
+<!--          const itemHtml = `-->
+<!--                    <div class="tham-so-item">-->
+<!--                        <div class="tham-so-title">${item.ten} (${item.ma})</div>-->
+<!--                        <div class="mo-ta">Mô Tả: ${item.moTa}</div>-->
+<!--                        <div class="gia-tri">Giá Trị: ${item.typeGiaTri} ${item.typeGiaTri}</div>-->
+<!--                        <div class="trang-thai">Trạng Thái: ${item.trangThai ? 'Hoạt Động' : 'Không Hoạt Động'}</div>-->
+<!--                    </div>`;-->
+<!--          container.append(itemHtml);-->
+<!--        });-->
+<!--      },-->
+<!--      error: function(xhr, status, error) {-->
+<!--        console.error('Có lỗi xảy ra:', error);-->
+<!--      }-->
+<!--    });-->
+<!--  });-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
