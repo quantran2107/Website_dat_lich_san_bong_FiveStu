@@ -5,8 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ClientCustomerController {
-    @GetMapping("customer-details")
-    public String testSidebar() {
+
+    @GetMapping("customer")
+    public String customerProfile(){
         return "client/profile-customer";
     }
 }

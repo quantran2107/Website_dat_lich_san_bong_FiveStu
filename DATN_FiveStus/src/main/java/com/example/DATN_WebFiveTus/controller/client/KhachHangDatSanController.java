@@ -1,4 +1,4 @@
-package com.example.DATN_WebFiveTus.controller;
+package com.example.DATN_WebFiveTus.controller.client;
 
 import com.example.DATN_WebFiveTus.config.security.CheckRole;
 import jakarta.servlet.http.HttpServletRequest;

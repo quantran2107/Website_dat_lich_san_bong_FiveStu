@@ -1,4 +1,4 @@
-package com.example.DATN_WebFiveTus.controller;
+package com.example.DATN_WebFiveTus.controller.client;
 
 import com.example.DATN_WebFiveTus.dto.DiaChiKhachHangDTO;
 import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Controller

@@ -596,6 +596,7 @@ h3 {
   border-radius: 0;
 }
 
+
 /* - Buttons Color Scheme
 ------------------------------------------------------------- */
 .btn.btn-normal {
@@ -662,6 +663,23 @@ h3 {
 .btn-right {
   text-align: right;
   display: block;
+}
+.hvr-text-color{
+  color: black;
+  background-color: white;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Tạo bóng */
+  transition: box-shadow 0.3s; /* Hiệu ứng chuyển tiếp khi hover */
+  border-radius: 2px;
+  padding: 0.3em;
+}
+.hvr-text-color:hover {
+  color: white;
+  background-color: #0aba00;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Bóng sâu hơn khi hover */
+}
+.hvr-text-color a:hover{
+  color: white;
 }
 
 /* - Button Hover Effects2

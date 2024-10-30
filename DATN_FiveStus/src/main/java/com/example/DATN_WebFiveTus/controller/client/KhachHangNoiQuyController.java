@@ -1,4 +1,4 @@
-package com.example.DATN_WebFiveTus.controller;
+package com.example.DATN_WebFiveTus.controller.client;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
