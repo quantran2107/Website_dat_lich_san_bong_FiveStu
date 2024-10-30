@@ -40,8 +40,11 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
             "JOIN FETCH sc.ngayTrongTuan nt " +
             "WHERE hdct.trangThai = :trangThai " +
             "AND hdct.ngayDenSan = CURRENT_DATE " +
-            "And hd.deletedAt = false ")
-    Page<HoaDonChiTiet> findByTrangThai(@Param("trangThai") String trangThai, Pageable pageable);
+            "AND hd.deletedAt = false " +
+            "AND (:soDienThoaiKhachHang IS NULL OR kh.soDienThoai LIKE %:soDienThoaiKhachHang%)")
+    Page<HoaDonChiTiet> findByTrangThai(@Param("trangThai") String trangThai,
+                                        @Param("soDienThoaiKhachHang") String soDienThoaiKhachHang,
+                                        Pageable pageable);
 
     @Query("SELECT hdct FROM HoaDonChiTiet hdct " +
             "JOIN FETCH hdct.hoaDon hd " +

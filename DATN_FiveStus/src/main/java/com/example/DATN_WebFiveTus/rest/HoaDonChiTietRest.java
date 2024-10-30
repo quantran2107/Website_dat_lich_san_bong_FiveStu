@@ -49,11 +49,11 @@ public class HoaDonChiTietRest {
     @GetMapping("/trang-thai")
     public ResponseEntity<?> getHoaDonChiTietByTrangThai(
             @RequestParam(defaultValue = "false") String trangThai,
+            @RequestParam(required = false) String soDienThoaiKhachHang,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        System.out.println("Fetching data for page " + page + " with size " + size);
-        Page<HoaDonChiTietDTO> result = hoaDonChiTietService.getHoaDonChiTietByTrangThai(trangThai, pageable);
+        Page<HoaDonChiTietDTO> result = hoaDonChiTietService.getHoaDonChiTietByTrangThai(trangThai, soDienThoaiKhachHang, pageable);
         return ResponseEntity.ok(result);
     }
 
