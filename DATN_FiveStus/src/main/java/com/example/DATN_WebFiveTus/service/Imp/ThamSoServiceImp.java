@@ -72,9 +72,7 @@ public class ThamSoServiceImp implements ThamSoService {
 
     @Override
     public ThamSoDTO findByMaThamSo(String maThamSo) {
-        ThamSo thamSo = thamSoRepository.findByMaThamSo(maThamSo).get();
-
-        return modelMapper.map(thamSo, ThamSoDTO.class);
+        return modelMapper.map(thamSoRepository.findByTenThamSo(maThamSo),ThamSoDTO.class);
     }
 
 
@@ -124,7 +122,7 @@ public class ThamSoServiceImp implements ThamSoService {
 
     @Override
     public ThamSoDTO saveFake(ThamSoDTO thamSoDTO) {
-        String giaTriFake = thamSoRepository.findByTenThamSo("TS003").getGiaTri();
+        String giaTriFake = thamSoRepository.findByMaThamSo("TS003").getGiaTri();
         ThamSo thamSo=modelMapper.map(thamSoDTO,ThamSo.class);
         thamSo.setTrangThai(true);
         thamSo.setDeletedAt(false);

@@ -72,7 +72,7 @@ public class ThamSoRest {
         return thamSoService.searchThamSoss(ma, ten, typeGiaTri, trangThai, pageable);
     }
 
-    @GetMapping("searchMa/{maThamSo}")
+    @GetMapping("searchMaFake/{maThamSo}")
     public ResponseEntity<ThamSoDTO> getThamSoByMa(@PathVariable String maThamSo) {
         ThamSoDTO thamSoDTO = thamSoService.findByMaThamSo(maThamSo);
         return new ResponseEntity<>(thamSoDTO, HttpStatus.OK);

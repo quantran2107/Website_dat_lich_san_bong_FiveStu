@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface ThamSoRepository extends JpaRepository<ThamSo, Integer> {
 
     @Query("SELECT ts FROM ThamSo ts WHERE ts.ma LIKE %:ma%")
-    Optional<ThamSo> findByMaThamSo(@Param("ma") String maThamSo);
+   ThamSo findByMaThamSo(@Param("ma") String maThamSo);
 
 
     @Query("SELECT ts FROM ThamSo ts WHERE " +
