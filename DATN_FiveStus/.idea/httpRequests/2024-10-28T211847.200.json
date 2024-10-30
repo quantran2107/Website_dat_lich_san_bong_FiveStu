@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "tenCa": "Ca 1",
+    "thoiGianBatDau": "2024-08-18T06:00:00",
+    "thoiGianKetThuc": "2024-08-18T08:00:00",
+    "trangThai": "Hoạt động"
+  },
+  {
+    "id": 2,
+    "tenCa": "Ca 2",
+    "thoiGianBatDau": "2024-08-18T08:00:00",
+    "thoiGianKetThuc": "2024-08-18T10:00:00",
+    "trangThai": "Hoạt động"
+  },
+  {
+    "id": 3,
+    "tenCa": "Ca 3",
+    "thoiGianBatDau": "2024-08-18T10:00:00",
+    "thoiGianKetThuc": "2024-08-18T12:00:00",
+    "trangThai": "Hoạt động"
+  },
+  {
+    "id": 4,
+    "tenCa": "Ca 4",
+    "thoiGianBatDau": "2024-08-18T12:00:00",
+    "thoiGianKetThuc": "2024-08-18T14:00:00",
+    "trangThai": "Hoạt động"
+  },
+  {
+    "id": 5,
+    "tenCa": "Ca 5",
+    "thoiGianBatDau": "2024-08-18T14:00:00",
+    "thoiGianKetThuc": "2024-08-18T16:00:00",
+    "trangThai": "Hoạt động"
+  },
+  {
+    "id": 6,
+    "tenCa": "Ca 6",
+    "thoiGianBatDau": "2024-08-18T16:00:00",
+    "thoiGianKetThuc": "2024-08-18T18:00:00",
+    "trangThai": "Hoạt động"
+  },
+  {
+    "id": 7,
+    "tenCa": "Ca 7",
+    "thoiGianBatDau": "2024-08-18T18:00:00",
+    "thoiGianKetThuc": "2024-08-18T20:00:00",
+    "trangThai": "Hoạt động"
+  },
+  {
+    "id": 8,
+    "tenCa": "Ca 8",
+    "thoiGianBatDau": "2024-08-18T20:00:00",
+    "thoiGianKetThuc": "2024-08-18T22:00:00",
+    "trangThai": "Hoạt động"
+  }
+]

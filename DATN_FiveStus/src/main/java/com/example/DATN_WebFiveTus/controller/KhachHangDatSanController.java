@@ -14,12 +14,8 @@ public class KhachHangDatSanController {
 
     @GetMapping("/khach-hang/dat-san")
     public String hienThi(HttpServletRequest request) {
-        return checkRole.checkUser(request) || checkRole.checkUser(request) || checkRole.checkUser(request) ? "/client/khach-hang-dat-san" : "redirect:/login";
+//        return checkRole.checkUser(request) || checkRole.checkUser(request) || checkRole.checkUser(request) ? "/client/khach-hang-dat-san" : "redirect:/login";
+        return "/client/khach-hang-dat-san";
     }
 
-    @GetMapping("/khach-hang/dat-san-test")
-    public String test(HttpServletRequest request) {
-        return "/client/khach-hang-dat-san";
-//        return checkRole.checkUser(request) || checkRole.checkUser(request) || checkRole.checkUser(request) ? "/client/khach-hang-dat-san" : "redirect:/login";
-    }
 }
