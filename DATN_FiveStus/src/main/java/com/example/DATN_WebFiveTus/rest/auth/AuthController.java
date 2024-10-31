@@ -8,13 +8,11 @@ import com.example.DATN_WebFiveTus.dto.request.SignUpRequestDto;
 import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
 import com.example.DATN_WebFiveTus.exception.UserAlreadyExistsException;
 import com.example.DATN_WebFiveTus.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -22,8 +20,6 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @Autowired
-    private JwtUtils jwtUtils;
 
     @PostMapping("/sign-up")
     public ResponseEntity<ApiResponseDto<?>> registerUser(@RequestBody @Valid SignUpRequestDto signUpRequestDto)
@@ -34,5 +30,9 @@ public class AuthController {
     @PostMapping("/sign-in")
     public ResponseEntity<ApiResponseDto<?>> signInUser(@RequestBody @Valid SignInRequestDto signInRequestDto){
         return authService.signIn(signInRequestDto);
+    }
+    @GetMapping("get-role")
+    public ResponseEntity<?> getRole(HttpServletRequest request){
+        return authService.getRole(request);
     }
 }

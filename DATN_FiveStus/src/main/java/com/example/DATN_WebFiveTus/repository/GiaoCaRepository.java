@@ -10,13 +10,11 @@ import java.time.LocalDate;
 
 public interface GiaoCaRepository extends JpaRepository<GiaoCa, Integer> {
 
-    @Query("select a from GiaoCa a where a.nhanVienNhan.id=:id and DATE(a.createdAt) = DATE(:today) and a.trangThai=true ")
-    GiaoCa findByIdNhanVien(@Param("id") int id,@Param("today") LocalDate today);
 
-    @Query(value = """
-        SELECT * FROM duantotnghiep.giao_ca
-            ORDER BY id DESC
-            LIMIT 1;
-        """,nativeQuery = true)
-    GiaoCa getRowLast();
+
+    @Query(value = "select * from duantotnghiep.giao_ca  where id_nhan_vien=:id and trang_thai=1 ",nativeQuery = true)
+    GiaoCa getRowLast(@Param("id") int id);
+
+    @Query(value = "SELECT * FROM duantotnghiep.giao_ca gc ORDER BY gc.id DESC LIMIT 1", nativeQuery = true)
+    GiaoCa findDataLast();
 }
