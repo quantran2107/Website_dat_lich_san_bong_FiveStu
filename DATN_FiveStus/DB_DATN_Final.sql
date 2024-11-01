@@ -2286,29 +2286,6 @@ VALUES
 (20000, 100, 'Warrior', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/fsvne0ghubuvnbowgzs1.jpg'),
 (13000, 100, 'Lon String vàng', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/nhtnwvsvnyarpp2yqw9v.jpg');
 
-
-INSERT INTO dich_vu_san_bong (id_do_thue, id_nuoc_uong, id_hoa_don_chi_tiet, tong_tien, so_luong, trang_thai, created_at, updated_at, deleted_at) VALUES
-(1, NULL, 1, 50.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 1, 2, 20.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(2, NULL, 3, 75.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 2, 4, 15.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(3, NULL, 5, 60.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 3, 6, 25.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(4, NULL, 7, 80.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 4, 8, 30.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(5, NULL, 9, 55.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 5, 10, 22.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(1, NULL, 41, 52.50, 3, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 1, 42, 21.00, 4, 'Đã đặt', NOW(), NOW(), 0),
-(2, NULL, 43, 80.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 2, 44, 19.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(3, NULL, 45, 65.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 3, 46, 24.00, 3, 'Đã đặt', NOW(), NOW(), 0),
-(4, NULL, 47, 85.00, 1, 'Đã đặt', NOW(), NOW(), 0),
-(NULL, 4, 48, 27.00, 2, 'Đã đặt', NOW(), NOW(), 0),
-(5, NULL, 49, 58.00, 4, 'Đã đặt', NOW(), NOW(), 0);
-
-
 INSERT INTO phu_phi_hoa_don (id_hoa_don_chi_tiet, ma, ten, tien_phu_phi, ghi_chu, trang_thai, created_at, updated_at, deleted_at)
 VALUES (1, 'PP001', 'Phí giao hàng', 50000.00, 'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
        (2, 'PP002', 'Phí đóng gói', 20000.00, 'Đóng gói cẩn thận', 'Hoàn tất', NOW(), NOW(), 0),

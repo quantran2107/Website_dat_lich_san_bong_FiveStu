@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => showError('Error fetching san bong data:', error));
 
     // Hiển thị danh sách sân bóng
-    function displaySanBong(sanBongs) {
+        function displaySanBong(sanBongs) {
         const sanCaContainer = document.getElementById('sanCaContainer');
         sanCaContainer.innerHTML = ''; // Xóa nội dung cũ
 

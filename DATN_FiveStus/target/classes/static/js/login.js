@@ -9,7 +9,6 @@ $(document).ready(function () {
     $('#loginForm').on('submit', function (event) {
         event.preventDefault(); // Ngăn chặn việc gửi form mặc định
 
-        // Lấy dữ liệu từ form
         let formData = {
             username: $('#username').val(),
             password: $('#password').val()
@@ -51,7 +50,4 @@ $(document).ready(function () {
         });
     });
 
-    function addGC(){
-
-    }
 });

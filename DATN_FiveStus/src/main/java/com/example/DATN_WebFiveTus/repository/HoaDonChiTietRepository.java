@@ -56,6 +56,15 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
             "WHERE hdct.id = :id")
     HoaDonChiTiet findHoaDonChiTietById(@Param("id") Integer id);
 
+    @Query("SELECT hdct FROM HoaDonChiTiet hdct " +
+            "JOIN FETCH hdct.hoaDon hd " +
+            "JOIN FETCH hd.khachHang kh " +
+            "JOIN FETCH hdct.sanCa sc " +
+            "JOIN FETCH sc.sanBong sb " +
+            "JOIN FETCH sc.ca c " +
+            "JOIN FETCH sc.ngayTrongTuan nt " +
+            "WHERE kh.id = :id")
+    HoaDonChiTiet findHoaDonChiTietByIdKhachHang(@Param("id") Integer id);
 
     @Modifying
     @Transactional
