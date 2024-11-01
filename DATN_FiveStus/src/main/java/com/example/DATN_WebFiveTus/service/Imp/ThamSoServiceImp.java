@@ -36,6 +36,11 @@ public class ThamSoServiceImp implements ThamSoService {
     }
 
     @Override
+    public List<ThamSoDTO> getAll2() {
+        return thamSoRepository.getAll2().stream().map((thamSo) ->modelMapper.map(thamSo,ThamSoDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
     public ThamSoDTO getOne(Integer id) {
         return modelMapper.map(thamSoRepository.findById(id).orElseThrow(()-> new ResourceNotfound("Không tồn tại ID tham số: "+id)),ThamSoDTO.class);
     }

@@ -35,6 +35,11 @@ public class ThamSoRest {
         return ResponseEntity.ok(thamSoService.getAll());
     }
 
+    @GetMapping("hien-thi2")
+    private ResponseEntity<List> HienThi2(){
+        return ResponseEntity.ok(thamSoService.getAll2());
+    }
+
     @GetMapping("/{id}")
     private ResponseEntity<ThamSoDTO> getOne(@PathVariable("id") Integer id){
         return ResponseEntity.ok(thamSoService.getOne(id));

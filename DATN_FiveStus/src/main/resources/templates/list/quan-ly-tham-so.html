@@ -61,19 +61,27 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="parameterType" class="form-label">Loại Giá Trị</label>
-                                        <input type="text" class="form-control" id="parameterType" name="typeGiaTri" >
+                                        <select class="form-control" id="parameterType" name="typeGiaTri">
+                                            <option value="%">%</option>
+                                            <option value="VND">VND</option>
+                                            <option value="Giờ">Giờ</option>
+                                            <option value="Phút">Phút</option>
+                                            <option value="Lần">Lần</option>
+                                            <option value="Ngày">Ngày</option>
+                                        </select>
                                     </div>
+
                                     <div class="mb-3">
                                         <label for="parameterDescription" class="form-label">Mô Tả</label>
                                         <textarea class="form-control" id="parameterDescription" name="moTa"></textarea>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="parameterStatus" class="form-label">Trạng Thái</label>
-                                        <select class="form-select" id="parameterStatus" name="trangThai">
-                                            <option value="true">Kích hoạt</option>
-                                            <option value="false">Vô hiệu hóa</option>
-                                        </select>
-                                    </div>
+<!--                                    <div class="mb-3">-->
+<!--                                        <label for="parameterStatus" class="form-label">Trạng Thái</label>-->
+<!--                                        <select class="form-select" id="parameterStatus" name="trangThai">-->
+<!--                                            <option value="true">Kích hoạt</option>-->
+<!--                                            <option value="false">Vô hiệu hóa</option>-->
+<!--                                        </select>-->
+<!--                                    </div>-->
                                     <button type="submit" class="btn btn-primary">Thêm</button>
                                 </form>
                             </div>
@@ -146,6 +154,7 @@
 <!-- JavaScript -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
 
     $(document).on('click', '#addParameterButton', function() {
@@ -200,8 +209,9 @@
             ten: tenThamSo,
             giaTri: giaTri,
             typeGiaTri: typeGiaTri,
+            isActive: true,
             moTa: moTa,
-            trangThai: trangThai
+            trangThai: false
         };
 
         $.ajax({
@@ -215,6 +225,14 @@
                     'Dữ liệu đã được thêm thành công.',
                     'success'
                 );
+
+                // Đóng modal (giả sử modal có id là 'addParameterModal')
+                $('#addParameterModal').modal('hide');
+
+                // Làm sạch form
+                $('#addParameterForm')[0].reset();
+
+                // Cập nhật bảng dữ liệu
                 fetchDataAndRenderTable();
             },
             error: function(xhr, status, error) {
@@ -227,6 +245,7 @@
             }
         });
     });
+
 
 
     // Edit button
@@ -306,6 +325,14 @@
                     'Dữ liệu đã được cập nhật thành công.',
                     'success'
                 );
+
+                // Đóng modal (giả sử modal có id là 'editParameterModal')
+                $('#editParameterModal').modal('hide');
+
+                // Làm sạch form
+                $('#editParameterForm')[0].reset();
+
+                // Cập nhật bảng dữ liệu
                 fetchDataAndRenderTable();
             },
             error: function(xhr, status, error) {
@@ -318,6 +345,7 @@
             }
         });
     });
+
 
     $(document).ready(function () {
         $(document).on('click', '.delete-button', function () {

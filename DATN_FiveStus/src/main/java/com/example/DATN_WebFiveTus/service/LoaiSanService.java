@@ -19,5 +19,7 @@ public interface LoaiSanService {
     List<LoaiSanDTO> getAllJoinFetch();
 
     void deletedAt(Integer id);
+
+    Boolean existsByTenLoaiSan(String tenLoaiSan);
 }
 
