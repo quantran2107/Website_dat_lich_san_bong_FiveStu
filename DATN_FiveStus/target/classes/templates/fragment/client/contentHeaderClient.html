@@ -295,33 +295,10 @@
     <div class="modal-dialog modal-fullscreen-md-down modal-md modal-dialog-centered" role="document">
       <div class="modal-content p-4">
         <div class="modal-header mx-auto border-0">
-          <h2 class="modal-title fs-3 fw-normal">Đăng nhập</h2>
+          <h2 class="modal-title fs-3 fw-normal">Nhân viên ca trước :<span id="tenNVCaTruoc"></span> </h2>
         </div>
         <div class="modal-body">
-          <div class="login-detail">
-            <div class="login-form p-0">
-              <div class="col-lg-12 mx-auto">
-                <form id="login-form">
-                  <input id="userEmailCustomer" type="text" name="username" placeholder="Username or Email Address *"
-                         class="mb-3 ps-3 text-input">
-                  <input id="passCustomer"type="password" name="password" placeholder="Password" class="ps-3 text-input">
-                  <div class="checkbox d-flex justify-content-between mt-4">
-                    <p class="checkbox-form">
-                      <label class="">
-                        <input name="rememberme" type="checkbox" id="remember-me" value="forever"> Ghi nhớ đăng nhập </label>
-                    </p>
-                    <p class="lost-password">
-                      <a th:href="@{#}">Quên mật khẩu?</a>
-                    </p>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <div class="modal-footer mt-5 d-flex justify-content-center">
-              <button id="btnLogin" type="button" class="btn btn-success hvr-sweep-to-right dark-sweep">Đăng nhập</button>
-              <button type="button" class="btn btn-outline-gray hvr-sweep-to-right dark-sweep">Đăng ký</button>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>

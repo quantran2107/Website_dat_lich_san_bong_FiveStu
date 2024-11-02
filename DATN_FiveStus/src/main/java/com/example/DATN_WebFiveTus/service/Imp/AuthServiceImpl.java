@@ -2,6 +2,7 @@ package com.example.DATN_WebFiveTus.service.Imp;
 
 
 import com.example.DATN_WebFiveTus.config.RoleFactory;
+import com.example.DATN_WebFiveTus.config.security.CheckRole;
 import com.example.DATN_WebFiveTus.config.security.jwt.JwtUtils;
 import com.example.DATN_WebFiveTus.dto.ApiResponseDto;
 import com.example.DATN_WebFiveTus.dto.request.SignInRequestDto;
@@ -14,6 +15,7 @@ import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
 import com.example.DATN_WebFiveTus.exception.UserAlreadyExistsException;
 import com.example.DATN_WebFiveTus.service.AuthService;
 import com.example.DATN_WebFiveTus.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +48,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private CheckRole checkRole;
 
     @Override
     public ResponseEntity<ApiResponseDto<?>> signUp(SignUpRequestDto signUpRequestDto)
@@ -117,6 +122,11 @@ public class AuthServiceImpl implements AuthService {
                         .build()
         );
 
+    }
+
+    @Override
+    public ResponseEntity<?> getRole(HttpServletRequest request) {
+        return ResponseEntity.ok(checkRole.getListRole(request));
     }
 
 

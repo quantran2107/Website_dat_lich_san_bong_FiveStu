@@ -6,6 +6,7 @@ import com.example.DATN_WebFiveTus.dto.request.SignInRequestDto;
 import com.example.DATN_WebFiveTus.dto.request.SignUpRequestDto;
 import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
 import com.example.DATN_WebFiveTus.exception.UserAlreadyExistsException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -16,4 +17,6 @@ public interface AuthService {
 
 
     ResponseEntity<?> logout(String userName);
+
+    ResponseEntity<?> getRole(HttpServletRequest request);
 }
