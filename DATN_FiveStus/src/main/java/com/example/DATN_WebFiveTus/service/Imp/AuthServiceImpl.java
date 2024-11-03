@@ -2,9 +2,11 @@ package com.example.DATN_WebFiveTus.service.Imp;
 
 
 import com.example.DATN_WebFiveTus.config.RoleFactory;
+import com.example.DATN_WebFiveTus.config.security.CookieUtils;
 import com.example.DATN_WebFiveTus.config.security.CheckRole;
 import com.example.DATN_WebFiveTus.config.security.jwt.JwtUtils;
 import com.example.DATN_WebFiveTus.dto.ApiResponseDto;
+import com.example.DATN_WebFiveTus.dto.request.ChangePassRequest;
 import com.example.DATN_WebFiveTus.dto.request.SignInRequestDto;
 import com.example.DATN_WebFiveTus.dto.request.SignUpRequestDto;
 import com.example.DATN_WebFiveTus.dto.response.SignInResponseDto;
@@ -13,6 +15,7 @@ import com.example.DATN_WebFiveTus.entity.auth.Role;
 import com.example.DATN_WebFiveTus.entity.auth.User;
 import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
 import com.example.DATN_WebFiveTus.exception.UserAlreadyExistsException;
+import com.example.DATN_WebFiveTus.repository.UserRepository;
 import com.example.DATN_WebFiveTus.service.AuthService;
 import com.example.DATN_WebFiveTus.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +27,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +49,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private JwtUtils jwtUtils;
 
@@ -126,7 +131,27 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<?> getRole(HttpServletRequest request) {
-        return ResponseEntity.ok(checkRole.getListRole(request));
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<?> changePass(HttpServletRequest request, ChangePassRequest changePassRequest) {
+        String token = CookieUtils.getCookie(request, "authToken");
+        if (token != null && jwtUtils.validateJwtToken(token) && jwtUtils.checkBlackList(token)) {
+            String username = jwtUtils.getUserNameFromJwtToken(token);
+            User user = userRepository.findByEmail(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+            user.setPassword(passwordEncoder.encode(changePassRequest.getPassword()));
+            userService.save(user);
+            return ResponseEntity.ok(ApiResponseDto.builder()
+                    .status(String.valueOf(ResponseStatus.SUCCESS))
+                    .response(true).build());
+        }
+        return ResponseEntity.ok(ApiResponseDto.builder()
+                .status(String.valueOf(ResponseStatus.FAIL))
+                .message("Thay đổi ko thành công")
+                .response(false).build());
+
     }
 
 

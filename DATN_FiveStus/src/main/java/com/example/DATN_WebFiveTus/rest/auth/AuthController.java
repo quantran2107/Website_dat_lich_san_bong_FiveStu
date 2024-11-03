@@ -3,6 +3,7 @@ package com.example.DATN_WebFiveTus.rest.auth;
 import com.example.DATN_WebFiveTus.config.security.jwt.JwtUtils;
 import com.example.DATN_WebFiveTus.dto.ApiResponseDto;
 
+import com.example.DATN_WebFiveTus.dto.request.ChangePassRequest;
 import com.example.DATN_WebFiveTus.dto.request.SignInRequestDto;
 import com.example.DATN_WebFiveTus.dto.request.SignUpRequestDto;
 import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
@@ -30,6 +31,10 @@ public class AuthController {
     @PostMapping("/sign-in")
     public ResponseEntity<ApiResponseDto<?>> signInUser(@RequestBody @Valid SignInRequestDto signInRequestDto){
         return authService.signIn(signInRequestDto);
+    }
+    @PutMapping("/change-pass")
+    public ResponseEntity<?>changepass(HttpServletRequest http, @RequestBody ChangePassRequest request) {
+        return authService.changePass(http, request);
     }
     @GetMapping("get-role")
     public ResponseEntity<?> getRole(HttpServletRequest request){

@@ -38,6 +38,7 @@
                         <ul class="btn-toggle-nav list-unstyled ps-3 pb-1 small">
                             <li id="profileCustomer" class="hvr-text-color" ><a href="#"  style="font-size: 14px">Hồ sơ</a></li>
                             <li id="changerPass" class="hvr-text-color" ><a href="#"  style="font-size: 14px">Đổi mật khẩu</a></li>
+                            <li id="customerAddress" class="hvr-text-color"><a href="#" style="font-size: 14px">Địa chỉ</a></li>
                         </ul>
                     </div>
                 </li>
@@ -51,6 +52,51 @@
         <div id="contentProfile" class="p-3 bg-white " style="flex-grow:1 ">ádasdasd</div>
     </div>
 </section>
+<!-- Modal Thêm/Cập nhật Địa chỉ -->
+<div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addressModalLabel">Thêm địa chỉ mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addressForm">
+                    <!-- Tỉnh/Thành -->
+                    <div class="mb-3">
+                        <label for="city" class="form-label">Tỉnh/Thành</label>
+                        <select class="form-select" id="city">
+                            <option selected disabled>Chọn Tỉnh/Thành</option>
+                        </select>
+                    </div>
+                    <!-- Quận/Huyện -->
+                    <div class="mb-3">
+                        <label for="district" class="form-label">Quận/Huyện</label>
+                        <select class="form-select" id="district">
+                            <option selected disabled>Chọn Quận/Huyện</option>
+                        </select>
+                    </div>
+                    <!-- Phường/Xã -->
+                    <div class="mb-3">
+                        <label for="ward" class="form-label">Phường/Xã</label>
+                        <select class="form-select" id="ward">
+                            <option selected disabled>Chọn Phường/Xã</option>
+                        </select>
+                    </div>
+                    <!-- Địa chỉ cụ thể -->
+                    <div class="mb-3">
+                        <label for="specificAddress" class="form-label">Địa chỉ cụ thể</label>
+                        <input type="text" class="form-control" id="specificAddress" placeholder="Nhập địa chỉ cụ thể">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" id="saveAddressButton" class="btn btn-primary">Lưu địa chỉ</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div th:include="~{fragment/client/footerClient :: footerClient}"></div>
 <!-- jQuery -->
@@ -58,11 +104,14 @@
 <!-- jQuery Easing -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
 <!-- Các tệp JavaScript khác -->
+<!-- Thêm SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script th:src="@{/client/js/jquery-1.11.0.min.js}"></script>
 <script th:src="@{/client/js/plugins.js}"></script>
 <script th:src="@{/client/js/script.js}"></script>
-
 <script src="/client/js/sidebarProfile.js"></script>
 </body>
 
