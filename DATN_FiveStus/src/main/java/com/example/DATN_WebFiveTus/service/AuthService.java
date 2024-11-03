@@ -15,9 +15,8 @@ import org.springframework.stereotype.Service;
 public interface AuthService {
     ResponseEntity<ApiResponseDto<?>> signUp(SignUpRequestDto signUpRequestDto) throws UserAlreadyExistsException, RoleNotFoundException;
     ResponseEntity<ApiResponseDto<?>> signIn(SignInRequestDto signInRequestDto);
-
-
     ResponseEntity<?> logout(String userName);
-
     ResponseEntity<?> changePass(HttpServletRequest request, ChangePassRequest changePassRequest);
+    ResponseEntity<?> getRole(HttpServletRequest request);
+
 }

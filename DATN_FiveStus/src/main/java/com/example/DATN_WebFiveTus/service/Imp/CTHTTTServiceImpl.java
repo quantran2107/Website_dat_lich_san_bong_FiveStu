@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,19 +42,17 @@ public class CTHTTTServiceImpl implements CTHTTTService {
     @Override
     public Boolean addNew(HTTTDto htttDto) {
         HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(htttDto.getIdHD()).orElse(null);
+        assert hoaDonChiTiet != null;
         System.out.println(hoaDonChiTiet.getId());
         HinhThucThanhToan hinhThucThanhToan = hinhThucThanhToanRepository.findById(htttDto.getIdHttt()).get();
 
-        if (hoaDonChiTiet != null) {
-            ChiTietHinhThucThanhToan ctHttt = new ChiTietHinhThucThanhToan();
-            ctHttt.setTrangThai("active");
-            ctHttt.setHinhThucThanhToan(hinhThucThanhToan);
-            ctHttt.setHoaDonChiTiet(hoaDonChiTiet);
-            ctHttt.setSoTien(htttDto.getSoTien());
-            chiTietHinhThucThanhToanRepository.save(ctHttt);
-            return true;
-        }
-        return false;
+        ChiTietHinhThucThanhToan ctHttt = new ChiTietHinhThucThanhToan();
+        ctHttt.setTrangThai("active");
+        ctHttt.setHinhThucThanhToan(hinhThucThanhToan);
+        ctHttt.setHoaDonChiTiet(hoaDonChiTiet);
+        ctHttt.setSoTien((htttDto.getSoTien()));
+        chiTietHinhThucThanhToanRepository.save(ctHttt);
+        return true;
     }
 
     @Override

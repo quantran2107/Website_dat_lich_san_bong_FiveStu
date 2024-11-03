@@ -3,6 +3,7 @@ package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.config.RoleFactory;
 import com.example.DATN_WebFiveTus.config.security.CookieUtils;
+import com.example.DATN_WebFiveTus.config.security.CheckRole;
 import com.example.DATN_WebFiveTus.config.security.jwt.JwtUtils;
 import com.example.DATN_WebFiveTus.dto.ApiResponseDto;
 import com.example.DATN_WebFiveTus.dto.request.ChangePassRequest;
@@ -52,6 +53,9 @@ public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
     @Autowired
     private JwtUtils jwtUtils;
+
+    @Autowired
+    private CheckRole checkRole;
 
     @Override
     public ResponseEntity<ApiResponseDto<?>> signUp(SignUpRequestDto signUpRequestDto)
@@ -126,6 +130,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public ResponseEntity<?> getRole(HttpServletRequest request) {
+        return null;
+    }
+
+    @Override
     public ResponseEntity<?> changePass(HttpServletRequest request, ChangePassRequest changePassRequest) {
         String token = CookieUtils.getCookie(request, "authToken");
         if (token != null && jwtUtils.validateJwtToken(token) && jwtUtils.checkBlackList(token)) {
@@ -142,6 +151,7 @@ public class AuthServiceImpl implements AuthService {
                 .status(String.valueOf(ResponseStatus.FAIL))
                 .message("Thay đổi ko thành công")
                 .response(false).build());
+
     }
 
 

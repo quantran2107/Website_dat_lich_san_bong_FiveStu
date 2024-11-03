@@ -21,8 +21,6 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @Autowired
-    private JwtUtils jwtUtils;
 
     @PostMapping("/sign-up")
     public ResponseEntity<ApiResponseDto<?>> registerUser(@RequestBody @Valid SignUpRequestDto signUpRequestDto)
@@ -35,7 +33,11 @@ public class AuthController {
         return authService.signIn(signInRequestDto);
     }
     @PutMapping("/change-pass")
-    public ResponseEntity<?>changepass(HttpServletRequest http, @RequestBody ChangePassRequest request){
-        return authService.changePass(http,request);
+    public ResponseEntity<?>changepass(HttpServletRequest http, @RequestBody ChangePassRequest request) {
+        return authService.changePass(http, request);
+    }
+    @GetMapping("get-role")
+    public ResponseEntity<?> getRole(HttpServletRequest request){
+        return authService.getRole(request);
     }
 }
