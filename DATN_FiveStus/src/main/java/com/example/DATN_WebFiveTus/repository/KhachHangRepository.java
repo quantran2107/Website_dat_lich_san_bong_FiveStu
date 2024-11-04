@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -39,4 +40,9 @@ public interface KhachHangRepository extends JpaRepository<KhachHang,Integer> {
                                                    Pageable pageable);
     @Query("SELECT kh FROM KhachHang kh WHERE kh.email =:email")
     KhachHang findKhachHangByEmail(@Param("email") String email);
+
+    Optional<KhachHang> findByEmail(String email);
+
+    @Query("SELECT kh FROM KhachHang kh WHERE kh.email = :email")
+    Optional<KhachHang> findKhachHangByEmail1(@Param("email") String email);
 }
