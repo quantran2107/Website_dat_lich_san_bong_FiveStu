@@ -17,7 +17,7 @@ public class GiaoCaDTO {
 
     private Integer id;
 
-    private NhanVien nhanVienNhan;
+    private NhanVien nhanVien;
 
     private BigDecimal tienMatCaTruoc;
 

@@ -70,6 +70,14 @@ public class ThamSoServiceImp implements ThamSoService {
 
     }
 
+    @Override
+    public ThamSoDTO findByMaThamSo(String maThamSo) {
+        ThamSo thamSo = thamSoRepository.findByMaThamSo(maThamSo).get();
+
+        return modelMapper.map(thamSo, ThamSoDTO.class);
+    }
+
+
 
     @Override
     public Page<ThamSoDTO> searchThamSo(String keyword, Pageable pageable) {
@@ -113,4 +121,17 @@ public class ThamSoServiceImp implements ThamSoService {
                 .map(thamSo -> modelMapper.map(thamSo, ThamSoDTO.class))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public ThamSoDTO saveFake(ThamSoDTO thamSoDTO) {
+        String giaTriFake = thamSoRepository.findByTenThamSo("TS003").getGiaTri();
+        ThamSo thamSo=modelMapper.map(thamSoDTO,ThamSo.class);
+        thamSo.setTrangThai(true);
+        thamSo.setDeletedAt(false);
+        thamSo.setTypeGiaTri(giaTriFake);
+        ThamSo thamSoSave=thamSoRepository.save(thamSo);
+        return modelMapper.map(thamSoSave,ThamSoDTO.class);
+    }
+
+
 }

@@ -72,4 +72,16 @@ public class ThamSoRest {
         return thamSoService.searchThamSoss(ma, ten, typeGiaTri, trangThai, pageable);
     }
 
+    @GetMapping("searchMa/{maThamSo}")
+    public ResponseEntity<ThamSoDTO> getThamSoByMa(@PathVariable String maThamSo) {
+        ThamSoDTO thamSoDTO = thamSoService.findByMaThamSo(maThamSo);
+        return new ResponseEntity<>(thamSoDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/fake")
+    public ResponseEntity<ThamSoDTO> saveFake(@RequestBody ThamSoDTO thamSoDTO) {
+        ThamSoDTO savedThamSo = thamSoService.saveFake(thamSoDTO);
+        return new ResponseEntity<>(savedThamSo, HttpStatus.CREATED);
+    }
+
 }

@@ -17,6 +17,7 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -41,7 +42,7 @@ public class ChiTietHinhThucThanhToan {
     private HinhThucThanhToan hinhThucThanhToan;
 
     @Column(name = "so_tien")
-    private Double soTien;
+    private BigDecimal soTien;
 
     @Column(name = "trang_thai", length = 50)
     private String trangThai;

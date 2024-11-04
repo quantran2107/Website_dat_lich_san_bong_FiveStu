@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class AuthControllerLog {
 
-
     @Autowired
     private JwtUtils jwtUtils;
 
@@ -33,6 +32,6 @@ public class AuthControllerLog {
     public String clientLogout(HttpServletRequest request) {
         String token = CookieUtils.getCookie(request, "authToken");
         jwtUtils.deleteToken(jwtUtils.getUserNameFromJwtToken(token));
-        return "redirect:/login";
+        return "redirect:/khach-hang/trang-chu";
     }
 }

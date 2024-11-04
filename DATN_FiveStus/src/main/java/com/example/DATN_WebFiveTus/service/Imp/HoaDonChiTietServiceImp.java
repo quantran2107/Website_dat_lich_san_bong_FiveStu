@@ -266,4 +266,9 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         return count > 0;  // Nếu count > 0 tức là sân ca đã được đặt
     }
 
+    @Override
+    public HoaDonChiTietDTO findByIdKhachHang(Integer id) {
+        return modelMapper.map(hoaDonChiTietRepository.findHoaDonChiTietByIdKhachHang(id), HoaDonChiTietDTO.class);
+    }
+
 }
