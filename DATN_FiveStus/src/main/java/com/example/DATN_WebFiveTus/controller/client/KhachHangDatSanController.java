@@ -1,4 +1,4 @@
-package com.example.DATN_WebFiveTus.controller;
+package com.example.DATN_WebFiveTus.controller.client;
 
 import com.example.DATN_WebFiveTus.config.security.CheckRole;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +15,7 @@ public class KhachHangDatSanController {
     @GetMapping("/khach-hang/dat-san")
     public String hienThi(HttpServletRequest request) {
 //        return checkRole.checkUser(request) || checkRole.checkUser(request) || checkRole.checkUser(request) ? "/client/khach-hang-dat-san" : "redirect:/login";
-        return "/client/khach-hang-dat-san";
+        return "/client/khach-hang-dat-lich";
     }
 
 }
