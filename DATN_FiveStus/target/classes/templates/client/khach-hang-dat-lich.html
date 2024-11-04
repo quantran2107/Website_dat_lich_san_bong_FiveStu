@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<div th:include="~{fragment/client/headClient :: headClient}"></div>
+
+<body>
+
+<div th:include="~{fragment/client/contentHeaderClient :: contentHeaderClient}"></div>
+
+<div th:include="~{fragment/client/headerClient :: headerClient}"></div>
+
+<section class="discount-coupon py-5 mb-5" style="position: relative;">
+    <div class="container" style="position: relative; z-index: 2;">
+        <div class="row align-items-center">
+            <div class="col-lg-12 text-center text-lg-left mb-4 mb-lg-0">
+                <h1 class="text-dark font-weight-bold mb-3" style="text-transform: uppercase">Đặt sân cùng FiveStu</h1>
+                <p>
+                    <a th:href="@{/khach-hang/dat-san}" class="btn btn-success btn-lg py-3 px-5 mr-3 mb-2">Hướng dẫn đặt
+                        lịch</a>
+                    <a th:href="@{/khach-hang-noi-quy2}" class="btn btn-warning btn-lg py-3 px-5 ms-3 mb-2">Nội quy</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <img th:src="@{/img/img5.jpg}" alt="Sân bóng FiveStu" class="img-fluid rounded shadow"
+         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;z-index: 1;">
+</section>
+
+<section class="card shadow mb-5 mx-4">
+    <div class="card-header d-flex justify-content-end align-items-center">
+        <div class="container my-3 d-flex justify-content-end">
+            <div class="dropdown ms-3">
+                <select class="form-select" id="dropdownLoaiSan" style="width: 300px;" onchange="handleLoaiSanChange()">
+                    <option value="1" hidden selected>Chọn loại sân</option>
+                    <!-- Options will be dynamically added here -->
+                </select>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center my-3">
+            <div class="d-inline-flex">
+                <button id="prev" class="btn btn-outline-secondary me-2"><</button>
+                <button id="next" class="btn btn-outline-secondary me-2">></button>
+                <button id="today" class="btn btn-outline-secondary me-2">Hôm nay</button>
+            </div>
+            <h4 id="currentRange" class="text-center mb-0">Hiển thị khoảng ngày</h4>
+            <div class="d-inline-flex">
+                <!--                <button id="month" class="btn btn-success ms-2">Tháng</button>-->
+                <button id="week" class="btn btn-success ms-2">Tuần</button>
+                <button id="day" class="btn btn-success ms-2">Ngày</button>
+            </div>
+        </div>
+        <table class="table table-bordered table-hover my-4" style="text-align: center;">
+            <thead>
+            <tr>
+                <th>Giờ</th>
+                <th>Sân</th>
+                <th id="monday">Thứ Hai</th>
+                <th id="tuesday">Thứ Ba</th>
+                <th id="wednesday">Thứ Tư</th>
+                <th id="thursday">Thứ Năm</th>
+                <th id="friday">Thứ Sáu</th>
+                <th id="saturday">Thứ Bảy</th>
+                <th id="sunday">Chủ Nhật</th>
+            </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+<div th:include="~{fragment/client/footerClient :: footerClient}"></div>
+<script th:src="@{/client/js/jquery-1.11.0.min.js}"></script>
+<script th:src="@{/client/js/plugins.js}"></script>
+<script th:src="@{/client/js/script.js}"></script>
+<script>
+
+    let currentWeekStart = new Date();
+    currentWeekStart.setDate(currentWeekStart.getDate() - currentWeekStart.getDay() + 1); // Bắt đầu từ Thứ Hai
+
+    function formatDate(date) {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        return `${day}/${month}`;
+    }
+
+    function updateWeekDays() {
+        const daysInVietnamese = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
+        const dayIds = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+        let currentDay = new Date(currentWeekStart);
+
+        dayIds.forEach((dayId, index) => {
+            document.getElementById(dayId).textContent = `${daysInVietnamese[index]} (${formatDate(currentDay)})`;
+            currentDay.setDate(currentDay.getDate() + 1);
+        });
+
+        const rangeEnd = new Date(currentWeekStart);
+        rangeEnd.setDate(rangeEnd.getDate() + 6); // Ngày Chủ Nhật
+        document.getElementById("currentRange").textContent =
+            `Từ ${formatDate(currentWeekStart)} đến ${formatDate(rangeEnd)}`;
+    }
+
+    document.getElementById("prev").addEventListener("click", () => {
+        currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+        updateWeekDays();
+    });
+
+    document.getElementById("next").addEventListener("click", () => {
+        currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+        updateWeekDays();
+    });
+
+    document.getElementById("today").addEventListener("click", () => {
+        const today = new Date();
+        currentWeekStart = new Date(today);
+        currentWeekStart.setDate(today.getDate() - today.getDay() + 1);
+        updateWeekDays();
+    });
+
+    // Khởi tạo hiển thị tuần hiện tại khi trang tải
+    updateWeekDays();
+
+    function loadLoaiSanOptions() {
+        fetch('http://localhost:8080/loai-san/hien-thi')
+            .then(response => response.json())
+            .then(data => {
+                const uniqueLoaiSan = [...new Map(data.map(item => [item.tenLoaiSan, item])).values()];
+                const dropdownLoaiSan = document.getElementById('dropdownLoaiSan');
+
+                uniqueLoaiSan.forEach(loaiSan => {
+                    const option = document.createElement('option');
+                    option.value = loaiSan.id;
+                    option.textContent = loaiSan.tenLoaiSan;
+                    dropdownLoaiSan.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Lỗi khi gọi API:', error));
+    }
+
+    function handleLoaiSanChange() {
+        const dropdown = document.getElementById('dropdownLoaiSan');
+        const selectedLoaiSanId = dropdown.value;
+        if (selectedLoaiSanId) {
+            loadTableData(selectedLoaiSanId);
+        }
+    }
+
+    function loadTableData(idLoaiSan) {
+        fetch('http://localhost:8080/ca/hien-thi')
+            .then(response => response.json())
+            .then(caData => {
+                const caTimes = caData.map(ca => {
+                    const startTime = new Date(ca.thoiGianBatDau).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    const endTime = new Date(ca.thoiGianKetThuc).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    return { time: `${startTime} - ${endTime}`, id: ca.id };
+                });
+
+                fetch(`http://localhost:8080/san-bong/findByIdLoaiSan/${idLoaiSan}`)
+                    .then(response => response.json())
+                    .then(sanData => {
+                        const tableBody = document.getElementById('tableBody');
+                        tableBody.innerHTML = '';
+
+                        caTimes.forEach((ca, caIndex) => {
+                            sanData.forEach((san, sanIndex) => {
+                                const row = document.createElement('tr');
+
+                                // Merge cells only for the "Giờ" column in the first row of each ca
+                                if (sanIndex === 0) {
+                                    const cellCa = document.createElement('td');
+                                    cellCa.textContent = ca.time;
+                                    cellCa.rowSpan = sanData.length;
+                                    cellCa.style.verticalAlign = 'middle';
+                                    row.appendChild(cellCa);
+                                }
+
+                                // Display field name
+                                const cellSan = document.createElement('td');
+                                cellSan.textContent = san.tenSanBong;
+                                row.appendChild(cellSan);
+
+                                // Add cells for each day of the week
+                                for (let i = 0; i < 7; i++) {
+                                    const cell = document.createElement('td');
+                                    cell.textContent = ''; // Initialize empty cell
+                                    row.appendChild(cell);
+                                }
+
+                                tableBody.appendChild(row);
+                            });
+                        });
+
+                        // Add data to cells below each day of the week
+                        caTimes.forEach((ca, caIndex) => {
+                            sanData.forEach((san, sanIndex) => {
+                                for (let i = 0; i < 7; i++) {
+                                    // Get field id and ca id
+                                    const idSanBong = san.id;
+                                    const idCa = ca.id;
+
+                                    // Get corresponding weekday name
+                                    const ngayTrongTuan = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"][i];
+
+                                    // Fetch data for the field and ca
+                                    fetchSanCa(idSanBong, ngayTrongTuan, idCa)
+                                        .then(giaData => {
+                                            if (giaData) {
+                                                const rowIndex = (caIndex * sanData.length) + sanIndex;
+                                                const cells = tableBody.getElementsByTagName('tr');
+
+                                                // Check if the row index exists
+                                                if (rowIndex < cells.length) {
+                                                    const row = cells[rowIndex];
+
+                                                    // Ensure the cell index is within bounds
+                                                    const targetCellIndex = i + 2;
+                                                    console.log(`Targeting row: ${rowIndex}, cell: ${targetCellIndex} with value: ${giaData.gia}`);
+                                                    if (targetCellIndex < row.cells.length) {
+                                                        row.cells[targetCellIndex].textContent = giaData.gia;
+                                                    } else {
+                                                        console.error(`Cell index out of bounds: ${targetCellIndex}`);
+                                                    }
+                                                } else {
+                                                    console.error(`Row index out of bounds: ${rowIndex}`);
+                                                }
+                                            } else {
+                                                console.error("Invalid data:", giaData);
+                                            }
+                                        })
+                                        .catch(error => console.error('Error fetching price data:', error));
+                                }
+                            });
+                        });
+                    })
+                    .catch(error => console.error('Error fetching field data:', error));
+            })
+            .catch(error => console.error('Error fetching ca data:', error));
+    }
+
+    // Hàm lấy sân ca từ API
+    async function fetchSanCa(idSanBong, ngayTrongTuan, idCa) {
+        // Chuyển đổi tên ngày thành id (cần có hàm để tìm id tương ứng với tên ngày)
+        const idNgayTrongTuan = await getIdByNgayTrongTuan(ngayTrongTuan);
+        const response = await fetch(`http://localhost:8080/san-ca/danh-sach-san-ca/${idSanBong}/${idNgayTrongTuan}/${idCa}`);
+        if (!response.ok) {
+            console.error(`Không thể lấy sanCa cho idSanBong: ${idSanBong}, idNgayTrongTuan: ${idNgayTrongTuan}, idCa: ${idCa}`);
+            return null;
+        }
+        return await response.json();
+    }
+
+    // Hàm lấy id ngày trong tuần từ tên ngày
+    async function getIdByNgayTrongTuan(tenNgay) {
+        const response = await fetch(`http://localhost:8080/ngay-trong-tuan/tim-kiem-ngay-trong-tuan?thuTrongTuan=${tenNgay}`);
+        if (!response.ok) {
+            console.error(`Không thể lấy id ngày cho: ${tenNgay}`);
+            return null;
+        }
+        const data = await response.json();
+        return data.id; // Giả định rằng id trả về là thuộc tính id
+    }
+
+
+    // Gọi hàm loadLoaiSanOptions ngay khi trang tải
+    loadLoaiSanOptions();
+
+    // // Hàm lấy danh sách hóa đơn chi tiết từ API
+    // function fetchHoaDonChiTiet() {
+    //     fetch('http://localhost:8080/hoa-don-chi-tiet/hien-thi')
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             hoaDonChiTietList = data;
+    //         })
+    //         .catch(error => showError('Error fetching hoa don chi tiet data:', error));
+    // }
+    // // Chuyển đổi chuỗi ngày tháng sang đối tượng Date
+    // function convertToDate(dateString) {
+    //     const [year, month, day] = dateString.split('-').map(Number);
+    //     return new Date(year, month - 1, day);
+    // }
+    // // Hàm định dạng ngày
+    // function formatDate(date) {
+    //     const year = date.getFullYear();
+    //     const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0 nên phải +1
+    //     const day = String(date.getDate()).padStart(2, '0'); // Lấy ngày theo múi giờ hiện tại
+    //     return `${year}-${month}-${day}`;
+    // }
+    //
+    // fetch(`http://localhost:8080/san-ca/danh-sach-doi-lich/${idLoaiSan}/${idNgayTrongTuan}/${idCa}`)
+    //     .then(response => response.json())
+    //     .then(sanCaList => {
+    //         renderDoiSanList(sanCaList, document.getElementById('doiLichContainer'), ngayDenSan);
+    //         // displayDoiSan(sanCaList); // Hàm để hiển thị danh sách sân ca
+    //     })
+    //     .catch(error => {
+    //         console.error('Lỗi khi lấy danh sách sân ca:', error);
+    //     });
+    //
+
+</script>
+
+</body>
+
+</html>

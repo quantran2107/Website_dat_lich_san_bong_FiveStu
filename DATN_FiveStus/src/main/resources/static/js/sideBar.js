@@ -13,7 +13,6 @@ $(document).ready(function () {
                     if (!response.includes('ROLE_EMPLOYEE')) {
                         checkSideBar();
                     }
-
                     logout(response);
 
                 },
@@ -122,8 +121,8 @@ $(document).ready(function () {
                 </li>
             </ul>
             `;
+            $(".w-100.d-flex").after(newUl);
 
-            $(".navbar-nav").eq(4).after(newUl);
 
         }
     }
