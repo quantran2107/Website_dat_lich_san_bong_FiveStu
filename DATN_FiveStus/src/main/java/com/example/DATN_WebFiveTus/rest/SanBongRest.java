@@ -84,4 +84,10 @@ public class SanBongRest {
         SanBongDTO sanBongDTO = sanBongService.getSanBongByName(tenSanBong);
         return ResponseEntity.ok(sanBongDTO);
     }
+
+    @GetMapping("existss")
+    public ResponseEntity<Boolean> existsByTenLoaiSan(@RequestParam Integer idLoaiSan,@RequestParam String tenSanBong) {
+        Boolean exists = sanBongService.existsByTenSanBongs(idLoaiSan,tenSanBong);
+        return ResponseEntity.ok(exists);
+    }
 }

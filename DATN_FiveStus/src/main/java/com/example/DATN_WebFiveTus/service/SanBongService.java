@@ -33,4 +33,6 @@ public interface SanBongService {
     public List<SanBongDTO> searchKeyWords(Integer pageNum, String keyWords, String sortDirection, int[] totalPageElement, Integer id);
 
     SanBongDTO getSanBongByName(String tenSanBong);
+
+    Boolean existsByTenSanBongs(Integer idLoaiSan,String tenSanBong);
 }

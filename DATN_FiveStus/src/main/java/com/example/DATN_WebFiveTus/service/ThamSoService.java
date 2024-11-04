@@ -10,6 +10,8 @@ public interface ThamSoService {
 
      List<ThamSoDTO> getAll();
 
+      List<ThamSoDTO> getAll2();
+
      ThamSoDTO getOne(Integer id);
 
      ThamSoDTO save(ThamSoDTO thamSoDTO);

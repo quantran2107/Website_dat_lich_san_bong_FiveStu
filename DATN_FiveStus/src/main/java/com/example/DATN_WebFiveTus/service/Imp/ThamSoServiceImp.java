@@ -1,6 +1,7 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.ThamSoDTO;
+import com.example.DATN_WebFiveTus.entity.SanBong;
 import com.example.DATN_WebFiveTus.entity.ThamSo;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.ThamSoRepository;
@@ -36,6 +37,11 @@ public class ThamSoServiceImp implements ThamSoService {
     }
 
     @Override
+    public List<ThamSoDTO> getAll2() {
+        return thamSoRepository.getAll2().stream().map((thamSo) ->modelMapper.map(thamSo,ThamSoDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
     public ThamSoDTO getOne(Integer id) {
         return modelMapper.map(thamSoRepository.findById(id).orElseThrow(()-> new ResourceNotfound("Không tồn tại ID tham số: "+id)),ThamSoDTO.class);
     }
@@ -67,17 +73,14 @@ public class ThamSoServiceImp implements ThamSoService {
 
     @Override
     public void delete(Integer id) {
-
+        ThamSo thamSo=thamSoRepository.findById(id).orElseThrow(() -> new ResourceNotfound("Không tồn tại id update tham số: "+id));
+        thamSoRepository.deletedAt(id);
     }
 
     @Override
     public ThamSoDTO findByMaThamSo(String maThamSo) {
-        ThamSo thamSo = thamSoRepository.findByMaThamSo(maThamSo).get();
-
-        return modelMapper.map(thamSo, ThamSoDTO.class);
+        return modelMapper.map(thamSoRepository.findByTenThamSo(maThamSo),ThamSoDTO.class);
     }
-
-
 
     @Override
     public Page<ThamSoDTO> searchThamSo(String keyword, Pageable pageable) {
@@ -124,7 +127,7 @@ public class ThamSoServiceImp implements ThamSoService {
 
     @Override
     public ThamSoDTO saveFake(ThamSoDTO thamSoDTO) {
-        String giaTriFake = thamSoRepository.findByTenThamSo("TS003").getGiaTri();
+        String giaTriFake = thamSoRepository.findByMaThamSo("TS003").getGiaTri();
         ThamSo thamSo=modelMapper.map(thamSoDTO,ThamSo.class);
         thamSo.setTrangThai(true);
         thamSo.setDeletedAt(false);
