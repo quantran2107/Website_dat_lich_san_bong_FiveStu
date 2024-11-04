@@ -31,7 +31,7 @@ public class GiaoCa {
 
     @ManyToOne
     @JoinColumn(name = "id_nhan_vien")
-    private NhanVien nhanVienNhan;
+    private NhanVien nhanVien;
 
     @Column(name = "tien_mat_ca_truoc", precision = 38, scale = 2)
     private BigDecimal tienMatCaTruoc;

@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <!-- SweetAlert2 JS -->
+
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
@@ -37,7 +44,6 @@
         .right-content {
             border-left: 1px solid #ddd;
         }
-
 
 
         .logo img {
@@ -204,6 +210,7 @@
             text-decoration: none;
             margin: 0 5px;
         }
+
         .separator {
             display: flex;
             align-items: center;
@@ -238,7 +245,8 @@
     <div class="left-content">
         <div class="w-100 d-flex">
             <a class="navbar-brand mx-auto mt-2 flex-fill text-center">
-                <img alt="Logo" class="navbar-brand-img brand-sm" style="width: 170px;margin-left: 123px;" th:src="@{/img/logo.png}">
+                <img alt="Logo" class="navbar-brand-img brand-sm" style="width: 170px;margin-left: 123px;"
+                     th:src="@{/img/logo.png}">
             </a>
         </div>
         <div class="features">
@@ -279,7 +287,7 @@
         <div class="separator">
             <span>or</span>
         </div>
-        <form id="loginForm" >
+        <form id="loginForm">
             <div class="input-group">
                 <label for="username">Email</label>
                 <input type="text" id="username" name="email" required>
@@ -295,16 +303,41 @@
                 </label>
                 <a href="/forgot-password" class="forgot-password">Forgot password?</a>
             </div>
-            <button type="submit"  class="btn btn-success">Đăng nhập</button>
+            <button type="submit" class="btn btn-success">Đăng nhập</button>
         </form>
         <div class="register-link">
             Chưa có tài khoản? <a href="/register">Đăng ký ở đây</a>
         </div>
-
     </div>
 </div>
+<div class="modal fade" id="modaltoggleNC" tabindex="-1" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+        <div class="modal-content p-4">
+            <div class="modal-header mx-auto border-0">
+                <h4 class="modal-title fs-3 fw-normal">Mở ca làm việc</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div id="input1" class="mb-3">
+                        <label for="tienQuyDauCa" class="form-label">Tiền quỹ đầu ca</label>
+                        <input type="number" class="form-control" id="tienQuyDauCa" aria-describedby="emailHelp">
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="checkBox">
+                        <label class="form-check-label" for="checkBox">Lấy dữ liệu từ ca trước</label>
+                    </div>
+                    <button id="btnNhanCa" type="button" class="btn btn-outline-success" style="float: right">Xác nhận</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/login.js"></script>
 </html>

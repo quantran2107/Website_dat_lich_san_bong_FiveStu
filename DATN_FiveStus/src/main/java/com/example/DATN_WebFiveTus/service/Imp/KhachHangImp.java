@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import org.modelmapper.ModelMapper;
 
 import java.security.SecureRandom;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.example.DATN_WebFiveTus.dto.DiaChiKhachHangDTO;
@@ -208,6 +210,27 @@ public class KhachHangImp implements KhachHangService {
         return modelMapper.map(khachHangSave, KhachHangDTO.class);
     }
 
+    @Override
+    public KhachHangDTO updateKhachHangByEmail(String email, KhachHangDTO khachHangDTO) {
+        Optional<KhachHang> existingKhachHangOpt = khachHangRepository.findByEmail(email);
+        if (!existingKhachHangOpt.isPresent()) {
+            throw new EntityNotFoundException("Khách hàng không tìm thấy với email: " + email);
+        }
+
+        KhachHang existingKhachHang = existingKhachHangOpt.get();
+
+        // Cập nhật các trường thông tin
+        existingKhachHang.setHoVaTen(khachHangDTO.getHoVaTen());
+        existingKhachHang.setGioiTinh(khachHangDTO.isGioiTinh());
+        existingKhachHang.setSoDienThoai(khachHangDTO.getSoDienThoai());
+
+        // Lưu KhachHang đã cập nhật
+        KhachHang updatedKhachHang = khachHangRepository.save(existingKhachHang);
+
+        // Chuyển đổi sang DTO và trả về
+        return convertToDTO(updatedKhachHang);
+    }
+
     private String generateMaKhachHang() {
         String PREFIX = "KH";
         String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -219,6 +242,21 @@ public class KhachHangImp implements KhachHangService {
             sb.append(CHARACTERS.charAt(index));
         }
         return sb.toString();
+    }
+
+    private KhachHangDTO convertToDTO(KhachHang khachHang) {
+        KhachHangDTO dto = new KhachHangDTO();
+        dto.setId(khachHang.getId());
+        dto.setMaKhachHang(khachHang.getMaKhachHang());
+        dto.setMatKhau(khachHang.getMatKhau());
+        dto.setHoVaTen(khachHang.getHoVaTen());
+        dto.setEmail(khachHang.getEmail());
+        dto.setGioiTinh(khachHang.isGioiTinh());
+        dto.setSoDienThoai(khachHang.getSoDienThoai());
+        dto.setTrangThai(khachHang.getTrangThai());
+        dto.setCreatedAt(khachHang.getCreatedAt());
+        // Giả sử bạn có phương thức để chuyển đổi danh sách địa chỉ (diaChi)
+        return dto;
     }
 
 }
