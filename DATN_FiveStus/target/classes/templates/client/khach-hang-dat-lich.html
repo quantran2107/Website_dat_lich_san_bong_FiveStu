@@ -2,7 +2,15 @@
 <html lang="en">
 
 <div th:include="~{fragment/client/headClient :: headClient}"></div>
+<style>
+    .clickable-cell {
+        cursor: pointer; /* Thay đổi con trỏ khi di chuột qua ô */
+    }
 
+    .clickable-cell.selected {
+        background-color: lightblue; /* Màu nền khi ô được chọn */
+    }
+</style>
 <body>
 
 <div th:include="~{fragment/client/contentHeaderClient :: contentHeaderClient}"></div>
@@ -13,7 +21,7 @@
     <div class="container" style="position: relative; z-index: 2;">
         <div class="row align-items-center">
             <div class="col-lg-12 text-center text-lg-left mb-4 mb-lg-0">
-                <h1 class="text-light font-weight-bold mb-3" style="text-transform: uppercase">Đặt sân cùng FiveStu</h1>
+                <h1 class="text-dark font-weight-bold mb-3" style="text-transform: uppercase">Đặt sân cùng FiveStu</h1>
                 <p>
                     <a th:href="@{/khach-hang/dat-san}" class="btn btn-success btn-lg py-3 px-5 mr-3 mb-2">Hướng dẫn đặt
                         lịch</a>
@@ -22,7 +30,8 @@
             </div>
         </div>
     </div>
-    <img th:src="@{/client/images/img5.jpeg}" alt="Sân bóng FiveStu" class="img-fluid rounded shadow"
+
+    <img th:src="@{/img/img5.jpg}" alt="Sân bóng FiveStu" class="img-fluid rounded shadow"
          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;z-index: 1;">
 </section>
 
@@ -30,8 +39,9 @@
     <div class="card-header d-flex justify-content-end align-items-center">
         <div class="container my-3 d-flex justify-content-end">
             <div class="dropdown ms-3">
-                <select class="form-select" id="dropdownLoaiSan" style="width: 300px;">
-                    <option selected>Chọn loại sân</option>
+
+                <select class="form-select" id="dropdownLoaiSan" style="width: 300px;" onchange="handleLoaiSanChange()">
+                    <option value="1" hidden selected>Chọn loại sân</option>
                     <!-- Options will be dynamically added here -->
                 </select>
             </div>
@@ -47,28 +57,37 @@
             </div>
             <h4 id="currentRange" class="text-center mb-0">Hiển thị khoảng ngày</h4>
             <div class="d-inline-flex">
-                <button id="month" class="btn btn-success ms-2">Tháng</button>
+
+                <!--                <button id="month" class="btn btn-success ms-2">Tháng</button>-->
+
                 <button id="week" class="btn btn-success ms-2">Tuần</button>
                 <button id="day" class="btn btn-success ms-2">Ngày</button>
             </div>
         </div>
-        <table class="table table-bordered table-hover my-4">
+
+        <table class="table table-bordered table-hover my-4" style="text-align: center;">
+
             <thead>
             <tr>
                 <th>Giờ</th>
                 <th>Sân</th>
-                <th>Thứ Hai 28/10</th>
-                <th>Thứ Ba 29/10</th>
-                <th>Thứ Tư 30/10</th>
-                <th>Thứ Năm 31/10</th>
-                <th>Thứ Sáu 01/11</th>
-                <th>Thứ Bảy 02/11</th>
-                <th>Chủ Nhật 03/11</th>
+                <th id="monday">Thứ Hai</th>
+                <th id="tuesday">Thứ Ba</th>
+                <th id="wednesday">Thứ Tư</th>
+                <th id="thursday">Thứ Năm</th>
+                <th id="friday">Thứ Sáu</th>
+                <th id="saturday">Thứ Bảy</th>
+                <th id="sunday">Chủ Nhật</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="tableBody">
+
             </tbody>
         </table>
+        <div class="d-flex justify-content-end align-items-center">
+            <div id="bookingInfo" class="my-3 me-3"></div>
+            <button id="btnDatLich" class="btn btn-primary">Đặt lịch</button>
+        </div>
     </div>
 
 </section>
@@ -78,7 +97,53 @@
 <script th:src="@{/client/js/plugins.js}"></script>
 <script th:src="@{/client/js/script.js}"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+
+    let currentWeekStart = new Date();
+    currentWeekStart.setDate(currentWeekStart.getDate() - currentWeekStart.getDay() + 1); // Bắt đầu từ Thứ Hai
+
+    function formatDate(date) {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        return `${day}/${month}`;
+    }
+
+    function updateWeekDays() {
+        const daysInVietnamese = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
+        const dayIds = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+        let currentDay = new Date(currentWeekStart);
+
+        dayIds.forEach((dayId, index) => {
+            document.getElementById(dayId).textContent = `${daysInVietnamese[index]} (${formatDate(currentDay)})`;
+            currentDay.setDate(currentDay.getDate() + 1);
+        });
+
+        const rangeEnd = new Date(currentWeekStart);
+        rangeEnd.setDate(rangeEnd.getDate() + 6); // Ngày Chủ Nhật
+        document.getElementById("currentRange").textContent =
+            `Từ ${formatDate(currentWeekStart)} đến ${formatDate(rangeEnd)}`;
+    }
+
+    document.getElementById("prev").addEventListener("click", () => {
+        currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+        updateWeekDays();
+    });
+
+    document.getElementById("next").addEventListener("click", () => {
+        currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+        updateWeekDays();
+    });
+
+    document.getElementById("today").addEventListener("click", () => {
+        const today = new Date();
+        currentWeekStart = new Date(today);
+        currentWeekStart.setDate(today.getDate() - today.getDay() + 1);
+        updateWeekDays();
+    });
+
+    // Khởi tạo hiển thị tuần hiện tại khi trang tải
+    updateWeekDays();
+
+    function loadLoaiSanOptions() {
         fetch('http://localhost:8080/loai-san/hien-thi')
             .then(response => response.json())
             .then(data => {
@@ -94,13 +159,214 @@
             })
             .catch(error => console.error('Lỗi khi gọi API:', error));
 
-        document.getElementById('dropdownLoaiSan').addEventListener('change', function() {
-            const selectedOption = this.options[this.selectedIndex];
-            console.log("ID của loại sân đã chọn:", selectedOption.value); // Log the selected ID
-            this.selectedIndex = 0; // Reset to default
-            this.options[0].textContent = selectedOption.textContent; // Update combobox text
+    }
+
+    function handleLoaiSanChange() {
+        const dropdown = document.getElementById('dropdownLoaiSan');
+        const selectedLoaiSanId = dropdown.value;
+        if (selectedLoaiSanId) {
+            loadTableData(selectedLoaiSanId);
+        }
+    }
+
+    // Hàm lấy sân ca từ API
+    async function fetchSanCa(idSanBong, ngayTrongTuan, idCa) {
+        // Chuyển đổi tên ngày thành id (cần có hàm để tìm id tương ứng với tên ngày)
+        const idNgayTrongTuan = await getIdByNgayTrongTuan(ngayTrongTuan);
+        const response = await fetch(`http://localhost:8080/san-ca/danh-sach-san-ca/${idSanBong}/${idNgayTrongTuan}/${idCa}`);
+        if (!response.ok) {
+            console.error(`Không thể lấy sanCa cho idSanBong: ${idSanBong}, idNgayTrongTuan: ${idNgayTrongTuan}, idCa: ${idCa}`);
+            return null;
+        }
+        return await response.json();
+    }
+
+    // Hàm lấy id ngày trong tuần từ tên ngày
+    async function getIdByNgayTrongTuan(tenNgay) {
+        const response = await fetch(`http://localhost:8080/ngay-trong-tuan/tim-kiem-ngay-trong-tuan?thuTrongTuan=${tenNgay}`);
+        if (!response.ok) {
+            console.error(`Không thể lấy id ngày cho: ${tenNgay}`);
+            return null;
+        }
+        const data = await response.json();
+        return data.id; // Giả định rằng id trả về là thuộc tính id
+    }
+
+    // Gọi hàm loadLoaiSanOptions ngay khi trang tải
+    loadLoaiSanOptions();
+
+    function loadTableData(idLoaiSan) {
+        fetch('http://localhost:8080/ca/hien-thi')
+            .then(response => response.json())
+            .then(caData => {
+                const caTimes = caData.map(ca => {
+                    const startTime = new Date(ca.thoiGianBatDau).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    const endTime = new Date(ca.thoiGianKetThuc).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    return {time: `${startTime} - ${endTime}`, id: ca.id};
+                });
+
+                fetch(`http://localhost:8080/san-bong/findByIdLoaiSan/${idLoaiSan}`)
+                    .then(response => response.json())
+                    .then(sanData => {
+                        const tableBody = document.getElementById('tableBody');
+                        tableBody.innerHTML = '';
+
+                        caTimes.forEach((ca, caIndex) => {
+                            sanData.forEach((san, sanIndex) => {
+                                const row = document.createElement('tr');
+
+                                // Thêm ô "Giờ" chỉ ở hàng đầu tiên của mỗi ca
+                                if (sanIndex === 0) {
+                                    const cellCa = document.createElement('td');
+                                    cellCa.textContent = ca.time;
+                                    cellCa.style.verticalAlign = 'middle';
+                                    row.appendChild(cellCa);
+                                } else {
+                                    const emptyCell = document.createElement('td');
+                                    row.appendChild(emptyCell);
+                                }
+
+                                // Ô cho tên sân bóng
+                                const cellSan = document.createElement('td');
+                                cellSan.textContent = san.tenSanBong;
+                                row.appendChild(cellSan);
+
+                                // Tạo ô cho các ngày trong tuần
+                                for (let i = 0; i < 7; i++) {
+                                    const cell = document.createElement('td');
+                                    cell.textContent = ''; // Giá sẽ được thêm sau
+
+                                    const idSanBong = san.id;
+                                    const idCa = ca.id;
+                                    const ngayTrongTuan = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"][i];
+
+                                    // Lấy dữ liệu giá
+                                    fetchSanCa(idSanBong, ngayTrongTuan, idCa)
+                                        .then(giaData => {
+                                            if (giaData) {
+                                                cell.textContent = giaData.gia; // Hiển thị giá
+                                                cell.dataset.price = giaData.gia; // Lưu giá vào dataset để tính tổng
+                                                cell.classList.add('clickable-cell'); // Thêm lớp để có thể nhấp vào
+
+                                                // Thêm sự kiện click
+                                                cell.addEventListener('click', () => {
+                                                    cell.classList.toggle('selected'); // Thay đổi màu ô khi chọn
+                                                    updateBookingInfo(); // Cập nhật thông tin đặt chỗ
+                                                });
+                                            }
+                                        })
+                                        .catch(error => console.error('Error fetching price data:', error));
+
+                                    row.appendChild(cell);
+                                }
+
+                                tableBody.appendChild(row);
+                            });
+                        });
+                    })
+                    .catch(error => console.error('Error fetching field data:', error));
+            })
+            .catch(error => console.error('Error fetching ca data:', error));
+    }
+
+    // Hàm cập nhật thông tin đặt chỗ
+    function updateBookingInfo() {
+        const selectedCells = document.querySelectorAll('.clickable-cell.selected');
+        let totalCost = 0;
+        let totalCount = selectedCells.length;
+
+        selectedCells.forEach(cell => {
+            totalCost += parseFloat(cell.dataset.price); // Cộng dồn giá
         });
+
+        // Cập nhật thông tin hiển thị
+        const bookingInfo = document.getElementById('bookingInfo');
+        bookingInfo.innerHTML = `Tổng số ca: ${totalCount} <br> Tổng giá: ${totalCost.toLocaleString()} VND`;
+    }
+
+
+    // Sự kiện cho nút "Đặt lịch"
+    document.getElementById('btnDatLich').addEventListener('click', () => {
+        const selectedCells = document.querySelectorAll('.clickable-cell.selected');
+
+        // Kiểm tra xem có ô nào được chọn không
+        if (selectedCells.length === 0) {
+            alert("Vui lòng chọn ít nhất một ca để đặt lịch.");
+            return;
+        }
+
+        // Lấy thông tin đã chọn
+        const bookingDetails = [];
+        selectedCells.forEach(cell => {
+            const row = cell.closest('tr');
+            const sanName = row.cells[1].textContent; // Tên sân
+            const time = row.cells[0].textContent; // Thời gian
+            const price = parseFloat(cell.dataset.price); // Giá
+            bookingDetails.push({sanName, time, price});
+        });
+
+        // Gửi thông tin đặt lịch (có thể dùng fetch để gọi API)
+        console.log("Thông tin đặt lịch:", bookingDetails);
+
+        // Gọi API để lưu thông tin đặt lịch
+        // fetch('/api/dat-lich', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(bookingDetails)
+        // })
+        // .then(response => {
+        //     if (response.ok) {
+        //         alert("Đặt lịch thành công!");
+        //         // Có thể làm mới bảng hoặc thực hiện hành động khác
+        //     } else {
+        //         alert("Đặt lịch không thành công.");
+        //     }
+        // })
+        // .catch(error => console.error('Error placing booking:', error));
     });
+
+
+    // // Hàm lấy danh sách hóa đơn chi tiết từ API
+    // function fetchHoaDonChiTiet() {
+    //     fetch('http://localhost:8080/hoa-don-chi-tiet/hien-thi')
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             hoaDonChiTietList = data;
+    //         })
+    //         .catch(error => showError('Error fetching hoa don chi tiet data:', error));
+    // }
+    // // Chuyển đổi chuỗi ngày tháng sang đối tượng Date
+    // function convertToDate(dateString) {
+    //     const [year, month, day] = dateString.split('-').map(Number);
+    //     return new Date(year, month - 1, day);
+    // }
+    // // Hàm định dạng ngày
+    // function formatDate(date) {
+    //     const year = date.getFullYear();
+    //     const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0 nên phải +1
+    //     const day = String(date.getDate()).padStart(2, '0'); // Lấy ngày theo múi giờ hiện tại
+    //     return `${year}-${month}-${day}`;
+    // }
+    //
+    // fetch(`http://localhost:8080/san-ca/danh-sach-doi-lich/${idLoaiSan}/${idNgayTrongTuan}/${idCa}`)
+    //     .then(response => response.json())
+    //     .then(sanCaList => {
+    //         renderDoiSanList(sanCaList, document.getElementById('doiLichContainer'), ngayDenSan);
+    //         // displayDoiSan(sanCaList); // Hàm để hiển thị danh sách sân ca
+    //     })
+    //     .catch(error => {
+    //         console.error('Lỗi khi lấy danh sách sân ca:', error);
+    //     });
+    //
+
 </script>
 
 </body>

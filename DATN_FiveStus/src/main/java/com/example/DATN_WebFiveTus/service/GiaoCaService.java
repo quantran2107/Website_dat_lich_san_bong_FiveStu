@@ -1,24 +1,20 @@
 package com.example.DATN_WebFiveTus.service;
 
 import com.example.DATN_WebFiveTus.dto.GiaoCaDTO;
-import com.example.DATN_WebFiveTus.dto.GiaoCaRequest;
-import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
 import com.example.DATN_WebFiveTus.dto.request.GiaoCaFormRequest;
+import com.example.DATN_WebFiveTus.dto.request.NhanCaRequest;
+import com.example.DATN_WebFiveTus.dto.response.BanGiaoCaResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
 
 public interface GiaoCaService {
 
-    GiaoCaDTO getRowforId(int id);
 
-    Boolean addRow(GiaoCaFormRequest request);
+    GiaoCaDTO lastData();
 
-    NhanVienDTO getIdNVG(HttpServletRequest request);
+    BanGiaoCaResponse banGiao(HttpServletRequest request);
 
-    Boolean changeGCN(GiaoCaRequest request);
+    ResponseEntity<?> changeGC(HttpServletRequest request, GiaoCaFormRequest giaoCaFormRequest);
 
-    Boolean getLastRow(HttpServletRequest request);
-
-    GiaoCaDTO checkNhanCa();
-
-    NhanVienDTO getNV(HttpServletRequest request);
+    Boolean addRow(HttpServletRequest request, NhanCaRequest requestBody);
 }

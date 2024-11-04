@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.service;
 
+import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
 import com.example.DATN_WebFiveTus.dto.NgayTrongTuanDTO;
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
 
@@ -16,4 +17,6 @@ public interface NgayTrongTuanService {
     NgayTrongTuanDTO update(Integer id,NgayTrongTuanDTO ngayTrongTuanDTO);
 
     void delete (Integer id);
+
+    NgayTrongTuanDTO findByNgayTrongTuan(String ngayTrongTuan);
 }

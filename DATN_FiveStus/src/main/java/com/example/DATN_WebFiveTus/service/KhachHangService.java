@@ -31,5 +31,6 @@ public interface KhachHangService {
 
     KhachHangDTO save2(KhachHangDTO khachHangDTO);
 
+    KhachHangDTO updateKhachHangByEmail(String email, KhachHangDTO khachHangDTO);
 }
 

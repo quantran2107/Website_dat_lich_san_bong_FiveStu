@@ -2,7 +2,9 @@ package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.DiaChiKhachHangDTO;
 import com.example.DATN_WebFiveTus.entity.DiaChiKhachHang;
+import com.example.DATN_WebFiveTus.entity.KhachHang;
 import com.example.DATN_WebFiveTus.repository.DiaChiKhachHangRepository;
+import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
 import com.example.DATN_WebFiveTus.service.DiaChiKhachHangService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class DiaChiKhachHangLmp implements DiaChiKhachHangService {
     private DiaChiKhachHangRepository diaChiKhachHangRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private KhachHangRepository khachHangRepository;
 
     @Override
     public List<DiaChiKhachHangDTO> getAll() {
@@ -82,6 +86,69 @@ public class DiaChiKhachHangLmp implements DiaChiKhachHangService {
     public Page<DiaChiKhachHangDTO> findByIdDC(Integer idKhachHang, Pageable pageable) {
         Page<DiaChiKhachHang> diaChiKhachHangPage = diaChiKhachHangRepository.findByIdKhachHang_Id(idKhachHang, pageable);
         return diaChiKhachHangPage.map(diaChiKhachHang -> modelMapper.map(diaChiKhachHang, DiaChiKhachHangDTO.class));
+    }
+
+    @Override
+    public List<DiaChiKhachHangDTO> getDiaChiByEmail(String email) {
+        KhachHang khachHang = khachHangRepository.findKhachHangByEmail1(email)
+                .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại với email: " + email));
+
+        List<DiaChiKhachHang> diaChiKhachHangList = diaChiKhachHangRepository.findActiveAddressesByCustomerId(khachHang.getEmail());
+
+        return diaChiKhachHangList.stream()
+                .map(diaChiKhachHang -> modelMapper.map(diaChiKhachHang, DiaChiKhachHangDTO.class))
+                .collect(Collectors.toList());
+    }
+
+
+    public boolean deleteDiaChiByEmail(String email, Integer id) {
+        DiaChiKhachHang diaChiKhachHang = diaChiKhachHangRepository.findDiaChiByEmailAndId(email, id)
+                .orElseThrow(() -> new RuntimeException("Địa chỉ không tồn tại với ID: " + id + " và email: " + email));
+
+        // Đánh dấu là đã xoá mềm
+        diaChiKhachHang.setDeletedAt(true);
+        diaChiKhachHangRepository.save(diaChiKhachHang);
+
+        return true;
+    }
+
+    @Override
+    public DiaChiKhachHangDTO updateDiaChiByEmail(String email, Integer id, DiaChiKhachHangDTO diaChiKhachHangDTO) {
+        // Tìm khách hàng theo email và địa chỉ theo id
+        DiaChiKhachHang diaChiKhachHang = diaChiKhachHangRepository.findDiaChiByEmailAndId(email, id)
+                .orElseThrow(() -> new RuntimeException("Địa chỉ không tồn tại với ID: " + id + " và email: " + email));
+
+        // Cập nhật thông tin địa chỉ cụ thể
+        diaChiKhachHang.setDiaChiCuThe(diaChiKhachHangDTO.getDiaChiCuThe());
+        diaChiKhachHang.setThanhPho(diaChiKhachHangDTO.getThanhPho());
+        diaChiKhachHang.setQuanHuyen(diaChiKhachHangDTO.getQuanHuyen());
+        diaChiKhachHang.setPhuongXa(diaChiKhachHangDTO.getPhuongXa());
+
+        // Lưu lại địa chỉ đã cập nhật
+        diaChiKhachHangRepository.save(diaChiKhachHang);
+
+        // Trả về DTO đã cập nhật
+        return modelMapper.map(diaChiKhachHang, DiaChiKhachHangDTO.class);
+    }
+
+    @Override
+    public Optional<DiaChiKhachHang> getDiaChiByEmailAndId(String email, Integer id) {
+        return diaChiKhachHangRepository.findDiaChiByEmailAndId(email, id);
+    }
+
+    @Override
+    public DiaChiKhachHangDTO addDiaChiByEmail(String email, DiaChiKhachHangDTO diaChiKhachHangDTO) {
+        KhachHang khachHang = khachHangRepository.findKhachHangByEmail1(email)
+                .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại với email: " + email));
+
+        // Chuyển đổi DTO thành thực thể
+        DiaChiKhachHang diaChiKhachHang = modelMapper.map(diaChiKhachHangDTO, DiaChiKhachHang.class);
+        diaChiKhachHang.setIdKhachHang(khachHang); // Gán khách hàng cho địa chỉ
+        diaChiKhachHang.setDeletedAt(Boolean.FALSE);
+        // Lưu địa chỉ mới
+        diaChiKhachHang = diaChiKhachHangRepository.save(diaChiKhachHang);
+
+        return modelMapper.map(diaChiKhachHang, DiaChiKhachHangDTO.class);
     }
 
 }
