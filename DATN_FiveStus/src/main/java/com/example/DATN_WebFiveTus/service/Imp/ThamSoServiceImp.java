@@ -1,6 +1,7 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.ThamSoDTO;
+import com.example.DATN_WebFiveTus.entity.SanBong;
 import com.example.DATN_WebFiveTus.entity.ThamSo;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.ThamSoRepository;
@@ -72,15 +73,14 @@ public class ThamSoServiceImp implements ThamSoService {
 
     @Override
     public void delete(Integer id) {
-
+        ThamSo thamSo=thamSoRepository.findById(id).orElseThrow(() -> new ResourceNotfound("Không tồn tại id update tham số: "+id));
+        thamSoRepository.deletedAt(id);
     }
 
     @Override
     public ThamSoDTO findByMaThamSo(String maThamSo) {
         return modelMapper.map(thamSoRepository.findByTenThamSo(maThamSo),ThamSoDTO.class);
     }
-
-
 
     @Override
     public Page<ThamSoDTO> searchThamSo(String keyword, Pageable pageable) {

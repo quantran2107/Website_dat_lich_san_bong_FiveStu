@@ -261,7 +261,8 @@
                 $('#editParameterValue').val(data.giaTri);
                 $('#editParameterType').val(data.typeGiaTri);
                 $('#editParameterDescription').val(data.moTa);
-                $('#editParameterStatus').prop('checked', data.trangThai);
+                // Thiết lập giá trị cho select
+                $('#editParameterStatus').val(data.trangThai === true ? 'true' : 'false');
 
                 var editModal = new bootstrap.Modal(document.getElementById('editModal'));
                 editModal.show();
@@ -283,7 +284,7 @@
         var giaTri = $('#editParameterValue').val();
         var typeGiaTri = $('#editParameterType').val();
         var moTa = $('#editParameterDescription').val();
-        var trangThai = $('#editParameterStatus').is(':checked');
+        var trangThai = $('#editParameterStatus').val();
         var id = $('#editParameterId').val();
 
         // Kiểm tra tên tham số
@@ -345,6 +346,54 @@
             }
         });
     });
+
+
+    // $(document).ready(function () {
+    //     $(document).on('click', '.delete-button', function () {
+    //         const id = $(this).data('id');
+    //
+    //         Swal.fire({
+    //             title: 'Bạn có chắc chắn?',
+    //             text: "Bạn không thể phục hồi dữ liệu sau khi xóa!",
+    //             icon: 'warning',
+    //             showCancelButton: true,
+    //             confirmButtonColor: '#3085d6',
+    //             cancelButtonColor: '#d33',
+    //             confirmButtonText: 'Có, xóa!',
+    //             cancelButtonText: 'Hủy'
+    //         }).then((result) => {
+    //             if (result.isConfirmed) {
+    //                 $.ajax({
+    //                     url: `http://localhost:8080/tham-so/${id}`,
+    //                     type: 'DELETE',
+    //                     success: function (affectedRows) {
+    //                         if (affectedRows > 0) { // Kiểm tra số bản ghi bị ảnh hưởng
+    //                             Swal.fire(
+    //                                 'Đã xóa!',
+    //                                 'Dữ liệu đã được xóa thành công.',
+    //                                 'success'
+    //                             );
+    //                             fetchDataAndRenderTable();
+    //                         } else {
+    //                             Swal.fire(
+    //                                 'Lỗi!',
+    //                                 'Không tìm thấy dữ liệu để xóa.',
+    //                                 'error'
+    //                             );
+    //                         }
+    //                     },
+    //                     error: function (xhr, status, error) {
+    //                         Swal.fire(
+    //                             'Lỗi!',
+    //                             'Có lỗi xảy ra khi xóa dữ liệu: ' + xhr.responseText,
+    //                             'error'
+    //                         );
+    //                     }
+    //                 });
+    //             }
+    //         });
+    //     });
+    // });
 
 
     $(document).ready(function () {
