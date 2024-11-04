@@ -13,7 +13,6 @@ $(document).ready(function () {
                     if (!response.includes('ROLE_EMPLOYEE')) {
                         checkSideBar();
                     }
-
                     logout(response);
 
                 },

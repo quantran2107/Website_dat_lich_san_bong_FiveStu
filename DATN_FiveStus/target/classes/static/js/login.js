@@ -99,7 +99,7 @@ $(document).ready(function () {
                     window.location.href = '/dich-vu';
                 } else if (roles.includes("ROLE_EMPLOYEE")) {
                     checkStatus(formData.username);
-                } 
+                }
             },
             error: function () {
                 $('#username').addClass('is-invalid');
