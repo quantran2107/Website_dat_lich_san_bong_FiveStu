@@ -5,6 +5,7 @@ import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
 import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import com.example.DATN_WebFiveTus.entity.KhachHang;
 import com.example.DATN_WebFiveTus.service.KhachHangService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -77,6 +78,17 @@ public class KhachHangRest {
     public ResponseEntity<KhachHangDTO> save2(@RequestBody KhachHangDTO khachHangDTO){
         KhachHangDTO khachHangDTOSave = khachHangService.save2(khachHangDTO);
         return ResponseEntity.ok(khachHangDTOSave);
+    }
+    @PutMapping("/update/{email}")
+    public ResponseEntity<KhachHangDTO> updateKhachHangByEmail(@PathVariable String email, @RequestBody KhachHangDTO khachHangDTO) {
+        try {
+            KhachHangDTO updatedKhachHang = khachHangService.updateKhachHangByEmail(email, khachHangDTO);
+            return new ResponseEntity<>(updatedKhachHang, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
