@@ -110,8 +110,6 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
                                   @Param("idCa") List<Integer> idCa);
 
 
-
-
     @Query("SELECT sc FROM SanCa  sc WHERE sc.ngayTrongTuan.id = :idNgayTrongTuan " +
                     "AND sc.ca.id = :idCa " +
                     "AND sc.sanBong.loaiSan.id = :idLoaiSan")
