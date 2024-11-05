@@ -19,4 +19,6 @@ public interface LoaiSanRepository extends JpaRepository<LoaiSan,Integer> {
     @Transactional
     @Query("UPDATE LoaiSan ls SET ls.deletedAt = TRUE WHERE ls.id = :id")
     void deletedAt(Integer id);
+
+    Boolean existsByTenLoaiSan(String tenLoaiSan);
 }

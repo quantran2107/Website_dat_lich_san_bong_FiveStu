@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -55,6 +56,12 @@ public class LoaiSanRest {
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id){
         loaiSanService.deletedAt(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("exists")
+    public ResponseEntity<Boolean> existsByTenLoaiSan(@RequestParam String tenLoaiSan) {
+        Boolean exists = loaiSanService.existsByTenLoaiSan(tenLoaiSan);
+        return ResponseEntity.ok(exists);
     }
 
 

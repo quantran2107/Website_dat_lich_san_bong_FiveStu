@@ -5708,6 +5708,7 @@ a.badge-dark:focus, a.badge-dark.focus {
 
 .list-group-flush > .list-group-item {
     border-width: 0 0 1px;
+    border-bottom: 1px solid grey;
 }
 
 .list-group-flush > .list-group-item:last-child {

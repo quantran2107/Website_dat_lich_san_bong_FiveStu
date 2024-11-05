@@ -64,7 +64,7 @@
                                                     <div class="col-md-4">
                                                         <div class="mt-3">
 
-                                                            <form>
+                                                            <form id="formAddSanBong">
                                                                 <div class="form-group">
                                                                     <label for="tenSanBong">Tên sân bóng</label>
                                                                     <input type="text" class="form-control"
@@ -485,240 +485,6 @@ JavaScript
         });
     });
 
-
-    // Định nghĩa hàm submitSanCa
-    // function submitSanCa() {
-    //     $('form').off('submit').on('submit', function (event) {
-    //         // Ngăn chặn hành động mặc định của form (chẳng hạn như reload trang)
-    //         event.preventDefault();
-    //
-    //
-    //         var activeTab = $('#loaiSanTab .nav-link.active');
-    //         var formSanCa = $(activeTab.attr('href')).find('#formSanCa');
-    //
-    //         var idCa = formSanCa.find('select[name="idCa"]').val();
-    //         var gia = formSanCa.find('input[name="gia"]').val();
-    //
-    //         function updateIdLoaiSanInput2() {
-    //             // Lấy idLoaiSan của tab đang hoạt động
-    //             var activeTab = $('#loaiSanTab .nav-link.active');
-    //             var activeTabContentId = activeTab.attr('href');
-    //             var idLoaiSan = activeTabContentId.replace('#loaiSan-', '');
-    //             $('#idLoaiSanInput').val(idLoaiSan);
-    //         }
-    //
-    //         //
-    //         // // Cập nhật idLoaiSanInput cho tab đầu tiên khi trang được tải
-    //         updateIdLoaiSanInput2();
-    //
-    //         // Lắng nghe sự kiện khi chuyển tab
-    //         $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
-    //             // Cập nhật idLoaiSanInput khi chuyển tab
-    //             updateIdLoaiSanInput2();
-    //         });
-    //
-    //         var idLoaiSan = $('#idLoaiSanInput').val();
-    //         alert("AHio: "+idLoaiSan)
-    //
-    //         if (!idCa) {
-    //             Swal.fire({
-    //                 icon: "error",
-    //                 title: "Đã xảy ra lỗi",
-    //                 text: "Vui lòng chọn Ca"
-    //
-    //             });
-    //             return;
-    //         }
-    //
-    //         if (!gia || isNaN(parseFloat(gia))) {
-    //             Swal.fire({
-    //                 icon: "error",
-    //                 title: "Đã xảy ra lỗi",
-    //                 text: "Giá phải là một số"
-    //
-    //             });
-    //             return;
-    //         }
-    //
-    //         var idNgayTrongTuan = $('.dayCheckbox:checked').val();
-    //
-    //         // Tạo đối tượng dữ liệu để gửi lên API
-    //         var formData = {
-    //             idNgayTrongTuan: parseInt(idNgayTrongTuan),
-    //             idCa: parseInt(idCa),
-    //             gia: gia,
-    //             trangThai:'active'
-    //         };
-    //
-    //         // Gọi API POST
-    //         $.ajax({
-    //             url: `http://localhost:8080/san-ca/add/${idLoaiSan}`,
-    //             method: 'POST',
-    //             contentType: 'application/json',
-    //             data: JSON.stringify(formData),
-    //             success: function (response) {
-    //                 console.log(response)
-    //                 // Xử lý thành công, ví dụ hiển thị thông báo
-    //                 Swal.fire({
-    //                     icon: "success",
-    //                     title: "Thêm sân ca thành công",
-    //                     showConfirmButton: false,
-    //                     timer: 1500
-    //                 });
-    //                 clearFormSanCa(); // Hàm để làm sạch formSanCa sau khi thực hiện thành công
-    //                 $('#formSanCa').hide(); // Ẩn form sau khi thêm sân ca thành công
-    //             },
-    //             error: function (xhr, status, error) {
-    //                 // Xử lý lỗi, hiển thị thông báo lỗi
-    //                 console.error('Đã xảy ra lỗi khi thêm sân ca:', xhr.responseText);
-    //                 alert('Đã xảy ra lỗi khi thêm sân ca: ' + xhr.responseText);
-    //             }
-    //         });
-    //     });
-    //
-    // }
-
-    // function submitSanCa() {
-    //     $('form').off('submit').on('submit', function (event) {
-    //         // Ngăn chặn hành động mặc định của form
-    //         event.preventDefault();
-    //
-    //         // Lấy tab hoạt động và form
-    //         var activeTab = $('#loaiSanTab .nav-link.active');
-    //         var formSanCa = $(activeTab.attr('href')).find('#formSanCa');
-    //         var giaInput = formSanCa.find('input[name="gia"]');
-    //         var gia = giaInput.val();
-    //
-    //         // Cập nhật idLoaiSanInput
-    //         updateIdLoaiSanInput2();
-    //         var idLoaiSan = $('#idLoaiSanInput').val();
-    //
-    //         // Lấy tất cả id của ngày trong tuần đã chọn
-    //         var idNgayTrongTuan = $('.dayCheckbox:checked').map(function() {
-    //             return parseInt($(this).val());
-    //         }).get();
-    //
-    //         // Lấy tất cả id của ca đã chọn
-    //         var idCa = $('.caCheckboxs:checked').map(function() {
-    //             return parseInt($(this).val());
-    //         }).get();
-    //
-    //         if (idNgayTrongTuan.length === 0) {
-    //             Swal.fire({
-    //                 icon: "error",
-    //                 title: "Đã xảy ra lỗi",
-    //                 text: "Vui lòng chọn ít nhất một ngày trong tuần"
-    //             });
-    //             return;
-    //         }
-    //
-    //         if (idCa.length === 0) {
-    //             Swal.fire({
-    //                 icon: "error",
-    //                 title: "Đã xảy ra lỗi",
-    //                 text: "Vui lòng chọn ít nhất một Ca"
-    //             });
-    //             return;
-    //         }
-    //
-    //         if (!gia || isNaN(parseFloat(gia))) {
-    //             Swal.fire({
-    //                 icon: "error",
-    //                 title: "Đã xảy ra lỗi",
-    //                 text: "Giá phải là một số"
-    //             });
-    //             return;
-    //         }
-    //         // url: `http://localhost:8080/san-ca/listSanCaExists/${idSanBong}/${idNgayTrongTuan.join(',')}/${idCa.join(',')}`,
-    //         // Kiểm tra xem SanCa đã tồn tại hay chưa
-    //         $.ajax({
-    //             url: `http://localhost:8080/san-ca/listSanCaExists/${idLoaiSan}/${idNgayTrongTuan.join(',')}/${idCa.join(',')}`,
-    //             method: 'GET',
-    //             success: function(data) {
-    //                 alert("Data: "+data)
-    //                 if (data && data.length > 0) {
-    //                     // Nếu tồn tại, điền giá vào ô input và chỉ cho phép sửa giá
-    //                     giaInput.val(data[0].gia); // Giả sử giá là thuộc tính của SanCaDTO
-    //                     giaInput.prop('disabled', false); // Cho phép sửa giá
-    //
-    //                     // Cập nhật đối tượng dữ liệu để gửi lên API
-    //                     var formData = {
-    //                         idNgayTrongTuanList: idNgayTrongTuan,
-    //                         idCaList: idCa,
-    //                         gia: gia, // Sử dụng giá đã tồn tại
-    //                         trangThai: 'active2'
-    //                     };
-    //
-    //                     alert("Giá: "+giaInput.val(data[0].gia));
-    //
-    //                     // Gọi API POST để cập nhật
-    //                     $.ajax({
-    //                         url: `http://localhost:8080/san-ca/add/${idLoaiSan}`, // Đường dẫn cập nhật
-    //                         method: 'POST',
-    //                         contentType: 'application/json',
-    //                         data: JSON.stringify(formData),
-    //                         success: function(response) {
-    //                             console.log("Cập nhật thành công:", response);
-    //                             Swal.fire({
-    //                                 icon: "success",
-    //                                 title: "Cập nhật sân ca thành công",
-    //                                 showConfirmButton: false,
-    //                                 timer: 1500
-    //                             });
-    //                             clearFormSanCa();
-    //                             $('#formSanCa').hide();
-    //                         },
-    //                         error: function(xhr, status, error) {
-    //                             console.error('Đã xảy ra lỗi khi cập nhật sân ca:', xhr.responseText);
-    //                             alert('Đã xảy ra lỗi khi cập nhật sân ca: ' + xhr.responseText);
-    //                         }
-    //                     });
-    //                 } else {
-    //                     // Nếu chưa tồn tại, gửi yêu cầu thêm mới
-    //                     var formData = {
-    //                         idNgayTrongTuanList: idNgayTrongTuan,
-    //                         idCaList: idCa,
-    //                         gia: parseFloat(gia),
-    //                         trangThai: 'active2'
-    //                     };
-    //
-    //                     // Gọi API POST để thêm mới
-    //                     $.ajax({
-    //                         url: `http://localhost:8080/san-ca/add/${idLoaiSan}`,
-    //                         method: 'POST',
-    //                         contentType: 'application/json',
-    //                         data: JSON.stringify(formData),
-    //                         success: function(response) {
-    //                             console.log("Thành công:", response);
-    //                             Swal.fire({
-    //                                 icon: "success",
-    //                                 title: "Thêm sân ca thành công",
-    //                                 showConfirmButton: false,
-    //                                 timer: 1500
-    //                             });
-    //                             clearFormSanCa();
-    //                             $('#formSanCa').hide();
-    //                         },
-    //                         error: function(xhr, status, error) {
-    //                             console.error('Đã xảy ra lỗi khi thêm sân ca:', xhr.responseText);
-    //                             alert('Đã xảy ra lỗi khi thêm sân ca: ' + xhr.responseText);
-    //                         }
-    //                     });
-    //                 }
-    //             },
-    //             error: function(err) {
-    //                 console.error('Đã xảy ra lỗi khi kiểm tra tồn tại SanCa:', err);
-    //                 alert('Có lỗi xảy ra khi kiểm tra dữ liệu: ' + err.responseText);
-    //             }
-    //         });
-    //     });
-    //
-    //     // Cập nhật idLoaiSanInput khi chuyển tab
-    //     $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
-    //         updateIdLoaiSanInput2();
-    //     });
-    // }
-
     function submitSanCa() {
         $('form').off('submit').on('submit', function (event) {
             event.preventDefault();
@@ -914,7 +680,6 @@ JavaScript
                 $('#idLoaiSanInput').val(idLoaiSan);
             }
 
-            //
             // // Cập nhật idLoaiSanInput cho tab đầu tiên khi trang được tải
             updateIdLoaiSanInput();
 
@@ -1130,10 +895,9 @@ JavaScript
         $('#' + newTabId).tab('show');
     }
 
+
     function addLoaiSanBong() {
-        // Lấy giá trị từ input
         $('form').off('submit').on('submit', function (event) {
-            // Ngăn chặn hành động mặc định của form (chẳng hạn như reload trang)
             event.preventDefault();
             var tenLoaiSan = $('#inputLoaiSan').val();
 
@@ -1142,57 +906,77 @@ JavaScript
                     icon: "error",
                     title: "Đã xảy ra lỗi",
                     text: "Bạn vui lòng nhập tên loại sân bóng"
-
                 });
                 return; // Dừng hàm nếu không hợp lệ
             }
 
-            // Tạo dữ liệu để gửi lên server
-            var data = {
-                tenLoaiSan: tenLoaiSan
-            };
-
-            // Gọi API POST
+            // Kiểm tra xem loại sân đã tồn tại hay chưa
             $.ajax({
-                type: "POST",
-                url: "http://localhost:8080/loai-san",
-                contentType: "application/json",
-                data: JSON.stringify(data),
-                success: function (response) {
-                    $('#idLoaiSanInput').val(response.id);
-                    // Xử lý kết quả thành công (nếu cần)
-                    Swal.fire({
-                        icon: "success",
-                        title: "Thêm loại sân thành công ",
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                type: "GET",
+                url: `http://localhost:8080/loai-san/exists?tenLoaiSan=${encodeURIComponent(tenLoaiSan)}`,
+                success: function (exists) {
+                    if (exists) {
+                        // Nếu loại sân đã tồn tại
+                        Swal.fire({
+                            icon: "error",
+                            title: "Đã xảy ra lỗi",
+                            text: "Loại sân này đã tồn tại."
+                        });
+                        return; // Dừng hàm nếu đã tồn tại
+                    }
 
-                    var currentTab = $('ul.nav-tabs li a.active');
-                    var tabContentId = currentTab.attr('href');
-                    $(tabContentId).load(location.href + ' ' + tabContentId);
-                    // reloadLoaiSanTabs();
-                    // setTimeout(function () {
-                    //     window.location.reload();
-                    // }, 1000);
-                    setTimeout(function() {
-                        reloadLoaiSanTabs(response.id);
-                    }, 1000);
-                    // Tùy chỉnh hành động sau khi thêm thành công, ví dụ: hiển thị thông báo, làm mới danh sách, vv.
+                    // Tạo dữ liệu để gửi lên server
+                    var data = {
+                        tenLoaiSan: tenLoaiSan
+                    };
+
+                    // Gọi API POST
+                    $.ajax({
+                        type: "POST",
+                        url: "http://localhost:8080/loai-san",
+                        contentType: "application/json",
+                        data: JSON.stringify(data),
+                        success: function (response) {
+                            $('#idLoaiSanInput').val(response.id);
+                            Swal.fire({
+                                icon: "success",
+                                title: "Thêm loại sân thành công ",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                            var currentTab = $('ul.nav-tabs li a.active');
+                            var tabContentId = currentTab.attr('href');
+                            $(tabContentId).load(location.href + ' ' + tabContentId);
+
+                            setTimeout(function() {
+                                reloadLoaiSanTabs(response.id);
+                            }, 1000);
+                        },
+                        error: function (err) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Lỗi khi thêm loại sân",
+                                text: err.responseText
+                            });
+                        }
+                    });
                 },
                 error: function (err) {
-                    // Xử lý lỗi (nếu có)
-                    alert("Lỗi khi thêm loại sân", err.responseText);
-
-                    // Tùy chỉnh hành động khi xảy ra lỗi, ví dụ: hiển thị thông báo lỗi, vv.
+                    Swal.fire({
+                        icon: "error",
+                        title: "Lỗi khi kiểm tra loại sân",
+                        text: err.responseText
+                    });
                 }
             });
         });
     }
 
 
-    // Hàm reload danh sách loại sân
-    function reloadLoaiSanTabs() {
+
+
+    function reloadLoaiSanTabs(newTabId) {
         // Gửi request GET để lấy danh sách loại sân từ server
         $.get('http://localhost:8080/loai-san/hien-thi', function (data) {
             // Xóa các tab hiện tại
@@ -1200,8 +984,9 @@ JavaScript
 
             // Thêm lại các tab từ dữ liệu mới nhận được
             $.each(data, function (index, loaiSan) {
+                var isActive = loaiSan.id === newTabId ? 'active' : ''; // Kiểm tra nếu là tab mới thì gán active
                 var tabHtml = '<li class="nav-item">' +
-                    '<a class="nav-link" id="tab-' + loaiSan.id + '" ' +
+                    '<a class="nav-link ' + isActive + '" id="tab-' + loaiSan.id + '" ' +
                     'data-bs-toggle="tab" ' +
                     'href="#loaiSan-' + loaiSan.id + '" ' +
                     'role="tab" ' +
@@ -1217,10 +1002,12 @@ JavaScript
             $('#loaiSanTab').append('<li class="nav-item">' +
                 '<a class="nav-link" id="addTab" href="#" onclick="addNewTab()">+ Thêm loại sân</a>' +
                 '</li>');
-        });
 
-        // Kích hoạt tab mới thêm
-        $('#tab-' + newTabId).tab('show');
+            // Kích hoạt tab mới nếu có newTabId
+            if (newTabId) {
+                $('#tab-' + newTabId).tab('show');
+            }
+        });
     }
 
 </script>

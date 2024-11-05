@@ -587,7 +587,7 @@
 
     // Hàm gọi API để lấy tỷ lệ tiền cọc
     async function fetchDepositRate() {
-        const response = await fetch('http://localhost:8080/tham-so/searchMa/TSTIEN_COC');
+        const response = await fetch('http://localhost:8080/tham-so/searchMaFake/TSTIEN_COC');
         const data = await response.json();
         return {
             value: data.giaTri,
@@ -669,6 +669,7 @@
                 soDienThoaiKhachHang: customerSoDienThoai,
                 emailKhachHang: customerEmail,
                 tongTienSan: totalPrice,
+                tongTien: totalPrice,
                 tienCoc: totalDeposit,
                 deletedAt: false
             }),
@@ -687,7 +688,7 @@
             console.log(booking)
             const bookingDate = parseDateString(booking.date); // Chuyển đổi chuỗi thành Date
             const formattedDate = formatDateToDDMMYYYY(bookingDate); // Định dạng lại thành dd/MM/yyyy
-            const detailResponse = await fetch('http://localhost:8080/hoa-don-chi-tiet/save3', {
+            const detailResponse = await fetch('http://localhost:8080/hoa-don-chi-tiet/save2', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -697,6 +698,7 @@
                     idSanCa: booking.idSanCa,
                     ngayDenSan: formattedDate, // Ngày đến sân
                     tongTien: booking.price, // Tổng tiền của dòng
+                    tongTienThucTe: booking.price, // Tổng tiền của dòng
                     deletedAt: false
                 }),
             });
