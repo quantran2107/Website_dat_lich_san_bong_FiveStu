@@ -4,9 +4,11 @@ import com.example.DATN_WebFiveTus.entity.ThamSo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +17,7 @@ import java.util.Optional;
 public interface ThamSoRepository extends JpaRepository<ThamSo, Integer> {
 
     @Query("SELECT ts FROM ThamSo ts WHERE ts.ma LIKE %:ma%")
-    Optional<ThamSo> findByMaThamSo(@Param("ma") String maThamSo);
+    ThamSo findByMaThamSo(@Param("ma") String maThamSo);
 
 
     @Query("SELECT ts FROM ThamSo ts WHERE " +
@@ -39,6 +41,13 @@ public interface ThamSoRepository extends JpaRepository<ThamSo, Integer> {
     @Query("SELECT ts FROM ThamSo ts where ts.ten like '%:keyword%' or ts.ma like '%:keyword%' ")
     Page<ThamSo> searchThamSo(@Param("keyword") String keyword, Pageable pageable);
 
+    @Query("SELECT ts FROM ThamSo ts where ts.isActive=true and ts.deletedAt=false ")
+    List<ThamSo> getAll2();
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE ThamSo ts SET ts.deletedAt =TRUE WHERE ts.id = :id")
+    void deletedAt(Integer id);
 
 
 }

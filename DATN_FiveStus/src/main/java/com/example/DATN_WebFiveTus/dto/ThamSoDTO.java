@@ -27,6 +27,8 @@ public class ThamSoDTO {
 
     private String moTa;
 
+    private boolean isActive;
+
     private boolean trangThai;
 
 }
