@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Thông Báo Hết Hạn Phiếu Giảm Giá</title>
+    <title>Thông báo: Đặt sân thành công</title>
     <style>
         .container {
             margin: 0 auto;
@@ -14,7 +14,7 @@
             background-color: #f9f9f9;
         }
         .header {
-            background-color: #dc3545;
+            background-color: #198754;
             padding: 20px;
             text-align: center;
             border-top-left-radius: 5px;
@@ -23,7 +23,6 @@
         }
         .header h1 {
             margin: 0;
-            font-size: 24px;
         }
         .content {
             padding: 20px;
@@ -37,14 +36,14 @@
         }
         .button {
             color: #fff;
-            background-color: #dc3545;
+            background-color: #198754;
             padding: 10px 20px;
             text-decoration: none;
             border-radius: 5px;
             display: inline-block;
         }
         .button:hover {
-            background-color: #c82333;
+            background-color: #145c32;
         }
         table {
             width: 100%;
@@ -64,32 +63,38 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>Thông Báo Hết Hạn Phiếu Giảm Giá</h1>
+        <h1>FiveStu
+            <br>
+            <span>Phiếu Đặt Lịch Sân Bóng</span></h1>
     </div>
     <div class="content">
-        <p>Xin chào quý khách hàng thân mến,</p>
-        <p>Chúng tôi xin thông báo rằng phiếu giảm giá của bạn đã hết hạn.</p>
+        <!-- Thông tin khách hàng -->
+        <h2>Thông tin khách hàng</h2>
+        <p><strong>Tên:</strong> <span th:text="${customer.hoVaTen}">Tên khách hàng</span></p>
+        <p><strong>Số điện thoại:</strong> <span th:text="${customer.soDienThoai}">Số điện thoại khách hàng</span></p>
+        <p><strong>Email:</strong> <span th:text="${customer.email}">Email khách hàng</span></p>
+
+        <h2 class="text-content">Thông tin chi tiết</h2>
         <table>
             <tr>
-                <th>Chi Tiết</th>
-                <td><span th:text="${ten}"></span></td>
+                <th>Ngày đá</th>
+                <th>Ca</th>
+                <th>Giá</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
             </tr>
-            <tr>
-                <td>Mức Giảm</td>
-                <td><span th:text="${mucGiam}"></span> cho đơn hàng từ: <span th:text="${dieuKienToiThieu}"></span></td>
-            </tr>
-            <tr>
-                <td>Có hiệu lực từ</td>
-                <td><span th:text="${batDau}"></span></td>
-            </tr>
-            <tr>
-                <td>Đến ngày</td>
-                <td><span th:text="${ketThuc}"></span></td>
+            <tr th:each="detail : ${invoiceDetails}">
+                <td th:text="${detail.ngayDenSan}">Ngày đá</td>
+                <td th:text="${detail.sanCa}">Ca</td>
+                <td th:text="${detail.price}">Giá</td>
+                <td th:text="${detail.tongTien}">Tổng tiền</td>
+                <td th:text="${detail.trangThai}">Trạng thái</td>
             </tr>
         </table>
-        <p>Rất tiếc vì sự bất tiện này. Nếu bạn có bất kỳ câu hỏi nào hoặc cần thêm thông tin, hãy liên hệ với chúng tôi.</p>
-        <a th:href="@{http://localhost:8080/khach-hang/trang-chu}" class="button">Xem Chi Tiết</a>
-        <p>Cảm ơn bạn đã ủng hộ và sử dụng dịch vụ của chúng tôi!</p>
+
+        <p>Hãy đặt sân trang web của chúng tôi để nhận được giá ưu đãi và trải nghiệm dịch vụ tiện ích .</p>
+        <a th:href="@{http://localhost:8080/khach-hang/trang-chu}" class="button" style="color: #ccced0">Xem Chi Tiết</a>
+        <p>Cảm ơn bạn đã ủng hộ chúng tôi!</p>
     </div>
     <div class="footer">
         <p>Sân bóng Five Stu</p>

@@ -11,8 +11,11 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'json',
             success: function (response) {
+                console.log(response)
                 if (!response.includes('ROLE_EMPLOYEE')) {
                     checkSideBar();
+                    logout(response);
+                    return;
                 }
                 checkStatus(response);
 
@@ -35,7 +38,6 @@ $(document).ready(function () {
                 switch (response.status) {
                     case 'OTHER_STAFF_ON_SHIFT':
                         showWarningMessage(response.response["nhanVien"]);
-                        logout2();
                         break;
                     case 'START_WORKING':
                         nhanCa(response.response);
@@ -166,15 +168,7 @@ $(document).ready(function () {
 
         });
     }
-    function logout2(){
-        $(document).on('click', 'button, a', function(event) {
-            // Kiểm tra nếu nút không phải là #logoutGC và không nằm trong SweetAlert2
-            if (!$(this).is('#logoutGC') && !$(this).closest('.swal2-container').length) {
-                event.preventDefault(); // Ngăn chặn hành động mặc định
-                event.stopImmediatePropagation(); // Dừng tất cả các sự kiện click khác
-            }
-        });
-    }
+
 
     function giaoCa() {
         $.ajax({
@@ -283,11 +277,14 @@ $(document).ready(function () {
             title: "Cảnh báo!",
             text: `Tài khoản nhân viên ${hoTen} chưa đăng xuất!`,
             icon: "warning",
-            showConfirmButton: false,
-            showCancelButton: true,
+            showConfirmButton: true,
             allowOutsideClick: false,
             allowEscapeKey: false,
-            cancelButtonText: 'Thoát!'
-        });
+            confirmButtonText: 'Đăng xuất',
+        }).then((result) => {
+            if (result.isConfirmed) {
+               window.location.href ="/admin/logout"
+            }
+        });;
     }
 });
