@@ -6,5 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class NhanCaRequest {
-    private Double tienDauCa;
+    private Double tienMatDauCa;
+    private Double tienChuyenKhoanDauCa;
 }

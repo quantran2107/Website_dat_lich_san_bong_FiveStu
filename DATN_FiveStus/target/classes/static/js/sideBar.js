@@ -1,57 +1,211 @@
 $(document).ready(function () {
+    loadSidebar();
+    $('#modaltoggleNC').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
 
-        loadSidebar();
-        const url = window.location.href;
-        console.log(url);
-
-        function loadSidebar() {
-            $.ajax({
-                url: `http://localhost:8080/api/auth/get-role`,
-                type: 'GET',
-                dataType: 'json',
-                success: function (response) {
-                    if (!response.includes('ROLE_EMPLOYEE')) {
-                        checkSideBar();
-                    }
-                    logout(response);
-
-                },
-                error:  () =>{
-                    window.location.href = "/client/logout";
+    function loadSidebar() {
+        $.ajax({
+            url: `http://localhost:8080/api/auth/get-role`,
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                if (!response.includes('ROLE_EMPLOYEE')) {
+                    checkSideBar();
                 }
-            });
-        }
+                checkStatus(response);
 
-        function logout(listRole) {
-            if (url === 'http://localhost:8080/giao-ca'){
-                return
+
+            },
+            error: () => {
+                window.location.href = "/admin/logout";
             }
-            $("#logoutGC").click(() => {
-                if (listRole.includes('ROLE_EMPLOYEE')) {
-                    Swal.fire({
-                        title: 'Xác nhận',
-                        text: "Bạn có kết thúc ca làm không?",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Có',
-                        cancelButtonText: 'Không'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = "/giao-ca";
-                        }
-                    });
+        });
+    }
 
-                } else {
-                    window.location.href = "/client/logout";
+    function checkStatus(listRole) {
+
+        $.ajax({
+            url: 'http://localhost:8080/giao-ca/check-gc',
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                console.log(response);
+                switch (response.status) {
+                    case 'OTHER_STAFF_ON_SHIFT':
+                        showWarningMessage(response.response["nhanVien"]);
+                        logout2();
+                        break;
+                    case 'START_WORKING':
+                        nhanCa(response.response);
+                        logout(listRole);
+                        break;
+                    case 'FAIL':
+                        window.location.href = '/admin/logout';
+                        break;
+                    default:
+                        logout(listRole);
+                        break;
                 }
+            },
+            error: function () {
+            }
+        });
+    }
 
+    function nhanCa(giaoCa) {
+        $('#modaltoggleNC').modal('show');
+        $('#btnNhanCa').click(function () {
+            let formNC = {
+                tienMatDauCa: null,
+                tienChuyenKhoanDauCa: null,
+            }
+            if ($('#checkBox').is(':checked')) {
+                formNC.tienMatDauCa = $('#tienMatDauCa').val();
+                formNC.tienChuyenKhoanDauCa = $('#tienChuyenKhoanDauCa').val();
+            } else if (giaoCa === null) {
+                formNC.tienMatDauCa = $('#tienMatDauCa').val();
+                formNC.tienChuyenKhoanDauCa = $('#tienChuyenKhoanDauCa').val();
+            } else if (giaoCa["tienMatTrongCa"] !==parseFloat( $('#tienMatDauCa').val()) || giaoCa["tienChuyenKhoanTrongCa"] !==parseFloat( $('#tienChuyenKhoanDauCa').val())) {
+                Swal.fire({
+                    title: "Cảnh báo!",
+                    text: `Số tiền bạn nhập vào không khớp với dữ liệu ca trước!`,
+                    icon: "warning",
+                    showConfirmButton: false,
+                    showCancelButton: true,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    cancelButtonText: 'Thoát!'
+                });
+                return;
+            } else {
+                formNC.tienMatDauCa = $('#tienMatDauCa').val();
+                formNC.tienChuyenKhoanDauCa = $('#tienChuyenKhoanDauCa').val();
+            }
+
+            $.ajax({
+                url: 'http://localhost:8080/giao-ca/add-row',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formNC),
+                success: function (response) {
+                    if (response === true) {
+                        $('#checkBox').prop('checked', false);
+                        $('#tienQuyDauCa').val('');
+                        $('#tienQuyDauCa').prop('disabled', false);
+                        let timerInterval;
+                        Swal.fire({
+                            title: "Nhận ca thành công!",
+                            icon: "success",
+                            timer: 2000,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            didOpen: () => {
+                                timerInterval = setInterval(() => {
+                                }, 100);
+                            },
+                            willClose: () => {
+                                clearInterval(timerInterval);
+                            }
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+                                $('#modaltoggleNC').modal('hide');
+                            }
+                        });
+
+                    } else {
+                        Swal.fire({
+                            title: "Lõi!",
+                            text: 'Hệ thống xảy ra lỗi!',
+                            icon: "error",
+                            showConfirmButton: false,
+                            showCancelButton: true,
+                            cancelButtonText: 'Thoát!'
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Lõi!",
+                        text: 'Đã xảy ra sự cố!',
+                        icon: "error",
+                        showConfirmButton: false,
+                        showCancelButton: true,
+                        cancelButtonText: 'Thoát!'
+                    });
+                }
             });
-        }
 
-        function checkSideBar() {
-            const newUl = `
+        })
+    }
+
+
+    function logout(listRole) {
+        $("#logoutGC").click(() => {
+            if (listRole.includes('ROLE_EMPLOYEE')) {
+                Swal.fire({
+                    title: 'Xác nhận',
+                    text: "Bạn có kết thúc ca làm không?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Có',
+                    cancelButtonText: 'Không'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        giaoCa();
+                    }
+                });
+            } else {
+                window.location.href = "/admin/logout";
+            }
+
+        });
+    }
+    function logout2(){
+        $(document).on('click', 'button, a', function(event) {
+            // Kiểm tra nếu nút không phải là #logoutGC và không nằm trong SweetAlert2
+            if (!$(this).is('#logoutGC') && !$(this).closest('.swal2-container').length) {
+                event.preventDefault(); // Ngăn chặn hành động mặc định
+                event.stopImmediatePropagation(); // Dừng tất cả các sự kiện click khác
+            }
+        });
+    }
+
+    function giaoCa() {
+        $.ajax({
+            url: 'http://localhost:8080/giao-ca/ban-giao',
+            type: 'PUT',
+            success: function (response) {
+                console.log(response)
+                if (response.response === true) {
+                    window.location.href = "/admin/logout";
+                } else {
+                    Swal.fire({
+                        title: "Lưu thất bại! Có lỗi xảy ra",
+                        icon: "error",
+                        timer: 2500,
+                        timerProgressBar: true,
+                    })
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    title: "Lưu thất bại! Có lỗi xảy ra",
+                    icon: "error",
+                    timer: 2500,
+                    timerProgressBar: true,
+                })
+            }
+        });
+    }
+
+    function checkSideBar() {
+        const newUl = `
             <ul class="navbar-nav flex-fill w-100 mb-3 mt-3">
                 <li class="nav-item active">
                     <a class="nav-link pl-3" href="/phieu-giam-gia">
@@ -121,10 +275,19 @@ $(document).ready(function () {
                 </li>
             </ul>
             `;
-            $(".w-100.d-flex").after(newUl);
-
-
-        }
+        $(".w-100.d-flex").after(newUl);
     }
-)
-;
+    function showWarningMessage(nv) {
+        let hoTen = nv["hoTen"];
+        Swal.fire({
+            title: "Cảnh báo!",
+            text: `Tài khoản nhân viên ${hoTen} chưa đăng xuất!`,
+            icon: "warning",
+            showConfirmButton: false,
+            showCancelButton: true,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            cancelButtonText: 'Thoát!'
+        });
+    }
+});

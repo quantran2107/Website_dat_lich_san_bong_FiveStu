@@ -34,4 +34,10 @@ public class AuthControllerLog {
         jwtUtils.deleteToken(jwtUtils.getUserNameFromJwtToken(token));
         return "redirect:/khach-hang/trang-chu";
     }
+    @GetMapping("/admin/logout")
+    public String adminLogout(HttpServletRequest request) {
+        String token = CookieUtils.getCookie(request, "authToken");
+        jwtUtils.deleteToken(jwtUtils.getUserNameFromJwtToken(token));
+        return "redirect:/login";
+    }
 }
