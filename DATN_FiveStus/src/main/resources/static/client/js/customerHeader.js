@@ -57,9 +57,27 @@ $(document).ready(function () {
                 </li>
               </ul>
          `;
+            let isUser = `
+               <li class="nav-item">
+                    <a class="nav-link me-5" th:href="@{/khach-hang/dat-san}">Đặt sân</a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link me-5 dropdown-toggle border-0" th:href="@{#}" data-bs-toggle="dropdown"
+                     aria-expanded="false">Danh sách đặt lịch</a>
+                  <ul class="dropdown-menu fw-bold">
+                    <li>
+                      <a th:href="@{#}" class="dropdown-item">About Us</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" th:href="@{#}">Shop</a>
+                    </li>
+                  </ul>
+                </li>
+            `;
             userMenuLink.parent().append(dropdownHtml);
             userMenuLink.attr('data-bs-toggle', 'dropdown');
             userMenuLink.attr('aria-expanded', 'false');
+            $("#noiquy").after(isUser)
         }
     }
 
@@ -67,7 +85,8 @@ $(document).ready(function () {
         const userMenuLink = $('#userMenuLink');
         userMenuLink.attr('data-bs-toggle', 'modal');
         userMenuLink.attr('data-bs-target', '#modallogin');
-        Cookies.remove('authToken', { path: '/' });
+        Cookies.remove('authToken', {path: '/'});
+
     }
 
 

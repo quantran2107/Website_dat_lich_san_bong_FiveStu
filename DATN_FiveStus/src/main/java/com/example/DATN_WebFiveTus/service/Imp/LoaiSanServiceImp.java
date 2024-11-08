@@ -77,4 +77,9 @@ public class LoaiSanServiceImp implements LoaiSanService {
                 .orElseThrow(() -> new ResourceNotfound("Không tồn tại id: "+id));
         loaiSanRepository.deletedAt(id);
     }
+
+    @Override
+    public Boolean existsByTenLoaiSan(String tenLoaiSan) {
+        return loaiSanRepository.existsByTenLoaiSan(tenLoaiSan);
+    }
 }

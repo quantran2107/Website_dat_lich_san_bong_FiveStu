@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +34,11 @@ public class ThamSoRest {
     @GetMapping("hien-thi")
     private ResponseEntity<List> HienThi(){
         return ResponseEntity.ok(thamSoService.getAll());
+    }
+
+    @GetMapping("hien-thi2")
+    private ResponseEntity<List> HienThi2(){
+        return ResponseEntity.ok(thamSoService.getAll2());
     }
 
     @GetMapping("/{id}")
@@ -72,7 +78,7 @@ public class ThamSoRest {
         return thamSoService.searchThamSoss(ma, ten, typeGiaTri, trangThai, pageable);
     }
 
-    @GetMapping("searchMa/{maThamSo}")
+    @GetMapping("searchMaFake/{maThamSo}")
     public ResponseEntity<ThamSoDTO> getThamSoByMa(@PathVariable String maThamSo) {
         ThamSoDTO thamSoDTO = thamSoService.findByMaThamSo(maThamSo);
         return new ResponseEntity<>(thamSoDTO, HttpStatus.OK);
@@ -84,4 +90,9 @@ public class ThamSoRest {
         return new ResponseEntity<>(savedThamSo, HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id){
+        thamSoService.delete(id);
+        return ResponseEntity.ok().build();
+    }
 }
