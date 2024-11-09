@@ -1352,7 +1352,7 @@ function showSuccessToast(message) {
     }).showToast();
 }
 
-function calculateTotalPrice() {
+async function calculateTotalPrice() {
     let total = 0;
     const rows = document.querySelectorAll('#sanCaTable tbody tr');
 
@@ -1369,7 +1369,25 @@ function calculateTotalPrice() {
     });
 
     // Cập nhật tổng tiền trong modal footer
-    document.getElementById('tongTien').textContent = `Tổng tiền: ${total.toLocaleString()} VNĐ`;
+    document.getElementById('tongTien').textContent = `${total.toLocaleString()} VNĐ`;
+
+    try {
+        // Gọi API để lấy giá trị tiền cọc
+        const response = await fetch('http://localhost:8080/tham-so/searchMaFake/TSTIEN_COC');
+        const data = await response.json();
+
+        // Lấy giá trị tiền cọc từ API và tính toán
+        if (data && data.trangThai) {
+            const depositRate = parseFloat(data.giaTri);
+            const depositAmount = (total * depositRate) / 100;
+
+            // Cập nhật tiền cọc trong modal
+            document.getElementById('tienCoc').textContent = `${depositAmount.toLocaleString()} VNĐ`;
+        }
+    } catch (error) {
+        console.error("Lỗi khi gọi API:", error);
+        document.getElementById('tienCoc').textContent = '0 VNĐ'; // Hiển thị giá trị mặc định nếu API lỗi
+    }
 }
 
 // Hàm giả lập lấy idSanBong từ tên sân bóng

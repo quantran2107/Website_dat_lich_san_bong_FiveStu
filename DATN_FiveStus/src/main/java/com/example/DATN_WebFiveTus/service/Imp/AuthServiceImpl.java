@@ -131,7 +131,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<?> getRole(HttpServletRequest request) {
-        return null;
+        return ResponseEntity.ok(checkRole.getListRole(request));
     }
 
     @Override

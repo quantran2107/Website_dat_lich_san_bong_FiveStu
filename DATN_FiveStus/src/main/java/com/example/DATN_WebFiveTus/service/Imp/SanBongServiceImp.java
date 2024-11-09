@@ -146,4 +146,11 @@ private LoaiSanRepository loaiSanRepository;
     public SanBongDTO getSanBongByName(String tenSanBong) {
         return modelMapper.map(sanBongRepository.getSanBongByName(tenSanBong),SanBongDTO.class);
     }
+
+    @Override
+    public Boolean existsByTenSanBongs(Integer idLoaiSan, String tenSanBong) {
+        return sanBongRepository.existsByTenSanBongs(idLoaiSan, tenSanBong);
+    }
+
+
 }

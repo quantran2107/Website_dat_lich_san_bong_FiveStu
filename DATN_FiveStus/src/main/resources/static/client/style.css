@@ -675,7 +675,12 @@ h3 {
 }
 .hvr-text-color:hover {
   color: white;
-  background-color: #0aba00;
+  background-color: #c5c5c5;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Bóng sâu hơn khi hover */
+}
+.hvr-text-color.active {
+  color: white;
+  background-color: #c5c5c5;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Bóng sâu hơn khi hover */
 }
 .hvr-text-color a:hover{

@@ -161,6 +161,15 @@ public class HoaDonServiceImp implements HoaDonService {
         return null;
     }
 
+    @Override
+    public PaymentResponse confirmPayment(String maHoaDon) {
+                // Giả lập kiểm tra trạng thái thanh toán
+                PaymentResponse response = new PaymentResponse();
+                response.setMaHoaDon(maHoaDon);
+                response.setStatus("success"); // hoặc 'failure'
+                return response;
+    }
+
 
 //    @Override
 //    public Page<HoaDonDTO> searchAndFilter(@Param("loai") Boolean loai,
