@@ -416,7 +416,7 @@ CREATE TABLE lich_su_checkin (
 
 INSERT INTO khach_hang (ma_khach_hang, mat_khau, ho_va_ten, email, gioi_tinh, so_dien_thoai, trang_thai, created_at, updated_at, deleted_at)
 VALUES
-  ('KH001', 'password1', 'Nguyen Van A', 'nguyenvana@gmail.com', true, '0987456321', 'active', NOW(), NOW(), 1),
+  ('KH001', '123456', 'Nguyen Van A', 'lyly1062004@gmail.com', true, '0987456321', 'active', NOW(), NOW(), 1),
   ('KH002', 'password2', 'Nguyen Van B', 'nguyenvanb@gmail.com', false, '0963258741', 'active', NOW(), NOW(), 1),
   ('KH003', 'password3', 'Nguyen Van C', 'nguyenvanc@gmail.com', true, '0321456987', 'inactive', NOW(), NOW(), 1),
   ('KH004', 'password4', 'Nguyen Van D', 'nguyenvand@gmail.com', false, '0369852147', 'active', NOW(), NOW(), 0),
@@ -2338,13 +2338,13 @@ VALUES
   ('Loai tham so 5', 1, NOW(), NOW(), 0);
 
 
-INSERT INTO giao_ca (id_nhan_vien, tien_mat_ca_truoc, tien_mat_trong_ca, tien_ck_trong_ca, tong_tien_trong_ca, tong_tien_mat_thuc_te, tong_tien_phat_sinh, ghi_chu)
+INSERT INTO giao_ca (id_nhan_vien, tien_mat_ca_truoc, tien_mat_trong_ca, tien_ck_trong_ca, tong_tien_trong_ca, tong_tien_mat_thuc_te, tong_tien_phat_sinh, ghi_chu,trang_thai)
 VALUES 
-    (1, 1000000, 500000, 200000, 1700000, 1700000, 50000, 'Giao ca buổi sáng'),
-    (2, 1500000, 600000, 300000, 2400000, 2400000, 60000, 'Giao ca buổi chiều'),
-    (3, 1200000, 700000, 400000, 2300000, 2300000, 40000, 'Giao ca tối'),
-    (4, 1300000, 800000, 350000, 2450000, 2450000, 70000, 'Giao ca buổi sáng ngày 2'),
-    (5, 1100000, 400000, 250000, 1750000, 1750000, 30000, 'Giao ca buổi chiều ngày 2');
+    (1, 1000000, 500000, 200000, 1700000, 1700000, 50000, 'Giao ca buổi sáng',0),
+    (2, 1500000, 600000, 300000, 2400000, 2400000, 60000, 'Giao ca buổi chiều',0),
+    (3, 1200000, 700000, 400000, 2300000, 2300000, 40000, 'Giao ca tối',0),
+    (4, 1300000, 800000, 350000, 2450000, 2450000, 70000, 'Giao ca buổi sáng ngày 2',0),
+    (5, 1100000, 400000, 250000, 1750000, 1750000, 30000, 'Giao ca buổi chiều ngày 2',0);
 
 INSERT INTO lich_su_checkin (id_hoa_don_chi_tiet, thoi_gian_checkin, mo_ta)
 VALUES
@@ -2370,7 +2370,8 @@ VALUES
 ('TS007', 'Thời Gian Hủy Đặt Sân', '2', 'giờ', 'Thời gian tối thiểu trước giờ đá để hủy đặt sân', 1, 0),
 ('TS008', 'Thời Gian Đặt Trước', '1', 'ngày', 'Thời gian tối thiểu để đặt sân trước ngày đá', 1, 0),
 ('TS009', 'Giá Thuê Bóng', '50000', 'VND', 'Giá thuê bóng trong 1 trận', 1, 0),
-('TS010', 'Phí Huấn Luyện Viên', '300000', 'VND', 'Phí thuê huấn luyện viên theo giờ', 1, 0);
+('TS010', 'Phí Huấn Luyện Viên', '300000', 'VND', 'Phí thuê huấn luyện viên theo giờ', 1, 0),
+('TSTIEN_COC', 'Tiền cọc', '40', '%', 'Số tiền cọc trước khi đặt sân', 1, 0);
 
 
 CREATE TABLE `user` (
@@ -2408,11 +2409,11 @@ INSERT INTO `duantotnghiep`.`user`
 `username`)
 VALUES
 (1,'truongvmph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','truongvmph39949'),
-(2,'quantaph12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','quantaph12345'),
+(2,'quantaph12345@gmail.com',2,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','quantaph12345'),
 (3,'bangdxph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','bangdxph39949'),
 (4,'lynhkph12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','lynhkph12345'),
 (5,'haipnph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','haipnph39949'),
-(6,'nguyenvana@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanA'),
+(6,'lyly1062004@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','Ly'),
 (7,'nguyenvanb@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanB'),
 (8,'nguyenvanc@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanC'),
 (9,'nguyenvand@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanD'),
@@ -2433,3 +2434,6 @@ INSERT INTO `duantotnghiep`.`user_roles`
 `role_id`)
 VALUES
 (1,1),(1,4),(2,1),(2,4),(3,1),(3,4),(4,1),(4,4),(5,1),(5,4),(6,1),(7,1),(8,1),(9,1),(10,1);
+
+select * From user_roles;	
+select * From user

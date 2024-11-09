@@ -124,7 +124,14 @@ public class HoaDonChiTietRest {
 
     @GetMapping("/khach-hang-hdct/{id}")
     public ResponseEntity<?> findByIdKhachHang(@PathVariable("id") Integer id) {
-        HoaDonChiTietDTO hoaDonChiTietDTO = hoaDonChiTietService.findByIdKhachHang(id);
+        List<HoaDonChiTietDTO> hoaDonChiTietDTO = hoaDonChiTietService.findByIdKhachHang(id);
         return ResponseEntity.ok(hoaDonChiTietDTO);
     }
+
+    @PostMapping("/save3")
+    public ResponseEntity<HoaDonChiTietDTO> save3(@RequestBody HoaDonChiTietDTO hoaDonChiTietDTO){
+        HoaDonChiTietDTO hoaDonChiTietDTOSave = hoaDonChiTietService.save3(hoaDonChiTietDTO);
+        return ResponseEntity.ok(hoaDonChiTietDTOSave);
+    }
+
 }

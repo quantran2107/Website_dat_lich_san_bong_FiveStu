@@ -3,6 +3,7 @@ package com.example.DATN_WebFiveTus.service;
 import com.example.DATN_WebFiveTus.dto.ApiResponseDto;
 import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.dto.HoaDonRequest;
+import com.example.DATN_WebFiveTus.dto.PaymentResponse;
 import com.example.DATN_WebFiveTus.entity.HoaDon;
 import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
 import org.springframework.data.domain.Page;
@@ -34,12 +35,15 @@ public interface HoaDonService {
 
     List<HoaDonDTO> getHDforNV(int id);
 
+    PaymentResponse confirmPayment(String maHoaDon);
 
 
-//    Page<HoaDonDTO> searchAndFilter(@Param("loai") Boolean loai,
-//                                    @Param("trangThai") String trangThai,
-//                                    @Param("keyword") String keyword,
-//                                    @Param("tongTienMin") Float tongTienMin,
-//                                    @Param("tongTienMax") Float tongTienMax,
-//                                    Pageable pageable);
+    Page<HoaDonDTO> searchAndFilter(@Param("loai") Boolean loai,
+                                    @Param("trangThai") String trangThai,
+                                    @Param("keyword") String keyword,
+                                    @Param("tongTienMin") Float tongTienMin,
+                                    @Param("tongTienMax") Float tongTienMax,
+                                    Pageable pageable);
+
+    HoaDonDTO huyLichDat(Integer id);
 }
