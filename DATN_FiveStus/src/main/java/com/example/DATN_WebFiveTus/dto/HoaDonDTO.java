@@ -38,6 +38,8 @@ public class HoaDonDTO {
 
     private String soDienThoaiKhachHang;
 
+    private String emailKhachHang;
+
     private Boolean loai;
 
     private Date ngayTao;
