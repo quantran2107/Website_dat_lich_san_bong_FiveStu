@@ -66,7 +66,6 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
             "WHERE kh.id = :id")
     List<HoaDonChiTiet> findHoaDonChiTietByIdKhachHang(@Param("id") Integer id);
 
-
     @Modifying
     @Transactional
     @Query("update HoaDonChiTiet hdct set hdct.trangThai='Đang hoạt động'  where hdct.id=:id")
