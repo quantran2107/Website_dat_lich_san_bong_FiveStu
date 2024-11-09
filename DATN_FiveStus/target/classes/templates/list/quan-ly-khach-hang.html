@@ -449,75 +449,174 @@
         filterKhachHang();
     });
 
-    function updateTableBody(data) {
-        var tableBody = document.getElementById('khachHangTable');
-        tableBody.innerHTML = '';
-
-        data.forEach(function (khachHang, index) {
-            var row = '<tr>' +
-                '<td>' + (index + 1) + '</td>' +
-                '<td>' + khachHang.hoVaTen + '</td>' +
-                '<td>' + khachHang.email + '</td>' +
-                '<td>' + khachHang.soDienThoai + '</td>' +
-                '<td>' + khachHang.createdAt + '</td>' +
-                '<td>' + (khachHang.gioiTinh ? 'Nam' : 'Nữ') + '</td>' +
-                '<td><span class="' + (khachHang.trangThai === 'active' ? 'custom-4' : 'custom-3') + '">' +
-                (khachHang.trangThai === 'active' ? 'Hoạt động' : 'Không hoạt động') + '</span></td>' +
-                '<td style="display: flex"><a href="/quan-ly-khach-hang-detail?id=' + khachHang.id + '">' +
-                '<button class="btn mb-2 mr-1 btn-outline-success type="button"><span class="fe fe-edit-3" title="Sửa"></span></button>' +
-                '</a></td>' +
-                '</tr>';
-            tableBody.innerHTML += row;
-        });
-    }
     document.getElementById("addForm").addEventListener("submit", function (event) {
         event.preventDefault(); // Ngăn chặn hành động mặc định của submit form
 
-        // Hiển thị hộp thoại xác nhận
-        Swal.fire({
-            title: 'Xác nhận',
-            text: 'Bạn chắc chắn muốn thêm khách hàng này không?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'Cancel',
-            reverseButtons: true // Đổi vị trí nút đồng ý và hủy
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Lấy dữ liệu từ form
-                let formData = new FormData(this);
+        let isValid = true;
 
-                // Gửi yêu cầu AJAX để thêm khách hàng
-                fetch(this.action, {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(response => response.text()) // Xử lý phản hồi dưới dạng văn bản
-                    .then(text => {
-                        Swal.fire({
-                            title: 'Thành công!',
-                            text: text,
-                            icon: 'success'
-                        }).then(() => {
-                            // Tải lại trang sau khi thêm thành công
-                            window.location.reload();
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        Swal.fire({
-                            title: 'Lỗi!',
-                            text: 'Đã xảy ra lỗi khi thêm khách hàng',
-                            icon: 'error'
-                        });
-                    });
-            }
+        // Reset trạng thái lỗi trước khi kiểm tra lại
+        document.querySelectorAll('.is-invalid').forEach((element) => {
+            element.classList.remove('is-invalid');
         });
+        document.querySelectorAll('.invalid-feedback').forEach((element) => {
+            element.remove();
+        });
+
+        // Lấy giá trị từ các trường input
+        let maKhachHang = document.getElementById("maKhachHang").value.trim();
+        let hoVaTen = document.getElementById("hoVaTen").value.trim();
+        let email = document.getElementById("email").value.trim();
+        let soDienThoai = document.getElementById("soDienThoai").value.trim();
+        let gioiTinh = document.getElementById("gioiTinh").value.trim();
+        let trangThai = document.getElementById("trangThai").value.trim();
+        let diaChi = document.getElementById("tenDiaChi").value.trim();
+        let city = document.getElementById("city").value.trim();
+        let district = document.getElementById("district").value.trim();
+        let ward = document.getElementById("ward").value.trim();
+
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const phonePattern = /^[0-9]{10,15}$/;
+
+        if (maKhachHang === '') {
+            let maKhachHangInput = document.getElementById("maKhachHang");
+            maKhachHangInput.classList.add('is-invalid');
+            maKhachHangInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng nhập mã khách hàng.</div>');
+            isValid = false;
+        }
+
+        if (hoVaTen === '') {
+            let hoVaTenInput = document.getElementById("hoVaTen");
+            hoVaTenInput.classList.add('is-invalid');
+            hoVaTenInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng nhập họ và tên.</div>');
+            isValid = false;
+        }
+
+        if (email === '') {
+            let emailInput = document.getElementById("email");
+            emailInput.classList.add('is-invalid');
+            emailInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng nhập email.</div>');
+            isValid = false;
+        } else if (!emailPattern.test(email)) {
+            let emailInput = document.getElementById("email");
+            emailInput.classList.add('is-invalid');
+            emailInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Email sai định dạng! Vui lòng nhập lại.</div>');
+            isValid = false;
+        }
+
+        // Kiểm tra số điện thoại
+        if (soDienThoai === '') {
+            let soDienThoaiInput = document.getElementById("soDienThoai");
+            soDienThoaiInput.classList.add('is-invalid');
+            soDienThoaiInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng nhập số điện thoại.</div>');
+            isValid = false;
+        } else if (!phonePattern.test(soDienThoai)) {
+            let soDienThoaiInput = document.getElementById("soDienThoai");
+            soDienThoaiInput.classList.add('is-invalid');
+            soDienThoaiInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Số điện thoại sai định dạng! Vui lòng nhập lại (10-15 chữ số).</div>');
+            isValid = false;
+        }
+
+        if (gioiTinh === '') {
+            let gioiTinhInput = document.getElementById("gioiTinh");
+            gioiTinhInput.classList.add('is-invalid');
+            gioiTinhInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng chọn giới tính.</div>');
+            isValid = false;
+        }
+
+        if (trangThai === '') {
+            let trangThaiInput = document.getElementById("trangThai");
+            trangThaiInput.classList.add('is-invalid');
+            trangThaiInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng chọn trạng thái.</div>');
+            isValid = false;
+        }
+
+        if (diaChi === '') {
+            let diaChiInput = document.getElementById("tenDiaChi");
+            diaChiInput.classList.add('is-invalid');
+            diaChiInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng nhập địa chỉ cụ thể.</div>');
+            isValid = false;
+        }
+
+        if (city === '') {
+            let cityInput = document.getElementById("city");
+            cityInput.classList.add('is-invalid');
+            cityInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng chọn tỉnh thành.</div>');
+            isValid = false;
+        }
+
+        if (district === '') {
+            let districtInput = document.getElementById("district");
+            districtInput.classList.add('is-invalid');
+            districtInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng chọn quận huyện.</div>');
+            isValid = false;
+        }
+
+        if (ward === '') {
+            let wardInput = document.getElementById("ward");
+            wardInput.classList.add('is-invalid');
+            wardInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng chọn phường xã.</div>');
+            isValid = false;
+        }
+
+        // Nếu tất cả các trường đều hợp lệ, kiểm tra trùng lặp mã khách hàng, email và số điện thoại
+        if (isValid) {
+            Promise.all([
+                fetch(`/quan-ly-khach-hang/kiem-tra-ma-khach-hang?maKhachHang=${encodeURIComponent(maKhachHang)}`).then(response => response.json()),
+                fetch(`/quan-ly-khach-hang/kiem-tra-email?email=${encodeURIComponent(email)}`).then(response => response.json()),
+                fetch(`/quan-ly-khach-hang/kiem-tra-so-dien-thoai?soDienThoai=${encodeURIComponent(soDienThoai)}`).then(response => response.json())
+            ]).then(([maKhachHangExists, emailExists, soDienThoaiExists]) => {
+                if (!maKhachHangExists && !emailExists && !soDienThoaiExists) {
+                    // Hiển thị hộp thoại xác nhận
+                    Swal.fire({
+                        title: 'Xác nhận',
+                        text: 'Bạn chắc chắn muốn thêm khách hàng này không?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: 'Cancel',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Gửi form bằng AJAX
+                            let formData = new FormData(document.getElementById("addForm"));
+                            fetch(document.getElementById("addForm").action, {
+                                method: 'POST',
+                                body: formData
+                            })
+                                .then(response => response.text())
+                                .then(text => {
+                                    Swal.fire({
+                                        title: 'Thành công!',
+                                        text: text,
+                                        icon: 'success'
+                                    }).then(() => {
+                                        window.location.reload(); // Tải lại trang sau khi thêm thành công
+                                    });
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    Swal.fire({
+                                        title: 'Lỗi!',
+                                        text: 'Đã xảy ra lỗi khi thêm khách hàng.',
+                                        icon: 'error'
+                                    });
+                                });
+                        }
+                    });
+                } else {
+                    let errorMessage = '';
+                    if (maKhachHangExists) errorMessage += 'Mã khách hàng đã tồn tại. ';
+                    if (emailExists) errorMessage += 'Email đã tồn tại. ';
+                    if (soDienThoaiExists) errorMessage += 'Số điện thoại đã tồn tại.';
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: errorMessage.trim(),
+                        icon: 'error'
+                    });
+                }
+            });
+        }
     });
-
-
-
-
 </script>
 </body>
 </html>
