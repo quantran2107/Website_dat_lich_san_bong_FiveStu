@@ -128,10 +128,4 @@ public class HoaDonChiTietRest {
         return ResponseEntity.ok(hoaDonChiTietDTO);
     }
 
-    @PostMapping("/save3")
-    public ResponseEntity<HoaDonChiTietDTO> save3(@RequestBody HoaDonChiTietDTO hoaDonChiTietDTO){
-        HoaDonChiTietDTO hoaDonChiTietDTOSave = hoaDonChiTietService.save3(hoaDonChiTietDTO);
-        return ResponseEntity.ok(hoaDonChiTietDTOSave);
-    }
-
 }

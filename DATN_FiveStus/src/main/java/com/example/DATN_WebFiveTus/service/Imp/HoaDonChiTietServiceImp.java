@@ -27,6 +27,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -281,73 +282,6 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         return modelMapper.map(hoaDonChiTietSave, HoaDonChiTietDTO.class);
     }
 
-    //Hàm của Ly viết để gửi mail
-    @Override
-    public HoaDonChiTietDTO save3(HoaDonChiTietDTO hoaDonChiTietDTO) {
-        // Chuyển đổi DTO sang entity
-        HoaDonChiTiet hoaDonChiTiet = modelMapper.map(hoaDonChiTietDTO, HoaDonChiTiet.class);
-
-        // Tìm kiếm thông tin sân và hóa đơn từ repository
-        SanCa sanCa = sanCaRepository.findById(hoaDonChiTietDTO.getIdSanCa())
-                .orElseThrow(() -> new EntityNotFoundException("Sân ca không tìm thấy"));
-        HoaDon hoaDon = hoaDonRepository.findById(hoaDonChiTietDTO.getIdHoaDon())
-                .orElseThrow(() -> new EntityNotFoundException("Hóa đơn không tìm thấy"));
-
-        // Thiết lập các thuộc tính cho hóa đơn chi tiết
-        hoaDonChiTiet.setMaHoaDonChiTiet(generateMaHoaDonChiTiet());
-        hoaDonChiTiet.setSanCa(sanCa);
-        hoaDonChiTiet.setHoaDon(hoaDon);
-        hoaDonChiTiet.setNgayDenSan(hoaDonChiTietDTO.getNgayDenSan());
-        hoaDonChiTiet.setTrangThai("Chờ nhận sân");
-        hoaDonChiTiet.setKieuNgayDat("Theo ngày");
-        hoaDonChiTiet.setTongTien(hoaDonChiTietDTO.getTongTien());
-
-        // Lưu hóa đơn chi tiết vào repository
-        HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
-        // Gửi email thông báo
-        sendEmail(hoaDonChiTietSave,hoaDon);
-        // Trả về DTO đã lưu
-        return modelMapper.map(hoaDonChiTietSave, HoaDonChiTietDTO.class);
-    }
-    // Phương thức gửi email thông báo
-    private void sendEmail(HoaDonChiTiet savedEntity, HoaDon hoaDon) {
-        KhachHang khachHang = khachHangRepository.getReferenceById(hoaDon.getKhachHang().getId());
-        String emailKhachHang = khachHang.getEmail();
-
-        if (emailKhachHang == null || emailKhachHang.isEmpty()) {
-            throw new IllegalArgumentException("Email khách hàng không được trống");
-        }
-
-        try {
-            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-
-            // Tạo nội dung email
-            Context context = new Context();
-            context.setVariable("maHoaDon", hoaDon.getMaHoaDon());
-            context.setVariable("tongTien", savedEntity.getTongTien());
-            context.setVariable("ngayDenSan", savedEntity.getNgayDenSan());
-            context.setVariable("trangThai", savedEntity.getTrangThai());
-            context.setVariable("trangThai", savedEntity.getTrangThai());
-            context.setVariable("trangThai", savedEntity.getTrangThai());
-            context.setVariable("trangThai", savedEntity.getTrangThai());
-
-            String html = springTemplateEngine.process("hoadon_template", context); // Tên template HTML
-
-            mimeMessage.setContent(html, "text/html; charset=utf-8");
-
-            helper.setTo(emailKhachHang);
-            helper.setSubject("Thông báo đặt sân thành công!");
-            helper.setText(html, true);
-
-            javaMailSender.send(mimeMessage); // Gửi email
-
-        } catch (MessagingException e) {
-            e.printStackTrace(); // Xử lý ngoại lệ MessagingException
-        } catch (Exception e) {
-            e.printStackTrace(); // Xử lý ngoại lệ khác
-        }
-    }
     @Override
     public boolean isSanCaBooked(Long idSanCa, LocalDate ngayDenSan) {
         Long count = hoaDonChiTietRepository.countByIdSanCaAndNgayDenSan(idSanCa, ngayDenSan);
