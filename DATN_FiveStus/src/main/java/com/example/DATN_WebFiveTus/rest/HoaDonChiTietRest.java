@@ -124,7 +124,8 @@ public class HoaDonChiTietRest {
 
     @GetMapping("/khach-hang-hdct/{id}")
     public ResponseEntity<?> findByIdKhachHang(@PathVariable("id") Integer id) {
-        HoaDonChiTietDTO hoaDonChiTietDTO = hoaDonChiTietService.findByIdKhachHang(id);
+        List<HoaDonChiTietDTO> hoaDonChiTietDTO = hoaDonChiTietService.findByIdKhachHang(id);
         return ResponseEntity.ok(hoaDonChiTietDTO);
     }
+
 }

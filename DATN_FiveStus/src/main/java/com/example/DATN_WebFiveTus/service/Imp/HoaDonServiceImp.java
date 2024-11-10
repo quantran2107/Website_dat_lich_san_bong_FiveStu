@@ -12,14 +12,22 @@ import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
 import com.example.DATN_WebFiveTus.repository.NhanVienReposity;
 import com.example.DATN_WebFiveTus.repository.PhieuGiamGiaRepository;
 import com.example.DATN_WebFiveTus.service.HoaDonService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.security.SecureRandom;
 import java.time.Instant;
@@ -56,7 +64,11 @@ public class HoaDonServiceImp implements HoaDonService {
         this.khachHangRepository = khachHangRepository;
         this.modelMapper = modelMapper;
     }
+    @Autowired
+    private JavaMailSender javaMailSender; // Để gửi email
 
+    @Autowired
+    private SpringTemplateEngine springTemplateEngine;
 
     @Override
     public List<HoaDonDTO> getAll() {
@@ -78,19 +90,22 @@ public class HoaDonServiceImp implements HoaDonService {
 
     @Override
     public HoaDonDTO save(HoaDonDTO hoaDonDTO) {
-
         // Tìm khách hàng theo ID
         KhachHang khachHang = khachHangRepository.findById(hoaDonDTO.getIdKhachHang())
                 .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại với ID: " + hoaDonDTO.getIdKhachHang()));
         HoaDon hoaDon = modelMapper.map(hoaDonDTO, HoaDon.class);
         hoaDon.setMaHoaDon(generateMaHoaDon());
+        hoaDon.setId(hoaDonDTO.getId());
         hoaDon.setTrangThai("Chờ thanh toán");
         Date now = Date.from(Instant.now());
         hoaDon.setKhachHang(khachHang);
         hoaDon.setTongTienSan(hoaDonDTO.getTongTienSan());
+        hoaDon.setTienCoc(hoaDonDTO.getTienCoc());
         hoaDon.setNgayTao(now);
+        hoaDon.setLoai(true);
         hoaDon.setDeletedAt(false);
         HoaDon hoaDonSave = hoaDonRepository.save(hoaDon);
+
         return modelMapper.map(hoaDonSave, HoaDonDTO.class);
     }
 
@@ -162,34 +177,43 @@ public class HoaDonServiceImp implements HoaDonService {
     }
 
 
-//    @Override
-//    public Page<HoaDonDTO> searchAndFilter(@Param("loai") Boolean loai,
-//                                           @Param("trangThai") String trangThai,
-//                                           @Param("keyword") String keyword,
-//                                           @Param("tongTienMin") Float tongTienMin,
-//                                           @Param("tongTienMax") Float tongTienMax,
-//                                           Pageable pageable) {
-//        List<HoaDon> hoaDonList = hoaDonRepository.searchAndFilter(loai, trangThai, keyword, tongTienMin, tongTienMax);
-//
-//        // Phân trang thủ công
-//        int pageSize = pageable.getPageSize();
-//        int currentPage = pageable.getPageNumber();
-//        int startItem = currentPage * pageSize;
-//        List<HoaDon> list;
-//
-//        if (hoaDonList.size() < startItem) {
-//            list = Collections.emptyList();
-//        } else {
-//            int toIndex = Math.min(startItem + pageSize, hoaDonList.size());
-//            list = hoaDonList.subList(startItem, toIndex);
-//        }
-//
-//        List<HoaDonDTO> hoaDonDTOList = list.stream()
-//                .map(hoaDon -> modelMapper.map(hoaDon, HoaDonDTO.class))
-//                .collect(Collectors.toList());
-//
-//        return new PageImpl<>(hoaDonDTOList, pageable, hoaDonList.size());
-//    }
+    @Override
+    public Page<HoaDonDTO> searchAndFilter(@Param("loai") Boolean loai,
+                                           @Param("trangThai") String trangThai,
+                                           @Param("keyword") String keyword,
+                                           @Param("tongTienMin") Float tongTienMin,
+                                           @Param("tongTienMax") Float tongTienMax,
+                                           Pageable pageable) {
+        List<HoaDon> hoaDonList = hoaDonRepository.searchAndFilter(loai, trangThai, keyword, tongTienMin, tongTienMax);
+
+        // Phân trang thủ công
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<HoaDon> list;
+
+        if (hoaDonList.size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, hoaDonList.size());
+            list = hoaDonList.subList(startItem, toIndex);
+        }
+
+        List<HoaDonDTO> hoaDonDTOList = list.stream()
+                .map(hoaDon -> modelMapper.map(hoaDon, HoaDonDTO.class))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(hoaDonDTOList, pageable, hoaDonList.size());
+    }
+
+    @Override
+    public HoaDonDTO huyLichDat(Integer id) {
+        HoaDon hoaDon = hoaDonRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn với id " + id));
+        hoaDon.setTrangThai("Đã hủy");
+        hoaDonRepository.save(hoaDon);
+        return modelMapper.map(hoaDon,HoaDonDTO.class);
+    }
 
     @Override
     public Page<HoaDonDTO> phanTrang(Pageable pageable) {

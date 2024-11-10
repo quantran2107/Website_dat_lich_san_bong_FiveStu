@@ -689,11 +689,18 @@ $(document).ready(function () {
     function setTableInTab() {
         content.html('');
         let html = ``;
-        html += `<div class="row">
-                                <h3>SẮP DIỄN RA</h3>
-                            </div>
-                            <div class="row" style="max-height: 400px; overflow-y: auto; border: 1px solid #ccc; border-radius: 5px;">
-                                <table class="table table-hover" style="width: 100%; border-collapse: collapse;">
+        html += `<ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#future" role="tab" aria-controls="future" aria-selected="true">Sắp diễn ra</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#past" role="tab" aria-controls="past" aria-selected="false">Đã kết thúc</a>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-3" id="myTabContent">
+            <div class="tab-pane fade show active" id="future" role="tabpanel" aria-labelledby="home-tab">
+               <table class="table table-hover" style="width: 100%; border-collapse: collapse;">
                                     <thead>
                                     <tr>
                                         <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">#</th>
@@ -716,13 +723,9 @@ $(document).ready(function () {
                                     </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <h3>ĐÃ KẾT THÚC</h3>
-                            </div>
-                            <div class="row">
-                                <table class="table table-hover">
+            </div>
+            <div class="tab-pane fade" id="past" role="tabpanel" aria-labelledby="profile-tab">
+                <table class="table table-hover">
                                     <thead>
                                     <tr>
                                         <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">#</th>
@@ -744,7 +747,10 @@ $(document).ready(function () {
                                     </tr>
                                     </tbody>
                                 </table>
-                            </div>`;
+
+            </div>
+        </div>
+`;
         content.html(html);
     }
 
@@ -760,6 +766,8 @@ $(document).ready(function () {
         return `${hours}:${minutes} - ${day}/${month}/${year}`;
     }
 });
+
+// Bằng
 let dataCache = null;
 document.addEventListener("DOMContentLoaded", function () {
     const citis = document.getElementById("city");
@@ -830,11 +838,20 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchData();
 });
 
-
-
-
-// Hàm mở modal cập nhật địa chỉ
-// function openUpdateAddressModal() {
-//     $('#addressModalLabel').text('Cập nhật địa chỉ');
-//     $('#addressModal').modal('show'); // Hiển thị modal
-// }
+// Ly viết hàm để click vào Đặt sân ngay
+async function checkLoginAndRedirect() {
+    try {
+        const customer = await loadCustomer();
+        if (customer && customer.id) {
+            // Nếu có thông tin khách hàng (đã đăng nhập), chuyển hướng đến trang đặt sân
+            window.location.href = '/khach-hang/dat-san';  // Thay vì th:href, dùng JavaScript để chuyển hướng
+        } else {
+            // Nếu không có thông tin khách hàng (chưa đăng nhập), mở modal login
+            $('#modallogin').modal('show');
+        }
+    } catch (error) {
+        console.error('Lỗi khi kiểm tra khách hàng:', error);
+        // Nếu gặp lỗi, bạn có thể mở modal hoặc xử lý lỗi ở đây
+        $('#modallogin').modal('show');
+    }
+}

@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
+import com.example.DATN_WebFiveTus.config.PDFGenerator;
 import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
 import com.example.DATN_WebFiveTus.entity.HoaDon;
 import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
@@ -8,28 +9,37 @@ import com.example.DATN_WebFiveTus.entity.SanCa;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.HoaDonChiTietRepository;
 import com.example.DATN_WebFiveTus.repository.HoaDonRepository;
+import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
 import com.example.DATN_WebFiveTus.repository.SanCaRepository;
 import com.example.DATN_WebFiveTus.service.HoaDonChiTietService;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfDocument;
+import com.itextpdf.text.pdf.PdfWriter;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.security.SecureRandom;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.io.ByteArrayOutputStream;
 @Service
 public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
@@ -37,15 +47,27 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
     private HoaDonRepository hoaDonRepository;
 
+    private KhachHangRepository khachHangRepository;
+
     private SanCaRepository sanCaRepository;
 
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PDFGenerator pdfGenerator;
+
+    @Autowired
+    private JavaMailSender javaMailSender; // Để gửi email
+
+    @Autowired
+    private SpringTemplateEngine springTemplateEngine;
 
     @Autowired
     public HoaDonChiTietServiceImp(HoaDonChiTietRepository hoaDonChiTietRepository, HoaDonRepository hoaDonRepository, SanCaRepository sanCaRepository, ModelMapper modelMapper) {
         this.hoaDonChiTietRepository = hoaDonChiTietRepository;
         this.hoaDonRepository = hoaDonRepository;
         this.sanCaRepository = sanCaRepository;
+        this.khachHangRepository = khachHangRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -69,7 +91,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
     @Override
     public HoaDonChiTietDTO save(HoaDonChiTietDTO hoaDonChiTietDTO) {
-        HoaDonChiTiet hoaDonChiTiet = modelMapper.map(hoaDonChiTietDTO,HoaDonChiTiet.class);
+        HoaDonChiTiet hoaDonChiTiet = modelMapper.map(hoaDonChiTietDTO, HoaDonChiTiet.class);
 
         SanCa sanCa = sanCaRepository.findById(hoaDonChiTietDTO.getIdSanCa()).orElseThrow();
 
@@ -86,7 +108,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
         HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
 
-        return modelMapper.map(hoaDonChiTietSave,HoaDonChiTietDTO.class);
+        return modelMapper.map(hoaDonChiTietSave, HoaDonChiTietDTO.class);
     }
 
     private String generateMaHoaDonChiTiet() {
@@ -237,7 +259,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
     @Override
     public HoaDonChiTietDTO save2(HoaDonChiTietDTO hoaDonChiTietDTO) {
-        HoaDonChiTiet hoaDonChiTiet = modelMapper.map(hoaDonChiTietDTO,HoaDonChiTiet.class);
+        HoaDonChiTiet hoaDonChiTiet = modelMapper.map(hoaDonChiTietDTO, HoaDonChiTiet.class);
 
         SanCa sanCa = sanCaRepository.findById(hoaDonChiTietDTO.getIdSanCa()).orElseThrow();
 
@@ -257,7 +279,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         System.out.println("idHoaDon: " + hoaDonChiTietDTO.getIdHoaDon());
         System.out.println("tongTien: " + hoaDonChiTietDTO.getTongTien());
 
-        return modelMapper.map(hoaDonChiTietSave,HoaDonChiTietDTO.class);
+        return modelMapper.map(hoaDonChiTietSave, HoaDonChiTietDTO.class);
     }
 
     @Override
@@ -267,8 +289,10 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
     }
 
     @Override
-    public HoaDonChiTietDTO findByIdKhachHang(Integer id) {
-        return modelMapper.map(hoaDonChiTietRepository.findHoaDonChiTietByIdKhachHang(id), HoaDonChiTietDTO.class);
+    public List<HoaDonChiTietDTO> findByIdKhachHang(Integer id) {
+        List<HoaDonChiTiet> list = hoaDonChiTietRepository.findHoaDonChiTietByIdKhachHang(id);
+        return list.stream()
+                .map((hoaDonChiTiet) -> modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class)).collect(Collectors.toList());
     }
 
 }

@@ -110,8 +110,6 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
                                   @Param("idCa") List<Integer> idCa);
 
 
-
-
     @Query("SELECT sc FROM SanCa  sc WHERE sc.ngayTrongTuan.id = :idNgayTrongTuan " +
                     "AND sc.ca.id = :idCa " +
                     "AND sc.sanBong.loaiSan.id = :idLoaiSan")
@@ -136,7 +134,7 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
         JOIN duantotnghiep.ca ca ON ca.id = sc.id_ca
         JOIN duantotnghiep.hoa_don_chi_tiet hdc ON sc.id = hdc.id_san_ca
         JOIN duantotnghiep.hoa_don hd ON hdc.id_hoa_don = hd.id
-        WHERE hd.id_khach_hang = '2'
+        WHERE hd.id_khach_hang = :id
         GROUP BY sc.id,
                  tenSanBong,
                  thoiGianBatDau,
@@ -149,5 +147,5 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
         ORDER BY   ngayDat ASC
         
         """, nativeQuery = true)
-    List<HistoryCustomerBookFieldResponse> findHistoryCustomerBookFieldResponse(Integer id);
+    List<HistoryCustomerBookFieldResponse> findHistoryCustomerBookFieldResponse(@Param("id") Integer id);
 }

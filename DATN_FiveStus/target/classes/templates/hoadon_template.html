@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông báo: Đặt sân thành công</title>
+    <style>
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 600px;
+            font-family: Arial, sans-serif;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .header {
+            background-color: #198754;
+            padding: 20px;
+            text-align: center;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            color: #fff;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .content {
+            padding: 20px;
+        }
+        .footer {
+            background-color: #f1f1f1;
+            padding: 10px;
+            text-align: center;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        .button {
+            color: #fff;
+            background-color: #198754;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .button:hover {
+            background-color: #145c32;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>FiveStu
+            <br>
+            <span>Phiếu Đặt Lịch Sân Bóng</span></h1>
+    </div>
+    <div class="content">
+        <!-- Thông tin khách hàng -->
+        <h2>Thông tin khách hàng</h2>
+        <p><strong>Tên:</strong> <span th:text="${customer.hoVaTen}">Tên khách hàng</span></p>
+        <p><strong>Số điện thoại:</strong> <span th:text="${customer.soDienThoai}">Số điện thoại khách hàng</span></p>
+        <p><strong>Email:</strong> <span th:text="${customer.email}">Email khách hàng</span></p>
+
+        <h2 class="text-content">Thông tin chi tiết</h2>
+        <table>
+            <tr>
+                <th>Ngày đá</th>
+                <th>Ca</th>
+                <th>Giá</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+            </tr>
+            <tr th:each="detail : ${invoiceDetails}">
+                <td th:text="${detail.ngayDenSan}">Ngày đá</td>
+                <td th:text="${detail.sanCa}">Ca</td>
+                <td th:text="${detail.price}">Giá</td>
+                <td th:text="${detail.tongTien}">Tổng tiền</td>
+                <td th:text="${detail.trangThai}">Trạng thái</td>
+            </tr>
+        </table>
+
+        <p>Hãy đặt sân trang web của chúng tôi để nhận được giá ưu đãi và trải nghiệm dịch vụ tiện ích .</p>
+        <a th:href="@{http://localhost:8080/khach-hang/trang-chu}" class="button" style="color: #ccced0">Xem Chi Tiết</a>
+        <p>Cảm ơn bạn đã ủng hộ chúng tôi!</p>
+    </div>
+    <div class="footer">
+        <p>Sân bóng Five Stu</p>
+    </div>
+</div>
+</body>
+</html>

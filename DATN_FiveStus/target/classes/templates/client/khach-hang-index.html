@@ -16,8 +16,9 @@
                 <h1 class="text-success font-weight-bold">Chào mừng bạn đến với Sân bóng FiveStu</h1>
                 <p class="lead text-dark">Trải nghiệm dịch vụ đặt sân bóng nhanh chóng cùng chúng tôi</p>
                 <p>
-                    <a th:href="@{/khach-hang/dat-san}" class="btn btn-success btn-lg py-3 px-5 mr-3 mb-2">Đặt sân ngay</a>
-                    <a th:href="@{/khach-hang-noi-quy2}" class="text-success py-3 px-5 mb-2">Nội quy</a>
+                    <a href="javascript:void(0);" class="btn btn-success btn-lg py-3 px-5 mr-3 mb-2"
+                       onclick="checkLoginAndRedirect()">Đặt sân ngay</a>
+                    <a th:href="@{/khach-hang-noi-quy3}" class="text-success py-3 px-5 mb-2">Nội quy</a>
                 </p>
             </div>
         </div>
@@ -116,6 +117,34 @@
 <script th:src="@{/client/js/jquery-1.11.0.min.js}"></script>
 <script th:src="@{/client/js/plugins.js}"></script>
 <script th:src="@{/client/js/script.js}"></script>
+<script>
+    async function loadCustomer() {
+        const response = await fetch('http://localhost:8080/customer/get-customer');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data.response; // Trả về thông tin khách hàng, giả sử bạn cần id khách hàng
+    }
+
+    async function checkLoginAndRedirect() {
+        try {
+            const customer = await loadCustomer();
+            if (customer && customer.id) {
+                // Nếu có thông tin khách hàng (đã đăng nhập), chuyển hướng đến trang đặt sân
+                window.location.href = '/khach-hang/dat-san';  // Thay vì th:href, dùng JavaScript để chuyển hướng
+            } else {
+                // Nếu không có thông tin khách hàng (chưa đăng nhập), mở modal login
+                $('#modallogin').modal('show');
+            }
+        } catch (error) {
+            console.error('Lỗi khi kiểm tra khách hàng:', error);
+            // Nếu gặp lỗi, bạn có thể mở modal hoặc xử lý lỗi ở đây
+            $('#modallogin').modal('show');
+        }
+    }
+
+</script>
 </body>
 
 </html>

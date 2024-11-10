@@ -12,8 +12,4 @@ public class GiaoCaController {
         return "";
     }
 
-    @GetMapping("/giao-ca")
-    public String giaoCa() {
-        return "list/nhan-vien/giao-ca";
-    }
 }

@@ -5,13 +5,11 @@ import com.example.DATN_WebFiveTus.dto.LoaiSanDTO;
 import com.example.DATN_WebFiveTus.dto.NgayTrongTuanDTO;
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
-import com.example.DATN_WebFiveTus.entity.SanBong;
 import com.example.DATN_WebFiveTus.rest.CaRest;
 import com.example.DATN_WebFiveTus.rest.LoaiSanRest;
 import com.example.DATN_WebFiveTus.rest.NgayTrongTuanRest;
 import com.example.DATN_WebFiveTus.rest.SanBongRest;
 import com.example.DATN_WebFiveTus.service.SanBongService;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -66,100 +63,6 @@ public class SanBongController {
         System.out.println("Haha: "+sanBongs);
         return "quan-ly-san-bong"; // Thay thế "list-san-bong" bằng tên view của bạn
     }
-
-
-//    @GetMapping("/listSanBong")
-//    public String listSanBong(@RequestParam(name = "haha", required = false) Integer id,
-//                              @RequestParam(name = "keyWords", required = false) String keyWords,
-//                              @RequestParam(name = "pageNum", defaultValue = "1") Integer pageNum,
-//                              @RequestParam(name = "sortDirection", defaultValue = "asc") String sortDirection,
-//                              Model model) {
-//
-//        List<LoaiSanDTO> listRest1 = loaiSanRest.getAll().getBody();
-//        Set<String> listTTLS = new HashSet<>(listRest1.stream()
-//                .map(LoaiSanDTO::getTrangThai)
-//                .collect(Collectors.toList()));
-//
-//        model.addAttribute("listTTLS",listTTLS);
-//
-//        List<SanBongDTO> listRest2 = sanBongRest.getAll().getBody();
-//        Set<String> listTTSB = new HashSet<>(listRest2.stream()
-//                .map(SanBongDTO::getTrangThai)
-//                .collect(Collectors.toList()));
-//
-//        model.addAttribute("listTTSB",listTTSB);
-//
-//        List<CaDTO> listRest3 = caRest.getAll().getBody();
-//        Set<String> listTTC = new HashSet<>(listRest3.stream()
-//                .map(CaDTO::getTrangThai)
-//                .collect(Collectors.toList()));
-//
-//        model.addAttribute("listTTC",listTTC);
-//
-//        model.addAttribute("listLS", Arrays.asList(restTemplate.getForObject(
-//                "http://localhost:8080/loai-san/hien-thi",
-//                LoaiSanDTO[].class
-//        )));
-//
-//        model.addAttribute("listNTT", Arrays.asList(restTemplate.getForObject(
-//                "http://localhost:8080/ngay-trong-tuan/hien-thi",
-//                NgayTrongTuanDTO[].class
-//        )));
-//
-//        model.addAttribute("listC", Arrays.asList(restTemplate.getForObject(
-//                "http://localhost:8080/ca/hien-thi",
-//                CaDTO[].class
-//        )));
-//
-//        model.addAttribute("listSB", Arrays.asList(restTemplate.getForObject(
-//                "http://localhost:8080/san-bong/hien-thi",
-//                SanBongDTO[].class
-//        )));
-//
-//
-//        model.addAttribute("listSC", Arrays.asList(restTemplate.getForObject(
-//                "http://localhost:8080/san-ca/hien-thi",
-//                SanCaDTO[].class
-//        )));
-//
-//        model.addAttribute("listSC", Arrays.asList(restTemplate.getForObject(
-//                "http://localhost:8080/san-ca/hien-thi",
-//                SanCaDTO[].class
-//        )));
-//
-//        model.addAttribute("sanCa",new SanCaDTO());
-//        model.addAttribute("sanBong",new SanBongDTO());
-//        model.addAttribute("ca",new CaDTO());
-//        model.addAttribute("ngayTrongTuan",new NgayTrongTuanDTO());
-//        model.addAttribute("loaiSan",new LoaiSanDTO());
-//
-//
-//
-//        int[] totalPageElement = new int[2]; // Array to store total pages and total elements
-//
-//        List<SanBongDTO> SanBongDTOList;
-//
-//        if (id != null || keyWords != null) {
-//            // Search by id if id is provided
-//            SanBongDTOList = sanBongService.searchKeyWords(pageNum, keyWords.trim(), sortDirection, totalPageElement, id);
-//        } else {
-//            // Otherwise, list all with pagination and sorting
-//            SanBongDTOList = sanBongService.listAllSortPage(pageNum, sortDirection, totalPageElement);
-//        }
-//
-//        model.addAttribute("SanBongDTOList", SanBongDTOList);
-//        model.addAttribute("currentPage", pageNum);
-//        model.addAttribute("sortDirection", sortDirection);
-//        model.addAttribute("totalPages", totalPageElement[0]);
-//        model.addAttribute("totalElements", totalPageElement[1]);
-//        model.addAttribute("currentId", id);
-//        model.addAttribute("currentTrangThai", keyWords);
-//
-//
-//        return "/list/quan-ly-san-bong2";
-//    }
-
-
 
 
     @PostMapping("/sanBong/add")

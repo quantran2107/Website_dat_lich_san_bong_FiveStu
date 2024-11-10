@@ -1373,7 +1373,7 @@ async function calculateTotalPrice() {
 
     try {
         // Gọi API để lấy giá trị tiền cọc
-        const response = await fetch('http://localhost:8080/tham-so/searchMa/TSTIEN_COC');
+        const response = await fetch('http://localhost:8080/tham-so/searchMaFake/TSTIEN_COC');
         const data = await response.json();
 
         // Lấy giá trị tiền cọc từ API và tính toán

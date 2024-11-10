@@ -41,7 +41,8 @@ public interface HoaDonChiTietService {
 
     HoaDonChiTietDTO save2(HoaDonChiTietDTO hoaDonChiTietDTO);
 
+
      boolean isSanCaBooked(Long idSanCa, LocalDate ngayDenSan);
 
-    HoaDonChiTietDTO findByIdKhachHang(Integer id);
+    List<HoaDonChiTietDTO> findByIdKhachHang(Integer id);
 }

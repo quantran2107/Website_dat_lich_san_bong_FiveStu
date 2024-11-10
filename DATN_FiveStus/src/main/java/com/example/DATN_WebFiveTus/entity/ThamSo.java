@@ -46,6 +46,9 @@ public class ThamSo {
     @Column(name = "mo_ta")
     private String moTa;
 
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
+
     @Column(name = "trang_thai", nullable = false)
     private boolean trangThai;
 

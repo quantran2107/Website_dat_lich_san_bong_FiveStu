@@ -64,7 +64,7 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
             "JOIN FETCH sc.ca c " +
             "JOIN FETCH sc.ngayTrongTuan nt " +
             "WHERE kh.id = :id")
-    HoaDonChiTiet findHoaDonChiTietByIdKhachHang(@Param("id") Integer id);
+    List<HoaDonChiTiet> findHoaDonChiTietByIdKhachHang(@Param("id") Integer id);
 
     @Modifying
     @Transactional
