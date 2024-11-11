@@ -201,6 +201,14 @@ $(document).ready(function () {
     function checkSideBar() {
         const newUl = `
             <ul class="navbar-nav flex-fill w-100 mb-3 mt-3">
+                <li class="nav-item dropdown">
+                    <a class="nav-link pl-3" href="/thong-ke">
+                        <i class="fe fe-dollar-sign"></i>
+                        <span class="ml-3 item-text">Thống kê </span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav flex-fill w-100 mb-3">
                 <li class="nav-item active">
                     <a class="nav-link pl-3" href="/phieu-giam-gia">
                         <i class="fe fe-tag"></i>
