@@ -1,15 +1,9 @@
 package com.example.DATN_WebFiveTus.service;
 
-import com.example.DATN_WebFiveTus.dto.ApiResponseDto;
 import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
-import com.example.DATN_WebFiveTus.dto.HoaDonRequest;
-import com.example.DATN_WebFiveTus.dto.PaymentResponse;
-import com.example.DATN_WebFiveTus.entity.HoaDon;
-import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -34,8 +28,6 @@ public interface HoaDonService {
     void deletedAt(Integer id);
 
     List<HoaDonDTO> getHDforNV(int id);
-
-    PaymentResponse confirmPayment(String maHoaDon);
 
 
     Page<HoaDonDTO> searchAndFilter(@Param("loai") Boolean loai,

@@ -18,8 +18,17 @@ import java.util.Optional;
 
 @Repository
 public interface KhachHangRepository extends JpaRepository<KhachHang,Integer> {
-    @Query("SELECT kh FROM KhachHang kh WHERE kh.hoVaTen LIKE %:query% OR kh.soDienThoai LIKE %:query% OR kh.email LIKE %:query%")
+    @Query("SELECT kh FROM KhachHang kh WHERE LOWER(kh.hoVaTen) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.soDienThoai) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.email) LIKE LOWER(CONCAT('%', :query, '%'))")
     Page<KhachHang> searchByNamePhoneOrEmail(@Param("query") String query, Pageable pageable);
+
+    @Query("SELECT kh FROM KhachHang kh WHERE (LOWER(kh.hoVaTen) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.soDienThoai) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.email) LIKE LOWER(CONCAT('%', :query, '%'))) AND kh.gioiTinh = :gender")
+    Page<KhachHang> searchByNamePhoneOrEmailAndGender(@Param("query") String query, @Param("gender") boolean gender, Pageable pageable);
+
+    @Query("SELECT kh FROM KhachHang kh WHERE (LOWER(kh.hoVaTen) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.soDienThoai) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.email) LIKE LOWER(CONCAT('%', :query, '%'))) AND kh.trangThai = :status")
+    Page<KhachHang> searchByNamePhoneOrEmailAndStatus(@Param("query") String query, @Param("status") String status, Pageable pageable);
+
+    @Query("SELECT kh FROM KhachHang kh WHERE (LOWER(kh.hoVaTen) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.soDienThoai) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.email) LIKE LOWER(CONCAT('%', :query, '%'))) AND kh.trangThai = :status AND kh.gioiTinh = :gender")
+    Page<KhachHang> searchByNamePhoneOrEmailAndStatusAndGender(@Param("query") String query, @Param("status") String status, @Param("gender") boolean gender, Pageable pageable);
 
     @Query("SELECT kh FROM KhachHang kh WHERE kh.trangThai = :status")
     Page<KhachHang> filterByStatus(@Param("status") String status, Pageable pageable);
@@ -45,4 +54,13 @@ public interface KhachHangRepository extends JpaRepository<KhachHang,Integer> {
 
     @Query("SELECT kh FROM KhachHang kh WHERE kh.email = :email")
     Optional<KhachHang> findKhachHangByEmail1(@Param("email") String email);
+
+    @Query("SELECT COUNT(kh) > 0 FROM KhachHang kh WHERE kh.email = :email")
+    boolean existsByEmail(@Param("email") String email);
+
+    @Query("SELECT COUNT(kh) > 0 FROM KhachHang kh WHERE kh.soDienThoai = :soDienThoai")
+    boolean existsBySoDienThoai(@Param("soDienThoai") String soDienThoai);
+
+    @Query("SELECT COUNT(kh) > 0 FROM KhachHang kh WHERE kh.maKhachHang = :maKhachHang")
+    boolean existsByMaKhachHang(@Param("maKhachHang") String maKhachHang);
 }

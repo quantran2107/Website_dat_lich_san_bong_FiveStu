@@ -457,10 +457,10 @@
 
         setupDeleteButtons(selectedBookings); // Thiết lập nút xóa
 
-        // Xử lý nút Huỷ
-        document.getElementById('btnCancel').addEventListener('click', function () {
-            loadTableData(1);
+        document.getElementById('btnCancel').addEventListener('click', () => {
+            window.location.href = 'http://localhost:8080/khach-hang/dat-san';
         });
+
 
         // Xử lý nút Đặt lịch
         document.getElementById('btnDatLichSubmit').addEventListener('click', async function () {
@@ -642,7 +642,6 @@
         const customerEmail = customer.email;
         const customerHoVaTen = customer.hoVaTen;
         const customerSoDienThoai = customer.soDienThoai;
-
         // Xác nhận trước khi đặt lịch
         const confirmResult = await Swal.fire({
             title: 'Xác nhận đặt lịch',
@@ -685,7 +684,6 @@
         console.log(invoiceId)
         // Tạo hóa đơn chi tiết
         const detailPromises = selectedBookings.map(async (booking) => {
-            console.log(booking)
             const bookingDate = parseDateString(booking.date); // Chuyển đổi chuỗi thành Date
             const formattedDate = formatDateToDDMMYYYY(bookingDate); // Định dạng lại thành dd/MM/yyyy
             const detailResponse = await fetch('http://localhost:8080/hoa-don-chi-tiet/save2', {
@@ -699,6 +697,7 @@
                     ngayDenSan: formattedDate, // Ngày đến sân
                     tongTien: booking.price, // Tổng tiền của dòng
                     tongTienThucTe: booking.price, // Tổng tiền của dòng
+
                     deletedAt: false
                 }),
             });
@@ -711,16 +710,20 @@
         // Đợi tất cả các yêu cầu tạo hóa đơn chi tiết hoàn thành
         await Promise.all(detailPromises);
 
-        // Thông báo cho người dùng và chuyển hướng sau khi hoàn thành
-        await Swal.fire({
-            title: 'Thành công!',
-            text: 'Đặt lịch thành công!',
-            icon: 'success',
-            confirmButtonText: 'OK'
+        const paymentResponse = await fetch('http://localhost:8080/api/payment/create_payment', {
+            method: 'GET', // Nếu API của bạn là GET
         });
 
-        // Chuyển hướng đến trang khách hàng
-        window.location.href = 'http://localhost:8080/customer';
+        if (!paymentResponse.ok) {
+            console.error('Lỗi tạo thanh toán:', await paymentResponse.text());
+            return;
+        }
+
+        const paymentData = await paymentResponse.json();
+        const paymentUrl = paymentData.url; // Lấy URL thanh toán từ API
+
+        // Chuyển hướng đến VNPay để thanh toán
+        window.location.href = paymentUrl;
     }
 
 </script>
