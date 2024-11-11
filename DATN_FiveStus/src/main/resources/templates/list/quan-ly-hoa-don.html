@@ -24,177 +24,7 @@
 <script th:inline="javascript">
 
     document.addEventListener("DOMContentLoaded", function () {
-        const mainContent = document.querySelector('.main-content');
-        mainContent.innerHTML = `
-        <div class="container-fluid" id="bodyContent">
-            <div class="row justify-content-center">
-                <div class="col-12">
-                    <h2 class="mb-2 page-title">Quản lý hóa đơn</h2>
-                    <div class="row my-4">
-                        <div class="col-md-12">
-                            <div class="card shadow">
-                                <div class="card-body">
-                                    <div class="form-row mb-3">
-                                        <i class="bi bi-funnel-fill"></i>
-                                        <h4 class="card-title ml-3">Bộ lọc</h4>
-                                    </div>
-                                    <div class="toolbar row">
-                                        <div class="col">
-                                            <form>
-                                                <div class="form-row mb-1">
-                                                    <div class="form-group col-md-1 d-flex align-items-center">
-                                                        <label for="search">Tìm kiếm: </label>
-                                                    </div>
-                                                    <div class="form-group col-md-4 mr-5">
-                                                        <input type="text" class="form-control" id="search"
-                                                               placeholder="Mã HD, NV, tên KH, SĐT" oninput="searchInvoices(this.value)">
-                                                    </div>
-                                                    <div class="form-group col-md-1 d-flex align-items-center">
-                                                        <label for="statusFilter">Loại: </label>
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <select class="custom-select my-1 mr-sm-2"
-                                                                id="statusFilter" onchange="filterTable()">
-                                                            <option value="all" selected>Tất cả</option>
-                                                            <option value="0">Online</option>
-                                                            <option value="1">Tại quầy</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-md-2">
-                                                        <button class="btn btn-info" onclick="back()">Làm mới</button>
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <h5>Tổng tiền</h5>
-                                                </div>
-                                                <div class="form-row mb-1">
-                                                    <div class="form-group col-md-1 d-flex align-items-center">
-                                                        <label for="tienMin">Từ: </label>
-                                                    </div>
-                                                    <div class="form-group col-md-4 mr-5">
-                                                        <input type="text" class="form-control" id="tienMin"
-                                                               placeholder="Nhập số tiền" oninput="searchMinMoney(this.value)">
-                                                    </div>
-                                                    <div class="form-group col-md-1 d-flex align-items-center">
-                                                        <label for="tienMax">Đến: </label>
-                                                    </div>
-                                                    <div class="form-group col-md-4 mr-5">
-                                                        <input type="text" class="form-control" id="tienMax"
-                                                               placeholder="Nhập số tiền" oninput="searchMaxMoney(this.value)">
-                                                    </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <h5>Ngày tạo</h5>
-                                                </div>
-                                                <div class="form-row mb-1">
-                                                    <div class="form-group col-md-1 d-flex align-items-center">
-                                                        <label for="ngayBatDau">Từ ngày: </label>
-                                                    </div>
-                                                    <div class="form-group col-md-4 mr-5">
-                                                        <div class="input-group">
-                                                          <input type="text" class="form-control drgpicker" id="ngayBatDau" value="" placeholder="dd/MM/yyyy">
-                                                          <div class="input-group-append">
-                                                            <div class="input-group-text" id="button-addon-date"><span class="fe fe-calendar fe-16 mx-2"></span></div>
-                                                          </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group col-md-1 d-flex align-items-center">
-                                                        <label for="ngayKetThuc">Đến ngày: </label>
-                                                    </div>
-                                                    <div class="form-group col-md-4">
-                                                        <div class="input-group">
-                                                          <input type="text" class="form-control drgpicker" id="ngayKetThuc" value="" placeholder="dd/MM/yyyy">
-                                                          <div class="input-group-append">
-                                                            <div class="input-group-text" id="button-addon-date"><span class="fe fe-calendar fe-16 mx-2"></span></div>
-                                                          </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row my-4">
-                        <div class="col-md-12">
-                            <div class="card shadow">
-                                <div class="card-body">
-                                    <div class="toolbar row mb-3">
-                                        <div class="col">
-                                            <form class="form-inline">
-                                                <div class="form-row">
-                                                    <div class="form-group col-auto ml-3">
-                                                        <h4 class="card-title">Danh sách hóa đơn</h4>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="col ml-auto">
-                                            <div class="dropdown float-right">
-                                                <button class="btn btn-success" type="button">
-                                                    + Tạo hóa đơn
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 mb-4">
-                                    <div class="card shadow">
-                                        <div class="card-body">
-                                            <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
-                                                <li class="nav-item">
-                                                    <button class="nav-link active" role="tab" data-toggle="pill" aria-controls="pills-home" aria-selected="true" onclick="filterTable2('all')">Tất cả</button>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-profile" onclick="filterTable2('da thanh toan')" aria-selected="false">Đã thanh toán</button>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-contact" onclick="filterTable2('huy')" aria-selected="false">Hủy</button>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-contact" onclick="filterTable2('huy')" aria-selected="false">Chờ xác nhận</button>
-                                                </li>
-                                            </ul>
-                                            <div class="tab-content mb-1" id="pills-tabContent">
-                                                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                                                    <table class="table datatables" style="justify-content: center; text-align: center" id="table-home">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>STT</th>
-                                                                <th>Mã hóa đơn</th>
-                                                                <th>Mã nhân viên</th>
-                                                                <th>Tên khách hàng</th>
-                                                                <th>SĐT khách hàng</th>
-                                                                <th>Loại</th>
-                                                                <th>Ngày tạo</th>
-                                                                <th>Tổng tiền</th>
-                                                                <th>Trạng thái</th>
-                                                                <th>Hành động</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="tableBody">
-
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                    <nav aria-label="Table Paging" class="mb-0 text-muted">
-                                        <ul id="pagination" class="pagination justify-content-end mb-0">
-                                            <!-- Các nút phân trang sẽ được thêm bởi JavaScript -->
-        </ul>
-        </nav>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        `;
+        loadTrangHoaDon();
 
         $('.drgpicker').daterangepicker({
         singleDatePicker: true,
@@ -248,38 +78,43 @@
         const tableBody = document.getElementById('tableBody');
         tableBody.innerHTML = ''; // Xóa dữ liệu hiện tại trong bảng
 
-        tableData.forEach((hoaDon, index) => {
-        const ngayTaoFormatted = new Date(hoaDon.ngayTao).toLocaleDateString();
-        const row = `
-        <tr>
-        <td>${(page * size) + index + 1}</td>
-        <td class="maHoaDon">${hoaDon.maHoaDon}</td>
-        <td class="maNhanVien">${hoaDon.maNhanVien}</td>
-        <td class="hoVaTenKhachHang">${hoaDon.hoVaTenKhachHang}</td>
-        <td class="soDienThoaiKhachHang">${hoaDon.soDienThoaiKhachHang}</td>
-        <td class="loai">
-        <span style="width: 90%"
-        class="${hoaDon.loai === true ? 'custom-1' : 'custom-4'}" >
-        ${hoaDon.loai == false ? "Online" : "Tại quầy"}
-        </span>
-        </td>
-        <td class="ngayTao">${ngayTaoFormatted}</td>
-        <td class="tongTien">${hoaDon.tongTien}</td>
-        <td class="trangThai">
-        <span style="width: 90%"
-        class="${hoaDon.trangThai === 'hủy' ? 'custom-3' : 'custom-4'}">
-        ${hoaDon.trangThai}
-        </span>
-        </td>
-        <td>
-        <button class="btn mb-2 mr-1 btn-outline-success" type="button" onclick="showDetailContent(${hoaDon.id})">
-        <span class="fe fe-eye"></span>
-        </button>
-        </td>
-        </tr>
-        `;
-        tableBody.insertAdjacentHTML('beforeend', row);
-        });
+            tableData.forEach((hoaDon, index) => {
+                const ngayTaoFormatted = new Date(hoaDon.ngayTao).toLocaleDateString();
+                const row = `
+                <tr>
+                <td>${(page * size) + index + 1}</td>
+                <td class="maHoaDon">${hoaDon.maHoaDon}</td>
+                <td class="maNhanVien">${hoaDon.maNhanVien}</td>
+                <td class="hoVaTenKhachHang">${hoaDon.hoVaTenKhachHang}</td>
+                <td class="soDienThoaiKhachHang">${hoaDon.soDienThoaiKhachHang}</td>
+                <td class="loai">
+                <span style="width: 90%"
+                class="${hoaDon.loai === true ? 'custom-1' : 'custom-4'}" >
+                ${hoaDon.loai == false ? "Online" : "Tại quầy"}
+                </span>
+                </td>
+                <td class="ngayTao">${ngayTaoFormatted}</td>
+                <td class="tongTien">${hoaDon.tongTien}</td>
+                <td class="trangThai">
+                    <span style="width: 90%"
+                          class="${hoaDon.trangThai === 'Đã hủy' ? 'custom-3' : hoaDon.trangThai === 'Chờ thanh toán' ? 'custom-5' : 'custom-4'}">
+                        ${hoaDon.trangThai}
+                    </span>
+                </td>
+                <td>
+                <button class="btn mb-2 mr-1 btn-outline-success" type="button" onclick="showDetailContent(${hoaDon.id})">
+                <span class="fe fe-eye"></span>
+                </button>
+                ${hoaDon.trangThai === 'Chờ thanh toán' ? `
+                    <button class="btn mb-2 mr-1 btn-outline-danger" type="button" onclick="cancelInvoice(${hoaDon.id})">
+                        <span class="fe fe-trash-2"></span>
+                    </button>
+                ` : ''}
+                </td>
+                </tr>
+                `;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            });
 
         // Tạo các nút phân trang
         const paginationElement = document.getElementById('pagination');
@@ -386,13 +221,9 @@
         </div>
         </div>
         <div class="form-row">
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-6">
         <label for="ngayDenSan" name="ngayDenSan">Ngày đến sân</label>
         <input type="date" class="form-control" id="ngayDenSan" readonly>
-        </div>
-        <div class="form-group col-md-3">
-        <label for="ngayThanhToan" name="ngayThanhToan">Ngày thanh toán</label>
-        <input type="date" class="form-control" id="ngayThanhToan" readonly>
         </div>
         <div class="form-group col-md-6">
         <label for="ghiChu" name="ghiChu">Ghi chú</label>
@@ -417,6 +248,7 @@
         <thead>
         <tr>
         <th>STT</th>
+        <th>Mã hóa đơn chi tiết</th>
         <th>Sân</th>
         <th>Ca</th>
         <th>Tổng tiền</th>
@@ -427,41 +259,34 @@
             <!-- Dữ liệu bảng sẽ được thêm bởi JavaScript -->
         </tbody>
         </table>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
         <div class="row my-4">
-        <div class="col-md-4">
-        <div class="card shadow">
-        <div class="card-body">
-        <div class="row mb-2">
-        <div class="col-6 text-left">Tổng tiền sân:</div>
-        <div class="col-6 text-right">100,000 VND</div>
-        </div>
-        <div class="row mb-2">
-        <div class="col-6 text-left">Tổng tiền dịch vụ:</div>
-        <div class="col-6 text-right">50,000 VND</div>
-        </div>
-        <div class="row mb-2">
-        <div class="col-6 text-left">Tổng tiền phụ phí:</div>
-        <div class="col-6 text-right">20,000 VND</div>
-        </div>
-        <div class="row mb-2">
-        <div class="col-6 text-left">Tổng tiền giảm:</div>
-        <div class="col-6 text-right">10,000 VND</div>
-        </div>
-        <hr>
-        <div class="row mb-2">
-        <div class="col-6 text-left">Tổng tiền thanh toán:</div>
-        <div class="col-6 text-right">160,000 VND</div>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <div class="col-6 text-left">Tổng tiền sân:</div>
+                            <div class="col-6 text-right" id="tongTienSan">0 VND</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6 text-left">Tổng tiền dịch vụ:</div>
+                            <div class="col-6 text-right" id="tongTienDichVu">0 VND</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6 text-left">Tổng tiền phụ phí:</div>
+                            <div class="col-6 text-right" id="tongTienPhuPhi">0 VND</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6 text-left">Tổng tiền giảm:</div>
+                            <div class="col-6 text-right" id="tongTienGiam">0 VND</div>
+                        </div>
+                        <hr>
+                        <div class="row mb-2">
+                            <div class="col-6 text-left">Tổng tiền thanh toán:</div>
+                            <div class="col-6 text-right" id="tongTienThanhToan">0 VND</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <button class="btn btn-outline-secondary" onclick="back()">Quay lại</button>
         `;
@@ -481,202 +306,109 @@
         document.getElementById('trangThai').value = data.trangThai;
         document.getElementById('ghiChu').value = data.ghiChu;
         document.getElementById('ngayDenSan').value = data.ngayDenSan;
-        document.getElementById('ngayThanhToan').value = data.ngayThanhToan;
         });
 
-        fetch(`http://localhost:8080/hoa-don-chi-tiet/hien-thi/${id}`)
-        .then(response => response.json())
-        .then(data => {
-        const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = '';
-        data.forEach((chiTiet, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${chiTiet.tenSanBong}</td>
-        <td>${chiTiet.tenCa}</td>
-        <td>${chiTiet.tienSan}</td>
-        <td>
-        <span style="width: 90%"
-        class="${chiTiet.trangThai === 'hủy' ? 'custom-3' : 'custom-4'}">
-        ${chiTiet.trangThai}
-        </span>
-        </td>
-        `;
-        tableBody.appendChild(row);
-        });
-        });
+            fetch(`http://localhost:8080/hoa-don-chi-tiet/hien-thi/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('tableBody');
+                    tableBody.innerHTML = '';
+
+                    let tongTienSan = 0;
+                    let tongTienDichVu = 0;
+                    let tongTienPhuPhi = 0;
+                    let tongTienGiam = 0;
+
+                    // Tạo mảng các promises cho các fetch con để tính tổng tiền dịch vụ
+                    const dichVuPromises = [];
+                    const phuPhiPromises = [];
+
+                    data.forEach((chiTiet, index) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                                <td>${index + 1}</td>
+                                <td>${chiTiet.maHoaDonChiTiet}</td>
+                                <td>${chiTiet.tenSanBong}</td>
+                                <td>${chiTiet.tenCa}</td>
+                                <td>${chiTiet.tongTien}</td>
+                                <td>
+                                    <span style="width: 90%"
+                                        class="${chiTiet.trangThai === 'Đã hủy' ? 'custom-3' : chiTiet.trangThai === 'Chờ nhận sân' ? 'custom-5' : 'custom-4'}">
+                                        ${chiTiet.trangThai}
+                                    </span>
+                                </td>
+                            `;
+                        tableBody.appendChild(row);
+
+                        // Cộng dồn các loại tiền theo từng mục
+                        tongTienSan += chiTiet.giaSanCa || 0;
+                        tongTienGiam += chiTiet.tienGiamGia || 0;
+
+                        // Đẩy promise của fetch dịch vụ vào mảng
+                        dichVuPromises.push(
+                            fetch(`http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${chiTiet.id}`)
+                                .then(response => response.json())
+                                .then(dichVuData => {
+                                    dichVuData.forEach(dichVu => {
+                                        tongTienDichVu += dichVu.tongTien || 0;
+                                    });
+                                })
+                        );
+
+                        phuPhiPromises.push(
+                            fetch(`http://localhost:8080/api/phu-phi-hoa-don/${chiTiet.id}`)
+                                .then(response => response.json())
+                                .then(phuPhiData => {
+                                    phuPhiData.forEach(phuPhi => {
+                                        tongTienPhuPhi += phuPhi.tienPhuPhi || 0;
+                                    });
+                                })
+                        );
+                    });
+
+                    // Chờ tất cả các fetch dịch vụ hoàn thành trước khi cập nhật giao diện
+                    Promise.all(dichVuPromises, phuPhiPromises).then(() => {
+                        // Cập nhật các giá trị tổng tiền vào giao diện
+                        document.getElementById('tongTienSan').textContent = tongTienSan.toLocaleString() + " VND";
+                        document.getElementById('tongTienDichVu').textContent = tongTienDichVu.toLocaleString() + " VND";
+                        document.getElementById('tongTienPhuPhi').textContent = tongTienPhuPhi.toLocaleString() + " VND";
+                        document.getElementById('tongTienGiam').textContent = tongTienGiam.toLocaleString() + " VND";
+
+                        // Tính tổng tiền thanh toán
+                        const tongTienThanhToan = tongTienSan + tongTienDichVu + tongTienPhuPhi - tongTienGiam;
+                        document.getElementById('tongTienThanhToan').textContent = tongTienThanhToan.toLocaleString() + " VND";
+                    });
+                })
+                .catch(error => console.error('Error:', error));
         };
 
-        function back(){
-        const mainContent = document.querySelector('.main-content');
-        mainContent.innerHTML = `
-        <div class="container-fluid" id="bodyContent">
-        <div class="row justify-content-center">
-        <div class="col-12">
-        <h2 class="mb-2 page-title">Quản lý hóa đơn</h2>
-        <div class="row my-4">
-        <div class="col-md-12">
-        <div class="card shadow">
-        <div class="card-body">
-        <div class="form-row mb-3">
-        <i class="bi bi-funnel-fill"></i>
-        <h4 class="card-title ml-3">Bộ lọc</h4>
-        </div>
-        <div class="toolbar row">
-        <div class="col">
-        <form>
-        <div class="form-row mb-3">
-        <div class="form-group col-md-1 d-flex align-items-center">
-        <label for="search">Tìm kiếm: </label>
-        </div>
-        <div class="form-group col-md-4 mr-5">
-        <input type="text" class="form-control" id="search"
-        placeholder="Mã HD, NV, tên KH, SĐT" oninput="searchInvoices(this.value)">
-        </div>
-        <div class="form-group col-md-1 d-flex align-items-center">
-        <label for="statusFilter">Loại: </label>
-        </div>
-        <div class="form-group col-md-2">
-        <select class="custom-select my-1 mr-sm-2"
-        id="statusFilter" onchange="filterTable()">
-        <option value="all" selected>Tất cả</option>
-        <option value="0">Online</option>
-        <option value="1">Tại quầy</option>
-        </select>
-        </div>
-        <div class="form-group col-md-2">
-        <button class="btn btn-info" onclick="back()">Làm mới</button>
-        </div>
-        </div>
-        <div class="form-row">
-        <h5>Tổng tiền</h5>
-        </div>
-        <div class="form-row mb-3">
-        <div class="form-group col-md-1 d-flex align-items-center">
-        <label for="tienMin">Từ: </label>
-        </div>
-        <div class="form-group col-md-4 mr-5">
-        <input type="text" class="form-control" id="tienMin"
-        placeholder="Nhập số tiền" oninput="searchMinMoney(this.value)">
-        </div>
-        <div class="form-group col-md-1 d-flex align-items-center">
-        <label for="tienMax">Đến: </label>
-        </div>
-        <div class="form-group col-md-4 mr-5">
-        <input type="text" class="form-control" id="tienMax"
-        placeholder="Nhập số tiền" oninput="searchMaxMoney(this.value)">
-        </div>
-        </div>
-        <div class="form-row">
-        <h5>Ngày tạo</h5>
-        </div>
-        <div class="form-row mb-3">
-        <div class="form-group col-md-1 d-flex align-items-center">
-        <label for="ngayBatDau">Từ ngày: </label>
-        </div>
-        <div class="form-group col-md-4 mr-5">
-        <div class="input-group">
-        <input type="text" class="form-control drgpicker" id="ngayBatDau" value="" placeholder="dd/MM/yyyy">
-        <div class="input-group-append">
-        <div class="input-group-text" id="button-addon-date"><span class="fe fe-calendar fe-16 mx-2"></span></div>
-        </div>
-        </div>
-        </div>
-        <div class="form-group col-md-1 d-flex align-items-center">
-        <label for="ngayKetThuc">Đến ngày: </label>
-        </div>
-        <div class="form-group col-md-4">
-        <div class="input-group">
-        <input type="text" class="form-control drgpicker" id="ngayKetThuc" value="" placeholder="dd/MM/yyyy">
-        <div class="input-group-append">
-        <div class="input-group-text" id="button-addon-date"><span class="fe fe-calendar fe-16 mx-2"></span></div>
-        </div>
-        </div>
-        </div>
-        </div>
-        </form>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        <div class="row my-4">
-        <div class="col-md-12">
-        <div class="card shadow">
-        <div class="card-body">
-        <div class="toolbar row mb-3">
-        <div class="col">
-        <form class="form-inline">
-        <div class="form-row">
-        <div class="form-group col-auto ml-3">
-        <h4 class="card-title">Danh sách hóa đơn</h4>
-        </div>
-        </div>
-        </form>
-        </div>
-        <div class="col ml-auto">
-        <div class="dropdown float-right">
-        <button class="btn btn-success" type="button">
-        + Tạo hóa đơn
-        </button>
-        </div>
-        </div>
-        </div>
-        <div class="col-md-12 mb-4">
-        <div class="card shadow">
-        <div class="card-body">
-        <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist" >
-        <li class="nav-item">
-        <button class="nav-link active" role="tab" data-toggle="pill" aria-controls="pills-home" aria-selected="true" onclick="filterTable2('all')" >Tất cả</button>
-        </li>
-        <li class="nav-item">
-        <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-profile" onclick="filterTable2('da thanh toan')" aria-selected="false">Đã thanh toán</button>
-        </li>
-        <li class="nav-item">
-        <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-contact" onclick="filterTable2('huy')" aria-selected="false">Hủy</button>
-        </li>
-        </ul>
-        <div class="tab-content mb-1" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-        <table class="table datatables" style="justify-content: center; text-align: center" id="table-home">
-        <thead>
-        <tr>
-        <th>STT</th>
-        <th>Mã hóa đơn</th>
-        <th>Mã nhân viên</th>
-        <th>Tên khách hàng</th>
-        <th>SĐT khách hàng</th>
-        <th>Loại</th>
-        <th>Ngày tạo</th>
-        <th>Tổng tiền</th>
-        <th>Trạng thái</th>
-        <th>Hành động</th>
-        </tr>
-        </thead>
-        <tbody id="tableBody">
-            <!-- Dữ liệu bảng sẽ được thêm bởi JavaScript -->
-        </tbody>
-        </table>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        <nav aria-label="Table Paging" class="mb-0 text-muted">
-        <ul id="pagination" class="pagination justify-content-end mb-0">
-            <!-- Các nút phân trang sẽ được thêm bởi JavaScript -->
-        </ul>
-        </nav>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-        `;
+    function cancelInvoice(id) {
+        fetch(`http://localhost:8080/hoa-don/huy-lich-dat/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Có lỗi xảy ra khi hủy lịch đặt');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert("Hủy lịch đặt thành công!");
+                console.log(data);
+                fetchDataAndRenderTable();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Không thể hủy lịch đặt. Vui lòng thử lại!");
+            });
+    }
+
+
+    function back(){
+        loadTrangHoaDon();
 
         $('.drgpicker').daterangepicker({
         singleDatePicker: true,
@@ -693,6 +425,183 @@
         currentStatusFilter = null;
         currentStatusFilter2 = null;
         fetchDataAndRenderTable(); // Gọi hàm fetch và render table khi DOMContentLoaded
-        }
+    }
+
+    function loadTrangHoaDon(){
+        const mainContent = document.querySelector('.main-content');
+        mainContent.innerHTML = `
+        <div class="container-fluid" id="bodyContent">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <h2 class="mb-2 page-title">Quản lý hóa đơn</h2>
+                    <div class="row my-4">
+                        <div class="col-md-12">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <div class="form-row mb-3">
+                                        <i class="bi bi-funnel-fill"></i>
+                                        <h4 class="card-title ml-3">Bộ lọc</h4>
+                                    </div>
+                                    <div class="toolbar row">
+                                        <div class="col">
+                                            <form>
+                                                <div class="form-row mb-1">
+                                                    <div class="form-group col-md-1 d-flex align-items-center">
+                                                        <label for="search">Tìm kiếm: </label>
+                                                    </div>
+                                                    <div class="form-group col-md-4 mr-5">
+                                                        <input type="text" class="form-control" id="search"
+                                                               placeholder="Mã HD, NV, tên KH, SĐT" oninput="searchInvoices(this.value)">
+                                                    </div>
+                                                    <div class="form-group col-md-1 d-flex align-items-center">
+                                                        <label for="statusFilter">Loại: </label>
+                                                    </div>
+                                                    <div class="form-group col-md-2">
+                                                        <select class="custom-select my-1 mr-sm-2"
+                                                                id="statusFilter" onchange="filterTable()">
+                                                            <option value="all" selected>Tất cả</option>
+                                                            <option value="0">Online</option>
+                                                            <option value="1">Tại quầy</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <h5>Tổng tiền</h5>
+                                                </div>
+                                                <div class="form-row mb-1">
+                                                    <div class="form-group col-md-1 d-flex align-items-center">
+                                                        <label for="tienMin">Từ: </label>
+                                                    </div>
+                                                    <div class="form-group col-md-4 mr-5">
+                                                        <input type="text" class="form-control" id="tienMin"
+                                                               placeholder="Nhập số tiền" oninput="searchMinMoney(this.value)">
+                                                    </div>
+                                                    <div class="form-group col-md-1 d-flex align-items-center">
+                                                        <label for="tienMax">Đến: </label>
+                                                    </div>
+                                                    <div class="form-group col-md-4 mr-5">
+                                                        <input type="text" class="form-control" id="tienMax"
+                                                               placeholder="Nhập số tiền" oninput="searchMaxMoney(this.value)">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <h5>Ngày tạo</h5>
+                                                </div>
+                                                <div class="form-row mb-1">
+                                                    <div class="form-group col-md-1 d-flex align-items-center">
+                                                        <label for="ngayBatDau">Từ ngày: </label>
+                                                    </div>
+                                                    <div class="form-group col-md-4 mr-5">
+                                                        <div class="input-group">
+                                                          <input type="text" class="form-control drgpicker" id="ngayBatDau" value="" placeholder="dd/MM/yyyy">
+                                                          <div class="input-group-append">
+                                                            <div class="input-group-text" id="button-addon-date"><span class="fe fe-calendar fe-16 mx-2"></span></div>
+                                                          </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-1 d-flex align-items-center">
+                                                        <label for="ngayKetThuc">Đến ngày: </label>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <div class="input-group">
+                                                          <input type="text" class="form-control drgpicker" id="ngayKetThuc" value="" placeholder="dd/MM/yyyy">
+                                                          <div class="input-group-append">
+                                                            <div class="input-group-text" id="button-addon-date"><span class="fe fe-calendar fe-16 mx-2"></span></div>
+                                                          </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group d-flex gap-2">
+                                                        <button class="btn btn-primary" onclick="back()" title="Reset" type="button">
+                                                            <span class="fe fe-refresh-ccw"></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-4">
+                        <div class="col-md-12">
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <div class="toolbar row mb-3">
+                                        <div class="col">
+                                            <form class="form-inline">
+                                                <div class="form-row">
+                                                    <div class="form-group col-auto ml-3">
+                                                        <h4 class="card-title">Danh sách hóa đơn</h4>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col ml-auto">
+                                            <div class="dropdown float-right">
+                                                <button class="btn btn-success" type="button">
+                                                    + Tạo hóa đơn
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-4">
+                                    <div class="card shadow">
+                                        <div class="card-body">
+                                            <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
+                                                <li class="nav-item">
+                                                    <button class="nav-link active" role="tab" data-toggle="pill" aria-controls="pills-home" aria-selected="true" onclick="filterTable2('all')">Tất cả</button>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-profile" onclick="filterTable2('da thanh toan')" aria-selected="false">Đã thanh toán</button>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-contact" onclick="filterTable2('da huy')" aria-selected="false">Đã hủy</button>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-contact" onclick="filterTable2('huy')" aria-selected="false">Chờ xác nhận</button>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content mb-1" id="pills-tabContent">
+                                                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                                                    <table class="table datatables" style="justify-content: center; text-align: center" id="table-home">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>STT</th>
+                                                                <th>Mã hóa đơn</th>
+                                                                <th>Mã nhân viên</th>
+                                                                <th>Tên khách hàng</th>
+                                                                <th>SĐT khách hàng</th>
+                                                                <th>Loại</th>
+                                                                <th>Ngày tạo</th>
+                                                                <th>Tổng tiền</th>
+                                                                <th>Trạng thái</th>
+                                                                <th>Hành động</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="tableBody">
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                    <nav aria-label="Table Paging" class="mb-0 text-muted">
+                                        <ul id="pagination" class="pagination justify-content-end mb-0">
+                                            <!-- Các nút phân trang sẽ được thêm bởi JavaScript -->
+        </ul>
+        </nav>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        `;
+    }
+
 </script>
 </html>

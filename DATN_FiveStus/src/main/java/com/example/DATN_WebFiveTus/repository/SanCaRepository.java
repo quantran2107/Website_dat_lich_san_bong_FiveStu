@@ -123,12 +123,15 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
                san.ten_san_bong as tenSanBong,
                ca.thoi_gian_bat_dau as thoiGianBatDau,
         	   hdc.created_at as ngayDat,
+        	   hdc.ngay_den_san as ngayDenSan,
                hdc.trang_thai as trangThaiCheckIn,
                hd.ma_hoa_don as maHoaDon,
                hd.tien_coc as tienCoc,
                hd.trang_thai as trangThaiHoaDon,
+               hdc.deleted_at as cancel,
                hd.tong_tien as tongTien,
-               SUM(hdc.tien_giam_gia) AS tongGiamGia
+               SUM(hdc.tien_giam_gia) AS tongGiamGia,
+                hdc.id as idHdct
         FROM duantotnghiep.san_ca sc
         JOIN duantotnghiep.san_bong san ON san.id = sc.id_san_bong
         JOIN duantotnghiep.ca ca ON ca.id = sc.id_ca
@@ -136,13 +139,16 @@ public interface SanCaRepository extends JpaRepository<SanCa,Integer> {
         JOIN duantotnghiep.hoa_don hd ON hdc.id_hoa_don = hd.id
         WHERE hd.id_khach_hang = :id
         GROUP BY sc.id,
+                 idHdct,
                  tenSanBong,
                  thoiGianBatDau,
+                 ngayDenSan,
                  trangThaiCheckIn,
                  maHoaDon,
                  tienCoc,
+                 cancel,
                  trangThaiHoaDon,
-                tongTien,
+                 tongTien,
         		 ngayDat
         ORDER BY   ngayDat ASC
         

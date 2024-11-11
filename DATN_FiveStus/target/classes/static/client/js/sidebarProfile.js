@@ -19,11 +19,6 @@ $(document).ready(function () {
         showCustomerAddress();
     });
 
-    $("#historyBill").click(function (event) {
-        event.preventDefault();
-        showCustomerCalendar();
-    });
-
     async function loadCustomer() {
         const response = await fetch('http://localhost:8080/customer/get-customer');
         if (!response.ok) {
@@ -31,6 +26,7 @@ $(document).ready(function () {
         }
         return await response.json();
     }
+
     async function loadCustomerAddressByEmail(email) {
         const response = await fetch(`http://localhost:8080/dia-chi/email/${email}`);
         if (!response.ok) {
@@ -101,26 +97,27 @@ $(document).ready(function () {
         });
 
         // Gán sự kiện cho nút thêm địa chỉ
-        $('.add-address').off('click').on('click', function(event) {
+        $('.add-address').off('click').on('click', function (event) {
             event.preventDefault();
             addAddress(email); // Truyền email vào đây
         });
 
         // Gán sự kiện cho các nút cập nhật và xóa
-        $('.update-address').click(function(event) {
+        $('.update-address').click(function (event) {
             event.preventDefault();
             const addressId = $(this).data('id');
             const email = $(this).data('email');
             updateAddress(addressId, email);
         });
 
-        $('.delete-address').click(function(event) {
+        $('.delete-address').click(function (event) {
             event.preventDefault();
             const addressId = $(this).closest('.list-group-item').find('.update-address').data('id');
             const email = $(this).closest('.list-group-item').find('.update-address').data('email');
             deleteAddress(addressId, email); // Gọi hàm xóa
         });
     }
+
     async function addAddress(email) {
         document.getElementById("specificAddress").value = '';
         document.getElementById("city").value = '';
@@ -129,7 +126,7 @@ $(document).ready(function () {
         $('#addressModal').modal('show');
 
         // Khi người dùng nhấn nút "Lưu địa chỉ" trong modal
-        $('#saveAddressButton').off('click').on('click', async function() {
+        $('#saveAddressButton').off('click').on('click', async function () {
             const specificAddress = document.getElementById("specificAddress").value;
             const city = document.getElementById("city").value;
             const district = document.getElementById("district").value;
@@ -272,6 +269,7 @@ $(document).ready(function () {
             alert("Không thể tải dữ liệu địa chỉ để cập nhật.");
         }
     }
+
     function deleteAddress(id, email) {
         Swal.fire({
             title: 'Xác nhận',
@@ -391,7 +389,7 @@ $(document).ready(function () {
         });
 
         // Kiểm tra và lưu dữ liệu
-        $('#saveCustomerButton').click(function() {
+        $('#saveCustomerButton').click(function () {
             const hoVaTen = $('#hoVaTen').val();
             if (!hoVaTen) {
                 Swal.fire({
@@ -406,7 +404,7 @@ $(document).ready(function () {
         });
 
         // Gán sự kiện click cho nút Change Phone
-        $('#changePhoneButton').click(function() {
+        $('#changePhoneButton').click(function () {
             Swal.fire({
                 title: 'Xác Nhận Số Điện Thoại',
                 input: 'text',
@@ -451,6 +449,7 @@ $(document).ready(function () {
                 }
             });
         });
+
         function validateVietnamesePhone(phone) {
             const phoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/;
             return phoneRegex.test(phone);
@@ -613,158 +612,7 @@ $(document).ready(function () {
             }
         });
     }
-    //Trường
-    async function showCustomerCalendar() {
-        try {
-            let response = await loadCustomer(); // Gọi hàm để lấy dữ liệu
-            htmlCustomerCalendar(response.response)
-        } catch (error) {
-        }
-    }
 
-    function htmlCustomerCalendar(customer) {
-        setTableInTab();
-        $.ajax({
-            url: ' http://localhost:8080/san-ca/for-customer-profile/' + customer.id,
-            type: 'GET',
-            dataType: 'json',
-            success: function (response) {
-                if (!response.response.length<1){
-                    setRowInTable(response.response);
-                }
-
-            }
-        });
-    }
-
-    function setRowInTable(response) {
-        let wait = 0;
-        let done = 0;
-        $.each(response, function (index, item) {
-            let ngayDat = formatDate(item["ngayDat"]);
-            let ca = formatDate(item["thoiGianBatDau"]);
-            if (item["trangThaiCheckIn"] === "Chờ nhận sân" || item["trangThaiCheckIn"] === "Đang hoạt động") {
-                wait++;
-                let row = `
-                <tr>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${wait}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tenSanBong"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${ca}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${ngayDat}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongTien"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tienCoc"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongGiamGia"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["maHoaDon"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["trangThaiHoaDon"]}</td>
-                </tr>
-                `;
-                $(`#tbodyFuture`).append(row);
-            } else {
-                done++;
-                let row = `
-                <tr>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${done}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tenSanBong"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${ca}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${ngayDat}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongTien"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tienCoc"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongGiamGia"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["maHoaDon"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["trangThaiHoaDon"]}</td>
-                </tr>
-                `;
-                $(`#tbodySince`).append(row);
-            }
-
-        })
-        if (done>0){
-            $('#tbodySince tr:first').remove();
-        }
-        if (wait>0){
-            $('#tbodyFuture tr:first').remove();
-        }
-    }
-
-    function setTableInTab() {
-        content.html('');
-        let html = ``;
-        html += `<ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#future" role="tab" aria-controls="future" aria-selected="true">Sắp diễn ra</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#past" role="tab" aria-controls="past" aria-selected="false">Đã kết thúc</a>
-            </li>
-        </ul>
-
-        <div class="tab-content mt-3" id="myTabContent">
-            <div class="tab-pane fade show active" id="future" role="tabpanel" aria-labelledby="home-tab">
-               <table class="table table-hover" style="width: 100%; border-collapse: collapse;">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">#</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tên sân</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Thời gian (Ca)</th>                                        
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Ngày đặt</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tổng tiền</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tiền cọc</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Giảm giá</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Mã hóa đơn</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Trạng thái hóa đơn</th>
-                                        
-                                    </tr>
-                                    </thead>
-                                    <tbody id="tbodyFuture">
-                                    <tr>
-                                        <td colspan="9" style="text-align: center; font-weight: bold;">
-                                            Không có dữ liệu
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-            </div>
-            <div class="tab-pane fade" id="past" role="tabpanel" aria-labelledby="profile-tab">
-                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">#</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tên sân</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Thời gian (Ca)</th>                                        
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Ngày đặt</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tổng tiền</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tiền cọc</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Giảm giá</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Mã hóa đơn</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Trạng thái hóa đơn</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="tbodySince">
-                                    <tr>
-                                        <td colspan="9" style="text-align: center; font-weight: bold;">
-                                            Không có dữ liệu
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-            </div>
-        </div>
-`;
-        content.html(html);
-    }
-
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-
-        return `${hours}:${minutes} - ${day}/${month}/${year}`;
-    }
 });
 
 // Bằng
@@ -838,3 +686,20 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchData();
 });
 
+// Ly viết hàm để click vào Đặt sân ngay
+async function checkLoginAndRedirect() {
+    try {
+        const customer = await loadCustomer();
+        if (customer && customer.id) {
+            // Nếu có thông tin khách hàng (đã đăng nhập), chuyển hướng đến trang đặt sân
+            window.location.href = '/khach-hang/dat-san';  // Thay vì th:href, dùng JavaScript để chuyển hướng
+        } else {
+            // Nếu không có thông tin khách hàng (chưa đăng nhập), mở modal login
+            $('#modallogin').modal('show');
+        }
+    } catch (error) {
+        console.error('Lỗi khi kiểm tra khách hàng:', error);
+        // Nếu gặp lỗi, bạn có thể mở modal hoặc xử lý lỗi ở đây
+        $('#modallogin').modal('show');
+    }
+}
