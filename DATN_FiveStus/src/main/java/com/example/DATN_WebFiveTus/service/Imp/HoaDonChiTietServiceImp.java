@@ -361,4 +361,40 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
                 .map((hoaDonChiTiet) -> modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class)).collect(Collectors.toList());
     }
 
+    @Override
+    public List<HoaDonChiTietDTO> findByNgayDenSanBetween(LocalDate startDate, LocalDate endDate) {
+        // Lấy danh sách HoaDonChiTiet từ repository
+        List<HoaDonChiTiet> list = hoaDonChiTietRepository.findByNgayDenSanBetween(startDate,endDate);
+
+        // Ánh xạ và bổ sung thông tin cho DTO
+        List<HoaDonChiTietDTO> dtoList = list.stream()
+                .map(hoaDonChiTiet -> {
+                    // Ánh xạ từ HoaDonChiTiet sang HoaDonChiTietDTO
+                    HoaDonChiTietDTO dto = modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class);
+
+                    // Lấy thông tin hóa đơn từ đối tượng HoaDon
+                    HoaDon hoaDon = hoaDonChiTiet.getHoaDon();
+                    if (hoaDon != null) {
+                        dto.setMaHoaDon(hoaDon.getMaHoaDon());
+                        if (hoaDon.getKhachHang() != null) {
+                            dto.setIdKhachHang(hoaDon.getKhachHang().getId());
+                            dto.setHoVaTenKhachHang(hoaDon.getKhachHang().getHoVaTen());
+                            dto.setSoDienThoaiKhachHang(hoaDon.getKhachHang().getSoDienThoai());
+                            dto.setEmailKhachHang(hoaDon.getKhachHang().getEmail());
+                        }
+                    }
+
+                    return dto;
+                })
+                .collect(Collectors.toMap(
+                        HoaDonChiTietDTO::getId, // key
+                        dto -> dto, // value
+                        (existing, replacement) -> existing)) // Resolve conflicts: keep existing
+                .values()
+                .stream()
+                .collect(Collectors.toList());
+
+        return dtoList;
+    }
+
 }

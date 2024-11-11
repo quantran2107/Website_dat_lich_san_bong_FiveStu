@@ -46,4 +46,7 @@ public interface HoaDonChiTietService {
      boolean isSanCaBooked(Long idSanCa, LocalDate ngayDenSan);
 
     List<HoaDonChiTietDTO> findByIdKhachHang(Integer id);
+
+    List<HoaDonChiTietDTO> findByNgayDenSanBetween(LocalDate startDate, LocalDate endDate);
+
 }

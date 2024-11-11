@@ -134,4 +134,18 @@ public class HoaDonChiTietRest {
         return ResponseEntity.ok(hoaDonChiTietDTOSave);
     }
 
+    @GetMapping("/khoang-ngay-den-san")
+    public ResponseEntity<?> finByNgayDenSanBetween(
+            @RequestParam("startDate") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate endDate) {
+        List<HoaDonChiTietDTO> result;
+        if (startDate == null || endDate == null) {
+            // Xử lý khi không có ngày được cung cấp, có thể trả về một danh sách rỗng hoặc thông báo lỗi
+            result = new ArrayList<>();  // Hoặc xử lý theo cách bạn muốn
+        } else {
+            result = hoaDonChiTietService.findByNgayDenSanBetween(startDate, endDate);
+        }
+        return ResponseEntity.ok(result);
+    }
+
 }
