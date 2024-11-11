@@ -74,7 +74,9 @@ public class PhieuGiamGiaChiTietServiceImp implements PhieuGiamGiaChiTietService
         return modelMapper.map(savedEntity, PhieuGiamGiaChiTietDTO.class);
 
     }
-    private void sendEmail(PhieuGiamGiaChiTiet savedEntity) {
+
+    @Async
+    public void sendEmail(PhieuGiamGiaChiTiet savedEntity) {
         KhachHang khachHang = khachHangRepository.getReferenceById(savedEntity.getKhachHang().getId());
         PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.getReferenceById(savedEntity.getPhieuGiamGia().getId());
 

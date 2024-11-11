@@ -3,7 +3,7 @@
 
     <nav id="header-nav" class="navbar navbar-expand-lg">
         <div class="container-lg">
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" th:href="@{/khach-hang/trang-chu}">
                 <img th:src="@{/client/images/main-logo.png}" alt="FiveStu" class="logo"
                      style="height: auto;width: 121px;">
             </a>
@@ -16,7 +16,7 @@
             </button>
             <div class="offcanvas offcanvas-end" tabindex="-1" id="bdNavbar">
                 <div class="offcanvas-header px-4 pb-0">
-                    <a class="navbar-brand ps-3" href="index.html">
+                    <a class="navbar-brand ps-3" th:href="@{/khach-hang/trang-chu}">
                         <img th:src="@{/client/images/main-logo.png}" class="logo" alt="logo">
                     </a>
                     <button type="button" class="btn-close btn-close-black p-5" data-bs-dismiss="offcanvas"
@@ -25,12 +25,14 @@
                 </div>
                 <div class="offcanvas-body">
                     <ul id="navbar" class="navbar-nav fw-bold justify-content-center align-items-center flex-grow-1">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link me-5" th:href="@{/khach-hang/trang-chu}" data-bs-toggle="dropdown"
-                               aria-expanded="false">Trang chủ</a>
+<!--                        <li class="nav-item ">-->
+<!--                            <a class="nav-link me-5" th:href="@{/khach-hang/trang-chu}" >Trang chủ</a>-->
+<!--                        </li>-->
+                        <li id="trangChu" class="nav-item">
+                            <a class="nav-link me-5" th:href="@{/khach-hang/trang-chu}">Trang chủ</a>
                         </li>
                         <li id="noiquy" class="nav-item">
-                            <a class="nav-link me-5" th:href="@{/khach-hang-noi-quy2}">Nội quy</a>
+                            <a class="nav-link me-5" th:href="@{/khach-hang-noi-quy3}">Nội quy</a>
                         </li>
 
                     </ul>

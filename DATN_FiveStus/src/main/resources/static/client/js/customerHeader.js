@@ -59,7 +59,7 @@ $(document).ready(function () {
          `;
             let isUser = `
                <li class="nav-item">
-                    <a class="nav-link me-5" th:href="@{/khach-hang/dat-san}">Đặt sân</a>
+                    <a class="nav-link me-5" href="/khach-hang/dat-san" >Đặt sân</a>
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link me-5 dropdown-toggle border-0" th:href="@{#}" data-bs-toggle="dropdown"

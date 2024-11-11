@@ -857,3 +857,20 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchData();
 });
 
+// Ly viết hàm để click vào Đặt sân ngay
+async function checkLoginAndRedirect() {
+    try {
+        const customer = await loadCustomer();
+        if (customer && customer.id) {
+            // Nếu có thông tin khách hàng (đã đăng nhập), chuyển hướng đến trang đặt sân
+            window.location.href = '/khach-hang/dat-san';  // Thay vì th:href, dùng JavaScript để chuyển hướng
+        } else {
+            // Nếu không có thông tin khách hàng (chưa đăng nhập), mở modal login
+            $('#modallogin').modal('show');
+        }
+    } catch (error) {
+        console.error('Lỗi khi kiểm tra khách hàng:', error);
+        // Nếu gặp lỗi, bạn có thể mở modal hoặc xử lý lỗi ở đây
+        $('#modallogin').modal('show');
+    }
+}
