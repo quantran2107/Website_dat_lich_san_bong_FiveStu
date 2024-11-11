@@ -32,6 +32,7 @@ public class KhachHangRest {
     @GetMapping("hien-thi")
     public ResponseEntity<List<KhachHangDTO>> getAll() {
         List<KhachHangDTO> khachHangDTOS = khachHangService.getAll();
+        Collections.reverse(khachHangDTOS);
         return ResponseEntity.ok(khachHangDTOS);
     }
 
@@ -42,21 +43,41 @@ public class KhachHangRest {
     }
 
     @GetMapping("/search")
-    public List<KhachHangDTO> searchKhachHang(
+    public ResponseEntity<Page<KhachHangDTO>> searchAndFilterKhachHang(
             @RequestParam(defaultValue = "") String query,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "5") int pageSize) {
-        return khachHangService.search(query, page, pageSize);
-    }
-
-    @GetMapping("/filter")
-    public List<KhachHangDTO> filterKhachHang(
             @RequestParam(defaultValue = "all") String status,
             @RequestParam(defaultValue = "all") String gender,
-            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int pageSize) {
-        return khachHangService.filter(status, gender, page, pageSize);
+
+        if (page < 0) {
+            page = 0;  // Kiểm tra và điều chỉnh page nếu nhỏ hơn 0
+        }
+
+        Page<KhachHangDTO> result = khachHangService.searchAndFilter(query, status, gender, page, pageSize);
+        return ResponseEntity.ok(result);
     }
+
+
+
+    @GetMapping("/filter")
+    public ResponseEntity<Page<KhachHangDTO>> filterKhachHang(
+            @RequestParam(defaultValue = "all") String status,
+            @RequestParam(defaultValue = "all") String gender,
+            @RequestParam(defaultValue = "0") int page,  // Sử dụng page bắt đầu từ 0
+            @RequestParam(defaultValue = "5") int pageSize) {  // Mặc định mỗi trang 5 mục
+
+        // Kiểm tra và điều chỉnh page nếu nó nhỏ hơn 0
+        if (page < 0) {
+            page = 0;  // Đảm bảo giá trị page không nhỏ hơn 0
+        }
+        Page<KhachHangDTO> result = khachHangService.filter(status, gender, page, pageSize);
+
+        return ResponseEntity.ok(result);
+    }
+
+
+
 
     @GetMapping("/tim-kiem-kh")
     public KhachHangDTO findByKhachHang(@RequestParam(defaultValue = "false") String soDienThoai){

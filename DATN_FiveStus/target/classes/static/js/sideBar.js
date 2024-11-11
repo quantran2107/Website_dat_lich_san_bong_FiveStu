@@ -209,6 +209,14 @@ $(document).ready(function () {
             </ul>
             <ul class="navbar-nav flex-fill w-100 mb-3">
                 <li class="nav-item dropdown">
+                    <a class="nav-link pl-3" href="/thong-ke">
+                        <i class="fe fe-dollar-sign"></i>
+                        <span class="ml-3 item-text">Thống kê </span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav flex-fill w-100 mb-3">
+                <li class="nav-item dropdown">
                     <a class="nav-link pl-3" href="/quan-ly-khach-hang">
                         <i class="fe fe-users"></i>
                         <span class="ml-3 item-text">Quản lý khách hàng </span>
