@@ -39,7 +39,7 @@ body {
   --bs-body-font-size: 1rem;
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.7;
-  --bs-body-color: #8f8f8f;
+  --bs-body-color: #0f1010;
   --bs-body-color-rgb: 143, 143, 143;
 
   --bs-primary: #ce071e;
@@ -487,7 +487,7 @@ h3 {
 }
 
 .container-md {
-  max-width: 1460px;
+  max-width: 1749px;
 }
 
 .container-lg {

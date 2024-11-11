@@ -24,6 +24,7 @@ public class DiaChiKhachHangController {
                                              @ModelAttribute DiaChiKhachHangDTO diaChiKhachHangDTO) {
         try {
             diaChiKhachHangDTO.setIdKhachHang(idKhachHang);
+            diaChiKhachHangDTO.setDeletedAt(false);
             diaChiKhachHangService.save(diaChiKhachHangDTO);
             return ResponseEntity.ok("Thêm địa chỉ thành công!");
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
+import com.example.DATN_WebFiveTus.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -16,8 +17,6 @@ import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
 import com.example.DATN_WebFiveTus.entity.DiaChiKhachHang;
 import com.example.DATN_WebFiveTus.entity.KhachHang;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
-import com.example.DATN_WebFiveTus.repository.DiaChiKhachHangRepository;
-import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
 import com.example.DATN_WebFiveTus.service.KhachHangService;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
@@ -73,6 +72,8 @@ public class KhachHangImp implements KhachHangService {
 
         return modelMapper.map(khachHang, KhachHangDTO.class);
     }
+
+
 
     @Override
     public void update(Integer id, KhachHangDTO khachHangDTO) {
@@ -130,46 +131,63 @@ public class KhachHangImp implements KhachHangService {
     }
 
     @Override
-    public List<KhachHangDTO> search(String query, int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page - 1, pageSize);
-        Page<KhachHang> results = khachHangRepository.searchByNamePhoneOrEmail(query, pageable);
+    public Page<KhachHangDTO> searchAndFilter(String query, String status, String gender, int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize); // Không trừ 1 vì page đã chỉnh ở controller
 
-        return results.stream()
-                .map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class))
-                .collect(Collectors.toList());
+        Page<KhachHang> results;
+        boolean genderBoolean = true;
+
+        if ("false".equals(gender)) {
+            genderBoolean = false;
+        }
+
+        if ("all".equals(status) && "all".equals(gender)) {
+            results = khachHangRepository.searchByNamePhoneOrEmail(query, pageable);
+        } else if ("all".equals(status)) {
+            results = khachHangRepository.searchByNamePhoneOrEmailAndGender(query, genderBoolean, pageable);
+        } else if ("all".equals(gender)) {
+            results = khachHangRepository.searchByNamePhoneOrEmailAndStatus(query, status, pageable);
+        } else {
+            results = khachHangRepository.searchByNamePhoneOrEmailAndStatusAndGender(query, status, genderBoolean, pageable);
+        }
+
+        return results.map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class));
     }
 
 
     @Override
-    public List<KhachHangDTO> filter(String status, String gender, int page, int pageSize) {
-        List<KhachHang> khachHangs;
-        boolean genderBoolean;
+    public Page<KhachHangDTO> filter(String status, String gender, int page, int pageSize) {
+        // Đảm bảo giá trị page không nhỏ hơn 0
+        if (page < 0) {
+            page = 0;
+        }
+
+        boolean genderBoolean = true; // Mặc định giới tính là true (Nam)
 
         if ("true".equals(gender)) {
             genderBoolean = true; // Nam
         } else if ("false".equals(gender)) {
             genderBoolean = false; // Nữ
-        } else {
-            // Trường hợp "all", không cần lọc theo giới tính
-            genderBoolean = true; // Mặc định, không lọc theo giới tính
         }
 
-        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Pageable pageable = PageRequest.of(page, pageSize);  // page đã được điều chỉnh
+
+        Page<KhachHang> khachHangPage;
 
         if ("all".equals(status) && ("all".equals(gender) || gender == null)) {
-            khachHangs = khachHangRepository.findAll(pageable).getContent();
+            khachHangPage = khachHangRepository.findAll(pageable);
         } else if ("all".equals(status)) {
-            khachHangs = khachHangRepository.filterByGender(genderBoolean, pageable).getContent();
+            khachHangPage = khachHangRepository.filterByGender(genderBoolean, pageable);
         } else if ("all".equals(gender)) {
-            khachHangs = khachHangRepository.filterByStatus(status, pageable).getContent();
+            khachHangPage = khachHangRepository.filterByStatus(status, pageable);
         } else {
-            khachHangs = khachHangRepository.findByStatusAndGender(status, genderBoolean, pageable).getContent();
+            khachHangPage = khachHangRepository.findByStatusAndGender(status, genderBoolean, pageable);
         }
 
-        return khachHangs.stream()
-                .map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class))
-                .collect(Collectors.toList());
+        // Chuyển đổi từ Page<KhachHang> sang Page<KhachHangDTO>
+        return khachHangPage.map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class));
     }
+
 
     @Override
     public Page<KhachHangDTO> searchActive(String query, String trangThai, Pageable pageable) {
@@ -257,6 +275,22 @@ public class KhachHangImp implements KhachHangService {
         dto.setCreatedAt(khachHang.getCreatedAt());
         // Giả sử bạn có phương thức để chuyển đổi danh sách địa chỉ (diaChi)
         return dto;
+    }
+
+
+    @Override
+    public boolean isEmailExists(String email) {
+        return khachHangRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean isSoDienThoaiExists(String soDienThoai) {
+        return khachHangRepository.existsBySoDienThoai(soDienThoai);
+    }
+
+    @Override
+    public boolean isMaKhachHangExists(String maKhachHang) {
+        return khachHangRepository.existsByMaKhachHang(maKhachHang);
     }
 
 }
