@@ -1,13 +1,18 @@
 package com.example.DATN_WebFiveTus.dto.response;
-
 import org.springframework.beans.factory.annotation.Value;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-
 public interface HistoryCustomerBookFieldResponse {
+    @Value("#{target.idHdct}")
+    Integer getIdHdct();
+
     @Value("#{target.tenSanBong}")
     String getTenSanBong();
+
+    @Value("#{target.ngayDenSan}")
+    LocalDate getNgayDenSan();
 
     @Value("#{target.thoiGianBatDau}")
     LocalDateTime getThoiGianBatDau();
@@ -32,4 +37,7 @@ public interface HistoryCustomerBookFieldResponse {
 
     @Value("#{target.tongGiamGia}")
     Double getTongGiamGia();
+
+    @Value("#{target.cancel}")
+    Boolean getCancel();
 }

@@ -10,4 +10,7 @@ public class ClientCustomerController {
     public String customerProfile(){
         return "client/profile-customer";
     }
+
+    @GetMapping("history-book")
+    public String historyBook(){return "client/history-book";}
 }

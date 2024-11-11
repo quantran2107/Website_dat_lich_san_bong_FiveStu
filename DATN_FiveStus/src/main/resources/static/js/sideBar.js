@@ -11,7 +11,6 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'json',
             success: function (response) {
-                console.log(response)
                 if (!response.includes('ROLE_EMPLOYEE')) {
                     checkSideBar();
                     logout(response);

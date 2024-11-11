@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import java.io.ByteArrayOutputStream;
+
 @Service
 public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
@@ -296,9 +297,19 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
     }
 
     @Override
+    public Boolean huyDatSan(Integer id) {
+        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(id).orElseThrow(null);
+        if (hoaDonChiTiet != null) {
+            hoaDonChiTiet.setDeletedAt(true);
+            hoaDonChiTietRepository.save(hoaDonChiTiet);
+            return true;
+        }
+        return false;
+    }
+
     public List<HoaDonChiTietDTO> findByNgayDenSanBetween(LocalDate startDate, LocalDate endDate) {
         // Lấy danh sách HoaDonChiTiet từ repository
-        List<HoaDonChiTiet> list = hoaDonChiTietRepository.findByNgayDenSanBetween(startDate,endDate);
+        List<HoaDonChiTiet> list = hoaDonChiTietRepository.findByNgayDenSanBetween(startDate, endDate);
 
         // Ánh xạ và bổ sung thông tin cho DTO
         List<HoaDonChiTietDTO> dtoList = list.stream()
@@ -329,6 +340,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
                 .collect(Collectors.toList());
 
         return dtoList;
+
     }
 
 }

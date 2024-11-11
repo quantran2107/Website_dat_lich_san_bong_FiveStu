@@ -53,6 +53,9 @@ $(document).ready(function () {
                   <a href="/customer" class="dropdown-item">Tài khoản</a>
                 </li>
                 <li>
+                  <a href="/history-book" class="dropdown-item">Lịch sử đặt sân</a>
+                </li>
+                <li>
                   <a class="dropdown-item" href="/client/logout">Đăng xuất</a>
                 </li>
               </ul>
