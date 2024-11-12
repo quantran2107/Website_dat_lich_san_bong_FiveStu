@@ -99,57 +99,40 @@
                                                                         </div>
                                                                         <div class="modal-body">
                                                                             <form>
-                                                                                <input type="hidden" name="id"
-                                                                                       id="editId">
+                                                                                <input type="hidden" name="id" id="editId">
+
                                                                                 <div class="form-row">
                                                                                     <div class="form-group col-md-6">
-                                                                                        <label for="editTenSanBong">Tên
-                                                                                            sân bóng</label>
-                                                                                        <input type="text"
-                                                                                               class="form-control"
-                                                                                               id="editTenSanBong"
-                                                                                               name="tenSanBong">
+                                                                                        <label for="editTenSanBong">Tên sân bóng</label>
+                                                                                        <input type="text" class="form-control" id="editTenSanBong" name="tenSanBong">
                                                                                     </div>
                                                                                 </div>
+
                                                                                 <div class="form-row">
                                                                                     <div class="form-group col-md-6">
-                                                                                        <label for="editTrangThai">Trạng
-                                                                                            thái</label>
-                                                                                        <select id="editTrangThai"
-                                                                                                class="form-control"
-                                                                                                name="trangThai">
-                                                                                            <option th:each="a: ${listTTSB}"
-                                                                                                    th:value="${a}"
-                                                                                                    th:text="${a}"></option>
+                                                                                        <label for="editTrangThai">Trạng thái</label>
+                                                                                        <select id="editTrangThai" class="form-control" name="trangThai" disabled>
+                                                                                            <option th:each="a: ${listTTSB}" th:value="${a}" th:text="${a}"></option>
                                                                                         </select>
                                                                                     </div>
                                                                                 </div>
+
                                                                                 <div class="form-row">
                                                                                     <div class="form-group col-md-6">
-                                                                                        <label for="editLoaiSan">Loại
-                                                                                            sân</label>
-                                                                                        <select id="editLoaiSan"
-                                                                                                class="form-control"
-                                                                                                name="idLoaiSan">
-                                                                                            <option th:each="a: ${listLS}"
-                                                                                                    th:value="${a.id}"
-                                                                                                    th:text="${a.tenLoaiSan}"></option>
+                                                                                        <label for="editLoaiSan">Loại sân</label>
+                                                                                        <select id="editLoaiSan" class="form-control" name="idLoaiSan" disabled>
+                                                                                            <option th:each="a: ${listLS}" th:value="${a.id}" th:text="${a.tenLoaiSan}"></option>
                                                                                         </select>
                                                                                     </div>
                                                                                 </div>
+
                                                                                 <div class="modal-footer">
-                                                                                    <button type="button"
-                                                                                            class="btn mb-2 btn-outline-secondary"
-                                                                                            data-dismiss="modal">Close
-                                                                                    </button>
-                                                                                    <button onclick="updateSanBong()"
-                                                                                            type="submit"
-                                                                                            class="btn mb-2 btn-success">
-                                                                                        Update
-                                                                                    </button>
+                                                                                    <button type="button" class="btn mb-2 btn-outline-secondary" data-dismiss="modal">Close</button>
+                                                                                    <button onclick="updateSanBong()" type="submit" class="btn mb-2 btn-success">Update</button>
                                                                                 </div>
                                                                             </form>
                                                                         </div>
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -166,7 +149,8 @@
                                                             <tbody>
                                                             <!-- Sử dụng th:each để duyệt qua danh sách sân bóng -->
                                                             <tr th:each="sanBong, stat : ${listSB}"
-                                                                th:if="${loaiSan.id == sanBong.idLoaiSan}">
+                                                                th:if="${loaiSan.id == sanBong.idLoaiSan}"
+                                                                th:data-id-loai-san="${sanBong.id}">
                                                                 <td th:text="${stat.count}"></td>
                                                                 <td>
                                                                     <span th:text="${sanBong.tenSanBong}"></span>
@@ -324,18 +308,32 @@ JavaScript
 
 <script>
 
+    // Hàm để disable thẻ <select> khi mở modal chỉnh sửa
+    function disableSelectFields() {
+        $('#editTrangThai').prop('disabled', true); // Disable <select> Trạng thái
+        $('#editLoaiSan').prop('disabled', true); // Disable <select> Loại sân
+    }
+
     function editSanBongs() {
-        $('button.btn-outline-success').on('click', function () {
-            var sanBongId = $(this).closest('tr').find('input[type="checkbox"]').val();
+        // Lắng nghe sự kiện click trên nút "Edit" trong bảng
+        $('tbody').on('click', 'button.btn-outline-success', function () {
+            const sanBongId = $(this).closest('tr').data('id-loai-san');
+            console.log("San bong id update: ", sanBongId);
+
+            // Lấy dữ liệu sân bóng từ API
             $.ajax({
                 type: 'GET',
                 url: 'http://localhost:8080/san-bong/' + sanBongId,
                 success: function (data) {
+                    // Hiển thị modal và điền thông tin sân bóng vào các trường
                     $('#myModalEdit').modal('show');
                     $('#editId').val(data.id);
                     $('#editTenSanBong').val(data.tenSanBong);
                     $('#editTrangThai').val(data.trangThai);
                     $('#editLoaiSan').val(data.idLoaiSan);
+
+                    // Disable select fields nếu cần thiết (nếu không muốn người dùng chỉnh sửa các trường này)
+                    disableSelectFields();
                 },
                 error: function (xhr, status, error) {
                     console.error('Error fetching san bong data:', error);
@@ -344,41 +342,58 @@ JavaScript
         });
     }
 
+    // Hàm disable các trường select nếu không muốn người dùng chỉnh sửa
+    function disableSelectFields() {
+        $('#editTrangThai').prop('disabled', true);
+        $('#editLoaiSan').prop('disabled', true);
+    }
+
+    // // Lắng nghe sự kiện khi chuyển tab để đảm bảo modal hoạt động đúng
+    // $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+    //     // Nếu modal đang mở, hiển thị lại modal
+    //     console.log("tab đây")
+    //     if ($('#myModalEdit').is(':visible')) {
+    //         $('#myModalEdit').modal('show');
+    //     }
+    // });
+
     function updateSanBong() {
+        // Lấy dữ liệu từ các trường trong modal
         const id = document.getElementById('editId').value;
         const tenSanBong = document.getElementById('editTenSanBong').value;
         const trangThai = document.getElementById('editTrangThai').value;
         const idLoaiSan = document.getElementById('editLoaiSan').value;
 
+        // Tạo đối tượng sanBong để gửi lên server
         const sanBong = {
             tenSanBong: tenSanBong,
             trangThai: trangThai,
             idLoaiSan: idLoaiSan
         };
 
-        fetch(`http://localhost:8080/san-bong/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(sanBong)
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Failed to update san bong');
-            })
-            .then(data => {
-                console.log('Update successful:', data);
+        // Thực hiện yêu cầu PUT để cập nhật sân bóng
+        $.ajax({
+            type: 'PUT',
+            url: 'http://localhost:8080/san-bong/' + id, // URL của API để cập nhật thông tin
+            data: JSON.stringify(sanBong), // Dữ liệu gửi lên server
+            contentType: 'application/json', // Định dạng dữ liệu gửi là JSON
+            success: function (data) {
+                console.log('Cập nhật sân bóng thành công:', data);
+                // Đóng modal sau khi cập nhật thành công
+                $('#myModalEdit').modal('hide');
+                // Cập nhật lại bảng (hoặc reload lại trang tùy theo ứng dụng của bạn)
                 refreshCurrentTab();
-                // Show success message or update the UI accordingly
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                // Show error message or handle error accordingly
-            });
+                // Hiển thị thông báo thành công cho người dùng
+                Swal.fire('Thành công!', 'Cập nhật sân bóng thành công!', 'success');
+            },
+            error: function (xhr, status, error) {
+                console.error('Lỗi khi cập nhật sân bóng:', error);
+                // Hiển thị thông báo lỗi cho người dùng
+                Swal.fire('Lỗi!', 'Có lỗi xảy ra khi cập nhật sân bóng.', 'error');
+            }
+        });
     }
+
 
 
     function deleteTabActive() {
@@ -418,10 +433,12 @@ JavaScript
 
 
     }
-
     function deletedSanBong() {
+        // Lắng nghe sự kiện click vào nút Xóa (btn-danger) trong tbody
         $('tbody').on('click', '.btn-danger', function () {
-            var sanBongId = $(this).closest('tr').find('input[type="checkbox"]').val();
+            // Lấy idSanBong từ data-id-loai-san của phần tử <tr> chứa nút Xóa
+            const sanBongId = $(this).closest('tr').data('id-loai-san');
+            console.log("San bong id, ",sanBongId)
             Swal.fire({
                 title: "Xóa bản ghi?",
                 text: "Bạn có chắc chắn muốn xóa bản ghi này?",
@@ -431,6 +448,7 @@ JavaScript
                 cancelButtonText: "Hủy"
             }).then((result) => {
                 if (result.isConfirmed) {
+                    // Thực hiện gọi API để xóa bản ghi
                     $.ajax({
                         type: "DELETE",
                         url: "http://localhost:8080/san-bong/" + sanBongId,
@@ -441,7 +459,7 @@ JavaScript
                                 text: "Bản ghi đã được xóa thành công!"
                             });
                             // Bạn có thể reload bảng hoặc cập nhật giao diện tại đây
-                            refreshCurrentTab();
+                            refreshCurrentTab(); // Gọi hàm để cập nhật lại bảng (nếu cần)
                         },
                         error: function (xhr, status, error) {
                             Swal.fire({
@@ -449,13 +467,13 @@ JavaScript
                                 title: "Oops...",
                                 text: "Lỗi xóa bản ghi: " + error
                             });
-                            refreshCurrentTab();
                         }
                     });
                 }
             });
         });
     }
+
 
 
     $(document).ready(function () {
