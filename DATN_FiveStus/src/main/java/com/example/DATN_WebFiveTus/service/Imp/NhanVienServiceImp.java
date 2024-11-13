@@ -1,8 +1,15 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
+import com.example.DATN_WebFiveTus.config.RoleFactory;
 import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
+import com.example.DATN_WebFiveTus.entity.KhachHang;
 import com.example.DATN_WebFiveTus.entity.NhanVien;
+import com.example.DATN_WebFiveTus.entity.auth.Role;
+import com.example.DATN_WebFiveTus.entity.auth.User;
+import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
+import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
 import com.example.DATN_WebFiveTus.repository.NhanVienReposity;
+import com.example.DATN_WebFiveTus.repository.UserRepository;
 import com.example.DATN_WebFiveTus.service.NhanVienService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -19,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
@@ -29,9 +37,7 @@ import java.io.InputStream;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,7 +51,17 @@ public class NhanVienServiceImp implements NhanVienService {
 
     @Autowired
     private SpringTemplateEngine springTemplateEngine;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RoleFactory roleFactory;
+
+    @Autowired
+    private KhachHangRepository khachHangRepository;
 
     public NhanVienServiceImp(NhanVienReposity nhanVienReposity, ModelMapper modelMapper) {
         this.nhanVienReposity = nhanVienReposity;
@@ -72,14 +88,16 @@ public class NhanVienServiceImp implements NhanVienService {
     }
 
     @Override
-    public Boolean addNew(NhanVienDTO nv) {
+    public Boolean addNew(NhanVienDTO nv) throws RoleNotFoundException {
         NhanVien nhanVien = modelMapper.map(nv, NhanVien.class);
         nhanVien.setMaNhanVien(generateMaNV());
         nhanVien.setTenNhanVien(generateTKNV(nv.getHoTen()));
-        nhanVien.setMatKhau(generateMK(16));
+        String pass = generateMK(16);
+        nhanVien.setMatKhau(passwordEncoder.encode(pass));
         nhanVien.setTrangThai("active");
-        boolean checkMail = mailFunction(nhanVien);
+        boolean checkMail = mailFunction(nhanVien, pass);
         if (checkMail) {
+            createUser(nhanVien);
             nhanVienReposity.save(nhanVien);
             return true;
         }
@@ -102,11 +120,10 @@ public class NhanVienServiceImp implements NhanVienService {
     public Boolean addMore(MultipartFile file) {
         try {
             InputStream inputStream = file.getInputStream();
-            Workbook workbook= new XSSFWorkbook(inputStream);
+            Workbook workbook = new XSSFWorkbook(inputStream);
 
             Sheet sheet = workbook.getSheetAt(0);
             Iterator<Row> iterator = sheet.iterator();
-
 
             int skipRows = 2;
             for (int i = 0; i < skipRows; i++) {
@@ -121,12 +138,14 @@ public class NhanVienServiceImp implements NhanVienService {
                 Row currentRow = iterator.next();
                 Cell firstCell = currentRow.getCell(1);
                 if (firstCell == null || firstCell.getCellType() == CellType.BLANK) {
-                    break; // Dừng vòng lặp nếu dòng không có dữ liệu
+                    break;
                 }
-                NhanVien nhanVien = createNhanVienFormRow(currentRow,dateFormatter);
-
+                NhanVien nhanVien = createNhanVienFormRow(currentRow, dateFormatter);
                 if (nhanVien != null) {
-                    boolean checkMail = mailFunction(nhanVien);
+                    String pass = generateMK(16);
+                    nhanVien.setMatKhau(passwordEncoder.encode(pass));
+                    createUser(nhanVien);
+                    boolean checkMail = mailFunction(nhanVien, pass);
                     if (checkMail) {
                         nhanVienReposity.save(nhanVien);
                     }
@@ -135,19 +154,20 @@ public class NhanVienServiceImp implements NhanVienService {
 
             workbook.close();
 
-
             return true;
-        } catch (IOException e ){
+        } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException();
+        } catch (RoleNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public ResponseEntity<?> getOneNv(int id) {
         NhanVien nv = nhanVienReposity.findById(id).orElse(null);
-        if (nv!=null){
-           return ResponseEntity.ok( modelMapper.map(nv,NhanVienDTO.class));
+        if (nv != null) {
+            return ResponseEntity.ok(modelMapper.map(nv, NhanVienDTO.class));
         }
         return ResponseEntity
                 .badRequest()
@@ -157,8 +177,8 @@ public class NhanVienServiceImp implements NhanVienService {
     @Override
     public ResponseEntity<?> getForCode(String maNV) {
         NhanVien nv = nhanVienReposity.findByMaNhanVien(maNV);
-        if (nv!= null){
-            return ResponseEntity.ok(modelMapper.map(nv,NhanVienDTO.class));
+        if (nv != null) {
+            return ResponseEntity.ok(modelMapper.map(nv, NhanVienDTO.class));
         }
         return ResponseEntity.ok(maNV);
     }
@@ -177,36 +197,35 @@ public class NhanVienServiceImp implements NhanVienService {
             Cell cellXa = row.getCell(9);
 
             nhanVien.setHoTen(cellTenNV.getStringCellValue());
-            nhanVien.setNgaySinh(LocalDate.parse(cellNgaySinh.getStringCellValue(),dateTimeFormatter));
-            nhanVien.setGioiTinh(cellGioiTinh.getStringCellValue().equalsIgnoreCase("Nam")?true:false);
+            nhanVien.setNgaySinh(LocalDate.parse(cellNgaySinh.getStringCellValue(), dateTimeFormatter));
+            nhanVien.setGioiTinh(cellGioiTinh.getStringCellValue().equalsIgnoreCase("Nam") ? true : false);
             nhanVien.setEmail(cellEmail.getStringCellValue());
             nhanVien.setSoDienThoai(cellSDT.getStringCellValue());
 
-            String diaChi = cellDc.getStringCellValue()+", "+cellTinh.getStringCellValue() +", "+cellHuyen.getStringCellValue()+", "+cellXa.getStringCellValue();
+            String diaChi = cellDc.getStringCellValue() + ", " + cellTinh.getStringCellValue() + ", " + cellHuyen.getStringCellValue() + ", " + cellXa.getStringCellValue();
 
             nhanVien.setDiaChi(diaChi);
 
             nhanVien.setMaNhanVien(generateMaNV());
             nhanVien.setTenNhanVien(generateTKNV(nhanVien.getHoTen()));
-            nhanVien.setMatKhau(generateMK(16));
             nhanVien.setTrangThai("active");
             return nhanVien;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
 
-    public Boolean mailFunction(NhanVien nhanVien) {
+    public Boolean mailFunction(NhanVien nhanVien, String pass) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
             Context context = new Context();
-            context.setVariable("username", nhanVien.getTenNhanVien());
-            context.setVariable("password", nhanVien.getMatKhau());
+            context.setVariable("username", nhanVien.getEmail());
+            context.setVariable("password", pass);
 
             String html = springTemplateEngine.process("userNV", context);
 
@@ -239,31 +258,44 @@ public class NhanVienServiceImp implements NhanVienService {
         if (list.isEmpty()) {
             return "NV001";
         }
-        Integer manv =list.get(list.size() - 1).getId()+1;
+        Integer manv = list.get(list.size() - 1).getId() + 1;
         return "NV" + manv;
     }
 
     public String generateTKNV(String fullName) {
-        // Tách tên thành các từ
         String[] parts = fullName.split("\\s+");
 
-        // Lấy từ cuối cùng làm họ chính (viết thường)
         String lastName = parts[parts.length - 1].toLowerCase();
-//        lastName = StringUtils.stripAccents(lastName);
 
-        // Lấy chữ cái đầu của các từ còn lại (không bao gồm từ cuối cùng) và viết thường
         StringBuilder initials = new StringBuilder();
         for (int i = 0; i < parts.length - 1; i++) {
             initials.append(Character.toLowerCase(parts[i].charAt(0)));
         }
 
         Random random = new Random();
-        int randomNumber = random.nextInt(1000); // Sinh số từ 100 đến 999
+        int randomNumber = random.nextInt(1000);
 
-        // Kết hợp lại với số ngẫu nhiên
         String username = lastName + initials.toString() + randomNumber;
 
         return username;
+    }
+
+    private void createUser(NhanVien nhanVien) throws RoleNotFoundException {
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleFactory.getInstance("user"));
+        roles.add(roleFactory.getInstance("employee"));
+        userRepository.save(User.builder()
+                .email(nhanVien.getEmail())
+                .username(nhanVien.getEmail().substring(0, nhanVien.getEmail().indexOf("@")))
+                .password(nhanVien.getMatKhau())
+                .enabled(true)
+                .roles(roles)
+                .build());
+        KhachHang khachHang = new KhachHang();
+        khachHang.setEmail(nhanVien.getEmail());
+        khachHang.setMaKhachHang(nhanVien.getEmail().substring(0, nhanVien.getEmail().indexOf("@")));
+        khachHang.setMatKhau(nhanVien.getMatKhau());
+        khachHangRepository.save(khachHang);
     }
 
 }

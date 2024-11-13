@@ -2,26 +2,32 @@ package com.example.DATN_WebFiveTus.service.Imp;
 
 
 import com.example.DATN_WebFiveTus.config.RoleFactory;
-import com.example.DATN_WebFiveTus.config.security.CookieUtils;
 import com.example.DATN_WebFiveTus.config.security.CheckRole;
+import com.example.DATN_WebFiveTus.config.security.CookieUtils;
 import com.example.DATN_WebFiveTus.config.security.jwt.JwtUtils;
 import com.example.DATN_WebFiveTus.dto.ApiResponseDto;
 import com.example.DATN_WebFiveTus.dto.request.ChangePassRequest;
 import com.example.DATN_WebFiveTus.dto.request.SignInRequestDto;
 import com.example.DATN_WebFiveTus.dto.request.SignUpRequestDto;
 import com.example.DATN_WebFiveTus.dto.response.SignInResponseDto;
+import com.example.DATN_WebFiveTus.entity.KhachHang;
 import com.example.DATN_WebFiveTus.entity.auth.ResponseStatus;
 import com.example.DATN_WebFiveTus.entity.auth.Role;
 import com.example.DATN_WebFiveTus.entity.auth.User;
 import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
 import com.example.DATN_WebFiveTus.exception.UserAlreadyExistsException;
+import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
 import com.example.DATN_WebFiveTus.repository.UserRepository;
 import com.example.DATN_WebFiveTus.service.AuthService;
 import com.example.DATN_WebFiveTus.service.UserService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,6 +36,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.util.HashSet;
 import java.util.List;
@@ -57,6 +65,16 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private CheckRole checkRole;
 
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    private SpringTemplateEngine springTemplateEngine;
+
+    @Autowired
+    private KhachHangRepository khachHangRepository;
+
+
     @Override
     public ResponseEntity<ApiResponseDto<?>> signUp(SignUpRequestDto signUpRequestDto)
             throws UserAlreadyExistsException, RoleNotFoundException {
@@ -69,6 +87,15 @@ public class AuthServiceImpl implements AuthService {
 
         User user = createUser(signUpRequestDto);
         userService.save(user);
+        KhachHang khachHang = new KhachHang();
+        khachHang.setEmail(signUpRequestDto.getEmail());
+        khachHang.setMaKhachHang(signUpRequestDto.getEmail().substring(0, signUpRequestDto.getEmail().indexOf("@")));
+        khachHang.setMatKhau(passwordEncoder.encode(signUpRequestDto.getPassword()));
+        khachHangRepository.save(khachHang);
+        boolean mail = mailFunction(signUpRequestDto);
+        if (!mail) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 ApiResponseDto.builder()
                         .status(String.valueOf(ResponseStatus.SUCCESS))
@@ -176,5 +203,30 @@ public class AuthServiceImpl implements AuthService {
             }
         }
         return roles;
+    }
+
+    public Boolean mailFunction(SignUpRequestDto dto) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            Context context = new Context();
+            context.setVariable("username", dto.getEmail());
+            context.setVariable("password", dto.getPassword());
+
+            String html = springTemplateEngine.process("userNV", context);
+
+            helper.setTo(dto.getEmail());
+            helper.setSubject("Thông báo tài khoản và mật khẩu");
+            helper.setText(html, true);
+
+            javaMailSender.send(mimeMessage);
+
+            return true;
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

@@ -30,25 +30,25 @@ public class KhachHang {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "ma_khach_hang", nullable = false, length = 50)
+    @Column(name = "ma_khach_hang")
     private String maKhachHang;
 
-    @Column(name = "mat_khau", nullable = false, length = 50)
+    @Column(name = "mat_khau")
     private String matKhau;
 
-    @Column(name = "ho_va_ten", nullable = false, length = 100)
+    @Column(name = "ho_va_ten")
     private String hoVaTen;
 
-    @Column(name = "email", nullable = false, length = 100)
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "gioi_tinh", nullable = false)
+    @Column(name = "gioi_tinh")
     private boolean gioiTinh;
 
-    @Column(name = "so_dien_thoai", nullable = false, length = 50)
+    @Column(name = "so_dien_thoai")
     private String soDienThoai;
 
-    @Column(name = "trang_thai", nullable = false, length = 50)
+    @Column(name = "trang_thai")
     private String trangThai;
 
     @CreationTimestamp
