@@ -47,10 +47,6 @@
                             </div>
                             <div class="modal-body">
                                 <form id="addParameterForm">
-                                    <!--                        <div class="mb-3">-->
-                                    <!--                            <label for="parameterCode" class="form-label">Mã</label>-->
-                                    <!--                            <input type="text" class="form-control" id="parameterCode" name="ma" required>-->
-                                    <!--                        </div>-->
                                     <div class="mb-3">
                                         <label for="parameterName" class="form-label">Tên</label>
                                         <input type="text" class="form-control" id="parameterName" name="ten" >
@@ -326,12 +322,12 @@
                     'Dữ liệu đã được cập nhật thành công.',
                     'success'
                 );
-
-                // Đóng modal (giả sử modal có id là 'editParameterModal')
-                $('#editParameterModal').modal('hide');
-
-                // Làm sạch form
-                $('#editParameterForm')[0].reset();
+                // var editModal = new bootstrap.Modal(document.getElementById('editModal'));
+                // // Đóng modal (giả sử modal có id là 'editParameterModal')
+                // editModal.modal('hide');
+                //
+                // // Làm sạch form
+                // editModal[0].reset();
 
                 // Cập nhật bảng dữ liệu
                 fetchDataAndRenderTable();
