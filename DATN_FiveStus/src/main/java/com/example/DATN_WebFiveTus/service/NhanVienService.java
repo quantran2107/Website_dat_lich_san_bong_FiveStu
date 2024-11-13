@@ -2,6 +2,7 @@ package com.example.DATN_WebFiveTus.service;
 
 
 import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
+import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,7 +13,7 @@ public interface NhanVienService {
 
     Boolean updateNew(NhanVienDTO nv);
 
-    Boolean addNew(NhanVienDTO nv);
+    Boolean addNew(NhanVienDTO nv) throws RoleNotFoundException;
 
     List<NhanVienDTO> getActiveNV();
 

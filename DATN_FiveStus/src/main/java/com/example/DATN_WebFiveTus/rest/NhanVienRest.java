@@ -1,6 +1,7 @@
 package com.example.DATN_WebFiveTus.rest;
 
 import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
+import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
 import com.example.DATN_WebFiveTus.service.NhanVienService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class NhanVienRest {
     }
 
     @PostMapping("add")
-    public ResponseEntity<Boolean> add(@RequestBody NhanVienDTO nv) throws MessagingException {
+    public ResponseEntity<Boolean> add(@RequestBody NhanVienDTO nv) throws MessagingException, RoleNotFoundException {
         return ResponseEntity.ok(nhanVienService.addNew(nv));
     }
     @PostMapping("upload")

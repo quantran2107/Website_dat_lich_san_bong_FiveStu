@@ -1,6 +1,7 @@
 package com.example.DATN_WebFiveTus.service;
 
 import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
+import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
@@ -11,7 +12,7 @@ public interface KhachHangService {
 
     KhachHangDTO getOne(Integer id);
 
-    KhachHangDTO save(KhachHangDTO khachHangDTO);
+    KhachHangDTO save(KhachHangDTO khachHangDTO) throws RoleNotFoundException;
 
     void update(Integer id, KhachHangDTO khachHangDTO);
 
