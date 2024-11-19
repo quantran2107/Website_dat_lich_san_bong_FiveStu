@@ -90,4 +90,10 @@ public class SanBongRest {
         Boolean exists = sanBongService.existsByTenSanBongs(idLoaiSan,tenSanBong);
         return ResponseEntity.ok(exists);
     }
+
+    @GetMapping("/getListSanBongWithIdLoaiSan")
+    public ResponseEntity<List<SanBongDTO>> getListSanBongWithIdLoaiSan(@RequestParam("idLoaiSan") Integer idLoaiSan){
+        List<SanBongDTO> sanBongs = sanBongService.getListSanBongWithIdLoaiSan(idLoaiSan);
+        return ResponseEntity.ok(sanBongs);
+    }
 }

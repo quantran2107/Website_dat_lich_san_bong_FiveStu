@@ -42,4 +42,7 @@ public interface SanBongRepository extends JpaRepository<SanBong,Integer> {
 
     @Query("SELECT sb FROM SanBong sb WHERE sb.loaiSan.id=:idLoaiSan and sb.tenSanBong =:tenSanBong")
     Boolean existsByTenSanBongs(Integer idLoaiSan,String tenSanBong);
+
+    @Query("SELECT sb FROM SanBong sb WHERE sb.deletedAt = false AND sb.loaiSan.id = :idLoaiSan")
+    List<SanBong> getListSanBongWithIdLoaiSan(@Param("idLoaiSan") Integer idLoaiSan);
 }
