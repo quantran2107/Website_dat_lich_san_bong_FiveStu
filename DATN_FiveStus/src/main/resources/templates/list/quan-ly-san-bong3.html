@@ -154,17 +154,7 @@
                                                                 <td th:text="${stat.count}"></td>
                                                                 <td>
                                                                     <span th:text="${sanBong.tenSanBong}"></span>
-                                                                    <!--                                                                    <div class="custom-control custom-checkbox"-->
-                                                                    <!--                                                                         style="display:inline-block; margin-left: 10px;">-->
-                                                                    <!--                                                                        <input type="checkbox"-->
-                                                                    <!--                                                                               class="custom-control-input item-checkbox"-->
-                                                                    <!--                                                                               th:id="'checkbox-' + ${sanBong.id}"-->
-                                                                    <!--                                                                               th:value="${sanBong.id}"-->
-                                                                    <!--                                                                               th:data-id="${sanBong.tenSanBong}"-->
-                                                                    <!--                                                                               th:name="'sanBongIds'">-->
-                                                                    <!--                                                                        <label class="custom-control-label"-->
-                                                                    <!--                                                                               th:for="'checkbox-' + ${sanBong.id}"></label>-->
-                                                                    <!--                                                                    </div>-->
+
 
                                                                 </td>
                                                                 <td>
@@ -314,38 +304,6 @@
 
 <script>
 
-    // $(document).ready(function () {
-    //     // Khi DOM đã sẵn sàng
-    //     // Tìm tab đầu tiên và thêm lớp active vào tab đó
-    //     var $firstTab = $('#loaiSanTab .nav-link').first();
-    //     $firstTab.addClass('active');
-    //
-    //     // Hiển thị nội dung của tab đầu tiên
-    //     var firstTabContentId = $firstTab.attr('href');
-    //     $(firstTabContentId).addClass('show active');
-    //
-    //     // Lấy giá trị idLoaiSan của tab đầu tiên và thiết lập vào input
-    //     var idLoaiSan = firstTabContentId.replace('#loaiSan-', '');
-    //     $('#idLoaiSanInput').val(idLoaiSan);
-    //
-    // });
-    //
-    // $(document).ready(function () {
-    //     // Lắng nghe sự kiện khi chuyển tab
-    //     $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
-    //         let idLoaiSan = $(e.target).attr('href').replace('#loaiSan-', '');
-    //         $('#idLoaiSanInput').val(idLoaiSan);
-    //
-    //         $('#tenSanBong').val('');
-    //         // Gỡ bỏ sự kiện submit cũ và gắn sự kiện submit mới
-    //         $('form').off('submit').on('submit', submitSanBong);
-    //     });
-    // });
-    //
-    // $(document).ready(function () {
-    //     editSanBongs();
-    // });
-
     $(document).ready(function () {
         // Khi DOM đã sẵn sàng
 
@@ -376,16 +334,12 @@
 
 
     function editSanBongs() {
-        // Gỡ sự kiện click cũ để tránh bị trùng
-        $('tbody').off('click', 'button.btn-outline-success');
+        $('#myModalEdit').modal('show');
 
-        // Gắn sự kiện click cho nút "Edit"
-        $('tbody').on('click', 'button.btn-outline-success', function () {
             const sanBongId = $(this).closest('tr').data('id-loai-san');
             console.log("San bong id update: ", sanBongId);
 
             // Hiển thị modal trước để đảm bảo người dùng thấy phản hồi nhanh
-            $('#myModalEdit').modal('show');
 
             // Lấy dữ liệu sân bóng từ API
             $.ajax({
@@ -407,7 +361,7 @@
                     Swal.fire('Lỗi!', 'Không thể tải dữ liệu sân bóng.', 'error');
                 }
             });
-        });
+
     }
 
 
@@ -580,7 +534,7 @@
                 Swal.fire({
                     icon: "error",
                     title: "Đã xảy ra lỗi",
-                    text: "Vui lòng kiểm tra lại các trường nhập."
+                    text: "Vui lòng nhâp giá."
                 });
                 return;
             }
