@@ -119,7 +119,7 @@ $(document).ready(function () {
 
                     } else {
                         Swal.fire({
-                            title: "Lõi!",
+                            title: "Lỗi!",
                             text: 'Hệ thống xảy ra lỗi!',
                             icon: "error",
                             showConfirmButton: false,
@@ -130,7 +130,7 @@ $(document).ready(function () {
                 },
                 error: function () {
                     Swal.fire({
-                        title: "Lõi!",
+                        title: "Lỗi!",
                         text: 'Đã xảy ra sự cố!',
                         icon: "error",
                         showConfirmButton: false,

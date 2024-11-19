@@ -6,12 +6,12 @@ USE DuAnTotNghiep;
 CREATE TABLE khach_hang (
   id INT AUTO_INCREMENT PRIMARY KEY,
   ma_khach_hang VARCHAR(50) NOT NULL,
-  mat_khau VARCHAR(50) NULL,
-  ho_va_ten VARCHAR(100) NOT NULL,
+  mat_khau VARCHAR(255) NULL,
+  ho_va_ten VARCHAR(100) NULL,
   email VARCHAR(100) NULL,
-  gioi_tinh BOOLEAN NOT NULL,
-  so_dien_thoai VARCHAR(50) NOT NULL,
-  trang_thai VARCHAR(50) NOT NULL,
+  gioi_tinh BOOLEAN NULL,
+  so_dien_thoai VARCHAR(50) NULL,
+  trang_thai VARCHAR(50) NULL,
   created_at DATETIME, 
   updated_at DATETIME,
   deleted_at bit
@@ -416,7 +416,7 @@ CREATE TABLE lich_su_checkin (
 
 INSERT INTO khach_hang (ma_khach_hang, mat_khau, ho_va_ten, email, gioi_tinh, so_dien_thoai, trang_thai, created_at, updated_at, deleted_at)
 VALUES
-  ('KH001', '123456', 'Nguyen Van A', 'lyly1062004@gmail.com', true, '0987456321', 'active', NOW(), NOW(), 1),
+  ('KH001', 'password1', 'Nguyen Van A', 'nguyenvana@gmail.com', true, '0987456321', 'active', NOW(), NOW(), 1),
   ('KH002', 'password2', 'Nguyen Van B', 'nguyenvanb@gmail.com', false, '0963258741', 'active', NOW(), NOW(), 1),
   ('KH003', 'password3', 'Nguyen Van C', 'nguyenvanc@gmail.com', true, '0321456987', 'inactive', NOW(), NOW(), 1),
   ('KH004', 'password4', 'Nguyen Van D', 'nguyenvand@gmail.com', false, '0369852147', 'active', NOW(), NOW(), 0),
@@ -2370,8 +2370,7 @@ VALUES
 ('TS007', 'Thời Gian Hủy Đặt Sân', '2', 'giờ', 'Thời gian tối thiểu trước giờ đá để hủy đặt sân', 1, 0),
 ('TS008', 'Thời Gian Đặt Trước', '1', 'ngày', 'Thời gian tối thiểu để đặt sân trước ngày đá', 1, 0),
 ('TS009', 'Giá Thuê Bóng', '50000', 'VND', 'Giá thuê bóng trong 1 trận', 1, 0),
-('TS010', 'Phí Huấn Luyện Viên', '300000', 'VND', 'Phí thuê huấn luyện viên theo giờ', 1, 0),
-('TSTIEN_COC', 'Tiền cọc', '40', '%', 'Số tiền cọc trước khi đặt sân', 1, 0);
+('TS010', 'Phí Huấn Luyện Viên', '300000', 'VND', 'Phí thuê huấn luyện viên theo giờ', 1, 0);
 
 
 CREATE TABLE `user` (
@@ -2409,11 +2408,11 @@ INSERT INTO `duantotnghiep`.`user`
 `username`)
 VALUES
 (1,'truongvmph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','truongvmph39949'),
-(2,'quantaph12345@gmail.com',2,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','quantaph12345'),
+(2,'quantaph12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','quantaph12345'),
 (3,'bangdxph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','bangdxph39949'),
 (4,'lynhkph12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','lynhkph12345'),
 (5,'haipnph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','haipnph39949'),
-(6,'lyly1062004@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','Ly'),
+(6,'nguyenvana@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanA'),
 (7,'nguyenvanb@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanB'),
 (8,'nguyenvanc@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanC'),
 (9,'nguyenvand@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanD'),
@@ -2434,6 +2433,3 @@ INSERT INTO `duantotnghiep`.`user_roles`
 `role_id`)
 VALUES
 (1,1),(1,4),(2,1),(2,4),(3,1),(3,4),(4,1),(4,4),(5,1),(5,4),(6,1),(7,1),(8,1),(9,1),(10,1);
-
-select * From user_roles;	
-select * From user

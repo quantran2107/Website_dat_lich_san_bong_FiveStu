@@ -72,6 +72,22 @@ $(document).ready(function () {
             }
         }
     });
+    $('#file').on('change', function () {
+        let fileName = '';
+        let newFileName = $(this).val().split('\\').pop();
+
+        if (newFileName) {
+            fileName = newFileName;
+            $('#labelFile').html('<label for="file" style="padding: 3px; border-radius: 5px;">' + fileName + '</label>');
+            $('#btnSubmitFile').show();
+        } else {
+            if (fileName) {
+                $('#labelFile').html('<label for="file" style="padding: 3px; border-radius: 5px;">' + fileName + '</label>');
+                $('#btnSubmitFile').show();
+            } else {
+            }
+        }
+    });
     $('#btnSubmitFile').click(function () {
         ajaxSubmitForm();
     });

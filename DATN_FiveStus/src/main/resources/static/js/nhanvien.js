@@ -356,6 +356,8 @@ $(document).ready(function () {
             $('#tbodyContainer').html(tbody);
             $('.action-button').off('click').on('click', function () {
                 let employeeData = $(this).data('employee');
+                $('#btnSubmitUpdate').hide();
+                $('#btnChangeUpdate').show();
                 renderUpdateForm(employeeData)
 
             });
@@ -944,6 +946,9 @@ $(document).ready(function () {
                                 showSuccessToast('Cập nhật  thành công');
                                 $(`#tableNhanVien`).show();
                                 loadTable(apiGetAll, '', currentPage, recordsPerPage);
+                                $('#btnSubmitUpdate').hide();
+                                $('#btnChangeUpdate').show();
+                                $('#btnSubmitUpdate').show();
                                 $(`#formAdd`).hide();
                                 $(`#formUpdate`).hide();
                                 $('#imageNVdetail').attr('src', 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg');
