@@ -34,7 +34,7 @@ $(document).ready(function () {
 
     $('#btnExcelMau').on('click', function() {
         // URL tải xuống file Excel từ Google Sheets
-        let url = 'https://docs.google.com/spreadsheets/d/1FxEkgetZJBOfYtFhqDgjrGTLYWw6Z6fJL50evGtrgpg/export?format=xlsx';
+        let url = 'https://docs.google.com/spreadsheets/d/1bDAR1kH1wQIMQ6JLkgmmLLQlrMioKFYY/export?format=xlsx';
 
         // Tạo một thẻ <a> tạm thời và thiết lập thuộc tính href
         let $a = $('<a></a>').attr('href', url).attr('download', 'file.xlsx').appendTo('body');

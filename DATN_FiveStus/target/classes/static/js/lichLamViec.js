@@ -48,7 +48,8 @@ $(document).ready(function () {
     }
 
     $('#btnExcelMauLich').on('click', function () {
-        let url = 'https://docs.google.com/spreadsheets/d/13CPv_VMCRxIpIW5UyuLclM7CibvygO3l-BtLczl_k34/export?format=xlsx';
+        let url = 'https://docs.google.com/spreadsheets/d/1Zi34HdFkU5Ik4L3T8JT82k4KJFmP7kvD/export?format=xlsx';
+
         let $a = $('<a></a>').attr('href', url).attr('download', 'file.xlsx').appendTo('body');
 
         $a[0].click();
