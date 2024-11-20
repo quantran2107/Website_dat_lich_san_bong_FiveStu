@@ -158,7 +158,7 @@
 
                                                                 </td>
                                                                 <td>
-                                                                    <button onclick="editSanBongs(this)"
+                                                                    <button onclick="editSanBongs()"
                                                                             class="btn btn-outline-success"><span
                                                                             class="fe fe-edit-3"></span></button>
 
@@ -333,36 +333,36 @@
     });
 
 
-    function editSanBongs(button) {
-        // Lấy id từ dòng (tr) của nút "Edit"
-        const sanBongId = $(button).closest('tr').data('id-loai-san');
-        console.log("San bong id update: ", sanBongId);
-
-        // Hiển thị modal trước khi lấy dữ liệu
+    function editSanBongs() {
         $('#myModalEdit').modal('show');
 
-        // Lấy dữ liệu sân bóng từ API
-        $.ajax({
-            type: 'GET',
-            url: 'http://localhost:8080/san-bong/' + sanBongId,
-            success: function (data) {
-                // Điền thông tin vào các trường trong modal
-                $('#editId').val(data.id);
-                $('#editTenSanBong').val(data.tenSanBong);
-                $('#editTrangThai').val(data.trangThai);
-                $('#editLoaiSan').val(data.idLoaiSan);
+            const sanBongId = $(this).closest('tr').data('id-loai-san');
+            console.log("San bong id update: ", sanBongId);
 
-                console.log("Dữ liệu sân bóng đã được nạp:", data);
-            },
-            error: function (xhr, status, error) {
-                console.error('Error fetching san bong data:', error);
-                // Đóng modal nếu xảy ra lỗi
-                $('#myModalEdit').modal('hide');
-                Swal.fire('Lỗi!', 'Không thể tải dữ liệu sân bóng.', 'error');
-            }
-        });
+            // Hiển thị modal trước để đảm bảo người dùng thấy phản hồi nhanh
+
+            // Lấy dữ liệu sân bóng từ API
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8080/san-bong/' + sanBongId,
+                success: function (data) {
+                    // Điền thông tin vào các trường trong modal
+                    $('#editId').val(data.id);
+                    $('#editTenSanBong').val(data.tenSanBong);
+                    $('#editTrangThai').val(data.trangThai);
+                    $('#editLoaiSan').val(data.idLoaiSan);
+
+                    console.log("Dữ liệu sân bóng đã được nạp:", data);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching san bong data:', error);
+                    // Đóng modal nếu xảy ra lỗi
+                    $('#myModalEdit').modal('hide');
+                    Swal.fire('Lỗi!', 'Không thể tải dữ liệu sân bóng.', 'error');
+                }
+            });
+
     }
-
 
 
 

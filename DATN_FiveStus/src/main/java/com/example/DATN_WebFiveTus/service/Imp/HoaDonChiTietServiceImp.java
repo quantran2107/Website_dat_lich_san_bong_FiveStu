@@ -2,6 +2,7 @@ package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.config.PDFGenerator;
 import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
+import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.entity.HoaDon;
 import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
 import com.example.DATN_WebFiveTus.entity.KhachHang;
@@ -25,6 +26,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -341,6 +343,15 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
         return dtoList;
 
+    }
+
+    @Override
+    public HoaDonChiTietDTO huyLichDat(Integer id) {
+        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn với id " + id));
+        hoaDonChiTiet.setTrangThai("Đã hủy");
+        hoaDonChiTietRepository.save(hoaDonChiTiet);
+        return modelMapper.map(hoaDonChiTiet,HoaDonChiTietDTO.class);
     }
 
 }

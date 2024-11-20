@@ -1,6 +1,8 @@
 package com.example.DATN_WebFiveTus.service;
 
 import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
+import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
@@ -38,4 +40,6 @@ public interface HoaDonService {
                                     Pageable pageable);
 
     HoaDonDTO huyLichDat(Integer id);
+
+    NhanVienDTO getNhanVienTrongCa(HttpServletRequest request);
 }
