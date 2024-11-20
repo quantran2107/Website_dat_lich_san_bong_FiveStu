@@ -154,21 +154,11 @@
                                                                 <td th:text="${stat.count}"></td>
                                                                 <td>
                                                                     <span th:text="${sanBong.tenSanBong}"></span>
-                                                                    <!--                                                                    <div class="custom-control custom-checkbox"-->
-                                                                    <!--                                                                         style="display:inline-block; margin-left: 10px;">-->
-                                                                    <!--                                                                        <input type="checkbox"-->
-                                                                    <!--                                                                               class="custom-control-input item-checkbox"-->
-                                                                    <!--                                                                               th:id="'checkbox-' + ${sanBong.id}"-->
-                                                                    <!--                                                                               th:value="${sanBong.id}"-->
-                                                                    <!--                                                                               th:data-id="${sanBong.tenSanBong}"-->
-                                                                    <!--                                                                               th:name="'sanBongIds'">-->
-                                                                    <!--                                                                        <label class="custom-control-label"-->
-                                                                    <!--                                                                               th:for="'checkbox-' + ${sanBong.id}"></label>-->
-                                                                    <!--                                                                    </div>-->
+
 
                                                                 </td>
                                                                 <td>
-                                                                    <button onclick="editSanBongs()"
+                                                                    <button onclick="editSanBongs(this)"
                                                                             class="btn btn-outline-success"><span
                                                                             class="fe fe-edit-3"></span></button>
 
@@ -301,138 +291,144 @@
 </div>
 
 
-JavaScript
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
 <script>
 
-    // Hàm để disable thẻ <select> khi mở modal chỉnh sửa
-    function disableSelectFields() {
-        $('#editTrangThai').prop('disabled', true); // Disable <select> Trạng thái
-        $('#editLoaiSan').prop('disabled', true); // Disable <select> Loại sân
-    }
+    $(document).ready(function () {
+        // Khi DOM đã sẵn sàng
 
-    function editSanBongs() {
-        // Lắng nghe sự kiện click trên nút "Edit" trong bảng
-        $('tbody').on('click', 'button.btn-outline-success', function () {
-            const sanBongId = $(this).closest('tr').data('id-loai-san');
-            console.log("San bong id update: ", sanBongId);
+        // 1. Kích hoạt tab đầu tiên mặc định
+        var $firstTab = $('#loaiSanTab .nav-link').first();
+        $firstTab.addClass('active'); // Thêm lớp active vào tab đầu tiên
 
-            // Lấy dữ liệu sân bóng từ API
-            $.ajax({
-                type: 'GET',
-                url: 'http://localhost:8080/san-bong/' + sanBongId,
-                success: function (data) {
-                    // Hiển thị modal và điền thông tin sân bóng vào các trường
-                    $('#myModalEdit').modal('show');
-                    $('#editId').val(data.id);
-                    $('#editTenSanBong').val(data.tenSanBong);
-                    $('#editTrangThai').val(data.trangThai);
-                    $('#editLoaiSan').val(data.idLoaiSan);
+        var firstTabContentId = $firstTab.attr('href'); // Lấy ID nội dung tab đầu tiên
+        $(firstTabContentId).addClass('show active'); // Hiển thị nội dung tab đầu tiên
 
-                    // Disable select fields nếu cần thiết (nếu không muốn người dùng chỉnh sửa các trường này)
-                    disableSelectFields();
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error fetching san bong data:', error);
-                }
-            });
+        // Thiết lập giá trị idLoaiSan vào input ẩn
+        var idLoaiSan = firstTabContentId.replace('#loaiSan-', '');
+        $('#idLoaiSanInput').val(idLoaiSan);
+
+        // 2. Lắng nghe sự kiện khi chuyển tab
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+            // Lấy ID của tab hiện tại
+            let idLoaiSan = $(e.target).attr('href').replace('#loaiSan-', '');
+            $('#idLoaiSanInput').val(idLoaiSan); // Cập nhật giá trị idLoaiSanInput
+
+            // Reset dữ liệu của form nếu cần thiết
+            $('#tenSanBong').val('');
         });
-    }
 
-    // Hàm disable các trường select nếu không muốn người dùng chỉnh sửa
-    function disableSelectFields() {
-        $('#editTrangThai').prop('disabled', true);
-        $('#editLoaiSan').prop('disabled', true);
-    }
+        // 3. Gắn sự kiện submit cho form
+        $('form').off('submit').on('submit', submitSanBong);
+    });
 
-    // // Lắng nghe sự kiện khi chuyển tab để đảm bảo modal hoạt động đúng
-    // $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
-    //     // Nếu modal đang mở, hiển thị lại modal
-    //     console.log("tab đây")
-    //     if ($('#myModalEdit').is(':visible')) {
-    //         $('#myModalEdit').modal('show');
-    //     }
-    // });
 
-    function updateSanBong() {
-        // Lấy dữ liệu từ các trường trong modal
-        const id = document.getElementById('editId').value;
-        const tenSanBong = document.getElementById('editTenSanBong').value;
-        const trangThai = document.getElementById('editTrangThai').value;
-        const idLoaiSan = document.getElementById('editLoaiSan').value;
+    function editSanBongs(button) {
+        // Lấy id từ dòng (tr) của nút "Edit"
+        const sanBongId = $(button).closest('tr').data('id-loai-san');
+        console.log("San bong id update: ", sanBongId);
 
-        // Tạo đối tượng sanBong để gửi lên server
-        const sanBong = {
-            tenSanBong: tenSanBong,
-            trangThai: trangThai,
-            idLoaiSan: idLoaiSan
-        };
+        // Hiển thị modal trước khi lấy dữ liệu
+        $('#myModalEdit').modal('show');
 
-        // Thực hiện yêu cầu PUT để cập nhật sân bóng
+        // Lấy dữ liệu sân bóng từ API
         $.ajax({
-            type: 'PUT',
-            url: 'http://localhost:8080/san-bong/' + id, // URL của API để cập nhật thông tin
-            data: JSON.stringify(sanBong), // Dữ liệu gửi lên server
-            contentType: 'application/json', // Định dạng dữ liệu gửi là JSON
+            type: 'GET',
+            url: 'http://localhost:8080/san-bong/' + sanBongId,
             success: function (data) {
-                console.log('Cập nhật sân bóng thành công:', data);
-                // Đóng modal sau khi cập nhật thành công
-                $('#myModalEdit').modal('hide');
-                // Cập nhật lại bảng (hoặc reload lại trang tùy theo ứng dụng của bạn)
-                refreshCurrentTab();
-                // Hiển thị thông báo thành công cho người dùng
-                Swal.fire('Thành công!', 'Cập nhật sân bóng thành công!', 'success');
+                // Điền thông tin vào các trường trong modal
+                $('#editId').val(data.id);
+                $('#editTenSanBong').val(data.tenSanBong);
+                $('#editTrangThai').val(data.trangThai);
+                $('#editLoaiSan').val(data.idLoaiSan);
+
+                console.log("Dữ liệu sân bóng đã được nạp:", data);
             },
             error: function (xhr, status, error) {
-                console.error('Lỗi khi cập nhật sân bóng:', error);
-                // Hiển thị thông báo lỗi cho người dùng
-                Swal.fire('Lỗi!', 'Có lỗi xảy ra khi cập nhật sân bóng.', 'error');
+                console.error('Error fetching san bong data:', error);
+                // Đóng modal nếu xảy ra lỗi
+                $('#myModalEdit').modal('hide');
+                Swal.fire('Lỗi!', 'Không thể tải dữ liệu sân bóng.', 'error');
             }
         });
     }
 
 
 
-    function deleteTabActive() {
-        Swal.fire({
-            title: 'Xoá tab hiện tại?',
-            text: 'Bạn chắc chắn muốn xoá tab này?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Xoá',
-            cancelButtonText: 'Hủy'
-        }).then((result) => {
-            if (result.isConfirmed) {
+
+    function updateSanBong() {
+        $('form').off('submit').on('submit', function (event) {
+            // Ngăn chặn hành động mặc định của form (chẳng hạn như reload trang)
+            event.preventDefault();
+
+            function updateIdLoaiSanInput() {
+                // Lấy idLoaiSan của tab đang hoạt động
                 var activeTab = $('#loaiSanTab .nav-link.active');
-                var tabId = activeTab.attr('href').replace('#', ''); // Get the ID of the tab
-                var id = tabId.split('-')[1]; // Extract the ID from the tab ID (e.g. "loai-san-1" -> "1")
-
-                // Send DELETE request to API
-                $.ajax({
-                    type: 'DELETE',
-                    url: `http://localhost:8080/loai-san/${id}`,
-                    success: function () {
-                        $(`#${tabId}`).remove(); // Remove the tab content
-                        activeTab.remove(); // Remove the tab link
-                        Swal.fire('Tab đã được xoá!', '', 'success');
-                        setTimeout(function () {
-                            window.location.reload();
-                        }, 1000);
-
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(error);
-                        Swal.fire('Error', 'Xoá tab thất bại!', 'error');
-                    }
-                });
+                var activeTabContentId = activeTab.attr('href');
+                var idLoaiSan = activeTabContentId.replace('#loaiSan-', '');
+                $('#idLoaiSanInput').val(idLoaiSan);
             }
+
+            // // Cập nhật idLoaiSanInput cho tab đầu tiên khi trang được tải
+            updateIdLoaiSanInput();
+
+            // Lắng nghe sự kiện khi chuyển tab
+            $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+                // Cập nhật idLoaiSanInput khi chuyển tab
+                updateIdLoaiSanInput();
+            });
+
+            // Lấy dữ liệu từ các trường trong modal
+            const id = document.getElementById('editId').value;
+            const tenSanBong = document.getElementById('editTenSanBong').value;
+            const trangThai = document.getElementById('editTrangThai').value;
+            const idLoaiSan = document.getElementById('editLoaiSan').value;
+
+            // Tạo đối tượng sanBong để gửi lên server
+            const sanBong = {
+                tenSanBong: tenSanBong,
+                trangThai: trangThai,
+                idLoaiSan: idLoaiSan
+            };
+
+            // Thực hiện yêu cầu PUT để cập nhật sân bóng
+            $.ajax({
+                type: 'PUT',
+                url: 'http://localhost:8080/san-bong/' + id, // URL của API để cập nhật thông tin
+                data: JSON.stringify(sanBong), // Dữ liệu gửi lên server
+                contentType: 'application/json', // Định dạng dữ liệu gửi là JSON
+                success: function (data) {
+                    console.log('Cập nhật sân bóng thành công:', data);
+                    // Đóng modal sau khi cập nhật thành công
+                    $('#myModalEdit').modal('hide');
+                    // Cập nhật lại bảng (hoặc reload lại trang tùy theo ứng dụng của bạn)
+                    var currentTab = $('ul.nav-tabs li a.active');
+                    var tabContentId = currentTab.attr('href');
+                    $(tabContentId).load(location.href + ' ' + tabContentId);
+                    // Hiển thị thông báo thành công cho người dùng
+                    Swal.fire('Thành công!', 'Cập nhật sân bóng thành công!', 'success');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Lỗi khi cập nhật sân bóng:', error);
+                    // Hiển thị thông báo lỗi cho người dùng
+                    Swal.fire('Lỗi!', 'Có lỗi xảy ra khi cập nhật sân bóng.', 'error');
+                }
+            });
+
         });
-
-
     }
+
+
     function deletedSanBong() {
         // Lắng nghe sự kiện click vào nút Xóa (btn-danger) trong tbody
         $('tbody').on('click', '.btn-danger', function () {
@@ -476,32 +472,43 @@ JavaScript
 
 
 
-    $(document).ready(function () {
-        // Khi DOM đã sẵn sàng
-        // Tìm tab đầu tiên và thêm lớp active vào tab đó
-        var $firstTab = $('#loaiSanTab .nav-link').first();
-        $firstTab.addClass('active');
+    function deleteTabActive() {
+        Swal.fire({
+            title: 'Xoá tab hiện tại?',
+            text: 'Bạn chắc chắn muốn xoá tab này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xoá',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var activeTab = $('#loaiSanTab .nav-link.active');
+                var tabId = activeTab.attr('href').replace('#', ''); // Get the ID of the tab
+                var id = tabId.split('-')[1]; // Extract the ID from the tab ID (e.g. "loai-san-1" -> "1")
 
-        // Hiển thị nội dung của tab đầu tiên
-        var firstTabContentId = $firstTab.attr('href');
-        $(firstTabContentId).addClass('show active');
+                // Send DELETE request to API
+                $.ajax({
+                    type: 'DELETE',
+                    url: `http://localhost:8080/loai-san/${id}`,
+                    success: function () {
+                        $(`#${tabId}`).remove(); // Remove the tab content
+                        activeTab.remove(); // Remove the tab link
+                        Swal.fire('Tab đã được xoá!', '', 'success');
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 1000);
 
-        // Lấy giá trị idLoaiSan của tab đầu tiên và thiết lập vào input
-        var idLoaiSan = firstTabContentId.replace('#loaiSan-', '');
-        $('#idLoaiSanInput').val(idLoaiSan);
-    });
-
-    $(document).ready(function () {
-        // Lắng nghe sự kiện khi chuyển tab
-        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
-            let idLoaiSan = $(e.target).attr('href').replace('#loaiSan-', '');
-            $('#idLoaiSanInput').val(idLoaiSan);
-
-            $('#tenSanBong').val('');
-            // Gỡ bỏ sự kiện submit cũ và gắn sự kiện submit mới
-            $('form').off('submit').on('submit', submitSanBong);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                        Swal.fire('Error', 'Xoá tab thất bại!', 'error');
+                    }
+                });
+            }
         });
-    });
+
+
+    }
 
     function submitSanCa() {
         $('form').off('submit').on('submit', function (event) {
@@ -527,7 +534,7 @@ JavaScript
                 Swal.fire({
                     icon: "error",
                     title: "Đã xảy ra lỗi",
-                    text: "Vui lòng kiểm tra lại các trường nhập."
+                    text: "Vui lòng nhâp giá."
                 });
                 return;
             }
@@ -765,7 +772,7 @@ JavaScript
     function refreshCurrentTab() {
         var currentTab = $('ul.nav-tabs li a.active');
         var tabContentId = currentTab.attr('href');
-        $(tabContentId).load(location.href + ' ' + tabContentId); // Load lại nội dung của tab
+        $(tabContentId).load(location.href + ' ' + tabContentId);
     }
 
 
