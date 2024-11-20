@@ -152,5 +152,11 @@ private LoaiSanRepository loaiSanRepository;
         return sanBongRepository.existsByTenSanBongs(idLoaiSan, tenSanBong);
     }
 
+    @Override
+    public List<SanBongDTO> getListSanBongWithIdLoaiSan(Integer idLoaiSan) {
+        return  sanBongRepository.getListSanBongWithIdLoaiSan(idLoaiSan).stream().map((sanBong) ->modelMapper
+                .map(sanBong,SanBongDTO.class)).collect(Collectors.toList());
+    }
+
 
 }
