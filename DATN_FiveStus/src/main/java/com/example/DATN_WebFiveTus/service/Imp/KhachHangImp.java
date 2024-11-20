@@ -1,15 +1,24 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
+import com.example.DATN_WebFiveTus.config.RoleFactory;
+import com.example.DATN_WebFiveTus.entity.NhanVien;
+import com.example.DATN_WebFiveTus.entity.auth.Role;
+import com.example.DATN_WebFiveTus.entity.auth.User;
+import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
 import com.example.DATN_WebFiveTus.repository.*;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
 import java.security.SecureRandom;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.example.DATN_WebFiveTus.dto.DiaChiKhachHangDTO;
@@ -20,10 +29,10 @@ import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.service.KhachHangService;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 
 @Service
@@ -37,6 +46,20 @@ public class KhachHangImp implements KhachHangService {
 
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    private SpringTemplateEngine springTemplateEngine;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RoleFactory roleFactory;
 
     @Override
     public List<KhachHangDTO> getAll() {
@@ -57,8 +80,23 @@ public class KhachHangImp implements KhachHangService {
     }
 
     @Override
-    public KhachHangDTO save(KhachHangDTO khachHangDTO) {
+    public KhachHangDTO save(KhachHangDTO khachHangDTO) throws RoleNotFoundException {
         KhachHang khachHang = modelMapper.map(khachHangDTO, KhachHang.class);
+        String pass = generateMK(16);
+        khachHang.setMatKhau(passwordEncoder.encode(pass));
+        if (!mailFunction(khachHang,pass)){
+            return null;
+        }
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleFactory.getInstance("user"));
+        userRepository.save(User.builder()
+                .email(khachHang.getEmail())
+                .username(khachHang.getEmail().substring(0, khachHang.getEmail().indexOf("@")))
+                .password(khachHang.getMatKhau())
+                .enabled(true)
+                .roles(roles)
+                .build());
+
         khachHang = khachHangRepository.save(khachHang);
 
         List<DiaChiKhachHangDTO> diaChiList = khachHangDTO.getDiaChi();
@@ -73,8 +111,40 @@ public class KhachHangImp implements KhachHangService {
         return modelMapper.map(khachHang, KhachHangDTO.class);
     }
 
+    public static String generateMK(int length) {
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom RANDOM = new SecureRandom();
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            sb.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
+        }
+        return sb.toString();
+    }
 
+    public Boolean mailFunction(KhachHang khachHang,String pass) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            Context context = new Context();
+            context.setVariable("username", khachHang.getEmail());
+            context.setVariable("password", pass);
+
+            String html = springTemplateEngine.process("userNV", context);
+
+            helper.setTo(khachHang.getEmail());
+            helper.setSubject("Thông báo tài khoản và mật khẩu");
+            helper.setText(html, true);
+
+            javaMailSender.send(mimeMessage);
+
+            return true;
+        } catch (MessagingException e) {
+            e.printStackTrace(); // Xử lý exception theo nhu cầu của bạn
+            return false;
+        }
+    }
     @Override
     public void update(Integer id, KhachHangDTO khachHangDTO) {
         // Lấy khách hàng từ repository

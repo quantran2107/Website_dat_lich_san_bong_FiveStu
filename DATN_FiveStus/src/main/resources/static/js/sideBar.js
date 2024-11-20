@@ -11,7 +11,6 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'json',
             success: function (response) {
-                console.log(response)
                 if (!response.includes('ROLE_EMPLOYEE')) {
                     checkSideBar();
                     logout(response);
@@ -120,7 +119,7 @@ $(document).ready(function () {
 
                     } else {
                         Swal.fire({
-                            title: "Lõi!",
+                            title: "Lỗi!",
                             text: 'Hệ thống xảy ra lỗi!',
                             icon: "error",
                             showConfirmButton: false,
@@ -131,7 +130,7 @@ $(document).ready(function () {
                 },
                 error: function () {
                     Swal.fire({
-                        title: "Lõi!",
+                        title: "Lỗi!",
                         text: 'Đã xảy ra sự cố!',
                         icon: "error",
                         showConfirmButton: false,
