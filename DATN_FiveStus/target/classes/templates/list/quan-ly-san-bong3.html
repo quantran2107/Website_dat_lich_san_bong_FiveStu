@@ -704,7 +704,7 @@
                 updateIdLoaiSanInput();
             });
 
-            var tenSanBong = $(this).find('#tenSanBong').val();
+            var tenSanBong = $(this).find('#tenSanBong').val().trim();
             var idLoaiSan = $('#idLoaiSanInput').val(); // Được set từ tab đã chọn
 
             if (!tenSanBong || tenSanBong.trim() === '') {
