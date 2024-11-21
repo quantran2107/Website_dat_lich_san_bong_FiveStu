@@ -241,7 +241,7 @@ $(document).ready(function () {
                                 if (response === true) {
                                     Swal.fire({
                                         title: "Thành công!",
-                                        text: "Bạn đã hủy đơn hàng này.",
+                                        text: "Bạn đã hủy hóa đơn này.",
                                         icon: "success"
                                     });
                                     showCustomerCalendar();

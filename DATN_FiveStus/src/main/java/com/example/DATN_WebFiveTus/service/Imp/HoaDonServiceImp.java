@@ -36,6 +36,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -190,8 +191,10 @@ public class HoaDonServiceImp implements HoaDonService {
                                            @Param("keyword") String keyword,
                                            @Param("tongTienMin") Float tongTienMin,
                                            @Param("tongTienMax") Float tongTienMax,
+                                           @Param("ngayTaoMin") LocalDateTime ngayTaoMin,
+                                           @Param("ngayTaoMax") LocalDateTime ngayTaoMax,
                                            Pageable pageable) {
-        List<HoaDon> hoaDonList = hoaDonRepository.searchAndFilter(loai, trangThai, keyword, tongTienMin, tongTienMax);
+        List<HoaDon> hoaDonList = hoaDonRepository.searchAndFilter(loai, trangThai, keyword, tongTienMin, tongTienMax, ngayTaoMin, ngayTaoMax);
 
         // Phân trang thủ công
         int pageSize = pageable.getPageSize();
