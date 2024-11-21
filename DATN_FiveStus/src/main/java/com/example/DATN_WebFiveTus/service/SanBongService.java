@@ -39,4 +39,6 @@ public interface SanBongService {
     Boolean existsByTenSanBongs(Integer idLoaiSan,String tenSanBong);
 
     List<SanBongDTO> getListSanBongWithIdLoaiSan(Integer idLoaiSan);
+
+    boolean checkTrungSanBong(Integer idLoaiSan, String tenSanBong);
 }

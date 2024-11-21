@@ -64,6 +64,11 @@ $(document).ready(function () {
             }
         }
     });
+    $('#load').on('click',()=>{
+        $('#actionMenuButton3').text('Tất cả');
+        $('#searchInput').val('')
+        loadTable(apiGetAll, '', currentPage, recordsPerPage);
+    })
 
     $('#btnSubmitFile').click(function () {
         ajaxSubmitForm(); // Gọi hàm ajaxSubmitForm để gửi dữ liệu form
@@ -276,24 +281,25 @@ $(document).ready(function () {
 
     });
 
+    $('#status-select .dropdown-item').click(function (event) {
+        event.preventDefault();
+        let selectedStatus = $(this).text().trim();
+        let apiGetAll = '';
+        $('#actionMenuButton3').text(selectedStatus);
 
-    // Xử lý sự kiện thay đổi trạng thái
-    $('input[type=radio][name=status]').change(function () {
-        let selectedStatus = this.value;
-
-        // Thay đổi API dựa trên trạng thái được chọn
-        if (selectedStatus === 'all') {
+        if (selectedStatus === 'Trạng thái') {
             apiGetAll = 'http://localhost:8080/nhan-vien/hien-thi';
-        } else if (selectedStatus === 'active') {
+        } else if (selectedStatus === 'Hoạt động') {
             apiGetAll = 'http://localhost:8080/nhan-vien/active';
-        } else if (selectedStatus === 'inactive') {
+        } else if (selectedStatus === 'Không hoạt động') {
             apiGetAll = 'http://localhost:8080/nhan-vien/inactive';
         }
 
-        // Reset lại trang về trang đầu tiên
         currentPage = 1;
         loadTable(apiGetAll, '', currentPage, recordsPerPage);
     });
+
+
 
     // Xử lý sự kiện khi nhập vào ô tìm kiếm
     $('#searchInput').on('input', function () {
@@ -305,6 +311,7 @@ $(document).ready(function () {
 
     // Hàm loadTable với phân trang và chức năng prev, next
     function loadTable(api, keysearch = '', page, limit) {
+        $(`#qlnv`).hide();
         $(`#linkAdd`).hide();
         $(`#linkUpdate`).hide();
         let tbody = '';
@@ -345,13 +352,9 @@ $(document).ready(function () {
                         <span>${statusText}</span>
                     </span>
                 </td>
-
-
-
-            <td><button class="btn btn-outline-success action-button" data-employee='${JSON.stringify(employee)}'><i class="fas fa-edit edit-icon"></i></button>
-                          </tr>`;
+            <td><button title="Chi tiết" class="btn btn-outline-success action-button" data-employee='${JSON.stringify(employee)}'><span class="fe fe-edit-3"></span></button>           
+            </tr>`;
             });
-
 
             $('#tbodyContainer').html(tbody);
             $('.action-button').off('click').on('click', function () {
@@ -363,14 +366,15 @@ $(document).ready(function () {
             });
             // Tạo các nút phân trang
             let pagination = `<div class="pagination" id="pagination">
-                                <button class="btn btn-success prev-page" ${currentPage === 1 ? 'disabled' : ''}>Prev</button>
-                                <select class="page-select form-control">`;
+                                <button style="height: 30px; display: flex; align-items: center; justify-content: center;" class="btn btn-success prev-page" ${currentPage === 1 ? 'hidden' : ''}><</button>
+                                <select  class="custom-select page-select">`;
             for (let i = 1; i <= totalPages; i++) {
                 pagination += `<option value="${i}" ${i === currentPage ? 'selected' : ''}>Trang ${i}</option>`;
             }
             pagination += `</select>
-                            <button class="btn btn-success next-page" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
+                            <button style="height: 30px; display: flex; align-items: center; justify-content: center;"  class="btn btn-success next-page" ${currentPage === totalPages ? 'hidden' : ''}>></button>
                            </div>`;
+
             $('#pagination').html(pagination);
 
             // Xử lý sự kiện khi chọn trang từ select
@@ -395,12 +399,16 @@ $(document).ready(function () {
                 }
             });
         });
+
     }
+
+
 
     function renderAddForm() {
 
         $('#tableNhanVien').hide();
         $('#formAdd').show();
+        $('#qlnv').show();
         $(`#formUpdate`).hide()
         $(`#linkAdd`).show();
         $(`#linkUpdate`).hide();
@@ -653,6 +661,7 @@ $(document).ready(function () {
         $('#tableNhanVien').hide();
         $('#formAdd').hide();
         $(`#formUpdate`).show()
+        $(`#qlnv`).show()
         $(`#linkAdd`).hide();
         $(`#linkUpdate`).show();
         if (nhanV["imageNV"]) {
