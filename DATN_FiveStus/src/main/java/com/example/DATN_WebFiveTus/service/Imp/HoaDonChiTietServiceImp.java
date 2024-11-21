@@ -85,7 +85,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         hoaDonChiTiet.setMaHoaDonChiTiet(generateMaHoaDonChiTiet());
         hoaDonChiTiet.setSanCa(sanCa);
         hoaDonChiTiet.setHoaDon(hoaDon);
-        hoaDonChiTiet.setNgayDenSan(hoaDonChiTietDTO.getNgayDenSan());
+        hoaDonChiTiet.setNgayDenSan((Date) hoaDonChiTietDTO.getNgayDenSan());
         hoaDonChiTiet.setTrangThai("Chờ nhận sân");
 
         hoaDonChiTiet.setKieuNgayDat(hoaDonChiTietDTO.getKieuNgayDat());
@@ -253,7 +253,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         hoaDonChiTiet.setMaHoaDonChiTiet(generateMaHoaDonChiTiet());
         hoaDonChiTiet.setSanCa(sanCa);
         hoaDonChiTiet.setHoaDon(hoaDon);
-        hoaDonChiTiet.setNgayDenSan(hoaDonChiTietDTO.getNgayDenSan());
+        hoaDonChiTiet.setNgayDenSan((Date) hoaDonChiTietDTO.getNgayDenSan());
         hoaDonChiTiet.setTrangThai("Chờ nhận sân");
         hoaDonChiTiet.setKieuNgayDat("Theo ngày");
         hoaDonChiTiet.setTongTien(hoaDonChiTietDTO.getTongTien());
