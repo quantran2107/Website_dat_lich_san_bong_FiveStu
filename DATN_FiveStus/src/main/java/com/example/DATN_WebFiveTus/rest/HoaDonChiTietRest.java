@@ -1,6 +1,7 @@
 package com.example.DATN_WebFiveTus.rest;
 
 import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
+import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.service.HoaDonChiTietService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -144,5 +145,11 @@ public class HoaDonChiTietRest {
             result = hoaDonChiTietService.findByNgayDenSanBetween(startDate, endDate);
         }
         return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/huy-lich-dat/{id}")
+    public ResponseEntity<HoaDonChiTietDTO> huyLichDat(@PathVariable Integer id){
+        HoaDonChiTietDTO hoaDonChiTietDTO = hoaDonChiTietService.huyLichDat(id);
+        return ResponseEntity.ok(hoaDonChiTietDTO);
     }
 }

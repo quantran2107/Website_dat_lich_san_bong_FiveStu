@@ -48,4 +48,6 @@ public interface HoaDonChiTietService {
 
     List<HoaDonChiTietDTO> findByNgayDenSanBetween(LocalDate startDate, LocalDate endDate);
 
+    HoaDonChiTietDTO huyLichDat(Integer id);
+
 }

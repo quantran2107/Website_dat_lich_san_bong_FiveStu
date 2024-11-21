@@ -1,9 +1,12 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
+import com.example.DATN_WebFiveTus.config.security.CookieUtils;
+import com.example.DATN_WebFiveTus.config.security.jwt.JwtUtils;
 import com.example.DATN_WebFiveTus.dto.*;
 import com.example.DATN_WebFiveTus.entity.HoaDon;
 import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
 import com.example.DATN_WebFiveTus.entity.KhachHang;
+import com.example.DATN_WebFiveTus.entity.NhanVien;
 import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.HoaDonChiTietRepository;
@@ -14,6 +17,7 @@ import com.example.DATN_WebFiveTus.repository.PhieuGiamGiaRepository;
 import com.example.DATN_WebFiveTus.service.HoaDonService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,6 +49,9 @@ public class HoaDonServiceImp implements HoaDonService {
 
     @Autowired
     private HoaDonChiTietRepository hoaDonChiTietRepository;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     private NhanVienReposity nhanVienReposity;
 
@@ -213,6 +220,17 @@ public class HoaDonServiceImp implements HoaDonService {
         hoaDon.setTrangThai("Đã hủy");
         hoaDonRepository.save(hoaDon);
         return modelMapper.map(hoaDon,HoaDonDTO.class);
+    }
+
+    @Override
+    public NhanVienDTO getNhanVienTrongCa(HttpServletRequest request) {
+        String token = CookieUtils.getCookie(request, "authToken");
+        if (token != null && jwtUtils.validateJwtToken(token) && jwtUtils.checkBlackList(token)) {
+            String username = jwtUtils.getUserNameFromJwtToken(token);
+            NhanVien nv = nhanVienReposity.findByUsername(username);
+            return modelMapper.map(nv,NhanVienDTO.class);
+        }
+        return null;
     }
 
     @Override
