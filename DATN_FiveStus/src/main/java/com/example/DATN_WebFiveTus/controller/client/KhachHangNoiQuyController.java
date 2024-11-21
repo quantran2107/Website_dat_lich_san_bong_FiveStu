@@ -6,15 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class KhachHangNoiQuyController {
 
-    @GetMapping("khach-hang-noi-quy")
-    public String dieuHuongKhachHangNoiQuy(){
-        return "client/khach-hang-noi-quy";
-    }
-
-    @GetMapping("khach-hang-noi-quy2")
-    public String dieuHuongKhachHangNoiQuy2(){
-        return "client/khach-hang-noi-quy2";
-    }
 
     @GetMapping("khach-hang-noi-quy3")
     public String dieuHuongKhachHangNoiQuy3(){
