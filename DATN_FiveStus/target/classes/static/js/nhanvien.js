@@ -124,7 +124,7 @@ $(document).ready(function () {
                 qrbox: {width: 250, height: 250}
             },
             (qrCodeMessage) => {
-                alert(qrCodeMessage)
+
                 let dataParts = qrCodeMessage.split('|');
 
                 let hoTen = dataParts[2];
