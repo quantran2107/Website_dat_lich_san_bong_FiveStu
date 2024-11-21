@@ -4,6 +4,7 @@ import com.example.DATN_WebFiveTus.config.security.jwt.JwtUtils;
 import com.example.DATN_WebFiveTus.dto.ApiResponseDto;
 
 import com.example.DATN_WebFiveTus.dto.request.ChangePassRequest;
+import com.example.DATN_WebFiveTus.dto.request.OtpRequest;
 import com.example.DATN_WebFiveTus.dto.request.SignInRequestDto;
 import com.example.DATN_WebFiveTus.dto.request.SignUpRequestDto;
 import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
@@ -40,4 +41,14 @@ public class AuthController {
     public ResponseEntity<?> getRole(HttpServletRequest request){
         return authService.getRole(request);
     }
+
+    @GetMapping("otp")
+    public ResponseEntity<?> otp(@RequestParam String email) throws UserAlreadyExistsException {
+        return authService.getOtp(email);
+    }
+    @PutMapping("check-otp")
+    public ResponseEntity<?> checkOtp(@RequestBody OtpRequest request) throws UserAlreadyExistsException {
+        return authService.checkOtp(request);
+    }
+
 }

@@ -16,6 +16,7 @@ import org.springframework.util.ObjectUtils;
 import java.security.Key;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
     private static ConcurrentMap<String, String> blackListToken = new ConcurrentHashMap<>();
+    private static ConcurrentMap<String, String> blackListOtp = new ConcurrentHashMap<>();
     @Value("${app.jwtSecret}")
     private String jwtSecret;
 
@@ -39,7 +41,7 @@ public class JwtUtils {
         String tokeFromBlackList = blackListToken.get(userPrincipal.getUsername());
 
         if (!ObjectUtils.isEmpty(tokeFromBlackList) && this.validateJwtToken(tokeFromBlackList)) {
-            token = tokeFromBlackList; // Trả về token hiện tại nếu nó còn hợp lệ
+            token = tokeFromBlackList;
         } else {
             List<String> roles = userPrincipal.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
@@ -80,10 +82,7 @@ public class JwtUtils {
     }
 
     public boolean checkBlackList(String token) {
-        if (blackListToken.containsKey(getUserNameFromJwtToken(token))) {
-            return true;
-        }
-        return false;
+        return blackListToken.containsKey(getUserNameFromJwtToken(token));
     }
 
     public boolean validateJwtToken(String authToken) {
@@ -109,6 +108,27 @@ public class JwtUtils {
             return true;
         }
         return false;
+    }
+
+    public String generateOtp(String email) {
+        StringBuilder otp = new StringBuilder();
+        Random random = new Random();
+        String characters = "0123456789";
+
+        for (int i = 0; i < 6; i++) {
+            otp.append(characters.charAt(random.nextInt(characters.length())));
+        }
+        blackListOtp.put(email, otp.toString());
+        return otp.toString();
+    }
+
+    public boolean fillOtp(String otp, String email) {
+        String storedOtp = blackListOtp.get(email);
+        return storedOtp != null && storedOtp.equals(otp);
+    }
+
+    public void removeOtp(String email) {
+        blackListOtp.remove(email);
     }
 
 }
