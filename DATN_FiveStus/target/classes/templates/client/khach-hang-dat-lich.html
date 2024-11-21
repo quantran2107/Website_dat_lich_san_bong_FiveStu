@@ -64,8 +64,10 @@
             <div class="col-lg-12 text-center text-lg-left mb-4 mb-lg-0">
                 <h1 class="text-dark font-weight-bold mb-3" style="text-transform: uppercase">Đặt sân cùng FiveStu</h1>
                 <p>
-                    <a th:href="@{/khach-hang/dat-san}" class="btn btn-success btn-lg py-3 px-5 mr-3 mb-2">Hướng dẫn đặt
-                        lịch</a>
+                    <a href="#" class="btn btn-success btn-lg py-3 px-5 mr-3 mb-2" data-bs-toggle="modal"
+                       data-bs-target="#guideModal">
+                        Hướng dẫn đặt lịch
+                    </a>
                     <a th:href="@{/khach-hang-noi-quy3}" class="btn btn-warning btn-lg py-3 px-5 ms-3 mb-2">Nội quy</a>
                 </p>
             </div>
@@ -104,24 +106,27 @@
                 <button id="day" class="btn btn-success ms-2">Ngày</button>
             </div>
         </div>
-        <table class="table table-bordered table-hover my-4" style="text-align: center;">
-            <thead>
-            <tr>
-                <th>Giờ</th>
-                <th>Sân</th>
-                <th id="monday">Thứ Hai</th>
-                <th id="tuesday">Thứ Ba</th>
-                <th id="wednesday">Thứ Tư</th>
-                <th id="thursday">Thứ Năm</th>
-                <th id="friday">Thứ Sáu</th>
-                <th id="saturday">Thứ Bảy</th>
-                <th id="sunday">Chủ Nhật</th>
-            </tr>
-            </thead>
-            <tbody id="tableBody">
+        <div style="max-height: 1000px; overflow-y: auto;">
+            <table class="table table-bordered table-hover my-4" style="text-align: center;">
+                <thead>
+                <tr>
+                    <th>Giờ</th>
+                    <th>Sân</th>
+                    <th id="monday">Thứ Hai</th>
+                    <th id="tuesday">Thứ Ba</th>
+                    <th id="wednesday">Thứ Tư</th>
+                    <th id="thursday">Thứ Năm</th>
+                    <th id="friday">Thứ Sáu</th>
+                    <th id="saturday">Thứ Bảy</th>
+                    <th id="sunday">Chủ Nhật</th>
+                </tr>
+                </thead>
 
-            </tbody>
-        </table>
+                <tbody id="tableBody">
+
+                </tbody>
+            </table>
+        </div>
         <div class="d-flex justify-content-end align-items-center">
             <div id="bookingInfo" class="my-3 me-3 text-dark"></div>
             <button id="btnDatLich" class="btn btn-outline-success">Đặt lịch</button>
@@ -129,7 +134,26 @@
     </div>
 
 </section>
-
+<!-- Modal -->
+<div class="modal fade" id="guideModal" tabindex="-1" aria-labelledby="guideModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title" id="guideModalLabel">Hướng dẫn đặt sân</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ol>
+                    <li>Chọn loại sân phù hợp với nhu cầu của bạn.</li>
+                    <li>Chọn sân và giờ phù hợp để đặt lịch.</li>
+                    <li>Ấn nút "Đặt lịch" để xác nhận và thực hiện thanh toán.</li>
+                </ol>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div th:include="~{fragment/client/footerClient :: footerClient}"></div>
 <script th:src="@{/client/js/jquery-1.11.0.min.js}"></script>
 <script th:src="@{/client/js/plugins.js}"></script>
@@ -344,19 +368,17 @@
                             const customerBooking = new Set(customerDetails.map(detail => detail.idSanCa)); // Tạo tập hợp ID sân ca của khách hàng
 
                             const now = new Date(); // Lấy thời gian hiện tại
-                            console.log(now)
                             caTimes.forEach((ca, caIndex) => {
                                 sanData.forEach((san, sanIndex) => {
                                     const row = document.createElement('tr');
 
+                                    // Merge cells in the first column
                                     if (sanIndex === 0) {
                                         const cellCa = document.createElement('td');
                                         cellCa.textContent = ca.time;
                                         cellCa.style.verticalAlign = 'middle';
+                                        cellCa.rowSpan = sanData.length; // Merge cells vertically
                                         row.appendChild(cellCa);
-                                    } else {
-                                        const emptyCell = document.createElement('td');
-                                        row.appendChild(emptyCell);
                                     }
 
                                     const cellSan = document.createElement('td');
@@ -373,45 +395,54 @@
                                         ngayDenSan.setDate(ngayDenSan.getDate() + i);
 
                                         // Kiểm tra ngày và giờ
-                                        const caStartTime = new Date(ngayDenSan);
                                         const [startHour, startMinute] = ca.time.split(' - ')[0].split(':');
+                                        const [endHour, endMinute] = ca.time.split(' - ')[1].split(':');
+
+                                        const caStartTime = new Date(ngayDenSan);
                                         caStartTime.setHours(startHour, startMinute);
 
-                                        if (ngayDenSan < now || (ngayDenSan.toDateString() === now.toDateString() && caStartTime < now)) {
-                                            // Nếu ngày/giờ nhỏ hơn hiện tại
-                                            cell.style.backgroundColor = 'lightgray';
+                                        const caEndTime = new Date(ngayDenSan);
+                                        caEndTime.setHours(endHour, endMinute);
+
+                                        // Kiểm tra điều kiện để đặt ca hợp lệ
+                                        if ((caEndTime >= now && ngayDenSan >= new Date(now.getFullYear(), now.getMonth(), now.getDate()))) {
+                                            // Gọi fetchSanCa để xử lý khi sân có thể đặt
+                                            fetchSanCa(idSanBong, ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"][i], idCa)
+                                                .then(giaData => {
+                                                    if (giaData) {
+                                                        const idSanCa = giaData.id; // Lấy id sân ca từ dữ liệu giá
+                                                        checkAvailability(idSanCa, ngayDenSan).then(status => {
+                                                            if (status === 'Còn trống') {
+                                                                cell.textContent = giaData.gia; // Điền giá khi sân còn trống
+                                                                cell.dataset.price = giaData.gia;
+                                                                cell.dataset.date = ngayDenSan.toISOString().split('T')[0];
+                                                                cell.dataset.idSanCa = idSanCa;
+                                                                cell.dataset.time = ca.time; // Lưu thời gian vào dataset
+                                                                cell.dataset.san = san.tenSanBong; // Lưu tên sân vào dataset
+                                                                cell.classList.add('clickable-cell');
+
+                                                                cell.addEventListener('click', function () {
+                                                                    cell.classList.toggle('selected');
+                                                                    updateBookingInfo();
+                                                                });
+                                                            } else {
+                                                                if (customerBooking.has(idSanCa)) {
+                                                                    cell.textContent = 'Đã đặt';
+                                                                    cell.style.backgroundColor = 'lightgreen';
+                                                                } else {
+                                                                    cell.style.backgroundColor = 'lightgray';
+                                                                }
+                                                            }
+                                                        }).catch(error => console.error('Error checking availability:', error));
+                                                    } else {
+                                                        cell.style.backgroundColor = 'lightgray';
+                                                    }
+                                                }).catch(error => console.error('Error fetching price data:', error));
+                                        } else {
+                                            // Giờ kết thúc của ca đã qua hoặc ngày đã qua
+                                            cell.style.backgroundColor = '#d3d3d338';
                                             cell.textContent = '';
                                             cell.classList.add('disabled-cell');
-                                        } else {
-                                            // Gọi fetchSanCa để lấy dữ liệu giá và idSanCa
-                                            fetchSanCa(idSanBong, ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"][i], idCa).then(giaData => {
-                                                if (giaData) {
-                                                    const idSanCa = giaData.id; // Lấy id sân ca từ dữ liệu giá
-                                                    checkAvailability(idSanCa, ngayDenSan).then(status => {
-                                                        if (status == 'Còn trống') {
-                                                            cell.textContent = giaData.gia; // Chỉ điền giá khi sân còn trống
-                                                            cell.dataset.price = giaData.gia;
-                                                            cell.dataset.date = ngayDenSan.toISOString().split('T')[0];
-                                                            cell.dataset.idSanCa = idSanCa;
-                                                            cell.classList.add('clickable-cell');
-
-                                                            cell.addEventListener('click', function () {
-                                                                cell.classList.toggle('selected');
-                                                                updateBookingInfo();
-                                                            });
-                                                        } else {
-                                                            if (customerBooking.has(idSanCa)) {
-                                                                cell.textContent = 'Đã đặt';
-                                                                cell.style.backgroundColor = 'lightgreen';
-                                                            } else {
-                                                                cell.style.backgroundColor = 'lightgray';
-                                                            }
-                                                        }
-                                                    }).catch(error => console.error('Error checking availability:', error));
-                                                } else {
-                                                    cell.style.backgroundColor = 'lightgray';
-                                                }
-                                            }).catch(error => console.error('Error fetching price data:', error));
                                         }
 
                                         row.appendChild(cell);
@@ -423,7 +454,6 @@
 
                             hideLoading(); // Ẩn loading khi hoàn thành tải dữ liệu
                         });
-
 
                     })
                     .catch(error => console.error('Error fetching field data:', error));
@@ -474,9 +504,6 @@
         const selectedBookings = [];
         const cells = document.querySelectorAll('.clickable-cell.selected');
         cells.forEach(cell => {
-            const row = cell.parentElement;
-            const timeCell = row.firstChild;
-            const sanCell = row.children[1];
             const priceCell = cell;
 
             const dateParts = priceCell.dataset.date.split('-');
@@ -485,8 +512,8 @@
             selectedBookings.push({
                 date: formattedDate,
                 idSanCa: priceCell.dataset.idSanCa,
-                time: timeCell.textContent,
-                san: sanCell.textContent,
+                time: priceCell.dataset.time, // Lấy thời gian từ dataset
+                san: priceCell.dataset.san, // Lấy tên sân từ dataset
                 price: priceCell.dataset.price // Lấy giá từ dataset
             });
         });
@@ -534,7 +561,7 @@
                 <td>${booking.price}</td>
                 <td id="deposit-${index}">0</td>
                 <td>
-                    <button class="btn btn-danger btn-sm" id="delete-btn-${index}">
+                    <button class="btn btn-danger btn-sm" id="delete-btn-${index}" title="Xóa">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </td>
@@ -559,6 +586,7 @@
     }
 
     // Hàm thiết lập các nút xóa
+    // Hàm thiết lập các nút xóa
     function setupDeleteButtons(selectedBookings) {
         selectedBookings.forEach((booking, index) => {
             document.getElementById(`delete-btn-${index}`).addEventListener('click', function () {
@@ -577,14 +605,38 @@
                     cancelButtonText: 'Hủy'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        selectedBookings.splice(rowIndex, 1); // Xóa phần tử khỏi mảng
+                        const bookingIndex = parseInt(rowIndex, 10);
+
+                        // Cập nhật tổng giá và tổng tiền cọc
+                        updateBookingTotals(bookingIndex, selectedBookings);
+
+                        selectedBookings.splice(bookingIndex, 1); // Xóa phần tử khỏi mảng
                         row.remove(); // Xóa hàng khỏi bảng
+
                         Swal.fire('Đã xóa!', 'Dòng đã được xóa thành công.', 'success');
                     }
                 });
             });
         });
     }
+
+    // Hàm cập nhật thông tin tổng tiền và tiền cọc khi xóa hàng
+    function updateBookingTotals(bookingIndex, selectedBookings) {
+        let totalPrice = 0;
+        let totalDeposit = 0;
+
+        selectedBookings.forEach((booking, index) => {
+            if (index !== bookingIndex) {
+                totalPrice += parseFloat(booking.price);
+                totalDeposit += parseFloat(document.getElementById(`deposit-${index}`).textContent);
+            }
+        });
+
+        // Cập nhật tổng giá và tổng tiền cọc vào bảng
+        document.getElementById('total-price').textContent = totalPrice;
+        document.getElementById('total-deposit').textContent = totalDeposit;
+    }
+
 
     // Hàm gọi API để lấy tỷ lệ tiền cọc
     async function fetchDepositRate() {

@@ -42,11 +42,9 @@ public class Ca {
 
 
     @Column(name = "thoi_gian_bat_dau")
-//    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime thoiGianBatDau;
 
     @Column(name = "thoi_gian_ket_thuc")
-//    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime  thoiGianKetThuc;
 
     @Column(name = "trang_thai", length = 50)
