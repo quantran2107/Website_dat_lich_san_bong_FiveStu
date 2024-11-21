@@ -18,7 +18,7 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <h2 class="mb-2 page-title">Quản lý loại sân bóng</h2>
-                    <div class="container mt-5">
+
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card shadow mb-4">
@@ -155,12 +155,12 @@
                                                                 <td>
                                                                     <span th:text="${sanBong.tenSanBong}"></span>
 
-
                                                                 </td>
                                                                 <td>
-                                                                    <button onclick="editSanBongs()"
-                                                                            class="btn btn-outline-success"><span
-                                                                            class="fe fe-edit-3"></span></button>
+                                                                    <button onclick="editSanBongs(this)" class="btn btn-outline-success">
+                                                                        <span class="fe fe-edit-3"></span>
+                                                                    </button>
+
 
                                                                     <button onclick="deletedSanBong()"
                                                                             class="btn btn-danger"><span
@@ -282,7 +282,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+
                 </div>
             </div>
         </div> <!-- .container-fluid -->
@@ -333,36 +333,30 @@
     });
 
 
-    function editSanBongs() {
-        $('#myModalEdit').modal('show');
+    function editSanBongs(button) {
+        // Lấy sanBongId từ data attribute của <tr>
+        const sanBongId = $(button).closest('tr').data('id-loai-san');
+        alert("Id san bong: " + sanBongId);
 
-            const sanBongId = $(this).closest('tr').data('id-loai-san');
-            console.log("San bong id update: ", sanBongId);
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/san-bong/' + sanBongId,
+            success: function (data) {
+                // Điền thông tin vào các trường trong modal
+                $('#editId').val(data.id);
+                $('#editTenSanBong').val(data.tenSanBong);
+                $('#editTrangThai').val(data.trangThai);
+                $('#editLoaiSan').val(data.idLoaiSan);
+                $('#myModalEdit').modal('show');
 
-            // Hiển thị modal trước để đảm bảo người dùng thấy phản hồi nhanh
-
-            // Lấy dữ liệu sân bóng từ API
-            $.ajax({
-                type: 'GET',
-                url: 'http://localhost:8080/san-bong/' + sanBongId,
-                success: function (data) {
-                    // Điền thông tin vào các trường trong modal
-                    $('#editId').val(data.id);
-                    $('#editTenSanBong').val(data.tenSanBong);
-                    $('#editTrangThai').val(data.trangThai);
-                    $('#editLoaiSan').val(data.idLoaiSan);
-
-                    console.log("Dữ liệu sân bóng đã được nạp:", data);
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error fetching san bong data:', error);
-                    // Đóng modal nếu xảy ra lỗi
-                    $('#myModalEdit').modal('hide');
-                    Swal.fire('Lỗi!', 'Không thể tải dữ liệu sân bóng.', 'error');
-                }
-            });
-
+                console.log("Dữ liệu sân bóng đã được nạp:", data);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching san bong data:", error);
+            }
+        });
     }
+
 
 
 
@@ -692,80 +686,87 @@
 
     // Xử lý sự kiện submit của form
     function submitSanBong() {
-
         $('form').off('submit').on('submit', function (event) {
-            // Ngăn chặn hành động mặc định của form (chẳng hạn như reload trang)
-            event.preventDefault();
+            event.preventDefault(); // Ngừng hành động mặc định của form
 
             function updateIdLoaiSanInput() {
-                // Lấy idLoaiSan của tab đang hoạt động
                 var activeTab = $('#loaiSanTab .nav-link.active');
                 var activeTabContentId = activeTab.attr('href');
                 var idLoaiSan = activeTabContentId.replace('#loaiSan-', '');
                 $('#idLoaiSanInput').val(idLoaiSan);
             }
 
-            // // Cập nhật idLoaiSanInput cho tab đầu tiên khi trang được tải
+            // Cập nhật idLoaiSanInput cho tab đầu tiên khi trang được tải
             updateIdLoaiSanInput();
 
             // Lắng nghe sự kiện khi chuyển tab
             $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
-                // Cập nhật idLoaiSanInput khi chuyển tab
                 updateIdLoaiSanInput();
             });
 
-            // Lấy dữ liệu từ các trường input trong form của tab hiện tại
             var tenSanBong = $(this).find('#tenSanBong').val();
-            var idLoaiSan = $('#idLoaiSanInput').val(); // Đã được set từ tab đã chọn
+            var idLoaiSan = $('#idLoaiSanInput').val(); // Được set từ tab đã chọn
 
             if (!tenSanBong || tenSanBong.trim() === '') {
                 Swal.fire({
                     icon: "error",
                     title: "Đã xảy ra lỗi",
                     text: "Bạn vui lòng nhập tên sân bóng"
-
                 });
-                return; // Dừng hàm nếu không hợp lệ
+                return;
             }
-            // Tạo đối tượng dữ liệu để gửi lên API
-            var formData = {
-                tenSanBong: tenSanBong,
-                idLoaiSan: idLoaiSan
-            };
 
-            // Gọi API POST
+            // Gọi API để kiểm tra tên sân bóng có trùng không
             $.ajax({
-                url: 'http://localhost:8080/san-bong',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(formData),
-                success: function (response) {
-                    // Xử lý thành công, ví dụ hiển thị thông báo
-                    Swal.fire({
-                        icon: "success",
-                        title: "Thêm sân bóng thành công",
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                url: `http://localhost:8080/san-bong/checkTrungSanBong?idLoaiSan=${idLoaiSan}&tenSanBong=${encodeURIComponent(tenSanBong)}`,
+                method: 'GET',
+                success: function(response) {
+                    if (response) {
+                        // Tên sân bóng đã tồn tại trong cùng loại sân
+                        Swal.fire({
+                            icon: "error",
+                            title: "Tên sân bóng đã tồn tại",
+                            text: "Vui lòng nhập tên sân bóng khác."
+                        });
+                    } else {
+                        // Tên sân bóng không trùng, gửi yêu cầu thêm sân bóng
+                        var formData = {
+                            tenSanBong: tenSanBong,
+                            idLoaiSan: idLoaiSan
+                        };
 
-                    // Sau khi thêm thành công, có thể làm gì đó khác, ví dụ như làm sạch form
-                    clearFormSanBong();
+                        $.ajax({
+                            url: 'http://localhost:8080/san-bong',
+                            method: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify(formData),
+                            success: function(response) {
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Thêm sân bóng thành công",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
 
-                    // Hoặc cập nhật lại danh sách sân bóng của tab hiện tại
-                    refreshCurrentTab();
+                                // Làm sạch form và cập nhật lại danh sách sân bóng
+                                clearFormSanBong();
+                                refreshCurrentTab();
+                            },
+                            error: function(xhr, status, error) {
+                                alert('Đã xảy ra lỗi khi thêm sân bóng: ' + xhr.responseText);
+                            }
+                        });
+                    }
                 },
-                error: function (xhr, status, error) {
-                    // Xử lý lỗi, ví dụ hiển thị thông báo lỗi
-                    alert('Đã xảy ra lỗi khi thêm sân bóng: ' + xhr.responseText);
+                error: function(xhr, status, error) {
+                    console.error("Lỗi khi kiểm tra tên sân bóng:", error);
                 }
             });
         });
 
-        // Hàm dọn dẹp form sau khi thêm thành công
         function clearFormSanBong() {
             $('form').trigger('reset'); // Reset form fields
         }
-
     }
 
     // Hàm cập nhật lại danh sách sân bóng của tab hiện tại

@@ -20,7 +20,6 @@ public interface ThamSoService {
 
      void delete(Integer id);
 
-     ThamSoDTO findByTenThamSo(String ma);
 
      ThamSoDTO findByMaThamSo( String maThamSo);
 
@@ -30,5 +29,5 @@ public interface ThamSoService {
 
      Page<ThamSoDTO> searchThamSoss(String ma, String ten, String typeGiaTri, Boolean trangThai, Pageable pageable);
 
-     public ThamSoDTO saveFake(ThamSoDTO thamSoDTO);
+      ThamSoDTO saveFake(ThamSoDTO thamSoDTO);
 }
