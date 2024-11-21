@@ -66,23 +66,6 @@
                                                        oninput="searchDV(this.value)" placeholder="Tìm kiếm theo tên"
                                                        style="width: 180px;" type="text">
                                             </div>
-                                            <!-- Price Range -->
-                                            <label class="form-label" for="customRange2"
-                                                   style="margin-left:-65px;margin-right: 10px">Khoảng giá</label>
-                                            <div class="form-group" style="flex-grow: 1;">
-                                                <div class="range-container" style="position: relative; width: 100%;">
-                                                    <input class="form-range" id="customRange2" max="1000" min="0"
-                                                           oninput="updatePriceRange(this.value)"
-                                                           step="10" type="range" value="500">
-                                                    <div class="range-labels d-flex justify-content-between">
-                                                        <span id="rangeMin">0</span>
-                                                        <span id="rangeValue"
-                                                              style="position: absolute; left: 50%; transform: translateX(-50%);">500</span>
-                                                        <span id="rangeMax">1000</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
 
                                             <div class="dropdown ml-3 mr-2">
                                                 <button aria-expanded="false"
@@ -144,9 +127,9 @@
                                                 <div aria-labelledby="importExcelButton" class="dropdown-menu"
                                                      id="importExcel">
                                                     <a class="dropdown-item" href="#"
-                                                       onclick="openFileDialog('nuoc-uong')">Nước uống</a>
-                                                    <a class="dropdown-item" href="#"
                                                        onclick="openFileDialog('do-thue')">Đồ thuê</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="openFileDialog('nuoc-uong')">Nước uống</a>
                                                 </div>
                                             </div>
 
@@ -215,7 +198,6 @@
                                     <!-- Pagination -->
                                     <nav aria-label="Table Paging" class="mb-0 text-muted">
                                         <ul class="pagination justify-content-end mb-0" id="paginationDoThue">
-                                            <!-- Pagination buttons will be inserted here by JavaScript -->
                                         </ul>
                                     </nav>
                                 </div>
@@ -242,7 +224,6 @@
                                     <!-- Pagination -->
                                     <nav aria-label="Table Paging" class="mb-0 text-muted">
                                         <ul class="pagination justify-content-end mb-0" id="paginationNuocUong">
-                                            <!-- Pagination buttons will be inserted here by JavaScript -->
                                         </ul>
                                     </nav>
                                 </div>
