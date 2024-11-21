@@ -7,6 +7,7 @@ import com.example.DATN_WebFiveTus.config.security.CookieUtils;
 import com.example.DATN_WebFiveTus.config.security.jwt.JwtUtils;
 import com.example.DATN_WebFiveTus.dto.ApiResponseDto;
 import com.example.DATN_WebFiveTus.dto.request.ChangePassRequest;
+import com.example.DATN_WebFiveTus.dto.request.OtpRequest;
 import com.example.DATN_WebFiveTus.dto.request.SignInRequestDto;
 import com.example.DATN_WebFiveTus.dto.request.SignUpRequestDto;
 import com.example.DATN_WebFiveTus.dto.response.SignInResponseDto;
@@ -39,6 +40,7 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -79,10 +81,10 @@ public class AuthServiceImpl implements AuthService {
     public ResponseEntity<ApiResponseDto<?>> signUp(SignUpRequestDto signUpRequestDto)
             throws UserAlreadyExistsException, RoleNotFoundException {
         if (userService.existByEmail(signUpRequestDto.getEmail())) {
-            throw new UserAlreadyExistsException("Registration Failed: Provided email already exists. Try sign in or provide another email.");
+            throw new UserAlreadyExistsException("Đăng ký không thành công: Email này đã tồn tại trong hệ thống.");
         }
         if (userService.existByUsername(signUpRequestDto.getUsername())) {
-            throw new UserAlreadyExistsException("Registration Failed: Provided username already exists. Try sign in or provide another username.");
+            throw new UserAlreadyExistsException("Đăng ký không thành công: Tên người dùng đã tồn tại trong hệ thống.");
         }
 
         User user = createUser(signUpRequestDto);
@@ -92,10 +94,6 @@ public class AuthServiceImpl implements AuthService {
         khachHang.setMaKhachHang(signUpRequestDto.getEmail().substring(0, signUpRequestDto.getEmail().indexOf("@")));
         khachHang.setMatKhau(passwordEncoder.encode(signUpRequestDto.getPassword()));
         khachHangRepository.save(khachHang);
-        boolean mail = mailFunction(signUpRequestDto);
-        if (!mail) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 ApiResponseDto.builder()
                         .status(String.valueOf(ResponseStatus.SUCCESS))
@@ -162,6 +160,36 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public ResponseEntity<?> getOtp(String email) throws UserAlreadyExistsException {
+        if (!userService.existByEmail(email)) {
+            throw new UserAlreadyExistsException("Email này không tồn tại trong hệ thống.");
+        }
+        boolean mail = mailFunction(email,"otp","otp","Thông báo về mã của bạn",jwtUtils.generateOtp(email));
+        if (!mail) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(true);
+    }
+
+    @Override
+    public ResponseEntity<?> checkOtp(OtpRequest request) {
+        if (jwtUtils.fillOtp(request.getOtp(), request.getEmail())){
+            User user = userRepository.findByEmail(request.getEmail())
+                    .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + request.getEmail()));
+            String password = generateMK(10);
+            user.setPassword(passwordEncoder.encode(password));
+            userRepository.save(user);
+            jwtUtils.removeOtp(request.getEmail());
+            boolean mail = mailFunction(request.getEmail(),"pass","password","Thông báo về mật khẩu của bạn",password);
+            if (!mail) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.ok(false);
+    }
+
+    @Override
     public ResponseEntity<?> changePass(HttpServletRequest request, ChangePassRequest changePassRequest) {
         String token = CookieUtils.getCookie(request, "authToken");
         if (token != null && jwtUtils.validateJwtToken(token) && jwtUtils.checkBlackList(token)) {
@@ -205,20 +233,18 @@ public class AuthServiceImpl implements AuthService {
         return roles;
     }
 
-    public Boolean mailFunction(SignUpRequestDto dto) {
+    public Boolean mailFunction(String email,String variable,String template,String subject,String code) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
             Context context = new Context();
-            context.setVariable("username", dto.getEmail());
-            context.setVariable("password", dto.getPassword());
+            context.setVariable(variable, code);
 
-            String html = springTemplateEngine.process("userNV", context);
+            String html = springTemplateEngine.process(template, context);
 
-            helper.setTo(dto.getEmail());
-            helper.setSubject("Thông báo tài khoản và mật khẩu");
+            helper.setTo(email);
+            helper.setSubject(subject);
             helper.setText(html, true);
 
             javaMailSender.send(mimeMessage);
@@ -228,5 +254,14 @@ public class AuthServiceImpl implements AuthService {
             e.printStackTrace();
             return false;
         }
+    }
+    public static String generateMK(int length) {
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom RANDOM = new SecureRandom();
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            sb.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
+        }
+        return sb.toString();
     }
 }
