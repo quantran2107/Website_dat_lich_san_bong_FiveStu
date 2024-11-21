@@ -51,6 +51,7 @@ public class ThamSoServiceImp implements ThamSoService {
         ThamSo thamSo=modelMapper.map(thamSoDTO,ThamSo.class);
         thamSo.setTrangThai(true);
         thamSo.setDeletedAt(false);
+        thamSo.setActive(true);
         ThamSo thamSoSave=thamSoRepository.save(thamSo);
         return modelMapper.map(thamSoSave,ThamSoDTO.class);
     }
@@ -100,10 +101,6 @@ public class ThamSoServiceImp implements ThamSoService {
     }
 
 
-    @Override
-    public ThamSoDTO findByTenThamSo(String ma) {
-        return modelMapper.map(thamSoRepository.findByTenThamSo(ma),ThamSoDTO.class);
-    }
 
     @Override
     public List<ThamSoDTO> listAllSortPage(Integer pageNum, String sortDirection, int[] totalPageElement) {
