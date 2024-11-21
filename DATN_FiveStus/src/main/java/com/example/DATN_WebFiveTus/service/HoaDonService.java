@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface HoaDonService {
@@ -37,6 +39,8 @@ public interface HoaDonService {
                                     @Param("keyword") String keyword,
                                     @Param("tongTienMin") Float tongTienMin,
                                     @Param("tongTienMax") Float tongTienMax,
+                                    @Param("ngayTaoMin") LocalDateTime ngayTaoMin,
+                                    @Param("ngayTaoMax") LocalDateTime ngayTaoMax,
                                     Pageable pageable);
 
     HoaDonDTO huyLichDat(Integer id);
