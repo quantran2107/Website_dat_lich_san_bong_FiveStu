@@ -643,10 +643,12 @@
 
         ngayBatDauInput.addEventListener('change', function () {
             fetchCustomData();
+            fetchStatistics2();
         });
 
         ngayKetThucInput.addEventListener('change', function () {
             fetchCustomData();
+            fetchStatistics2();
         });
 
         flatpickr("#ngayBatDau", {});
@@ -657,6 +659,7 @@
     function fetchStatistics() {
         const today = new Date();
         const formattedDate = today.toLocaleDateString('en-GB').split('/').join('/');
+        console.log(formattedDate);
 
         let tongDanhThuNgay = 0;
         let tongTienDichVu = 0;
@@ -842,6 +845,54 @@
             .catch(error => console.error('Error fetching data:', error));
     }
 
+    function fetchStatistics2(){
+        const formattedDate = formatDate(ngayBatDauInput.value);
+        const formattedDate2 = formatDate(ngayKetThucInput.value);
+
+        let tongDanhThuCustom = 0;
+        let tongTienDichVuCustom = 0;
+        let successfulOrdersCountCustom = 0;
+        let cancelOrdersCountCustom = 0;
+        let totalBookingsCustom = 0;
+
+        const dichVuPromisesCustom = [];
+        fetch(`http://localhost:8080/hoa-don-chi-tiet/khoang-ngay-den-san?startDate=${formattedDate}&endDate=${formattedDate2}`)
+            .then(response => response.json())
+            .then(data => {
+                totalBookingsCustom = data.length;
+                // Duyệt qua từng hóa đơn chi tiết và cộng tổng tiền thực tế
+                data.forEach(item => {
+                    if (item.trangThai === "Đã thanh toán") {
+                        successfulOrdersCountCustom++;
+                        tongDanhThuCustom += item.tongTienThucTe || 0;
+                    }
+
+                    if (item.trangThai === "Đã hủy") {
+                        cancelOrdersCountCustom++;
+                    }
+
+                    dichVuPromisesCustom.push(
+                        fetch(`http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${item.id}`)
+                            .then(response => response.json())
+                            .then(dichVuData => {
+                                dichVuData.forEach(dichVu => {
+                                    tongTienDichVuCustom += dichVu.tongTien || 0;
+                                });
+                            })
+                    );
+                });
+                Promise.all(dichVuPromisesCustom).then(() =>{
+                    document.getElementById("custom-revenue").innerText = tongDanhThuCustom.toLocaleString() + ' VNĐ';
+                    document.getElementById("custom-products").innerText = `${totalBookingsCustom}`;
+                    document.getElementById("custom-success").innerText = `${successfulOrdersCountCustom}`;
+                    document.getElementById("custom-cancel").innerText = `${cancelOrdersCountCustom}`;
+                    document.getElementById("custom-return").innerText = tongTienDichVuCustom.toLocaleString() + ' VNĐ';
+                });
+
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
     // Gọi hàm fetch khi trang được tải
     window.onload = fetchStatistics;
 
@@ -933,6 +984,7 @@
     function formatToFullDate(inputDate) {
         return new Date(inputDate);
     }
+
 
 </script>
 </body>
