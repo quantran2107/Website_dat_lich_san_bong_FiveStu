@@ -99,7 +99,6 @@ public class PhieuGiamGiaRest {
         if (newStatus == null) {
             return ResponseEntity.badRequest().body("Thiếu trường 'trangThai' trong yêu cầu");
         }
-
         try {
             phieuGiamGiaService.updateStatus(id, newStatus);
             return ResponseEntity.ok().body("Cập nhật trạng thái thành công");

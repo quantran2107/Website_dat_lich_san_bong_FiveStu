@@ -48,7 +48,8 @@ $(document).ready(function () {
     }
 
     $('#btnExcelMauLich').on('click', function () {
-        let url = 'https://docs.google.com/spreadsheets/d/13CPv_VMCRxIpIW5UyuLclM7CibvygO3l-BtLczl_k34/export?format=xlsx';
+        let url = 'https://docs.google.com/spreadsheets/d/1Zi34HdFkU5Ik4L3T8JT82k4KJFmP7kvD/export?format=xlsx';
+
         let $a = $('<a></a>').attr('href', url).attr('download', 'file.xlsx').appendTo('body');
 
         $a[0].click();
@@ -67,6 +68,22 @@ $(document).ready(function () {
         } else {
             if (fileName) {
                 $('#labelFile').html('<label for="file" style="margin: 15px">' + fileName + '</label>');
+                $('#btnSubmitFile').show();
+            } else {
+            }
+        }
+    });
+    $('#file').on('change', function () {
+        let fileName = '';
+        let newFileName = $(this).val().split('\\').pop();
+
+        if (newFileName) {
+            fileName = newFileName;
+            $('#labelFile').html('<label for="file" style="padding: 3px; border-radius: 5px;">' + fileName + '</label>');
+            $('#btnSubmitFile').show();
+        } else {
+            if (fileName) {
+                $('#labelFile').html('<label for="file" style="padding: 3px; border-radius: 5px;">' + fileName + '</label>');
                 $('#btnSubmitFile').show();
             } else {
             }

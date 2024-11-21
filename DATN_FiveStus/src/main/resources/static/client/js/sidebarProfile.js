@@ -19,11 +19,6 @@ $(document).ready(function () {
         showCustomerAddress();
     });
 
-    $("#historyBill").click(function (event) {
-        event.preventDefault();
-        showCustomerCalendar();
-    });
-
     async function loadCustomer() {
         const response = await fetch('http://localhost:8080/customer/get-customer');
         if (!response.ok) {
@@ -31,6 +26,7 @@ $(document).ready(function () {
         }
         return await response.json();
     }
+
     async function loadCustomerAddressByEmail(email) {
         const response = await fetch(`http://localhost:8080/dia-chi/email/${email}`);
         if (!response.ok) {
@@ -63,74 +59,110 @@ $(document).ready(function () {
 
         // Tạo phần tiêu đề và nút thêm (chỉ một lần)
         const headerHtml = `
-    <div class="card-header d-flex justify-content-between align-items-center text-black">
-        <h4 class="mb-0">Địa chỉ của tôi</h4>
-        <button class="btn btn-primary add-address" style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                 + Thêm địa chỉ mới
-        </button>
-    </div>
-    <hr>
+        <div class="card-header d-flex justify-content-between align-items-center text-black">
+            <h4 class="mb-0">Địa chỉ của tôi</h4>
+            <button class="btn btn-primary add-address" style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                     + Thêm địa chỉ mới
+            </button>
+        </div>
+        <hr>
     `;
         addressContainer.append(headerHtml); // Giữ tiêu đề ở trên cùng
 
         // Kiểm tra nếu không có địa chỉ nào
         if (!addresses || addresses.length === 0) {
             addressContainer.append('<p class="text-center text-muted">Chưa có địa chỉ nào được lưu.</p>');
-            return;
+        } else {
+            // Đảo ngược mảng địa chỉ để hiển thị theo thứ tự mong muốn
+            const reversedAddresses = addresses.reverse();
+
+            // Duyệt qua danh sách địa chỉ đã đảo ngược và tạo phần hiển thị cho mỗi địa chỉ
+            reversedAddresses.forEach(address => {
+                const addressHtml = `
+            <div class="list-group-item mb-3" style="border: 1px solid #ddd; border-radius: 5px; padding: 10px;">
+                <div class="mb-2">
+                    <h5 class="mb-1">${address.diaChiCuThe}</h5>
+                    <p class="mb-1">${address.phuongXa}, ${address.quanHuyen}, ${address.thanhPho}</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="#" class="btn-link update-address" style="color: #007bff; text-decoration: none;" data-id="${address.id}" data-email="${email}">Cập nhật</a>
+                    <span style="color: #888;">|</span>
+                    <a href="#" class="btn-link delete-address text-danger" style="color: #dc3545; text-decoration: none;">Xóa</a>
+                </div>
+            </div>
+            `;
+                addressContainer.append(addressHtml); // Thêm từng địa chỉ vào container
+            });
         }
 
-        // Đảo ngược mảng địa chỉ để hiển thị theo thứ tự mong muốn
-        const reversedAddresses = addresses.reverse();
-
-        // Duyệt qua danh sách địa chỉ đã đảo ngược và tạo phần hiển thị cho mỗi địa chỉ
-        reversedAddresses.forEach(address => {
-            const addressHtml = `
-        <div class="list-group-item mb-3" style="border: 1px solid #ddd; border-radius: 5px; padding: 10px;">
-            <div class="mb-2">
-                <h5 class="mb-1">${address.diaChiCuThe}</h5>
-                <p class="mb-1">${address.phuongXa}, ${address.quanHuyen}, ${address.thanhPho}</p>
-            </div>
-            <div class="d-flex gap-2">
-                <a href="#" class="btn-link update-address" style="color: #007bff; text-decoration: none;" data-id="${address.id}" data-email="${email}">Cập nhật</a>
-                <span style="color: #888;">|</span>
-                <a href="#" class="btn-link delete-address text-danger" style="color: #dc3545; text-decoration: none;">Xóa</a>
-            </div>
-        </div>
-        `;
-            addressContainer.append(addressHtml); // Thêm từng địa chỉ vào container
-        });
-
         // Gán sự kiện cho nút thêm địa chỉ
-        $('.add-address').off('click').on('click', function(event) {
+        $('.add-address').off('click').on('click', function (event) {
             event.preventDefault();
             addAddress(email); // Truyền email vào đây
         });
 
         // Gán sự kiện cho các nút cập nhật và xóa
-        $('.update-address').click(function(event) {
+        $('.update-address').click(function (event) {
             event.preventDefault();
             const addressId = $(this).data('id');
             const email = $(this).data('email');
             updateAddress(addressId, email);
         });
 
-        $('.delete-address').click(function(event) {
+        $('.delete-address').click(function (event) {
             event.preventDefault();
             const addressId = $(this).closest('.list-group-item').find('.update-address').data('id');
             const email = $(this).closest('.list-group-item').find('.update-address').data('email');
             deleteAddress(addressId, email); // Gọi hàm xóa
         });
     }
-    async function addAddress(email) {
-        document.getElementById("specificAddress").value = '';
-        document.getElementById("city").value = '';
-        document.getElementById("district").value = '';
-        document.getElementById("ward").value = '';
-        $('#addressModal').modal('show');
 
-        // Khi người dùng nhấn nút "Lưu địa chỉ" trong modal
+    async function addAddress(email) {
+        // Reset các trường input
+        document.getElementById("specificAddress").value = '';
+        document.getElementById("ghiChu").value = '';
+
+        // Reset các trường select (Đảm bảo chúng có các giá trị mặc định)
+        document.getElementById("city").value = '';  // Đặt lại Tỉnh/Thành về mặc định
+        document.getElementById("district").value = '';  // Đặt lại Quận/Huyện về mặc định
+        document.getElementById("ward").value = '';  // Đặt lại Phường/Xã về mặc định
+
+        // Thêm các giá trị mặc định vào các select
+        const citySelect = document.getElementById("city");
+        if (!citySelect.querySelector("option[value='']")) { // Nếu chưa có giá trị mặc định
+            const defaultOptionCity = document.createElement('option');
+            defaultOptionCity.value = '';
+            defaultOptionCity.textContent = 'Chọn Tỉnh/Thành';
+            defaultOptionCity.disabled = true;
+            defaultOptionCity.selected = true;
+            citySelect.appendChild(defaultOptionCity);
+        }
+
+        const districtSelect = document.getElementById("district");
+        if (!districtSelect.querySelector("option[value='']")) { // Nếu chưa có giá trị mặc định
+            const defaultOptionDistrict = document.createElement('option');
+            defaultOptionDistrict.value = '';
+            defaultOptionDistrict.textContent = 'Chọn Quận/Huyện';
+            defaultOptionDistrict.disabled = true;
+            defaultOptionDistrict.selected = true;
+            districtSelect.appendChild(defaultOptionDistrict);
+        }
+
+        const wardSelect = document.getElementById("ward");
+        if (!wardSelect.querySelector("option[value='']")) { // Nếu chưa có giá trị mặc định
+            const defaultOptionWard = document.createElement('option');
+            defaultOptionWard.value = '';
+            defaultOptionWard.textContent = 'Chọn Phường/Xã';
+            defaultOptionWard.disabled = true;
+            defaultOptionWard.selected = true;
+            wardSelect.appendChild(defaultOptionWard);
+        }
+
+        $('#addressModal').modal('show');
         $('#saveAddressButton').off('click').on('click', async function() {
+
             const specificAddress = document.getElementById("specificAddress").value;
+            const ghiChu = document.getElementById("ghiChu").value;
             const city = document.getElementById("city").value;
             const district = document.getElementById("district").value;
             const ward = document.getElementById("ward").value;
@@ -146,6 +178,7 @@ $(document).ready(function () {
                 thanhPho: city,
                 quanHuyen: district,
                 phuongXa: ward,
+                ghiChu: ghiChu,
             };
 
             try {
@@ -168,7 +201,6 @@ $(document).ready(function () {
         });
     }
 
-
     async function updateAddress(addressId, email) {
         try {
             // Đảm bảo `dataCache` đã được tải
@@ -185,16 +217,16 @@ $(document).ready(function () {
 
             // Điền dữ liệu vào trường địa chỉ cụ thể
             document.getElementById("specificAddress").value = address.diaChiCuThe;
+            document.getElementById("ghiChu").value = address.ghiChu;
 
             // Cập nhật select cho thành phố
             const citySelect = document.getElementById("city");
-            citySelect.value = address.thanhPho;
+            citySelect.value = address.thanhPho || ''; // Nếu có giá trị thì gán vào
             if (!Array.from(citySelect.options).some(option => option.value === address.thanhPho)) {
                 const optCity = document.createElement('option');
                 optCity.value = address.thanhPho;
                 optCity.text = address.thanhPho;
                 citySelect.appendChild(optCity);
-                citySelect.value = address.thanhPho; // Gán lại giá trị
             }
 
             // Cập nhật select cho quận/huyện
@@ -206,18 +238,10 @@ $(document).ready(function () {
                     const opt = document.createElement('option');
                     opt.value = district.Name;
                     opt.text = district.Name;
-                    opt.setAttribute('data-id', district.Id);
                     districtSelect.appendChild(opt);
                 });
-                districtSelect.value = address.quanHuyen;
             }
-            if (!Array.from(districtSelect.options).some(option => option.value === address.quanHuyen)) {
-                const optDistrict = document.createElement('option');
-                optDistrict.value = address.quanHuyen;
-                optDistrict.text = address.quanHuyen;
-                districtSelect.appendChild(optDistrict);
-                districtSelect.value = address.quanHuyen; // Gán lại giá trị
-            }
+            districtSelect.value = address.quanHuyen || ''; // Đặt giá trị quận/huyện
 
             // Cập nhật select cho phường/xã
             const wardSelect = document.getElementById("ward");
@@ -230,38 +254,30 @@ $(document).ready(function () {
                     opt.text = ward.Name;
                     wardSelect.appendChild(opt);
                 });
-                wardSelect.value = address.phuongXa;
             }
-            if (!Array.from(wardSelect.options).some(option => option.value === address.phuongXa)) {
-                const optWard = document.createElement('option');
-                optWard.value = address.phuongXa;
-                optWard.text = address.phuongXa;
-                wardSelect.appendChild(optWard);
-                wardSelect.value = address.phuongXa; // Gán lại giá trị
-            }
+            wardSelect.value = address.phuongXa || ''; // Đặt giá trị phường/xã
 
             $('#addressModal').modal('show');
+
+            // Khi người dùng nhấn nút "Cập nhật địa chỉ"
             document.getElementById("saveAddressButton").onclick = async function () {
                 const updatedAddressData = {
                     diaChiCuThe: document.getElementById("specificAddress").value,
+                    ghiChu: document.getElementById("ghiChu").value,
                     thanhPho: citySelect.value,
                     quanHuyen: districtSelect.value,
                     phuongXa: wardSelect.value,
                 };
 
                 try {
-                    // Gọi API để cập nhật địa chỉ
                     await axios.put(`/dia-chi/update/${email}/${addressId}`, updatedAddressData);
                     Swal.fire({
                         icon: 'success',
                         title: 'Thành công',
                         text: 'Địa chỉ đã được cập nhật thành công!',
                     });
-
-                    // Đóng modal
                     $('#addressModal').modal('hide');
                     showCustomerAddress();
-
                 } catch (updateError) {
                     console.error("Lỗi khi cập nhật địa chỉ:", updateError);
                     alert("Không thể cập nhật địa chỉ. Vui lòng thử lại.");
@@ -272,6 +288,7 @@ $(document).ready(function () {
             alert("Không thể tải dữ liệu địa chỉ để cập nhật.");
         }
     }
+
     function deleteAddress(id, email) {
         Swal.fire({
             title: 'Xác nhận',
@@ -348,39 +365,38 @@ $(document).ready(function () {
         let actualPhone = customer.soDienThoai; // Lưu tạm số điện thoại thật để lưu sau
 
         let html = `
-    <div class="card-header text-black text-center">
-        <h4>Thông Tin Khách Hàng</h4>
-    </div>
-    <div class="card-body">
-        <div class="form-group mb-3">
-            <label for="email"><strong>Email:</strong></label>
-            <input type="text" class="form-control-plaintext" id="email" value="${emailValue}" readonly />
-        </div>
-        <div class="form-group mb-3">
-            <label for="hoVaTen"><strong>Họ Và Tên:</strong></label>
-            <input type="text" class="form-control" id="hoVaTen" value="${hoVaTenValue}" />
-        </div>
-        <div class="form-group mb-3">
-            <label><strong>Số Điện Thoại:</strong></label>
-            <div class="input-group">
-                <input type="text" class="form-control" id="soDienThoai" value="${hiddenPhone}" readonly />
-                <button id="changePhoneButton" class="btn btn-outline-secondary">Đổi</button>
+            <div class="card-header text-black text-center">
+                <h4>Thông Tin Khách Hàng</h4>
             </div>
-        </div>
-        <div class="form-group mb-4">
-            <label><strong>Giới Tính:</strong></label><br>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="gioiTinh" id="male" value="true" ${customer.gioiTinh ? 'checked' : ''}>
-                <label class="form-check-label" for="male">Nam</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="gioiTinh" id="female" value="false" ${!customer.gioiTinh ? 'checked' : ''}>
-                <label class="form-check-label" for="female">Nữ</label>
-            </div>
-        </div>
-        <button id="saveCustomerButton" class="btn btn-success w-100">Save</button>
-    </div>`;
-
+            <div class="card-body">
+                <div class="form-group mb-3">
+                    <label for="email"><strong>Email:</strong></label>
+                    <input type="text" class="form-control-plaintext" id="email" value="${emailValue}" readonly />
+                </div>
+                <div class="form-group mb-3">
+                    <label for="hoVaTen"><strong>Họ Và Tên:</strong></label>
+                    <input type="text" class="form-control" id="hoVaTen" value="${hoVaTenValue}" />
+                </div>
+                <div class="form-group mb-3">
+                    <label><strong>Số Điện Thoại:</strong></label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="soDienThoai" value="${hiddenPhone}" readonly />
+                        <button id="changePhoneButton" class="btn btn-outline-secondary">Đổi</button>
+                    </div>
+                </div>
+                <div class="form-group mb-4">
+                    <label><strong>Giới Tính:</strong></label><br>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="gioiTinh" id="male" value="true" ${customer.gioiTinh ? 'checked' : ''}>
+                        <label class="form-check-label" for="male">Nam</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="gioiTinh" id="female" value="false" ${!customer.gioiTinh ? 'checked' : ''}>
+                        <label class="form-check-label" for="female">Nữ</label>
+                    </div>
+                </div>
+                <button id="saveCustomerButton" class="btn btn-success w-100">Save</button>
+            </div>`;
         content.html(html); // Hiển thị nội dung vào DOM
 
         // Xóa nội dung mặc định 'Chưa có tên' khi nhấp vào ô nhập tên
@@ -391,7 +407,7 @@ $(document).ready(function () {
         });
 
         // Kiểm tra và lưu dữ liệu
-        $('#saveCustomerButton').click(function() {
+        $('#saveCustomerButton').click(function () {
             const hoVaTen = $('#hoVaTen').val();
             if (!hoVaTen) {
                 Swal.fire({
@@ -406,7 +422,7 @@ $(document).ready(function () {
         });
 
         // Gán sự kiện click cho nút Change Phone
-        $('#changePhoneButton').click(function() {
+        $('#changePhoneButton').click(function () {
             Swal.fire({
                 title: 'Xác Nhận Số Điện Thoại',
                 input: 'text',
@@ -451,6 +467,7 @@ $(document).ready(function () {
                 }
             });
         });
+
         function validateVietnamesePhone(phone) {
             const phoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/;
             return phoneRegex.test(phone);
@@ -613,158 +630,7 @@ $(document).ready(function () {
             }
         });
     }
-    //Trường
-    async function showCustomerCalendar() {
-        try {
-            let response = await loadCustomer(); // Gọi hàm để lấy dữ liệu
-            htmlCustomerCalendar(response.response)
-        } catch (error) {
-        }
-    }
 
-    function htmlCustomerCalendar(customer) {
-        setTableInTab();
-        $.ajax({
-            url: ' http://localhost:8080/san-ca/for-customer-profile/' + customer.id,
-            type: 'GET',
-            dataType: 'json',
-            success: function (response) {
-                if (!response.response.length<1){
-                    setRowInTable(response.response);
-                }
-
-            }
-        });
-    }
-
-    function setRowInTable(response) {
-        let wait = 0;
-        let done = 0;
-        $.each(response, function (index, item) {
-            let ngayDat = formatDate(item["ngayDat"]);
-            let ca = formatDate(item["thoiGianBatDau"]);
-            if (item["trangThaiCheckIn"] === "Chờ nhận sân" || item["trangThaiCheckIn"] === "Đang hoạt động") {
-                wait++;
-                let row = `
-                <tr>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${wait}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tenSanBong"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${ca}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${ngayDat}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongTien"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tienCoc"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongGiamGia"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["maHoaDon"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["trangThaiHoaDon"]}</td>
-                </tr>
-                `;
-                $(`#tbodyFuture`).append(row);
-            } else {
-                done++;
-                let row = `
-                <tr>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${done}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tenSanBong"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${ca}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${ngayDat}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongTien"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tienCoc"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongGiamGia"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["maHoaDon"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["trangThaiHoaDon"]}</td>
-                </tr>
-                `;
-                $(`#tbodySince`).append(row);
-            }
-
-        })
-        if (done>0){
-            $('#tbodySince tr:first').remove();
-        }
-        if (wait>0){
-            $('#tbodyFuture tr:first').remove();
-        }
-    }
-
-    function setTableInTab() {
-        content.html('');
-        let html = ``;
-        html += `<ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#future" role="tab" aria-controls="future" aria-selected="true">Sắp diễn ra</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#past" role="tab" aria-controls="past" aria-selected="false">Đã kết thúc</a>
-            </li>
-        </ul>
-
-        <div class="tab-content mt-3" id="myTabContent">
-            <div class="tab-pane fade show active" id="future" role="tabpanel" aria-labelledby="home-tab">
-               <table class="table table-hover" style="width: 100%; border-collapse: collapse;">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">#</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tên sân</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Thời gian (Ca)</th>                                        
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Ngày đặt</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tổng tiền</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tiền cọc</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Giảm giá</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Mã hóa đơn</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Trạng thái hóa đơn</th>
-                                        
-                                    </tr>
-                                    </thead>
-                                    <tbody id="tbodyFuture">
-                                    <tr>
-                                        <td colspan="9" style="text-align: center; font-weight: bold;">
-                                            Không có dữ liệu
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-            </div>
-            <div class="tab-pane fade" id="past" role="tabpanel" aria-labelledby="profile-tab">
-                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">#</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tên sân</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Thời gian (Ca)</th>                                        
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Ngày đặt</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tổng tiền</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tiền cọc</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Giảm giá</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Mã hóa đơn</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Trạng thái hóa đơn</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="tbodySince">
-                                    <tr>
-                                        <td colspan="9" style="text-align: center; font-weight: bold;">
-                                            Không có dữ liệu
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-            </div>
-        </div>
-`;
-        content.html(html);
-    }
-
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-
-        return `${hours}:${minutes} - ${day}/${month}/${year}`;
-    }
 });
 
 // Bằng

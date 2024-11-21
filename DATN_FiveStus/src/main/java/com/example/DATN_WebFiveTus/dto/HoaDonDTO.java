@@ -42,6 +42,8 @@ public class HoaDonDTO {
 
     private Boolean loai;
 
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date ngayTao;
 
     private String ghiChu;

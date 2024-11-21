@@ -28,11 +28,18 @@ public class DiaChiKhachHangLmp implements DiaChiKhachHangService {
 
     @Override
     public List<DiaChiKhachHangDTO> getAll() {
-        List<DiaChiKhachHang> khachHangs = diaChiKhachHangRepository.findAll();
-        return khachHangs.stream()
+        // Lấy tất cả địa chỉ khách hàng
+        List<DiaChiKhachHang> diaChiKhachHangs = diaChiKhachHangRepository.findAll();
+
+        // Lọc các địa chỉ có deletedAt = false (chỉ lấy các địa chỉ không bị xóa)
+        return diaChiKhachHangs.stream()
+                .filter(diaChiKhachHang -> Boolean.FALSE.equals(diaChiKhachHang.getDeletedAt())) // Kiểm tra trường deletedAt
                 .map(diaChiKhachHang -> modelMapper.map(diaChiKhachHang, DiaChiKhachHangDTO.class))
                 .collect(Collectors.toList());
     }
+
+
+
 
     @Override
     public DiaChiKhachHangDTO getOne(Integer id) {

@@ -253,4 +253,9 @@ public class SanCaRest {
         return sanCaService.findForCustomer(id);
     }
 
+    @GetMapping("/tham-so")
+    public ResponseEntity<?> getThamSo(){
+        return sanCaService.getThamSo();
+    }
+
 }

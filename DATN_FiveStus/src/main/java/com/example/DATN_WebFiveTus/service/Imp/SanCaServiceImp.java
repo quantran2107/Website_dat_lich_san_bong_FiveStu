@@ -3,18 +3,10 @@ package com.example.DATN_WebFiveTus.service.Imp;
 import com.example.DATN_WebFiveTus.dto.ApiResponseDto;
 import com.example.DATN_WebFiveTus.dto.SanCaDTO;
 import com.example.DATN_WebFiveTus.dto.response.HistoryCustomerBookFieldResponse;
-import com.example.DATN_WebFiveTus.entity.Ca;
-import com.example.DATN_WebFiveTus.entity.LoaiSan;
-import com.example.DATN_WebFiveTus.entity.NgayTrongTuan;
-import com.example.DATN_WebFiveTus.entity.SanBong;
-import com.example.DATN_WebFiveTus.entity.SanCa;
+import com.example.DATN_WebFiveTus.entity.*;
 import com.example.DATN_WebFiveTus.entity.auth.ResponseStatus;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
-import com.example.DATN_WebFiveTus.repository.CaRepository;
-import com.example.DATN_WebFiveTus.repository.LoaiSanRepository;
-import com.example.DATN_WebFiveTus.repository.NgayTrongTuanRepository;
-import com.example.DATN_WebFiveTus.repository.SanBongRepository;
-import com.example.DATN_WebFiveTus.repository.SanCaRepository;
+import com.example.DATN_WebFiveTus.repository.*;
 import com.example.DATN_WebFiveTus.service.SanCaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,72 +38,75 @@ public class SanCaServiceImp implements SanCaService {
 
     private ModelMapper modelMapper;
 
+    private ThamSoRepository thamSoRepository;
+
     @Autowired
     public SanCaServiceImp(SanCaRepository sanCaRepository, NgayTrongTuanRepository ngayTrongTuanRepository
-            , SanBongRepository sanBongRepository, CaRepository caRepository, LoaiSanRepository loaiSanRepository, ModelMapper modelMapper) {
+            , SanBongRepository sanBongRepository, CaRepository caRepository, LoaiSanRepository loaiSanRepository, ModelMapper modelMapper, ThamSoRepository thamSoRepository) {
         this.sanCaRepository = sanCaRepository;
         this.ngayTrongTuanRepository = ngayTrongTuanRepository;
         this.sanBongRepository = sanBongRepository;
         this.caRepository = caRepository;
         this.loaiSanRepository = loaiSanRepository;
         this.modelMapper = modelMapper;
+        this.thamSoRepository = thamSoRepository;
     }
 
     @Override
     public List<SanCaDTO> getAll() {
         return sanCaRepository.findAll().stream()
-                .map((sanCa) -> modelMapper.map(sanCa,SanCaDTO.class)).collect(Collectors.toList());
+                .map((sanCa) -> modelMapper.map(sanCa, SanCaDTO.class)).collect(Collectors.toList());
     }
 
     @Override
     public List<SanCaDTO> getAllJoinFetch() {
         return sanCaRepository.getAllJoinFetch().stream()
-                .map((sanCa) -> modelMapper.map(sanCa,SanCaDTO.class)).collect(Collectors.toList());
+                .map((sanCa) -> modelMapper.map(sanCa, SanCaDTO.class)).collect(Collectors.toList());
     }
 
     @Override
     public SanCaDTO getOne(Integer id) {
-        return modelMapper.map(sanCaRepository.findById(id).orElseThrow(()->new ResourceNotfound("Không tồn tại id: "+id)),SanCaDTO.class);
+        return modelMapper.map(sanCaRepository.findById(id).orElseThrow(() -> new ResourceNotfound("Không tồn tại id: " + id)), SanCaDTO.class);
     }
 
     @Override
     public SanCaDTO save(SanCaDTO sanCaDTO) {
-        Ca ca=caRepository.findById(sanCaDTO.getIdCa()).orElseThrow(()
-                ->new ResourceNotfound("Không tồn tại id ca: "+sanCaDTO.getIdCa()));
+        Ca ca = caRepository.findById(sanCaDTO.getIdCa()).orElseThrow(()
+                -> new ResourceNotfound("Không tồn tại id ca: " + sanCaDTO.getIdCa()));
 
-        SanBong sanBong=sanBongRepository.findById(sanCaDTO.getIdSanBong()).orElseThrow(()
-                ->new ResourceNotfound("Không tồn tại id sân bóng: "+sanCaDTO.getIdSanBong()));
+        SanBong sanBong = sanBongRepository.findById(sanCaDTO.getIdSanBong()).orElseThrow(()
+                -> new ResourceNotfound("Không tồn tại id sân bóng: " + sanCaDTO.getIdSanBong()));
 
-        NgayTrongTuan ngayTrongTuan=ngayTrongTuanRepository.findById(sanCaDTO.getIdNgayTrongTuan()).orElseThrow(()
-                ->new ResourceNotfound("Không tồn tại id ngày trong tuần: "+sanCaDTO.getIdNgayTrongTuan()));
+        NgayTrongTuan ngayTrongTuan = ngayTrongTuanRepository.findById(sanCaDTO.getIdNgayTrongTuan()).orElseThrow(()
+                -> new ResourceNotfound("Không tồn tại id ngày trong tuần: " + sanCaDTO.getIdNgayTrongTuan()));
 
 
-        SanCa sanCa=modelMapper.map(sanCaDTO,SanCa.class);
+        SanCa sanCa = modelMapper.map(sanCaDTO, SanCa.class);
         sanCa.setTrangThai("Đã đặt nhé");
         sanCa.setCa(ca);
         sanCa.setSanBong(sanBong);
         sanCa.setNgayTrongTuan(ngayTrongTuan);
-        SanCa sanCaSave=sanCaRepository.save(sanCa);
-        return modelMapper.map(sanCaSave,SanCaDTO.class);
+        SanCa sanCaSave = sanCaRepository.save(sanCa);
+        return modelMapper.map(sanCaSave, SanCaDTO.class);
     }
 
     @Override
     public SanCaDTO update(Integer id, SanCaDTO sanCaDTO) {
-        SanCa sanCa=sanCaRepository.findById(id).orElseThrow(()-> new ResourceNotfound("Không tồn tại update id: "+id));
-        Ca ca=caRepository.findById(sanCaDTO.getIdCa()).orElseThrow(()
-                ->new ResourceNotfound("Không tồn tại id ca: "+sanCaDTO.getIdCa()));
+        SanCa sanCa = sanCaRepository.findById(id).orElseThrow(() -> new ResourceNotfound("Không tồn tại update id: " + id));
+        Ca ca = caRepository.findById(sanCaDTO.getIdCa()).orElseThrow(()
+                -> new ResourceNotfound("Không tồn tại id ca: " + sanCaDTO.getIdCa()));
 
-        SanBong sanBong=sanBongRepository.findById(sanCaDTO.getIdSanBong()).orElseThrow(()
-                ->new ResourceNotfound("Không tồn tại id sân bóng: "+sanCaDTO.getIdSanBong()));
+        SanBong sanBong = sanBongRepository.findById(sanCaDTO.getIdSanBong()).orElseThrow(()
+                -> new ResourceNotfound("Không tồn tại id sân bóng: " + sanCaDTO.getIdSanBong()));
 
-        NgayTrongTuan ngayTrongTuan=ngayTrongTuanRepository.findById(sanCaDTO.getIdNgayTrongTuan()).orElseThrow(()
-                ->new ResourceNotfound("Không tồn tại id ngày trong tuần: "+sanCaDTO.getIdNgayTrongTuan()));
+        NgayTrongTuan ngayTrongTuan = ngayTrongTuanRepository.findById(sanCaDTO.getIdNgayTrongTuan()).orElseThrow(()
+                -> new ResourceNotfound("Không tồn tại id ngày trong tuần: " + sanCaDTO.getIdNgayTrongTuan()));
         sanCa.setCa(ca);
         sanCa.setSanBong(sanBong);
         sanCa.setNgayTrongTuan(ngayTrongTuan);
         sanCa.setTrangThai(sanCaDTO.getTrangThai());
-        SanCa sanCaUpdate=sanCaRepository.save(sanCa);
-        return modelMapper.map(sanCaUpdate,SanCaDTO.class);
+        SanCa sanCaUpdate = sanCaRepository.save(sanCa);
+        return modelMapper.map(sanCaUpdate, SanCaDTO.class);
     }
 
     @Override
@@ -124,13 +116,14 @@ public class SanCaServiceImp implements SanCaService {
 
     @Override
     public void deletedAt(Integer id) {
-        SanCa sanCa=sanCaRepository.findById(id).orElseThrow(()-> new ResourceNotfound("Không tồn tại xoá id: "+id));
+        SanCa sanCa = sanCaRepository.findById(id).orElseThrow(() -> new ResourceNotfound("Không tồn tại xoá id: " + id));
         sanCaRepository.deletedAt(id);
     }
 
     @Override
     public List<SanCaDTO> listAllSortPage(Integer pageNum, String sortDirection, int[] totalPageElement) {
-        Sort sortS = Sort.by("sanBong.tenSanBong").and(Sort.by("ca.tenCa"));;
+        Sort sortS = Sort.by("sanBong.tenSanBong").and(Sort.by("ca.tenCa"));
+        ;
         if (sortDirection.equalsIgnoreCase("asc")) {
             sortS = sortS.ascending();
         } else if (sortDirection.equalsIgnoreCase("desc")) {
@@ -150,7 +143,8 @@ public class SanCaServiceImp implements SanCaService {
 
     @Override
     public List<SanCaDTO> searchKeyWords(Integer pageNum, String keyWords, String sortDirection, int[] totalPageElement, Integer id) {
-        Sort sortS = Sort.by("sanBong.tenSanBong").and(Sort.by("ca.tenCa"));;
+        Sort sortS = Sort.by("sanBong.tenSanBong").and(Sort.by("ca.tenCa"));
+        ;
         if (sortDirection.equalsIgnoreCase("asc")) {
             sortS = sortS.ascending();
         } else if (sortDirection.equalsIgnoreCase("desc")) {
@@ -158,7 +152,7 @@ public class SanCaServiceImp implements SanCaService {
         }
 
         Pageable pageable = PageRequest.of(pageNum - 1, 5, sortS);
-        Page<SanCa> sanCaPage = sanCaRepository.search(id,keyWords.trim(),pageable);
+        Page<SanCa> sanCaPage = sanCaRepository.search(id, keyWords.trim(), pageable);
 
         totalPageElement[0] = sanCaPage.getTotalPages();
         totalPageElement[1] = (int) sanCaPage.getTotalElements();
@@ -170,8 +164,8 @@ public class SanCaServiceImp implements SanCaService {
 
     @Override
     public List<SanCaDTO> findByTrangThai(Integer idCa, String thuTrongTuan, String trangThai) {
-        List<SanCa> list = sanCaRepository.sanHopLe(idCa,thuTrongTuan,trangThai);
-        return list.stream().map(sanCa -> modelMapper.map(sanCa,SanCaDTO.class)).collect(Collectors.toList());
+        List<SanCa> list = sanCaRepository.sanHopLe(idCa, thuTrongTuan, trangThai);
+        return list.stream().map(sanCa -> modelMapper.map(sanCa, SanCaDTO.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -189,21 +183,21 @@ public class SanCaServiceImp implements SanCaService {
 
     @Override
     public List<SanCaDTO> findSanCaBySan(Integer idSanBong, Integer idNgayTrongTuan) {
-        return sanCaRepository.findSanCaBySan(idSanBong,idNgayTrongTuan).stream()
-                .map((sanCa) -> modelMapper.map(sanCa,SanCaDTO.class)).collect(Collectors.toList());
+        return sanCaRepository.findSanCaBySan(idSanBong, idNgayTrongTuan).stream()
+                .map((sanCa) -> modelMapper.map(sanCa, SanCaDTO.class)).collect(Collectors.toList());
     }
 
     @Override
     public SanCaDTO getOneSanCaByAll(Integer idSanBong, Integer idNgayTrongTuan, Integer idCa) {
         return modelMapper.map(sanCaRepository.getOneSanCaByAll
-                (idSanBong,idNgayTrongTuan, idCa),SanCaDTO.class);
+                (idSanBong, idNgayTrongTuan, idCa), SanCaDTO.class);
     }
 
     //Ly them
     @Override
     public List<SanCaDTO> findSanCaByNhieuNgay(Integer idSanBong, List<Integer> listIdNgayTrongTuan) {
-        return sanCaRepository.findSanCaByNhieuNgay(idSanBong,listIdNgayTrongTuan).stream()
-                .map((sanCa) -> modelMapper.map(sanCa,SanCaDTO.class)).collect(Collectors.toList());
+        return sanCaRepository.findSanCaByNhieuNgay(idSanBong, listIdNgayTrongTuan).stream()
+                .map((sanCa) -> modelMapper.map(sanCa, SanCaDTO.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -236,7 +230,7 @@ public class SanCaServiceImp implements SanCaService {
             for (NgayTrongTuan ngayTrongTuan : ngayTrongTuans) {
                 for (Ca ca : cas) {
 //                     Kiểm tra xem SanCa đã tồn tại chưa
-                    List<SanCaDTO> existingSanCaList = getListSanCaExits(sanBong.getLoaiSan().getId(),List.of(sanBong.getId()), List.of(ngayTrongTuan.getId()), List.of(ca.getId()));
+                    List<SanCaDTO> existingSanCaList = getListSanCaExits(sanBong.getLoaiSan().getId(), List.of(sanBong.getId()), List.of(ngayTrongTuan.getId()), List.of(ca.getId()));
 
                     if (!existingSanCaList.isEmpty()) {
                         System.out.println("Trống nha");
@@ -268,16 +262,15 @@ public class SanCaServiceImp implements SanCaService {
     }
 
     @Override
-    public List<SanCaDTO> getListSanCaExits(Integer idLoaiSan,List<Integer>  idSanBong, List<Integer> idNgayTrongTuan, List<Integer> idCa) {
+    public List<SanCaDTO> getListSanCaExits(Integer idLoaiSan, List<Integer> idSanBong, List<Integer> idNgayTrongTuan, List<Integer> idCa) {
         return sanCaRepository.getListSanCaExits(idLoaiSan, idSanBong, idNgayTrongTuan, idCa).stream()
                 .map(sanCa -> modelMapper.map(sanCa, SanCaDTO.class)).collect(Collectors.toList());
     }
 
 
-
     public List<SanCaDTO> getAllSanCaByLoaiSan(Integer idLoaiSan, Integer idNgayTrongTuan, Integer idCa) {
-        return sanCaRepository.getAllSanCaByLoaiSan(idLoaiSan,idNgayTrongTuan,idCa).stream()
-                .map(sanCa -> modelMapper.map(sanCa,SanCaDTO.class)).collect(Collectors.toList());
+        return sanCaRepository.getAllSanCaByLoaiSan(idLoaiSan, idNgayTrongTuan, idCa).stream()
+                .map(sanCa -> modelMapper.map(sanCa, SanCaDTO.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -287,6 +280,15 @@ public class SanCaServiceImp implements SanCaService {
             return ResponseEntity.ok(ApiResponseDto.builder().status(String.valueOf(ResponseStatus.FAIL)).message("Not Found").response(null).build());
         }
         return ResponseEntity.ok(ApiResponseDto.builder().status(String.valueOf(ResponseStatus.SUCCESS)).message("List here!").response(list).build());
+    }
+
+    @Override
+    public ResponseEntity<?> getThamSo() {
+        Optional<ThamSo> thamSo = thamSoRepository.findById(7);
+        if (thamSo.isEmpty()) {
+            return ResponseEntity.ok(ApiResponseDto.builder().status(String.valueOf(ResponseStatus.FAIL)).message("Not Found").response(null).build());
+        }
+        return ResponseEntity.ok(thamSo.get().getGiaTri());
     }
 
 

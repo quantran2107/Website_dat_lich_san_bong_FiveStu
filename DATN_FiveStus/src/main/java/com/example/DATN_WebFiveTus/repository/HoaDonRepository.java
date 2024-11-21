@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,14 +32,19 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Integer> {
             "OR kh.hoVaTen LIKE %:keyword% " +
             "OR kh.soDienThoai LIKE %:keyword%) " +
             "AND (:tongTienMin IS NULL OR hd.tongTien >= :tongTienMin) " +
-            "AND (:tongTienMax IS NULL OR hd.tongTien <= :tongTienMax)" +
-            "AND (:trangThai IS NULL OR hd.trangThai LIKE :trangThai)")
+            "AND (:tongTienMax IS NULL OR hd.tongTien <= :tongTienMax) " +
+            "AND (:trangThai IS NULL OR hd.trangThai LIKE :trangThai) " +
+            "AND (:ngayTaoMin IS NULL OR hd.ngayTao >=  :ngayTaoMin) " +
+            "AND (:ngayTaoMax IS NULL OR hd.ngayTao <=  :ngayTaoMax)" +
+            "ORDER BY hd.ngayTao DESC")
     List<HoaDon> searchAndFilter(
             @Param("loai") Boolean loai,
             @Param("trangThai") String trangThai,
             @Param("keyword") String keyword,
             @Param("tongTienMin") Float tongTienMin,
-            @Param("tongTienMax") Float tongTienMax);
+            @Param("tongTienMax") Float tongTienMax,
+            @Param("ngayTaoMin") LocalDateTime ngayTaoMin,
+            @Param("ngayTaoMax") LocalDateTime ngayTaoMax);
 
     @Query("SELECT hd FROM HoaDon hd LEFT JOIN FETCH hd.khachHang WHERE hd.id = :id")
     HoaDon findByIdWithKhachHang(@Param("id") Integer id);

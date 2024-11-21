@@ -1,9 +1,12 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
+import com.example.DATN_WebFiveTus.config.security.CookieUtils;
+import com.example.DATN_WebFiveTus.config.security.jwt.JwtUtils;
 import com.example.DATN_WebFiveTus.dto.*;
 import com.example.DATN_WebFiveTus.entity.HoaDon;
 import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
 import com.example.DATN_WebFiveTus.entity.KhachHang;
+import com.example.DATN_WebFiveTus.entity.NhanVien;
 import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.HoaDonChiTietRepository;
@@ -12,6 +15,9 @@ import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
 import com.example.DATN_WebFiveTus.repository.NhanVienReposity;
 import com.example.DATN_WebFiveTus.repository.PhieuGiamGiaRepository;
 import com.example.DATN_WebFiveTus.service.HoaDonService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,11 +26,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +50,9 @@ public class HoaDonServiceImp implements HoaDonService {
 
     @Autowired
     private HoaDonChiTietRepository hoaDonChiTietRepository;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     private NhanVienReposity nhanVienReposity;
 
@@ -57,7 +72,11 @@ public class HoaDonServiceImp implements HoaDonService {
         this.khachHangRepository = khachHangRepository;
         this.modelMapper = modelMapper;
     }
+    @Autowired
+    private JavaMailSender javaMailSender; // Để gửi email
 
+    @Autowired
+    private SpringTemplateEngine springTemplateEngine;
 
     @Override
     public List<HoaDonDTO> getAll() {
@@ -79,20 +98,22 @@ public class HoaDonServiceImp implements HoaDonService {
 
     @Override
     public HoaDonDTO save(HoaDonDTO hoaDonDTO) {
-
         // Tìm khách hàng theo ID
         KhachHang khachHang = khachHangRepository.findById(hoaDonDTO.getIdKhachHang())
                 .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại với ID: " + hoaDonDTO.getIdKhachHang()));
         HoaDon hoaDon = modelMapper.map(hoaDonDTO, HoaDon.class);
         hoaDon.setMaHoaDon(generateMaHoaDon());
+        hoaDon.setId(hoaDonDTO.getId());
         hoaDon.setTrangThai("Chờ thanh toán");
         Date now = Date.from(Instant.now());
         hoaDon.setKhachHang(khachHang);
         hoaDon.setTongTienSan(hoaDonDTO.getTongTienSan());
+        hoaDon.setTienCoc(hoaDonDTO.getTienCoc());
         hoaDon.setNgayTao(now);
         hoaDon.setLoai(true);
         hoaDon.setDeletedAt(false);
         HoaDon hoaDonSave = hoaDonRepository.save(hoaDon);
+
         return modelMapper.map(hoaDonSave, HoaDonDTO.class);
     }
 
@@ -163,14 +184,6 @@ public class HoaDonServiceImp implements HoaDonService {
         return null;
     }
 
-    @Override
-    public PaymentResponse confirmPayment(String maHoaDon) {
-                // Giả lập kiểm tra trạng thái thanh toán
-                PaymentResponse response = new PaymentResponse();
-                response.setMaHoaDon(maHoaDon);
-                response.setStatus("success"); // hoặc 'failure'
-                return response;
-    }
 
     @Override
     public Page<HoaDonDTO> searchAndFilter(@Param("loai") Boolean loai,
@@ -178,8 +191,10 @@ public class HoaDonServiceImp implements HoaDonService {
                                            @Param("keyword") String keyword,
                                            @Param("tongTienMin") Float tongTienMin,
                                            @Param("tongTienMax") Float tongTienMax,
+                                           @Param("ngayTaoMin") LocalDateTime ngayTaoMin,
+                                           @Param("ngayTaoMax") LocalDateTime ngayTaoMax,
                                            Pageable pageable) {
-        List<HoaDon> hoaDonList = hoaDonRepository.searchAndFilter(loai, trangThai, keyword, tongTienMin, tongTienMax);
+        List<HoaDon> hoaDonList = hoaDonRepository.searchAndFilter(loai, trangThai, keyword, tongTienMin, tongTienMax, ngayTaoMin, ngayTaoMax);
 
         // Phân trang thủ công
         int pageSize = pageable.getPageSize();
@@ -208,6 +223,17 @@ public class HoaDonServiceImp implements HoaDonService {
         hoaDon.setTrangThai("Đã hủy");
         hoaDonRepository.save(hoaDon);
         return modelMapper.map(hoaDon,HoaDonDTO.class);
+    }
+
+    @Override
+    public NhanVienDTO getNhanVienTrongCa(HttpServletRequest request) {
+        String token = CookieUtils.getCookie(request, "authToken");
+        if (token != null && jwtUtils.validateJwtToken(token) && jwtUtils.checkBlackList(token)) {
+            String username = jwtUtils.getUserNameFromJwtToken(token);
+            NhanVien nv = nhanVienReposity.findByUsername(username);
+            return modelMapper.map(nv,NhanVienDTO.class);
+        }
+        return null;
     }
 
     @Override

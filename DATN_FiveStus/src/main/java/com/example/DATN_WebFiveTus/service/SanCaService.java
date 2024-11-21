@@ -59,4 +59,6 @@ public interface SanCaService {
 
 
     ResponseEntity<ApiResponseDto<?>> findForCustomer(Integer id);
+
+    ResponseEntity<?> getThamSo();
 }

@@ -11,7 +11,6 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'json',
             success: function (response) {
-                console.log(response)
                 if (!response.includes('ROLE_EMPLOYEE')) {
                     checkSideBar();
                     logout(response);
@@ -120,7 +119,7 @@ $(document).ready(function () {
 
                     } else {
                         Swal.fire({
-                            title: "Lõi!",
+                            title: "Lỗi!",
                             text: 'Hệ thống xảy ra lỗi!',
                             icon: "error",
                             showConfirmButton: false,
@@ -131,7 +130,7 @@ $(document).ready(function () {
                 },
                 error: function () {
                     Swal.fire({
-                        title: "Lõi!",
+                        title: "Lỗi!",
                         text: 'Đã xảy ra sự cố!',
                         icon: "error",
                         showConfirmButton: false,
@@ -201,6 +200,14 @@ $(document).ready(function () {
     function checkSideBar() {
         const newUl = `
             <ul class="navbar-nav flex-fill w-100 mb-3 mt-3">
+                <li class="nav-item dropdown">
+                    <a class="nav-link pl-3" href="/thong-ke">
+                        <i class="fe fe-dollar-sign"></i>
+                        <span class="ml-3 item-text">Thống kê </span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav flex-fill w-100 mb-3">
                 <li class="nav-item active">
                     <a class="nav-link pl-3" href="/phieu-giam-gia">
                         <i class="fe fe-tag"></i>
@@ -224,14 +231,14 @@ $(document).ready(function () {
                     </a>
                 </li>
             </ul>
-            <ul class="navbar-nav flex-fill w-100 mb-3">
-                <li class="nav-item active">
-                    <a class="nav-link pl-3" href="/quan-ly-lich-dat">
-                        <i class="fe fe-calendar"></i>
-                        <span class="ml-3 item-text">Quản lý lịch đặt</span>
-                    </a>
-                </li>
-            </ul>
+<!--            <ul class="navbar-nav flex-fill w-100 mb-3">-->
+<!--                <li class="nav-item active">-->
+<!--                    <a class="nav-link pl-3" href="/quan-ly-lich-dat">-->
+<!--                        <i class="fe fe-calendar"></i>-->
+<!--                        <span class="ml-3 item-text">Quản lý lịch đặt</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--            </ul>-->
             <ul class="navbar-nav flex-fill w-100 mb-3">
                 <li class="nav-item dropdown">
                     <a class="nav-link pl-3" href="/listSanBong">

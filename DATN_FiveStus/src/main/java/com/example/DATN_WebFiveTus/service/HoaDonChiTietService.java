@@ -32,7 +32,6 @@ public interface HoaDonChiTietService {
 
     HoaDonChiTietDTO getOneHDCT(Integer id);
 
-
    void updateTrangThai(Integer id);
 
    void updateTrangThaiThanhToan(Integer id);
@@ -41,9 +40,14 @@ public interface HoaDonChiTietService {
 
     HoaDonChiTietDTO save2(HoaDonChiTietDTO hoaDonChiTietDTO);
 
-    HoaDonChiTietDTO save3(HoaDonChiTietDTO hoaDonChiTietDTO);
-
      boolean isSanCaBooked(Long idSanCa, LocalDate ngayDenSan);
 
     List<HoaDonChiTietDTO> findByIdKhachHang(Integer id);
+
+    Boolean huyDatSan(Integer id);
+
+    List<HoaDonChiTietDTO> findByNgayDenSanBetween(LocalDate startDate, LocalDate endDate);
+
+    HoaDonChiTietDTO huyLichDat(Integer id);
+
 }

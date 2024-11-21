@@ -16,7 +16,6 @@ function handleFileChange(event) {
         alert("Please select a file.");
         return;
     }
-
     // Gửi tệp đến API
     importFromExcel(window.currentImportType, file);
 }
@@ -51,7 +50,6 @@ function showErrorToast(message) {
 document.addEventListener('DOMContentLoaded', async function () {
     showLoading();
     currentServiceType = 'do_thue'; // Default service type
-    await fetchPriceRange(currentServiceType);
     await loadData(currentServiceType); // Load default data
     hideLoading();
     changeTab(currentServiceType);
@@ -60,30 +58,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 let currentServiceType = 'do_thue';
 let currentSearchQuery = '';
 let currentStatusFilter = '';
-let currentdonGiasMin = '';
-let currentdonGiasMax = '';
 
 const pageSize = 10;
-const debounceDelay = 300;
-let debounceTimeout;
-
-const cache = {};
-const cacheDuration = 30 * 1000; // 30 giây
-
 
 async function fetchData(apiUrl) {
-    const currentTime = Date.now();
-    const cacheEntry = cache[apiUrl];
-
-    if (cacheEntry && (currentTime - cacheEntry.timestamp < cacheDuration)) {
-        return cacheEntry.data;
-    }
-
     try {
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
-        cache[apiUrl] = {data, timestamp: currentTime};
         return data;
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -99,9 +81,7 @@ async function loadData(serviceType, page = 0) {
     // Thêm các tham số lọc vào URL
     if (currentSearchQuery) apiUrl += `&keyword=${encodeURIComponent(currentSearchQuery)}`;
     if (currentStatusFilter) apiUrl += `&trangThai=${encodeURIComponent(currentStatusFilter)}`;
-    if (currentdonGiasMin !== undefined && currentdonGiasMax !== undefined) {
-        apiUrl += `&donGiasMin=${encodeURIComponent(currentdonGiasMin)}&donGiasMax=${encodeURIComponent(currentdonGiasMax)}`;
-    }
+
 
     // Fetch dữ liệu từ API
     const data = await fetchData(apiUrl);
@@ -163,7 +143,10 @@ function renderTable(items, page, size) {
     tableBody.innerHTML = '';
     tableBody.appendChild(fragment);
 }
-
+function searchDV(query) {
+    currentSearchQuery = query;
+    loadData(currentServiceType, 0);
+}
 
 function updatePagination(totalElements, currentPage, size) {
     const pagination = document.getElementById(`pagination${currentServiceType === 'do_thue' ? 'DoThue' : 'NuocUong'}`);
@@ -177,106 +160,84 @@ function updatePagination(totalElements, currentPage, size) {
 
     // Nếu chỉ có một trang hoặc không có trang nào, chỉ hiển thị số trang đó
     if (totalPages <= 1) {
-        if (totalPages === 1) {
-            const singlePageLi = document.createElement('li');
-            singlePageLi.className = 'page-item active'; // Nổi bật trang hiện tại
-            const singlePageA = document.createElement('a');
-            singlePageA.className = 'page-link';
-            singlePageA.href = '#';
-            singlePageA.textContent = '1'; // Hiển thị số trang
-            singlePageLi.appendChild(singlePageA);
-            fragment.appendChild(singlePageLi);
-        }
+        const singlePageLi = document.createElement('li');
+        singlePageLi.className = 'page-item active'; // Nổi bật trang hiện tại
+        const singlePageA = document.createElement('a');
+        singlePageA.className = 'page-link';
+        singlePageA.href = '#';
+        singlePageA.textContent = '1'; // Hiển thị số trang
+        singlePageLi.appendChild(singlePageA);
+        fragment.appendChild(singlePageLi);
         pagination.appendChild(fragment);
         return;
     }
 
-    // Số trang tối đa để hiển thị
-    const maxPagesToShow = 3;
-    let startPage, endPage;
+    // Tạo một div chứa các nút "Lùi", "Dropdown", "Tiến"
+    const navContainer = document.createElement('div');
+    navContainer.className = 'd-flex justify-content-center align-items-center mt-2';
 
-    // Điều chỉnh startPage và endPage để chỉ hiển thị số trang hợp lý
-    if (totalPages <= maxPagesToShow) {
-        startPage = 0;
-        endPage = totalPages;
-    } else {
-        // Hiển thị trang xung quanh trang hiện tại
-        startPage = Math.max(0, currentPage - Math.floor(maxPagesToShow / 2));
-        endPage = Math.min(totalPages, startPage + maxPagesToShow);
-
-        // Điều chỉnh startPage nếu không đủ trang trước đó
-        if (endPage - startPage < maxPagesToShow) {
-            startPage = Math.max(0, endPage - maxPagesToShow);
-        }
-    }
-
-    // Thêm nút "Previous" nếu không phải là trang đầu tiên
-    if (currentPage > 0) {
-        const prevPageLi = document.createElement('li');
-        prevPageLi.className = 'page-item';
-        const prevPageA = document.createElement('a');
-        prevPageA.className = 'page-link';
-        prevPageA.href = '#';
-        prevPageA.textContent = '<';
-        prevPageA.addEventListener('click', (event) => {
-            event.preventDefault();
+    // Nút "Lùi"
+    const prevButton = document.createElement('button');
+    prevButton.className = 'btn btn-success';
+    prevButton.textContent = '<';
+    prevButton.disabled = currentPage === 0; // Vô hiệu hóa nếu đã là trang đầu tiên
+    prevButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (currentPage > 0) {
             loadData(currentServiceType, currentPage - 1);
-        });
-        prevPageLi.appendChild(prevPageA);
-        fragment.appendChild(prevPageLi);
+        }
+    });
+
+    // Tạo dropdown (select) cho việc chọn trang
+    const select = document.createElement('select');
+    select.className = 'custom-select mx-1'; // Thêm margin để tạo khoảng cách với các nút
+    for (let i = 0; i < totalPages; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = `Trang ${i + 1}`;
+        if (i === currentPage) {
+            option.selected = true; // Đánh dấu trang hiện tại
+        }
+        select.appendChild(option);
     }
 
-    // Thêm các trang số
-    for (let i = startPage; i < endPage; i++) {
-        const li = document.createElement('li');
-        li.className = `page-item${i === currentPage ? ' active' : ''}`;
-        const a = document.createElement('a');
-        a.className = 'page-link';
-        a.href = '#';
-        a.textContent = i + 1;
-        a.addEventListener('click', (event) => {
-            event.preventDefault();
-            loadData(currentServiceType, i);
-        });
-        li.appendChild(a);
-        fragment.appendChild(li);
-    }
+    // Thêm sự kiện thay đổi trang khi chọn trong dropdown
+    select.addEventListener('change', (event) => {
+        const selectedPage = parseInt(event.target.value);
+        loadData(currentServiceType, selectedPage); // Gọi hàm loadData để tải dữ liệu trang mới
+    });
 
-    // Thêm nút "Next" nếu không phải là trang cuối cùng
-    if (currentPage < totalPages - 1) {
-        const nextPageLi = document.createElement('li');
-        nextPageLi.className = 'page-item';
-        const nextPageA = document.createElement('a');
-        nextPageA.className = 'page-link';
-        nextPageA.href = '#';
-        nextPageA.textContent = '>';
-        nextPageA.addEventListener('click', (event) => {
-            event.preventDefault();
+    // Nút "Tiến"
+    const nextButton = document.createElement('button');
+    nextButton.className = 'btn btn-success';
+    nextButton.textContent = '>';
+    nextButton.disabled = currentPage === totalPages - 1; // Vô hiệu hóa nếu đã là trang cuối cùng
+    nextButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (currentPage < totalPages - 1) {
             loadData(currentServiceType, currentPage + 1);
-        });
-        nextPageLi.appendChild(nextPageA);
-        fragment.appendChild(nextPageLi);
+        }
+    });
+
+    // Thêm các phần tử vào container chỉ nếu có trang trước và sau
+    if (currentPage > 0 && currentPage < totalPages - 1) {
+        // Nếu có cả trang trước và sau, hiển thị đầy đủ
+        navContainer.appendChild(prevButton); // Thêm nút "Lùi"
+        navContainer.appendChild(select); // Thêm dropdown
+        navContainer.appendChild(nextButton); // Thêm nút "Tiến"
+    } else if (currentPage === 0) {
+        // Chỉ hiển thị dropdown và "Tiến" khi đang ở trang đầu
+        navContainer.appendChild(select);
+        navContainer.appendChild(nextButton);
+    } else if (currentPage === totalPages - 1) {
+        // Chỉ hiển thị dropdown và "Lùi" khi đang ở trang cuối
+        navContainer.appendChild(prevButton);
+        navContainer.appendChild(select);
     }
-    console.log(totalElements, currentPage, size)
-    pagination.appendChild(fragment); // Append all pagination items at once
-}
 
-
-function debounce(func, delay) {
-    if (debounceTimeout) clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(func, delay);
-}
-
-
-const debouncedSearchdonGias = debounce(function (min, current, max) {
-    currentdonGiasMin = min;
-    currentdonGiasMax = current;
-    loadData(currentServiceType, 0); // Load data with updated price range
-}, debounceDelay);
-
-function updatePriceRange(value) {
-    document.getElementById('rangeValue').textContent = value;
-    searchdonGias(value);
+    // Thêm container vào phân trang
+    fragment.appendChild(navContainer);
+    pagination.appendChild(fragment); // Thêm tất cả vào phân trang
 }
 
 function showLoading() {
@@ -287,92 +248,28 @@ function hideLoading() {
     document.getElementById('loadingOverlay').classList.add('loading-hidden');
 }
 
-
-// Function to initialize price range slider
-function initializePriceRange(minPrice, maxPrice) {
-    const rangeInput = document.getElementById('customRange2');
-    if (rangeInput) {
-        rangeInput.min = minPrice;
-        rangeInput.max = maxPrice;
-        rangeInput.value = maxPrice; // Set initial value to maxPrice
-        document.getElementById('rangeMin').textContent = minPrice;
-        document.getElementById('rangeMax').textContent = maxPrice;
-        document.getElementById('rangeValue').textContent = maxPrice;
-    }
-}
-
-document.getElementById('customRange2').addEventListener('input', function () {
-    const value = this.value;
-    updatePriceRange(value);
-});
-
-
 function setStatusFilterDV(status) {
     currentStatusFilter = status;
     document.getElementById('statusFilterButton').textContent = status;
     loadData(currentServiceType, 0); // Load data with updated status filter
 }
 
-function searchDV(query) {
-    clearTimeout(debounceTimeout);
-    debounceTimeout = setTimeout(() => {
-        currentSearchQuery = query;
-        loadData(currentServiceType, 0); // Load data with updated search query
-    }, debounceDelay);
-}
-
 function resetFilters() {
     // Đặt lại các bộ lọc
     currentSearchQuery = '';
     currentStatusFilter = '';
-    currentdonGiasMin = ''; // Hoặc giá trị mặc định bạn muốn
-    currentdonGiasMax = ''; // Hoặc giá trị mặc định bạn muốn
 
     // Cập nhật giao diện
     document.getElementById('search').value = '';
     document.getElementById('statusFilterButton').textContent = 'Trạng thái';
 
-    // Đặt lại thanh range
-    const rangeInput = document.getElementById('customRange2');
-    rangeInput.value = rangeInput.max; // Hoặc giá trị mặc định bạn muốn
-    document.getElementById('rangeValue').textContent = rangeInput.max;
-
     // Tải lại dữ liệu không có bộ lọc
     loadData(currentServiceType, 0);
 }
 
-
 function changeTab(serviceType) {
     currentServiceType = serviceType;
-    fetchPriceRange(serviceType).then(() => {
-        loadData(serviceType, 0); // Load data for the selected tab
-    });
-}
-
-function searchdonGias(value) {
-    const min = document.getElementById('customRange2').min;
-    const max = document.getElementById('customRange2').max;
-    currentdonGiasMin = min;
-    currentdonGiasMax = value;
-    loadData(currentServiceType, 0);
-}
-
-
-// Function to fetch price range for a service type
-async function fetchPriceRange(serviceType) {
-    let apiUrl = `http://localhost:8080/${serviceType}/hien-thi`;
-    const data = await fetchData(apiUrl);
-    if (data) {
-        const donGiass = data.map(item => item.donGiass).filter(donGiass => typeof donGiass === 'number');
-        if (donGiass.length > 0) {
-            const minPrice = Math.min(...donGias);
-            const maxPrice = Math.max(...donGias);
-            initializePriceRange(minPrice, maxPrice);
-        } else {
-            console.warn('No valid prices found.');
-            initializePriceRange(0, 0);
-        }
-    }
+    loadData(currentServiceType)
 }
 
 function deleteItem(id) {
@@ -401,7 +298,7 @@ function deleteItem(id) {
                             text: 'Xóa dịch vụ thành công',
                             icon: 'success'
                         }).then(() => {
-                            loadData(currentServiceType, 0);//(Bản chất cái này thực hiện xóa được nhưng giao diện vẫn dữ nguyên cái mình vừa xóa, phải reload mới xóa đc)
+                            loadData(currentServiceType);//(Bản chất cái này thực hiện xóa được nhưng giao diện vẫn dữ nguyên cái mình vừa xóa, phải reload mới xóa đc)
                             // window.location.reload();(Buộc phải reload lại thì mới mất được dữ liệu trên form)
                         });
                     } else {
@@ -424,7 +321,6 @@ function deleteItem(id) {
         }
     });
 }
-
 
 function importFromExcel(type) {
     const fileInput = document.getElementById('fileInput');
@@ -469,8 +365,6 @@ async function exportToExcel(serviceType) {
         }
         const data = await response.json();
 
-        // Debug: In dữ liệu trả về từ API
-        console.log("Dữ liệu từ API:", data);
 
         if (data && Array.isArray(data)) {
             // Tạo bảng dữ liệu từ kết quả API
@@ -1235,8 +1129,6 @@ function cancelAdd() {
     const tableBodyCard = document.getElementById('tableCardBody');
     const tableBodyCard1 = document.getElementById('tableCardBody1');
 
-    // Hiển thị lại card body ban đầu
-    fetchPriceRange(currentServiceType);
     loadData(currentServiceType); // Tải dữ liệu mặc định
     tableBodyCard1.style.display = 'block';
 
@@ -1254,24 +1146,6 @@ function cancelAdd() {
                    oninput="searchDV(this.value)" placeholder="Tìm kiếm theo tên"
                    style="width: 180px;" type="text">
         </div>
-        <!-- Price Range -->
-        <label class="form-label" for="customRange2"
-               style="margin-left:-65px;margin-right: 10px">Khoảng giá</label>
-        <div class="form-group" style="flex-grow: 1;">
-            <div class="range-container" style="position: relative; width: 100%;">
-                <input class="form-range" id="customRange2" max="1000" min="0"
-                       oninput="updatePriceRange(this.value)"
-                       step="10" type="range" value="500">
-                    <div class="range-labels d-flex justify-content-between">
-                        <span id="rangeMin">0</span>
-                        <span id="rangeValue"
-                              style="position: absolute; left: 50%; transform: translateX(-50%);">500</span>
-                        <span id="rangeMax">1000</span>
-                    </div>
-            </div>
-        </div>
-
-
         <div class="dropdown ml-3 mr-2">
             <button aria-expanded="false"
                     aria-haspopup="true"
