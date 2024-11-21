@@ -17,8 +17,6 @@ $(document).ready(function () {
                     return;
                 }
                 checkStatus(response);
-
-
             },
             error: () => {
                 window.location.href = "/admin/logout";

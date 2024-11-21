@@ -127,7 +127,7 @@ $(document).ready(function () {
                 <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#past" role="tab" aria-controls="past" aria-selected="false">Đã kết thúc</a>
             </li>
              <li class="nav-item">
-                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#cancel" role="tab" aria-controls="cancel" aria-selected="false">Đã kết thúc</a>
+                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#cancel" role="tab" aria-controls="cancel" aria-selected="false">Đã hủy</a>
             </li>
         </ul>
 
@@ -241,7 +241,7 @@ $(document).ready(function () {
                                 if (response === true) {
                                     Swal.fire({
                                         title: "Thành công!",
-                                        text: "Bạn đã hủy đơn hàng này.",
+                                        text: "Bạn đã hủy hóa đơn này.",
                                         icon: "success"
                                     });
                                     showCustomerCalendar();

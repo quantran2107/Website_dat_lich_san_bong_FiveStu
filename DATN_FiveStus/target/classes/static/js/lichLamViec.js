@@ -123,24 +123,34 @@ $(document).ready(function () {
         });
     }
 
+    $('#status-select .dropdown-item').click(function (event) {
+        event.preventDefault();
+        let selectedStatus = $(this).text().trim();
+        $('#actionMenuButton3').text(selectedStatus);
+
+        let key = $('#searchInput').val();
+        let selectedDate = $('#date-input').val();
+        loadTable(key, selectedStatus, selectedDate);
+
+    });
     $('#date-input').change(function () {
         let selectedDate = $(this).val();
         let key = $('#searchInput').val();
-        let selectedValue = $('input[name="status"]:checked').val();
+        let selectedValue = $('#actionMenuButton3').text().trim();
         loadTable(key, selectedValue, selectedDate);
     });
     $('#searchInput').on('input', function () {
         let key = $(this).val().trim();
         let selectedDate = $('#date-input').val();
-        let selectedValue = $('input[name="status"]:checked').val();
+        let selectedValue = $('#actionMenuButton3').text().trim();
         loadTable(key, selectedValue, selectedDate);
     });
-    $('input[type=radio][name=status]').change(function () {
-        let selectedStatus = this.value;
-        let key = $('#searchInput').val();
-        let selectedDate = $('#date-input').val();
-        loadTable(key, selectedStatus, selectedDate);
-    });
+    $('#load').on('click',()=>{
+        $('#actionMenuButton3').text('Tất cả');
+        $('#searchInput').val('')
+        $('#date-input').val('');
+        loadTable('', '', '');
+    })
 
     function loadTable(keyString = '', ca = '', date = '') {
 
