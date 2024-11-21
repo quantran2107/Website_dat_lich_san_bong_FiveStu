@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -79,10 +82,12 @@ public class HoaDonRest {
             @RequestParam(required = false) String key,
             @RequestParam(required = false) Float tongTienMin,
             @RequestParam(required = false) Float tongTienMax,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime ngayTaoMin,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss") LocalDateTime ngayTaoMax,
             @RequestParam(defaultValue = "0") int trang,
             @RequestParam(defaultValue = "10") int kichThuoc) {
         Pageable pageable = PageRequest.of(trang, kichThuoc);
-        Page<HoaDonDTO> hoaDonPage = hoaDonService.searchAndFilter(loai, trangThai, key, tongTienMin, tongTienMax, pageable);
+        Page<HoaDonDTO> hoaDonPage = hoaDonService.searchAndFilter(loai, trangThai, key, tongTienMin, tongTienMax, ngayTaoMin, ngayTaoMax, pageable);
         return ResponseEntity.ok(hoaDonPage);
     }
 
