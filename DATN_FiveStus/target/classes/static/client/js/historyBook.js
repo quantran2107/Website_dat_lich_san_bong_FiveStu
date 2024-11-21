@@ -127,7 +127,7 @@ $(document).ready(function () {
                 <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#past" role="tab" aria-controls="past" aria-selected="false">Đã kết thúc</a>
             </li>
              <li class="nav-item">
-                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#cancel" role="tab" aria-controls="cancel" aria-selected="false">Đã kết thúc</a>
+                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#cancel" role="tab" aria-controls="cancel" aria-selected="false">Đã hủy</a>
             </li>
         </ul>
 

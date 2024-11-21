@@ -19,6 +19,7 @@
 <div th:include="fragment/script :: script"></div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet"/>
 
 <script th:inline="javascript">
@@ -337,6 +338,13 @@
                                         ${chiTiet.trangThai}
                                     </span>
                                 </td>
+                                <td>
+                                ${chiTiet.trangThai === 'Chờ nhận sân' ? `
+                                    <button class="btn mb-2 mr-1 btn-outline-danger" type="button" onclick="cancelDetailInvoice(${chiTiet.id})">
+                                        <span class="fe fe-trash-2"></span>
+                                    </button>
+                                ` : ''}
+                                </td>
                             `;
                         tableBody.appendChild(row);
 
@@ -383,29 +391,88 @@
         };
 
     function cancelInvoice(id) {
-        fetch(`http://localhost:8080/hoa-don/huy-lich-dat/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Có lỗi xảy ra khi hủy lịch đặt');
+        confirmAction('Bạn có chắc chắn?', 'Bạn có muốn hủy lịch đặt này không?')
+            .then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`http://localhost:8080/hoa-don/huy-lich-dat/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Có lỗi xảy ra khi hủy lịch đặt');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            Swal.fire(
+                                'Thành công!',
+                                'Lịch đặt đã được hủy.',
+                                'success'
+                            );
+                            console.log(data);
+                            fetchDataAndRenderTable();
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire(
+                                'Thất bại!',
+                                'Không thể hủy lịch đặt. Vui lòng thử lại!',
+                                'error'
+                            );
+                        });
                 }
-                return response.json();
-            })
-            .then(data => {
-                alert("Hủy lịch đặt thành công!");
-                console.log(data);
-                fetchDataAndRenderTable();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert("Không thể hủy lịch đặt. Vui lòng thử lại!");
             });
     }
 
+    function cancelDetailInvoice(id) {
+        confirmAction('Bạn có chắc chắn?', 'Bạn có muốn hủy lịch đặt này không?')
+            .then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`http://localhost:8080/hoa-don-chi-tiet/huy-lich-dat/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Có lỗi xảy ra khi hủy lịch đặt');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            alert("Hủy lịch đặt thành công!");
+                            console.log(data);
+                            fetch(`http://localhost:8080/hoa-don-chi-tiet/${id}`,{
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Có lỗi xảy ra khi hủy lịch đặt');
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    showDetailContent(data.idHoaDon);
+                                })
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire(
+                                'Thất bại!',
+                                'Không thể hủy lịch đặt. Vui lòng thử lại!',
+                                'error'
+                            );
+                        });
+                }
+            });
+    }
 
     function back(){
         loadTrangHoaDon();
@@ -425,6 +492,19 @@
         currentStatusFilter = null;
         currentStatusFilter2 = null;
         fetchDataAndRenderTable(); // Gọi hàm fetch và render table khi DOMContentLoaded
+    }
+
+    function confirmAction(title, text, confirmText = 'Đồng ý', cancelText = 'Hủy') {
+        return Swal.fire({
+            title: title,
+            text: text,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirmText,
+            cancelButtonText: cancelText
+        });
     }
 
     function loadTrangHoaDon(){
@@ -554,6 +634,9 @@
                                                 </li>
                                                 <li class="nav-item">
                                                     <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-profile" onclick="filterTable2('da thanh toan')" aria-selected="false">Đã thanh toán</button>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-profile" onclick="filterTable2('da thanh toan mot phan')" aria-selected="false">Đã thanh toán một phần</button>
                                                 </li>
                                                 <li class="nav-item">
                                                     <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-contact" onclick="filterTable2('da huy')" aria-selected="false">Đã hủy</button>

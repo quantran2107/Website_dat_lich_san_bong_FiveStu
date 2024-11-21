@@ -255,8 +255,7 @@
                                     <div class="toolbar row">
                                         <div class="col">
                                             <!-- Nút Bộ lọc -->
-                                            <button type="button" class="btn btn-filter mx-1 active" onclick="selectFilter(this, 'day')">NGÀY</button>
-                                            <button type="button" class="btn btn-filter mx-1" onclick="selectFilter(this, 'week')">TUẦN</button>
+                                            <button type="button" class="btn btn-filter mx-1 active" onclick="selectFilter(this, 'week')">NGÀY</button>
                                             <button type="button" class="btn btn-filter mx-1" onclick="selectFilter(this, 'month')">THÁNG</button>
                                             <button type="button" class="btn btn-filter mx-1" onclick="selectFilter(this, 'year')">NĂM</button>
                                             <button type="button" class="btn btn-filter mx-1" id="customFilterBtn" onclick="selectFilter(this, 'custom')">TÙY CHỈNH</button>
@@ -275,6 +274,7 @@
                                                 <div class="input-group col-md-5" id="inputNgayKetThuc" >
                                                     <input type="date" id="ngayKetThuc" class="form-control" style="width: 100%;" />
                                                 </div>
+                                                <button type="button" class="btn btn-filter mx-1" id="customFilterBtn2" onclick="selectFilter(this, 'custom')">XÁC NHẬN</button>
                                             </div>
                                         </div>
                                     </div>
@@ -297,6 +297,9 @@
     </main>
 </div>
 <script>
+    const ngayBatDauInput = document.getElementById('ngayBatDau');
+    const ngayKetThucInput = document.getElementById('ngayKetThuc');
+
     async function fetchWeeklyData() {
 
         const startDate = new Date(getMondayOfCurrentWeek().split('/').reverse().join('-'));
@@ -322,7 +325,9 @@
 
             // Duyệt qua từng hóa đơn trong dữ liệu
             data.forEach(item => {
-                tongDanhThuNgay += item.tongTienThucTe || 0;
+                if(item.trangThai === "Đã thanh toán"){
+                    tongDanhThuNgay += item.tongTienThucTe || 0;
+                }
 
                 // Gọi API dịch vụ cho từng hóa đơn
                 dailyDichVuPromises.push(
@@ -367,6 +372,7 @@
     async function fetchMonthlyData() {
 
         const startDate = new Date(getFirstDayOfMonth().split('/').reverse().join('-'));
+        console.log("startDate: " + startDate);
         const endDate = new Date(startDate);
         endDate.setDate(startDate.getDate() + 6);
 
@@ -388,8 +394,9 @@
             const weekDichVuPromises = [];
 
             data.forEach(item => {
-                tongDanhThuTuan += item.tongTienThucTe || 0;
-
+                if(item.trangThai === "Đã thanh toán"){
+                    tongDanhThuTuan += item.tongTienThucTe || 0;
+                }
                 weekDichVuPromises.push(
                     fetch(`http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${item.id}`)
                         .then(response => response.json())
@@ -449,8 +456,9 @@
             const monthDichVuPromises = [];
 
             data.forEach(item => {
-                tongDanhThuThang += item.tongTienThucTe || 0;
-
+                if(item.trangThai === "Đã thanh toán"){
+                    tongDanhThuThang += item.tongTienThucTe || 0;
+                }
                 monthDichVuPromises.push(
                     fetch(`http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${item.id}`)
                         .then(response => response.json())
@@ -471,6 +479,64 @@
     }
 
     fetchYearlyData();
+
+    const customLabels = [];
+
+    async function fetchCustomData() {
+
+        const startDateCustom = formatToFullDate(ngayBatDauInput.value);
+        const totalDays = calculateTotalDays(ngayBatDauInput.value,ngayKetThucInput.value);
+        const dichVuPromisesCustom = [];
+
+        // Duyệt qua từng ngày trong tuần để lấy dữ liệu
+        for (let i = 0; i < totalDays; i++) {
+            let tongDanhThuNgayCustom = 0;
+            let tongTienDichVuCustom = 0;
+
+            // Gọi API để lấy dữ liệu hóa đơn chi tiết cho từng ngày trong tuần
+            const response = await fetch(`http://localhost:8080/hoa-don-chi-tiet/khoang-ngay-den-san?startDate=${startDateCustom.toLocaleDateString('en-GB')}&endDate=${startDateCustom.toLocaleDateString('en-GB')}`);
+
+            // Kiểm tra lỗi phản hồi
+            if (!response.ok) {
+                console.error('Error fetching data for the day', startDateCustom);
+                continue; // Bỏ qua nếu có lỗi trong việc fetch dữ liệu
+            }
+
+            const data = await response.json();
+            const dailyDichVuPromisesCustom = []; // Mảng Promise dành cho dịch vụ mỗi ngày
+
+            // Duyệt qua từng hóa đơn trong dữ liệu
+            data.forEach(item => {
+                tongDanhThuNgayCustom += item.tongTienThucTe || 0;
+
+                // Gọi API dịch vụ cho từng hóa đơn
+                dailyDichVuPromisesCustom.push(
+                    fetch(`http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${item.id}`)
+                        .then(response => response.json())
+                        .then(dichVuData => {
+                            dichVuData.forEach(dichVu => {
+                                tongTienDichVuCustom += dichVu.tongTien || 0;
+                            });
+                        })
+                        .catch(error => console.error('Error fetching service data:', error))
+                );
+            });
+
+            // Đợi tất cả các Promise dịch vụ hoàn thành
+            await Promise.all(dailyDichVuPromisesCustom);
+
+            // Lưu tổng doanh thu và tiền dịch vụ vào mảng tương ứng
+            dataSets.custom.data.push(tongDanhThuNgayCustom);
+            dataSets.custom.dataSet2.push(tongTienDichVuCustom);
+
+            const formattedDate = startDateCustom.toLocaleDateString('en-GB'); // Định dạng ngày theo kiểu "dd/MM/yyyy"
+            customLabels.push(formattedDate);
+
+            // Tăng ngày lên 1 ngày cho ngày tiếp theo
+            startDateCustom.setDate(startDateCustom.getDate() + 1); // Thêm một ngày vào startDate
+        }
+
+    }
 
     const ctx = document.getElementById('myLineChart').getContext('2d');
 
@@ -509,11 +575,6 @@
 
     // Dữ liệu mẫu cho từng khoảng thời gian
     const dataSets = {
-        day: {
-            labels: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
-            data: [5, 8, 6, 7, 10, 15, 12, 9, 11, 13, 10, 7],
-            dataSet2: [6, 9, 7, 8, 12, 16, 13, 10, 12, 14, 11, 8] // Dữ liệu bổ sung
-        },
         week: {
             labels: weekLabels,
             data: [],
@@ -526,6 +587,11 @@
         },
         year: {
             labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+            data: [],
+            dataSet2: []
+        },
+        custom: {
+            labels: customLabels,
             data: [],
             dataSet2: []
         }
@@ -541,48 +607,47 @@
 
         // Kiểm tra nếu là nút "TÙY CHỈNH" thì hiển thị ô nhập ngày
         var customDateInputs = document.getElementById("customDateInputs");
-        var customDiv = document.getElementById("custom-div");
         if (timeRange === 'custom') {
             customDateInputs.style.display = "inline-flex";
-            customDiv.style.display = "inline-flex";
         } else {
             customDateInputs.style.display = "none";
-            customDiv.style.display = "none";
-            const selectedData = dataSets[timeRange];
-
-            // Cập nhật dữ liệu và nhãn cho biểu đồ
-            myLineChart.data.labels = selectedData.labels;
-            myLineChart.data.datasets[0].data = selectedData.data;
-
-            // Thêm một tập dữ liệu mới nếu cần
-            if (myLineChart.data.datasets.length < 2) {
-                myLineChart.data.datasets.push({
-                    label: 'Dữ liệu bổ sung',
-                    data: selectedData.dataSet2,
-                    borderColor: 'rgba(153, 102, 255, 1)',
-                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                    borderWidth: 2,
-                    fill: true
-                });
-            } else {
-                myLineChart.data.datasets[1].data = selectedData.dataSet2;
-            }
-
-            myLineChart.update();
         }
+        const selectedData = dataSets[timeRange];
+
+        // Cập nhật dữ liệu và nhãn cho biểu đồ
+        myLineChart.data.labels = selectedData.labels;
+        myLineChart.data.datasets[0].data = selectedData.data;
+
+        // Thêm một tập dữ liệu mới nếu cần
+        if (myLineChart.data.datasets.length < 2) {
+            myLineChart.data.datasets.push({
+                label: 'Tổng tiền dịch vụ',
+                data: selectedData.dataSet2,
+                borderColor: 'rgba(153, 102, 255, 1)',
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderWidth: 2,
+                fill: true
+            });
+        } else {
+            myLineChart.data.datasets[1].data = selectedData.dataSet2;
+        }
+
+        myLineChart.update();
     }
 
     document.addEventListener("DOMContentLoaded", function() {
 
-        const ngayBatDauInput = document.getElementById('ngayBatDau');
-        const ngayKetThucInput = document.getElementById('ngayKetThuc');
-
         // Đặt giá trị ngày hiện tại vào ô nhập ngày
-        const today = new Date().toISOString().split('T')[0];
-        ngayBatDauInput.value = today;
-        ngayKetThucInput.value = today;
 
-        selectFilter(document.querySelector('.btn-filter.active'), 'day');
+        selectFilter(document.querySelector('.btn-filter.active'), 'week');
+
+        ngayBatDauInput.addEventListener('change', function () {
+            fetchCustomData();
+        });
+
+        ngayKetThucInput.addEventListener('change', function () {
+            fetchCustomData();
+        });
 
         flatpickr("#ngayBatDau", {});
         flatpickr("#ngayKetThuc", {});
@@ -606,9 +671,9 @@
                 totalBookings = data.length;
                 // Duyệt qua từng hóa đơn chi tiết và cộng tổng tiền thực tế
                 data.forEach(item => {
-                    tongDanhThuNgay += item.tongTienThucTe || 0; // Nếu `tongTienThucTe` là null, cộng thêm 0
                     if (item.trangThai === "Đã thanh toán") {
                         successfulOrdersCount++;
+                        tongDanhThuNgay += item.tongTienThucTe || 0;
                     }
 
                     if (item.trangThai === "Đã hủy") {
@@ -651,9 +716,9 @@
                 totalBookingsTuan = data.length;
                 // Duyệt qua từng hóa đơn chi tiết và cộng tổng tiền thực tế
                 data.forEach(item => {
-                    tongDanhThuTuan += item.tongTienThucTe || 0; // Nếu `tongTienThucTe` là null, cộng thêm 0
                     if (item.trangThai === "Đã thanh toán") {
                         successfulOrdersCountTuan++;
+                        tongDanhThuTuan += item.tongTienThucTe || 0;
                     }
 
                     if (item.trangThai === "Đã hủy") {
@@ -696,9 +761,9 @@
                 totalBookingsThang = data.length;
                 // Duyệt qua từng hóa đơn chi tiết và cộng tổng tiền thực tế
                 data.forEach(item => {
-                    tongDanhThuThang += item.tongTienThucTe || 0; // Nếu `tongTienThucTe` là null, cộng thêm 0
                     if (item.trangThai === "Đã thanh toán") {
                         successfulOrdersCountThang++;
+                        tongDanhThuThang += item.tongTienThucTe || 0;
                     }
 
                     if (item.trangThai === "Đã hủy") {
@@ -725,7 +790,6 @@
                     document.getElementById("month-cancel").innerText = `${cancelOrdersCountThang}`;
                     document.getElementById("month-return").innerText = tongTienDichVuThang.toLocaleString() + ' VNĐ';
                 });
-
             })
             .catch(error => console.error('Error fetching data:', error));
 
@@ -744,9 +808,9 @@
                 totalBookingsNam = data.length;
                 // Duyệt qua từng hóa đơn chi tiết và cộng tổng tiền thực tế
                 data.forEach(item => {
-                    tongDanhThuNam += item.tongTienThucTe || 0; // Nếu `tongTienThucTe` là null, cộng thêm 0
                     if (item.trangThai === "Đã thanh toán") {
                         successfulOrdersCountNam++;
+                        tongDanhThuNam += item.tongTienThucTe || 0;
                     }
 
                     if (item.trangThai === "Đã hủy") {
@@ -853,6 +917,21 @@
 
     function getLastDayOfMonth2(year, month) {
         return new Date(year, month + 1, 0); // Ngày 0 của tháng tiếp theo là ngày cuối cùng của tháng hiện tại
+    }
+
+    function calculateTotalDays(ngayBatDau, ngayKetThuc) {
+        const start = new Date(ngayBatDau);
+        const end = new Date(ngayKetThuc);
+        return Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+    }
+
+    function formatDate(inputDate) {
+        const [year, month, day] = inputDate.split("-");
+        return `${day}/${month}/${year}`;
+    }
+
+    function formatToFullDate(inputDate) {
+        return new Date(inputDate);
     }
 
 </script>

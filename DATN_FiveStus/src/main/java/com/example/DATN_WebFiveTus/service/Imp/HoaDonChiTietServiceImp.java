@@ -1,10 +1,9 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
-import com.example.DATN_WebFiveTus.config.PDFGenerator;
 import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
+import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.entity.HoaDon;
 import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
-import com.example.DATN_WebFiveTus.entity.KhachHang;
 import com.example.DATN_WebFiveTus.entity.SanCa;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.HoaDonChiTietRepository;
@@ -12,24 +11,14 @@ import com.example.DATN_WebFiveTus.repository.HoaDonRepository;
 import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
 import com.example.DATN_WebFiveTus.repository.SanCaRepository;
 import com.example.DATN_WebFiveTus.service.HoaDonChiTietService;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfDocument;
-import com.itextpdf.text.pdf.PdfWriter;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.security.SecureRandom;
@@ -38,8 +27,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import java.io.ByteArrayOutputStream;
 
 @Service
 public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
@@ -53,9 +40,6 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
     private SanCaRepository sanCaRepository;
 
     private ModelMapper modelMapper;
-
-    @Autowired
-    private PDFGenerator pdfGenerator;
 
     @Autowired
     private JavaMailSender javaMailSender; // Để gửi email
@@ -341,6 +325,15 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
         return dtoList;
 
+    }
+
+    @Override
+    public HoaDonChiTietDTO huyLichDat(Integer id) {
+        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn với id " + id));
+        hoaDonChiTiet.setTrangThai("Đã hủy");
+        hoaDonChiTietRepository.save(hoaDonChiTiet);
+        return modelMapper.map(hoaDonChiTiet,HoaDonChiTietDTO.class);
     }
 
 }

@@ -17,8 +17,6 @@ $(document).ready(function () {
                     return;
                 }
                 checkStatus(response);
-
-
             },
             error: () => {
                 window.location.href = "/admin/logout";
@@ -231,14 +229,14 @@ $(document).ready(function () {
                     </a>
                 </li>
             </ul>
-            <ul class="navbar-nav flex-fill w-100 mb-3">
-                <li class="nav-item active">
-                    <a class="nav-link pl-3" href="/quan-ly-lich-dat">
-                        <i class="fe fe-calendar"></i>
-                        <span class="ml-3 item-text">Quản lý lịch đặt</span>
-                    </a>
-                </li>
-            </ul>
+<!--            <ul class="navbar-nav flex-fill w-100 mb-3">-->
+<!--                <li class="nav-item active">-->
+<!--                    <a class="nav-link pl-3" href="/quan-ly-lich-dat">-->
+<!--                        <i class="fe fe-calendar"></i>-->
+<!--                        <span class="ml-3 item-text">Quản lý lịch đặt</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--            </ul>-->
             <ul class="navbar-nav flex-fill w-100 mb-3">
                 <li class="nav-item dropdown">
                     <a class="nav-link pl-3" href="/listSanBong">
