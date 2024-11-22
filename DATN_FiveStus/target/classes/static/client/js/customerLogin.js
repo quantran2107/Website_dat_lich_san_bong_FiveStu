@@ -271,13 +271,14 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: JSON.stringify(formData),
             success: function (response) {
+
                 if (response.status === "SUCCESS") {
                     mess("Đăng ký thành công!", "/khach-hang/trang-chu");
                     removeForm()
                 }
             },
-            error: function (xhr, status, error) {
-                messError(error.responseJSON.message)
+            error: function (response) {
+                messError(response.responseJSON.message)
             }
         });
     }
