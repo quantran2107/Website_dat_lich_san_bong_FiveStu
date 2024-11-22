@@ -119,17 +119,21 @@ $(document).ready(function () {
 
     async function addAddress(email) {
         // Reset các trường input
-        document.getElementById("specificAddress").value = '';
-        document.getElementById("ghiChu").value = '';
-
-        // Reset các trường select (Đảm bảo chúng có các giá trị mặc định)
-        document.getElementById("city").value = '';  // Đặt lại Tỉnh/Thành về mặc định
-        document.getElementById("district").value = '';  // Đặt lại Quận/Huyện về mặc định
-        document.getElementById("ward").value = '';  // Đặt lại Phường/Xã về mặc định
-
-        // Thêm các giá trị mặc định vào các select
+        const specificAddressInput = document.getElementById("specificAddress");
+        const ghiChuInput = document.getElementById("ghiChu");
         const citySelect = document.getElementById("city");
-        if (!citySelect.querySelector("option[value='']")) { // Nếu chưa có giá trị mặc định
+        const districtSelect = document.getElementById("district");
+        const wardSelect = document.getElementById("ward");
+
+        specificAddressInput.value = '';
+        ghiChuInput.value = '';
+
+        // Reset và thêm các giá trị mặc định vào các select
+        citySelect.value = '';
+        districtSelect.value = '';
+        wardSelect.value = '';
+
+        if (!citySelect.querySelector("option[value='']")) {
             const defaultOptionCity = document.createElement('option');
             defaultOptionCity.value = '';
             defaultOptionCity.textContent = 'Chọn Tỉnh/Thành';
@@ -138,8 +142,7 @@ $(document).ready(function () {
             citySelect.appendChild(defaultOptionCity);
         }
 
-        const districtSelect = document.getElementById("district");
-        if (!districtSelect.querySelector("option[value='']")) { // Nếu chưa có giá trị mặc định
+        if (!districtSelect.querySelector("option[value='']")) {
             const defaultOptionDistrict = document.createElement('option');
             defaultOptionDistrict.value = '';
             defaultOptionDistrict.textContent = 'Chọn Quận/Huyện';
@@ -148,8 +151,7 @@ $(document).ready(function () {
             districtSelect.appendChild(defaultOptionDistrict);
         }
 
-        const wardSelect = document.getElementById("ward");
-        if (!wardSelect.querySelector("option[value='']")) { // Nếu chưa có giá trị mặc định
+        if (!wardSelect.querySelector("option[value='']")) {
             const defaultOptionWard = document.createElement('option');
             defaultOptionWard.value = '';
             defaultOptionWard.textContent = 'Chọn Phường/Xã';
@@ -158,27 +160,62 @@ $(document).ready(function () {
             wardSelect.appendChild(defaultOptionWard);
         }
 
+        // Hiển thị modal
         $('#addressModal').modal('show');
-        $('#saveAddressButton').off('click').on('click', async function() {
 
-            const specificAddress = document.getElementById("specificAddress").value;
-            const ghiChu = document.getElementById("ghiChu").value;
-            const city = document.getElementById("city").value;
-            const district = document.getElementById("district").value;
-            const ward = document.getElementById("ward").value;
+        // Xử lý sự kiện nút lưu
+        $('#saveAddressButton').off('click').on('click', async function () {
+            const specificAddress = specificAddressInput.value;
+            const ghiChu = ghiChuInput.value;
+            const city = citySelect.value;
+            const district = districtSelect.value;
+            const ward = wardSelect.value;
+
+            // Reset trạng thái lỗi
+            const inputsToCheck = [specificAddressInput, citySelect, districtSelect, wardSelect];
+            inputsToCheck.forEach(input => {
+                input.classList.remove('is-invalid');
+                const invalidFeedback = input.nextElementSibling;
+                if (invalidFeedback && invalidFeedback.classList.contains('invalid-feedback')) {
+                    invalidFeedback.remove();
+                }
+            });
 
             // Kiểm tra tính đầy đủ của thông tin địa chỉ
-            if (!specificAddress || !city || !district || !ward) {
-                alert("Vui lòng điền đầy đủ thông tin địa chỉ.");
-                return; // Dừng lại nếu thông tin không đầy đủ
+            let hasError = false;
+
+            if (!specificAddress) {
+                specificAddressInput.classList.add('is-invalid');
+                specificAddressInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng nhập địa chỉ cụ thể.</div>');
+                hasError = true;
             }
+
+            if (!city) {
+                citySelect.classList.add('is-invalid');
+                citySelect.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng chọn Tỉnh/Thành.</div>');
+                hasError = true;
+            }
+
+            if (!district) {
+                districtSelect.classList.add('is-invalid');
+                districtSelect.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng chọn Quận/Huyện.</div>');
+                hasError = true;
+            }
+
+            if (!ward) {
+                wardSelect.classList.add('is-invalid');
+                wardSelect.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng chọn Phường/Xã.</div>');
+                hasError = true;
+            }
+
+            if (hasError) return; // Dừng lại nếu có lỗi
 
             const newAddressData = {
                 diaChiCuThe: specificAddress,
                 thanhPho: city,
                 quanHuyen: district,
                 phuongXa: ward,
-                ghiChu: ghiChu,
+                ghiChu: ghiChu, // Cho phép ghi chú trống
             };
 
             try {
@@ -200,6 +237,7 @@ $(document).ready(function () {
             }
         });
     }
+
 
     async function updateAddress(addressId, email) {
         try {
@@ -559,7 +597,22 @@ $(document).ready(function () {
 
         // Xác nhận mật khẩu cũ
         $('#verifyOldPassword').on('click', function () {
-            let oldPassword = $('#oldPassword').val();
+            let oldPasswordInput = $('#oldPassword');
+            let oldPassword = oldPasswordInput.val();
+
+            // Reset trạng thái lỗi trước đó
+            oldPasswordInput.removeClass('is-invalid');
+            const invalidFeedback = oldPasswordInput.next('.invalid-feedback');
+            if (invalidFeedback.length) {
+                invalidFeedback.remove();
+            }
+
+            // Kiểm tra nếu người dùng chưa nhập mật khẩu
+            if (!oldPassword) {
+                oldPasswordInput.addClass('is-invalid'); // Đánh dấu input là không hợp lệ
+                oldPasswordInput.after('<div class="invalid-feedback">Vui lòng nhập mật khẩu hiện tại.</div>'); // Hiển thị thông báo lỗi
+                return; // Dừng xử lý nếu không có mật khẩu
+            }
 
             let formData = {
                 username: customer.email,
@@ -576,7 +629,7 @@ $(document).ready(function () {
                     $('#newPasswordForm').show();
                 },
                 error: function (xhr) {
-                    $('#oldPassword').addClass('is-invalid'); // Đánh dấu input mật khẩu cũ
+                    oldPasswordInput.addClass('is-invalid'); // Đánh dấu input mật khẩu cũ
                     Swal.fire({
                         title: 'Lỗi!',
                         text: 'Mật khẩu hiện tại không chính xác.',
@@ -584,50 +637,73 @@ $(document).ready(function () {
                         confirmButtonText: 'OK'
                     });
                     // Xóa giá trị của mật khẩu cũ để người dùng nhập lại
-                    $('#oldPassword').val('');
+                    oldPasswordInput.val('');
                 }
             });
         });
+
 
         // Gửi mật khẩu mới
         $('#submitNewPassword').on('click', function () {
             let newPassword = $('#newPassword').val();
             let confirmPassword = $('#confirmPassword').val();
 
-            if (newPassword === confirmPassword) {
-                $.ajax({
-                    url: '/api/auth/change-pass',
-                    type: 'PUT',
-                    contentType: 'application/json',
-                    data: JSON.stringify({password: newPassword}),
-                    success: function () {
-                        Swal.fire({
-                            title: 'Thành công!',
-                            text: 'Mật khẩu đã được thay đổi thành công!',
-                            icon: 'success',
-                            confirmButtonText: 'OK'
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                    },
-                    error: function (xhr) {
-                        console.log("Password change error:", xhr.responseText);
-                        Swal.fire({
-                            title: 'Lỗi!',
-                            text: 'Đã xảy ra lỗi, vui lòng thử lại.',
-                            icon: 'error',
-                            confirmButtonText: 'OK'
-                        });
-                    }
-                });
-            } else {
-                Swal.fire({
-                    title: 'Lỗi!',
-                    text: 'Mật khẩu mới và xác nhận không khớp.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
+            // Hàm kiểm tra tính hợp lệ của mật khẩu
+            function isPasswordValid(password) {
+                const minLength = 6;
+                const maxLength = 15;
+                const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,15}$/;
+
+                return password.length >= minLength &&
+                    password.length <= maxLength &&
+                    regex.test(password);
             }
+
+            // Reset thông báo lỗi
+            $('.invalid-feedback').remove();
+            $('#newPassword').removeClass('is-invalid');
+            $('#confirmPassword').removeClass('is-invalid');
+
+            // Kiểm tra mật khẩu mới
+            if (!isPasswordValid(newPassword)) {
+                $('#newPassword').addClass('is-invalid');
+                $('#newPassword').after('<div class="invalid-feedback">Mật khẩu phải từ 6-15 ký tự, có ít nhất 1 ký tự thường, 1 ký tự viết hoa và 1 chữ số.</div>');
+                return;
+            }
+
+            // Kiểm tra mật khẩu xác nhận
+            if (newPassword !== confirmPassword) {
+                $('#confirmPassword').addClass('is-invalid');
+                $('#confirmPassword').after('<div class="invalid-feedback">Mật khẩu mới và xác nhận không khớp.</div>');
+                return;
+            }
+
+            // Gửi yêu cầu đổi mật khẩu nếu hợp lệ
+            $.ajax({
+                url: '/api/auth/change-pass',
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({ password: newPassword }),
+                success: function () {
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Mật khẩu đã được thay đổi thành công!',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                },
+                error: function (xhr) {
+                    console.log("Password change error:", xhr.responseText);
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: 'Đã xảy ra lỗi, vui lòng thử lại.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
         });
     }
 

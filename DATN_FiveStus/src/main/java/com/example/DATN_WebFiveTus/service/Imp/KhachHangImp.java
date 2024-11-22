@@ -82,6 +82,9 @@ public class KhachHangImp implements KhachHangService {
     @Override
     public KhachHangDTO save(KhachHangDTO khachHangDTO) throws RoleNotFoundException {
         KhachHang khachHang = modelMapper.map(khachHangDTO, KhachHang.class);
+        if (khachHang.getTrangThai() == null || khachHang.getTrangThai().isEmpty()) {
+            khachHang.setTrangThai("active");
+        }
         String pass = generateMK(16);
         khachHang.setMatKhau(passwordEncoder.encode(pass));
         if (!mailFunction(khachHang,pass)){

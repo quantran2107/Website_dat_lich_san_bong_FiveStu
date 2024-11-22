@@ -2373,6 +2373,15 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                             });
                             return;
                         }
+                        if (isNaN(giaPhuPhi) || giaPhuPhi < 0) {
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: 'Giá phụ phí phải là một số không nhỏ hơn 0!',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                            return;
+                        }
 
                         fetch('http://localhost:8080/api/phu-phi-hoa-don/add', {
                             method: 'POST',
@@ -2446,9 +2455,10 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                         document.getElementById(`tienPhuPhi${invoiceId}`).value = totalPhuPhi.toLocaleString('vi-VN');
 
                         // Cập nhật tổng tiền hóa đơn sau khi có phụ phí
-                        const updatedTotalInvoice = totalInvoice + totalPhuPhi;
+                        totalInvoice += totalPhuPhi; // Cộng tổng phụ phí vào tổng tiền hóa đơn
+                        document.getElementById(`tongTien${invoiceId}`).value = totalInvoice.toLocaleString('vi-VN');
                         // Gọi API để tìm phiếu giảm giá dựa trên tổng tiền
-                        return fetch(`http://localhost:8080/api-phieu-giam-gia/fill-PGG?tongTien=${updatedTotalInvoice}`);
+                        return fetch(`http://localhost:8080/api-phieu-giam-gia/fill-PGG?tongTien=${totalInvoice}`);
                     })
                     .then(response => {
                         if (!response.ok) {

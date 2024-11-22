@@ -32,7 +32,7 @@ public class KhachHangRest {
     @GetMapping("hien-thi")
     public ResponseEntity<List<KhachHangDTO>> getAll() {
         List<KhachHangDTO> khachHangDTOS = khachHangService.getAll();
-        Collections.reverse(khachHangDTOS);
+//        Collections.reverse(khachHangDTOS);
         return ResponseEntity.ok(khachHangDTOS);
     }
 

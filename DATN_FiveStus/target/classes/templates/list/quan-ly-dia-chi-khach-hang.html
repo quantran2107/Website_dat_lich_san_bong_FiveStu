@@ -112,7 +112,7 @@
                                                             <div class="form-group">
                                                                 <label for="tenDiaChi">Địa chỉ cụ thể</label>
                                                                 <input type="text" class="form-control" id="tenDiaChi" name="diaChiCuThe"
-                                                                       placeholder="Nhập địa chỉ cụ thể" required>
+                                                                       placeholder="Nhập địa chỉ cụ thể">
                                                             </div>
                                                             <div class="form-row">
                                                                 <div class="form-group col-md-4">
@@ -139,8 +139,7 @@
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="ghiChu">Ghi chú</label>
-                                                                <input type="text" class="form-control" id="ghiChu" name="ghiChu" placeholder="Nhập ghi chú"
-                                                                       required>
+                                                                <input type="text" class="form-control" id="ghiChu" name="ghiChu" placeholder="Nhập ghi chú (Có thể để trống)">
                                                             </div>
                                                             <button type="submit" class="btn btn-primary">Thêm</button>
                                                             <button type="button" class="btn btn-secondary" onclick="toggleForm()">Đóng</button>
@@ -176,7 +175,7 @@
                                                                     <div class="form-group">
                                                                         <label for="updateTenDiaChi">Địa chỉ cụ thể</label>
                                                                         <input type="text" class="form-control" id="updateTenDiaChi"
-                                                                               name="diaChiCuThe" th:value="${diaChi.diaChiCuThe}" required>
+                                                                               name="diaChiCuThe" th:value="${diaChi.diaChiCuThe}">
                                                                     </div>
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-4">
@@ -204,7 +203,9 @@
                                                                     <div class="form-group">
                                                                         <label for="updateGhiChu">Ghi chú</label>
                                                                         <input type="text" class="form-control" id="updateGhiChu"
-                                                                               name="ghiChu" th:value="${diaChi.ghiChu}" required>
+                                                                               name="ghiChu" th:value="${diaChi.ghiChu}"
+                                                                               placeholder="Không có ghi chú"
+                                                                               th:placeholder="${diaChi.ghiChu == null or diaChi.ghiChu.isEmpty() ? 'Không có ghi chú' : ''}">
                                                                     </div>
                                                                     <div class="text-right">
                                                                         <button type="submit" class="btn btn-outline-success">
@@ -267,15 +268,6 @@
                 form.classList.add('show');
             }
         }
-        function toggleForm1(index) {
-            var form = document.getElementById('collapse' + index);
-            if (form.classList.contains('show')) {
-                form.classList.remove('show');
-            } else {
-                form.classList.add('show');
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', function () {
             const closeButtons = document.querySelectorAll('.btn-secondary[data-bs-toggle="collapse"]');
             closeButtons.forEach(button => {
@@ -356,6 +348,11 @@
                 var districts1 = form.querySelector('.district-select[data-index="' + index + '"]');
                 var wards1 = form.querySelector('.ward-select[data-index="' + index + '"]');
 
+                // Lấy giá trị đã chọn (nếu có) từ các attribute của các select
+                var currentCityId = citis1.getAttribute('data-selected-id');
+                var currentDistrictId = districts1.getAttribute('data-selected-id');
+                var currentWardId = wards1.getAttribute('data-selected-id');
+
                 var Parameter1 = {
                     url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
                     method: "GET",
@@ -363,12 +360,12 @@
                 };
 
                 axios(Parameter1).then(function (result) {
-                    renderCity(result.data, citis1, districts1, wards1);
+                    renderCity(result.data, citis1, districts1, wards1, currentCityId, currentDistrictId, currentWardId);
                 }).catch(function (error) {
                     console.error("Error fetching data:", error);
                 });
 
-                function renderCity(data, citis1, districts1, wards1) {
+                function renderCity(data, citis1, districts1, wards1, currentCityId, currentDistrictId, currentWardId) {
                     for (const x of data) {
                         var opt = document.createElement('option');
                         opt.value = x.Name;
@@ -377,49 +374,78 @@
                         citis1.options.add(opt);
                     }
 
+                    // Nếu có Tỉnh/Thành phố đã chọn, thiết lập và cập nhật danh sách Quận/Huyện
+                    if (currentCityId) {
+                        citis1.value = currentCityId;
+
+                        // Tự động cập nhật Quận/Huyện theo Tỉnh/Thành phố đã chọn
+                        updateDistricts(currentCityId, data, districts1, currentDistrictId, currentWardId);
+                    }
+
+                    // Sự kiện khi thay đổi Tỉnh/Thành phố
                     citis1.onchange = function () {
-                        districts1.length = 1;
-                        wards1.length = 1;
+                        districts1.length = 1; // Reset danh sách Quận/Huyện
+                        wards1.length = 1; // Reset danh sách Phường/Xã
                         const selectedCityId = this.options[this.selectedIndex].getAttribute('data-id');
 
                         if (selectedCityId) {
-                            const city = data.find(n => n.Id === selectedCityId);
-
-                            if (city && city.Districts) {
-                                for (const district of city.Districts) {
-                                    var opt = document.createElement('option');
-                                    opt.value = district.Name;
-                                    opt.text = district.Name;
-                                    opt.setAttribute('data-id', district.Id);
-                                    districts1.options.add(opt);
-                                }
-                            }
+                            updateDistricts(selectedCityId, data, districts1, null, null);
                         }
                     };
 
                     districts1.onchange = function () {
-                        wards1.length = 1;
+                        wards1.length = 1; // Reset danh sách Phường/Xã
                         const selectedCityId = citis1.options[citis1.selectedIndex].getAttribute('data-id');
                         const selectedDistrictId = this.options[this.selectedIndex].getAttribute('data-id');
 
                         if (selectedCityId && selectedDistrictId) {
                             const city = data.find(n => n.Id === selectedCityId);
+                            const district = city.Districts.find(n => n.Id === selectedDistrictId);
 
-                            if (city && city.Districts) {
-                                const district = city.Districts.find(n => n.Id === selectedDistrictId);
-
-                                if (district && district.Wards) {
-                                    for (const ward of district.Wards) {
-                                        var opt = document.createElement('option');
-                                        opt.value = ward.Name;
-                                        opt.text = ward.Name;
-                                        opt.setAttribute('data-id', ward.Id);
-                                        wards1.options.add(opt);
-                                    }
-                                }
+                            if (district) {
+                                updateWards(district.Wards, wards1, null);
                             }
                         }
                     };
+                }
+
+                function updateDistricts(cityId, data, districts1, currentDistrictId, currentWardId) {
+                    const city = data.find(n => n.Id === cityId);
+
+                    if (city && city.Districts) {
+                        for (const district of city.Districts) {
+                            var opt = document.createElement('option');
+                            opt.value = district.Name;
+                            opt.text = district.Name;
+                            opt.setAttribute('data-id', district.Id);
+                            districts1.options.add(opt);
+                        }
+
+                        // Nếu có Quận/Huyện đã chọn, thiết lập và cập nhật danh sách Phường/Xã
+                        if (currentDistrictId) {
+                            districts1.value = currentDistrictId;
+
+                            const district = city.Districts.find(n => n.Id === currentDistrictId);
+                            if (district) {
+                                updateWards(district.Wards, wards1, currentWardId);
+                            }
+                        }
+                    }
+                }
+
+                function updateWards(wardsData, wards1, currentWardId) {
+                    for (const ward of wardsData) {
+                        var opt = document.createElement('option');
+                        opt.value = ward.Name;
+                        opt.text = ward.Name;
+                        opt.setAttribute('data-id', ward.Id);
+                        wards1.options.add(opt);
+                    }
+
+                    // Nếu có Phường/Xã đã chọn, thiết lập giá trị
+                    if (currentWardId) {
+                        wards1.value = currentWardId;
+                    }
                 }
             });
         });
@@ -493,8 +519,8 @@
                             .then(text => {
                                 // Hiển thị thông báo thành công với phản hồi từ máy chủ
                                 Swal.fire({
-                                    title: 'Updated Successfully!',
-                                    text: text || 'Sửa thành công', // Hiển thị văn bản phản hồi từ máy chủ
+                                    title: 'Thành công!',
+                                    text: text || 'Sửa địa chỉ thành công', // Hiển thị văn bản phản hồi từ máy chủ
                                     icon: 'success'
                                 });
                             })
