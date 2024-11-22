@@ -283,10 +283,11 @@ $(document).ready(function () {
         });
     }
 
-    function mess(alert, location) {
+
+    function mess(mess, location) {
         let timerInterval;
         Swal.fire({
-            title: `${alert}`,
+            title: `${mess}`,
             icon: "success",
             timer: 2000,
             timerProgressBar: true,
