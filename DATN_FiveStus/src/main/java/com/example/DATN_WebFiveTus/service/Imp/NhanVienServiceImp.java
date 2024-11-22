@@ -1,6 +1,8 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.config.RoleFactory;
+import com.example.DATN_WebFiveTus.config.security.CookieUtils;
+import com.example.DATN_WebFiveTus.config.security.jwt.JwtUtils;
 import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
 import com.example.DATN_WebFiveTus.entity.KhachHang;
 import com.example.DATN_WebFiveTus.entity.NhanVien;
@@ -13,6 +15,7 @@ import com.example.DATN_WebFiveTus.repository.UserRepository;
 import com.example.DATN_WebFiveTus.service.NhanVienService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -22,7 +25,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -62,6 +64,9 @@ public class NhanVienServiceImp implements NhanVienService {
 
     @Autowired
     private KhachHangRepository khachHangRepository;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     public NhanVienServiceImp(NhanVienReposity nhanVienReposity, ModelMapper modelMapper) {
         this.nhanVienReposity = nhanVienReposity;
@@ -181,6 +186,17 @@ public class NhanVienServiceImp implements NhanVienService {
             return ResponseEntity.ok(modelMapper.map(nv, NhanVienDTO.class));
         }
         return ResponseEntity.ok(maNV);
+    }
+
+    @Override
+    public NhanVienDTO getNV(HttpServletRequest request) {
+        String token = CookieUtils.getCookie(request, "authToken");
+        if (token != null && jwtUtils.validateJwtToken(token) && jwtUtils.checkBlackList(token)) {
+            String username = jwtUtils.getUserNameFromJwtToken(token);
+            NhanVien nv = nhanVienReposity.findByUsername(username);
+            return modelMapper.map(nv, NhanVienDTO.class);
+        }
+        return null;
     }
 
     private NhanVien createNhanVienFormRow(Row row, DateTimeFormatter dateTimeFormatter) {

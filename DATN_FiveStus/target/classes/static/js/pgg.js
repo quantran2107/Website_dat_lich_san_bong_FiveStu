@@ -285,7 +285,7 @@ function updateVoucherStatus(checkbox) {
                             })
                             .then(data => {
                                 Swal.fire({
-                                    title: 'Updated Successfully',
+                                    title: 'Cập nhật trạng thái thành công',
                                     text: 'Cập nhật trạng thái thành công',
                                     icon: 'success'
                                 });
@@ -1527,7 +1527,7 @@ function showUpdate(id) {
 
                         // Hiển thị thông báo khi cập nhật thành công
                         Swal.fire({
-                            title: 'Updated Successfully',
+                            title: 'Sửa thành công',
                             text: 'Sửa thành công',
                             icon: 'success'
                         });

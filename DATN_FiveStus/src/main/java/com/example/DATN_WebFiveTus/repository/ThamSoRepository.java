@@ -46,7 +46,7 @@ public interface ThamSoRepository extends JpaRepository<ThamSo, Integer> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE ThamSo ts SET ts.deletedAt =TRUE WHERE ts.id = :id")
+    @Query("UPDATE ThamSo ts SET ts.deletedAt =true WHERE ts.id = :id and ts.isActive=true ")
     void deletedAt(Integer id);
 
 

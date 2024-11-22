@@ -36,6 +36,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -100,6 +101,8 @@ public class HoaDonServiceImp implements HoaDonService {
         // Tìm khách hàng theo ID
         KhachHang khachHang = khachHangRepository.findById(hoaDonDTO.getIdKhachHang())
                 .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại với ID: " + hoaDonDTO.getIdKhachHang()));
+        NhanVien nhanVien = nhanVienReposity.findById(hoaDonDTO.getIdNhanVien())
+                .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại với ID: " + hoaDonDTO.getIdNhanVien()));
         HoaDon hoaDon = modelMapper.map(hoaDonDTO, HoaDon.class);
         hoaDon.setMaHoaDon(generateMaHoaDon());
         hoaDon.setId(hoaDonDTO.getId());
@@ -108,6 +111,7 @@ public class HoaDonServiceImp implements HoaDonService {
         hoaDon.setKhachHang(khachHang);
         hoaDon.setTongTienSan(hoaDonDTO.getTongTienSan());
         hoaDon.setTienCoc(hoaDonDTO.getTienCoc());
+        hoaDon.setNhanVien(nhanVien);
         hoaDon.setNgayTao(now);
         hoaDon.setLoai(true);
         hoaDon.setDeletedAt(false);
@@ -190,8 +194,10 @@ public class HoaDonServiceImp implements HoaDonService {
                                            @Param("keyword") String keyword,
                                            @Param("tongTienMin") Float tongTienMin,
                                            @Param("tongTienMax") Float tongTienMax,
+                                           @Param("ngayTaoMin") LocalDateTime ngayTaoMin,
+                                           @Param("ngayTaoMax") LocalDateTime ngayTaoMax,
                                            Pageable pageable) {
-        List<HoaDon> hoaDonList = hoaDonRepository.searchAndFilter(loai, trangThai, keyword, tongTienMin, tongTienMax);
+        List<HoaDon> hoaDonList = hoaDonRepository.searchAndFilter(loai, trangThai, keyword, tongTienMin, tongTienMax, ngayTaoMin, ngayTaoMax);
 
         // Phân trang thủ công
         int pageSize = pageable.getPageSize();
