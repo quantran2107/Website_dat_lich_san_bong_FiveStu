@@ -9,8 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("nhan-vien")
 public class NhanVienRest {
@@ -63,6 +61,4 @@ public class NhanVienRest {
     public ResponseEntity<?> getNVForCode(@PathVariable("code") String maNV){
         return nhanVienService.getForCode(maNV);
     }
-
-    
 }

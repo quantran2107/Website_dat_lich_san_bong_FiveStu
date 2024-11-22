@@ -74,10 +74,10 @@ $(document).ready(function () {
                      aria-expanded="false">Danh sách đặt lịch</a>
                   <ul class="dropdown-menu fw-bold">
                     <li>
-                      <a th:href="@{#}" class="dropdown-item">About Us</a>
+                      <a th:href="@{#}" class="dropdown-item">Về chúng tôi</a>
                     </li>
                     <li>
-                      <a class="dropdown-item" th:href="@{#}">Shop</a>
+                      <a class="dropdown-item" href="/history-book">Danh sách của bạn</a>
                     </li>
                   </ul>
                 </li>
