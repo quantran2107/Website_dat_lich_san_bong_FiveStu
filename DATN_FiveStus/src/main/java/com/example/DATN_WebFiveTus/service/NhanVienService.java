@@ -2,7 +2,9 @@ package com.example.DATN_WebFiveTus.service;
 
 
 import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
+import com.example.DATN_WebFiveTus.entity.NhanVien;
 import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,4 +26,6 @@ public interface NhanVienService {
     ResponseEntity<?> getOneNv(int id);
 
     ResponseEntity<?> getForCode(String maNV);
+
+    NhanVienDTO getNV(HttpServletRequest request);
 }
