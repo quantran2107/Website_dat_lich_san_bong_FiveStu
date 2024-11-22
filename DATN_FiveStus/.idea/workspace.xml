@@ -5,35 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="235b9b66-624d-4d66-bdd7-130317bcab1a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/js/navbar.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/controller/client/KhachHangNoiQuyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/controller/client/KhachHangNoiQuyController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/SanBongRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/SanBongRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/ThamSoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/ThamSoRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/SanBongRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/SanBongRest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/HoaDonServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/HoaDonServiceImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/SanBongServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/SanBongServiceImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/ThamSoServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/ThamSoServiceImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/SanBongService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/SanBongService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/ThamSoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/ThamSoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/chon-san-ca.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/chon-san-ca.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/client/khach-hang-noi-quy3.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/client/khach-hang-noi-quy3.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/NhapThamSo.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-san-bong3.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-san-bong3.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-tham-so.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-tham-so.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/controller/client/KhachHangNoiQuyController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/controller/client/KhachHangNoiQuyController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/SanBongRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/SanBongRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/ThamSoRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/ThamSoRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/SanBongRest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/SanBongRest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/HoaDonServiceImp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/HoaDonServiceImp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/SanBongServiceImp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/SanBongServiceImp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/ThamSoServiceImp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/ThamSoServiceImp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/SanBongService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/SanBongService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/ThamSoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/ThamSoService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/static/js/chon-san-ca.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/js/chon-san-ca.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/client/khach-hang-noi-quy3.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/client/khach-hang-noi-quy3.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/NhapThamSo.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-san-bong3.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-san-bong3.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-tham-so.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-tham-so.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/NhanVienRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/NhanVienRest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/NhanVienServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/NhanVienServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/NhanVienService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/NhanVienService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/fragment/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/fragment/navbar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/nhan-vien/lich-lam-viec.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/nhan-vien/lich-lam-viec.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/fragment/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/fragment/navbar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/nhan-vien/lich-lam-viec.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/nhan-vien/lich-lam-viec.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,11 +24,11 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="JavaScript File" />
         <option value="HTML File" />
         <option value="JavaScript File" />
         <option value="HTML File" />
         <option value="Class" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -92,8 +72,13 @@
     "RequestMappingsPanelWidth0": "75",
     "RequestMappingsPanelWidth1": "75",
     "Spring Boot.DatnWebFiveTusApplication.executor": "Run",
-    "git-widget-placeholder": "Merging nhanhTruong",
-    "node.js.selected.package.tslint": "(autodetect)"
+    "git-widget-placeholder": "nhanhTruong",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -122,10 +107,18 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="3f69e9a7-ac49-4e29-afb8-81944512af61" name="Changes" comment="" />
+      <changelist id="235b9b66-624d-4d66-bdd7-130317bcab1a" name="Changes" comment="" />
       <created>1721639258822</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -283,6 +276,8 @@
       <workItem from="1732086164958" duration="1049000" />
       <workItem from="1732110093506" duration="9163000" />
       <workItem from="1732179735034" duration="14945000" />
+      <workItem from="1732233779073" duration="230000" />
+      <workItem from="1732243281464" duration="1240000" />
     </task>
     <servers />
   </component>

@@ -4,6 +4,7 @@ import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
 import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
 import com.example.DATN_WebFiveTus.service.NhanVienService;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,5 +61,10 @@ public class NhanVienRest {
     @GetMapping("search-for-code/{code}")
     public ResponseEntity<?> getNVForCode(@PathVariable("code") String maNV){
         return nhanVienService.getForCode(maNV);
+    }
+
+    @GetMapping("get-nv")
+    public ResponseEntity<?> getNV(HttpServletRequest request){
+        return ResponseEntity.ok(nhanVienService.getNV(request));
     }
 }
