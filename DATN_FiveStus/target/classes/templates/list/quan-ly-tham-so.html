@@ -18,6 +18,16 @@
         width: 250px; /* Đặt chiều rộng cho ô input */
     }
 
+    /* Tùy chỉnh bảng trong thẻ card */
+    .card {
+        background-color: #ffffff; /* Đặt nền trắng */
+        border-radius: 10px;      /* Bo góc mềm mại */
+    }
+    .card-header .btn {
+        font-size: 0.875rem; /* Nhỏ hơn nút mặc định một chút */
+        padding: 5px 10px;  /* Điều chỉnh kích thước nút */
+    }
+
 
 
 
@@ -30,39 +40,57 @@
         <div class="col-12">
             <h2 class="mb-2 page-title">Quản lý tham số</h2>
             <h6>Các điều khoản của sân bóng</h6>
-            <div class="mb-4">
-                <div class="search-box-container">
-                    <div class="form-group mb-0">
-                        <label for="search" class="font-weight-bold">Tìm kiếm</label>
-                        <input type="text" class="form-control" id="search" placeholder="Tìm kiếm theo mã tham số, tên tham số">
+            <div class="card shadow-sm mb-4 bg-white">
+                <div class="card-header bg-white text-black">
+                    <h5 class="mb-0">Tìm kiếm</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <div class="search-box-container">
+                            <div class="form-group mb-0">
+                                <label for="search" class="font-weight-bold">Tìm kiếm</label>
+                                <input type="text" class="form-control" id="search" placeholder="Tìm kiếm theo mã tham số, tên tham số">
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-
             </div>
-            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addParameterModal">
-                Thêm Tham Số
-            </button>
 
-            <table id="parameterTable" class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>Mã</th>
-                    <th>Tên</th>
-                    <th>Giá Trị</th>
-                    <th>Loại Giá Trị</th>
-                    <th>Mô Tả</th>
-                    <th>Trạng Thái</th>
-                    <th>Hành Động</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- Rows will be populated dynamically here -->
-                </tbody>
-            </table>
+
+
+            <div class="card shadow-sm my-4">
+                <div class="card-header d-flex justify-content-between align-items-center bg-white text-black">
+                    <h5 class="mb-0">Danh Sách Thông Số</h5>
+                    <button type="button"  class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addParameterModal">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <table id="parameterTable" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Mã</th>
+                            <th>Tên</th>
+                            <th>Giá Trị</th>
+                            <th>Loại Giá Trị</th>
+                            <th>Mô Tả</th>
+                            <th>Trạng Thái</th>
+                            <th>Hành Động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Rows will be populated dynamically here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
 
             <!-- Modal for adding a parameter -->
-            <div class="modal fade" id="addParameterModal" tabindex="-1" aria-labelledby="addParameterModalLabel" aria-hidden="true">
+            <div class="modal fade" id="addParameterModal" tabindex="-1" aria-labelledby="addParameterModalLabel"
+                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -73,11 +101,11 @@
                             <form id="addParameterForm">
                                 <div class="mb-3">
                                     <label for="parameterName" class="form-label">Tên</label>
-                                    <input type="text" class="form-control" id="parameterName" name="ten" >
+                                    <input type="text" class="form-control" id="parameterName" name="ten">
                                 </div>
                                 <div class="mb-3">
                                     <label for="parameterValue" class="form-label">Giá Trị</label>
-                                    <input type="text" class="form-control" id="parameterValue" name="giaTri" >
+                                    <input type="text" class="form-control" id="parameterValue" name="giaTri">
                                 </div>
                                 <div class="mb-3">
                                     <label for="parameterType" class="form-label">Loại Giá Trị</label>
@@ -108,7 +136,8 @@
 
 
             <!-- Modal for editing a   -->
-            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editParameterModalLabel" aria-hidden="true">
+            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editParameterModalLabel"
+                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -157,7 +186,7 @@
 
 
             <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-end"  id="pagination">
+                <ul class="pagination justify-content-end" id="pagination">
                     <!-- Pagination items will be populated dynamically here -->
                 </ul>
             </nav>
@@ -171,10 +200,11 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
 <script>
 
-    $(document).on('click', '#addParameterButton', function() {
+    $(document).on('click', '#addParameterButton', function () {
         var addModal = new bootstrap.Modal(document.getElementById('parameterModal'));
         addModal.show();
     });
@@ -236,7 +266,7 @@
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(formData),
-            success: function(response) {
+            success: function (response) {
                 Swal.fire(
                     'Thêm mới!',
                     'Dữ liệu đã được thêm thành công.',
@@ -252,7 +282,7 @@
                 // Cập nhật bảng dữ liệu
                 fetchDataAndRenderTable();
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : xhr.responseText;
                 Swal.fire({
                     icon: 'error',
@@ -264,14 +294,13 @@
     });
 
 
-
     // Khi nhấn nút Edit
-    $(document).on('click', '.edit-button', function() {
+    $(document).on('click', '.edit-button', function () {
         var thamSoId = $(this).data('id');
         $.ajax({
             url: 'http://localhost:8080/tham-so/' + thamSoId,
             method: 'GET',
-            success: function(data) {
+            success: function (data) {
                 // Điền dữ liệu vào form
                 $('#editParameterId').val(data.id);
                 $('#editParameterCode').val(data.ma);
@@ -286,7 +315,7 @@
                 var editModal = bootstrap.Modal.getOrCreateInstance(editModalElement);
                 editModal.show();
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi',
@@ -297,7 +326,7 @@
     });
 
     // Khi submit form
-    $('#editParameterForm').on('submit', function(e) {
+    $('#editParameterForm').on('submit', function (e) {
         e.preventDefault();
 
         // Lấy dữ liệu từ form
@@ -317,7 +346,7 @@
             method: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(formData),
-            success: function() {
+            success: function () {
                 Swal.fire(
                     'Cập nhật!',
                     'Dữ liệu đã được cập nhật thành công.',
@@ -334,7 +363,7 @@
                 // Cập nhật bảng dữ liệu
                 fetchDataAndRenderTable();
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi',
@@ -345,7 +374,7 @@
     });
 
     // Reset modal khi đóng
-    $('#editModal').on('hidden.bs.modal', function() {
+    $('#editModal').on('hidden.bs.modal', function () {
         $('#editParameterForm')[0].reset(); // Reset form
     });
 
@@ -475,14 +504,18 @@
             <td>${parameter.moTa}</td>
             <td>${parameter.trangThai ? 'Kích hoạt' : 'Vô hiệu hóa'}</td>
             <td>
-                <button type="button" class="btn btn-warning btn-sm edit-button"
-                        data-bs-toggle="modal" data-bs-target="#editModal"
-                        data-id="${parameter.id}">
-                    Sửa
-                </button>
-                <button type="button" class="btn btn-danger btn-sm delete-button" data-id="${parameter.id}">
-                    Xóa
-                </button>
+               <!-- Nút Sửa -->
+            <button type="button" class="btn btn-warning btn-sm edit-button"
+                    data-bs-toggle="modal" data-bs-target="#editModal"
+                    data-id="${parameter.id}">
+                <i class="bi bi-pencil-square"></i>
+            </button>
+
+            <!-- Nút Xóa -->
+            <button type="button" class="btn btn-danger btn-sm delete-button"
+                    data-id="${parameter.id}">
+                <i class="bi bi-trash"></i>
+            </button>
             </td>
         </tr>`;
             tableBody.insertAdjacentHTML('beforeend', row);
@@ -507,9 +540,8 @@
     }
 
 
-
-    // Initial data fetch
-    fetchDataAndRenderTable();
+        // Initial data fetch
+        fetchDataAndRenderTable();
 </script>
 
 </body>

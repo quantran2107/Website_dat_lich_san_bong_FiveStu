@@ -14,7 +14,7 @@ $(document).ready(function () {
         </li>
     `;
 
-                $('.nav').append(newListItem);
+                $('#navbarADMIN').append(newListItem);
             } else {
 
             }
