@@ -397,44 +397,44 @@ $(document).ready(function () {
             return;
         }
 
-        const hiddenPhone = customer.soDienThoai ? `********${customer.soDienThoai.slice(-2)}` : 'Chưa có thông tin';
+        const hiddenPhone = customer.soDienThoai ? `********${customer.soDienThoai.slice(-2)}` : 'Không có số điện thoại';
         const hoVaTenValue = customer.hoVaTen || 'Chưa có tên';
         const emailValue = customer.email || 'Chưa có email';
-        let actualPhone = customer.soDienThoai; // Lưu tạm số điện thoại thật để lưu sau
+        let actualPhone = customer.soDienThoai || ''; // Lưu tạm số điện thoại thật để lưu sau
 
         let html = `
-            <div class="card-header text-black text-center">
-                <h4>Thông Tin Khách Hàng</h4>
+        <div class="card-header text-black text-center">
+            <h4>Thông Tin Khách Hàng</h4>
+        </div>
+        <div class="card-body">
+            <div class="form-group mb-3">
+                <label for="email"><strong>Email:</strong></label>
+                <input type="text" class="form-control-plaintext" id="email" value="${emailValue}" readonly />
             </div>
-            <div class="card-body">
-                <div class="form-group mb-3">
-                    <label for="email"><strong>Email:</strong></label>
-                    <input type="text" class="form-control-plaintext" id="email" value="${emailValue}" readonly />
+            <div class="form-group mb-3">
+                <label for="hoVaTen"><strong>Họ Và Tên:</strong></label>
+                <input type="text" class="form-control" id="hoVaTen" value="${hoVaTenValue}" />
+            </div>
+            <div class="form-group mb-3">
+                <label><strong>Số Điện Thoại:</strong></label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="soDienThoai" value="${hiddenPhone}" readonly />
+                    <button id="changePhoneButton" class="btn btn-outline-secondary">Đổi</button>
                 </div>
-                <div class="form-group mb-3">
-                    <label for="hoVaTen"><strong>Họ Và Tên:</strong></label>
-                    <input type="text" class="form-control" id="hoVaTen" value="${hoVaTenValue}" />
+            </div>
+            <div class="form-group mb-4">
+                <label><strong>Giới Tính:</strong></label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gioiTinh" id="male" value="true" ${customer.gioiTinh ? 'checked' : ''}>
+                    <label class="form-check-label" for="male">Nam</label>
                 </div>
-                <div class="form-group mb-3">
-                    <label><strong>Số Điện Thoại:</strong></label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="soDienThoai" value="${hiddenPhone}" readonly />
-                        <button id="changePhoneButton" class="btn btn-outline-secondary">Đổi</button>
-                    </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gioiTinh" id="female" value="false" ${!customer.gioiTinh ? 'checked' : ''}>
+                    <label class="form-check-label" for="female">Nữ</label>
                 </div>
-                <div class="form-group mb-4">
-                    <label><strong>Giới Tính:</strong></label><br>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="gioiTinh" id="male" value="true" ${customer.gioiTinh ? 'checked' : ''}>
-                        <label class="form-check-label" for="male">Nam</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="gioiTinh" id="female" value="false" ${!customer.gioiTinh ? 'checked' : ''}>
-                        <label class="form-check-label" for="female">Nữ</label>
-                    </div>
-                </div>
-                <button id="saveCustomerButton" class="btn btn-success w-100">Save</button>
-            </div>`;
+            </div>
+            <button id="saveCustomerButton" class="btn btn-success w-100">Save</button>
+        </div>`;
         content.html(html); // Hiển thị nội dung vào DOM
 
         // Xóa nội dung mặc định 'Chưa có tên' khi nhấp vào ô nhập tên
@@ -461,49 +461,79 @@ $(document).ready(function () {
 
         // Gán sự kiện click cho nút Change Phone
         $('#changePhoneButton').click(function () {
-            Swal.fire({
-                title: 'Xác Nhận Số Điện Thoại',
-                input: 'text',
-                inputLabel: 'Nhập số điện thoại hiện tại của bạn',
-                inputPlaceholder: hiddenPhone,
-                showCancelButton: true,
-                confirmButtonText: 'Xác nhận',
-                cancelButtonText: 'Hủy',
-                inputValidator: (value) => {
-                    if (value !== actualPhone) {
-                        return 'Số điện thoại không khớp!';
+            if (!actualPhone) {
+                // Trường hợp chưa có số điện thoại
+                Swal.fire({
+                    title: 'Nhập Số Điện Thoại',
+                    input: 'text',
+                    inputLabel: 'Vui lòng nhập số điện thoại mới',
+                    showCancelButton: true,
+                    confirmButtonText: 'Lưu',
+                    cancelButtonText: 'Hủy',
+                    inputValidator: (newPhone) => {
+                        if (!newPhone) {
+                            return 'Vui lòng nhập số điện thoại!';
+                        } else if (!validateVietnamesePhone(newPhone)) {
+                            return 'Số điện thoại không đúng định dạng của Việt Nam!';
+                        }
+                        return null;
                     }
-                    return null;
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: 'Nhập Số Điện Thoại Mới',
-                        input: 'text',
-                        inputLabel: 'Vui lòng nhập số điện thoại mới',
-                        showCancelButton: true,
-                        confirmButtonText: 'Lưu',
-                        cancelButtonText: 'Hủy',
-                        inputValidator: (newPhone) => {
-                            if (!newPhone) {
-                                return 'Vui lòng nhập số điện thoại mới!';
-                            } else if (!validateVietnamesePhone(newPhone)) {
-                                return 'Số điện thoại không đúng định dạng của Việt Nam!';
-                            }
-                            return null;
-                        }
-                    }).then((newPhoneResult) => {
-                        if (newPhoneResult.isConfirmed) {
-                            // Cập nhật số điện thoại thật và hiển thị trong ô nhập
-                            actualPhone = newPhoneResult.value;
-                            $('#soDienThoai').val(actualPhone); // Cập nhật input thành số thực
+                }).then((newPhoneResult) => {
+                    if (newPhoneResult.isConfirmed) {
+                        // Cập nhật số điện thoại thật và hiển thị trong ô nhập
+                        actualPhone = newPhoneResult.value;
+                        $('#soDienThoai').val(actualPhone); // Cập nhật input thành số thực
 
-                            // Gọi hàm save để lưu số điện thoại mới ngay lập tức
-                            saveCustomerDetails();
+                        // Gọi hàm save để lưu số điện thoại mới ngay lập tức
+                        saveCustomerDetails();
+                    }
+                });
+            } else {
+                // Trường hợp đã có số điện thoại
+                Swal.fire({
+                    title: 'Xác Nhận Số Điện Thoại',
+                    input: 'text',
+                    inputLabel: 'Nhập số điện thoại hiện tại của bạn',
+                    inputPlaceholder: hiddenPhone,
+                    showCancelButton: true,
+                    confirmButtonText: 'Xác nhận',
+                    cancelButtonText: 'Hủy',
+                    inputValidator: (value) => {
+                        if (value !== actualPhone) {
+                            return 'Số điện thoại không khớp!';
                         }
-                    });
-                }
-            });
+                        return null;
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Nhập Số Điện Thoại Mới',
+                            input: 'text',
+                            inputLabel: 'Vui lòng nhập số điện thoại mới',
+                            showCancelButton: true,
+                            confirmButtonText: 'Lưu',
+                            cancelButtonText: 'Hủy',
+                            inputValidator: (newPhone) => {
+                                if (!newPhone) {
+                                    return 'Vui lòng nhập số điện thoại mới!';
+                                } else if (!validateVietnamesePhone(newPhone)) {
+                                    return 'Số điện thoại không đúng định dạng của Việt Nam!';
+                                }
+                                return null;
+                            }
+                        }).then((newPhoneResult) => {
+                            if (newPhoneResult.isConfirmed) {
+                                // Cập nhật số điện thoại thật và hiển thị trong ô nhập
+                                actualPhone = newPhoneResult.value;
+                                $('#soDienThoai').val(actualPhone); // Cập nhật input thành số thực
+
+                                // Gọi hàm save để lưu số điện thoại mới ngay lập tức
+                                saveCustomerDetails();
+                            }
+                        });
+                    }
+                });
+            }
         });
 
         function validateVietnamesePhone(phone) {
@@ -548,6 +578,7 @@ $(document).ready(function () {
             });
         }
     }
+
 
     async function showCustomerChangerPass() {
         try {
