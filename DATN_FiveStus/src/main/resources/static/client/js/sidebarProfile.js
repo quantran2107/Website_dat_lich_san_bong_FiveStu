@@ -398,98 +398,94 @@ $(document).ready(function () {
         }
 
         const hiddenPhone = customer.soDienThoai ? `********${customer.soDienThoai.slice(-2)}` : 'Không có số điện thoại';
-        const hoVaTenValue = customer.hoVaTen || 'Chưa có tên';
+        const hoVaTenValue = customer.hoVaTen || 'Chưa có tên'; // Hiển thị "Chưa có tên" nếu không có dữ liệu
         const emailValue = customer.email || 'Chưa có email';
         let actualPhone = customer.soDienThoai || ''; // Lưu tạm số điện thoại thật để lưu sau
 
+        let buttonLabel = actualPhone ? "Đổi" : "Thêm"; // Tùy chỉnh nút theo trạng thái số điện thoại
+
         let html = `
-        <div class="card-header text-black text-center">
-            <h4>Thông Tin Khách Hàng</h4>
+    <div class="card-header text-black text-center">
+        <h4>Thông Tin Khách Hàng</h4>
+    </div>
+    <div class="card-body">
+        <div class="form-group mb-3">
+            <label for="email"><strong>Email:</strong></label>
+            <input type="text" class="form-control-plaintext" id="email" value="${emailValue}" readonly />
         </div>
-        <div class="card-body">
-            <div class="form-group mb-3">
-                <label for="email"><strong>Email:</strong></label>
-                <input type="text" class="form-control-plaintext" id="email" value="${emailValue}" readonly />
+        <div class="form-group mb-3">
+            <label for="hoVaTen"><strong>Họ Và Tên:</strong></label>
+            <input type="text" class="form-control" id="hoVaTen" value="${hoVaTenValue}" />
+            <div class="invalid-feedback">Họ tên không được để trống</div>
+        </div>
+        <div class="form-group mb-3">
+            <label><strong>Số Điện Thoại:</strong></label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="soDienThoai" value="${hiddenPhone}" readonly />
+                <button id="changePhoneButton" class="btn btn-outline-secondary">${buttonLabel}</button>
             </div>
-            <div class="form-group mb-3">
-                <label for="hoVaTen"><strong>Họ Và Tên:</strong></label>
-                <input type="text" class="form-control" id="hoVaTen" value="${hoVaTenValue}" />
+        </div>
+        <div class="form-group mb-4">
+            <label><strong>Giới Tính:</strong></label><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gioiTinh" id="male" value="true" ${customer.gioiTinh ? 'checked' : ''}>
+                <label class="form-check-label" for="male">Nam</label>
             </div>
-            <div class="form-group mb-3">
-                <label><strong>Số Điện Thoại:</strong></label>
-                <div class="input-group">
-                    <input type="text" class="form-control" id="soDienThoai" value="${hiddenPhone}" readonly />
-                    <button id="changePhoneButton" class="btn btn-outline-secondary">Đổi</button>
-                </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gioiTinh" id="female" value="false" ${!customer.gioiTinh ? 'checked' : ''}>
+                <label class="form-check-label" for="female">Nữ</label>
             </div>
-            <div class="form-group mb-4">
-                <label><strong>Giới Tính:</strong></label><br>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="gioiTinh" id="male" value="true" ${customer.gioiTinh ? 'checked' : ''}>
-                    <label class="form-check-label" for="male">Nam</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="gioiTinh" id="female" value="false" ${!customer.gioiTinh ? 'checked' : ''}>
-                    <label class="form-check-label" for="female">Nữ</label>
-                </div>
-            </div>
-            <button id="saveCustomerButton" class="btn btn-success w-100">Save</button>
-        </div>`;
+        </div>
+        <button id="saveCustomerButton" class="btn btn-success w-100">Save</button>
+    </div>`;
         content.html(html); // Hiển thị nội dung vào DOM
 
-        // Xóa nội dung mặc định 'Chưa có tên' khi nhấp vào ô nhập tên
-        $('#hoVaTen').focus(function () {
+        // Đặt màu nhạt cho "Chưa có tên" nếu giá trị là mặc định
+        const hoVaTenInput = $('#hoVaTen');
+        if (hoVaTenInput.val() === 'Chưa có tên') {
+            hoVaTenInput.css('color', '#6c757d'); // Màu nhạt Bootstrap
+        }
+
+        // Khi người dùng nhấp vào input, xóa màu nhạt nếu là giá trị mặc định
+        hoVaTenInput.focus(function () {
             if ($(this).val() === 'Chưa có tên') {
-                $(this).val('');
+                $(this).val('').css('color', '#000'); // Đặt màu đen khi nhập
             }
         });
 
-        // Kiểm tra và lưu dữ liệu
+        // Khi người dùng rời khỏi input mà không nhập gì, đặt lại giá trị mặc định
+        hoVaTenInput.blur(function () {
+            if ($(this).val().trim() === '') {
+                $(this).val('Chưa có tên').css('color', '#6c757d');
+            }
+        });
         $('#saveCustomerButton').click(function () {
-            const hoVaTen = $('#hoVaTen').val();
-            if (!hoVaTen) {
-                Swal.fire({
-                    title: 'Lỗi!',
-                    text: 'Họ và tên không được để trống!',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
+            const hoVaTen = $('#hoVaTen').val().trim();
+
+            // Reset trạng thái is-invalid
+            $('#hoVaTen').removeClass('is-invalid');
+
+            if (hoVaTen === 'Chưa có tên' || hoVaTen === '') {
+                $('#hoVaTen').addClass('is-invalid');
+                $('.invalid-feedback').text('Họ tên không được để trống');
                 return;
             }
+
+            if (!validateName(hoVaTen)) {
+                $('#hoVaTen').addClass('is-invalid');
+                $('.invalid-feedback').text('Họ và tên không được chứa ký tự đặc biệt hoặc số');
+                return;
+            }
+
             saveCustomerDetails();
         });
-
-        // Gán sự kiện click cho nút Change Phone
+        // Gán sự kiện click cho nút Change/Thêm Phone
         $('#changePhoneButton').click(function () {
             if (!actualPhone) {
-                // Trường hợp chưa có số điện thoại
-                Swal.fire({
-                    title: 'Nhập Số Điện Thoại',
-                    input: 'text',
-                    inputLabel: 'Vui lòng nhập số điện thoại mới',
-                    showCancelButton: true,
-                    confirmButtonText: 'Lưu',
-                    cancelButtonText: 'Hủy',
-                    inputValidator: (newPhone) => {
-                        if (!newPhone) {
-                            return 'Vui lòng nhập số điện thoại!';
-                        } else if (!validateVietnamesePhone(newPhone)) {
-                            return 'Số điện thoại không đúng định dạng của Việt Nam!';
-                        }
-                        return null;
-                    }
-                }).then((newPhoneResult) => {
-                    if (newPhoneResult.isConfirmed) {
-                        // Cập nhật số điện thoại thật và hiển thị trong ô nhập
-                        actualPhone = newPhoneResult.value;
-                        $('#soDienThoai').val(actualPhone); // Cập nhật input thành số thực
-
-                        // Gọi hàm save để lưu số điện thoại mới ngay lập tức
-                        saveCustomerDetails();
-                    }
-                });
+                // Trường hợp thêm số mới
+                openPhoneInputModal("Thêm Số Điện Thoại", "Vui lòng nhập số điện thoại mới");
             } else {
-                // Trường hợp đã có số điện thoại
+                // Trường hợp đổi số điện thoại
                 Swal.fire({
                     title: 'Xác Nhận Số Điện Thoại',
                     input: 'text',
@@ -506,41 +502,89 @@ $(document).ready(function () {
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        Swal.fire({
-                            title: 'Nhập Số Điện Thoại Mới',
-                            input: 'text',
-                            inputLabel: 'Vui lòng nhập số điện thoại mới',
-                            showCancelButton: true,
-                            confirmButtonText: 'Lưu',
-                            cancelButtonText: 'Hủy',
-                            inputValidator: (newPhone) => {
-                                if (!newPhone) {
-                                    return 'Vui lòng nhập số điện thoại mới!';
-                                } else if (!validateVietnamesePhone(newPhone)) {
-                                    return 'Số điện thoại không đúng định dạng của Việt Nam!';
-                                }
-                                return null;
-                            }
-                        }).then((newPhoneResult) => {
-                            if (newPhoneResult.isConfirmed) {
-                                // Cập nhật số điện thoại thật và hiển thị trong ô nhập
-                                actualPhone = newPhoneResult.value;
-                                $('#soDienThoai').val(actualPhone); // Cập nhật input thành số thực
-
-                                // Gọi hàm save để lưu số điện thoại mới ngay lập tức
-                                saveCustomerDetails();
-                            }
-                        });
+                        openPhoneInputModal("Nhập Số Điện Thoại Mới", "Vui lòng nhập số điện thoại mới");
                     }
                 });
             }
         });
 
+        // Hàm mở modal nhập số điện thoại
+        function openPhoneInputModal(title, label) {
+            Swal.fire({
+                title: title,
+                input: 'text',
+                inputLabel: label,
+                showCancelButton: true,
+                confirmButtonText: 'Lưu',
+                cancelButtonText: 'Hủy',
+                inputValidator: (newPhone) => {
+                    if (!newPhone) {
+                        return 'Vui lòng nhập số điện thoại!';
+                    } else if (!validateVietnamesePhone(newPhone)) {
+                        return 'Số điện thoại không đúng định dạng của Việt Nam!';
+                    }
+                    return null;
+                }
+            }).then((newPhoneResult) => {
+                if (newPhoneResult.isConfirmed) {
+                    const newPhone = newPhoneResult.value;
+
+                    // Kiểm tra trùng số điện thoại
+                    checkDuplicatePhone(newPhone)
+                        .then((isDuplicate) => {
+                            if (isDuplicate) {
+                                Swal.fire({
+                                    title: 'Lỗi!',
+                                    text: 'Số điện thoại đã tồn tại. Vui lòng nhập số khác.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    // Gọi lại hàm mở form nhập số mới
+                                    openPhoneInputModal(title, label);
+                                });
+                            } else {
+                                actualPhone = newPhone;
+                                $('#soDienThoai').val(actualPhone);
+                                saveCustomerDetails();
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error checking phone:', error);
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: 'Có lỗi xảy ra khi kiểm tra số điện thoại.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                }
+            });
+        }
+
+        // Hàm kiểm tra trùng số điện thoại
+        function checkDuplicatePhone(phone) {
+            return fetch(`/quan-ly-khach-hang/kiem-tra-so-dien-thoai?soDienThoai=${encodeURIComponent(phone)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to check phone');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    return data; // Trả về giá trị boolean
+                });
+        }
+
+        // Hàm validate số điện thoại
         function validateVietnamesePhone(phone) {
             const phoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/;
             return phoneRegex.test(phone);
         }
-
+        function validateName(name) {
+            const nameRegex = /^[a-zA-ZÀ-Ỹà-ỹ\s]+$/;
+            return nameRegex.test(name);
+        }
+        // Hàm lưu thông tin khách hàng
         function saveCustomerDetails() {
             const email = $('#email').val();
             const hoVaTen = $('#hoVaTen').val();
@@ -549,7 +593,7 @@ $(document).ready(function () {
             const customerData = {
                 hoVaTen: hoVaTen,
                 gioiTinh: gioiTinh,
-                soDienThoai: actualPhone, // Sử dụng actualPhone thay vì giá trị input có thể chứa `*`
+                soDienThoai: actualPhone,
             };
 
             $.ajax({
@@ -564,7 +608,7 @@ $(document).ready(function () {
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then(() => {
-                        htmlDetaisCustomer(response); // Cập nhật giao diện với dữ liệu mới
+                        htmlDetaisCustomer(response);
                     });
                 },
                 error: function (xhr, status, error) {
@@ -578,7 +622,6 @@ $(document).ready(function () {
             });
         }
     }
-
 
     async function showCustomerChangerPass() {
         try {
@@ -683,11 +726,7 @@ $(document).ready(function () {
             function isPasswordValid(password) {
                 const minLength = 6;
                 const maxLength = 15;
-                const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,15}$/;
-
-                return password.length >= minLength &&
-                    password.length <= maxLength &&
-                    regex.test(password);
+                return password.length >= minLength && password.length <= maxLength;
             }
 
             // Reset thông báo lỗi
@@ -695,10 +734,9 @@ $(document).ready(function () {
             $('#newPassword').removeClass('is-invalid');
             $('#confirmPassword').removeClass('is-invalid');
 
-            // Kiểm tra mật khẩu mới
             if (!isPasswordValid(newPassword)) {
                 $('#newPassword').addClass('is-invalid');
-                $('#newPassword').after('<div class="invalid-feedback">Mật khẩu phải từ 6-15 ký tự, có ít nhất 1 ký tự thường, 1 ký tự viết hoa và 1 chữ số.</div>');
+                $('#newPassword').after('<div class="invalid-feedback">Mật khẩu phải từ 6-15 ký tự.</div>');
                 return;
             }
 
