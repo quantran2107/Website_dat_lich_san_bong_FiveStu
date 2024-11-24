@@ -459,7 +459,26 @@ $(document).ready(function () {
                 $(this).val('Chưa có tên').css('color', '#6c757d');
             }
         });
+        $('#saveCustomerButton').click(function () {
+            const hoVaTen = $('#hoVaTen').val().trim();
 
+            // Reset trạng thái is-invalid
+            $('#hoVaTen').removeClass('is-invalid');
+
+            if (hoVaTen === 'Chưa có tên' || hoVaTen === '') {
+                $('#hoVaTen').addClass('is-invalid');
+                $('.invalid-feedback').text('Họ tên không được để trống');
+                return;
+            }
+
+            if (!validateName(hoVaTen)) {
+                $('#hoVaTen').addClass('is-invalid');
+                $('.invalid-feedback').text('Họ và tên không được chứa ký tự đặc biệt hoặc số');
+                return;
+            }
+
+            saveCustomerDetails();
+        });
         // Gán sự kiện click cho nút Change/Thêm Phone
         $('#changePhoneButton').click(function () {
             if (!actualPhone) {
@@ -561,7 +580,10 @@ $(document).ready(function () {
             const phoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/;
             return phoneRegex.test(phone);
         }
-
+        function validateName(name) {
+            const nameRegex = /^[a-zA-ZÀ-Ỹà-ỹ\s]+$/;
+            return nameRegex.test(name);
+        }
         // Hàm lưu thông tin khách hàng
         function saveCustomerDetails() {
             const email = $('#email').val();
