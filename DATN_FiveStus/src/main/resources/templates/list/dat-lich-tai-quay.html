@@ -1453,57 +1453,38 @@
         }).showToast();
     }
 
-    async function checkIn(id) {
-        try {
-            // Tìm hàng tương ứng với ID trong bảng và lấy giá trị hoVaTenKhachHang và maHoaDonChiTiet
-            const row = document.querySelector(`tr[data-id='${id}']`);
-            if (!row) throw new Error('Không tìm thấy hàng với ID: ' + id);
+        async function checkIn(id) {
+            try {
+                // Tìm hàng tương ứng với ID trong bảng và lấy giá trị hoVaTenKhachHang và maHoaDonChiTiet
+                const row = document.querySelector(`tr[data-id='${id}']`);
+                if (!row) throw new Error('Không tìm thấy hàng với ID: ' + id);
 
-            const hoVaTenKhachHangCell = row.querySelector('.tenKH');
-            const maHoaDonChiTietCell = row.querySelector('.maHoaDonChiTiet'); // Lấy giá trị từ thuộc tính data
-            const hoVaTenKhachHang = hoVaTenKhachHangCell ? hoVaTenKhachHangCell.textContent.trim() : 'Khách hàng không xác định';
-            const maHoaDonChiTiet = maHoaDonChiTietCell ? maHoaDonChiTietCell.textContent.trim() : 'Mã HDCT không xác định';
-            // Cập nhật trạng thái của bản ghi
-            const response = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({trangThai: 'Đang hoạt động'})
-            });
+                // Cập nhật trạng thái của bản ghi
+                const response = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ trangThai: 'Đang hoạt động' })
+                });
 
-            if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
+                if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
 
-            // Lưu lại lịch sử check-in
-            const historyResponse = await fetch('http://localhost:8080/lich-su/checkinLichSu', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id: id,
-                    hoVaTenKhachHang: hoVaTenKhachHang,
-                    maHoaDonChiTiet: maHoaDonChiTiet,
-                    trangThai: 'Đang hoạt động'
-                })
-            });
+                // Làm mới bảng dữ liệu trong tab "Đang hoạt động"
+                await fetchData('Chờ nhận sân', 0, 'cho-nhan-table');
 
-            if (!historyResponse.ok) throw new Error(`Error ${historyResponse.status}: ${await historyResponse.text()}`);
+                // Tùy chọn: Hiển thị thông báo thành công
+                showSuccessToast('Check in thành công.');
+                // location.reload();
 
-            // Làm mới bảng dữ liệu trong tab "Đang hoạt động"
-            await fetchData('Chờ nhận sân', 0, 'cho-nhan-table');
-
-            // Tùy chọn: Hiển thị thông báo thành công
-            showSuccessToast('Cập nhật trạng thái và lưu lịch sử thành công.');
-            // location.reload();
-
-        } catch (error) {
-            console.error('Error during check-in:', error);
-            showErrorToast('Có lỗi xảy ra khi check-in.');
+            } catch (error) {
+                console.error('Error during check-in:', error);
+                showErrorToast('Có lỗi xảy ra khi check-in.');
+            }
         }
-    }
 
-    let currentPage = 0;
+
+        let currentPage = 0;
 
     // Hàm tìm kiếm theo số điện thoại
     async function searchByPhone() {
