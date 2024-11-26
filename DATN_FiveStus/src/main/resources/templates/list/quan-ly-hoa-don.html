@@ -93,7 +93,9 @@
         fetch(apiURL)
         .then(response => response.json())
         .then(data => {
-        renderTable(data, page, size);
+            totalPagesHoaDon = data.totalPages;
+            renderTable(data, page, size);
+            updatePagination(data);
         })
         .catch(error => console.error('Error fetching data:', error));
         }
@@ -141,27 +143,6 @@
                 tableBody.insertAdjacentHTML('beforeend', row);
             });
 
-        // Tạo các nút phân trang
-        const paginationElement = document.getElementById('pagination');
-        paginationElement.innerHTML = ''; // Xóa nút phân trang hiện tại
-
-        // Tạo nút Previous nếu có trang trước đó
-        if (data.number > 0) {
-        const previousButton = `<li class="page-item"><a class="page-link" href="#" onclick="fetchDataAndRenderTable(${data.number - 1}, ${data.size})">Previous</a></li>`;
-        paginationElement.insertAdjacentHTML('beforeend', previousButton);
-        }
-
-        // Tạo các nút trang
-        for (let i = 0; i < data.totalPages; i++) {
-        const pageButton = `<li class="page-item ${i === data.number ? 'active' : ''}"><a class="page-link" href="#" onclick="fetchDataAndRenderTable(${i}, ${data.size})">${i + 1}</a></li>`;
-        paginationElement.insertAdjacentHTML('beforeend', pageButton);
-        }
-
-        // Tạo nút Next nếu có trang tiếp theo
-        if (data.number < data.totalPages - 1) {
-        const nextButton = `<li class="page-item"><a class="page-link" href="#" onclick="fetchDataAndRenderTable(${data.number + 1}, ${data.size})">Next</a></li>`;
-        paginationElement.insertAdjacentHTML('beforeend', nextButton);
-        }
         }
 
         function searchInvoices(query) {
@@ -187,6 +168,52 @@
         return isStartOfDay
             ? `${formattedDate} 00:00:00`
             : `${formattedDate} 23:59:59`;
+    }
+
+    let currentPage = 0;
+    let totalPagesHoaDon = 1;
+
+    // Hàm cập nhật giao diện phân trang
+    function updatePagination(data) {
+        const totalPagesHoaDon = data.totalPages;
+        const currentPage = data.number;
+
+        // Cập nhật dropdown các trang
+        const pageDropdown = document.getElementById('pageDropdown');
+        pageDropdown.innerHTML = ''; // Xóa danh sách cũ
+
+        for (let i = 0; i < totalPagesHoaDon; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = `Trang ${i + 1}`;
+            if (currentPage === i) {
+                option.selected = true; // Chọn trang hiện tại
+            }
+            pageDropdown.appendChild(option);
+        }
+
+        // Cập nhật nút Lùi
+        const prevPageButton = document.getElementById('prevPageButton');
+        prevPageButton.style.display = currentPage === 0 ? 'none' : 'inline-block';
+
+        // Cập nhật nút Tiếp
+        const nextPageButton = document.getElementById('nextPageButton');
+        nextPageButton.style.display = currentPage === totalPagesHoaDon - 1 ? 'none' : 'inline-block';
+    }
+
+    // Hàm chuyển đổi trang khi bấm nút Lùi hoặc Tiếp
+    function changePage(page) {
+        if (page >= 0 && page < totalPagesHoaDon) {
+            currentPage = page; // Cập nhật currentPage ngay lập tức
+            fetchDataAndRenderTable(page, 10); // Gọi hàm fetch mới
+        }
+    }
+
+    // Hàm chuyển đổi trang khi chọn trong dropdown
+    function changePageFromDropdown(selectElement) {
+        const selectedPage = parseInt(selectElement.value, 10);
+        currentPage = selectedPage; // Cập nhật currentPage
+        fetchDataAndRenderTable(selectedPage, 10); // Gọi hàm fetch mới
     }
 
     function searchMinDate(minDate) {
@@ -705,13 +732,32 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                <div class="mt-3">
                                     <nav aria-label="Table Paging" class="mb-0 text-muted">
                                         <ul id="pagination" class="pagination justify-content-end mb-0">
-                                            <!-- Các nút phân trang sẽ được thêm bởi JavaScript -->
-        </ul>
-        </nav>
-        </div>
+                                            <!-- Nút Lùi -->
+                                            <li class="page-item" id="prevPageButton">
+                                                <a class="btn btn-success" href="#" onclick="changePage(currentPage - 1)" aria-label="Previous">
+                                                    <span aria-hidden="true">&lt;</span>
+                                                </a>
+                                            </li>
+
+                                            <!-- Dropdown chọn trang -->
+                                            <li class="page-item">
+                                                <select class="custom-select" id="pageDropdown" onchange="changePageFromDropdown(this)">
+                                                    <!-- Các tùy chọn trang sẽ được thêm động -->
+                                                </select>
+                                            </li>
+
+                                            <!-- Nút Tiếp -->
+                                            <li class="page-item" id="nextPageButton">
+                                                <a class="btn btn-success" href="#" onclick="changePage(currentPage + 1)" aria-label="Next">
+                                                    <span aria-hidden="true">&gt;</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
         </div>
         </div>
         </div>
