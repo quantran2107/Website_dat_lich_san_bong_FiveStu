@@ -53,13 +53,6 @@ public class DichVuSanBongDTO {
 
     private String imageDataNuocUong;
 
-//    @Temporal(TemporalType.TIMESTAMP)
-//    private LocalDateTime createdAt;
-//
-//    @Temporal(TemporalType.TIMESTAMP)
-//    private LocalDateTime updatedAt;
-//
-//    @Temporal(TemporalType.TIMESTAMP)
-//    private boolean deletedAt;
+
 }
 
