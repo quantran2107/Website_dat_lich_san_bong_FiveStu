@@ -90,4 +90,18 @@ public class SanBongRest {
         Boolean exists = sanBongService.existsByTenSanBongs(idLoaiSan,tenSanBong);
         return ResponseEntity.ok(exists);
     }
+
+    @GetMapping("/getListSanBongWithIdLoaiSan")
+    public ResponseEntity<List<SanBongDTO>> getListSanBongWithIdLoaiSan(@RequestParam("idLoaiSan") Integer idLoaiSan){
+        List<SanBongDTO> sanBongs = sanBongService.getListSanBongWithIdLoaiSan(idLoaiSan);
+        return ResponseEntity.ok(sanBongs);
+    }
+    @GetMapping("/checkTrungSanBong")
+    public ResponseEntity<Boolean> checkTrungSanBong(@RequestParam Integer idLoaiSan, @RequestParam String tenSanBong) {
+        boolean isExist = sanBongService.checkTrungSanBong(idLoaiSan, tenSanBong);
+        return ResponseEntity.ok(isExist); // Trả về true nếu trùng, false nếu không trùng
+    }
+
+
+
 }

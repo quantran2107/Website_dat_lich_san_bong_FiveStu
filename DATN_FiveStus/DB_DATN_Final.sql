@@ -2338,13 +2338,13 @@ VALUES
   ('Loai tham so 5', 1, NOW(), NOW(), 0);
 
 
-INSERT INTO giao_ca (id_nhan_vien, tien_mat_ca_truoc, tien_mat_trong_ca, tien_ck_trong_ca, tong_tien_trong_ca, tong_tien_mat_thuc_te, tong_tien_phat_sinh, ghi_chu)
+INSERT INTO giao_ca (id_nhan_vien, tien_mat_ca_truoc, tien_mat_trong_ca, tien_ck_trong_ca, tong_tien_trong_ca, tong_tien_mat_thuc_te, tong_tien_phat_sinh, ghi_chu,trang_thai)
 VALUES 
-    (1, 1000000, 500000, 200000, 1700000, 1700000, 50000, 'Giao ca buổi sáng'),
-    (2, 1500000, 600000, 300000, 2400000, 2400000, 60000, 'Giao ca buổi chiều'),
-    (3, 1200000, 700000, 400000, 2300000, 2300000, 40000, 'Giao ca tối'),
-    (4, 1300000, 800000, 350000, 2450000, 2450000, 70000, 'Giao ca buổi sáng ngày 2'),
-    (5, 1100000, 400000, 250000, 1750000, 1750000, 30000, 'Giao ca buổi chiều ngày 2');
+    (1, 1000000, 500000, 200000, 1700000, 1700000, 50000, 'Giao ca buổi sáng',0),
+    (2, 1500000, 600000, 300000, 2400000, 2400000, 60000, 'Giao ca buổi chiều',0),
+    (3, 1200000, 700000, 400000, 2300000, 2300000, 40000, 'Giao ca tối',0),
+    (4, 1300000, 800000, 350000, 2450000, 2450000, 70000, 'Giao ca buổi sáng ngày 2',0),
+    (5, 1100000, 400000, 250000, 1750000, 1750000, 30000, 'Giao ca buổi chiều ngày 2',0);
 
 INSERT INTO lich_su_checkin (id_hoa_don_chi_tiet, thoi_gian_checkin, mo_ta)
 VALUES
@@ -2436,4 +2436,4 @@ VALUES
 (1,1),(1,4),(2,1),(2,4),(3,1),(3,4),(4,1),(4,4),(5,1),(5,4),(6,1),(7,1),(8,1),(9,1),(10,1);
 
 select * From user_roles;	
-select * From user
+select * From nhan_vien

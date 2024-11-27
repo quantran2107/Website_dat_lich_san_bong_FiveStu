@@ -152,5 +152,19 @@ private LoaiSanRepository loaiSanRepository;
         return sanBongRepository.existsByTenSanBongs(idLoaiSan, tenSanBong);
     }
 
+    @Override
+    public List<SanBongDTO> getListSanBongWithIdLoaiSan(Integer idLoaiSan) {
+        return  sanBongRepository.getListSanBongWithIdLoaiSan(idLoaiSan).stream().map((sanBong) ->modelMapper
+                .map(sanBong,SanBongDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean checkTrungSanBong(Integer idLoaiSan, String tenSanBong) {
+        // Kiểm tra nếu tên sân bóng đã tồn tại trong cùng loại sân
+        SanBong sanBong = sanBongRepository.checkTrungSanBongWithLoaiSanAndName(idLoaiSan, tenSanBong);
+        return sanBong != null; // Nếu có đối tượng sanBong, trả về true (trùng tên), nếu không trả về false
+    }
+
+
 
 }

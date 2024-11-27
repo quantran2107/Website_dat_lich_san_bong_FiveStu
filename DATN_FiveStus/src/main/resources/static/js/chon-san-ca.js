@@ -1027,19 +1027,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Điền thông tin khách hàng vào modal đặt lịch
             document.getElementById('hoVaTen').value = selectedCustomer.name;
-            document.getElementById('soDienThoai').value = selectedCustomer.phone;
+            if(selectedCustomer.phone==null){
+                document.getElementById('soDienThoai').value = "Không có";
+            }else{
+                document.getElementById('soDienThoai').value = selectedCustomer.phone;
+            }
 
             // Đóng modal chọn khách hàng
             $('#selectCustomerModal').modal('hide');
         }
     });
 
-    flatpickr("#ngayDenSan", {});
-    flatpickr("#ngayBatDau", {});
-    flatpickr("#ngayKetThuc", {});
+    flatpickr("#ngayDenSan", {
+        minDate: "today"
+    });
+    flatpickr("#ngayBatDau", {
+        minDate: "today"
+    });
+    flatpickr("#ngayKetThuc", {
+        minDate: "today"
+    });
 });
 
-document.querySelector('#datLich').addEventListener('click', function () {
+document.querySelector('#datLich').addEventListener('click', async function () {
     console.log("Button Đặt Lịch đã được nhấn."); // Để xác nhận rằng hàm đã được gọi
     // Lấy danh sách các dòng sân ca từ bảng
     const rows = document.querySelectorAll("#sanCaTable tbody tr");
@@ -1056,7 +1066,6 @@ document.querySelector('#datLich').addEventListener('click', function () {
         }
     });
 
-
     if (hasBookedSlot) {
         showWarningToast('Có sân đã được đặt, vui lòng chọn sân khác.');
         return;
@@ -1072,66 +1081,76 @@ document.querySelector('#datLich').addEventListener('click', function () {
         return;
     }
 
-    // Gọi API để tìm khách hàng bằng số điện thoại
-    fetch('http://localhost:8080/khach-hang/tim-kiem-kh?soDienThoai=' + soDienThoai)
-        .then(response => {
-            if (!response.ok) {
-                // Nếu không tìm thấy khách hàng, trả về null để xử lý tạo khách hàng mới
-                return null;
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Nếu không tìm thấy khách hàng, gọi API để thêm mới
-            if (!data) {
-                return fetch('http://localhost:8080/khach-hang/save2', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        hoVaTen: hoVaTen, // Thay thế bằng giá trị từ form nếu có
-                        soDienThoai: soDienThoai
-                    })
-                }).then(response => response.json());
-            }
-            return data; // Trả về data của khách hàng nếu tìm thấy
-        })
-        .then(data => {
-            var idKhachHang = data.id;
+    try {
+        // Gọi API để lấy idNhanVien
+        const responseNhanVien = await fetch('http://localhost:8080/hoa-don/get-nhan-vien-trong-ca');
+        if (!responseNhanVien.ok) {
+            throw new Error("Không thể lấy thông tin nhân viên");
+        }
+        const nhanVienData = await responseNhanVien.json();
+        const idNhanVien = nhanVienData.id;
 
-            var tongTienElement = document.getElementById("tongTien");
-            var tongTienText = tongTienElement.textContent || tongTienElement.innerText;
+        // Gọi API để tìm khách hàng bằng số điện thoại
+        const responseKhachHang = await fetch('http://localhost:8080/khach-hang/tim-kiem-kh?soDienThoai=' + soDienThoai);
+        const khachHangData = await responseKhachHang.json();
 
-            var tongTienSan = parseInt(tongTienText.replace(/\D/g, ''), 10); // Chỉ lấy số
-
-            var payload = {
-                idKhachHang: idKhachHang,
-                tongTienSan: tongTienSan
-            };
-
-            // Gọi API để tạo hóa đơn
-            return fetch('http://localhost:8080/hoa-don/save', {
+        // Nếu không tìm thấy khách hàng, gọi API để thêm mới
+        let idKhachHang;
+        if (!khachHangData) {
+            const responseSaveKhachHang = await fetch('http://localhost:8080/khach-hang/save2', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    hoVaTen: hoVaTen,
+                    soDienThoai: soDienThoai
+                })
             });
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Lấy idHoaDon từ kết quả trả về của API tạo hóa đơn
-            var idHoaDon = data.id;
-            console.log('Thêm hóa đơn thành công:', data);
+            const savedKhachHang = await responseSaveKhachHang.json();
+            idKhachHang = savedKhachHang.id;
+        } else {
+            idKhachHang = khachHangData.id;
+        }
 
-            // Gọi hàm thêm hóa đơn chi tiết sau khi thêm hóa đơn thành công
-            themHoaDonChiTiet(idHoaDon);
-        })
-        .catch(error => {
-            console.error('Lỗi khi thêm hóa đơn:', error);
-            showErrorToast('Lỗi khi thêm hóa đơn: ' + error.message);
+        // Lấy giá trị từ các trường input
+        var tongTienElement = document.getElementById("tongTien");
+        var tongTienText = tongTienElement.textContent || tongTienElement.innerText;
+
+        var tongTienCocElement = document.getElementById("tienCoc");
+        var tongTienCocText = tongTienCocElement.textContent || tongTienElement.innerText;
+
+        var tongTienSan = parseInt(tongTienText.replace(/\D/g, ''), 10); // Chỉ lấy số
+        var tongTienCoc = parseInt(tongTienCocText.replace(/\D/g, ''), 10); // Chỉ lấy số
+
+        var payload = {
+            idKhachHang: idKhachHang,
+            tongTienSan: tongTienSan,
+            tienCoc: tongTienCoc,
+            idNhanVien: idNhanVien // Lấy idNhanVien từ API
+        };
+
+        // Gọi API để tạo hóa đơn
+        const responseHoaDon = await fetch('http://localhost:8080/hoa-don/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
         });
+
+        const hoaDonData = await responseHoaDon.json();
+        var idHoaDon = hoaDonData.id;
+
+        console.log('Thêm hóa đơn thành công:', hoaDonData);
+
+        // Gọi hàm thêm hóa đơn chi tiết sau khi thêm hóa đơn thành công
+        await themHoaDonChiTiet(idHoaDon);
+
+    } catch (error) {
+        console.error('Lỗi khi thêm hóa đơn:', error);
+        showErrorToast('Lỗi khi thêm hóa đơn: ' + error.message);
+    }
 });
 
 async function themHoaDonChiTiet(idHoaDon) {

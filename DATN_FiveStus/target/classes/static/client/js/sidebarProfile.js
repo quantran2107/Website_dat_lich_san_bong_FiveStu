@@ -19,11 +19,6 @@ $(document).ready(function () {
         showCustomerAddress();
     });
 
-    $("#historyBill").click(function (event) {
-        event.preventDefault();
-        showCustomerCalendar();
-    });
-
     async function loadCustomer() {
         const response = await fetch('http://localhost:8080/customer/get-customer');
         if (!response.ok) {
@@ -31,6 +26,7 @@ $(document).ready(function () {
         }
         return await response.json();
     }
+
     async function loadCustomerAddressByEmail(email) {
         const response = await fetch(`http://localhost:8080/dia-chi/email/${email}`);
         if (!response.ok) {
@@ -63,89 +59,163 @@ $(document).ready(function () {
 
         // Tạo phần tiêu đề và nút thêm (chỉ một lần)
         const headerHtml = `
-    <div class="card-header d-flex justify-content-between align-items-center text-black">
-        <h4 class="mb-0">Địa chỉ của tôi</h4>
-        <button class="btn btn-primary add-address" style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                 + Thêm địa chỉ mới
-        </button>
-    </div>
-    <hr>
+        <div class="card-header d-flex justify-content-between align-items-center text-black">
+            <h4 class="mb-0">Địa chỉ của tôi</h4>
+            <button class="btn btn-primary add-address" style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                     + Thêm địa chỉ mới
+            </button>
+        </div>
+        <hr>
     `;
         addressContainer.append(headerHtml); // Giữ tiêu đề ở trên cùng
 
         // Kiểm tra nếu không có địa chỉ nào
         if (!addresses || addresses.length === 0) {
             addressContainer.append('<p class="text-center text-muted">Chưa có địa chỉ nào được lưu.</p>');
-            return;
+        } else {
+            // Đảo ngược mảng địa chỉ để hiển thị theo thứ tự mong muốn
+            const reversedAddresses = addresses.reverse();
+
+            // Duyệt qua danh sách địa chỉ đã đảo ngược và tạo phần hiển thị cho mỗi địa chỉ
+            reversedAddresses.forEach(address => {
+                const addressHtml = `
+            <div class="list-group-item mb-3" style="border: 1px solid #ddd; border-radius: 5px; padding: 10px;">
+                <div class="mb-2">
+                    <h5 class="mb-1">${address.diaChiCuThe}</h5>
+                    <p class="mb-1">${address.phuongXa}, ${address.quanHuyen}, ${address.thanhPho}</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="#" class="btn-link update-address" style="color: #007bff; text-decoration: none;" data-id="${address.id}" data-email="${email}">Cập nhật</a>
+                    <span style="color: #888;">|</span>
+                    <a href="#" class="btn-link delete-address text-danger" style="color: #dc3545; text-decoration: none;">Xóa</a>
+                </div>
+            </div>
+            `;
+                addressContainer.append(addressHtml); // Thêm từng địa chỉ vào container
+            });
         }
 
-        // Đảo ngược mảng địa chỉ để hiển thị theo thứ tự mong muốn
-        const reversedAddresses = addresses.reverse();
-
-        // Duyệt qua danh sách địa chỉ đã đảo ngược và tạo phần hiển thị cho mỗi địa chỉ
-        reversedAddresses.forEach(address => {
-            const addressHtml = `
-        <div class="list-group-item mb-3" style="border: 1px solid #ddd; border-radius: 5px; padding: 10px;">
-            <div class="mb-2">
-                <h5 class="mb-1">${address.diaChiCuThe}</h5>
-                <p class="mb-1">${address.phuongXa}, ${address.quanHuyen}, ${address.thanhPho}</p>
-            </div>
-            <div class="d-flex gap-2">
-                <a href="#" class="btn-link update-address" style="color: #007bff; text-decoration: none;" data-id="${address.id}" data-email="${email}">Cập nhật</a>
-                <span style="color: #888;">|</span>
-                <a href="#" class="btn-link delete-address text-danger" style="color: #dc3545; text-decoration: none;">Xóa</a>
-            </div>
-        </div>
-        `;
-            addressContainer.append(addressHtml); // Thêm từng địa chỉ vào container
-        });
-
         // Gán sự kiện cho nút thêm địa chỉ
-        $('.add-address').off('click').on('click', function(event) {
+        $('.add-address').off('click').on('click', function (event) {
             event.preventDefault();
             addAddress(email); // Truyền email vào đây
         });
 
         // Gán sự kiện cho các nút cập nhật và xóa
-        $('.update-address').click(function(event) {
+        $('.update-address').click(function (event) {
             event.preventDefault();
             const addressId = $(this).data('id');
             const email = $(this).data('email');
             updateAddress(addressId, email);
         });
 
-        $('.delete-address').click(function(event) {
+        $('.delete-address').click(function (event) {
             event.preventDefault();
             const addressId = $(this).closest('.list-group-item').find('.update-address').data('id');
             const email = $(this).closest('.list-group-item').find('.update-address').data('email');
             deleteAddress(addressId, email); // Gọi hàm xóa
         });
     }
+
     async function addAddress(email) {
-        document.getElementById("specificAddress").value = '';
-        document.getElementById("city").value = '';
-        document.getElementById("district").value = '';
-        document.getElementById("ward").value = '';
+        // Reset các trường input
+        const specificAddressInput = document.getElementById("specificAddress");
+        const ghiChuInput = document.getElementById("ghiChu");
+        const citySelect = document.getElementById("city");
+        const districtSelect = document.getElementById("district");
+        const wardSelect = document.getElementById("ward");
+
+        specificAddressInput.value = '';
+        ghiChuInput.value = '';
+
+        // Reset và thêm các giá trị mặc định vào các select
+        citySelect.value = '';
+        districtSelect.value = '';
+        wardSelect.value = '';
+
+        if (!citySelect.querySelector("option[value='']")) {
+            const defaultOptionCity = document.createElement('option');
+            defaultOptionCity.value = '';
+            defaultOptionCity.textContent = 'Chọn Tỉnh/Thành';
+            defaultOptionCity.disabled = true;
+            defaultOptionCity.selected = true;
+            citySelect.appendChild(defaultOptionCity);
+        }
+
+        if (!districtSelect.querySelector("option[value='']")) {
+            const defaultOptionDistrict = document.createElement('option');
+            defaultOptionDistrict.value = '';
+            defaultOptionDistrict.textContent = 'Chọn Quận/Huyện';
+            defaultOptionDistrict.disabled = true;
+            defaultOptionDistrict.selected = true;
+            districtSelect.appendChild(defaultOptionDistrict);
+        }
+
+        if (!wardSelect.querySelector("option[value='']")) {
+            const defaultOptionWard = document.createElement('option');
+            defaultOptionWard.value = '';
+            defaultOptionWard.textContent = 'Chọn Phường/Xã';
+            defaultOptionWard.disabled = true;
+            defaultOptionWard.selected = true;
+            wardSelect.appendChild(defaultOptionWard);
+        }
+
+        // Hiển thị modal
         $('#addressModal').modal('show');
 
-        // Khi người dùng nhấn nút "Lưu địa chỉ" trong modal
-        $('#saveAddressButton').off('click').on('click', async function() {
-            const specificAddress = document.getElementById("specificAddress").value;
-            const city = document.getElementById("city").value;
-            const district = document.getElementById("district").value;
-            const ward = document.getElementById("ward").value;
+        // Xử lý sự kiện nút lưu
+        $('#saveAddressButton').off('click').on('click', async function () {
+            const specificAddress = specificAddressInput.value;
+            const ghiChu = ghiChuInput.value;
+            const city = citySelect.value;
+            const district = districtSelect.value;
+            const ward = wardSelect.value;
+
+            // Reset trạng thái lỗi
+            const inputsToCheck = [specificAddressInput, citySelect, districtSelect, wardSelect];
+            inputsToCheck.forEach(input => {
+                input.classList.remove('is-invalid');
+                const invalidFeedback = input.nextElementSibling;
+                if (invalidFeedback && invalidFeedback.classList.contains('invalid-feedback')) {
+                    invalidFeedback.remove();
+                }
+            });
 
             // Kiểm tra tính đầy đủ của thông tin địa chỉ
-            if (!specificAddress || !city || !district || !ward) {
-                alert("Vui lòng điền đầy đủ thông tin địa chỉ.");
-                return; // Dừng lại nếu thông tin không đầy đủ
+            let hasError = false;
+
+            if (!specificAddress) {
+                specificAddressInput.classList.add('is-invalid');
+                specificAddressInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng nhập địa chỉ cụ thể.</div>');
+                hasError = true;
             }
+
+            if (!city) {
+                citySelect.classList.add('is-invalid');
+                citySelect.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng chọn Tỉnh/Thành.</div>');
+                hasError = true;
+            }
+
+            if (!district) {
+                districtSelect.classList.add('is-invalid');
+                districtSelect.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng chọn Quận/Huyện.</div>');
+                hasError = true;
+            }
+
+            if (!ward) {
+                wardSelect.classList.add('is-invalid');
+                wardSelect.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng chọn Phường/Xã.</div>');
+                hasError = true;
+            }
+
+            if (hasError) return; // Dừng lại nếu có lỗi
 
             const newAddressData = {
                 diaChiCuThe: specificAddress,
                 thanhPho: city,
                 quanHuyen: district,
                 phuongXa: ward,
+                ghiChu: ghiChu, // Cho phép ghi chú trống
             };
 
             try {
@@ -185,16 +255,16 @@ $(document).ready(function () {
 
             // Điền dữ liệu vào trường địa chỉ cụ thể
             document.getElementById("specificAddress").value = address.diaChiCuThe;
+            document.getElementById("ghiChu").value = address.ghiChu;
 
             // Cập nhật select cho thành phố
             const citySelect = document.getElementById("city");
-            citySelect.value = address.thanhPho;
+            citySelect.value = address.thanhPho || ''; // Nếu có giá trị thì gán vào
             if (!Array.from(citySelect.options).some(option => option.value === address.thanhPho)) {
                 const optCity = document.createElement('option');
                 optCity.value = address.thanhPho;
                 optCity.text = address.thanhPho;
                 citySelect.appendChild(optCity);
-                citySelect.value = address.thanhPho; // Gán lại giá trị
             }
 
             // Cập nhật select cho quận/huyện
@@ -206,18 +276,10 @@ $(document).ready(function () {
                     const opt = document.createElement('option');
                     opt.value = district.Name;
                     opt.text = district.Name;
-                    opt.setAttribute('data-id', district.Id);
                     districtSelect.appendChild(opt);
                 });
-                districtSelect.value = address.quanHuyen;
             }
-            if (!Array.from(districtSelect.options).some(option => option.value === address.quanHuyen)) {
-                const optDistrict = document.createElement('option');
-                optDistrict.value = address.quanHuyen;
-                optDistrict.text = address.quanHuyen;
-                districtSelect.appendChild(optDistrict);
-                districtSelect.value = address.quanHuyen; // Gán lại giá trị
-            }
+            districtSelect.value = address.quanHuyen || ''; // Đặt giá trị quận/huyện
 
             // Cập nhật select cho phường/xã
             const wardSelect = document.getElementById("ward");
@@ -230,38 +292,30 @@ $(document).ready(function () {
                     opt.text = ward.Name;
                     wardSelect.appendChild(opt);
                 });
-                wardSelect.value = address.phuongXa;
             }
-            if (!Array.from(wardSelect.options).some(option => option.value === address.phuongXa)) {
-                const optWard = document.createElement('option');
-                optWard.value = address.phuongXa;
-                optWard.text = address.phuongXa;
-                wardSelect.appendChild(optWard);
-                wardSelect.value = address.phuongXa; // Gán lại giá trị
-            }
+            wardSelect.value = address.phuongXa || ''; // Đặt giá trị phường/xã
 
             $('#addressModal').modal('show');
+
+            // Khi người dùng nhấn nút "Cập nhật địa chỉ"
             document.getElementById("saveAddressButton").onclick = async function () {
                 const updatedAddressData = {
                     diaChiCuThe: document.getElementById("specificAddress").value,
+                    ghiChu: document.getElementById("ghiChu").value,
                     thanhPho: citySelect.value,
                     quanHuyen: districtSelect.value,
                     phuongXa: wardSelect.value,
                 };
 
                 try {
-                    // Gọi API để cập nhật địa chỉ
                     await axios.put(`/dia-chi/update/${email}/${addressId}`, updatedAddressData);
                     Swal.fire({
                         icon: 'success',
                         title: 'Thành công',
                         text: 'Địa chỉ đã được cập nhật thành công!',
                     });
-
-                    // Đóng modal
                     $('#addressModal').modal('hide');
                     showCustomerAddress();
-
                 } catch (updateError) {
                     console.error("Lỗi khi cập nhật địa chỉ:", updateError);
                     alert("Không thể cập nhật địa chỉ. Vui lòng thử lại.");
@@ -272,6 +326,7 @@ $(document).ready(function () {
             alert("Không thể tải dữ liệu địa chỉ để cập nhật.");
         }
     }
+
     function deleteAddress(id, email) {
         Swal.fire({
             title: 'Xác nhận',
@@ -342,10 +397,12 @@ $(document).ready(function () {
             return;
         }
 
-        const hiddenPhone = customer.soDienThoai ? `********${customer.soDienThoai.slice(-2)}` : 'Chưa có thông tin';
-        const hoVaTenValue = customer.hoVaTen || 'Chưa có tên';
+        const hiddenPhone = customer.soDienThoai ? `********${customer.soDienThoai.slice(-2)}` : 'Không có số điện thoại';
+        const hoVaTenValue = customer.hoVaTen || 'Chưa có tên'; // Hiển thị "Chưa có tên" nếu không có dữ liệu
         const emailValue = customer.email || 'Chưa có email';
-        let actualPhone = customer.soDienThoai; // Lưu tạm số điện thoại thật để lưu sau
+        let actualPhone = customer.soDienThoai || ''; // Lưu tạm số điện thoại thật để lưu sau
+
+        let buttonLabel = actualPhone ? "Đổi" : "Thêm"; // Tùy chỉnh nút theo trạng thái số điện thoại
 
         let html = `
     <div class="card-header text-black text-center">
@@ -359,12 +416,13 @@ $(document).ready(function () {
         <div class="form-group mb-3">
             <label for="hoVaTen"><strong>Họ Và Tên:</strong></label>
             <input type="text" class="form-control" id="hoVaTen" value="${hoVaTenValue}" />
+            <div class="invalid-feedback">Họ tên không được để trống</div>
         </div>
         <div class="form-group mb-3">
             <label><strong>Số Điện Thoại:</strong></label>
             <div class="input-group">
                 <input type="text" class="form-control" id="soDienThoai" value="${hiddenPhone}" readonly />
-                <button id="changePhoneButton" class="btn btn-outline-secondary">Đổi</button>
+                <button id="changePhoneButton" class="btn btn-outline-secondary">${buttonLabel}</button>
             </div>
         </div>
         <div class="form-group mb-4">
@@ -380,82 +438,153 @@ $(document).ready(function () {
         </div>
         <button id="saveCustomerButton" class="btn btn-success w-100">Save</button>
     </div>`;
-
         content.html(html); // Hiển thị nội dung vào DOM
 
-        // Xóa nội dung mặc định 'Chưa có tên' khi nhấp vào ô nhập tên
-        $('#hoVaTen').focus(function () {
+        // Đặt màu nhạt cho "Chưa có tên" nếu giá trị là mặc định
+        const hoVaTenInput = $('#hoVaTen');
+        if (hoVaTenInput.val() === 'Chưa có tên') {
+            hoVaTenInput.css('color', '#6c757d'); // Màu nhạt Bootstrap
+        }
+
+        // Khi người dùng nhấp vào input, xóa màu nhạt nếu là giá trị mặc định
+        hoVaTenInput.focus(function () {
             if ($(this).val() === 'Chưa có tên') {
-                $(this).val('');
+                $(this).val('').css('color', '#000'); // Đặt màu đen khi nhập
             }
         });
 
-        // Kiểm tra và lưu dữ liệu
-        $('#saveCustomerButton').click(function() {
-            const hoVaTen = $('#hoVaTen').val();
-            if (!hoVaTen) {
-                Swal.fire({
-                    title: 'Lỗi!',
-                    text: 'Họ và tên không được để trống!',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
+        // Khi người dùng rời khỏi input mà không nhập gì, đặt lại giá trị mặc định
+        hoVaTenInput.blur(function () {
+            if ($(this).val().trim() === '') {
+                $(this).val('Chưa có tên').css('color', '#6c757d');
+            }
+        });
+        $('#saveCustomerButton').click(function () {
+            const hoVaTen = $('#hoVaTen').val().trim();
+
+            // Reset trạng thái is-invalid
+            $('#hoVaTen').removeClass('is-invalid');
+
+            if (hoVaTen === 'Chưa có tên' || hoVaTen === '') {
+                $('#hoVaTen').addClass('is-invalid');
+                $('.invalid-feedback').text('Họ tên không được để trống');
                 return;
             }
+
+            if (!validateName(hoVaTen)) {
+                $('#hoVaTen').addClass('is-invalid');
+                $('.invalid-feedback').text('Họ và tên không được chứa ký tự đặc biệt hoặc số');
+                return;
+            }
+
             saveCustomerDetails();
         });
+        // Gán sự kiện click cho nút Change/Thêm Phone
+        $('#changePhoneButton').click(function () {
+            if (!actualPhone) {
+                // Trường hợp thêm số mới
+                openPhoneInputModal("Thêm Số Điện Thoại", "Vui lòng nhập số điện thoại mới");
+            } else {
+                // Trường hợp đổi số điện thoại
+                Swal.fire({
+                    title: 'Xác Nhận Số Điện Thoại',
+                    input: 'text',
+                    inputLabel: 'Nhập số điện thoại hiện tại của bạn',
+                    inputPlaceholder: hiddenPhone,
+                    showCancelButton: true,
+                    confirmButtonText: 'Xác nhận',
+                    cancelButtonText: 'Hủy',
+                    inputValidator: (value) => {
+                        if (value !== actualPhone) {
+                            return 'Số điện thoại không khớp!';
+                        }
+                        return null;
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        openPhoneInputModal("Nhập Số Điện Thoại Mới", "Vui lòng nhập số điện thoại mới");
+                    }
+                });
+            }
+        });
 
-        // Gán sự kiện click cho nút Change Phone
-        $('#changePhoneButton').click(function() {
+        // Hàm mở modal nhập số điện thoại
+        function openPhoneInputModal(title, label) {
             Swal.fire({
-                title: 'Xác Nhận Số Điện Thoại',
+                title: title,
                 input: 'text',
-                inputLabel: 'Nhập số điện thoại hiện tại của bạn',
-                inputPlaceholder: hiddenPhone,
+                inputLabel: label,
                 showCancelButton: true,
-                confirmButtonText: 'Xác nhận',
+                confirmButtonText: 'Lưu',
                 cancelButtonText: 'Hủy',
-                inputValidator: (value) => {
-                    if (value !== actualPhone) {
-                        return 'Số điện thoại không khớp!';
+                inputValidator: (newPhone) => {
+                    if (!newPhone) {
+                        return 'Vui lòng nhập số điện thoại!';
+                    } else if (!validateVietnamesePhone(newPhone)) {
+                        return 'Số điện thoại không đúng định dạng của Việt Nam!';
                     }
                     return null;
                 }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: 'Nhập Số Điện Thoại Mới',
-                        input: 'text',
-                        inputLabel: 'Vui lòng nhập số điện thoại mới',
-                        showCancelButton: true,
-                        confirmButtonText: 'Lưu',
-                        cancelButtonText: 'Hủy',
-                        inputValidator: (newPhone) => {
-                            if (!newPhone) {
-                                return 'Vui lòng nhập số điện thoại mới!';
-                            } else if (!validateVietnamesePhone(newPhone)) {
-                                return 'Số điện thoại không đúng định dạng của Việt Nam!';
-                            }
-                            return null;
-                        }
-                    }).then((newPhoneResult) => {
-                        if (newPhoneResult.isConfirmed) {
-                            // Cập nhật số điện thoại thật và hiển thị trong ô nhập
-                            actualPhone = newPhoneResult.value;
-                            $('#soDienThoai').val(actualPhone); // Cập nhật input thành số thực
+            }).then((newPhoneResult) => {
+                if (newPhoneResult.isConfirmed) {
+                    const newPhone = newPhoneResult.value;
 
-                            // Gọi hàm save để lưu số điện thoại mới ngay lập tức
-                            saveCustomerDetails();
-                        }
-                    });
+                    // Kiểm tra trùng số điện thoại
+                    checkDuplicatePhone(newPhone)
+                        .then((isDuplicate) => {
+                            if (isDuplicate) {
+                                Swal.fire({
+                                    title: 'Lỗi!',
+                                    text: 'Số điện thoại đã tồn tại. Vui lòng nhập số khác.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    // Gọi lại hàm mở form nhập số mới
+                                    openPhoneInputModal(title, label);
+                                });
+                            } else {
+                                actualPhone = newPhone;
+                                $('#soDienThoai').val(actualPhone);
+                                saveCustomerDetails();
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error checking phone:', error);
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: 'Có lỗi xảy ra khi kiểm tra số điện thoại.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        });
                 }
             });
-        });
+        }
+
+        // Hàm kiểm tra trùng số điện thoại
+        function checkDuplicatePhone(phone) {
+            return fetch(`/quan-ly-khach-hang/kiem-tra-so-dien-thoai?soDienThoai=${encodeURIComponent(phone)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to check phone');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    return data; // Trả về giá trị boolean
+                });
+        }
+
+        // Hàm validate số điện thoại
         function validateVietnamesePhone(phone) {
             const phoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/;
             return phoneRegex.test(phone);
         }
-
+        function validateName(name) {
+            const nameRegex = /^[a-zA-ZÀ-Ỹà-ỹ\s]+$/;
+            return nameRegex.test(name);
+        }
+        // Hàm lưu thông tin khách hàng
         function saveCustomerDetails() {
             const email = $('#email').val();
             const hoVaTen = $('#hoVaTen').val();
@@ -464,7 +593,7 @@ $(document).ready(function () {
             const customerData = {
                 hoVaTen: hoVaTen,
                 gioiTinh: gioiTinh,
-                soDienThoai: actualPhone, // Sử dụng actualPhone thay vì giá trị input có thể chứa `*`
+                soDienThoai: actualPhone,
             };
 
             $.ajax({
@@ -479,7 +608,7 @@ $(document).ready(function () {
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then(() => {
-                        htmlDetaisCustomer(response); // Cập nhật giao diện với dữ liệu mới
+                        htmlDetaisCustomer(response);
                     });
                 },
                 error: function (xhr, status, error) {
@@ -542,7 +671,22 @@ $(document).ready(function () {
 
         // Xác nhận mật khẩu cũ
         $('#verifyOldPassword').on('click', function () {
-            let oldPassword = $('#oldPassword').val();
+            let oldPasswordInput = $('#oldPassword');
+            let oldPassword = oldPasswordInput.val();
+
+            // Reset trạng thái lỗi trước đó
+            oldPasswordInput.removeClass('is-invalid');
+            const invalidFeedback = oldPasswordInput.next('.invalid-feedback');
+            if (invalidFeedback.length) {
+                invalidFeedback.remove();
+            }
+
+            // Kiểm tra nếu người dùng chưa nhập mật khẩu
+            if (!oldPassword) {
+                oldPasswordInput.addClass('is-invalid'); // Đánh dấu input là không hợp lệ
+                oldPasswordInput.after('<div class="invalid-feedback">Vui lòng nhập mật khẩu hiện tại.</div>'); // Hiển thị thông báo lỗi
+                return; // Dừng xử lý nếu không có mật khẩu
+            }
 
             let formData = {
                 username: customer.email,
@@ -559,7 +703,7 @@ $(document).ready(function () {
                     $('#newPasswordForm').show();
                 },
                 error: function (xhr) {
-                    $('#oldPassword').addClass('is-invalid'); // Đánh dấu input mật khẩu cũ
+                    oldPasswordInput.addClass('is-invalid'); // Đánh dấu input mật khẩu cũ
                     Swal.fire({
                         title: 'Lỗi!',
                         text: 'Mật khẩu hiện tại không chính xác.',
@@ -567,204 +711,71 @@ $(document).ready(function () {
                         confirmButtonText: 'OK'
                     });
                     // Xóa giá trị của mật khẩu cũ để người dùng nhập lại
-                    $('#oldPassword').val('');
+                    oldPasswordInput.val('');
                 }
             });
         });
+
 
         // Gửi mật khẩu mới
         $('#submitNewPassword').on('click', function () {
             let newPassword = $('#newPassword').val();
             let confirmPassword = $('#confirmPassword').val();
 
-            if (newPassword === confirmPassword) {
-                $.ajax({
-                    url: '/api/auth/change-pass',
-                    type: 'PUT',
-                    contentType: 'application/json',
-                    data: JSON.stringify({password: newPassword}),
-                    success: function () {
-                        Swal.fire({
-                            title: 'Thành công!',
-                            text: 'Mật khẩu đã được thay đổi thành công!',
-                            icon: 'success',
-                            confirmButtonText: 'OK'
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                    },
-                    error: function (xhr) {
-                        console.log("Password change error:", xhr.responseText);
-                        Swal.fire({
-                            title: 'Lỗi!',
-                            text: 'Đã xảy ra lỗi, vui lòng thử lại.',
-                            icon: 'error',
-                            confirmButtonText: 'OK'
-                        });
-                    }
-                });
-            } else {
-                Swal.fire({
-                    title: 'Lỗi!',
-                    text: 'Mật khẩu mới và xác nhận không khớp.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
+            // Hàm kiểm tra tính hợp lệ của mật khẩu
+            function isPasswordValid(password) {
+                const minLength = 6;
+                const maxLength = 15;
+                return password.length >= minLength && password.length <= maxLength;
             }
-        });
-    }
-    //Trường
-    async function showCustomerCalendar() {
-        try {
-            let response = await loadCustomer(); // Gọi hàm để lấy dữ liệu
-            htmlCustomerCalendar(response.response)
-        } catch (error) {
-        }
-    }
 
-    function htmlCustomerCalendar(customer) {
-        setTableInTab();
-        $.ajax({
-            url: ' http://localhost:8080/san-ca/for-customer-profile/' + customer.id,
-            type: 'GET',
-            dataType: 'json',
-            success: function (response) {
-                if (!response.response.length<1){
-                    setRowInTable(response.response);
+            // Reset thông báo lỗi
+            $('.invalid-feedback').remove();
+            $('#newPassword').removeClass('is-invalid');
+            $('#confirmPassword').removeClass('is-invalid');
+
+            if (!isPasswordValid(newPassword)) {
+                $('#newPassword').addClass('is-invalid');
+                $('#newPassword').after('<div class="invalid-feedback">Mật khẩu phải từ 6-15 ký tự.</div>');
+                return;
+            }
+
+            // Kiểm tra mật khẩu xác nhận
+            if (newPassword !== confirmPassword) {
+                $('#confirmPassword').addClass('is-invalid');
+                $('#confirmPassword').after('<div class="invalid-feedback">Mật khẩu mới và xác nhận không khớp.</div>');
+                return;
+            }
+
+            // Gửi yêu cầu đổi mật khẩu nếu hợp lệ
+            $.ajax({
+                url: '/api/auth/change-pass',
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({ password: newPassword }),
+                success: function () {
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Mật khẩu đã được thay đổi thành công!',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                },
+                error: function (xhr) {
+                    console.log("Password change error:", xhr.responseText);
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: 'Đã xảy ra lỗi, vui lòng thử lại.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
                 }
-
-            }
+            });
         });
     }
 
-    function setRowInTable(response) {
-        let wait = 0;
-        let done = 0;
-        $.each(response, function (index, item) {
-            let ngayDat = formatDate(item["ngayDat"]);
-            let ca = formatDate(item["thoiGianBatDau"]);
-            if (item["trangThaiCheckIn"] === "Chờ nhận sân" || item["trangThaiCheckIn"] === "Đang hoạt động") {
-                wait++;
-                let row = `
-                <tr>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${wait}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tenSanBong"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${ca}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${ngayDat}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongTien"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tienCoc"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongGiamGia"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["maHoaDon"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["trangThaiHoaDon"]}</td>
-                </tr>
-                `;
-                $(`#tbodyFuture`).append(row);
-            } else {
-                done++;
-                let row = `
-                <tr>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${done}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tenSanBong"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${ca}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${ngayDat}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongTien"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tienCoc"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongGiamGia"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["maHoaDon"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["trangThaiHoaDon"]}</td>
-                </tr>
-                `;
-                $(`#tbodySince`).append(row);
-            }
-
-        })
-        if (done>0){
-            $('#tbodySince tr:first').remove();
-        }
-        if (wait>0){
-            $('#tbodyFuture tr:first').remove();
-        }
-    }
-
-    function setTableInTab() {
-        content.html('');
-        let html = ``;
-        html += `<ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#future" role="tab" aria-controls="future" aria-selected="true">Sắp diễn ra</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#past" role="tab" aria-controls="past" aria-selected="false">Đã kết thúc</a>
-            </li>
-        </ul>
-
-        <div class="tab-content mt-3" id="myTabContent">
-            <div class="tab-pane fade show active" id="future" role="tabpanel" aria-labelledby="home-tab">
-               <table class="table table-hover" style="width: 100%; border-collapse: collapse;">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">#</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tên sân</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Thời gian (Ca)</th>                                        
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Ngày đặt</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tổng tiền</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tiền cọc</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Giảm giá</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Mã hóa đơn</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Trạng thái hóa đơn</th>
-                                        
-                                    </tr>
-                                    </thead>
-                                    <tbody id="tbodyFuture">
-                                    <tr>
-                                        <td colspan="9" style="text-align: center; font-weight: bold;">
-                                            Không có dữ liệu
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-            </div>
-            <div class="tab-pane fade" id="past" role="tabpanel" aria-labelledby="profile-tab">
-                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">#</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tên sân</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Thời gian (Ca)</th>                                        
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Ngày đặt</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tổng tiền</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tiền cọc</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Giảm giá</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Mã hóa đơn</th>
-                                        <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Trạng thái hóa đơn</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="tbodySince">
-                                    <tr>
-                                        <td colspan="9" style="text-align: center; font-weight: bold;">
-                                            Không có dữ liệu
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-            </div>
-        </div>
-`;
-        content.html(html);
-    }
-
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-
-        const hours = String(date.getHours()).padStart(2, '0');
-        const minutes = String(date.getMinutes()).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const year = date.getFullYear();
-
-        return `${hours}:${minutes} - ${day}/${month}/${year}`;
-    }
 });
 
 // Bằng

@@ -293,40 +293,53 @@
 
   <div class="modal fade" id="modallogin" tabindex="-1" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-fullscreen-md-down modal-md modal-dialog-centered" role="document">
-      <div class="modal-content p-4">
+      <div class="modal-content p-4" style="height: auto">
         <div class="modal-header mx-auto border-0">
-          <h2 class="modal-title fs-3 fw-normal">Đăng nhập</h2>
+          <h2 id="titleModal" class="modal-title fs-3 fw-normal">Đăng nhập</h2>
         </div>
         <div class="modal-body">
           <div class="login-detail">
             <div class="login-form p-0">
               <div class="col-lg-12 mx-auto">
                 <form id="login-form">
-                  <input id="userEmailCustomer" type="text" name="username" placeholder="Username or Email Address *"
+                  <input id="userNameCustomer" type="text" name="usernameC" placeholder="Tên đăng nhập"
                          class="mb-3 ps-3 text-input">
-                  <input id="passCustomer" type="password" name="password" placeholder="Password" class="ps-3 text-input">
+                  <input id="otp" type="text" name="otp" placeholder="Nhập mã của bạn"
+                         class="mb-3 ps-3 text-input">
+                  <input id="userEmailCustomer" type="text" name="username" placeholder="Email đăng nhập"
+                         class="mb-3 ps-3 text-input">
+                  <input id="passCustomer" type="password" name="password" placeholder="Mật khẩu" class="mb-3 ps-3 text-input">
+                  <input id="confirm-password" type="password" name="confirm-password" placeholder="Nhập lại mật khẩu" class="ps-3 text-input">
                   <div class="checkbox d-flex justify-content-between mt-4">
                     <p class="checkbox-form">
-                      <label class="">
+                      <label id="checkboxForm">
                         <input name="rememberme" type="checkbox" id="remember-me" value="forever"> Ghi nhớ đăng nhập </label>
                     </p>
-                    <p class="lost-password">
-                      <a th:href="@{#}">Quên mật khẩu?</a>
+                    <p class="lost-password" id="forgotPass">
+                      <a style="text-decoration: underline" th:href="@{#}">Quên mật khẩu?</a>
                     </p>
                   </div>
                 </form>
               </div>
+              <div class="row justify-content-center">
+                <button id="btnLogin" type="button" class="btn btn-success hvr-sweep-to-right dark-sweep">Đăng nhập</button>
+              </div>
             </div>
-            <div class="modal-footer mt-5 d-flex justify-content-center">
-              <button id="btnLogin" type="button" class="btn btn-success hvr-sweep-to-right dark-sweep">Đăng nhập</button>
-              <button type="button" class="btn btn-outline-gray hvr-sweep-to-right dark-sweep">Đăng ký</button>
+
+            <div class="modal-footer mt-5 justify-content-center">
+              <p class="lost-password d-flex">
+                <span id="textQuestion">Chưa có tài khoản?</span>
+                <a id="changeSign" style="text-decoration: underline" th:href="@{#}">Đăng ký</a>
+              </p>
             </div>
+
           </div>
         </div>
       </div>
     </div>
   </div>
   <!-- Login --><script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
   <script src="/client/js/customerLogin.js"></script>
 </div>

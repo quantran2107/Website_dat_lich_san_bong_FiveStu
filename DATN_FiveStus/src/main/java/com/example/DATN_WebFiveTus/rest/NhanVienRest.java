@@ -1,14 +1,14 @@
 package com.example.DATN_WebFiveTus.rest;
 
 import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
+import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
 import com.example.DATN_WebFiveTus.service.NhanVienService;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("nhan-vien")
@@ -42,7 +42,7 @@ public class NhanVienRest {
     }
 
     @PostMapping("add")
-    public ResponseEntity<Boolean> add(@RequestBody NhanVienDTO nv) throws MessagingException {
+    public ResponseEntity<Boolean> add(@RequestBody NhanVienDTO nv) throws MessagingException, RoleNotFoundException {
         return ResponseEntity.ok(nhanVienService.addNew(nv));
     }
     @PostMapping("upload")
@@ -63,5 +63,8 @@ public class NhanVienRest {
         return nhanVienService.getForCode(maNV);
     }
 
-    
+    @GetMapping("get-nv")
+    public ResponseEntity<?> getNV(HttpServletRequest request){
+        return ResponseEntity.ok(nhanVienService.getNV(request));
+    }
 }

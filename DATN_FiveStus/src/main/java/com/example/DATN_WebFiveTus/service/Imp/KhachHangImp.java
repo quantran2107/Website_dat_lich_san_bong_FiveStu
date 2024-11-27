@@ -1,14 +1,24 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
+import com.example.DATN_WebFiveTus.config.RoleFactory;
+import com.example.DATN_WebFiveTus.entity.NhanVien;
+import com.example.DATN_WebFiveTus.entity.auth.Role;
+import com.example.DATN_WebFiveTus.entity.auth.User;
+import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
+import com.example.DATN_WebFiveTus.repository.*;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
 import java.security.SecureRandom;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.example.DATN_WebFiveTus.dto.DiaChiKhachHangDTO;
@@ -16,15 +26,13 @@ import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
 import com.example.DATN_WebFiveTus.entity.DiaChiKhachHang;
 import com.example.DATN_WebFiveTus.entity.KhachHang;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
-import com.example.DATN_WebFiveTus.repository.DiaChiKhachHangRepository;
-import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
 import com.example.DATN_WebFiveTus.service.KhachHangService;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 
 @Service
@@ -38,6 +46,20 @@ public class KhachHangImp implements KhachHangService {
 
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    private SpringTemplateEngine springTemplateEngine;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private RoleFactory roleFactory;
 
     @Override
     public List<KhachHangDTO> getAll() {
@@ -58,8 +80,26 @@ public class KhachHangImp implements KhachHangService {
     }
 
     @Override
-    public KhachHangDTO save(KhachHangDTO khachHangDTO) {
+    public KhachHangDTO save(KhachHangDTO khachHangDTO) throws RoleNotFoundException {
         KhachHang khachHang = modelMapper.map(khachHangDTO, KhachHang.class);
+        if (khachHang.getTrangThai() == null || khachHang.getTrangThai().isEmpty()) {
+            khachHang.setTrangThai("active");
+        }
+        String pass = generateMK(16);
+        khachHang.setMatKhau(passwordEncoder.encode(pass));
+        if (!mailFunction(khachHang,pass)){
+            return null;
+        }
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleFactory.getInstance("user"));
+        userRepository.save(User.builder()
+                .email(khachHang.getEmail())
+                .username(khachHang.getEmail().substring(0, khachHang.getEmail().indexOf("@")))
+                .password(khachHang.getMatKhau())
+                .enabled(true)
+                .roles(roles)
+                .build());
+
         khachHang = khachHangRepository.save(khachHang);
 
         List<DiaChiKhachHangDTO> diaChiList = khachHangDTO.getDiaChi();
@@ -74,6 +114,40 @@ public class KhachHangImp implements KhachHangService {
         return modelMapper.map(khachHang, KhachHangDTO.class);
     }
 
+    public static String generateMK(int length) {
+        String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        SecureRandom RANDOM = new SecureRandom();
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            sb.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
+        }
+        return sb.toString();
+    }
+
+    public Boolean mailFunction(KhachHang khachHang,String pass) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            Context context = new Context();
+            context.setVariable("username", khachHang.getEmail());
+            context.setVariable("password", pass);
+
+            String html = springTemplateEngine.process("userNV", context);
+
+            helper.setTo(khachHang.getEmail());
+            helper.setSubject("Thông báo tài khoản và mật khẩu");
+            helper.setText(html, true);
+
+            javaMailSender.send(mimeMessage);
+
+            return true;
+        } catch (MessagingException e) {
+            e.printStackTrace(); // Xử lý exception theo nhu cầu của bạn
+            return false;
+        }
+    }
     @Override
     public void update(Integer id, KhachHangDTO khachHangDTO) {
         // Lấy khách hàng từ repository
@@ -130,46 +204,63 @@ public class KhachHangImp implements KhachHangService {
     }
 
     @Override
-    public List<KhachHangDTO> search(String query, int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page - 1, pageSize);
-        Page<KhachHang> results = khachHangRepository.searchByNamePhoneOrEmail(query, pageable);
+    public Page<KhachHangDTO> searchAndFilter(String query, String status, String gender, int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize); // Không trừ 1 vì page đã chỉnh ở controller
 
-        return results.stream()
-                .map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class))
-                .collect(Collectors.toList());
+        Page<KhachHang> results;
+        boolean genderBoolean = true;
+
+        if ("false".equals(gender)) {
+            genderBoolean = false;
+        }
+
+        if ("all".equals(status) && "all".equals(gender)) {
+            results = khachHangRepository.searchByNamePhoneOrEmail(query, pageable);
+        } else if ("all".equals(status)) {
+            results = khachHangRepository.searchByNamePhoneOrEmailAndGender(query, genderBoolean, pageable);
+        } else if ("all".equals(gender)) {
+            results = khachHangRepository.searchByNamePhoneOrEmailAndStatus(query, status, pageable);
+        } else {
+            results = khachHangRepository.searchByNamePhoneOrEmailAndStatusAndGender(query, status, genderBoolean, pageable);
+        }
+
+        return results.map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class));
     }
 
 
     @Override
-    public List<KhachHangDTO> filter(String status, String gender, int page, int pageSize) {
-        List<KhachHang> khachHangs;
-        boolean genderBoolean;
+    public Page<KhachHangDTO> filter(String status, String gender, int page, int pageSize) {
+        // Đảm bảo giá trị page không nhỏ hơn 0
+        if (page < 0) {
+            page = 0;
+        }
+
+        boolean genderBoolean = true; // Mặc định giới tính là true (Nam)
 
         if ("true".equals(gender)) {
             genderBoolean = true; // Nam
         } else if ("false".equals(gender)) {
             genderBoolean = false; // Nữ
-        } else {
-            // Trường hợp "all", không cần lọc theo giới tính
-            genderBoolean = true; // Mặc định, không lọc theo giới tính
         }
 
-        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Pageable pageable = PageRequest.of(page, pageSize);  // page đã được điều chỉnh
+
+        Page<KhachHang> khachHangPage;
 
         if ("all".equals(status) && ("all".equals(gender) || gender == null)) {
-            khachHangs = khachHangRepository.findAll(pageable).getContent();
+            khachHangPage = khachHangRepository.findAll(pageable);
         } else if ("all".equals(status)) {
-            khachHangs = khachHangRepository.filterByGender(genderBoolean, pageable).getContent();
+            khachHangPage = khachHangRepository.filterByGender(genderBoolean, pageable);
         } else if ("all".equals(gender)) {
-            khachHangs = khachHangRepository.filterByStatus(status, pageable).getContent();
+            khachHangPage = khachHangRepository.filterByStatus(status, pageable);
         } else {
-            khachHangs = khachHangRepository.findByStatusAndGender(status, genderBoolean, pageable).getContent();
+            khachHangPage = khachHangRepository.findByStatusAndGender(status, genderBoolean, pageable);
         }
 
-        return khachHangs.stream()
-                .map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class))
-                .collect(Collectors.toList());
+        // Chuyển đổi từ Page<KhachHang> sang Page<KhachHangDTO>
+        return khachHangPage.map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class));
     }
+
 
     @Override
     public Page<KhachHangDTO> searchActive(String query, String trangThai, Pageable pageable) {
@@ -257,6 +348,22 @@ public class KhachHangImp implements KhachHangService {
         dto.setCreatedAt(khachHang.getCreatedAt());
         // Giả sử bạn có phương thức để chuyển đổi danh sách địa chỉ (diaChi)
         return dto;
+    }
+
+
+    @Override
+    public boolean isEmailExists(String email) {
+        return khachHangRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean isSoDienThoaiExists(String soDienThoai) {
+        return khachHangRepository.existsBySoDienThoai(soDienThoai);
+    }
+
+    @Override
+    public boolean isMaKhachHangExists(String maKhachHang) {
+        return khachHangRepository.existsByMaKhachHang(maKhachHang);
     }
 
 }

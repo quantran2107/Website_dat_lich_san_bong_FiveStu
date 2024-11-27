@@ -1,6 +1,7 @@
 package com.example.DATN_WebFiveTus.rest;
 
 import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
+import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.service.HoaDonChiTietService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -65,9 +66,9 @@ public class HoaDonChiTietRest {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Integer id){
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         hoaDonChiTietService.updateTrangThai(id);
-       return ResponseEntity.ok().build();
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("thanhtoan/{id}")
@@ -96,14 +97,14 @@ public class HoaDonChiTietRest {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<HoaDonChiTietDTO> save(@RequestBody HoaDonChiTietDTO hoaDonChiTietDTO){
+    public ResponseEntity<HoaDonChiTietDTO> save(@RequestBody HoaDonChiTietDTO hoaDonChiTietDTO) {
         HoaDonChiTietDTO hoaDonChiTietDTOSave = hoaDonChiTietService.save(hoaDonChiTietDTO);
         return ResponseEntity.ok(hoaDonChiTietDTOSave);
     }
 
 
     @PostMapping("/save2")
-    public ResponseEntity<HoaDonChiTietDTO> save2(@RequestBody HoaDonChiTietDTO hoaDonChiTietDTO){
+    public ResponseEntity<HoaDonChiTietDTO> save2(@RequestBody HoaDonChiTietDTO hoaDonChiTietDTO) {
         HoaDonChiTietDTO hoaDonChiTietDTOSave = hoaDonChiTietService.save2(hoaDonChiTietDTO);
         return ResponseEntity.ok(hoaDonChiTietDTOSave);
     }
@@ -128,10 +129,27 @@ public class HoaDonChiTietRest {
         return ResponseEntity.ok(hoaDonChiTietDTO);
     }
 
-    @PostMapping("/save3")
-    public ResponseEntity<HoaDonChiTietDTO> save3(@RequestBody HoaDonChiTietDTO hoaDonChiTietDTO){
-        HoaDonChiTietDTO hoaDonChiTietDTOSave = hoaDonChiTietService.save3(hoaDonChiTietDTO);
-        return ResponseEntity.ok(hoaDonChiTietDTOSave);
+    @PutMapping("huy-dat/{id}")
+    public ResponseEntity<?> huyDatSan(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(hoaDonChiTietService.huyDatSan(id));
     }
 
+    @GetMapping("/khoang-ngay-den-san")
+    public ResponseEntity<?> finByNgayDenSanBetween(
+            @RequestParam("startDate") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate endDate) {
+        List<HoaDonChiTietDTO> result;
+        if (startDate == null || endDate == null) {
+            result = new ArrayList<>();
+        } else {
+            result = hoaDonChiTietService.findByNgayDenSanBetween(startDate, endDate);
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @PutMapping("/huy-lich-dat/{id}")
+    public ResponseEntity<HoaDonChiTietDTO> huyLichDat(@PathVariable Integer id){
+        HoaDonChiTietDTO hoaDonChiTietDTO = hoaDonChiTietService.huyLichDat(id);
+        return ResponseEntity.ok(hoaDonChiTietDTO);
+    }
 }

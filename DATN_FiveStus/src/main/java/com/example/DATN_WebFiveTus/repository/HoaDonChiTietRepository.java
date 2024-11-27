@@ -66,7 +66,6 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
             "WHERE kh.id = :id")
     List<HoaDonChiTiet> findHoaDonChiTietByIdKhachHang(@Param("id") Integer id);
 
-
     @Modifying
     @Transactional
     @Query("update HoaDonChiTiet hdct set hdct.trangThai='Đang hoạt động'  where hdct.id=:id")
@@ -100,5 +99,10 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
 
     @Query("SELECT hdct FROM HoaDonChiTiet hdct join fetch HoaDon hd ON hdct.hoaDon.id = hd.id WHERE hd.id = :idHoaDon")
     HoaDonChiTiet findByIdHoaDon(@Param("idHoaDon") Integer idHoaDon);
+
+    @Query("SELECT hdct FROM HoaDonChiTiet hdct " +
+            "WHERE hdct.ngayDenSan BETWEEN :startDate AND :endDate")
+    List<HoaDonChiTiet> findByNgayDenSanBetween(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
 
 }

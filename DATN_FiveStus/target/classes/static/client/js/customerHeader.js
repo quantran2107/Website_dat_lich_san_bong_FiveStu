@@ -43,14 +43,22 @@ $(document).ready(function () {
 
             userMenuLink.removeAttr('data-bs-toggle');
             userMenuLink.removeAttr('data-bs-target');
-            let ten = customer["hoVaTen"].split(" ").pop();
+            let ten = (customer["hoVaTen"] === null)? customer["email"].split(" ").pop() :customer["hoVaTen"].split(" ").pop();
+            let customerSider =`
+                <li class="pe-3 nav-item dropdown">
+                      <a href="#" 
+                         class="border-0">
+                        <span style="text-decoration: underline;">Xin chào ${ten} !</span>
+                      </a>
+                </li>
+            `;
             let dropdownHtml = `
             <ul class="dropdown-menu fw-bold">
                 <li>
-                  <span class="dropdown-item">Xin chào ${ten} !</span>
+                  <a href="/customer" class="dropdown-item">Tài khoản</a>
                 </li>
                 <li>
-                  <a href="/customer" class="dropdown-item">Tài khoản</a>
+                  <a href="/history-book" class="dropdown-item">Lịch sử đặt sân</a>
                 </li>
                 <li>
                   <a class="dropdown-item" href="/client/logout">Đăng xuất</a>
@@ -59,17 +67,17 @@ $(document).ready(function () {
          `;
             let isUser = `
                <li class="nav-item">
-                    <a class="nav-link me-5" th:href="@{/khach-hang/dat-san}">Đặt sân</a>
+                    <a class="nav-link me-5" href="/khach-hang/dat-san" >Đặt sân</a>
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link me-5 dropdown-toggle border-0" th:href="@{#}" data-bs-toggle="dropdown"
                      aria-expanded="false">Danh sách đặt lịch</a>
                   <ul class="dropdown-menu fw-bold">
                     <li>
-                      <a th:href="@{#}" class="dropdown-item">About Us</a>
+                      <a th:href="@{#}" class="dropdown-item">Về chúng tôi</a>
                     </li>
                     <li>
-                      <a class="dropdown-item" th:href="@{#}">Shop</a>
+                      <a class="dropdown-item" href="/history-book">Danh sách của bạn</a>
                     </li>
                   </ul>
                 </li>
@@ -77,6 +85,7 @@ $(document).ready(function () {
             userMenuLink.parent().append(dropdownHtml);
             userMenuLink.attr('data-bs-toggle', 'dropdown');
             userMenuLink.attr('aria-expanded', 'false');
+            $(`#customerSider`).prepend(customerSider);
             $("#noiquy").after(isUser)
         }
     }

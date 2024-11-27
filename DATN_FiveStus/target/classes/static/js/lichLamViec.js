@@ -48,7 +48,8 @@ $(document).ready(function () {
     }
 
     $('#btnExcelMauLich').on('click', function () {
-        let url = 'https://docs.google.com/spreadsheets/d/13CPv_VMCRxIpIW5UyuLclM7CibvygO3l-BtLczl_k34/export?format=xlsx';
+        let url = 'https://docs.google.com/spreadsheets/d/1Zi34HdFkU5Ik4L3T8JT82k4KJFmP7kvD/export?format=xlsx';
+
         let $a = $('<a></a>').attr('href', url).attr('download', 'file.xlsx').appendTo('body');
 
         $a[0].click();
@@ -67,6 +68,22 @@ $(document).ready(function () {
         } else {
             if (fileName) {
                 $('#labelFile').html('<label for="file" style="margin: 15px">' + fileName + '</label>');
+                $('#btnSubmitFile').show();
+            } else {
+            }
+        }
+    });
+    $('#file').on('change', function () {
+        let fileName = '';
+        let newFileName = $(this).val().split('\\').pop();
+
+        if (newFileName) {
+            fileName = newFileName;
+            $('#labelFile').html('<label for="file" style="padding: 3px; border-radius: 5px;">' + fileName + '</label>');
+            $('#btnSubmitFile').show();
+        } else {
+            if (fileName) {
+                $('#labelFile').html('<label for="file" style="padding: 3px; border-radius: 5px;">' + fileName + '</label>');
                 $('#btnSubmitFile').show();
             } else {
             }
@@ -106,24 +123,34 @@ $(document).ready(function () {
         });
     }
 
+    $('#status-select .dropdown-item').click(function (event) {
+        event.preventDefault();
+        let selectedStatus = $(this).text().trim();
+        $('#actionMenuButton3').text(selectedStatus);
+
+        let key = $('#searchInput').val();
+        let selectedDate = $('#date-input').val();
+        loadTable(key, selectedStatus, selectedDate);
+
+    });
     $('#date-input').change(function () {
         let selectedDate = $(this).val();
         let key = $('#searchInput').val();
-        let selectedValue = $('input[name="status"]:checked').val();
+        let selectedValue = $('#actionMenuButton3').text().trim();
         loadTable(key, selectedValue, selectedDate);
     });
     $('#searchInput').on('input', function () {
         let key = $(this).val().trim();
         let selectedDate = $('#date-input').val();
-        let selectedValue = $('input[name="status"]:checked').val();
+        let selectedValue = $('#actionMenuButton3').text().trim();
         loadTable(key, selectedValue, selectedDate);
     });
-    $('input[type=radio][name=status]').change(function () {
-        let selectedStatus = this.value;
-        let key = $('#searchInput').val();
-        let selectedDate = $('#date-input').val();
-        loadTable(key, selectedStatus, selectedDate);
-    });
+    $('#load').on('click',()=>{
+        $('#actionMenuButton3').text('Tất cả');
+        $('#searchInput').val('')
+        $('#date-input').val('');
+        loadTable('', '', '');
+    })
 
     function loadTable(keyString = '', ca = '', date = '') {
 

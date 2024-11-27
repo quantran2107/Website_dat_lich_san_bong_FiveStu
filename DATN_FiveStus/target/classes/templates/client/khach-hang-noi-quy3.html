@@ -2,82 +2,132 @@
 <html lang="en">
 <head>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* Cấu trúc cơ bản */
+        /* Reset các phần tử để đảm bảo tính nhất quán */
+        * {
             margin: 0;
-            padding: 20px;
-            background-color: #f0f4f8;
-            color: #333;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        h1, h2 {
-            color: #007BFF;
-            text-align: left; /* Đặt căn trái cho tiêu đề */
+        /* Font chữ chính */
+        body {
+            font-family: 'Times New Roman', Times, serif;  /* Sử dụng font Times New Roman */
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            font-size: 18px;  /* Tăng kích thước chữ cho toàn trang */
+        }
+
+        /* Wrapper chính */
+        .content-wrapper {
+            max-width: 1650px;
+            margin: 0 auto;
+        }
+
+        /* Các section nội dung */
+        .content-section {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
 
-        .tham-so-container {
-            display: block; /* Đảm bảo các card được xếp dọc */
-            max-width: 600px; /* Giới hạn độ rộng của container */
-            margin: 0 auto; /* Căn giữa container */
+        /* Tiêu đề h2 */
+        h2 {
+            font-size: 2.2rem;  /* Tăng kích thước font cho tiêu đề h2 */
+            color: #222;
+            margin-bottom: 20px;
+            font-weight: 600;
         }
 
-        .tham-so-item {
-            border: 1px solid #007BFF;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 10px 0;
-            background-color: #ffffff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
+        /* Tiêu đề h3 và h4 */
+        h3, h4 {
+            font-size: 1.8rem;  /* Tăng kích thước font cho h3 và h4 */
+            color: #333;
+            margin-top: 20px;
+            font-weight: 500;
         }
 
-        .tham-so-item:hover {
-            transform: scale(1.02);
+        /* Các đoạn văn bản, danh sách */
+        p, ul, ol {
+            font-size: 1.125rem;  /* Tăng font size cho văn bản và danh sách */
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.7;
         }
 
-        .tham-so-title {
-            font-size: 20px;
-            color: #007BFF;
+        /* Danh sách không đánh số và có đánh số */
+        ul, ol {
+            padding-left: 20px;
         }
 
-        .mo-ta {
-            margin-top: 10px;
+        /* Các liên kết */
+        a {
+            color: #007bff;
+            text-decoration: none;
         }
 
-        .gia-tri {
-            margin-top: 10px;
-            color: #28a745;
+        a:hover {
+            text-decoration: underline;
         }
 
-        .typeGiaTri {
-            font-family: 'Arial', sans-serif; /* Chọn font chữ */
-            font-size: 18px; /* Kích thước chữ */
-            color: #333; /* Màu chữ */
-            background-color: #f0f0f0; /* Màu nền */
-            padding: 10px; /* Khoảng cách bên trong */
-            border-radius: 5px; /* Bo góc */
-            text-align: center; /* Căn giữa văn bản */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Đổ bóng */
-        }
-
-        .message {
-            margin: 20px;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+        /* Phần điều khoản thông tin */
+        .typeGiaTri p {
             background-color: #f9f9f9;
-            line-height: 1.6;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #007BFF;
+            border-radius: 5px;
+            font-size: 1.1rem;  /* Tăng kích thước font cho phần điều khoản */
         }
 
-        .message p {
-            margin: 0 0 10px; /* Giảm khoảng cách giữa các đoạn */
+        /* Đảm bảo không tràn viền */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
         }
 
-        strong {
-            color: #d9534f; /* Màu sắc cho văn bản đậm */
+        /* Responsive - Điều chỉnh cho các thiết bị nhỏ hơn */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 16px;  /* Giảm font-size cho các thiết bị nhỏ */
+            }
+
+            h2 {
+                font-size: 1.8rem;  /* Giảm kích thước cho tiêu đề h2 */
+            }
+
+            h3, h4 {
+                font-size: 1.6rem;  /* Giảm kích thước cho h3 và h4 */
+            }
+
+            p, ul, ol {
+                font-size: 1rem;  /* Giảm kích thước chữ cho văn bản */
+            }
+
+            .content-section {
+                padding: 20px;  /* Giảm padding của content section trên màn hình nhỏ */
+            }
         }
 
+        /* Tạo hiệu ứng cho chữ */
+        .message strong {
+            font-size: 1.2rem; /* Tăng kích thước chữ cho rõ ràng */
+            color: #333; /* Màu chữ mặc định */
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Tạo bóng nhẹ cho chữ */
+            transition: all 0.3s ease; /* Mượt mà khi có thay đổi */
+        }
+
+        /* Hiệu ứng khi hover */
+        .message strong:hover {
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 165, 0, 0.8); /* Tạo hiệu ứng bóng đổ đậm và sóng ánh sáng */
+            transform: translateY(-3px); /* Chữ sẽ di chuyển nhẹ lên trên */
+        }
 
     </style>
 </head>
@@ -96,8 +146,9 @@
                 <h1 class="text-success font-weight-bold">Chào mừng bạn đến với Sân bóng FiveStu</h1>
                 <p class="lead text-dark">Trải nghiệm dịch vụ đặt sân bóng nhanh chóng cùng chúng tôi</p>
                 <p>
-                    <a th:href="@{/khach-hang/dat-san}" class="btn btn-success btn-lg py-3 px-5 mr-3 mb-2">Đặt sân ngay</a>
-                    <a th:href="@{/khach-hang-noi-quy2}" class="text-success py-3 px-5 mb-2">Nội quy</a>
+                    <a href="javascript:void(0);" class="btn btn-success btn-lg py-3 px-5 mr-3 mb-2"
+                       onclick="checkLoginAndRedirect()">Đặt sân ngay</a>
+                    <a th:href="@{/khach-hang-noi-quy3}" class="text-success py-3 px-5 mb-2">Nội quy</a>
                 </p>
             </div>
         </div>
@@ -107,45 +158,9 @@
 </section>
 
 
-<section id="featured-products" class="product-store">
-    <div class="container-md">
-        <div class="display-header d-flex align-items-center justify-content-between">
-            <h2 class="section-title text-uppercase">Về chúng tôi</h2>
-        </div>
-        <div class="container content-section">
-            <div class="row align-items-center">
-                <div class="col-md-4 text-center text-md-left mb-4 mb-md-0"> <img th:src="@{/client/images/img2.jpg}" alt="FiveStu"
-                                                                                  class="img-fluid img-container rounded shadow"> </div>
-                <div class="col-md-8">
-                    <h4 class="text-success">Sân bóng Fivestu - Nơi kết nối đam mê bóng đá</h4>
-                    <p class="lead">Fivestu là địa điểm lý tưởng dành cho những ai yêu thích bóng đá. Với cơ sở vật chất hiện
-                        đại,
-                        mặt cỏ chất lượng cao, và không gian rộng rãi, sân bóng của chúng tôi đáp ứng mọi nhu cầu luyện tập và thi
-                        đấu. Hãy đến và trải nghiệm những trận cầu đỉnh cao cùng bạn bè tại Fivestu, nơi kết nối đam mê và tinh
-                        thần
-                        thể thao.</p>
-                </div>
-            </div>
-        </div>
-        <div class="container content-section">
-            <div class="row align-items-center my-5">
-                <div class="col-md-8">
-                    <h4 class="text-success">Trải nghiệm sân bóng đẳng cấp tại Fivestu</h4>
-                    <p class="lead">Sân bóng Fivestu được thiết kế với tiêu chuẩn chuyên nghiệp, sẵn sàng phục vụ các trận đấu
-                        và giải đấu mọi cấp độ. Chúng tôi luôn đảm bảo chất lượng sân bãi, ánh sáng, và dịch vụ tốt nhất để mang
-                        đến trải nghiệm tuyệt vời cho từng trận bóng. Hãy chọn Fivestu làm điểm đến cho những phút giây sôi động
-                        cùng trái bóng tròn!</p>
-                </div>
-                <div class="col-md-4 text-center text-md-left mb-4 mb-md-0"> <img th:src="@{/client/images/img3.jpg}" alt="FiveStu"
-                                                                                  class="img-fluid img-container rounded shadow"> </div>
 
-            </div>
-        </div>
-    </div>
-</section>
-
-<main>
-    <section>
+<main class="content-wrapper">
+    <section class="content-section">
         <h2>ĐIỀU KHOẢN SỬ DỤNG NỀN TẢNG ĐẶT LỊCH SÂN BÓNG FIVE_STUS</h2>
         <h4>Giới thiệu</h4>
         <p>Five_stus là một nền tảng trực tuyến sáng tạo, được thiết kế đặc biệt để hỗ trợ người dùng trong việc đặt
@@ -169,201 +184,79 @@
             có thể dễ dàng gặp gỡ, thi đấu và chia sẻ đam mê. Hãy tham gia Five_stus để khám phá thế giới thể thao
             đầy thú vị ngay hôm nay!</p>
     </section>
-    <section>
+
+    <section class="content-section">
         <h2>I. Nguyên tắc chung</h2>
-        <ol>
-            <li>Quản lý và vận hành: Nền tảng Five_stus do Công ty Cổ phần Phần mềm Vitex Việt Nam thực hiện và quản
+            <p>Quản lý và vận hành: Nền tảng Five_stus do Công ty Cổ phần Phần mềm Vitex Việt Nam thực hiện và quản
                 lý. Chúng tôi luôn nỗ lực cải tiến và phát triển nền tảng để đáp ứng tốt nhất nhu cầu của người
                 dùng. Đội ngũ quản lý và kỹ thuật của chúng tôi là những người có kinh nghiệm dày dạn trong lĩnh vực
-                công nghệ thông tin và thể thao, đảm bảo rằng mọi hoạt động diễn ra một cách suôn sẻ và hiệu quả.
-            </li>
-            <li>Thành viên: Mọi thương nhân, tổ chức, cá nhân có nhu cầu sử dụng dịch vụ của Five_stus đều có thể
+                công nghệ thông tin và thể thao, đảm bảo rằng mọi hoạt động diễn ra một cách suôn sẻ và hiệu quả.</p>
+            <p>Thành viên: Mọi thương nhân, tổ chức, cá nhân có nhu cầu sử dụng dịch vụ của Five_stus đều có thể
                 đăng ký trở thành thành viên. Việc đăng ký rất đơn giản và nhanh chóng, chỉ cần cung cấp một số
                 thông tin cơ bản như tên, địa chỉ email và số điện thoại. Sau khi đăng ký, người dùng sẽ nhận được
                 một tài khoản cá nhân, nơi họ có thể quản lý thông tin đặt sân, lịch sử giao dịch và các thông báo
-                quan trọng.
-            </li>
-            <li>Thỏa thuận tự do: Các bên có quyền thỏa thuận trên cơ sở tôn trọng quyền lợi và nghĩa vụ hợp pháp.
-                Chúng tôi khuyến khích các thành viên giao tiếp và thảo luận để đạt được những thỏa thuận tốt nhất.
-                Điều này không chỉ giúp xây dựng mối quan hệ tốt đẹp giữa người cho thuê và người thuê mà còn tạo ra
-                một môi trường giao dịch minh bạch và công bằng.
-            </li>
-            <li>Minh bạch: Tất cả thông tin về giá cả và dịch vụ phải được công khai, rõ ràng. Five_stus cam kết
-                cung cấp thông tin chính xác và đầy đủ để người dùng có thể đưa ra quyết định đúng đắn. Chúng tôi
-                cũng cung cấp các đánh giá và nhận xét từ người dùng trước đó, giúp người thuê có thêm thông tin
-                tham khảo trước khi quyết định đặt sân.
-            </li>
-            <li>Tuân thủ pháp luật: Tất cả hoạt động trên nền tảng phải tuân thủ quy định của pháp luật Việt Nam.
+                quan trọng.</p>
+            <p>Thỏa thuận tự do: Các bên có quyền thỏa thuận trên cơ sở tôn trọng quyền lợi và nghĩa vụ hợp pháp.
+                Chúng tôi khuyến khích các thành viên giao tiếp và thảo luận để đạt được những thỏa thuận tốt nhất.</p>
+            <p>Minh bạch: Tất cả thông tin về giá cả và dịch vụ phải được công khai, rõ ràng. Five_stus cam kết
+                cung cấp thông tin chính xác và đầy đủ để người dùng có thể đưa ra quyết định đúng đắn.</p>
+            <p>Tuân thủ pháp luật: Tất cả hoạt động trên nền tảng phải tuân thủ quy định của pháp luật Việt Nam.
                 Chúng tôi nghiêm túc thực hiện các quy định này để bảo vệ quyền lợi của người dùng và đảm bảo sự
-                phát triển bền vững của nền tảng. Five_stus cam kết không tham gia vào bất kỳ hoạt động nào vi phạm
-                pháp luật và luôn sẵn sàng hợp tác với các cơ quan chức năng khi cần thiết.
-            </li>
-        </ol>
+                phát triển bền vững của nền tảng.</p>
     </section>
-    <section>
+
+    <section class="content-section">
         <h2>II. Quy định chung</h2>
-        <p>Tên miền: Nền tảng Five_stus có tên miền là <a href="https://www.five_stus.com">www.five_stus.com</a>.
-            Tại đây, người dùng có thể tìm thấy tất cả thông tin cần thiết về dịch vụ đặt sân bóng cũng như các
-            hướng dẫn sử dụng nền tảng. Chúng tôi cũng thường xuyên cập nhật các tin tức mới nhất về các sự kiện thể
-            thao, các giải đấu và các chương trình khuyến mãi hấp dẫn, giúp người dùng không bỏ lỡ bất kỳ cơ hội
-            nào.</p>
+        <p>Tên miền: Nền tảng Five_stus có tên miền là <a href="https://www.five_stus.com">www.five_stus.com</a>.</p>
         <p>Định nghĩa chung:</p>
         <ul>
             <li>Người cho thuê: Là các cơ sở thể thao có nhu cầu cho thuê sân bóng trên nền tảng. Họ có trách nhiệm
-                cung cấp thông tin chính xác về sân, giá cả và các dịch vụ đi kèm. Five_stus cam kết hỗ trợ người
-                cho thuê trong việc quản lý và quảng bá sân bóng của mình, giúp họ có thể thu hút thêm nhiều khách
-                hàng và tăng doanh thu.
-            </li>
-            <li>Người thuê: Là các cá nhân hoặc tổ chức có nhu cầu đặt sân bóng để thi đấu hoặc tập luyện. Người
-                thuê cần cung cấp thông tin chính xác về nhu cầu của mình để có thể tìm được sân phù hợp. Five_stus
-                cam kết cung cấp các dịch vụ hỗ trợ người thuê trong việc tìm kiếm và đặt sân, giúp họ có thể tiết
-                kiệm thời gian và công sức.
-            </li>
-            <li>Thành viên: Bao gồm cả người cho thuê và người thuê. Tất cả thành viên đều được hưởng các quyền lợi
-                và nghĩa vụ như nhau khi tham gia vào nền tảng. Chúng tôi cam kết đối xử công bằng và minh bạch với
-                tất cả thành viên, không phân biệt giữa người cho thuê và người thuê.
-            </li>
+                cung cấp thông tin chính xác về sân, giá cả và các dịch vụ đi kèm.</li>
+            <li>Người thuê: Là các cá nhân hoặc tổ chức có nhu cầu đặt sân bóng để thi đấu hoặc tập luyện.</li>
+            <li>Thành viên: Bao gồm cả người cho thuê và người thuê, tất cả thành viên đều được hưởng quyền lợi và
+                nghĩa vụ như nhau khi tham gia nền tảng.</li>
         </ul>
-    </section>
-    <section>
-        <h2>III. Quy trình đặt sân</h2>
-        <h3>1. Quy trình dành cho người đặt sân:</h3>
-        <ol>
-            <li>Bước 1: Đăng ký tài khoản trên Five_stus. Người dùng cần cung cấp thông tin cá nhân và xác thực tài
-                khoản qua email hoặc số điện thoại. Sau khi đăng ký thành công, người dùng sẽ nhận được một tài
-                khoản cá nhân, nơi họ có thể quản lý thông tin đặt sân, lịch sử giao dịch và các thông báo quan
-                trọng.
-            </li>
-            <li>Bước 2: Đăng nhập vào hệ thống. Sau khi đăng ký thành công, người dùng có thể đăng nhập vào tài
-                khoản của mình để bắt đầu sử dụng dịch vụ.
-            </li>
-            <li>Bước 3: Tìm kiếm sân bằng cách chọn môn thể thao và địa điểm. Five_stus cung cấp bộ lọc để người
-                dùng dễ dàng tìm kiếm sân theo nhu cầu. Người dùng có thể lọc sân theo các tiêu chí như giá cả, địa
-                điểm, loại hình sân và thời gian.
-            </li>
-            <li>Bước 4: Chọn thời gian và địa điểm phù hợp. Người dùng có thể xem lịch trống của sân và chọn thời
-                gian phù hợp nhất cho mình. Five_stus cam kết cung cấp thông tin chính xác và đầy đủ về sân, giúp
-                người dùng có thể đưa ra quyết định đúng đắn.
-            </li>
-            <li>Bước 5: Nhấn nút "Đặt sân". Sau khi chọn sân và thời gian, người dùng có thể nhấn nút "Đặt sân" để
-                hoàn tất quy trình đặt sân. Five_stus sẽ gửi thông tin đặt sân đến người dùng qua email hoặc số điện
-                thoại để xác nhận.
-            </li>
-            <li>Bước 6: Kiểm tra thông tin đặt sân. Người dùng cần kiểm tra thông tin đặt sân để đảm bảo rằng mọi
-                thông tin đều chính xác và đầy đủ.
-            </li>
-            <li>Bước 7: Nhận thông báo xác nhận đặt sân thành công. Sau khi hoàn tất quy trình đặt sân, người dùng
-                sẽ nhận được thông báo xác nhận đặt sân thành công và có thể bắt đầu sử dụng sân.
-            </li>
-        </ol>
-        <h3>2. Quy trình dành cho người quản lý sân:</h3>
-        <ol>
-            <li>Bước 1: Đăng ký và ký hợp đồng hợp tác với Five_stus. Người quản lý sân cần đăng ký tài khoản và ký
-                hợp đồng hợp tác với Five_stus để có thể quản lý sân trên nền tảng.
-            </li>
-            <li>Bước 2: Đăng nhập vào hệ thống quản lý. Sau khi đăng ký thành công, người quản lý sân có thể đăng
-                nhập vào hệ thống quản lý để bắt đầu quản lý sân.
-            </li>
-            <li>Bước 3: Quản lý thông tin đặt sân và trạng thái thanh toán. Người quản lý sân có thể xem và quản lý
-                thông tin đặt sân, trạng thái thanh toán và các thông tin khác liên quan đến sân.
-            </li>
-            <li>Bước 4: Cập nhật thông tin sân và dịch vụ cho thuê. Người quản lý sân cần cập nhật thông tin sân và
-                dịch vụ cho thuê để người dùng có thể tìm thấy thông tin chính xác và đầy đủ.
-            </li>
-        </ol>
-    </section>
-    <section>
-        <h2>IV. Quy định về thanh toán</h2>
-        <p>Five_stus cung cấp các phương thức thanh toán an toàn và tiện lợi, giúp người dùng có thể thanh toán dễ
-            dàng và nhanh chóng. Chúng tôi chấp nhận các phương thức thanh toán như thẻ tín dụng, thẻ ghi nợ, và các
-            phương thức thanh toán trực tuyến khác.</p>
-        <p>Người dùng cần thanh toán đầy đủ và đúng hạn để có thể sử dụng sân. Five_stus sẽ gửi thông báo thanh toán
-            đến người dùng qua email hoặc số điện thoại để nhắc nhở.</p>
-    </section>
-    <section>
-        <h2>V. Quy định về hủy đặt sân</h2>
-        <p>Người dùng có thể hủy đặt sân trong trường hợp cần thiết. Tuy nhiên, người dùng cần thông báo hủy đặt sân
-            đến Five_stus trước một thời gian nhất định để có thể nhận lại tiền đặt cọc.</p>
-        <p>Five_stus sẽ không hoàn lại tiền đặt cọc trong trường hợp người dùng hủy đặt sân quá gần với thời gian sử
-            dụng sân. Chúng tôi khuyến khích người dùng hủy đặt sân sớm để có thể nhận lại tiền đặt cọc và giúp
-            người khác có thể sử dụng sân.</p>
-    </section>
-    <section>
-        <h2>VI. Quy định về giải quyết tranh chấp</h2>
-        <p>Trong trường hợp xảy ra tranh chấp giữa người cho thuê và người thuê, Five_stus sẽ đứng ra giải quyết
-            tranh chấp một cách công bằng và minh bạch. Chúng tôi sẽ xem xét các bằng chứng và thông tin liên quan
-            để đưa ra quyết định cuối cùng.</p>
-        <p>Người dùng cần tuân thủ các quy định của Five_stus và pháp luật Việt Nam trong trường hợp xảy ra tranh
-            chấp. Chúng tôi sẽ không tham gia vào bất kỳ hoạt động nào vi phạm pháp luật và luôn sẵn sàng hợp tác
-            với các cơ quan chức năng khi cần thiết.</p>
     </section>
 </main>
 
+<main class="content-wrapper">
+    <section class="content-section">
 <h2>Điều Khoản Sân Bóng</h2>
-<!--<div class="tham-so-container" id="tham-so-container">-->
-<!--    &lt;!&ndash; Dữ liệu sẽ được thêm vào đây &ndash;&gt;-->
-<!--</div>-->
-<div class="typeGiaTri">
-    <p id="thoi-gian-dat-san"></p>
-    <p id="thoi-gian-mo-cua"></p>
-    <p id="thoi-gian-dong-cua"></p>
-    <p id="gia-san-nho"></p>
-    <p id="gia-san-lon"></p>
-    <p id="so-nguoi-toi-da-nho"></p>
-    <p id="so-nguoi-toi-da-lon"></p>
-    <p id="thoi-gian-huy-dat"></p>
-    <p id="thoi-gian-dat-truoc"></p>
-    <p id="gia-thue-bong"></p>
-</div>
-
-<section id="latest-products" class="product-store py-2 my-2 py-md-5 my-md-5 pt-0">
-    <div class="container-md">
-        <div class="display-header d-flex align-items-center justify-content-between">
-            <h2 class="section-title text-uppercase">Tại sao bạn nên chọn đặt sân tại FiveStu</h2>
-        </div>
-        <div class="row no-gutters">
-            <div class="col-md-4">
-                <div class="post-entry">
-                    <a href="#">
-                        <img th:src="@{/client/images/online.png}"alt="FiveStu" class="img-fluid"
-                             style="height: 480px;width: 400px;object-fit: contain;">
-                    </a>
-                    <div class="caption">
-                        <div class="caption-inner">
-                            <h4 class="mb-3">Đặt sân online nhanh chóng và tiện lợi</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="post-entry">
-                    <a href="#">
-                        <img th:src="@{/client/images/money.png}"alt="FiveStu" class="img-fluid"
-                             style="height: 480px;width: 400px;object-fit: contain;">
-                    </a>
-                    <div class="caption">
-                        <div class="caption-inner">
-                            <h4 class="mb-3">Giá cả phải chăng, phù hợp với mọi đối tượng</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="post-entry">
-                    <a href="#">
-                        <img th:src="@{/client/images/good.png}" alt="FiveStu" class="img-fluid"
-                             style="height: 480px;width: 400px;object-fit: contain;">
-                    </a>
-                    <div class="caption">
-                        <div class="caption-inner">
-                            <h4 class="mb-3">Dịch vụ đầy đủ, đa dạng loại sân phù hợp nhu cầu</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="terms-container">
+    <div class="terms-item">
+        <p id="thoi-gian-dat-san" class="terms-text"><strong>Thời gian đặt sân:</strong> 8:00 AM - 10:00 PM</p>
     </div>
-</section>
+    <div class="terms-item">
+        <p id="thoi-gian-mo-cua" class="terms-text"><strong>Thời gian mở cửa:</strong> 7:00 AM</p>
+    </div>
+    <div class="terms-item">
+        <p id="thoi-gian-dong-cua" class="terms-text"><strong>Thời gian đóng cửa:</strong> 11:00 PM</p>
+    </div>
+    <div class="terms-item">
+        <p id="gia-san-nho" class="terms-text"><strong>Giá sân nhỏ:</strong> 500.000 VNĐ/giờ</p>
+    </div>
+    <div class="terms-item">
+        <p id="gia-san-lon" class="terms-text"><strong>Giá sân lớn:</strong> 800.000 VNĐ/giờ</p>
+    </div>
+    <div class="terms-item">
+        <p id="so-nguoi-toi-da-nho" class="terms-text"><strong>Số người tối đa sân nhỏ:</strong> 10 người</p>
+    </div>
+    <div class="terms-item">
+        <p id="so-nguoi-toi-da-lon" class="terms-text"><strong>Số người tối đa sân lớn:</strong> 20 người</p>
+    </div>
+    <div class="terms-item">
+        <p id="thoi-gian-huy-dat" class="terms-text"><strong>Thời gian hủy đặt sân:</strong> 2 giờ trước giờ thi đấu</p>
+    </div>
+    <div class="terms-item">
+        <p id="thoi-gian-dat-truoc" class="terms-text"><strong>Thời gian đặt trước:</strong> Tối thiểu 1 ngày</p>
+    </div>
+    <div class="terms-item">
+        <p id="gia-thue-bong" class="terms-text"><strong>Giá thuê bóng:</strong> 50.000 VNĐ/cái</p>
+    </div>
+</div>
+    </section>
+</main>
+
 
 <div th:include="~{fragment/client/footerClient :: footerClient}"></div>
 <script th:src="@{/client/js/jquery-1.11.0.min.js}"></script>
@@ -388,67 +281,62 @@
                         <div class="gia-tri">Giá Trị: ${item.giaTri} ${item.typeGiaTri}</div>
                     </div>`;
                     container.append(itemHtml);
-
-                    // Cập nhật thẻ p với giá trị giaTri
-
                     $('#thoi-gian-dat-san').html(`
     <div class="message">
         <p>Thời gian đặt sân: <strong>${item.giaTri}</strong>.</p>
-        <p>Chúng tôi xin chân thành cảm ơn bạn đã lựa chọn dịch vụ của chúng tôi! Đây là thời gian tuyệt vời để bạn tận hưởng những giây phút thú vị trên sân cỏ, nơi mà bạn có thể không chỉ rèn luyện sức khỏe mà còn kết nối với bạn bè, gia đình và những người cùng đam mê thể thao.</p>
-        <p>Hãy tận dụng cơ hội này để thể hiện tài năng và niềm đam mê của bạn với môn thể thao yêu thích. Trong không gian này, hãy thoải mái thư giãn, vượt qua giới hạn của bản thân và tạo nên những kỷ niệm đẹp. Đừng quên ghi lại những khoảnh khắc đáng nhớ trong buổi chơi hôm nay, vì đó chính là những kỷ niệm quý giá mà bạn sẽ mãi trân trọng.</p>
-        <p>Chúng tôi hy vọng rằng bạn sẽ có những trải nghiệm tuyệt vời và thú vị nhất, và nếu có bất kỳ điều gì chúng tôi có thể hỗ trợ, đừng ngần ngại cho chúng tôi biết. Chúc bạn có một buổi chơi vui vẻ và thành công!</p>
+        <p>Chúng tôi xin chân thành cảm ơn bạn đã lựa chọn dịch vụ của chúng tôi! Đây là thời gian tuyệt vời để bạn tận hưởng những giây phút thư giãn và sôi động trên sân cỏ, nơi mà bạn không chỉ có thể rèn luyện thể lực mà còn kết nối và giao lưu với bạn bè, gia đình và những người có cùng đam mê thể thao. Chúng tôi hy vọng bạn sẽ có một trải nghiệm tuyệt vời và tràn đầy năng lượng trong suốt thời gian chơi.</p>
+        <p>Đây là cơ hội để bạn thể hiện tài năng, niềm đam mê với môn thể thao yêu thích, cũng như thử thách bản thân vượt qua giới hạn. Hãy tận hưởng không gian tuyệt vời này, thư giãn, vui chơi và tạo nên những kỷ niệm đẹp cùng những người bạn đồng hành. Đừng quên ghi lại những khoảnh khắc đặc biệt trong buổi chơi hôm nay, vì những kỷ niệm này sẽ là hành trang quý giá trong hành trình thể thao của bạn.</p>
+        <p>Chúng tôi hy vọng rằng bạn sẽ có một trải nghiệm tuyệt vời và đầy ắp tiếng cười. Nếu có bất kỳ yêu cầu hoặc thắc mắc nào, đừng ngần ngại liên hệ với chúng tôi. Chúng tôi luôn sẵn sàng hỗ trợ bạn để buổi chơi của bạn thêm phần hoàn hảo. Chúc bạn có một buổi chơi vui vẻ và thành công!</p>
     </div>
 `);
 
                     $('#thoi-gian-dong-cua').html(`
     <div class="message">
-        <p>Giờ đóng cửa: <strong>${item.giaTri}</strong>. Xin vui lòng rời sân trước giờ này để đảm bảo an toàn và tuân thủ quy định. Cảm ơn bạn đã hợp tác!</p>
+        <p>Giờ đóng cửa: <strong>${item.giaTri}</strong>. Xin vui lòng rời sân trước giờ này để đảm bảo an toàn và tuân thủ các quy định về thời gian hoạt động của sân. Việc tuân thủ giờ giấc sẽ giúp chúng tôi duy trì chất lượng dịch vụ và mang đến trải nghiệm tốt nhất cho tất cả mọi người. Chúng tôi rất cảm ơn sự hợp tác của bạn và mong muốn tiếp tục phục vụ bạn trong những lần tiếp theo.</p>
     </div>
 `);
 
                     $('#gia-san-nho').html(`
     <div class="message">
-        <p>Giá thuê sân nhỏ: <strong>${item.giaTri} VND</strong>. Chúng tôi hy vọng bạn sẽ có những trải nghiệm tuyệt vời và vui vẻ khi chơi trên sân!</p>
+        <p>Giá thuê sân nhỏ: <strong>${item.giaTri} VND</strong>. Đây là mức giá hợp lý cho không gian sân nhỏ, phù hợp với những nhóm bạn bè, gia đình hoặc những ai muốn trải nghiệm thể thao trong không gian ấm cúng và thoải mái. Chúng tôi hy vọng bạn sẽ có những khoảnh khắc thật vui vẻ và thú vị khi chơi trên sân, và tận dụng tối đa những giây phút quý giá này.</p>
     </div>
 `);
 
                     $('#gia-san-lon').html(`
     <div class="message">
-        <p>Giá thuê sân lớn: <strong>${item.giaTri} VND</strong>. Hãy cùng nhau tận hưởng những khoảnh khắc tuyệt vời trên sân lớn với bạn bè!</p>
+        <p>Giá thuê sân lớn: <strong>${item.giaTri} VND</strong>. Đây là mức giá cho sân lớn, lý tưởng cho những trận đấu hoặc các giải đấu quy mô lớn. Hãy cùng bạn bè và đồng đội của mình tận hưởng không khí sôi động trên sân lớn, nơi bạn có thể thể hiện hết khả năng và cùng nhau tạo nên những khoảnh khắc đáng nhớ. Chúng tôi cam kết mang đến một sân chơi chất lượng với dịch vụ tốt nhất.</p>
     </div>
 `);
 
                     $('#so-nguoi-toi-da-nho').html(`
     <div class="message">
-        <p>Số người tối đa sân nhỏ: <strong>${item.giaTri} người</strong>. Đảm bảo rằng bạn không vượt quá số lượng này để có trải nghiệm tốt nhất!</p>
+        <p>Số người tối đa sân nhỏ: <strong>${item.giaTri} người</strong>. Đảm bảo rằng bạn không vượt quá số lượng người tối đa này để có thể trải nghiệm tốt nhất và đảm bảo sự thoải mái cho tất cả mọi người. Đối với sân nhỏ, không gian có giới hạn, vì vậy hãy chắc chắn rằng tất cả mọi người đều có thể tham gia và chơi một cách vui vẻ mà không cảm thấy chật chội hay không thoải mái.</p>
     </div>
 `);
 
                     $('#so-nguoi-toi-da-lon').html(`
     <div class="message">
-        <p>Số người tối đa sân lớn: <strong>${item.giaTri} người</strong>. Hãy mời bạn bè tham gia và cùng nhau tạo ra những kỷ niệm đáng nhớ!</p>
+        <p>Số người tối đa sân lớn: <strong>${item.giaTri} người</strong>. Sân lớn cho phép tổ chức các trận đấu đông người hơn, phù hợp cho những nhóm bạn bè, các đội thể thao hoặc các sự kiện thể thao quy mô lớn. Hãy mời bạn bè, đồng nghiệp hoặc người thân tham gia và tạo ra những kỷ niệm đẹp cùng nhau trên sân lớn, nơi bạn sẽ có không gian thoải mái để chơi bóng và thể hiện tinh thần thể thao mạnh mẽ.</p>
     </div>
 `);
 
                     $('#thoi-gian-huy-dat').html(`
     <div class="message">
-        <p>Thời gian hủy đặt sân: <strong>${item.giaTri} giờ</strong>. Vui lòng thông báo trước thời gian này nếu bạn cần hủy đặt để tránh mất phí.</p>
+        <p>Thời gian hủy đặt sân: <strong>${item.giaTri} giờ</strong>. Vui lòng thông báo trước thời gian này nếu bạn cần hủy đặt sân để tránh mất phí. Việc hủy đặt sân sớm sẽ giúp chúng tôi sắp xếp lại lịch trình và phục vụ các khách hàng khác một cách tốt nhất. Cảm ơn bạn đã tuân thủ quy định và hợp tác với chúng tôi.</p>
     </div>
 `);
 
                     $('#thoi-gian-dat-truoc').html(`
     <div class="message">
-        <p>Thời gian đặt trước: <strong>${item.giaTri} ngày</strong>. Đặt sân sớm để đảm bảo có chỗ cho trận đấu của bạn!</p>
+        <p>Thời gian đặt trước: <strong>${item.giaTri} ngày</strong>. Chúng tôi khuyến khích bạn đặt sân sớm để đảm bảo có được chỗ tốt nhất cho trận đấu của mình. Việc đặt trước không chỉ giúp bạn tránh tình trạng hết chỗ mà còn giúp bạn linh hoạt hơn trong việc sắp xếp lịch trình cho buổi chơi của mình. Hãy tận dụng thời gian đặt trước để đảm bảo mọi thứ được chuẩn bị chu đáo nhất.</p>
     </div>
 `);
 
                     $('#gia-thue-bong').html(`
     <div class="message">
-        <p>Giá thuê bóng: <strong>${item.giaTri} VND</strong>. Hãy chuẩn bị sẵn để có thể chơi thoải mái mà không lo lắng về bóng!</p>
+        <p>Giá thuê bóng: <strong>${item.giaTri} VND</strong>. Đảm bảo bạn sẽ có những quả bóng chất lượng để chơi mà không lo lắng về vấn đề bóng hỏng hay mất. Hãy chuẩn bị sẵn sàng để có thể chơi thoải mái và tập trung vào trận đấu mà không phải bận tâm về các vấn đề ngoài lề. Chúng tôi cam kết cung cấp những sản phẩm tốt nhất để phục vụ cho trải nghiệm của bạn.</p>
     </div>
 `);
-
-
 
                 });
             },
@@ -457,6 +345,33 @@
             }
         });
     });
+
+    // Ly viết hàm để click vào Đặt sân ngay
+    async function loadCustomer() {
+        const response = await fetch('http://localhost:8080/customer/get-customer');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data.response; // Giả sử bạn cần trả về id khách hàng
+    }
+
+    async function checkLoginAndRedirect() {
+        try {
+            const customer = await loadCustomer();
+            if (customer && customer.id) {
+                // Nếu có thông tin khách hàng (đã đăng nhập), chuyển hướng đến trang đặt sân
+                window.location.href = '/khach-hang/dat-san';  // Thay vì th:href, dùng JavaScript để chuyển hướng
+            } else {
+                // Nếu không có thông tin khách hàng (chưa đăng nhập), mở modal login
+                $('#modallogin').modal('show');
+            }
+        } catch (error) {
+            console.error('Lỗi khi kiểm tra khách hàng:', error);
+            // Nếu gặp lỗi, bạn có thể mở modal hoặc xử lý lỗi ở đây
+            $('#modallogin').modal('show');
+        }
+    }
 </script>
 </body>
 

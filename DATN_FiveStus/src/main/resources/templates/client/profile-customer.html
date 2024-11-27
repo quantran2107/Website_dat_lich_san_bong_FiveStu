@@ -14,10 +14,6 @@
             <div class="col-lg-12 text-center text-lg-left mb-4 mb-lg-0">
                 <h1 class="text-success font-weight-bold">Chào mừng bạn đến với Sân bóng FiveStu</h1>
                 <p class="lead text-dark">Trải nghiệm dịch vụ đặt sân bóng nhanh chóng cùng chúng tôi</p>
-                <p>
-                    <a th:href="@{/khach-hang/dat-san}" class="btn btn-success btn-lg py-3 px-5 mr-3 mb-2">Đặt sân ngay</a>
-                    <a th:href="@{/khach-hang-noi-quy3}" class="text-success py-3 px-5 mb-2">Nội quy</a>
-                </p>
             </div>
         </div>
     </div>
@@ -27,29 +23,24 @@
 
 
 <section id="featured-products" class="product-store">
-    <div class="container-md shadow p-3 mb-5 bg-white rounded border" style="display: flex; " >
-        <div class="flex-shrink-0 p-3 bg-white border-right " style="width: 280px;">
+    <div class="container-md shadow p-3 mb-5 bg-white rounded border d-flex">
+        <div class="sidebar flex-shrink-0 p-3 bg-light border-right" style="width: 280px;">
             <ul class="list-unstyled ps-0">
-                <li class="mb-1 ">
-                    <button class="btn btn-toggle w-100 hvr-text-color " style="text-align: left;font-size: 16px" data-bs-toggle="collapse" data-bs-target="#customer-collapse" aria-expanded="false">
-                        Tài khoản của tôi
+                <li class="mb-2">
+                    <button class="btn btn-toggle align-items-center rounded collapsed w-100 hvr-text-color" style="font-size: 16px" data-bs-toggle="collapse" data-bs-target="#customer-collapse" aria-expanded="false">
+                        <i class="bi bi-person-circle me-2"></i> Tài khoản của tôi
                     </button>
                     <div class="collapse w-100" id="customer-collapse">
                         <ul class="btn-toggle-nav list-unstyled ps-3 pb-1 small">
-                            <li id="profileCustomer" class="hvr-text-color" ><a href="#"  style="font-size: 14px">Hồ sơ</a></li>
-                            <li id="changerPass" class="hvr-text-color" ><a href="#"  style="font-size: 14px">Đổi mật khẩu</a></li>
-                            <li id="customerAddress" class="hvr-text-color"><a href="#" style="font-size: 14px">Địa chỉ</a></li>
+                            <li id="profileCustomer" class="sidebar-item"><a href="#" class="sidebar-link">Hồ sơ</a></li>
+                            <li id="changerPass" class="sidebar-item"><a href="#" class="sidebar-link">Đổi mật khẩu</a></li>
+                            <li id="customerAddress" class="sidebar-item"><a href="#" class="sidebar-link">Địa chỉ</a></li>
                         </ul>
                     </div>
                 </li>
-                <li class="mb-1 ">
-                    <button id="historyBill" class="btn btn-toggle w-100 hvr-text-color " style="text-align: left;font-size: 16px" >
-                        Lịch sử hóa đơn
-                    </button>
-                </li>
             </ul>
         </div>
-        <div id="contentProfile" class="p-3 bg-white " style="flex-grow:1 "></div>
+        <div id="contentProfile" class="p-3 bg-white flex-grow-1"></div>
     </div>
 </section>
 <!-- Modal Thêm/Cập nhật Địa chỉ -->
@@ -62,6 +53,11 @@
             </div>
             <div class="modal-body">
                 <form id="addressForm">
+                    <!-- Địa chỉ cụ thể -->
+                    <div class="mb-3">
+                        <label for="specificAddress" class="form-label">Địa chỉ cụ thể</label>
+                        <input type="text" class="form-control" id="specificAddress" placeholder="Nhập địa chỉ cụ thể">
+                    </div>
                     <!-- Tỉnh/Thành -->
                     <div class="mb-3">
                         <label for="city" class="form-label">Tỉnh/Thành</label>
@@ -83,10 +79,9 @@
                             <option selected disabled>Chọn Phường/Xã</option>
                         </select>
                     </div>
-                    <!-- Địa chỉ cụ thể -->
                     <div class="mb-3">
-                        <label for="specificAddress" class="form-label">Địa chỉ cụ thể</label>
-                        <input type="text" class="form-control" id="specificAddress" placeholder="Nhập địa chỉ cụ thể">
+                        <label for="ghiChu" class="form-label">Ghi chú</label>
+                        <input type="text" class="form-control" id="ghiChu" placeholder="Nhập ghi chú (Có thể để trống)">
                     </div>
                 </form>
             </div>
@@ -97,7 +92,7 @@
         </div>
     </div>
 </div>
-
+<link rel="stylesheet" href="/client/css/sidebarProfile.css">
 <div th:include="~{fragment/client/footerClient :: footerClient}"></div>
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
