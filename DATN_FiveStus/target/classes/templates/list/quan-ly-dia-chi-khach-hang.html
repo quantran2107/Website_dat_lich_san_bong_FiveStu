@@ -28,26 +28,26 @@
                                                 <label for="maKhachHang" class="form-label">Mã khách hàng</label>
                                                 <input type="text" class="form-control" id="maKhachHang"
                                                        name="maKhachHang"
-                                                       th:value="${khachHang.maKhachHang}" required disabled>
+                                                       th:value="${khachHang.maKhachHang}"  disabled>
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="hoVaTen" class="form-label">Họ và tên</label>
                                                 <input type="text" class="form-control" id="hoVaTen" name="hoVaTen"
-                                                       th:value="${khachHang.hoVaTen}" required>
+                                                       th:value="${khachHang.hoVaTen}" >
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="email" class="form-label">Email</label>
                                                 <input type="email" class="form-control" id="email" name="email"
-                                                       th:value="${khachHang.email}" required>
+                                                       th:value="${khachHang.email}" >
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="soDienThoai" class="form-label">Số điện thoại</label>
                                                 <input type="text" class="form-control" id="soDienThoai"
                                                        name="soDienThoai"
-                                                       th:value="${khachHang.soDienThoai}" required>
+                                                       th:value="${khachHang.soDienThoai}" >
                                             </div>
 
                                             <div class="mb-3">
@@ -117,21 +117,21 @@
                                                             <div class="form-row">
                                                                 <div class="form-group col-md-4">
                                                                     <label for="city">Tỉnh thành</label>
-                                                                    <select id="city" class="form-control" name="thanhPho" required>
+                                                                    <select id="city" class="form-control" name="thanhPho" >
                                                                         <option value="" selected>Chọn tỉnh thành</option>
                                                                         <!-- Các option của tỉnh thành -->
                                                                     </select>
                                                                 </div>
                                                                 <div class="form-group col-md-4">
                                                                     <label for="district">Quận huyện</label>
-                                                                    <select id="district" class="form-control" name="quanHuyen" required>
+                                                                    <select id="district" class="form-control" name="quanHuyen" >
                                                                         <option value="" selected>Chọn quận huyện</option>
                                                                         <!-- Các option của quận huyện -->
                                                                     </select>
                                                                 </div>
                                                                 <div class="form-group col-md-4">
                                                                     <label for="ward">Phường xã</label>
-                                                                    <select id="ward" class="form-control" name="phuongXa" required>
+                                                                    <select id="ward" class="form-control" name="phuongXa" >
                                                                         <option value="" selected>Chọn phường xã</option>
                                                                         <!-- Các option của phường xã -->
                                                                     </select>
@@ -150,76 +150,16 @@
                                         </div>
 
                                         <!-- Danh sách địa chỉ -->
-                                        <div th:if="${#lists.isEmpty(diaChiList)}">
-                                            <!-- Hiển thị thông báo khi không có địa chỉ -->
-                                            <p class="text-danger text-center">Chưa có địa chỉ</p>
+<!--                                        <div th:if="${#lists.isEmpty(diaChiList)}">-->
+<!--                                            &lt;!&ndash; Hiển thị thông báo khi không có địa chỉ &ndash;&gt;-->
+<!--                                            <p class="text-danger text-center">Chưa có địa chỉ</p>-->
+<!--                                        </div>-->
+                                        <input type="hidden" id="khachHangId" th:value="${khachHang.id}">
+                                        <div id="address-list">
+                                            <!-- Danh sách địa chỉ sẽ được thêm vào đây thông qua JavaScript -->
                                         </div>
 
-                                        <div th:if="${!#lists.isEmpty(diaChiList)}">
-                                            <!-- Danh sách địa chỉ và phân trang chỉ hiển thị khi có địa chỉ -->
-                                            <div th:each="diaChi, iterStat : ${diaChiList}">
-                                                <div class="accordion customer-address-accordion" th:id="'accordion' + ${iterStat.index}">
-                                                    <div class="accordion-item" style="margin-top: 20px">
-                                                        <h2 class="accordion-header" th:id="'heading' + ${iterStat.index}">
-                                                            <button class="accordion-button customer-address-button" type="button"
-                                                                    th:onclick="'toggleForm1(' + ${iterStat.index} + ')'">
-                                                                <b>Địa chỉ <span th:text="${(currentPage * sizeDiaChi) + iterStat.index + 1}"></span></b>
-                                                            </button>
-                                                        </h2>
-                                                        <div th:id="'collapse' + ${iterStat.index}" class="accordion-collapse collapse show"
-                                                             th:aria-labelledby="'heading' + ${iterStat.index}">
-                                                            <div class="accordion-body">
-                                                                <form th:action="@{/quan-ly-khach-hang/cap-nhat-dia-chi}" method="post"
-                                                                      class="update-address-form" th:data-index="${iterStat.index}">
-                                                                    <input type="hidden" th:name="id" th:value="${diaChi.id}">
-                                                                    <div class="form-group">
-                                                                        <label for="updateTenDiaChi">Địa chỉ cụ thể</label>
-                                                                        <input type="text" class="form-control" id="updateTenDiaChi"
-                                                                               name="diaChiCuThe" th:value="${diaChi.diaChiCuThe}">
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-4">
-                                                                            <label>Tỉnh thành</label>
-                                                                            <select class="form-control city-select" name="thanhPho" required
-                                                                                    th:data-index="${iterStat.index}">
-                                                                                <option th:value="${diaChi.thanhPho}" th:text="${diaChi.thanhPho}" selected></option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-4">
-                                                                            <label>Quận huyện</label>
-                                                                            <select class="form-control district-select" name="quanHuyen" required
-                                                                                    th:data-index="${iterStat.index}">
-                                                                                <option th:value="${diaChi.quanHuyen}" th:text="${diaChi.quanHuyen}" selected></option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div class="form-group col-md-4">
-                                                                            <label>Phường xã</label>
-                                                                            <select class="form-control ward-select" name="phuongXa" required
-                                                                                    th:data-index="${iterStat.index}">
-                                                                                <option th:value="${diaChi.phuongXa}" th:text="${diaChi.phuongXa}" selected></option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="updateGhiChu">Ghi chú</label>
-                                                                        <input type="text" class="form-control" id="updateGhiChu"
-                                                                               name="ghiChu" th:value="${diaChi.ghiChu}"
-                                                                               placeholder="Không có ghi chú"
-                                                                               th:placeholder="${diaChi.ghiChu == null or diaChi.ghiChu.isEmpty() ? 'Không có ghi chú' : ''}">
-                                                                    </div>
-                                                                    <div class="text-right">
-                                                                        <button type="submit" class="btn btn-outline-success">
-                                                                            <span class="fe fe-edit-3"></span>
-                                                                        </button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Phân trang -->
+                                        <!-- Phân trang -->
                                             <div class="row justify-content-center mt-4">
                                                 <div class="col-12">
                                                     <nav aria-label="Page navigation example">
@@ -260,6 +200,94 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
     <script>
+        async function fetchAddresses(khachHangId) {
+            try {
+                const response = await fetch(`/dia-chi/${khachHangId}`);
+                if (!response.ok) {
+                    throw new Error("Không thể tải dữ liệu từ server.");
+                }
+                const data = await response.json();
+                renderAddresses(data);
+            } catch (error) {
+                console.error("Lỗi khi lấy danh sách địa chỉ:", error);
+            }
+        }
+
+        function renderAddresses(addressList) {
+            const addressContainer = document.getElementById("address-list");
+            addressContainer.innerHTML = ""; // Xóa nội dung cũ
+            addressList.forEach((address, index) => {
+                const accordionId = `accordion${index}`;
+                const headingId = `heading${index}`;
+                const collapseId = `collapse${index}`;
+                const addressHTML = `
+                <div class="accordion customer-address-accordion" id="${accordionId}">
+                    <div class="accordion-item" style="margin-top: 20px">
+                        <h2 class="accordion-header" id="${headingId}">
+                            <button class="accordion-button customer-address-button" type="button" onclick="toggleAccordion('${collapseId}')">
+                                <b>Địa chỉ ${index + 1}</b>
+                            </button>
+                        </h2>
+                        <div id="${collapseId}" class="accordion-collapse collapse show" aria-labelledby="${headingId}">
+                            <div class="accordion-body">
+                                <form class="update-address-form" data-index="${index}">
+                                    <input type="hidden" name="id" value="${address.id}">
+                                    <div class="form-group">
+                                        <label for="updateTenDiaChi${index}">Địa chỉ cụ thể</label>
+                                        <input type="text" class="form-control" id="updateTenDiaChi${index}" name="diaChiCuThe" value="${address.diaChiCuThe}">
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label>Tỉnh thành</label>
+                                            <select class="form-control city-select" name="thanhPho">
+                                                <option value="${address.thanhPho}" selected>${address.thanhPho}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Quận huyện</label>
+                                            <select class="form-control district-select" name="quanHuyen">
+                                                <option value="${address.quanHuyen}" selected>${address.quanHuyen}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label>Phường xã</label>
+                                            <select class="form-control ward-select" name="phuongXa">
+                                                <option value="${address.phuongXa}" selected>${address.phuongXa}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="updateGhiChu${index}">Ghi chú</label>
+                                        <input type="text" class="form-control" id="updateGhiChu${index}" name="ghiChu" value="${address.ghiChu || ''}" placeholder="Không có ghi chú">
+                                    </div>
+                                    <div class="text-right">
+                                        <button type="submit" class="btn btn-outline-success">
+                                            <span class="fe fe-edit-3"></span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+                addressContainer.insertAdjacentHTML("beforeend", addressHTML);
+            });
+        }
+
+        function toggleAccordion(collapseId) {
+            const element = document.getElementById(collapseId);
+            if (element.classList.contains("show")) {
+                element.classList.remove("show");
+            } else {
+                element.classList.add("show");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const khachHangId = document.getElementById("khachHangId").value;
+            fetchAddresses(khachHangId);
+        });
         function toggleForm() {
             var form = document.getElementById('collapseAddAddress');
             if (form.classList.contains('show')) {
@@ -268,6 +296,7 @@
                 form.classList.add('show');
             }
         }
+
         document.addEventListener('DOMContentLoaded', function () {
             const closeButtons = document.querySelectorAll('.btn-secondary[data-bs-toggle="collapse"]');
             closeButtons.forEach(button => {
@@ -281,174 +310,68 @@
                 });
             });
         });
-        document.addEventListener("DOMContentLoaded", function () {
-            var citis = document.getElementById("city");
-            var districts = document.getElementById("district");
-            var wards = document.getElementById("ward");
 
-            var Parameter = {
-                url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
-                method: "GET",
-                responseType: "application/json",
-            };
+        document.addEventListener("DOMContentLoaded", async function () {
+            const citySelect = document.getElementById("city");
+            const districtSelect = document.getElementById("district");
+            const wardSelect = document.getElementById("ward");
 
-            axios(Parameter).then(function (result) {
-                renderCity(result.data);
-            });
+            let locationData = []; // Biến lưu trữ dữ liệu địa phương
 
-            function renderCity(data) {
-                for (const x of data) {
-                    var opt = document.createElement('option');
-                    opt.value = x.Name;
-                    opt.text = x.Name;
-                    opt.setAttribute('data-id', x.Id);
-                    citis.options.add(opt);
+            // Hàm tải dữ liệu từ URL
+            async function fetchData() {
+                try {
+                    const response = await axios.get(
+                        "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
+                    );
+                    locationData = response.data;
+                    resetSelect(citySelect, "Chọn Tỉnh Thành");
+                    renderOptions(citySelect, locationData, "Name", "Id"); // Render tỉnh/thành phố
+                } catch (error) {
+                    console.error("Lỗi khi tải dữ liệu địa chỉ:", error);
                 }
-
-                citis.onchange = function () {
-                    districts.length = 1;
-                    wards.length = 1;
-                    if (this.options[this.selectedIndex].dataset.id !== "") {
-                        const result = data.filter(n => n.Id === this.options[this.selectedIndex].dataset.id);
-
-                        for (const k of result[0].Districts) {
-                            var opt = document.createElement('option');
-                            opt.value = k.Name;
-                            opt.text = k.Name;
-                            opt.setAttribute('data-id', k.Id);
-                            districts.options.add(opt);
-                        }
-                    }
-                };
-
-                districts.onchange = function () {
-                    wards.length = 1;
-                    const dataCity = data.filter((n) => n.Id === citis.options[citis.selectedIndex].dataset.id);
-                    if (this.options[this.selectedIndex].dataset.id !== "") {
-                        const dataWards = dataCity[0].Districts.filter(n => n.Id === this.options[this.selectedIndex].dataset.id)[0].Wards;
-
-                        for (const w of dataWards) {
-                            var opt = document.createElement('option');
-                            opt.value = w.Name;
-                            opt.text = w.Name;
-                            opt.setAttribute('data-id', w.Id);
-                            wards.options.add(opt);
-                        }
-                    }
-                };
             }
-        });
 
-        document.addEventListener("DOMContentLoaded", function () {
-            var forms = document.querySelectorAll(".update-address-form");
-
-            forms.forEach(function (form) {
-                var index = form.getAttribute("data-index");
-                var citis1 = form.querySelector('.city-select[data-index="' + index + '"]');
-                var districts1 = form.querySelector('.district-select[data-index="' + index + '"]');
-                var wards1 = form.querySelector('.ward-select[data-index="' + index + '"]');
-
-                // Lấy giá trị đã chọn (nếu có) từ các attribute của các select
-                var currentCityId = citis1.getAttribute('data-selected-id');
-                var currentDistrictId = districts1.getAttribute('data-selected-id');
-                var currentWardId = wards1.getAttribute('data-selected-id');
-
-                var Parameter1 = {
-                    url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
-                    method: "GET",
-                    responseType: "application/json",
-                };
-
-                axios(Parameter1).then(function (result) {
-                    renderCity(result.data, citis1, districts1, wards1, currentCityId, currentDistrictId, currentWardId);
-                }).catch(function (error) {
-                    console.error("Error fetching data:", error);
+            // Hàm render options cho dropdown
+            function renderOptions(selectElement, data, textKey = "Name", valueKey = "Id") {
+                data.forEach((item) => {
+                    const option = document.createElement("option");
+                    option.value = item[valueKey];
+                    option.textContent = item[textKey];
+                    selectElement.appendChild(option);
                 });
+            }
 
-                function renderCity(data, citis1, districts1, wards1, currentCityId, currentDistrictId, currentWardId) {
-                    for (const x of data) {
-                        var opt = document.createElement('option');
-                        opt.value = x.Name;
-                        opt.text = x.Name;
-                        opt.setAttribute('data-id', x.Id);
-                        citis1.options.add(opt);
-                    }
+            // Hàm reset dropdown
+            function resetSelect(selectElement, placeholder = "Chọn") {
+                selectElement.innerHTML = `<option value="">${placeholder}</option>`;
+            }
 
-                    // Nếu có Tỉnh/Thành phố đã chọn, thiết lập và cập nhật danh sách Quận/Huyện
-                    if (currentCityId) {
-                        citis1.value = currentCityId;
-
-                        // Tự động cập nhật Quận/Huyện theo Tỉnh/Thành phố đã chọn
-                        updateDistricts(currentCityId, data, districts1, currentDistrictId, currentWardId);
-                    }
-
-                    // Sự kiện khi thay đổi Tỉnh/Thành phố
-                    citis1.onchange = function () {
-                        districts1.length = 1; // Reset danh sách Quận/Huyện
-                        wards1.length = 1; // Reset danh sách Phường/Xã
-                        const selectedCityId = this.options[this.selectedIndex].getAttribute('data-id');
-
-                        if (selectedCityId) {
-                            updateDistricts(selectedCityId, data, districts1, null, null);
-                        }
-                    };
-
-                    districts1.onchange = function () {
-                        wards1.length = 1; // Reset danh sách Phường/Xã
-                        const selectedCityId = citis1.options[citis1.selectedIndex].getAttribute('data-id');
-                        const selectedDistrictId = this.options[this.selectedIndex].getAttribute('data-id');
-
-                        if (selectedCityId && selectedDistrictId) {
-                            const city = data.find(n => n.Id === selectedCityId);
-                            const district = city.Districts.find(n => n.Id === selectedDistrictId);
-
-                            if (district) {
-                                updateWards(district.Wards, wards1, null);
-                            }
-                        }
-                    };
-                }
-
-                function updateDistricts(cityId, data, districts1, currentDistrictId, currentWardId) {
-                    const city = data.find(n => n.Id === cityId);
-
-                    if (city && city.Districts) {
-                        for (const district of city.Districts) {
-                            var opt = document.createElement('option');
-                            opt.value = district.Name;
-                            opt.text = district.Name;
-                            opt.setAttribute('data-id', district.Id);
-                            districts1.options.add(opt);
-                        }
-
-                        // Nếu có Quận/Huyện đã chọn, thiết lập và cập nhật danh sách Phường/Xã
-                        if (currentDistrictId) {
-                            districts1.value = currentDistrictId;
-
-                            const district = city.Districts.find(n => n.Id === currentDistrictId);
-                            if (district) {
-                                updateWards(district.Wards, wards1, currentWardId);
-                            }
-                        }
-                    }
-                }
-
-                function updateWards(wardsData, wards1, currentWardId) {
-                    for (const ward of wardsData) {
-                        var opt = document.createElement('option');
-                        opt.value = ward.Name;
-                        opt.text = ward.Name;
-                        opt.setAttribute('data-id', ward.Id);
-                        wards1.options.add(opt);
-                    }
-
-                    // Nếu có Phường/Xã đã chọn, thiết lập giá trị
-                    if (currentWardId) {
-                        wards1.value = currentWardId;
-                    }
-                }
+            // Sự kiện khi chọn tỉnh/thành phố
+            citySelect.addEventListener("change", function () {
+                const selectedCityId = this.value;
+                const districts = locationData.find((city) => city.Id === selectedCityId)?.Districts || [];
+                resetSelect(districtSelect, "Chọn Quận Huyện");
+                resetSelect(wardSelect, "Chọn Phường Xã");
+                renderOptions(districtSelect, districts, "Name", "Id");
             });
+
+            // Sự kiện khi chọn quận/huyện
+            districtSelect.addEventListener("change", function () {
+                const selectedCityId = citySelect.value;
+                const selectedDistrictId = this.value;
+                const wards =
+                    locationData
+                        .find((city) => city.Id === selectedCityId)
+                        ?.Districts.find((district) => district.Id === selectedDistrictId)?.Wards || [];
+                resetSelect(wardSelect, "Chọn Phường Xã");
+                renderOptions(wardSelect, wards, "Name", "Id");
+            });
+
+            // Khởi chạy
+            await fetchData();
         });
+
         document.getElementById("addAddressForm").addEventListener("submit", function (event) {
             event.preventDefault(); // Ngăn chặn hành động mặc định của submit form
 

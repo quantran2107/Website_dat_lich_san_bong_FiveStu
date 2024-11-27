@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,34 @@ public class KhachHangDiaChiRest {
     public ResponseEntity<List> GetAll2(){
         List<DiaChiKhachHangDTO>diaChiKhachHangDTOS=diaChiKhachHangService.getAll();
         return ResponseEntity.ok(diaChiKhachHangDTOS);
+    }
+    @GetMapping("/{khachHangId}")
+    public ResponseEntity<List<DiaChiKhachHangDTO>> getAllDiaChiByKhachHangId(@PathVariable Integer khachHangId) {
+        // Lấy danh sách địa chỉ của khách hàng theo ID
+        List<DiaChiKhachHangDTO> diaChiList = diaChiKhachHangService.findById(khachHangId);
+
+        // Sắp xếp danh sách theo createdAt (từ mới đến cũ)
+        diaChiList.sort(Comparator.comparing(DiaChiKhachHangDTO::getCreatedAt).reversed());
+
+        // Trả về danh sách đã sắp xếp
+        return ResponseEntity.ok(diaChiList);
+    }
+
+    @PostMapping("/them/{khachHangId}")
+    public ResponseEntity<String> addNewAddress(@PathVariable Integer khachHangId,
+                                                @RequestBody DiaChiKhachHangDTO diaChiKhachHangDTO) {
+        try {
+            // Gán ID khách hàng cho địa chỉ mới
+            diaChiKhachHangDTO.setIdKhachHang(khachHangId);
+
+            // Gọi service để thêm địa chỉ
+            diaChiKhachHangService.save(diaChiKhachHangDTO);
+
+            return ResponseEntity.ok("Địa chỉ mới đã được thêm thành công!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Lỗi khi thêm địa chỉ mới: " + e.getMessage());
+        }
     }
     @GetMapping("/email/{email}")
     public List<DiaChiKhachHangDTO> getDiaChiByEmail(@PathVariable String email) {
