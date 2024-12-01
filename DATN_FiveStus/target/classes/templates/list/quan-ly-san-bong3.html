@@ -502,6 +502,11 @@
                         $(`#${tabId}`).remove(); // Remove the tab content
                         activeTab.remove(); // Remove the tab link
                         Swal.fire('Tab đã được xoá!', '', 'success');
+
+                        var currentTab = $('ul.nav-tabs li a.active');
+                        var tabContentId = currentTab.attr('href');
+                        $(tabContentId).load(location.href + ' ' + tabContentId);
+
                         setTimeout(function () {
                             window.location.reload();
                         }, 1000);
