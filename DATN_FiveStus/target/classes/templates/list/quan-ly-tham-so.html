@@ -112,6 +112,7 @@
                                         <option value="Phút">Phút</option>
                                         <option value="Lần">Lần</option>
                                         <option value="Ngày">Ngày</option>
+                                        <option value="Người">Người</option>
                                     </select>
                                 </div>
 
@@ -155,9 +156,22 @@
                                     <label for="editParameterValue" class="form-label">Giá Trị</label>
                                     <input type="text" class="form-control" id="editParameterValue" name="giaTri">
                                 </div>
+<!--                                <div class="mb-3">-->
+<!--                                    <label for="editParameterType" class="form-label">Loại Giá Trị</label>-->
+<!--                                    <input type="text" class="form-control" id="editParameterType" name="typeGiaTri">-->
+<!--                                </div>-->
+
                                 <div class="mb-3">
                                     <label for="editParameterType" class="form-label">Loại Giá Trị</label>
-                                    <input type="text" class="form-control" id="editParameterType" name="typeGiaTri">
+                                    <select class="form-control" id="editParameterType" name="typeGiaTri">
+                                        <option value="%">%</option>
+                                        <option value="VND">VND</option>
+                                        <option value="Giờ">Giờ</option>
+                                        <option value="Phút">Phút</option>
+                                        <option value="Lần">Lần</option>
+                                        <option value="Ngày">Ngày</option>
+                                        <option value="Người">Người</option>
+                                    </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="editParameterDescription" class="form-label">Mô Tả</label>
@@ -302,9 +316,9 @@
                 $('#editParameterCode').val(data.ma);
                 $('#editParameterName').val(data.ten);
                 $('#editParameterValue').val(data.giaTri);
-                $('#editParameterType').val(data.typeGiaTri);
+                $('#editParameterType').val(data.typeGiaTri).change(); // Giá trị typeGiaTri sẽ được chọn đúng
                 $('#editParameterDescription').val(data.moTa);
-                $('#editParameterStatus').val(data.trangThai === true ? 'true' : 'false');
+                $('#editParameterStatus').val(data.trangThai === true ? 'true' : 'false'); // Đảm bảo trạng thái là 'true' hoặc 'false'
 
                 // Hiển thị modal
                 var editModalElement = document.getElementById('editModal');
@@ -333,8 +347,36 @@
             giaTri: $('#editParameterValue').val(),
             typeGiaTri: $('#editParameterType').val(),
             moTa: $('#editParameterDescription').val(),
-            trangThai: $('#editParameterStatus').val()
+            trangThai: $('#editParameterStatus').val() === 'true' // Chuyển chuỗi 'true' thành boolean
         };
+
+        // Validate các trường input
+        if (!formData.ma || formData.ma.trim() === "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Mã tham số không được để trống!'
+            });
+            return;
+        }
+
+        if (!formData.ten || formData.ten.trim() === "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Tên tham số không được để trống!'
+            });
+            return;
+        }
+
+        if (!formData.giaTri || formData.giaTri.trim() === "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Giá trị tham số không được để trống!'
+            });
+            return;
+        }
 
         // Gửi yêu cầu cập nhật
         $.ajax({
@@ -349,15 +391,14 @@
                     'success'
                 );
 
-                fetchDataAndRenderTable()
+                // Cập nhật bảng dữ liệu
+                fetchDataAndRenderTable();
+
                 // Đóng modal
                 $('#editModal').modal('hide');
 
                 // Làm sạch form
                 $('#editParameterForm')[0].reset();
-
-                // Cập nhật bảng dữ liệu
-                fetchDataAndRenderTable();
             },
             error: function (xhr) {
                 Swal.fire({
@@ -368,6 +409,7 @@
             }
         });
     });
+
 
     // Reset modal khi đóng
     $('#editModal').on('hidden.bs.modal', function () {
