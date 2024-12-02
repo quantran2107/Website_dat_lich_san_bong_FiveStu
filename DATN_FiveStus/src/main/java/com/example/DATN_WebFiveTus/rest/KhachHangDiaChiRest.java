@@ -4,6 +4,10 @@ import com.example.DATN_WebFiveTus.dto.KhachHangDTO;
 import com.example.DATN_WebFiveTus.entity.DiaChiKhachHang;
 import com.example.DATN_WebFiveTus.service.DiaChiKhachHangService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +41,33 @@ public class KhachHangDiaChiRest {
 
         // Trả về danh sách đã sắp xếp
         return ResponseEntity.ok(diaChiList);
+    }
+    @PutMapping("/{diaChiId}")
+    public ResponseEntity<DiaChiKhachHangDTO> updateDiaChi(
+            @PathVariable Integer diaChiId,
+            @RequestBody DiaChiKhachHangDTO diaChiKhachHangDTO
+    ) {
+        DiaChiKhachHangDTO updatedDiaChi = diaChiKhachHangService.updateDiaChi(diaChiId, diaChiKhachHangDTO);
+        if (updatedDiaChi != null) {
+            return ResponseEntity.ok(updatedDiaChi);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/khachhang/{idKhachHang}")
+    public ResponseEntity<Page<DiaChiKhachHangDTO>> findByIdDC(
+            @PathVariable Integer idKhachHang,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size) {
+
+        // Tạo đối tượng Pageable
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        // Lấy dữ liệu từ service
+        Page<DiaChiKhachHangDTO> result = diaChiKhachHangService.findByIdDC(idKhachHang, pageable);
+
+        // Trả về dữ liệu phân trang dưới dạng JSON
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/them/{khachHangId}")
@@ -85,11 +116,12 @@ public class KhachHangDiaChiRest {
         return ResponseEntity.ok(diaChi);
     }
     @PostMapping("/add/{email}")
-    public ResponseEntity<DiaChiKhachHangDTO> addDiaChi(@PathVariable String email,
-                                                        @RequestBody DiaChiKhachHangDTO diaChiKhachHangDTO) {
-        DiaChiKhachHangDTO createdDiaChi = diaChiKhachHangService.addDiaChiByEmail(email, diaChiKhachHangDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdDiaChi); // Trả về địa chỉ mới với mã trạng thái 201
+    public ResponseEntity<Void> addDiaChi(@PathVariable String email,
+                                          @RequestBody DiaChiKhachHangDTO diaChiKhachHangDTO) {
+        diaChiKhachHangService.addDiaChiByEmail(email, diaChiKhachHangDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build(); // Trả về mã trạng thái 201 (Created)
     }
+
 
 
 }
