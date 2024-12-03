@@ -41,4 +41,6 @@ public interface SanBongService {
     List<SanBongDTO> getListSanBongWithIdLoaiSan(Integer idLoaiSan);
 
     boolean checkTrungSanBong(Integer idLoaiSan, String tenSanBong);
+
+    void updateTrangThai(Integer id, String status);
 }
