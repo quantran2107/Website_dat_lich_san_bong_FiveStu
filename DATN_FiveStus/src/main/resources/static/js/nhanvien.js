@@ -661,7 +661,9 @@ $(document).ready(function () {
                                 $('#imageNVdetail').attr('src', 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg');
                                 imageData = '';
                                 $('#formAdd').find('input').val('');
-                            } else {
+                            } else if (response==="Email đã tồn tại!"){
+                                showErrorToast('Email đã tồn tại!');
+                            }else {
                                 showErrorToast('Thêm thất bại');
                             }
                         },
