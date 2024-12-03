@@ -355,15 +355,6 @@ CREATE TABLE phu_phi_hoa_don (
   CONSTRAINT fk_phuPhiHoaDon_hoaDonChiTiet FOREIGN KEY (id_hoa_don_chi_tiet) REFERENCES hoa_don_chi_tiet(id)
 );
 
--- Table: loai_tham_so
-CREATE TABLE loai_tham_so (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  ten VARCHAR(255),
-  trang_thai INT,
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit
-);
 
 -- Table: tham_so
 CREATE TABLE tham_so (
@@ -376,8 +367,10 @@ CREATE TABLE tham_so (
   trang_thai BOOLEAN NOT NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  deleted_at BIT(1) DEFAULT 1
+  deleted_at BIT(1) DEFAULT 1,
+  is_active BIT(1) DEFAULT 1
 );
+
 
 
 -- Table: giao_ca
@@ -2249,42 +2242,42 @@ VALUES
 
 INSERT INTO do_thue (don_gia, so_luong, ten_do_thue, trang_thai, created_at, updated_at, deleted_at, image_data)
 VALUES
-(100000, 150, 'Bóng đá 1', 'Chưa chọn', NOW(), NOW(), 0, default),
-(100000, 130, 'Bóng đá 2', 'Chưa chọn', NOW(), NOW(), 0, default),
-(100000, 20, 'Áo thi đấu 1', 'Chưa chọn', NOW(), NOW(), 0, default),
-(100000, 10, 'Giày đá bóng 1', 'Chưa chọn', NOW(), NOW(), 0, default),
-(100000, 10, 'Bóng đá 3', 'Đã chọn', NOW(), NOW(), 0, default),
-(100000, 10, 'Áo thi đấu 2', 'Đã chọn', NOW(), NOW(), 0, default),
-(100000, 10, 'Giày đá bóng 2', 'Đã chọn', NOW(), NOW(), 0, default),
-(100000, 10, 'Khung gôn 1', 'Đã chọn', NOW(), NOW(), 0, default),
-(100000, 10, 'Khung gôn 2', 'Đã chọn', NOW(), NOW(), 0, default),
-(100000, 10, 'Bóng đá 4', 'Đã chọn', NOW(), NOW(), 0, default),
-(100000, 10, 'Bóng đá 5', 'Đã chọn', NOW(), NOW(), 0, default),
-(100000, 10, 'Giày đá bóng 3', 'Đã chọn', NOW(), NOW(), 0, default);
+(30000, 150, 'Giày cá tính', 'Còn', NOW(), NOW(), 0, 'https://res.cloudinary.com/dsuehugin/image/upload/v1729485498/lodtasdf5ratvwqfioms.webp'),
+(10000, 130, 'Bảng điểm số', 'Còn', NOW(), NOW(), 0, 'https://res.cloudinary.com/dsuehugin/image/upload/v1731311488/uzqf4h9i3ndtpg4crmcg.jpg'),
+(5000, 20, 'Chướng ngại vật', 'Còn', NOW(), NOW(), 0, 'https://res.cloudinary.com/dsuehugin/image/upload/v1731312712/ekhkja1gxdpvsins9geb.jpg'),
+(30000, 10, 'Găng tay cá tính', 'Còn', NOW(), NOW(), 0, 'https://res.cloudinary.com/dsuehugin/image/upload/v1731312712/hzrmcxaqpe20lrz4klte.jpg'),
+(20000, 10, 'Dây đàn hồi', 'Còn', NOW(), NOW(), 0, 'https://res.cloudinary.com/dsuehugin/image/upload/v1731312712/leyxqsa5neeopzxratmu.jpg'),
+(30000, 10, 'Găng yêu nước', 'Còn', NOW(), NOW(), 0, 'https://res.cloudinary.com/dsuehugin/image/upload/v1731312712/lngkvssfyxhjyu6fgvg6.jpg'),
+(30000, 10, 'Găng cho nữ', 'Còn', NOW(), NOW(), 0, 'https://res.cloudinary.com/dsuehugin/image/upload/v1731312712/ztyzbqtjnifuhjvuzxho.jpg'),
+(100000, 0, 'Bảo vệ chân', 'Hết', NOW(), NOW(), 0, 'https://res.cloudinary.com/dsuehugin/image/upload/v1731312713/vrr5uwj5risfjhyalj34.jpg'),
+(200000, 10, 'Giày thượng đình', 'Còn', NOW(), NOW(), 0, 'https://res.cloudinary.com/dsuehugin/image/upload/v1731312713/f6v3lihgvujbldauex3p.jpg'),
+(100000, 100, 'Áo vip', 'Còn', NOW(), NOW(), 0, 'https://res.cloudinary.com/dsuehugin/image/upload/v1731312713/xhjludmtfndpeorg8va3.jpg'),
+(100000, 10, 'Mũ bảo hiểm', 'Còn', NOW(), NOW(), 0, 'https://res.cloudinary.com/dsuehugin/image/upload/v1731312713/jx2r6cw3gibz0crht1li.jpg'),
+(500000, 10, 'Trọng tài liêm khiết', 'Còn', NOW(), NOW(), 0, 'https://res.cloudinary.com/dsuehugin/image/upload/v1731312714/fl9pdxhii7ahh4batyfa.jpg');
 
 
 
 
 INSERT INTO nuoc_uong (don_gia, so_luong, ten_nuoc_uong, trang_thai, created_at, updated_at, image_data)
 VALUES
-(10000, 100, 'Coca-Cola', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728555252/z99tddvdeoa6w4ly0kgq.jpg'),
-(6000, 100, 'Aquarius', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557484/qqqmb3yshzdzrmmhd51y.jpg'),
-(10000, 100, 'Bia Tiger', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557484/xhvmdut9zoevmi3svoqp.jpg'),
-(12000, 100, 'C2 vị ổi', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557485/mzglgz7asrvx9exu6eif.jpg'),
-(12000, 100, 'C2 vị vải', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557485/pn4m4ejzovsgw7xyoz4y.jpg'),
-(12000, 100, 'C2 vị dưa lưới', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557485/jd4zfwzkrmeeud7cxsnf.jpg'),
-(12000, 100, 'C2 vị chanh', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/myhoe4wud22s8zlfxffy.jpg'),
-(18000, 100, 'Monster', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557485/anpzvx0de9cqnmbdtpnt.jpg'),
-(10000, 100, 'Chanh muối', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557485/qraj7exeeu1t1mytlvu0.jpg'),
-(5000, 100, 'Nước lọc lavie', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/r9aquezhhpnqamaddht3.jpg'),
-(10000, 100, 'Revive', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/qxredswehibjzdesgmaj.jpg'),
-(13000, 0, 'Lon String đỏ', 'Chưa chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/hfi20eyzmlebh4yvcro8.jpg'),
-(10000, 100, 'Chai String đỏ', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/unmmsmqazh03kuf7qrxt.jpg'),
-(13000, 100, 'Bò húc', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/kw0x902gsd2vhd7nrxam.jpg'),
-(1000, 0, 'Chai String vàng', 'Chưa chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/erv95mjtarcdvbhpfgng.jpg'),
-(10000, 100, 'Trà xanh không độ', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/aos6ljsh4zhz2yu8vccr.jpg'),
-(20000, 100, 'Warrior', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/fsvne0ghubuvnbowgzs1.jpg'),
-(13000, 100, 'Lon String vàng', 'Đã chọn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/nhtnwvsvnyarpp2yqw9v.jpg');
+(10000, 100, 'Coca-Cola', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728555252/z99tddvdeoa6w4ly0kgq.jpg'),
+(6000, 100, 'Aquarius', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557484/qqqmb3yshzdzrmmhd51y.jpg'),
+(10000, 100, 'Bia Tiger', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557484/xhvmdut9zoevmi3svoqp.jpg'),
+(12000, 100, 'C2 vị ổi', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557485/mzglgz7asrvx9exu6eif.jpg'),
+(12000, 100, 'C2 vị vải', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557485/pn4m4ejzovsgw7xyoz4y.jpg'),
+(12000, 100, 'C2 vị dưa lưới', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557485/jd4zfwzkrmeeud7cxsnf.jpg'),
+(12000, 100, 'C2 vị chanh', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/myhoe4wud22s8zlfxffy.jpg'),
+(18000, 100, 'Monster', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557485/anpzvx0de9cqnmbdtpnt.jpg'),
+(10000, 100, 'Chanh muối', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557485/qraj7exeeu1t1mytlvu0.jpg'),
+(5000, 100, 'Nước lọc lavie', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/r9aquezhhpnqamaddht3.jpg'),
+(10000, 100, 'Revive', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/qxredswehibjzdesgmaj.jpg'),
+(13000, 0, 'Lon String đỏ', 'Hết', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/hfi20eyzmlebh4yvcro8.jpg'),
+(10000, 100, 'Chai String đỏ', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/unmmsmqazh03kuf7qrxt.jpg'),
+(13000, 100, 'Bò húc', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/kw0x902gsd2vhd7nrxam.jpg'),
+(1000, 0, 'Chai String vàng', 'Hết', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557486/erv95mjtarcdvbhpfgng.jpg'),
+(10000, 100, 'Trà xanh không độ', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/aos6ljsh4zhz2yu8vccr.jpg'),
+(20000, 100, 'Warrior', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/fsvne0ghubuvnbowgzs1.jpg'),
+(13000, 100, 'Lon String vàng', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/nhtnwvsvnyarpp2yqw9v.jpg');
 
 INSERT INTO phu_phi_hoa_don (id_hoa_don_chi_tiet, ma, ten, tien_phu_phi, ghi_chu, trang_thai, created_at, updated_at, deleted_at)
 VALUES (1, 'PP001', 'Phí giao hàng', 50000.00, 'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
@@ -2329,13 +2322,6 @@ VALUES (1, 'PP001', 'Phí giao hàng', 50000.00, 'Giao hàng nhanh', 'Hoàn tấ
        (40, 'PP040', 'Phí dịch vụ', 25000.00,  'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0);
 
 
-INSERT INTO loai_tham_so (ten, trang_thai, created_at, updated_at, deleted_at)
-VALUES
-  ('Loai tham so 1', 1, NOW(), NOW(), 0),
-  ('Loai tham so 2', 1, NOW(), NOW(), 0),
-  ('Loai tham so 3', 0, NOW(), NOW(), 0),
-  ('Loai tham so 4', 1, NOW(), NOW(), 0),
-  ('Loai tham so 5', 1, NOW(), NOW(), 0);
 
 
 INSERT INTO giao_ca (id_nhan_vien, tien_mat_ca_truoc, tien_mat_trong_ca, tien_ck_trong_ca, tong_tien_trong_ca, tong_tien_mat_thuc_te, tong_tien_phat_sinh, ghi_chu,trang_thai)
@@ -2358,19 +2344,17 @@ VALUES
   (28, '2024-08-25 17:30:00', 'Khách hàng check-in vào buổi tối sớm'),
   (29, '2024-08-25 18:45:00', 'Khách hàng check-in gần giờ đóng cửa'),
   (30, '2024-08-25 19:15:00', 'Khách hàng check-in vào tối muộn');
-  
-  INSERT INTO tham_so (ma, ten, gia_tri, type_gia_tri, mo_ta, trang_thai, deleted_at)
+
+INSERT INTO tham_so (ma, ten, gia_tri, type_gia_tri, mo_ta, trang_thai, deleted_at, is_active)
 VALUES
-('TS001', 'Giờ Mở Cửa', '06:00', 'giờ', 'Thời gian mở cửa sân bóng', 1, 0),
-('TS002', 'Giờ Đóng Cửa', '22:00', 'giờ', 'Thời gian đóng cửa sân bóng', 1, 0),
-('TS003', 'Giá Sân Nhỏ', '200000', 'VND', 'Giá thuê sân nhỏ trong 1 giờ', 1, 0),
-('TS004', 'Giá Sân Lớn', '400000', 'VND', 'Giá thuê sân lớn trong 1 giờ', 1, 0),
-('TS005', 'Số Người Tối Đa Sân Nhỏ', '10', 'người', 'Số người tối đa cho sân nhỏ', 1, 0),
-('TS006', 'Số Người Tối Đa Sân Lớn', '20', 'người', 'Số người tối đa cho sân lớn', 1, 0),
-('TS007', 'Thời Gian Hủy Đặt Sân', '2', 'giờ', 'Thời gian tối thiểu trước giờ đá để hủy đặt sân', 1, 0),
-('TS008', 'Thời Gian Đặt Trước', '1', 'ngày', 'Thời gian tối thiểu để đặt sân trước ngày đá', 1, 0),
-('TS009', 'Giá Thuê Bóng', '50000', 'VND', 'Giá thuê bóng trong 1 trận', 1, 0),
-('TS010', 'Phí Huấn Luyện Viên', '300000', 'VND', 'Phí thuê huấn luyện viên theo giờ', 1, 0);
+('TS_Thoi_Gian_Dat_Truoc', 'Thời Gian Đặt Trước', '06:00', 'Giờ', 'Thời gian tối thiểu người dùng phải đặt sân trước giờ thi đấu', 1, 0, 1),
+('TS_Gio_Dong_Cua', 'Giờ Đóng Cửa', '22:00', 'Giờ', 'Thời gian sân bóng ngừng hoạt động trong ngày', 1, 0, 1),
+('TS_Thoi_Gian_Huy_Dat_San', 'Thời Gian Hủy Đặt Sân', '2', 'Giờ', 'Thời gian tối thiểu trước giờ thi đấu để hủy đặt sân mà không mất phí', 1, 0, 1),
+('TS_Gio_Mo_Cua', 'Giờ Mở Cửa', '06:00', 'Giờ', 'Thời gian sân bóng bắt đầu hoạt động trong ngày', 1, 0, 1),
+('TSTIEN_COC', 'Tiền Cọc', '40', '%', 'Phần trăm tiền cọc cần thanh toán khi đặt sân', 1, 0, 1),
+('TS_Tien_Qua_Tai', 'Tiền Quá Giờ', '100000', 'VND', 'Khoản phí bổ sung cho mỗi giờ sử dụng vượt quá thời gian đặt trước', 1, 0, 1);
+
+
 
 
 CREATE TABLE `user` (
