@@ -8,7 +8,8 @@ $(document).ready(function () {
 
     $('#loginForm').on('submit', function (event) {
         event.preventDefault(); // Ngăn chặn việc gửi form mặc định
-
+        $('#loginForm .is-invalid').removeClass('is-invalid');
+        $('#passwordError').remove();
         let formData = {
             username: $('#username').val().trim(),
             password: $('#password').val().trim()
@@ -20,6 +21,30 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: JSON.stringify(formData),
             success: function (response) {
+                if (response.response === null){
+                    let timerInterval;
+                    Swal.fire({
+                        title: `${response.message}`,
+                        icon: "error",
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        didOpen: () => {
+                            timerInterval = setInterval(() => {
+                            }, 100);
+                        },
+                        willClose: () => {
+                            clearInterval(timerInterval);
+                        }
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            window.location.href = '/login';
+                        }
+                    });
+                    return;
+                }
                 let tokenJWT = response.response["token"];
                 // Lưu token vào cookie
                 Cookies.set('authToken', tokenJWT, {path: '/', secure: true, sameSite: 'Strict'});

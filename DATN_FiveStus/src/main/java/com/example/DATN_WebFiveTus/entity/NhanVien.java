@@ -49,11 +49,6 @@ public class NhanVien {
     @Column(name = "so_dien_thoai", nullable = false, length = 100)
     private String soDienThoai;
 
-    @Column(name = "image_nv", columnDefinition = "LONGTEXT")
-    @Lob
-    private String imageNV;
-
-
     @Column(name = "dia_chi", nullable = false, length = 100)
     private String diaChi;
 
