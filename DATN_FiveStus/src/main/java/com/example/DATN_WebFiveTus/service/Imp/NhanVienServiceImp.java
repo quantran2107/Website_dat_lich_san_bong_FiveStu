@@ -93,8 +93,12 @@ public class NhanVienServiceImp implements NhanVienService {
     }
 
     @Override
-    public Boolean addNew(NhanVienDTO nv) throws RoleNotFoundException {
+    public Object addNew(NhanVienDTO nv) throws RoleNotFoundException {
         NhanVien nhanVien = modelMapper.map(nv, NhanVien.class);
+        NhanVien nv2 = nhanVienReposity.findByUsername(nv.getEmail());
+        if (nv2 != null) {
+            return "Email đã tồn tại!";
+        }
         nhanVien.setMaNhanVien(generateMaNV());
         nhanVien.setTenNhanVien(generateTKNV(nv.getHoTen()));
         String pass = generateMK(16);
