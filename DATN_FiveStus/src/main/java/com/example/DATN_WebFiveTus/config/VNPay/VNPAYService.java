@@ -43,7 +43,7 @@ public class VNPAYService {
 
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
 
-        vnp_Params.put("vnp_OrderInfo", "Thanh toan dat lich san bong " + orderInfo);
+        vnp_Params.put("vnp_OrderInfo", "Thanh toan tien coc dat lich san bong " + orderInfo);
 
         vnp_Params.put("vnp_OrderType", orderType);
         vnp_Params.put("vnp_Locale", "vn");

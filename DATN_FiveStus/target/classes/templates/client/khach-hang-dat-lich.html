@@ -91,21 +91,18 @@
 
     </div>
     <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center my-3">
-            <div class="d-inline-flex">
+        <div class="d-flex align-items-center justify-content-between my-3">
+            <div class="d-inline-flex align-items-center">
                 <button id="prev" class="btn btn-outline-secondary me-2"><</button>
                 <button id="next" class="btn btn-outline-secondary me-2">></button>
                 <button id="today" class="btn btn-outline-secondary me-2">Hôm nay</button>
             </div>
-            <h4 id="currentRange" class="text-center mb-0">Hiển thị khoảng ngày</h4>
-<!--            <div class="d-inline-flex">-->
-
-<!--                &lt;!&ndash;                <button id="month" class="btn btn-success ms-2">Tháng</button>&ndash;&gt;-->
-
-<!--                <button id="week" class="btn btn-success ms-2">Tuần</button>-->
-<!--                <button id="day" class="btn btn-success ms-2">Ngày</button>-->
-<!--            </div>-->
+            <div class="text-center flex-grow-1">
+                <h4 id="currentRange" class="mb-0">Hiển thị khoảng ngày</h4>
+            </div>
+            <div class="d-inline-flex"></div> <!-- Placeholder để đảm bảo tiêu đề ở giữa -->
         </div>
+
         <div style="max-height: 1000px; overflow-y: auto;">
             <table class="table table-bordered table-hover my-4" style="text-align: center;">
                 <thead>
@@ -559,7 +556,7 @@
                 <td>${booking.date}</td>
                 <td>${booking.time}</td>
                 <td>${booking.san}</td>
-                <td>${booking.price}</td>
+                <td>${formatCurrencyVND(booking.price)}</td>
                 <td id="deposit-${index}">0</td>
                 <td>
                     <button class="btn btn-danger btn-sm" id="delete-btn-${index}" title="Xóa">
@@ -593,6 +590,11 @@
     function setupDeleteButtons(selectedBookings) {
         selectedBookings.forEach((booking, index) => {
             document.getElementById(`delete-btn-${index}`).addEventListener('click', function () {
+                if (selectedBookings.length <= 1) {
+                    Swal.fire('Cảnh báo', 'Bạn không thể xóa hết tất cả sân trong danh sách đặt!', 'warning');
+                    return;
+                }
+
                 const row = this.closest('tr');
                 const rowIndex = row.getAttribute('data-index');
 
@@ -610,11 +612,14 @@
                     if (result.isConfirmed) {
                         const bookingIndex = parseInt(rowIndex, 10);
 
-                        // Cập nhật tổng giá và tổng tiền cọc
-                        updateBookingTotals(bookingIndex, selectedBookings);
+                        // Xóa phần tử khỏi mảng
+                        selectedBookings.splice(bookingIndex, 1);
 
-                        selectedBookings.splice(bookingIndex, 1); // Xóa phần tử khỏi mảng
-                        row.remove(); // Xóa hàng khỏi bảng
+                        // Xóa hàng khỏi bảng
+                        row.remove();
+
+                        // Cập nhật tổng giá và tổng tiền cọc
+                        updateBookingTotals(selectedBookings);
 
                         Swal.fire('Đã xóa!', 'Dòng đã được xóa thành công.', 'success');
                     }
@@ -624,7 +629,7 @@
     }
 
     // Hàm cập nhật thông tin tổng tiền và tiền cọc khi xóa hàng
-    function updateBookingTotals(bookingIndex, selectedBookings) {
+    function updateBookingTotals(selectedBookings) {
         let totalPrice = 0;
         let totalDeposit = 0;
 
@@ -638,7 +643,7 @@
                 deposit = depositRate.value; // Giả sử giá trị cụ thể
             }
 
-            // Định dạng giá trị Tiền cọc
+            // Hiển thị Tiền cọc đã định dạng
             document.getElementById(`deposit-${index}`).textContent = formatCurrencyVND(deposit);
 
             // Cộng dồn tổng giá và tổng tiền cọc
@@ -646,11 +651,11 @@
             totalDeposit += deposit;
         });
 
-// Định dạng tổng tiền và tổng tiền cọc
+        // Định dạng tổng tiền và tổng tiền cọc trước khi hiển thị
         document.getElementById('total-price').textContent = formatCurrencyVND(totalPrice);
         document.getElementById('total-deposit').textContent = formatCurrencyVND(totalDeposit);
-
     }
+
 
 
     // Hàm gọi API để lấy tỷ lệ tiền cọc
@@ -680,17 +685,18 @@
             }
 
             // Cập nhật giá trị Tiền cọc trong bảng
-            document.getElementById(`deposit-${index}`).textContent = deposit;
+            document.getElementById(`deposit-${index}`).textContent = formatCurrencyVND(deposit);
 
             // Cộng dồn tổng giá và tổng tiền cọc
             totalPrice += parseFloat(booking.price);
             totalDeposit += deposit;
         });
 
-        // Cập nhật tổng giá và tổng tiền cọc vào bảng
-        document.getElementById('total-price').textContent = totalPrice;
-        document.getElementById('total-deposit').textContent = totalDeposit;
+        // Định dạng tổng giá và tổng tiền cọc trước khi hiển thị
+        document.getElementById('total-price').textContent = formatCurrencyVND(totalPrice);
+        document.getElementById('total-deposit').textContent = formatCurrencyVND(totalDeposit);
     }
+
 
     function parseDateString(dateString) {
         const parts = dateString.split('/'); // Tách chuỗi theo dấu '/'
@@ -702,7 +708,10 @@
     }
 
     async function handleBooking(selectedBookings) {
-        const totalDeposit = parseFloat(document.getElementById('total-deposit').textContent);
+        const totalDepositFormatted = parseFloat(
+            document.getElementById('total-deposit').textContent.replace(/[^\d]/g, '')
+        ); // Xóa các ký tự định dạng (., đ)
+        const totalDeposit = totalDepositFormatted ; // Nhân với 100 để đúng định dạng VNPay
         const customer = await loadCustomer();
         const customerId = customer.id;
         const customerEmail = customer.email;
@@ -730,9 +739,9 @@
                     hoVaTenKhachHang: customerHoVaTen,
                     soDienThoaiKhachHang: customerSoDienThoai,
                     emailKhachHang: customerEmail,
-                    tongTienSan: totalDeposit,
-                    tongTien: totalDeposit,
-                    tienCoc: totalDeposit,
+                    tongTienSan: totalDepositFormatted,
+                    tongTien: totalDepositFormatted,
+                    tienCoc: totalDepositFormatted,
                     deletedAt: false
                 }),
             });
@@ -766,12 +775,11 @@
 
             await Promise.all(detailPromises);
 
+            // Gọi API tạo URL thanh toán VNPay
             const vnpayResponse = await fetch(`http://localhost:8080/api/vnpay/submitOrder?amount=${totalDeposit}&orderInfo=${invoiceId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             });
-            console.log(`http://localhost:8080/api/vnpay/submitOrder?amount=${totalDeposit}&orderInfo=${invoiceId}`)
-
 
             if (!vnpayResponse.ok) {
                 Swal.fire('Lỗi', 'Không thể kết nối VNPay.', 'error');
@@ -780,19 +788,16 @@
 
             const vnpayData = await vnpayResponse.json();
 
-            // Kiểm tra redirectUrl thay vì code === "00"
             if (vnpayData.redirectUrl) {
                 window.location.href = vnpayData.redirectUrl; // Chuyển hướng đến trang thanh toán VNPay
             } else {
                 Swal.fire('Lỗi', 'Không thể tạo URL thanh toán.', 'error');
             }
-
         } catch (error) {
             console.error('Lỗi khi xử lý đặt lịch:', error);
             Swal.fire('Lỗi', 'Có lỗi xảy ra trong quá trình xử lý.', 'error');
         }
     }
-
 
 
 </script>
