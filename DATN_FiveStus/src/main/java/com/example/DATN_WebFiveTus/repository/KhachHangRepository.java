@@ -18,25 +18,25 @@ import java.util.Optional;
 
 @Repository
 public interface KhachHangRepository extends JpaRepository<KhachHang,Integer> {
-    @Query("SELECT kh FROM KhachHang kh WHERE LOWER(kh.hoVaTen) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.soDienThoai) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.email) LIKE LOWER(CONCAT('%', :query, '%'))")
+    @Query("SELECT kh FROM KhachHang kh WHERE (LOWER(kh.hoVaTen) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.soDienThoai) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.email) LIKE LOWER(CONCAT('%', :query, '%'))) ORDER BY kh.createdAt DESC")
     Page<KhachHang> searchByNamePhoneOrEmail(@Param("query") String query, Pageable pageable);
 
-    @Query("SELECT kh FROM KhachHang kh WHERE (LOWER(kh.hoVaTen) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.soDienThoai) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.email) LIKE LOWER(CONCAT('%', :query, '%'))) AND kh.gioiTinh = :gender")
+    @Query("SELECT kh FROM KhachHang kh WHERE (LOWER(kh.hoVaTen) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.soDienThoai) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.email) LIKE LOWER(CONCAT('%', :query, '%'))) AND kh.gioiTinh = :gender ORDER BY kh.createdAt DESC")
     Page<KhachHang> searchByNamePhoneOrEmailAndGender(@Param("query") String query, @Param("gender") boolean gender, Pageable pageable);
 
-    @Query("SELECT kh FROM KhachHang kh WHERE (LOWER(kh.hoVaTen) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.soDienThoai) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.email) LIKE LOWER(CONCAT('%', :query, '%'))) AND kh.trangThai = :status")
+    @Query("SELECT kh FROM KhachHang kh WHERE (LOWER(kh.hoVaTen) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.soDienThoai) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.email) LIKE LOWER(CONCAT('%', :query, '%'))) AND kh.trangThai = :status ORDER BY kh.createdAt DESC")
     Page<KhachHang> searchByNamePhoneOrEmailAndStatus(@Param("query") String query, @Param("status") String status, Pageable pageable);
 
-    @Query("SELECT kh FROM KhachHang kh WHERE (LOWER(kh.hoVaTen) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.soDienThoai) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.email) LIKE LOWER(CONCAT('%', :query, '%'))) AND kh.trangThai = :status AND kh.gioiTinh = :gender")
+    @Query("SELECT kh FROM KhachHang kh WHERE (LOWER(kh.hoVaTen) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.soDienThoai) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(kh.email) LIKE LOWER(CONCAT('%', :query, '%'))) AND kh.trangThai = :status AND kh.gioiTinh = :gender ORDER BY kh.createdAt DESC")
     Page<KhachHang> searchByNamePhoneOrEmailAndStatusAndGender(@Param("query") String query, @Param("status") String status, @Param("gender") boolean gender, Pageable pageable);
 
-    @Query("SELECT kh FROM KhachHang kh WHERE kh.trangThai = :status")
+    @Query("SELECT kh FROM KhachHang kh WHERE kh.trangThai = :status ORDER BY kh.createdAt DESC")
     Page<KhachHang> filterByStatus(@Param("status") String status, Pageable pageable);
 
-    @Query("SELECT kh FROM KhachHang kh WHERE kh.gioiTinh = :gender")
+    @Query("SELECT kh FROM KhachHang kh WHERE kh.gioiTinh = :gender ORDER BY kh.createdAt DESC")
     Page<KhachHang> filterByGender(@Param("gender") boolean gender, Pageable pageable);
 
-    @Query("SELECT kh FROM KhachHang kh WHERE kh.trangThai = :status AND kh.gioiTinh = :gender")
+    @Query("SELECT kh FROM KhachHang kh WHERE kh.trangThai = :status AND kh.gioiTinh = :gender ORDER BY kh.createdAt DESC")
     Page<KhachHang> findByStatusAndGender(@Param("status") String status, @Param("gender") boolean gender, Pageable pageable);
 
     @Query("SELECT kh FROM KhachHang kh WHERE kh.soDienThoai = :soDienThoai ")

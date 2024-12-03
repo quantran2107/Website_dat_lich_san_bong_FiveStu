@@ -253,7 +253,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         hoaDonChiTiet.setMaHoaDonChiTiet(generateMaHoaDonChiTiet());
         hoaDonChiTiet.setSanCa(sanCa);
         hoaDonChiTiet.setHoaDon(hoaDon);
-        hoaDonChiTiet.setNgayDenSan((Date) hoaDonChiTietDTO.getNgayDenSan());
+        hoaDonChiTiet.setNgayDenSan(new java.sql.Date(hoaDonChiTietDTO.getNgayDenSan().getTime()));
         hoaDonChiTiet.setTrangThai("Chờ nhận sân");
         hoaDonChiTiet.setKieuNgayDat("Theo ngày");
         hoaDonChiTiet.setTongTien(hoaDonChiTietDTO.getTongTien());

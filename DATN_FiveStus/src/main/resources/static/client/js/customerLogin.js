@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $('#confirm-password').hide()
     $('#userNameCustomer').hide()
+    $('#customerName').hide()
     $('#otp').hide()
     showFogotPass()
 
@@ -25,6 +26,7 @@ $(document).ready(function () {
         $('#confirm-passwordError').remove();
         $('#remember-meError').remove();
         $('#otpError').remove();
+        $('#customerNameError').remove();
     }
 
     function removeForm() {
@@ -34,6 +36,7 @@ $(document).ready(function () {
         $('#confirm-password').val('')
         $('#remember-me').prop('checked', false);
         $('#otp').val('')
+        $('#customerName').val('')
 
     }
 
@@ -56,6 +59,7 @@ $(document).ready(function () {
             $('#checkboxForm').append(`<input name="rememberme" type="checkbox" id="remember-me" value="forever"> Tôi đồng ý với điều khoản sử dụng`);
             $('#userNameCustomer').show()
             $('#confirm-password').show()
+            $('#customerName').show();
         } else {
             removeForm();
             $('#otp').hide()
@@ -75,6 +79,7 @@ $(document).ready(function () {
             $('#checkboxForm').append(`<input name="rememberme" type="checkbox" id="remember-me" value="forever"> Ghi nhớ đăng nhập`);
             $('#userNameCustomer').hide()
             $('#confirm-password').hide()
+            $('#customerName').hide();
         }
     })
 
@@ -215,7 +220,14 @@ $(document).ready(function () {
             username: $('#userNameCustomer').val(),
             email: $('#userEmailCustomer').val(),
             password: $('#passCustomer').val(),
+            name : $('#customerName').val()
         };
+        if (formData.name.trim() === '') {
+            $('#customerName').addClass('is-invalid');
+            $('#customerNameError').remove();
+            $('#customerName').after('<div id="customerNameError" class="invalid-feedback">Chưa nhập họ và tên!</div>');
+            return;
+        }
         if (formData.username.trim() === '') {
             $('#userNameCustomer').addClass('is-invalid');
             $('#userNameCustomerError').remove();
@@ -271,21 +283,23 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: JSON.stringify(formData),
             success: function (response) {
+
                 if (response.status === "SUCCESS") {
                     mess("Đăng ký thành công!", "/khach-hang/trang-chu");
                     removeForm()
                 }
             },
-            error: function (xhr, status, error) {
-                messError(error.responseJSON.message)
+            error: function (response) {
+                messError(response.responseJSON.message)
             }
         });
     }
 
-    function mess(alert, location) {
+
+    function mess(mess, location) {
         let timerInterval;
         Swal.fire({
-            title: `${alert}`,
+            title: `${mess}`,
             icon: "success",
             timer: 2000,
             timerProgressBar: true,
