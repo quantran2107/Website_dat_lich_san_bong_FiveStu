@@ -82,6 +82,9 @@ public class KhachHangImp implements KhachHangService {
     @Override
     public KhachHangDTO save(KhachHangDTO khachHangDTO) throws RoleNotFoundException {
         KhachHang khachHang = modelMapper.map(khachHangDTO, KhachHang.class);
+        if (khachHang.getTrangThai() == null || khachHang.getTrangThai().isEmpty()) {
+            khachHang.setTrangThai("active");
+        }
         String pass = generateMK(16);
         khachHang.setMatKhau(passwordEncoder.encode(pass));
         if (!mailFunction(khachHang,pass)){
@@ -201,16 +204,15 @@ public class KhachHangImp implements KhachHangService {
     }
 
     @Override
-    public Page<KhachHangDTO> searchAndFilter(String query, String status, String gender, int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page, pageSize); // Không trừ 1 vì page đã chỉnh ở controller
-
+    public Page<KhachHangDTO> searchAndFilter(String query, String status, String gender, Pageable pageable) {
         Page<KhachHang> results;
-        boolean genderBoolean = true;
 
+        boolean genderBoolean = true;
         if ("false".equals(gender)) {
             genderBoolean = false;
         }
 
+        // Kiểm tra các điều kiện lọc và gọi repository tương ứng
         if ("all".equals(status) && "all".equals(gender)) {
             results = khachHangRepository.searchByNamePhoneOrEmail(query, pageable);
         } else if ("all".equals(status)) {
@@ -221,8 +223,13 @@ public class KhachHangImp implements KhachHangService {
             results = khachHangRepository.searchByNamePhoneOrEmailAndStatusAndGender(query, status, genderBoolean, pageable);
         }
 
+        // Trả về danh sách KhachHangDTO sau khi ánh xạ
         return results.map(khachHang -> modelMapper.map(khachHang, KhachHangDTO.class));
     }
+
+
+
+
 
 
     @Override

@@ -1,14 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="fragment/head :: head">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-</head>
+<head th:include="fragment/head :: head"></head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <body class="vertical  light  ">
 <div class="wrapper">
     <div th:include="fragment/navbar :: navbar"></div>
@@ -17,271 +10,267 @@
         <div class="container-fluid">
             <div class="row justify-content-center">
                 <div class="col-12">
-                    <h2 class="mb-2 page-title">Quản lý loại sân bóng</h2>
+                    <h2 class="mb-2 page-title">Quản lý sân và giá</h2>
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card shadow mb-4">
-                                    <div class="card-body">
-
-
-                                        <ul class="nav nav-tabs" id="loaiSanTab" role="tablist">
-                                            <!-- Chuyển tab theo idLoaiSan -->
-                                            <li class="nav-item" th:each="loaiSan, iterStat : ${listLS}">
-                                                <a class="nav-link"
-                                                   th:id="'tab-' + ${loaiSan.id}"
-                                                   data-bs-toggle="tab"
-                                                   th:attr="href='#loaiSan-' + ${loaiSan.id}, aria-controls='loaiSan-' + ${loaiSan.id}, aria-selected=${iterStat.index == 0 ? 'true' : 'false'}"
-                                                   th:classappend="${iterStat.index == 0} ? 'active' : ''"
-                                                   th:text="${loaiSan.tenLoaiSan}">
-                                                    Tên Loại Sân
-                                                </a>
-                                            </li>
-
-                                            <!-- Tab thêm mới -->
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="addTab" href="#" onclick="addNewTab()">
-                                                    + Thêm loại sân
-                                                </a>
-                                            </li>
-                                        </ul>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card shadow mb-4">
+                                <div class="card-body">
 
 
-                                        <!-- Nội dung từng tab sẽ được thêm vào đây -->
-                                        <div class="tab-content" id="myTabContent">
+                                    <ul class="nav nav-tabs" id="loaiSanTab" role="tablist">
+                                        <!-- Chuyển tab theo idLoaiSan -->
+                                        <li class="nav-item" th:each="loaiSan, iterStat : ${listLS}">
+                                            <a class="nav-link"
+                                               th:id="'tab-' + ${loaiSan.id}"
+                                               data-bs-toggle="tab"
+                                               th:attr="href='#loaiSan-' + ${loaiSan.id}, aria-controls='loaiSan-' + ${loaiSan.id}, aria-selected=${iterStat.index == 0 ? 'true' : 'false'}"
+                                               th:classappend="${iterStat.index == 0} ? 'active' : ''"
+                                               th:text="${loaiSan.tenLoaiSan}">
+                                                Tên Loại Sân
+                                            </a>
+                                        </li>
 
-                                            <div>
+                                        <!-- Tab thêm mới -->
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="addTab" href="#" onclick="addNewTab()">
+                                                + Thêm loại sân
+                                            </a>
+                                        </li>
+                                    </ul>
 
-                                            </div>
-                                            <!--                                            Tab 1-->
-                                            <div class="tab-pane fade show"
-                                                 role="tabpanel"
 
-                                                 th:each="loaiSan : ${listLS}"
-                                                 th:id="'loaiSan-' + ${loaiSan.id}"
-                                                 th:aria-labelledby="'tab-' + ${loaiSan.id}">
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <div class="mt-3">
+                                    <!-- Nội dung từng tab sẽ được thêm vào đây -->
+                                    <div class="tab-content" id="myTabContent">
 
-                                                            <form id="formAddSanBong">
-                                                                <div class="form-group">
-                                                                    <label for="tenSanBong">Tên sân bóng</label>
-                                                                    <input type="text" class="form-control"
-                                                                           id="tenSanBong" name="tenSanBong"
-                                                                           placeholder="Nhập tên sân bóng">
-                                                                </div>
-                                                                <input type="hidden" id="idLoaiSanInput"
-                                                                       name="idLoaiSan">
-                                                                <button type="submit" onclick="submitSanBong()"
-                                                                        class="btn btn-success">Thêm sân
-                                                                    bóng
-                                                                </button>
-                                                            </form>
+                                        <div>
 
-                                                        </div>
+                                        </div>
+                                        <!--                                            Tab 1-->
+                                        <div class="tab-pane fade show"
+                                             role="tabpanel"
 
-                                                        <div class="mt-3">
-                                                            <div class="modal fade" id="myModalEdit" tabindex="-1"
-                                                                 role="dialog" aria-labelledby="myModalEdit"
-                                                                 aria-hidden="true">
-                                                                <div class="modal-dialog" role="document">
-                                                                    <div class="modal-content">
-                                                                        <div class="modal-header">
-                                                                            <h5 class="modal-title"
-                                                                                id="editModalLabel2">Chỉnh sửa sân
-                                                                                bóng</h5>
-                                                                            <button type="button" class="close"
-                                                                                    data-dismiss="modal"
-                                                                                    aria-label="Close">
-                                                                                <span aria-hidden="true">&times;</span>
-                                                                            </button>
-                                                                        </div>
-                                                                        <div class="modal-body">
-                                                                            <form>
-                                                                                <input type="hidden" name="id" id="editId">
+                                             th:each="loaiSan : ${listLS}"
+                                             th:id="'loaiSan-' + ${loaiSan.id}"
+                                             th:aria-labelledby="'tab-' + ${loaiSan.id}">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="mt-3">
 
-                                                                                <div class="form-row">
-                                                                                    <div class="form-group col-md-6">
-                                                                                        <label for="editTenSanBong">Tên sân bóng</label>
-                                                                                        <input type="text" class="form-control" id="editTenSanBong" name="tenSanBong">
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div class="form-row">
-                                                                                    <div class="form-group col-md-6">
-                                                                                        <label for="editTrangThai">Trạng thái</label>
-                                                                                        <select id="editTrangThai" class="form-control" name="trangThai" disabled>
-                                                                                            <option th:each="a: ${listTTSB}" th:value="${a}" th:text="${a}"></option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div class="form-row">
-                                                                                    <div class="form-group col-md-6">
-                                                                                        <label for="editLoaiSan">Loại sân</label>
-                                                                                        <select id="editLoaiSan" class="form-control" name="idLoaiSan" disabled>
-                                                                                            <option th:each="a: ${listLS}" th:value="${a.id}" th:text="${a.tenLoaiSan}"></option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                </div>
-
-                                                                                <div class="modal-footer">
-                                                                                    <button type="button" class="btn mb-2 btn-outline-secondary" data-dismiss="modal">Close</button>
-                                                                                    <button onclick="updateSanBong()" type="submit" class="btn mb-2 btn-success">Update</button>
-                                                                                </div>
-                                                                            </form>
-                                                                        </div>
-
-                                                                    </div>
-                                                                </div>
+                                                        <form id="formAddSanBong">
+                                                            <div class="form-group">
+                                                                <label for="tenSanBong">Tên sân bóng</label>
+                                                                <input type="text" class="form-control"
+                                                                       id="tenSanBong" name="tenSanBong"
+                                                                       placeholder="Nhập tên sân bóng">
                                                             </div>
-                                                        </div>
-
-                                                        <table class="table table-striped table-hover table-borderless">
-                                                            <thead>
-                                                            <tr>
-                                                                <th>#</th>
-                                                                <th>Tên sân</th>
-                                                                <th>Hành động</th>
-                                                            </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            <!-- Sử dụng th:each để duyệt qua danh sách sân bóng -->
-                                                            <tr th:each="sanBong, stat : ${listSB}"
-                                                                th:if="${loaiSan.id == sanBong.idLoaiSan}"
-                                                                th:data-id-loai-san="${sanBong.id}">
-                                                                <td th:text="${stat.count}"></td>
-                                                                <td>
-                                                                    <span th:text="${sanBong.tenSanBong}"></span>
-
-                                                                </td>
-                                                                <td>
-                                                                    <button onclick="editSanBongs(this)" class="btn btn-outline-success">
-                                                                        <span class="fe fe-edit-3"></span>
-                                                                    </button>
-
-
-                                                                    <button onclick="deletedSanBong()"
-                                                                            class="btn btn-danger"><span
-                                                                            class="fe fe-trash-2"></span></button>
-                                                                </td>
-                                                            </tr>
-                                                            </tbody>
-                                                        </table>
-
+                                                            <input type="hidden" id="idLoaiSanInput"
+                                                                   name="idLoaiSan">
+                                                            <button type="submit" onclick="submitSanBong()"
+                                                                    class="btn btn-success">Thêm sân
+                                                                bóng
+                                                            </button>
+                                                        </form>
 
                                                     </div>
-                                                    <div class="col-md-8 mt-4">
-                                                        <style>
-                                                            .checkbox-label {
-                                                                display: flex;
-                                                                flex-wrap: wrap;
-                                                            }
+                                                    <table class="table table-striped table-hover table-borderless">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Tên sân</th>
+                                                            <th>Hành động</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <!-- Sử dụng th:each để duyệt qua danh sách sân bóng -->
+                                                        <tr th:each="sanBong, stat : ${listSB}"
+                                                            th:if="${loaiSan.id == sanBong.idLoaiSan}"
+                                                            th:data-id-loai-san="${sanBong.id}">
+                                                            <td th:text="${stat.count}"></td>
+                                                            <td>
+                                                                <span th:text="${sanBong.tenSanBong}"></span>
 
-                                                            .checkbox-label .checkbox-item {
-                                                                margin-right: 20px; /* Khoảng cách giữa các checkbox */
-                                                            }
-                                                        </style>
-                                                        <div class="col-md-12 ">
-                                                            <div class="card shadow">
-                                                                <div class="card-body">
-                                                                    <div class="mt-3">
-                                                                        <!-- Thêm idNgayTrongTuan vào bảng SanCa -->
-                                                                        <form id="formAddNgayTrongTuan">
-                                                                            <input type="hidden" name="id" value="1"
-                                                                                   id="addId">
-                                                                            <h8 class="card-title">Chọn ngày:</h8>
+                                                            </td>
+                                                            <td>
+                                                                <button onclick="editSanBongs(this)" class="btn btn-outline-success">
+                                                                    <span class="fe fe-edit-3"></span>
+                                                                </button>
+                                                                <button onclick="deletedSanBong()"
+                                                                        class="btn btn-danger"><span
+                                                                        class="fe fe-trash-2"></span></button>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+
+
+                                                </div>
+                                                <div class="col-md-8 mt-4">
+                                                    <style>
+                                                        .checkbox-label {
+                                                            display: flex;
+                                                            flex-wrap: wrap;
+                                                        }
+
+                                                        .checkbox-label .checkbox-item {
+                                                            margin-right: 20px; /* Khoảng cách giữa các checkbox */
+                                                        }
+                                                    </style>
+                                                    <div class="col-md-12 ">
+                                                        <div class="card shadow">
+                                                            <div class="card-body">
+                                                                <div class="mt-3">
+                                                                    <!-- Thêm idNgayTrongTuan vào bảng SanCa -->
+                                                                    <form id="formAddNgayTrongTuan">
+                                                                        <input type="hidden" name="id" value="1"
+                                                                               id="addId">
+                                                                        <h8 class="card-title">Chọn ngày:</h8>
+                                                                        <div class="checkbox-label">
                                                                             <div class="checkbox-label">
-                                                                                <div class="checkbox-label">
-                                                                                    <div th:each="ntt : ${listNTT}"
-                                                                                         class="checkbox-item">
-                                                                                        <input class="m-2 dayCheckbox"
-                                                                                               type="checkbox"
-                                                                                               th:value="${ntt.id}"
-                                                                                               id="dayCheckbox-${ntt.id}"
-                                                                                               name="days">
-                                                                                        <label th:for="'dayCheckbox-' + ${ntt.id}"
-                                                                                               th:text="${ntt.thuTrongTuan}"></label>
-                                                                                    </div>
+                                                                                <div th:each="ntt : ${listNTT}"
+                                                                                     class="checkbox-item">
+                                                                                    <input class="m-2 dayCheckbox"
+                                                                                           type="checkbox"
+                                                                                           th:value="${ntt.id}"
+                                                                                           id="dayCheckbox-${ntt.id}"
+                                                                                           name="days">
+                                                                                    <label th:for="'dayCheckbox-' + ${ntt.id}"
+                                                                                           th:text="${ntt.thuTrongTuan}"></label>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="form-group col-md-6">
-                                                                                <button type="button"
-                                                                                        class="btn btn-success btn-sm"
-                                                                                        onclick="displaySelectedDays()">
-                                                                                    Thêm ngày
-                                                                                </button>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-
-                                                                    <div class="mt-3">
-                                                                        <p>Thứ được chọn sẽ thêm vào đây: <span
-                                                                                id="selectedDays"
-                                                                                class="form-control"></span></p>
-                                                                    </div>
-
-                                                                    <hr>
-
-                                                                    <form id="formSanCa" style="display: none;">
-                                                                        <div class="mt-3">
-
-
-                                                                            <h8 class="card-title">Chọn Ca:</h8>
-                                                                            <div class="checkbox-label">
-                                                                                <div class="checkbox-label">
-                                                                                    <div th:each="ca : ${listC}"
-                                                                                         class="checkbox-item">
-                                                                                        <input class="m-2 caCheckboxs"
-                                                                                               type="checkbox"
-                                                                                               th:value="${ca.id}"
-                                                                                               id="caCheckboxs-${ca.id}"
-                                                                                               name="cas">
-                                                                                        <label th:for="'caCheckboxs-' + ${ca.id}"
-                                                                                               th:text="${ca.tenCa}"></label>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-
-
-
                                                                         </div>
-                                                                        <div class="mt-3">
-                                                                            <label>Giá</label>
-                                                                            <input type="text" name="gia"
-                                                                                   class="form-control">
-                                                                        </div>
-
-                                                                        <!-- Thêm các input hidden để lưu idSanBong và idNgayTrongTuan -->
-                                                                        <input type="hidden" name="idSanBong"
-                                                                               id="selectedSanBongId">
-                                                                        <input type="hidden" name="idNgayTrongTuan"
-                                                                               id="selectedDaysIds">
-
-                                                                        <div class="mt-3">
-                                                                            <button type="submit"
-                                                                                    onclick="submitSanCa()"
-                                                                                    class="btn btn-success"> Thêm sân ca
+                                                                        <div class="form-group col-md-6">
+                                                                            <button type="button"
+                                                                                    class="btn btn-success btn-sm"
+                                                                                    onclick="displaySelectedDays()">
+                                                                                Thêm ngày
                                                                             </button>
                                                                         </div>
                                                                     </form>
-
                                                                 </div>
-                                                                <button onclick="deleteTabActive()"
-                                                                        class="btn btn-success">Xoá loại sân hiện tại
-                                                                </button>
+
+                                                                <div class="mt-3">
+                                                                    <p>Thứ được chọn sẽ thêm vào đây: <span
+                                                                            id="selectedDays"
+                                                                            class="form-control"></span></p>
+                                                                </div>
+
+                                                                <hr>
+
+                                                                <form id="formSanCa" style="display: none;">
+                                                                    <div class="mt-3">
+
+
+                                                                        <h8 class="card-title">Chọn Ca:</h8>
+                                                                        <div class="checkbox-label">
+                                                                            <div class="checkbox-label">
+                                                                                <div th:each="ca : ${listC}"
+                                                                                     class="checkbox-item">
+                                                                                    <input class="m-2 caCheckboxs"
+                                                                                           type="checkbox"
+                                                                                           th:value="${ca.id}"
+                                                                                           id="caCheckboxs-${ca.id}"
+                                                                                           name="cas">
+                                                                                    <label th:for="'caCheckboxs-' + ${ca.id}"
+                                                                                           th:text="${ca.tenCa}"></label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="mt-3">
+                                                                        <label>Giá</label>
+                                                                        <input type="text" name="gia"
+                                                                               class="form-control">
+                                                                    </div>
+
+                                                                    <!-- Thêm các input hidden để lưu idSanBong và idNgayTrongTuan -->
+                                                                    <input type="hidden" name="idSanBong"
+                                                                           id="selectedSanBongId">
+                                                                    <input type="hidden" name="idNgayTrongTuan"
+                                                                           id="selectedDaysIds">
+
+                                                                    <div class="mt-3">
+                                                                        <button type="submit"
+                                                                                onclick="submitSanCa()"
+                                                                                class="btn btn-success"> Thêm sân ca
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+
                                                             </div>
-                                                        </div><!--   Tab content 1-->
+                                                            <button onclick="deleteTabActive()"
+                                                                    class="btn btn-success">Xoá loại sân hiện tại
+                                                            </button>
+                                                        </div>
+                                                    </div><!--   Tab content 1-->
+                                                </div>
+                                                <!--   Tab content-->
+                                            </div>
+                                        </div>
+                                    </div><!--   Tab content 1-->
+
+
+                                    <div class="mt-3">
+                                        <div class="modal fade" id="myModalEdit" tabindex="-1"
+                                             role="dialog" aria-labelledby="myModalEdit"
+                                             aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title"
+                                                            id="editModalLabel2">Chỉnh sửa sân
+                                                            bóng</h5>
+                                                        <button type="button" class="close"
+                                                                data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
                                                     </div>
-                                                    <!--   Tab content-->
+                                                    <div class="modal-body">
+                                                        <form>
+                                                            <input type="hidden" name="id" id="editId">
+
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="editTenSanBong">Tên sân bóng</label>
+                                                                    <input type="text" class="form-control" id="editTenSanBong" name="tenSanBong">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="editTrangThai">Trạng thái</label>
+                                                                    <select id="editTrangThai" class="form-control" name="trangThai" disabled>
+                                                                        <option th:each="a: ${listTTSB}" th:value="${a}" th:text="${a}"></option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="editLoaiSan" hidden>Loại sân</label>
+                                                                    <select id="editLoaiSan" class="form-control" name="idLoaiSan" disabled hidden>
+                                                                        <option th:each="a: ${listLS}" th:value="${a.id}" th:text="${a.tenLoaiSan}"></option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn mb-2 btn-outline-secondary" data-dismiss="modal">Close</button>
+                                                                <button onclick="updateSanBong()" type="submit" class="btn mb-2 btn-success">Update</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+
                                                 </div>
                                             </div>
-                                        </div><!--   Tab content 1-->
-                                    </div> <!--   Tab content-->
-                                </div>
+                                        </div>
+                                    </div>
+                                </div> <!--   Tab content-->
                             </div>
                         </div>
+                    </div>
 
                 </div>
             </div>
@@ -292,14 +281,12 @@
 
 
 
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
 <script>
@@ -314,19 +301,20 @@
         var firstTabContentId = $firstTab.attr('href'); // Lấy ID nội dung tab đầu tiên
         $(firstTabContentId).addClass('show active'); // Hiển thị nội dung tab đầu tiên
 
-        // Thiết lập giá trị idLoaiSan vào input ẩn
-        var idLoaiSan = firstTabContentId.replace('#loaiSan-', '');
-        $('#idLoaiSanInput').val(idLoaiSan);
-
-        // 2. Lắng nghe sự kiện khi chuyển tab
         $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
-            // Lấy ID của tab hiện tại
+            // Cập nhật idLoaiSanInput cho tab hiện tại
             let idLoaiSan = $(e.target).attr('href').replace('#loaiSan-', '');
-            $('#idLoaiSanInput').val(idLoaiSan); // Cập nhật giá trị idLoaiSanInput
+            $('#idLoaiSanInput').val(idLoaiSan);
 
             // Reset dữ liệu của form nếu cần thiết
             $('#tenSanBong').val('');
+
+            // Gắn lại sự kiện click cho nút sửa (edit)
+            $('tbody .btn-edit').off('click').on('click', function () {
+                editSanBongs(this); // Gọi hàm edit
+            });
         });
+
 
         // 3. Gắn sự kiện submit cho form
         $('form').off('submit').on('submit', submitSanBong);
@@ -334,9 +322,7 @@
 
 
     function editSanBongs(button) {
-        // Lấy sanBongId từ data attribute của <tr>
         const sanBongId = $(button).closest('tr').data('id-loai-san');
-        alert("Id san bong: " + sanBongId);
 
         $.ajax({
             type: 'GET',
@@ -348,13 +334,12 @@
                 $('#editTrangThai').val(data.trangThai);
                 $('#editLoaiSan').val(data.idLoaiSan);
                 $('#myModalEdit').modal('show');
-
-                console.log("Dữ liệu sân bóng đã được nạp:", data);
             },
             error: function (xhr, status, error) {
                 console.error("Error fetching san bong data:", error);
             }
         });
+        $('#myModalEdit').modal('show');
     }
 
 
@@ -373,7 +358,7 @@
                 $('#idLoaiSanInput').val(idLoaiSan);
             }
 
-            // // Cập nhật idLoaiSanInput cho tab đầu tiên khi trang được tải
+            // Cập nhật idLoaiSanInput cho tab đầu tiên khi trang được tải
             updateIdLoaiSanInput();
 
             // Lắng nghe sự kiện khi chuyển tab
@@ -384,43 +369,72 @@
 
             // Lấy dữ liệu từ các trường trong modal
             const id = document.getElementById('editId').value;
-            const tenSanBong = document.getElementById('editTenSanBong').value;
+            const tenSanBong = document.getElementById('editTenSanBong').value.trim();
             const trangThai = document.getElementById('editTrangThai').value;
             const idLoaiSan = document.getElementById('editLoaiSan').value;
 
-            // Tạo đối tượng sanBong để gửi lên server
-            const sanBong = {
-                tenSanBong: tenSanBong,
-                trangThai: trangThai,
-                idLoaiSan: idLoaiSan
-            };
+            if (!tenSanBong || tenSanBong.trim() === '') {
+                Swal.fire({
+                    icon: "error",
+                    title: "Đã xảy ra lỗi",
+                    text: "Bạn vui lòng nhập tên sân bóng"
+                });
+                return;
+            }
 
-            // Thực hiện yêu cầu PUT để cập nhật sân bóng
+            // Kiểm tra tên sân bóng đã tồn tại chưa
             $.ajax({
-                type: 'PUT',
-                url: 'http://localhost:8080/san-bong/' + id, // URL của API để cập nhật thông tin
-                data: JSON.stringify(sanBong), // Dữ liệu gửi lên server
-                contentType: 'application/json', // Định dạng dữ liệu gửi là JSON
-                success: function (data) {
-                    console.log('Cập nhật sân bóng thành công:', data);
-                    // Đóng modal sau khi cập nhật thành công
-                    $('#myModalEdit').modal('hide');
-                    // Cập nhật lại bảng (hoặc reload lại trang tùy theo ứng dụng của bạn)
-                    var currentTab = $('ul.nav-tabs li a.active');
-                    var tabContentId = currentTab.attr('href');
-                    $(tabContentId).load(location.href + ' ' + tabContentId);
-                    // Hiển thị thông báo thành công cho người dùng
-                    Swal.fire('Thành công!', 'Cập nhật sân bóng thành công!', 'success');
+                url: `http://localhost:8080/san-bong/checkTrungSanBong?idLoaiSan=${idLoaiSan}&tenSanBong=${encodeURIComponent(tenSanBong)}&id=${id}`,
+                method: 'GET',
+                success: function(response) {
+                    if (response) {
+                        // Tên sân bóng đã tồn tại trong cùng loại sân
+                        Swal.fire({
+                            icon: "error",
+                            title: "Tên sân bóng đã tồn tại",
+                            text: "Vui lòng nhập tên sân bóng khác."
+                        });
+                    } else {
+                        // Tạo đối tượng sanBong để gửi lên server
+                        const sanBong = {
+                            tenSanBong: tenSanBong,
+                            trangThai: trangThai,
+                            idLoaiSan: idLoaiSan
+                        };
+
+                        // Thực hiện yêu cầu PUT để cập nhật sân bóng
+                        $.ajax({
+                            type: 'PUT',
+                            url: 'http://localhost:8080/san-bong/' + id, // URL của API để cập nhật thông tin
+                            data: JSON.stringify(sanBong), // Dữ liệu gửi lên server
+                            contentType: 'application/json', // Định dạng dữ liệu gửi là JSON
+                            success: function (data) {
+                                console.log('Cập nhật sân bóng thành công:', data);
+                                // Đóng modal sau khi cập nhật thành công
+                                $('#myModalEdit').modal('hide');
+                                // Cập nhật lại bảng (hoặc reload lại trang tùy theo ứng dụng của bạn)
+                                var currentTab = $('ul.nav-tabs li a.active');
+                                var tabContentId = currentTab.attr('href');
+                                $(tabContentId).load(location.href + ' ' + tabContentId);
+                                // Hiển thị thông báo thành công cho người dùng
+                                Swal.fire('Thành công!', 'Cập nhật sân bóng thành công!', 'success');
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Lỗi khi cập nhật sân bóng:', error);
+                                // Hiển thị thông báo lỗi cho người dùng
+                                Swal.fire('Lỗi!', 'Có lỗi xảy ra khi cập nhật sân bóng.', 'error');
+                            }
+                        });
+                    }
                 },
-                error: function (xhr, status, error) {
-                    console.error('Lỗi khi cập nhật sân bóng:', error);
-                    // Hiển thị thông báo lỗi cho người dùng
-                    Swal.fire('Lỗi!', 'Có lỗi xảy ra khi cập nhật sân bóng.', 'error');
+                error: function(xhr, status, error) {
+                    console.error("Lỗi khi kiểm tra tên sân bóng:", error);
                 }
             });
 
         });
     }
+
 
 
     function deletedSanBong() {
@@ -488,6 +502,11 @@
                         $(`#${tabId}`).remove(); // Remove the tab content
                         activeTab.remove(); // Remove the tab link
                         Swal.fire('Tab đã được xoá!', '', 'success');
+
+                        var currentTab = $('ul.nav-tabs li a.active');
+                        var tabContentId = currentTab.attr('href');
+                        $(tabContentId).load(location.href + ' ' + tabContentId);
+
                         setTimeout(function () {
                             window.location.reload();
                         }, 1000);
@@ -523,6 +542,15 @@
             var idCa = $('.caCheckboxs:checked').map(function() {
                 return parseInt($(this).val());
             }).get();
+
+            if (idCa.length === 0) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Đã xảy ra lỗi",
+                    text: "Vui lòng chọn ít nhất một ca."
+                });
+                return;
+            }
 
             if (idNgayTrongTuan.length === 0 || idCa.length === 0 || !gia || isNaN(parseFloat(gia))) {
                 Swal.fire({
@@ -659,8 +687,6 @@
         });
     }
 
-
-
     function updateIdLoaiSanInput2() {
         var activeTab = $('#loaiSanTab .nav-link.active');
         var activeTabContentId = activeTab.attr('href');
@@ -678,13 +704,11 @@
         // Reset các ô checkbox
         $('#formAddNgayTrongTuan .dayCheckbox, #formSanCa .caCheckboxs').prop('checked', false);
 
-        // Không reset trạng thái của input gia
-        // $('#formSanCa input[name="gia"]').prop('disabled', true); // Bỏ dòng này nếu không muốn vô hiệu hóa ô input giá
     }
 
 
 
-    // Xử lý sự kiện submit của form
+
     function submitSanBong() {
         $('form').off('submit').on('submit', function (event) {
             event.preventDefault(); // Ngừng hành động mặc định của form
@@ -796,7 +820,8 @@
             Swal.fire({
                 icon: "error",
                 title: "Đã xảy ra lỗi",
-                text: "Vui lòng chọn ít nhất một ngày"
+                text: "Vui lòng chọn ít nhất một ngày",
+                confirmButtonText: "OK"
             });
             return; // Dừng hàm nếu không có checkbox nào được chọn
         }
@@ -805,6 +830,7 @@
         $(activeTabHref).find('#selectedDays').text(selectedDays.join(', '));
         $(activeTabHref).find('#formSanCa').css('display', 'block');
     }
+
 
 
     // Hàm để lấy href của tab đang active

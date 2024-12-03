@@ -1027,16 +1027,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Điền thông tin khách hàng vào modal đặt lịch
             document.getElementById('hoVaTen').value = selectedCustomer.name;
-            document.getElementById('soDienThoai').value = selectedCustomer.phone;
+            if(selectedCustomer.phone==null){
+                document.getElementById('soDienThoai').value = "Không có";
+            }else{
+                document.getElementById('soDienThoai').value = selectedCustomer.phone;
+            }
 
             // Đóng modal chọn khách hàng
             $('#selectCustomerModal').modal('hide');
         }
     });
 
-    flatpickr("#ngayDenSan", {});
-    flatpickr("#ngayBatDau", {});
-    flatpickr("#ngayKetThuc", {});
+    flatpickr("#ngayDenSan", {
+        minDate: "today"
+    });
+    flatpickr("#ngayBatDau", {
+        minDate: "today"
+    });
+    flatpickr("#ngayKetThuc", {
+        minDate: "today"
+    });
 });
 
 document.querySelector('#datLich').addEventListener('click', async function () {
@@ -1135,7 +1145,7 @@ document.querySelector('#datLich').addEventListener('click', async function () {
         console.log('Thêm hóa đơn thành công:', hoaDonData);
 
         // Gọi hàm thêm hóa đơn chi tiết sau khi thêm hóa đơn thành công
-        themHoaDonChiTiet(idHoaDon);
+        await themHoaDonChiTiet(idHoaDon);
 
     } catch (error) {
         console.error('Lỗi khi thêm hóa đơn:', error);

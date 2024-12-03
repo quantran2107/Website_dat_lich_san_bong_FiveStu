@@ -253,16 +253,12 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         hoaDonChiTiet.setMaHoaDonChiTiet(generateMaHoaDonChiTiet());
         hoaDonChiTiet.setSanCa(sanCa);
         hoaDonChiTiet.setHoaDon(hoaDon);
-        hoaDonChiTiet.setNgayDenSan((Date) hoaDonChiTietDTO.getNgayDenSan());
+        hoaDonChiTiet.setNgayDenSan(new java.sql.Date(hoaDonChiTietDTO.getNgayDenSan().getTime()));
         hoaDonChiTiet.setTrangThai("Chờ nhận sân");
         hoaDonChiTiet.setKieuNgayDat("Theo ngày");
         hoaDonChiTiet.setTongTien(hoaDonChiTietDTO.getTongTien());
 
         HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
-
-        System.out.println("idSanCa: " + hoaDonChiTietDTO.getIdSanCa());
-        System.out.println("idHoaDon: " + hoaDonChiTietDTO.getIdHoaDon());
-        System.out.println("tongTien: " + hoaDonChiTietDTO.getTongTien());
 
         return modelMapper.map(hoaDonChiTietSave, HoaDonChiTietDTO.class);
     }

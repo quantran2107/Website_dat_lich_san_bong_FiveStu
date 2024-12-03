@@ -1,3 +1,23 @@
+GET http://localhost:8080/api/payment/create_payment?params=kn1WMok5
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.2.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-11-28T003434.400.txt
+
+###
+
+GET http://localhost:8080/api/payment/create_payment?params=vEg8TI50
+User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.2.3
+Accept-Encoding: br, deflate, gzip, x-gzip
+Accept: */*
+content-length: 0
+
+<> 2024-11-28T003013.400.txt
+
+###
+
 GET http://localhost:8080/ca/hien-thi
 User-Agent: IntelliJ HTTP Client/IntelliJ IDEA 2024.2.3
 Accept-Encoding: br, deflate, gzip, x-gzip
