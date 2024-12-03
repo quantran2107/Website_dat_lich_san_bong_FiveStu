@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6c608e69-d507-4e02-8fb6-f3a024a454b3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/entity/HoaDon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/entity/HoaDon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/DoThueService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/DoThueService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-hoa-don.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-hoa-don.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/entity/HoaDon.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/entity/HoaDon.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-hoa-don.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-hoa-don.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/thong-ke.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/thong-ke.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -259,7 +255,7 @@
       <workItem from="1732245444197" duration="390000" />
       <workItem from="1732589538257" duration="5754000" />
       <workItem from="1732606823743" duration="34633000" />
-      <workItem from="1733200843939" duration="593000" />
+      <workItem from="1733200843939" duration="4165000" />
     </task>
     <servers />
   </component>
