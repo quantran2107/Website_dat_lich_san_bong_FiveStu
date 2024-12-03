@@ -102,6 +102,17 @@ public class SanBongRest {
         return ResponseEntity.ok(isExist); // Trả về true nếu trùng, false nếu không trùng
     }
 
+    @PutMapping("/updateTrangThai/{id}")
+    public ResponseEntity<String> updateTrangThai(@PathVariable("id") Integer id,
+                                                  @RequestParam("status") String status) {
+        try {
+            sanBongService.updateTrangThai(id, status);
+            return ResponseEntity.ok("Trạng thái đã được cập nhật thành công.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Lỗi khi cập nhật trạng thái: " + e.getMessage());
+        }
+    }
 
 
 }

@@ -1,7 +1,65 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="fragment/head :: head"></head>
+<head th:include="fragment/head :: head">
+</head>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+    /* Thiết kế của switch */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;  /* Giảm kích thước width */
+        height: 24px; /* Giảm kích thước height */
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;  /* Bo tròn các góc của slider */
+    }
+
+    /* Thiết kế nút tròn bên trong slider */
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;  /* Giảm chiều cao của nút tròn */
+        width: 16px;   /* Giảm chiều rộng của nút tròn */
+        border-radius: 50%;  /* Làm cho nó thành vòng tròn */
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+    }
+
+    /* Khi checkbox được checked */
+    input:checked + .slider {
+        background-color: #4CAF50; /* Màu nền khi checkbox checked */
+    }
+
+    /* Khi slider di chuyển */
+    input:checked + .slider:before {
+        transform: translateX(16px);  /* Điều chỉnh lại vị trí của nút tròn */
+    }
+
+    /* Giảm kích thước nút edit */
+    .btn-sm {
+        font-size: 12px; /* Giảm kích thước font */
+        padding: 5px 10px; /* Giảm padding để nút nhỏ lại */
+    }
+
+</style>
 <body class="vertical  light  ">
 <div class="wrapper">
     <div th:include="fragment/navbar :: navbar"></div>
@@ -73,11 +131,13 @@
                                                         </form>
 
                                                     </div>
+
                                                     <table class="table table-striped table-hover table-borderless">
                                                         <thead>
                                                         <tr>
                                                             <th>#</th>
                                                             <th>Tên sân</th>
+                                                            <th>Trạng thái</th>
                                                             <th>Hành động</th>
                                                         </tr>
                                                         </thead>
@@ -89,15 +149,18 @@
                                                             <td th:text="${stat.count}"></td>
                                                             <td>
                                                                 <span th:text="${sanBong.tenSanBong}"></span>
-
                                                             </td>
+                                                            <td th:text="${sanBong.trangThai}"></td>
                                                             <td>
                                                                 <button onclick="editSanBongs(this)" class="btn btn-outline-success">
                                                                     <span class="fe fe-edit-3"></span>
                                                                 </button>
-                                                                <button onclick="deletedSanBong()"
-                                                                        class="btn btn-danger"><span
-                                                                        class="fe fe-trash-2"></span></button>
+
+                                                                <label class="switch">
+                                                                    <input type="checkbox" class="status-switch" data-id="${sanBong.id}"
+                                                                           th:attr="checked=${sanBong.trangThai == 'Hoạt động'}">
+                                                                    <span class="slider round"></span>
+                                                                </label>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -200,7 +263,7 @@
 
                                                             </div>
                                                             <button onclick="deleteTabActive()"
-                                                                    class="btn btn-success">Xoá loại sân hiện tại
+                                                                    class="btn btn-danger">Xoá loại sân hiện tại
                                                             </button>
                                                         </div>
                                                     </div><!--   Tab content 1-->
@@ -234,15 +297,18 @@
                                                             <div class="form-row">
                                                                 <div class="form-group col-md-6">
                                                                     <label for="editTenSanBong">Tên sân bóng</label>
-                                                                    <input type="text" class="form-control" id="editTenSanBong" name="tenSanBong">
+                                                                    <input type="text" class="form-control"
+                                                                           id="editTenSanBong" name="tenSanBong">
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-row">
                                                                 <div class="form-group col-md-6">
                                                                     <label for="editTrangThai">Trạng thái</label>
-                                                                    <select id="editTrangThai" class="form-control" name="trangThai" disabled>
-                                                                        <option th:each="a: ${listTTSB}" th:value="${a}" th:text="${a}"></option>
+                                                                    <select id="editTrangThai" class="form-control"
+                                                                            name="trangThai" disabled>
+                                                                        <option th:each="a: ${listTTSB}" th:value="${a}"
+                                                                                th:text="${a}"></option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -250,15 +316,23 @@
                                                             <div class="form-row">
                                                                 <div class="form-group col-md-6">
                                                                     <label for="editLoaiSan" hidden>Loại sân</label>
-                                                                    <select id="editLoaiSan" class="form-control" name="idLoaiSan" disabled hidden>
-                                                                        <option th:each="a: ${listLS}" th:value="${a.id}" th:text="${a.tenLoaiSan}"></option>
+                                                                    <select id="editLoaiSan" class="form-control"
+                                                                            name="idLoaiSan" disabled hidden>
+                                                                        <option th:each="a: ${listLS}"
+                                                                                th:value="${a.id}"
+                                                                                th:text="${a.tenLoaiSan}"></option>
                                                                     </select>
                                                                 </div>
                                                             </div>
 
                                                             <div class="modal-footer">
-                                                                <button type="button" class="btn mb-2 btn-outline-secondary" data-dismiss="modal">Close</button>
-                                                                <button onclick="updateSanBong()" type="submit" class="btn mb-2 btn-success">Update</button>
+                                                                <button type="button"
+                                                                        class="btn mb-2 btn-outline-secondary"
+                                                                        data-dismiss="modal">Close
+                                                                </button>
+                                                                <button onclick="updateSanBong()" type="submit"
+                                                                        class="btn mb-2 btn-success">Update
+                                                                </button>
                                                             </div>
                                                         </form>
                                                     </div>
@@ -280,7 +354,6 @@
 </div>
 
 
-
 <!-- JavaScript -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -288,8 +361,78 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
 
-
 <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.status-switch').forEach(switchElement => {
+            switchElement.addEventListener('change', function() {
+                // const id = parseInt(this.getAttribute('data-id'), 10);  // Đảm bảo id là Integer
+                const id = $(this).closest('tr').data('id-loai-san');
+                const status = this.checked ? 'Hoạt động' : 'Bảo trì'; // Dùng chuỗi thay vì boolean
+
+                if (status === 'Bảo trì') {
+                    Swal.fire({
+                        title: 'Bạn có chắc chắn?',
+                        text: "Bạn có muốn vô hiệu hoá sân bóng này?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Có, vô hiệu hoá',
+                        cancelButtonText: 'Không, quay lại',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            updateTrangThai(id, status, this);
+                        } else {
+                            this.checked = true; // Khôi phục trạng thái nếu hủy
+                        }
+                    });
+                } else {
+                    updateTrangThai(id, status, this);
+                }
+            });
+        });
+
+        function updateTrangThai(id, status, switchElement) {
+            fetch(`http://localhost:8080/san-bong/updateTrangThai/${id}?status=${status}`, {
+                method: 'PUT',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: 'Trạng thái đã được cập nhật thành công.',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        // Cập nhật trực tiếp trạng thái trong bảng
+                        const row = switchElement.closest('tr'); // Tìm hàng hiện tại
+                        const statusCell = row.querySelector('td:nth-child(3)'); // Chọn cột trạng thái (cột thứ 3)
+                        if (statusCell) {
+                            statusCell.textContent = status; // Cập nhật văn bản trạng thái
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi!',
+                            text: 'Có lỗi xảy ra khi cập nhật trạng thái.',
+                        });
+                        switchElement.checked = (status === 'Hoạt động'); // Khôi phục trạng thái nếu lỗi
+                    }
+                })
+                .catch(error => {
+                    console.error('Có lỗi xảy ra:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi!',
+                        text: 'Có lỗi xảy ra khi cập nhật trạng thái.',
+                    });
+                    switchElement.checked = (status === 'Hoạt động'); // Khôi phục trạng thái nếu có lỗi
+                });
+        }
+    });
+
+
 
     $(document).ready(function () {
         // Khi DOM đã sẵn sàng
@@ -343,8 +486,6 @@
     }
 
 
-
-
     function updateSanBong() {
         $('form').off('submit').on('submit', function (event) {
             // Ngăn chặn hành động mặc định của form (chẳng hạn như reload trang)
@@ -386,7 +527,7 @@
             $.ajax({
                 url: `http://localhost:8080/san-bong/checkTrungSanBong?idLoaiSan=${idLoaiSan}&tenSanBong=${encodeURIComponent(tenSanBong)}&id=${id}`,
                 method: 'GET',
-                success: function(response) {
+                success: function (response) {
                     if (response) {
                         // Tên sân bóng đã tồn tại trong cùng loại sân
                         Swal.fire({
@@ -402,32 +543,32 @@
                             idLoaiSan: idLoaiSan
                         };
 
-                        // Thực hiện yêu cầu PUT để cập nhật sân bóng
+
                         $.ajax({
                             type: 'PUT',
-                            url: 'http://localhost:8080/san-bong/' + id, // URL của API để cập nhật thông tin
-                            data: JSON.stringify(sanBong), // Dữ liệu gửi lên server
-                            contentType: 'application/json', // Định dạng dữ liệu gửi là JSON
+                            url: 'http://localhost:8080/san-bong/' + id,
+                            data: JSON.stringify(sanBong),
+                            contentType: 'application/json',
                             success: function (data) {
                                 console.log('Cập nhật sân bóng thành công:', data);
-                                // Đóng modal sau khi cập nhật thành công
+
                                 $('#myModalEdit').modal('hide');
-                                // Cập nhật lại bảng (hoặc reload lại trang tùy theo ứng dụng của bạn)
+
                                 var currentTab = $('ul.nav-tabs li a.active');
                                 var tabContentId = currentTab.attr('href');
                                 $(tabContentId).load(location.href + ' ' + tabContentId);
-                                // Hiển thị thông báo thành công cho người dùng
+
                                 Swal.fire('Thành công!', 'Cập nhật sân bóng thành công!', 'success');
                             },
                             error: function (xhr, status, error) {
                                 console.error('Lỗi khi cập nhật sân bóng:', error);
-                                // Hiển thị thông báo lỗi cho người dùng
+
                                 Swal.fire('Lỗi!', 'Có lỗi xảy ra khi cập nhật sân bóng.', 'error');
                             }
                         });
                     }
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error("Lỗi khi kiểm tra tên sân bóng:", error);
                 }
             });
@@ -436,13 +577,12 @@
     }
 
 
-
     function deletedSanBong() {
         // Lắng nghe sự kiện click vào nút Xóa (btn-danger) trong tbody
         $('tbody').on('click', '.btn-danger', function () {
             // Lấy idSanBong từ data-id-loai-san của phần tử <tr> chứa nút Xóa
             const sanBongId = $(this).closest('tr').data('id-loai-san');
-            console.log("San bong id, ",sanBongId)
+            console.log("San bong id, ", sanBongId)
             Swal.fire({
                 title: "Xóa bản ghi?",
                 text: "Bạn có chắc chắn muốn xóa bản ghi này?",
@@ -477,7 +617,6 @@
             });
         });
     }
-
 
 
     function deleteTabActive() {
@@ -535,11 +674,11 @@
             updateIdLoaiSanInput2();
             var idLoaiSan = $('#idLoaiSanInput').val();
 
-            var idNgayTrongTuan = $('.dayCheckbox:checked').map(function() {
+            var idNgayTrongTuan = $('.dayCheckbox:checked').map(function () {
                 return parseInt($(this).val());
             }).get();
 
-            var idCa = $('.caCheckboxs:checked').map(function() {
+            var idCa = $('.caCheckboxs:checked').map(function () {
                 return parseInt($(this).val());
             }).get();
 
@@ -565,7 +704,7 @@
             $.ajax({
                 url: `http://localhost:8080/san-bong/findByIdLoaiSan/${idLoaiSan}`,
                 method: 'GET',
-                success: function(data) {
+                success: function (data) {
                     if (data.length === 0) {
                         Swal.fire({
                             icon: "error",
@@ -576,7 +715,7 @@
                     }
 
                     // Lấy tất cả idSanBong
-                    var idSanBong = data.map(function(sanBong) {
+                    var idSanBong = data.map(function (sanBong) {
                         return sanBong.id; // Lấy id từ từng đối tượng
                     }).join(',');
 
@@ -584,7 +723,7 @@
                     $.ajax({
                         url: `http://localhost:8080/san-ca/listSanCaExists/${idLoaiSan}/${idSanBong}/${idNgayTrongTuan.join(',')}/${idCa.join(',')}`,
                         method: 'GET',
-                        success: function(data) {
+                        success: function (data) {
                             if (data && data.length > 0) {
                                 Swal.fire({
                                     icon: "info",
@@ -610,17 +749,20 @@
                                             method: 'POST',
                                             contentType: 'application/json',
                                             data: JSON.stringify(formData),
-                                            success: function(response) {
+                                            success: function (response) {
                                                 Swal.fire({
                                                     icon: "success",
                                                     title: "Cập nhật sân ca thành công",
                                                     showConfirmButton: false,
                                                     timer: 1000
                                                 });
+                                                var currentTab = $('ul.nav-tabs li a.active');
+                                                var tabContentId = currentTab.attr('href');
+                                                $(tabContentId).load(location.href + ' ' + tabContentId);
                                                 clearFormSanCa();
                                                 $('#formSanCa').hide();
                                             },
-                                            error: function(xhr) {
+                                            error: function (xhr) {
                                                 Swal.fire({
                                                     icon: "error",
                                                     title: "Đã xảy ra lỗi",
@@ -642,7 +784,7 @@
                                     method: 'POST',
                                     contentType: 'application/json',
                                     data: JSON.stringify(formData),
-                                    success: function(response) {
+                                    success: function (response) {
                                         Swal.fire({
                                             icon: "success",
                                             title: "Thêm sân ca thành công",
@@ -652,7 +794,7 @@
                                         clearFormSanCa();
                                         $('#formSanCa').hide();
                                     },
-                                    error: function(xhr) {
+                                    error: function (xhr) {
                                         Swal.fire({
                                             icon: "error",
                                             title: "Đã xảy ra lỗi",
@@ -662,7 +804,7 @@
                                 });
                             }
                         },
-                        error: function(err) {
+                        error: function (err) {
                             Swal.fire({
                                 icon: "error",
                                 title: "Đã xảy ra lỗi",
@@ -671,7 +813,7 @@
                         }
                     });
                 },
-                error: function(err) {
+                error: function (err) {
                     Swal.fire({
                         icon: "error",
                         title: "Đã xảy ra lỗi",
@@ -696,16 +838,15 @@
 
 
 
-    // Hàm để làm sạch formSanCa sau khi thêm sân ca thành công
+
     function clearFormSanCa() {
-        // Reset các ô input
+
         $('#formSanCa input[type="text"], #formSanCa input[type="number"]').val('');
 
-        // Reset các ô checkbox
         $('#formAddNgayTrongTuan .dayCheckbox, #formSanCa .caCheckboxs').prop('checked', false);
 
+        $('#selectedDays').text('');
     }
-
 
 
 
@@ -744,7 +885,7 @@
             $.ajax({
                 url: `http://localhost:8080/san-bong/checkTrungSanBong?idLoaiSan=${idLoaiSan}&tenSanBong=${encodeURIComponent(tenSanBong)}`,
                 method: 'GET',
-                success: function(response) {
+                success: function (response) {
                     if (response) {
                         // Tên sân bóng đã tồn tại trong cùng loại sân
                         Swal.fire({
@@ -764,7 +905,7 @@
                             method: 'POST',
                             contentType: 'application/json',
                             data: JSON.stringify(formData),
-                            success: function(response) {
+                            success: function (response) {
                                 Swal.fire({
                                     icon: "success",
                                     title: "Thêm sân bóng thành công",
@@ -776,13 +917,13 @@
                                 clearFormSanBong();
                                 refreshCurrentTab();
                             },
-                            error: function(xhr, status, error) {
+                            error: function (xhr, status, error) {
                                 alert('Đã xảy ra lỗi khi thêm sân bóng: ' + xhr.responseText);
                             }
                         });
                     }
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error("Lỗi khi kiểm tra tên sân bóng:", error);
                 }
             });
@@ -830,7 +971,6 @@
         $(activeTabHref).find('#selectedDays').text(selectedDays.join(', '));
         $(activeTabHref).find('#formSanCa').css('display', 'block');
     }
-
 
 
     // Hàm để lấy href của tab đang active
@@ -1001,7 +1141,7 @@
                             var tabContentId = currentTab.attr('href');
                             $(tabContentId).load(location.href + ' ' + tabContentId);
 
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 reloadLoaiSanTabs(response.id);
                             }, 1000);
                         },
@@ -1024,8 +1164,6 @@
             });
         });
     }
-
-
 
 
     function reloadLoaiSanTabs(newTabId) {
