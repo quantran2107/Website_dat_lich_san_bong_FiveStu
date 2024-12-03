@@ -21,13 +21,59 @@
     /* Tùy chỉnh bảng trong thẻ card */
     .card {
         background-color: #ffffff; /* Đặt nền trắng */
-        border-radius: 10px;      /* Bo góc mềm mại */
-    }
-    .card-header .btn {
-        font-size: 0.875rem; /* Nhỏ hơn nút mặc định một chút */
-        padding: 5px 10px;  /* Điều chỉnh kích thước nút */
+        border-radius: 10px; /* Bo góc mềm mại */
     }
 
+    .card-header .btn {
+        font-size: 0.875rem; /* Nhỏ hơn nút mặc định một chút */
+        padding: 5px 10px; /* Điều chỉnh kích thước nút */
+    }
+
+    /* Thiết kế của switch */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;  /* Giảm kích thước width */
+        height: 24px; /* Giảm kích thước height */
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;  /* Giảm chiều cao của nút tròn */
+        width: 16px;   /* Giảm chiều rộng của nút tròn */
+        border-radius: 50%;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: #4CAF50;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(16px);  /* Điều chỉnh lại vị trí của nút tròn */
+    }
 
 
 
@@ -45,7 +91,8 @@
                         <div class="search-box-container">
                             <div class="form-group mb-0">
                                 <label for="search" class="font-weight-bold">Tìm kiếm</label>
-                                <input type="text" class="form-control" id="search" placeholder="Tìm kiếm theo mã tham số, tên tham số">
+                                <input type="text" class="form-control" id="search"
+                                       placeholder="Tìm kiếm theo mã tham số, tên tham số">
                             </div>
                         </div>
                     </div>
@@ -53,13 +100,12 @@
             </div>
 
 
-
             <div class="card shadow-sm my-4">
                 <div class="card-header d-flex justify-content-between align-items-center bg-white text-black">
-                    <h5 class="mb-0">Danh Sách Thông Số</h5>
-                    <button type="button"  class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addParameterModal">
-                        <i class="bi bi-plus-circle"></i>
-                    </button>
+                    <h5 class="mb-0">Danh Sách Tham Số</h5>
+                    <!--                    <button type="button"  class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addParameterModal">-->
+                    <!--                        <i class="bi bi-plus-circle"></i>-->
+                    <!--                    </button>-->
                 </div>
                 <div class="card-body">
                     <table id="parameterTable" class="table table-bordered table-striped">
@@ -80,8 +126,6 @@
                     </table>
                 </div>
             </div>
-
-
 
 
             <!-- Modal for adding a parameter -->
@@ -156,10 +200,10 @@
                                     <label for="editParameterValue" class="form-label">Giá Trị</label>
                                     <input type="text" class="form-control" id="editParameterValue" name="giaTri">
                                 </div>
-<!--                                <div class="mb-3">-->
-<!--                                    <label for="editParameterType" class="form-label">Loại Giá Trị</label>-->
-<!--                                    <input type="text" class="form-control" id="editParameterType" name="typeGiaTri">-->
-<!--                                </div>-->
+                                <!--                                <div class="mb-3">-->
+                                <!--                                    <label for="editParameterType" class="form-label">Loại Giá Trị</label>-->
+                                <!--                                    <input type="text" class="form-control" id="editParameterType" name="typeGiaTri">-->
+                                <!--                                </div>-->
 
                                 <div class="mb-3">
                                     <label for="editParameterType" class="form-label">Loại Giá Trị</label>
@@ -179,7 +223,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="editParameterStatus" class="form-label">Trạng Thái</label>
-                                    <select class="form-select" id="editParameterStatus" name="trangThai">
+                                    <select class="form-select" id="editParameterStatus" name="trangThai" disabled>
                                         <option value="true">Kích hoạt</option>
                                         <option value="false">Vô hiệu hóa</option>
                                     </select>
@@ -195,11 +239,11 @@
             </div>
 
 
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-end" id="pagination">
-                    <!-- Pagination items will be populated dynamically here -->
-                </ul>
-            </nav>
+            <!--            <nav aria-label="Page navigation">-->
+            <!--                <ul class="pagination justify-content-end" id="pagination">-->
+            <!--                    &lt;!&ndash; Pagination items will be populated dynamically here &ndash;&gt;-->
+            <!--                </ul>-->
+            <!--            </nav>-->
         </div>
 
         <div th:include="fragment/modal :: modal"></div>
@@ -213,6 +257,80 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
 <script>
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.status-switch').forEach(switchElement => {
+            switchElement.addEventListener('change', function() {
+                const id = this.getAttribute('data-id');
+                const status = this.checked;
+
+                if (!status) {
+                    Swal.fire({
+                        title: 'Bạn có chắc chắn?',
+                        text: "Bạn có muốn vô hiệu hoá tham số này?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Có, vô hiệu hoá',
+                        cancelButtonText: 'Không, quay lại',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            updateTrangThai(id, status, this);
+                        } else {
+                            this.checked = true; // Khôi phục trạng thái ban đầu nếu hủy
+                        }
+                    });
+                } else {
+                    updateTrangThai(id, status, this);
+                }
+            });
+        });
+
+        function updateTrangThai(id, status, switchElement) {
+            fetch(`http://localhost:8080/tham-so/updateTrangThai/${id}?status=${status}`, {
+                method: 'PUT',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: 'Trạng thái đã được cập nhật thành công.',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        // Cập nhật trực tiếp trạng thái trong bảng
+                        const row = switchElement.closest('tr'); // Tìm hàng hiện tại
+                        const statusCell = row.querySelector('td:nth-child(6)'); // Chọn cột trạng thái (cột thứ 6)
+                        if (statusCell) {
+                            statusCell.textContent = status ? 'Kích hoạt' : 'Vô hiệu hóa'; // Cập nhật văn bản trạng thái
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi!',
+                            text: 'Có lỗi xảy ra khi cập nhật trạng thái.',
+                        });
+                        switchElement.checked = !status; // Khôi phục trạng thái nếu lỗi
+                    }
+                })
+                .catch(error => {
+                    console.error('Có lỗi xảy ra:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi!',
+                        text: 'Có lỗi xảy ra khi cập nhật trạng thái.',
+                    });
+                    switchElement.checked = !status; // Khôi phục trạng thái nếu có lỗi
+                });
+        }
+    });
+
+
+
+
+
 
     $(document).on('click', '#addParameterButton', function () {
         var addModal = new bootstrap.Modal(document.getElementById('parameterModal'));
@@ -490,7 +608,7 @@
     let currentSearchMa = null;
     let currentSearchName = null;
 
-    function fetchDataAndRenderTable(page = 0, size = 5) {
+    function fetchDataAndRenderTable(page = 0, size = 10) {
         let apiURL = `/tham-so/searchs?page=${page}&size=${size}`;
 
         if (currentSearchMa) {
@@ -542,18 +660,19 @@
             <td>${parameter.moTa}</td>
             <td>${parameter.trangThai ? 'Kích hoạt' : 'Vô hiệu hóa'}</td>
             <td>
-               <!-- Nút Sửa -->
+
             <button type="button" class="btn btn-warning btn-sm edit-button"
                     data-bs-toggle="modal" data-bs-target="#editModal"
                     data-id="${parameter.id}">
                 <i class="bi bi-pencil-square"></i>
             </button>
 
-            <!-- Nút Xóa -->
-            <button type="button" class="btn btn-danger btn-sm delete-button"
-                    data-id="${parameter.id}">
-                <i class="bi bi-trash"></i>
-            </button>
+            <label class="switch">
+                <input type="checkbox" class="status-switch" data-id="${parameter.id}" ${parameter.trangThai ? 'checked' : ''}>
+                <span class="slider round"></span>
+            </label>
+
+
             </td>
         </tr>`;
             tableBody.insertAdjacentHTML('beforeend', row);

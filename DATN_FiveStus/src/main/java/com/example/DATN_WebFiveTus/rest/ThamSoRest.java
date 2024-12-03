@@ -1,6 +1,7 @@
 package com.example.DATN_WebFiveTus.rest;
 
 import com.example.DATN_WebFiveTus.dto.ThamSoDTO;
+import com.example.DATN_WebFiveTus.entity.ThamSo;
 import com.example.DATN_WebFiveTus.service.ThamSoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -95,4 +96,17 @@ public class ThamSoRest {
         thamSoService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/updateTrangThai/{id}")
+    public ResponseEntity<String> updateTrangThai(@PathVariable("id") Integer id,
+                                                  @RequestParam("status") boolean status) {
+        try {
+            thamSoService.updateTrangThai(id, status);
+            return ResponseEntity.ok("Trạng thái đã được cập nhật thành công.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Lỗi khi cập nhật trạng thái: " + e.getMessage());
+        }
+    }
+
 }
