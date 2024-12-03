@@ -6,6 +6,11 @@ $(document).ready(function () {
     let list = []; // Danh sách dữ liệu
     let imageData = '';
 
+    $('#closeQRmodal').on('click', () => {
+        $('#qrCodeModal').modal('hide');
+    })
+
+
     function showSuccessToast(message) {
         Toastify({
             text: message,
@@ -32,7 +37,7 @@ $(document).ready(function () {
         }).showToast();
     }
 
-    $('#btnExcelMau').on('click', function() {
+    $('#btnExcelMau').on('click', function () {
         // URL tải xuống file Excel từ Google Sheets
         let url = 'https://docs.google.com/spreadsheets/d/1bDAR1kH1wQIMQ6JLkgmmLLQlrMioKFYY/export?format=xlsx';
 
@@ -64,7 +69,7 @@ $(document).ready(function () {
             }
         }
     });
-    $('#load').on('click',()=>{
+    $('#load').on('click', () => {
         $('#actionMenuButton3').text('Tất cả');
         $('#searchInput').val('')
         loadTable(apiGetAll, '', currentPage, recordsPerPage);
@@ -256,7 +261,6 @@ $(document).ready(function () {
         reader.readAsDataURL(file); // Đọc nội dung của tệp dưới dạng URL base64
     });
     $('#fileInputU').change(function (event) {
-        console.log(1)
         let file = event.target.files[0];
         let reader = new FileReader();
         reader.onload = function (e) {
@@ -274,12 +278,35 @@ $(document).ready(function () {
 
 
     $('#qlnv').on('click', function () {
+        $('.is-invalid').removeClass('is-invalid');
+        removeErrorClass();
         $(`#tableNhanVien`).show()
         loadTable(apiGetAll, '', currentPage, recordsPerPage);
         $(`#formAdd`).hide();
         $(`#formUpdate`).hide();
 
     });
+
+    function removeErrorClass() {
+        $('#ngaySinhError').remove();
+        $('#emailError').remove();
+        $('#soDienThoaiError').remove();
+        $('#tinhError').remove();
+        $('#huyenError').remove();
+        $('#xaError').remove();
+        $('#diaChiError').remove();
+        $('#hoTenError').remove();
+
+        $('#ngaySinhUError').remove();
+        $('#emailUError').remove();
+        $('#soDienThoaiUError').remove();
+        $('#tinhUError').remove();
+        $('#huyenUError').remove();
+        $('#xaUError').remove();
+        $('#diaChiUError').remove();
+        $('#hoTenUError').remove();
+
+    }
 
     $('#status-select .dropdown-item').click(function (event) {
         event.preventDefault();
@@ -298,7 +325,6 @@ $(document).ready(function () {
         currentPage = 1;
         loadTable(apiGetAll, '', currentPage, recordsPerPage);
     });
-
 
 
     // Xử lý sự kiện khi nhập vào ô tìm kiếm
@@ -366,13 +392,13 @@ $(document).ready(function () {
             });
             // Tạo các nút phân trang
             let pagination = `<div class="pagination" id="pagination">
-                                <button style="height: 30px; display: flex; align-items: center; justify-content: center;" class="btn btn-success prev-page" ${currentPage === 1 ? 'hidden' : ''}><</button>
+                                <button title="Trước" style="height: 30px; display: flex; align-items: center; justify-content: center;" class="btn btn-success prev-page" ${currentPage === 1 ? 'hidden' : ''}><</button>
                                 <select  class="custom-select page-select">`;
             for (let i = 1; i <= totalPages; i++) {
                 pagination += `<option value="${i}" ${i === currentPage ? 'selected' : ''}>Trang ${i}</option>`;
             }
             pagination += `</select>
-                            <button style="height: 30px; display: flex; align-items: center; justify-content: center;"  class="btn btn-success next-page" ${currentPage === totalPages ? 'hidden' : ''}>></button>
+                            <button title="Sau" style="height: 30px; display: flex; align-items: center; justify-content: center;"  class="btn btn-success next-page" ${currentPage === totalPages ? 'hidden' : ''}>></button>
                            </div>`;
 
             $('#pagination').html(pagination);
@@ -401,7 +427,6 @@ $(document).ready(function () {
         });
 
     }
-
 
 
     function renderAddForm() {
@@ -478,118 +503,118 @@ $(document).ready(function () {
 
             $('#ngaySinh').on('input', function () {
                 if ($(this).val().trim() !== '') {
-                    $(this).removeClass('is-invalid'); // Loại bỏ class is-invalid nếu không rỗng
-                    $('#ngaySinhError').remove(); // Loại bỏ thông báo lỗi
+                    $(this).removeClass('is-invalid');
+                    $('#ngaySinhError').remove();
                 }
             });
 
             $('#email').on('input', function () {
                 if ($(this).val().trim() !== '') {
-                    $(this).removeClass('is-invalid'); // Loại bỏ class is-invalid nếu không rỗng
-                    $('#emailError').remove(); // Loại bỏ thông báo lỗi
+                    $(this).removeClass('is-invalid');
+                    $('#emailError').remove();
                 }
             });
             $('#soDienThoai').on('input', function () {
                 if ($(this).val().trim() !== '') {
-                    $(this).removeClass('is-invalid'); // Loại bỏ class is-invalid nếu không rỗng
-                    $('#soDienThoaiError').remove(); // Loại bỏ thông báo lỗi
+                    $(this).removeClass('is-invalid');
+                    $('#soDienThoaiError').remove();
                 }
             });
             $('#tinh').on('input', function () {
                 if ($(this).val().trim() !== '') {
-                    $(this).removeClass('is-invalid'); // Loại bỏ class is-invalid nếu không rỗng
-                    $('#tinhError').remove(); // Loại bỏ thông báo lỗi
+                    $(this).removeClass('is-invalid');
+                    $('#tinhError').remove();
                 }
             });
             $('#huyen').on('input', function () {
                 if ($(this).val().trim() !== '') {
-                    $(this).removeClass('is-invalid'); // Loại bỏ class is-invalid nếu không rỗng
-                    $('#huyenError').remove(); // Loại bỏ thông báo lỗi
+                    $(this).removeClass('is-invalid');
+                    $('#huyenError').remove();
                 }
             });
             $('#xa').on('input', function () {
                 if ($(this).val().trim() !== '') {
-                    $(this).removeClass('is-invalid'); // Loại bỏ class is-invalid nếu không rỗng
-                    $('#xaError').remove(); // Loại bỏ thông báo lỗi
+                    $(this).removeClass('is-invalid');
+                    $('#xaError').remove();
                 }
             });
             $('#diaChi').on('input', function () {
                 if ($(this).val().trim() !== '') {
-                    $(this).removeClass('is-invalid'); // Loại bỏ class is-invalid nếu không rỗng
-                    $('#diaChiError').remove(); // Loại bỏ thông báo lỗi
+                    $(this).removeClass('is-invalid');
+                    $('#diaChiError').remove();
                 }
             });
             $('#hoTen').on('input', function () {
                 if ($(this).val().trim() !== '') {
-                    $(this).removeClass('is-invalid'); // Loại bỏ class is-invalid nếu không rỗng
-                    $('#hoTenError').remove(); // Loại bỏ thông báo lỗi
+                    $(this).removeClass('is-invalid');
+                    $('#hoTenError').remove();
                 }
             });
 
             function valid() {
                 if (ngaySinh === '') {
-                    $('#ngaySinh').addClass('is-invalid'); // Thêm class is-invalid để bôi đỏ ô input
-                    $('#ngaySinhError').remove(); // Loại bỏ thông báo lỗi cũ nếu có
-                    $('#ngaySinh').after('<div id="ngaySinhError" class="invalid-feedback">Vui lòng nhập Tên nhân viên.</div>'); // Thêm thông báo lỗi mới
+                    $('#ngaySinh').addClass('is-invalid');
+                    $('#ngaySinhError').remove();
+                    $('#ngaySinh').after('<div id="ngaySinhError" class="invalid-feedback">Vui lòng nhập ngày sinh.</div>');
                     return false;
                 }
                 if (hoTen === '') {
-                    $('#hoTen').addClass('is-invalid'); // Thêm class is-invalid để bôi đỏ ô input
-                    $('#hoTenError').remove(); // Loại bỏ thông báo lỗi cũ nếu có
-                    $('#hoTen').after('<div id="hoTenError" class="invalid-feedback">Vui lòng nhập Tên nhân viên.</div>'); // Thêm thông báo lỗi mới
+                    $('#hoTen').addClass('is-invalid');
+                    $('#hoTenError').remove();
+                    $('#hoTen').after('<div id="hoTenError" class="invalid-feedback">Vui lòng nhập Tên nhân viên.</div>');
                     return false;
                 }
                 if (email === '') {
-                    $('#email').addClass('is-invalid'); // Thêm class is-invalid để bôi đỏ ô input
-                    $('#emailError').remove(); // Loại bỏ thông báo lỗi cũ nếu có
-                    $('#email').after('<div id="emailError" class="invalid-feedback">Vui lòng nhập email.</div>'); // Thêm thông báo lỗi mới
+                    $('#email').addClass('is-invalid');
+                    $('#emailError').remove();
+                    $('#email').after('<div id="emailError" class="invalid-feedback">Vui lòng nhập email.</div>');
                     return false;
                 }
 
                 const regex = /^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/;
                 if (!regex.test(email)) {
-                    $('#email').addClass('is-invalid'); // Thêm class is-invalid để bôi đỏ ô input
-                    $('#emailUError').remove(); // Loại bỏ thông báo lỗi cũ nếu có
-                    $('#email').after('<div id="emailError" class="invalid-feedback">Email sai định dạng! Vui lòng nhập lại.</div>'); // Thêm thông báo lỗi mới
+                    $('#email').addClass('is-invalid');
+                    $('#emailUError').remove();
+                    $('#email').after('<div id="emailError" class="invalid-feedback">Email sai định dạng! Vui lòng nhập lại.</div>');
                     return false;
                 }
 
                 if (soDienThoai === '') {
-                    $('#soDienThoai').addClass('is-invalid'); // Thêm class is-invalid để bôi đỏ ô input
-                    $('#soDienThoaiError').remove(); // Loại bỏ thông báo lỗi cũ nếu có
-                    $('#soDienThoai').after('<div id="soDienThoaiError" class="invalid-feedback">Vui lòng nhập số điện thoại.</div>'); // Thêm thông báo lỗi mới
+                    $('#soDienThoai').addClass('is-invalid');
+                    $('#soDienThoaiError').remove();
+                    $('#soDienThoai').after('<div id="soDienThoaiError" class="invalid-feedback">Vui lòng nhập số điện thoại.</div>');
                     return false;
                 }
                 const regexSdt = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
                 if (!regexSdt.test(soDienThoai)) {
-                    $('#soDienThoai').addClass('is-invalid'); // Thêm class is-invalid để bôi đỏ ô input
-                    $('#soDienThoaiError').remove(); // Loại bỏ thông báo lỗi cũ nếu có
-                    $('#soDienThoai').after('<div id="soDienThoaiError" class="invalid-feedback">Số điện thoại sai định dang! Vui lòng nhập lại.</div>'); // Thêm thông báo lỗi mới
+                    $('#soDienThoai').addClass('is-invalid');
+                    $('#soDienThoaiError').remove();
+                    $('#soDienThoai').after('<div id="soDienThoaiError" class="invalid-feedback">Số điện thoại sai định dang! Vui lòng nhập lại.</div>');
                     return false;
                 }
                 if (tinh === 'Chọn Tỉnh/Thành phố') {
-                    $('#tinh').addClass('is-invalid'); // Thêm class is-invalid để bôi đỏ ô input
-                    $('#tinhError').remove(); // Loại bỏ thông báo lỗi cũ nếu có
-                    $('#tinh').after('<div id="tinhError" class="invalid-feedback">Vui lòng chọn tỉnh thành.</div>'); // Thêm thông báo lỗi mới
+                    $('#tinh').addClass('is-invalid');
+                    $('#tinhError').remove();
+                    $('#tinh').after('<div id="tinhError" class="invalid-feedback">Vui lòng chọn tỉnh thành.</div>');
                     return false;
                 }
                 if (huyen === 'Chọn Quận/Huyện') {
-                    $('#huyen').addClass('is-invalid'); // Thêm class is-invalid để bôi đỏ ô input
-                    $('#huyenError').remove(); // Loại bỏ thông báo lỗi cũ nếu có
-                    $('#huyen').after('<div id="huyenUError" class="invalid-feedback">Vui lòng chọn quận/huyện.</div>'); // Thêm thông báo lỗi mới
+                    $('#huyen').addClass('is-invalid');
+                    $('#huyenError').remove();
+                    $('#huyen').after('<div id="huyenUError" class="invalid-feedback">Vui lòng chọn quận/huyện.</div>');
                     return false;
                 }
 
                 if (xa === 'Chọn Phường/Xã') {
-                    $('#xa').addClass('is-invalid'); // Thêm class is-invalid để bôi đỏ ô input
-                    $('#xaError').remove(); // Loại bỏ thông báo lỗi cũ nếu có
-                    $('#xa').after('<div id="xaError" class="invalid-feedback">Vui lòng chọn xã/phường.</div>'); // Thêm thông báo lỗi mới
+                    $('#xa').addClass('is-invalid');
+                    $('#xaError').remove();
+                    $('#xa').after('<div id="xaError" class="invalid-feedback">Vui lòng chọn xã/phường.</div>');
                     return false;
                 }
                 if (diaChiCT === '') {
-                    $('#diaChi').addClass('is-invalid'); // Thêm class is-invalid để bôi đỏ ô input
-                    $('#diaChiError').remove(); // Loại bỏ thông báo lỗi cũ nếu có
-                    $('#diaChi').after('<div id="diaChiError" class="invalid-feedback">Vui lòng nhập địa chỉ.</div>'); // Thêm thông báo lỗi mới
+                    $('#diaChi').addClass('is-invalid');
+                    $('#diaChiError').remove();
+                    $('#diaChi').after('<div id="diaChiError" class="invalid-feedback">Vui lòng nhập địa chỉ.</div>');
                     return false;
                 }
 
@@ -617,21 +642,20 @@ $(document).ready(function () {
                         soDienThoai: soDienThoai,
                         diaChi: diaChi,
                         gioiTinh: gender,
-
-                        // Thêm các trường dữ liệu khác tùy theo yêu cầu của API
                     };
-                    console.log(employeeData)
+
                     // Gọi API để thêm nhân viên
                     $.ajax({
-                        url: 'http://localhost:8080/nhan-vien/add', // Đường dẫn API
-                        type: 'POST', // Phương thức gửi dữ liệu
-                        contentType: 'application/json', // Kiểu dữ liệu gửi đi
-                        data: JSON.stringify(employeeData), // Chuyển đối tượng dữ liệu thành JSON
+                        url: 'http://localhost:8080/nhan-vien/add',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(employeeData),
                         success: function (response) {
                             if (response === true) {
                                 showSuccessToast('Thêm thành công ');
                                 $(`#tableNhanVien`).show();
                                 loadTable(apiGetAll, '', currentPage, recordsPerPage);
+
                                 $(`#formAdd`).hide();
                                 $(`#formUpdate`).hide();
                                 $('#imageNVdetail').attr('src', 'https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg');
@@ -654,8 +678,6 @@ $(document).ready(function () {
         });
     }
 
-    // Gán sự kiện click cho các nút có class 'action-button'
-
 
     function renderUpdateForm(nhanV) {
         $('#tableNhanVien').hide();
@@ -674,9 +696,7 @@ $(document).ready(function () {
 
         $(`#hoTenU`).val(nhanV["hoTen"]);
         $(`#ngaySinhU`).val(nhanV["ngaySinh"]);
-        $(`#createAtU`).val(nhanV["createdAt"]);
-        console.log(nhanV["createdAt"])
-        console.log(nhanV["ngaySinh"])
+        $(`#createAtU`).val(nhanV["createdAt"].split('T')[0]);
         $(`#tenNhanVienU`).val(nhanV["tenNhanVien"]);
         $(`#maNhanVienU`).val(nhanV["maNhanVien"]);
 
@@ -718,8 +738,8 @@ $(document).ready(function () {
                 let selectedProvince = provinces.find(province => province.Id === selectedProvinceId);
                 let districts = selectedProvince ? selectedProvince.Districts : [];
 
-                $('#huyenU').empty().append(new Option('Chọn Quận/Huyện', '')).prop('disabled', districts.length === 0);
-                $('#xaU').empty().append(new Option('Chọn Phường/Xã', '')).prop('disabled', true);
+                $('#huyenU').empty().append(new Option('Chọn Quận/Huyện', ''))
+                $('#xaU').empty().append(new Option('Chọn Phường/Xã', ''))
 
                 // Load districts into the Huyện select
                 districts.forEach(function (district) {
@@ -735,7 +755,7 @@ $(document).ready(function () {
                 let selectedDistrict = selectedProvince ? selectedProvince.Districts.find(district => district.Id === selectedDistrictId) : null;
                 let communes = selectedDistrict ? selectedDistrict.Wards : [];
 
-                $('#xaU').empty().append(new Option('Chọn Phường/Xã', '')).prop('disabled', communes.length === 0);
+                $('#xaU').empty().append(new Option('Chọn Phường/Xã', ''))
 
                 // Load communes into the Xã select
                 communes.forEach(function (commune) {
@@ -853,7 +873,7 @@ $(document).ready(function () {
                 if (ngaySinh === '') {
                     $('#ngaySinhU').addClass('is-invalid'); // Thêm class is-invalid để bôi đỏ ô input
                     $('#ngaySinhUError').remove(); // Loại bỏ thông báo lỗi cũ nếu có
-                    $('#ngaySinhU').after('<div id="ngaySinhUError" class="invalid-feedback">Vui lòng nhập Tên nhân viên.</div>'); // Thêm thông báo lỗi mới
+                    $('#ngaySinhU').after('<div id="ngaySinhUError" class="invalid-feedback">Vui lòng nhập ngày sinh.</div>'); // Thêm thông báo lỗi mới
                     return false;
                 }
                 if (hoten === '') {
