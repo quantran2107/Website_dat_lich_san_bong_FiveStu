@@ -637,9 +637,9 @@
 
     document.addEventListener("DOMContentLoaded", function() {
 
-        // Đặt giá trị ngày hiện tại vào ô nhập ngày
-
-        selectFilter(document.querySelector('.btn-filter.active'), 'week');
+        setTimeout(function () {
+            selectFilter(document.querySelector('.btn-filter.active'), 'week');
+        }, 1500);
 
         ngayBatDauInput.addEventListener('change', function () {
             fetchCustomData();
