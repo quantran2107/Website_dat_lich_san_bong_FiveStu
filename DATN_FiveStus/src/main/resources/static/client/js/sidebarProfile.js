@@ -162,13 +162,8 @@ $(document).ready(function () {
             // Reset quận/huyện và phường/xã
             districts.innerHTML = "<option value=''>Chọn Quận/Huyện</option>";
             wards.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
-
             const cityId = this.value;  // Sử dụng `value` thay vì `dataset.id`
-            console.log("City ID đã chọn:", cityId); // Kiểm tra ID thành phố đã chọn
-
             const selectedCity = dataCache.find(city => city.Id == cityId); // So khớp với `Id` của thành phố
-
-            console.log("City được tìm thấy:", selectedCity); // Kiểm tra thành phố đã được tìm thấy
 
             if (selectedCity) {
                 selectedCity.Districts.forEach(district => {
@@ -178,7 +173,6 @@ $(document).ready(function () {
                     opt.dataset.id = district.Id; // Lưu ID quận/huyện vào dataset
                     districts.appendChild(opt);
                 });
-                console.log("Danh sách quận/huyện đã được render.");
             }
         });
 
@@ -189,15 +183,10 @@ $(document).ready(function () {
 
             const cityId = $('#city').val();  // Lấy giá trị thành phố đã chọn
             const districtId = this.value; // Sử dụng `value` của district đã chọn
-            console.log("City ID chọn từ Quận/Huyện:", cityId); // Kiểm tra ID thành phố
-            console.log("District ID đã chọn:", districtId); // Kiểm tra ID quận/huyện đã chọn
-
             const selectedCity = dataCache.find(city => city.Id == cityId); // Tìm thành phố từ `dataCache`
-            console.log("City được tìm thấy từ dữ liệu:", selectedCity); // Kiểm tra thành phố đã tìm thấy từ dữ liệu
 
             if (selectedCity) {
-                const selectedDistrict = selectedCity.Districts.find(district => district.Id == districtId); // So khớp với ID quận/huyện
-                console.log("District được tìm thấy từ dữ liệu:", selectedDistrict); // Kiểm tra quận/huyện đã tìm thấy từ dữ liệu
+                const selectedDistrict = selectedCity.Districts.find(district => district.Id == districtId); // So khớp với ID quận/huyệnệu
 
                 if (selectedDistrict) {
                     selectedDistrict.Wards.forEach(ward => {
@@ -207,7 +196,6 @@ $(document).ready(function () {
                         opt.dataset.id = ward.Id; // Lưu ID phường/xã vào dataset
                         wards.appendChild(opt);
                     });
-                    console.log("Danh sách phường/xã đã được render.");
                 }
             }
         });
@@ -216,9 +204,6 @@ $(document).ready(function () {
         fetchData();
     });
 
-
-
-// Hàm thêm địa chỉ
     async function addAddress(email) {
         const specificAddressInput = document.getElementById("specificAddress");
         const ghiChuInput = document.getElementById("ghiChu");
@@ -226,50 +211,62 @@ $(document).ready(function () {
         const districtSelect = document.getElementById("district");
         const wardSelect = document.getElementById("ward");
 
-        // Hiển thị modal để thêm địa chỉ
-        $('#addressModal').modal('show');
+        const clearErrors = () => {
+            [specificAddressInput, citySelect, districtSelect, wardSelect].forEach(input => {
+                input.classList.remove("is-invalid");
+                const errorElement = input.nextElementSibling;
+                if (errorElement && errorElement.classList.contains("invalid-feedback")) {
+                    errorElement.remove();
+                }
+            });
+        };
 
-        // Xử lý khi nhấn nút Lưu địa chỉ
-        $('#saveAddressButton').off('click').on('click', async function () {
-            const specificAddress = specificAddressInput.value;
-            const ghiChu = ghiChuInput.value;
+        const showError = (input, message) => {
+            input.classList.add("is-invalid");
+            if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("invalid-feedback")) {
+                input.insertAdjacentHTML("afterend", `<div class="invalid-feedback">${message}</div>`);
+            }
+        };
 
-            // Lấy ID từ các phần tử select sử dụng thuộc tính data-id
-            const cityId = citySelect.options[citySelect.selectedIndex]?.dataset.id || null;
-            const districtId = districtSelect.options[districtSelect.selectedIndex]?.dataset.id || null;
-            const wardId = wardSelect.options[wardSelect.selectedIndex]?.dataset.id || null;
+        const validateInputs = () => {
+            clearErrors();
+            let isValid = true;
 
-            // Kiểm tra ID đã chọn
-            console.log("ID thành phố:", cityId); // Kiểm tra ID thành phố
-            console.log("ID quận/huyện:", districtId); // Kiểm tra ID quận/huyện
-            console.log("ID phường/xã:", wardId); // Kiểm tra ID phường/xã
-
-            // Kiểm tra nếu người dùng chưa chọn giá trị hợp lệ
-            if (!specificAddress || !cityId || !districtId || !wardId) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi',
-                    text: 'Vui lòng điền đầy đủ thông tin địa chỉ.',
-                });
-                return;
+            if (!specificAddressInput.value.trim()) {
+                showError(specificAddressInput, "Địa chỉ cụ thể không được để trống.");
+                isValid = false;
+            }
+            if (!citySelect.value) {
+                showError(citySelect, "Vui lòng chọn Tỉnh/Thành.");
+                isValid = false;
+            }
+            if (!districtSelect.value) {
+                showError(districtSelect, "Vui lòng chọn Quận/Huyện.");
+                isValid = false;
+            }
+            if (!wardSelect.value) {
+                showError(wardSelect, "Vui lòng chọn Phường/Xã.");
+                isValid = false;
             }
 
+            return isValid;
+        };
+
+        $('#addressModal').modal('show'); // Hiển thị modal
+
+        $('#saveAddressButton').off('click').on('click', async function () {
+            if (!validateInputs()) return; // Dừng nếu dữ liệu không hợp lệ
+
             const newAddressData = {
-                diaChiCuThe: specificAddress,
-                thanhPho: cityId,
-                quanHuyen: districtId,
-                phuongXa: wardId,
-                ghiChu: ghiChu,
+                diaChiCuThe: specificAddressInput.value.trim(),
+                thanhPho: citySelect.value,
+                quanHuyen: districtSelect.value,
+                phuongXa: wardSelect.value,
+                ghiChu: ghiChuInput.value.trim(),
             };
 
-            console.log("Dữ liệu sẽ gửi lên server:", newAddressData); // Log dữ liệu trước khi gửi lên server
-
             try {
-                // Gửi dữ liệu địa chỉ mới đến server
-                const response = await axios.post(`/dia-chi/add/${encodeURIComponent(email)}`, newAddressData);
-
-                // Kiểm tra phản hồi từ server
-                console.log("Phản hồi từ server:", response.data);
+                await axios.post(`/dia-chi/add/${encodeURIComponent(email)}`, newAddressData);
 
                 Swal.fire({
                     icon: 'success',
@@ -279,116 +276,146 @@ $(document).ready(function () {
 
                 $('#addressModal').modal('hide');
                 showCustomerAddress(); // Cập nhật danh sách địa chỉ
-
             } catch (error) {
-                console.error("Lỗi khi thêm địa chỉ:", error.response.data);
+                console.error("Lỗi khi thêm địa chỉ:", error);
                 Swal.fire({
                     icon: 'error',
                     title: 'Lỗi',
-                    text: `Không thể thêm địa chỉ. Lý do: ${error.response.data.message || 'Vui lòng thử lại.'}`,
+                    text: error.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại.",
                 });
             }
         });
     }
 
+
+
     async function updateAddress(addressId, email) {
         try {
-            // Đảm bảo `dataCache` đã được tải
             if (!dataCache || dataCache.length === 0) {
                 console.error("Dữ liệu chưa được tải, vui lòng thử lại sau.");
                 alert("Dữ liệu chưa được tải, vui lòng thử lại sau.");
                 return;
             }
 
-            // Gọi API để lấy thông tin chi tiết của địa chỉ theo `email` và `id`
-            let response = await axios.get(`/dia-chi/find/${email}/${addressId}`);
-            let address = response.data;
-            console.log(address); // Kiểm tra dữ liệu nhận được
+            const response = await axios.get(`/dia-chi/find/${email}/${addressId}`);
+            const address = response.data;
+            console.log(address);
 
-            // Điền dữ liệu vào trường địa chỉ cụ thể
-            document.getElementById("specificAddress").value = address.diaChiCuThe;
-            document.getElementById("ghiChu").value = address.ghiChu;
-
-            // Cập nhật select cho thành phố
+            const specificAddressInput = document.getElementById("specificAddress");
+            const ghiChuInput = document.getElementById("ghiChu");
             const citySelect = document.getElementById("city");
+            const districtSelect = document.getElementById("district");
+            const wardSelect = document.getElementById("ward");
+
+            specificAddressInput.value = address.diaChiCuThe || '';
+            ghiChuInput.value = address.ghiChu || '';
+
             const selectedCity = dataCache.find(city => city.Id === address.thanhPho);
             if (selectedCity) {
-                citySelect.value = selectedCity.Id; // Gán ID thành phố vào select
-                console.log("Giá trị thành phố đã gán:", selectedCity.Name); // Kiểm tra giá trị đã gán vào select
+                citySelect.value = selectedCity.Id;
+                districtSelect.innerHTML = '';
+                selectedCity.Districts.forEach(district => {
+                    const opt = document.createElement('option');
+                    opt.value = district.Id;
+                    opt.text = district.Name;
+                    districtSelect.appendChild(opt);
+                });
+                districtSelect.value = address.quanHuyen || '';
 
-                // Nếu thành phố chưa có trong select, thêm vào
-                if (!Array.from(citySelect.options).some(option => option.value === selectedCity.Id)) {
-                    const optCity = document.createElement('option');
-                    optCity.value = selectedCity.Id;
-                    optCity.text = selectedCity.Name;
-                    citySelect.appendChild(optCity);
+                wardSelect.innerHTML = '';
+                const selectedDistrict = selectedCity.Districts.find(district => district.Id === address.quanHuyen);
+                if (selectedDistrict) {
+                    selectedDistrict.Wards.forEach(ward => {
+                        const opt = document.createElement('option');
+                        opt.value = ward.Id;
+                        opt.text = ward.Name;
+                        wardSelect.appendChild(opt);
+                    });
+                    wardSelect.value = address.phuongXa || '';
                 }
             }
 
-            // Cập nhật select cho quận/huyện
-            const districtSelect = document.getElementById("district");
-            districtSelect.innerHTML = "<option value=''>Chọn Quận/Huyện</option>"; // Reset danh sách quận/huyện
-            const selectedDistrict = selectedCity ? selectedCity.Districts.find(district => district.Id === address.quanHuyen) : null;
-
-            if (selectedDistrict) {
-                selectedCity.Districts.forEach(district => {
-                    const optDistrict = document.createElement('option');
-                    optDistrict.value = district.Id; // Dùng Id của quận/huyện
-                    optDistrict.text = district.Name;
-                    districtSelect.appendChild(optDistrict);
+            const clearErrors = () => {
+                [specificAddressInput, citySelect, districtSelect, wardSelect].forEach(input => {
+                    input.classList.remove("is-invalid");
+                    const errorElement = input.nextElementSibling;
+                    if (errorElement && errorElement.classList.contains("invalid-feedback")) {
+                        errorElement.remove();
+                    }
                 });
-            }
-            districtSelect.value = address.quanHuyen; // Gán giá trị quận/huyện đúng từ `address`
-            console.log("Giá trị quận/huyện đã gán:", address.quanHuyen); // Kiểm tra giá trị quận/huyện đã gán
+            };
 
-            // Cập nhật select cho phường/xã
-            const wardSelect = document.getElementById("ward");
-            wardSelect.innerHTML = "<option value=''>Chọn Phường/Xã</option>"; // Reset danh sách phường/xã
-            const selectedWard = selectedDistrict ? selectedDistrict.Wards.find(ward => ward.Id === address.phuongXa) : null;
+            const showError = (input, message) => {
+                input.classList.add("is-invalid");
+                if (!input.nextElementSibling || !input.nextElementSibling.classList.contains("invalid-feedback")) {
+                    input.insertAdjacentHTML("afterend", `<div class="invalid-feedback">${message}</div>`);
+                }
+            };
 
-            if (selectedWard) {
-                selectedDistrict.Wards.forEach(ward => {
-                    const optWard = document.createElement('option');
-                    optWard.value = ward.Id; // Dùng Id của phường/xã
-                    optWard.text = ward.Name;
-                    wardSelect.appendChild(optWard);
-                });
-            }
-            wardSelect.value = address.phuongXa; // Gán giá trị phường/xã đúng từ `address`
-            console.log("Giá trị phường/xã đã gán:", address.phuongXa); // Kiểm tra giá trị phường/xã đã gán
+            const validateInputs = () => {
+                clearErrors();
+                let isValid = true;
 
-            // Đảm bảo DOM đã được cập nhật trước khi mở modal
-            $('#addressModal').modal('show'); // Hiển thị modal sau khi cập nhật DOM
+                if (!specificAddressInput.value.trim()) {
+                    showError(specificAddressInput, "Địa chỉ cụ thể không được để trống.");
+                    isValid = false;
+                }
+                if (!citySelect.value) {
+                    showError(citySelect, "Vui lòng chọn Tỉnh/Thành.");
+                    isValid = false;
+                }
+                if (!districtSelect.value) {
+                    showError(districtSelect, "Vui lòng chọn Quận/Huyện.");
+                    isValid = false;
+                }
+                if (!wardSelect.value) {
+                    showError(wardSelect, "Vui lòng chọn Phường/Xã.");
+                    isValid = false;
+                }
 
-            // Khi người dùng nhấn nút "Cập nhật địa chỉ"
-            document.getElementById("saveAddressButton").onclick = async function () {
+                return isValid;
+            };
+
+            $('#addressModal').modal('show');
+
+            $('#saveAddressButton').off('click').on('click', async function () {
+                if (!validateInputs()) return;
+
                 const updatedAddressData = {
-                    diaChiCuThe: document.getElementById("specificAddress").value,
-                    ghiChu: document.getElementById("ghiChu").value,
+                    diaChiCuThe: specificAddressInput.value.trim(),
+                    ghiChu: ghiChuInput.value.trim(),
                     thanhPho: citySelect.value,
                     quanHuyen: districtSelect.value,
                     phuongXa: wardSelect.value,
                 };
 
-                console.log("Dữ liệu cập nhật:", updatedAddressData); // Kiểm tra dữ liệu sẽ gửi lên server
-
                 try {
                     await axios.put(`/dia-chi/update/${email}/${addressId}`, updatedAddressData);
+
                     Swal.fire({
                         icon: 'success',
                         title: 'Thành công',
                         text: 'Địa chỉ đã được cập nhật thành công!',
                     });
+
                     $('#addressModal').modal('hide');
                     showCustomerAddress(); // Cập nhật danh sách địa chỉ
-                } catch (updateError) {
-                    console.error("Lỗi khi cập nhật địa chỉ:", updateError);
-                    alert("Không thể cập nhật địa chỉ. Vui lòng thử lại.");
+                } catch (error) {
+                    console.error("Lỗi khi cập nhật địa chỉ:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi',
+                        text: error.response?.data?.message || "Không thể cập nhật địa chỉ. Vui lòng thử lại.",
+                    });
                 }
-            };
+            });
         } catch (error) {
             console.error("Lỗi khi lấy thông tin địa chỉ:", error);
-            alert("Không thể tải dữ liệu địa chỉ để cập nhật.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: "Không thể tải dữ liệu địa chỉ để cập nhật.",
+            });
         }
     }
 

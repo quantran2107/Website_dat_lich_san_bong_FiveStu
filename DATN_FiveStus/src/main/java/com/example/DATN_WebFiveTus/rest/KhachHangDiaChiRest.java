@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("dia-chi")
@@ -36,12 +37,18 @@ public class KhachHangDiaChiRest {
         // Lấy danh sách địa chỉ của khách hàng theo ID
         List<DiaChiKhachHangDTO> diaChiList = diaChiKhachHangService.findById(khachHangId);
 
-        // Sắp xếp danh sách theo createdAt (từ mới đến cũ)
-        diaChiList.sort(Comparator.comparing(DiaChiKhachHangDTO::getCreatedAt).reversed());
+        // Lọc danh sách để chỉ giữ các địa chỉ có deletedAt = false
+        List<DiaChiKhachHangDTO> activeDiaChiList = diaChiList.stream()
+                .filter(diaChi -> diaChi.getDeletedAt() == null || !diaChi.getDeletedAt())
+                .collect(Collectors.toList());
 
-        // Trả về danh sách đã sắp xếp
-        return ResponseEntity.ok(diaChiList);
+        // Sắp xếp danh sách theo createdAt (từ mới đến cũ)
+        activeDiaChiList.sort(Comparator.comparing(DiaChiKhachHangDTO::getCreatedAt).reversed());
+
+        // Trả về danh sách đã lọc và sắp xếp
+        return ResponseEntity.ok(activeDiaChiList);
     }
+
     @PutMapping("/{diaChiId}")
     public ResponseEntity<DiaChiKhachHangDTO> updateDiaChi(
             @PathVariable Integer diaChiId,
@@ -63,12 +70,13 @@ public class KhachHangDiaChiRest {
         // Tạo đối tượng Pageable
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
-        // Lấy dữ liệu từ service
+        // Lấy dữ liệu từ service, chỉ lấy những địa chỉ có deletedAt = false
         Page<DiaChiKhachHangDTO> result = diaChiKhachHangService.findByIdDC(idKhachHang, pageable);
 
         // Trả về dữ liệu phân trang dưới dạng JSON
         return ResponseEntity.ok(result);
     }
+
 
     @PostMapping("/them/{khachHangId}")
     public ResponseEntity<String> addNewAddress(@PathVariable Integer khachHangId,
