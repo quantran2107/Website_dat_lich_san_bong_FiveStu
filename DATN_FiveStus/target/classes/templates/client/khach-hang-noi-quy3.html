@@ -2,134 +2,59 @@
 <html lang="en">
 <head>
     <style>
-        /* Cấu trúc cơ bản */
-        /* Reset các phần tử để đảm bảo tính nhất quán */
-        * {
+        body {
+            font-family: 'Inter', sans-serif;
+            font-size: 20px;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
-        /* Font chữ chính */
-        body {
-            font-family: 'Times New Roman', Times, serif; /* Sử dụng font Times New Roman */
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-            font-size: 18px; /* Tăng kích thước chữ cho toàn trang */
-        }
-
-        /* Wrapper chính */
-        .content-wrapper {
-            max-width: 1650px;
-            margin: 0 auto;
-        }
-
-        /* Các section nội dung */
         .content-section {
-            background-color: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .content-section h2,
+        .content-section h3,
+        .content-section h4,
+        .content-section h1 {
+            font-family: 'Inter', sans-serif;
+            font-size: 20px;
             margin-bottom: 20px;
         }
 
-        /* Tiêu đề h2 */
-        h2 {
-            font-size: 2.2rem; /* Tăng kích thước font cho tiêu đề h2 */
-            color: #222;
-            margin-bottom: 20px;
-            font-weight: 600;
+        .content-section p {
+            text-align: justify;
+            text-indent: 0;
+            margin: 0 0 16px;
+            line-height: 1.6;
         }
 
-        /* Tiêu đề h3 và h4 */
-        h3, h4 {
-            font-size: 1.8rem; /* Tăng kích thước font cho h3 và h4 */
-            color: #333;
-            margin-top: 20px;
-            font-weight: 500;
-        }
-
-        /* Các đoạn văn bản, danh sách */
-        p, ul, ol {
-            font-size: 1.125rem; /* Tăng font size cho văn bản và danh sách */
-            color: #555;
-            margin-bottom: 20px;
-            line-height: 1.7;
-        }
-
-        /* Danh sách không đánh số và có đánh số */
-        ul, ol {
+        .content-section ul {
             padding-left: 20px;
+            margin: 0 0 16px;
         }
 
-        /* Các liên kết */
-        a {
-            color: #007bff;
-            text-decoration: none;
+        .content-section li {
+            margin-bottom: 10px;
         }
 
-        a:hover {
-            text-decoration: underline;
+        .terms-container {
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Phần điều khoản thông tin */
-        .typeGiaTri p {
-            background-color: #f9f9f9;
-            padding: 12px;
+        .terms-item {
             margin-bottom: 15px;
-            border-left: 4px solid #007BFF;
-            border-radius: 5px;
-            font-size: 1.1rem; /* Tăng kích thước font cho phần điều khoản */
         }
 
-        /* Đảm bảo không tràn viền */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
+        strong {
+            font-weight: bold;
+            color: #e74c3c; /* Màu đỏ nổi bật */
+            font-size: 1.2em; /* Tăng kích thước chữ để tạo sự chú ý */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ */
         }
-
-        /* Responsive - Điều chỉnh cho các thiết bị nhỏ hơn */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-                font-size: 16px; /* Giảm font-size cho các thiết bị nhỏ */
-            }
-
-            h2 {
-                font-size: 1.8rem; /* Giảm kích thước cho tiêu đề h2 */
-            }
-
-            h3, h4 {
-                font-size: 1.6rem; /* Giảm kích thước cho h3 và h4 */
-            }
-
-            p, ul, ol {
-                font-size: 1rem; /* Giảm kích thước chữ cho văn bản */
-            }
-
-            .content-section {
-                padding: 20px; /* Giảm padding của content section trên màn hình nhỏ */
-            }
-        }
-
-        /* Tạo hiệu ứng cho chữ */
-        .message strong {
-            font-size: 1.2rem; /* Tăng kích thước chữ cho rõ ràng */
-            color: #333; /* Màu chữ mặc định */
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Tạo bóng nhẹ cho chữ */
-            transition: all 0.3s ease; /* Mượt mà khi có thay đổi */
-        }
-
-        /* Hiệu ứng khi hover */
-        .message strong:hover {
-            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 165, 0, 0.8); /* Tạo hiệu ứng bóng đổ đậm và sóng ánh sáng */
-            transform: translateY(-3px); /* Chữ sẽ di chuyển nhẹ lên trên */
-        }
-
     </style>
+
 </head>
 <div th:include="~{fragment/client/headClient :: headClient}"></div>
 
@@ -158,99 +83,120 @@
 </section>
 
 
-<main class="content-wrapper">
+
     <section class="content-section">
-        <h3>ĐIỀU KHOẢN SỬ DỤNG NỀN TẢNG ĐẶT LỊCH SÂN BÓNG FIVE_STUS</h3>
-        <h4>Giới thiệu</h4>
-        <p>Five_stus là một nền tảng trực tuyến sáng tạo, được thiết kế đặc biệt để hỗ trợ người dùng trong việc đặt
-            lịch sân bóng một cách tiện lợi và hiệu quả. Với sự phát triển của công nghệ và nhu cầu ngày càng cao về
-            các hoạt động thể thao, Five_stus ra đời với mục tiêu kết nối người cho thuê và người thuê sân, từ đó
-            tối ưu hóa trải nghiệm thể thao cho cả hai bên. Đặc biệt, Five_stus giúp bạn dễ dàng lựa chọn sân bóng phù hợp,
-            tiết kiệm thời gian và đem lại sự thuận tiện tuyệt đối cho mọi cuộc chơi.</p>
+        <div class="container-md">
+            <h3>ĐIỀU KHOẢN SỬ DỤNG NỀN TẢNG ĐẶT LỊCH SÂN BÓNG FIVE_STUS</h3>
+            <h4>Giới thiệu</h4>
+            <p>Five_stus là một nền tảng trực tuyến sáng tạo, được thiết kế đặc biệt để hỗ trợ người dùng trong việc đặt
+                lịch sân bóng một cách tiện lợi và hiệu quả. Với sự phát triển của công nghệ và nhu cầu ngày càng cao về
+                các hoạt động thể thao, Five_stus ra đời với mục tiêu kết nối người cho thuê và người thuê sân, từ đó
+                tối ưu hóa trải nghiệm thể thao cho cả hai bên. Đặc biệt, Five_stus giúp bạn dễ dàng lựa chọn sân bóng
+                phù hợp,
+                tiết kiệm thời gian và đem lại sự thuận tiện tuyệt đối cho mọi cuộc chơi.</p>
 
-        <p>Nền tảng này không chỉ đơn thuần là một công cụ đặt sân mà còn là một giải pháp toàn diện cho những ai
-            yêu thích thể thao. Với hệ thống tìm kiếm thông minh, bạn có thể chọn lựa sân bóng theo các tiêu chí cụ thể
-            như vị trí, loại sân, giá cả và nhiều lựa chọn khác, tất cả chỉ trong vài cú nhấp chuột. Dễ dàng truy cập
-            thông tin chi tiết về sân, bao gồm hình ảnh, đánh giá từ những người đã trải nghiệm trước đó và khả năng
-            đặt sân trong thời gian thực. Từ đó, bạn sẽ luôn tìm thấy sân bóng lý tưởng cho mình, mọi lúc, mọi nơi!</p>
+            <p>Nền tảng này không chỉ đơn thuần là một công cụ đặt sân mà còn là một giải pháp toàn diện cho những ai
+                yêu thích thể thao. Với hệ thống tìm kiếm thông minh, bạn có thể chọn lựa sân bóng theo các tiêu chí cụ
+                thể
+                như vị trí, loại sân, giá cả và nhiều lựa chọn khác, tất cả chỉ trong vài cú nhấp chuột. Dễ dàng truy
+                cập
+                thông tin chi tiết về sân, bao gồm hình ảnh, đánh giá từ những người đã trải nghiệm trước đó và khả năng
+                đặt sân trong thời gian thực. Từ đó, bạn sẽ luôn tìm thấy sân bóng lý tưởng cho mình, mọi lúc, mọi
+                nơi!</p>
 
-        <p>Five_stus mang đến cho bạn quy trình thanh toán nhanh chóng, an toàn và minh bạch. Chúng tôi hỗ trợ đa dạng
-            các phương thức thanh toán, từ thẻ tín dụng, ví điện tử cho đến chuyển khoản ngân hàng, giúp bạn dễ dàng
-            thực hiện giao dịch mà không lo lắng về các vấn đề phát sinh. Chúng tôi cam kết bảo mật thông tin khách hàng,
-            đem đến sự an tâm tuyệt đối trong mỗi lần giao dịch.</p>
+            <p>Five_stus mang đến cho bạn quy trình thanh toán nhanh chóng, an toàn và minh bạch. Chúng tôi hỗ trợ đa
+                dạng
+                các phương thức thanh toán, từ thẻ tín dụng, ví điện tử cho đến chuyển khoản ngân hàng, giúp bạn dễ dàng
+                thực hiện giao dịch mà không lo lắng về các vấn đề phát sinh. Chúng tôi cam kết bảo mật thông tin khách
+                hàng,
+                đem đến sự an tâm tuyệt đối trong mỗi lần giao dịch.</p>
 
-        <p>Với Five_stus, trải nghiệm thể thao của bạn sẽ trở nên thú vị và thuận tiện hơn bao giờ hết. Không chỉ tiết
-            kiệm thời gian, nền tảng này còn giúp bạn kết nối với cộng đồng yêu thể thao rộng lớn, tạo cơ hội gặp gỡ,
-            thi đấu và chia sẻ đam mê. Đặc biệt, đội ngũ chăm sóc khách hàng của Five_stus luôn sẵn sàng hỗ trợ bạn trong
-            suốt quá trình đặt sân và sử dụng dịch vụ, giúp bạn có một trải nghiệm hoàn hảo từ đầu đến cuối.</p>
+            <p>Với Five_stus, trải nghiệm thể thao của bạn sẽ trở nên thú vị và thuận tiện hơn bao giờ hết. Không chỉ
+                tiết
+                kiệm thời gian, nền tảng này còn giúp bạn kết nối với cộng đồng yêu thể thao rộng lớn, tạo cơ hội gặp
+                gỡ,
+                thi đấu và chia sẻ đam mê. Đặc biệt, đội ngũ chăm sóc khách hàng của Five_stus luôn sẵn sàng hỗ trợ bạn
+                trong
+                suốt quá trình đặt sân và sử dụng dịch vụ, giúp bạn có một trải nghiệm hoàn hảo từ đầu đến cuối.</p>
 
-        <p>Hãy tham gia ngay Five_stus để khám phá thế giới thể thao đầy thú vị, tận hưởng những trận đấu sôi động và
-            kết nối cùng những người bạn đam mê thể thao như bạn. Đừng chần chừ, vì mọi trải nghiệm tuyệt vời đang chờ
-            đón bạn tại Five_stus – nơi thỏa mãn đam mê, kết nối cộng đồng thể thao!</p>
+            <p>Hãy tham gia ngay Five_stus để khám phá thế giới thể thao đầy thú vị, tận hưởng những trận đấu sôi động
+                và
+                kết nối cùng những người bạn đam mê thể thao như bạn. Đừng chần chừ, vì mọi trải nghiệm tuyệt vời đang
+                chờ
+                đón bạn tại Five_stus – nơi thỏa mãn đam mê, kết nối cộng đồng thể thao!</p>
+        </div>
     </section>
 
 
     <section class="content-section">
-        <h2>I. Nguyên tắc chung</h2>
-        <p>Quản lý và vận hành: Nền tảng Five_stus do Công ty Cổ phần Phần mềm Vitex Việt Nam thực hiện và quản
-            lý. Chúng tôi luôn nỗ lực cải tiến và phát triển nền tảng để đáp ứng tốt nhất nhu cầu của người
-            dùng. Đội ngũ quản lý và kỹ thuật của chúng tôi là những người có kinh nghiệm dày dạn trong lĩnh vực
-            công nghệ thông tin và thể thao, đảm bảo rằng mọi hoạt động diễn ra một cách suôn sẻ và hiệu quả.</p>
-        <p>Thành viên: Mọi thương nhân, tổ chức, cá nhân có nhu cầu sử dụng dịch vụ của Five_stus đều có thể
-            đăng ký trở thành thành viên. Việc đăng ký rất đơn giản và nhanh chóng, chỉ cần cung cấp một số
-            thông tin cơ bản như tên, địa chỉ email và số điện thoại. Sau khi đăng ký, người dùng sẽ nhận được
-            một tài khoản cá nhân, nơi họ có thể quản lý thông tin đặt sân, lịch sử giao dịch và các thông báo
-            quan trọng.</p>
-        <p>Thỏa thuận tự do: Các bên có quyền thỏa thuận trên cơ sở tôn trọng quyền lợi và nghĩa vụ hợp pháp.
-            Chúng tôi khuyến khích các thành viên giao tiếp và thảo luận để đạt được những thỏa thuận tốt nhất.</p>
-        <p>Minh bạch: Tất cả thông tin về giá cả và dịch vụ phải được công khai, rõ ràng. Five_stus cam kết
-            cung cấp thông tin chính xác và đầy đủ để người dùng có thể đưa ra quyết định đúng đắn.</p>
-        <p>Tuân thủ pháp luật: Tất cả hoạt động trên nền tảng phải tuân thủ quy định của pháp luật Việt Nam.
-            Chúng tôi nghiêm túc thực hiện các quy định này để bảo vệ quyền lợi của người dùng và đảm bảo sự
-            phát triển bền vững của nền tảng.</p>
+        <div class="container-md">
+            <h4>I. Nguyên tắc chung</h4>
+            <p>Quản lý và vận hành: Nền tảng Five_stus do Công ty Cổ phần Phần mềm Vitex Việt Nam thực hiện và quản
+                lý. Chúng tôi luôn nỗ lực cải tiến và phát triển nền tảng để đáp ứng tốt nhất nhu cầu của người
+                dùng. Đội ngũ quản lý và kỹ thuật của chúng tôi là những người có kinh nghiệm dày dạn trong lĩnh vực
+                công nghệ thông tin và thể thao, đảm bảo rằng mọi hoạt động diễn ra một cách suôn sẻ và hiệu quả.</p>
+            <p>Thành viên: Mọi thương nhân, tổ chức, cá nhân có nhu cầu sử dụng dịch vụ của Five_stus đều có thể
+                đăng ký trở thành thành viên. Việc đăng ký rất đơn giản và nhanh chóng, chỉ cần cung cấp một số
+                thông tin cơ bản như tên, địa chỉ email và số điện thoại. Sau khi đăng ký, người dùng sẽ nhận được
+                một tài khoản cá nhân, nơi họ có thể quản lý thông tin đặt sân, lịch sử giao dịch và các thông báo
+                quan trọng.</p>
+            <p>Thỏa thuận tự do: Các bên có quyền thỏa thuận trên cơ sở tôn trọng quyền lợi và nghĩa vụ hợp pháp.
+                Chúng tôi khuyến khích các thành viên giao tiếp và thảo luận để đạt được những thỏa thuận tốt nhất.</p>
+            <p>Minh bạch: Tất cả thông tin về giá cả và dịch vụ phải được công khai, rõ ràng. Five_stus cam kết
+                cung cấp thông tin chính xác và đầy đủ để người dùng có thể đưa ra quyết định đúng đắn.</p>
+            <p>Tuân thủ pháp luật: Tất cả hoạt động trên nền tảng phải tuân thủ quy định của pháp luật Việt Nam.
+                Chúng tôi nghiêm túc thực hiện các quy định này để bảo vệ quyền lợi của người dùng và đảm bảo sự
+                phát triển bền vững của nền tảng.</p>
+            </div>
     </section>
 
     <section class="content-section">
-        <h2>II. Quy định chung</h2>
-        <p>Tên miền: Nền tảng FiveStus có tên miền là <a href="https://www.fivestusplatform.com">www.fivestusplatform.com</a>.</p>
-        <p>Định nghĩa chung:</p>
-        <ul>
-            <li>Chủ sân: Là các cơ sở thể thao có nhu cầu cho thuê sân bóng trên nền tảng. Họ có trách nhiệm
-                cung cấp thông tin chính xác về sân, giá cả và các dịch vụ đi kèm.
-            </li>
-            <li>Khách hàng: Là các cá nhân hoặc tổ chức có nhu cầu đặt sân bóng để thi đấu hoặc tập luyện.</li>
-            <li>Nhân viên: Là những người làm việc tại nền tảng FiveStus, có trách nhiệm hỗ trợ khách hàng trong việc
-                đặt sân, giải quyết các yêu cầu và thắc mắc của khách hàng, cũng như đảm bảo việc quản lý thông tin và
-                lịch trình sân bóng. Nhân viên cũng giám sát các hoạt động của chủ sân và khách hàng, đảm bảo quy trình
-                hoạt động diễn ra suôn sẻ và hiệu quả.
-            </li>
-        </ul>
+        <div class="container-md">
+            <h4>II. Quy định chung</h4>
+            <p>Định nghĩa chung:</p>
+            <ul>
+                <li>Chủ sân: Là các cơ sở thể thao có nhu cầu cho thuê sân bóng trên nền tảng. Họ có trách nhiệm
+                    cung cấp thông tin chính xác về sân, giá cả và các dịch vụ đi kèm.
+                </li>
+                <li>Khách hàng: Là các cá nhân hoặc tổ chức có nhu cầu đặt sân bóng để thi đấu hoặc tập luyện.</li>
+                <li>Nhân viên: Là những người làm việc tại nền tảng FiveStus, có trách nhiệm hỗ trợ khách hàng trong
+                    việc
+                    đặt sân, giải quyết các yêu cầu và thắc mắc của khách hàng, cũng như đảm bảo việc quản lý thông tin
+                    và
+                    lịch trình sân bóng. Nhân viên cũng giám sát các hoạt động của chủ sân và khách hàng, đảm bảo quy
+                    trình
+                    hoạt động diễn ra suôn sẻ và hiệu quả.
+                </li>
+            </ul>
+        </div>
     </section>
 
-</main>
 
-<main class="content-wrapper">
+
+
     <section class="content-section">
-        <h2>Điều Khoản Sân Bóng</h2>
-        <div class="terms-container">
-            <div class="terms-item">
-                <p id="thoi-gian-mo-cua" class="terms-text"></p>
-            </div>
-            <div class="terms-item">
-                <p id="thoi-gian-dong-cua" class="terms-text"></p>
-            </div>
-            <div class="terms-item">
-                <p id="tien-coc" class="terms-text"></p>
-            </div>
-            <div class="terms-item">
-                <p id="thoi-gian-dat-truoc" class="terms-text"></p>
-            </div>
-            <div class="terms-item">
-                <p id="thoi-gian-huy-dat" class="terms-text"></p>
+        <div class="container-md">
+            <h4>Điều Khoản Sân Bóng</h4>
+            <div class="terms-container">
+                <div class="terms-item">
+                    <p id="thoi-gian-mo-cua" class="terms-text"></p>
+                </div>
+                <div class="terms-item">
+                    <p id="thoi-gian-dong-cua" class="terms-text"></p>
+                </div>
+                <div class="terms-item">
+                    <p id="tien-coc" class="terms-text"></p>
+                </div>
+                <div class="terms-item">
+                    <p id="thoi-gian-dat-truoc" class="terms-text"></p>
+                </div>
+                <div class="terms-item">
+                    <p id="thoi-gian-huy-dat" class="terms-text"></p>
+                </div>
             </div>
         </div>
     </section>
-</main>
+
 
 
 <div th:include="~{fragment/client/footerClient :: footerClient}"></div>
@@ -309,7 +255,7 @@
                     }
 
                     if (item.id == 4) { // Giả sử id của "Thời gian mở cửa" là 2
-                      $('#thoi-gian-mo-cua').html(`
+                        $('#thoi-gian-mo-cua').html(`
                     <div class="message">
                         <p>Giờ mở cửa: <strong>${item.giaTri}</strong> giờ. Chúng tôi rất vui khi được chào đón bạn đến với sân của chúng tôi. Sân bóng mở cửa từ giờ này để bạn có thể thoải mái tham gia các trận đấu, rèn luyện thể thao và thư giãn. Chúng tôi cam kết mang đến không gian chơi bóng chất lượng, giúp bạn có những trải nghiệm tuyệt vời.</p>
                         <p>Hãy đến đúng giờ mở cửa để có thể tận hưởng tối đa thời gian chơi bóng, tránh phải chờ đợi lâu. Chúng tôi luôn sẵn sàng phục vụ bạn để mang lại những giây phút thể thao đầy hứng khởi. Cảm ơn bạn đã chọn sân của chúng tôi và hy vọng bạn sẽ có một trải nghiệm tuyệt vời!</p>
