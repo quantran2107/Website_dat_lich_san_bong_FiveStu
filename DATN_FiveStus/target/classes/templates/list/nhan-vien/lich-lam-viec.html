@@ -22,80 +22,53 @@
                                 <div class="card-body">
                                     <div id="tableLich">
                                         <div class="card-body">
-
-                                            <div class="toolbar row mb-3">
-                                                <div class="col-md-7" style="display: flex;">
-                                                    <div class="col-md-4" style="display: flex">
-                                                        <label class="form-label" for="date-input"
-                                                               style="width: 125px;padding-top: 7px; padding-left: 5px; padding-right: 5px">Ngày:</label>
-                                                        <input class="form-control" id="date-input" type="date">
-                                                    </div>
-                                                    <div class="col-md-6" style="display: flex">
-                                                        <form class="form-inline">
-                                                            <div class="form-row">
-                                                                <div class="form-group col-auto">
-                                                                    <input class="form-control" id="searchInput"
-                                                                           placeholder="Tìm theo mã, tên ..."
-                                                                           type="text">
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <div class="col-md-2" style="display: flex">
-                                                        <div class="dropdown mr-3">
-                                                            <button aria-expanded="false"
-                                                                    aria-haspopup="true"
-                                                                    class="btn btn-outline-success dropdown-toggle"
-                                                                    data-toggle="dropdown" id="actionMenuButton3"
-                                                                    type="button">Trạng thái
+                                            <div class="toolbar row mb-3 mt-3">
+                                                <div class="col-md-12">
+                                                    <form class="form-inline"  style="display: flex; justify-content: space-between; align-items: center;">
+                                                        <div class="form-group" style="flex-grow: 1;">
+                                                            <label for="searchInput">Tìm kiếm</label>
+                                                            <input class="form-control ml-3 mr-5" id="searchInput"  placeholder="Tìm kiếm theo mã hoặc tên" style="width: 400px;" type="text">
+                                                        </div>
+                                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                            <button class="btn btn-success" id="load" title="Tải lại" type="button">
+                                                                <i class="fas fa-sync"></i>
                                                             </button>
-                                                            <div aria-labelledby="actionMenuButton3"
-                                                                 class="dropdown-menu"
-                                                                 id="status-select">
-                                                                <a class="dropdown-item" href="#"
-                                                                >Chọn ca</a>
-                                                                <a class="dropdown-item" href="#"
-                                                                >Ca sáng</a>
-                                                                <a class="dropdown-item" href="#"
-                                                                >Ca chiều</a>
-                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    </form>
                                                 </div>
-                                                <div class="col-md-4">
-                                                        <div class="col" style="display: flex" id="daDung">
-                                                        <div class="col ml-auto">
-                                                            <button class="btn btn-outline-success" id="load" style="float: right;" title="Tải lại"><i
-                                                                    class="fas fa-sync"></i></button>
-                                                            <button class="btn btn-outline-success" id="btnExcelMau"
-                                                                    style="float: right;margin-right: 8px;padding-bottom: 0px">
-                                                                <label>Mẫu excel</label> <i
-                                                                    class="fas fa-file-excel fa-lg"></i></button>
 
-                                                            <div style="float: right;padding-top: 0">
-                                                                <input accept=".xlsx, .xls" id="file" name="file" style="width: 0.1px;
-	                                                                                                height: 0.1px;
-	                                                                                                opacity: 0;
-	                                                                                                overflow: hidden;
-	                                                                                                position: absolute;
-	                                                                                                z-index: -1;"
-                                                                       type="file"/>
-                                                                <div id="labelFile"
-                                                                     class="btn btn-outline-success"
-                                                                     style="padding: 0px; border-radius: 5px; margin-right: 10px;margin-top: 0px" title="Chọn file">
-                                                                    <label for="file" style="margin: 7px"><i
-                                                                            class="fas fa-file-excel fa-lg"></i></label>
-                                                                </div>
-                                                                <button class="btn btn-outline-success" id="btnSubmitFile"
-                                                                        style="display: none;padding: 6px; border-radius: 5px; margin-right: 10px; margin-bottom: 15px">
-                                                                    Gửi file
+                                                <div class="col-md-12 mt-4">
+                                                    <form class="form-inline" id="filterDateForm" style="display: flex; justify-content: space-between; align-items: center;">
+                                                        <div class="form-group d-flex" style="flex-grow: 1;">
+                                                            <label for="date-input">Ngày</label>
+                                                            <input class="form-control ml-3 mr-3" id="date-input"  style="width: 163px;" type="date">
+                                                            <div class="dropdown mr-3">
+                                                                <button aria-expanded="false"
+                                                                        aria-haspopup="true"
+                                                                        class="btn btn-outline-success dropdown-toggle"
+                                                                        data-toggle="dropdown" id="actionMenuButton3"
+                                                                        type="button">Chọn ca
                                                                 </button>
+                                                                <div aria-labelledby="actionMenuButton3"
+                                                                     class="dropdown-menu"
+                                                                     id="status-select">
+                                                                    <a class="dropdown-item" href="#"
+                                                                    >Chọn ca</a>
+                                                                    <a class="dropdown-item" href="#"
+                                                                    >Ca sáng</a>
+                                                                    <a class="dropdown-item" href="#"
+                                                                    >Ca chiều</a>
+                                                                </div>
                                                             </div>
+                                                            <button class="btn btn-outline-success" id="uploadButton" title="Tải lên" type="button">
+                                                                <span class="fe fe-file-text"></span>
+                                                            </button>
+                                                            <button class="btn btn-outline-success" style="margin-left: 15px" title="Mẫu excel" id="btnExcelMauLich" type="button">
+                                                                <span class="fe fe-download"></span>
+                                                            </button>
                                                         </div>
-                                                    </div>
+                                                    </form>
                                                 </div>
-
-
                                             </div>
                                         </div>
                                     </div>
@@ -195,6 +168,9 @@
 <script src="/js/lichLamViec.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
@@ -316,7 +292,12 @@
             let date = new Date();
             let now = `${date.toISOString().split('T')[0]}`;
             if (dateStr < now) {
-                alert("Không thể thêm lịch vào quá khứ!");
+                Swal.fire({
+                    title: 'Cảnh báo!',
+                    text: 'Không thể thêm lịch vào quá khư',
+                    icon: 'warning', // You can also use 'error', 'warning', 'info'
+                    confirmButtonText: 'OK',
+                });
                 return;
             }
             addEventModal.style.display = 'block';
@@ -357,7 +338,12 @@
                     },
                     error: function (xhr, status, error) {
 
-                        alert('Có lỗi xảy ra: ' + error);
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Đã có lỗi xảy ra',
+                            icon: 'errot', // You can also use 'error', 'warning', 'info'
+                            confirmButtonText: 'OK',
+                        });
                         return;
                     }
                 });
