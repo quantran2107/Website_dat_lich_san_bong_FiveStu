@@ -260,10 +260,6 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
         HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
 
-        System.out.println("idSanCa: " + hoaDonChiTietDTO.getIdSanCa());
-        System.out.println("idHoaDon: " + hoaDonChiTietDTO.getIdHoaDon());
-        System.out.println("tongTien: " + hoaDonChiTietDTO.getTongTien());
-
         return modelMapper.map(hoaDonChiTietSave, HoaDonChiTietDTO.class);
     }
 

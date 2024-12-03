@@ -101,8 +101,16 @@ public class HoaDonServiceImp implements HoaDonService {
         // Tìm khách hàng theo ID
         KhachHang khachHang = khachHangRepository.findById(hoaDonDTO.getIdKhachHang())
                 .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại với ID: " + hoaDonDTO.getIdKhachHang()));
-        NhanVien nhanVien = nhanVienReposity.findById(hoaDonDTO.getIdNhanVien())
-                .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại với ID: " + hoaDonDTO.getIdNhanVien()));
+
+        // Khởi tạo đối tượng NhanVien
+        NhanVien nhanVien = null;
+
+        // Kiểm tra điều kiện trước khi tìm nhân viên
+        if (hoaDonDTO.getIdNhanVien() != null) {
+            nhanVien = nhanVienReposity.findById(hoaDonDTO.getIdNhanVien())
+                    .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại với ID: " + hoaDonDTO.getIdNhanVien()));
+        }
+
         HoaDon hoaDon = modelMapper.map(hoaDonDTO, HoaDon.class);
         hoaDon.setMaHoaDon(generateMaHoaDon());
         hoaDon.setId(hoaDonDTO.getId());
@@ -111,14 +119,16 @@ public class HoaDonServiceImp implements HoaDonService {
         hoaDon.setKhachHang(khachHang);
         hoaDon.setTongTienSan(hoaDonDTO.getTongTienSan());
         hoaDon.setTienCoc(hoaDonDTO.getTienCoc());
-        hoaDon.setNhanVien(nhanVien);
+        hoaDon.setNhanVien(nhanVien); // Nếu nhân viên null thì set null
         hoaDon.setNgayTao(now);
         hoaDon.setLoai(true);
         hoaDon.setDeletedAt(false);
+
         HoaDon hoaDonSave = hoaDonRepository.save(hoaDon);
 
         return modelMapper.map(hoaDonSave, HoaDonDTO.class);
     }
+
 
     @Override
     public void updateThanhToan(Integer idHoaDonChiTiet) {
