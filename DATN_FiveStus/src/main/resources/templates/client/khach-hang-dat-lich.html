@@ -413,7 +413,7 @@
                                                         const idSanCa = giaData.id; // Lấy id sân ca từ dữ liệu giá
                                                         checkAvailability(idSanCa, ngayDenSan).then(status => {
                                                             if (status === 'Còn trống') {
-                                                                cell.textContent = giaData.gia; // Điền giá khi sân còn trống
+                                                                cell.textContent = formatCurrencyVND(giaData.gia); // Điền giá khi sân còn trống
                                                                 cell.dataset.price = giaData.gia;
                                                                 cell.dataset.date = ngayDenSan.toISOString().split('T')[0];
                                                                 cell.dataset.idSanCa = idSanCa;
@@ -471,10 +471,11 @@
             totalCost += parseFloat(cell.dataset.price); // Cộng dồn giá
         });
 
-        // Cập nhật thông tin hiển thị
+        // Cập nhật thông tin hiển thị với định dạng VND
         const bookingInfo = document.getElementById('bookingInfo');
-        bookingInfo.innerHTML = `Tổng số lịch đặt: ${totalCount} <br> Tổng giá: ${totalCost.toLocaleString()} VND`;
+        bookingInfo.innerHTML = `Tổng số lịch đặt: ${totalCount} <br> Tổng giá: ${formatCurrencyVND(totalCost)}`;
     }
+
 
     document.getElementById('btnDatLich').addEventListener('click', async function () {
         const customer = await loadCustomer(); // Tải thông tin khách hàng
@@ -584,9 +585,11 @@
 </div>
 `;
     }
+    function formatCurrencyVND(amount) {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    }
 
-    // Hàm thiết lập các nút xóa
-    // Hàm thiết lập các nút xóa
+    // Hàm thiết lập các nút
     function setupDeleteButtons(selectedBookings) {
         selectedBookings.forEach((booking, index) => {
             document.getElementById(`delete-btn-${index}`).addEventListener('click', function () {
@@ -626,15 +629,27 @@
         let totalDeposit = 0;
 
         selectedBookings.forEach((booking, index) => {
-            if (index !== bookingIndex) {
-                totalPrice += parseFloat(booking.price);
-                totalDeposit += parseFloat(document.getElementById(`deposit-${index}`).textContent);
+            let deposit;
+
+            // Tính toán tiền cọc
+            if (depositRate.type === '%') {
+                deposit = (booking.price * depositRate.value) / 100;
+            } else {
+                deposit = depositRate.value; // Giả sử giá trị cụ thể
             }
+
+            // Định dạng giá trị Tiền cọc
+            document.getElementById(`deposit-${index}`).textContent = formatCurrencyVND(deposit);
+
+            // Cộng dồn tổng giá và tổng tiền cọc
+            totalPrice += parseFloat(booking.price);
+            totalDeposit += deposit;
         });
 
-        // Cập nhật tổng giá và tổng tiền cọc vào bảng
-        document.getElementById('total-price').textContent = totalPrice;
-        document.getElementById('total-deposit').textContent = totalDeposit;
+// Định dạng tổng tiền và tổng tiền cọc
+        document.getElementById('total-price').textContent = formatCurrencyVND(totalPrice);
+        document.getElementById('total-deposit').textContent = formatCurrencyVND(totalDeposit);
+
     }
 
 
@@ -687,97 +702,98 @@
     }
 
     async function handleBooking(selectedBookings) {
-        // Lấy tổng tiền và tổng tiền cọc
-        const totalPrice = parseFloat(document.getElementById('total-price').textContent);
         const totalDeposit = parseFloat(document.getElementById('total-deposit').textContent);
-        const customer = await loadCustomer(); // Tải thông tin khách hàng
-        const customerId = customer.id; // Giả sử bạn đã lấy id khách hàng từ hàm loadCustomer
+        const customer = await loadCustomer();
+        const customerId = customer.id;
         const customerEmail = customer.email;
         const customerHoVaTen = customer.hoVaTen;
         const customerSoDienThoai = customer.soDienThoai;
-        // Xác nhận trước khi đặt lịch
+
         const confirmResult = await Swal.fire({
             title: 'Xác nhận đặt lịch',
             text: "Bạn có chắc chắn muốn đặt lịch không?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Có, đặt lịch!',
-            cancelButtonText: 'Không, huỷ!'
+            cancelButtonText: 'Không, hủy!'
         });
 
-        if (!confirmResult.isConfirmed) {
-            return; // Thoát nếu người dùng không xác nhận
-        }
+        if (!confirmResult.isConfirmed) return;
 
-        // Tạo hóa đơn
-        const invoiceResponse = await fetch('http://localhost:8080/hoa-don/save', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                idKhachHang: customerId,
-                hoVaTenKhachHang: customerHoVaTen,
-                soDienThoaiKhachHang: customerSoDienThoai,
-                emailKhachHang: customerEmail,
-                tongTienSan: totalPrice,
-                tongTien: totalPrice,
-                tienCoc: totalDeposit,
-                deletedAt: false
-            }),
-        });
-
-        if (!invoiceResponse.ok) {
-            console.error('Lỗi tạo hóa đơn:', await invoiceResponse.text());
-            return; // Thoát nếu có lỗi
-        }
-
-        const invoiceData = await invoiceResponse.json();
-        const invoiceId = invoiceData.id; // Giả sử API trả về id hóa đơn
-        console.log(invoiceId)
-        // Tạo hóa đơn chi tiết
-        const detailPromises = selectedBookings.map(async (booking) => {
-            const bookingDate = parseDateString(booking.date); // Chuyển đổi chuỗi thành Date
-            const formattedDate = formatDateToDDMMYYYY(bookingDate); // Định dạng lại thành dd/MM/yyyy
-            const detailResponse = await fetch('http://localhost:8080/hoa-don-chi-tiet/save2', {
+        try {
+            // Tạo hóa đơn
+            const invoiceResponse = await fetch('http://localhost:8080/hoa-don/save', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    idHoaDon: invoiceId,
-                    idSanCa: booking.idSanCa,
-                    ngayDenSan: formattedDate, // Ngày đến sân
-                    tongTien: booking.price, // Tổng tiền của dòng
-                    tongTienThucTe: booking.price, // Tổng tiền của dòng
-
+                    idKhachHang: customerId,
+                    hoVaTenKhachHang: customerHoVaTen,
+                    soDienThoaiKhachHang: customerSoDienThoai,
+                    emailKhachHang: customerEmail,
+                    tongTienSan: totalDeposit,
+                    tongTien: totalDeposit,
+                    tienCoc: totalDeposit,
                     deletedAt: false
                 }),
             });
 
-            if (!detailResponse.ok) {
-                console.error('Lỗi tạo hóa đơn chi tiết:', await detailResponse.text());
+            if (!invoiceResponse.ok) {
+                Swal.fire('Lỗi', 'Không thể tạo hóa đơn.', 'error');
+                return;
             }
-        });
 
-        // Đợi tất cả các yêu cầu tạo hóa đơn chi tiết hoàn thành
-        await Promise.all(detailPromises);
+            const invoiceData = await invoiceResponse.json();
+            const invoiceId = invoiceData.id;
 
-        const paymentResponse = await fetch('http://localhost:8080/api/payment/create_payment', {
-            method: 'GET', // Nếu API của bạn là GET
-        });
+            // Lưu chi tiết hóa đơn
+            const detailPromises = selectedBookings.map(async (booking) => {
+                const formattedDate = formatDateToDDMMYYYY(parseDateString(booking.date));
+                const detailResponse = await fetch('http://localhost:8080/hoa-don-chi-tiet/save2', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        idHoaDon: invoiceId,
+                        idSanCa: booking.idSanCa,
+                        ngayDenSan: formattedDate,
+                        tongTien: booking.price,
+                        tongTienThucTe: booking.price,
+                        deletedAt: false
+                    }),
+                });
 
-        if (!paymentResponse.ok) {
-            console.error('Lỗi tạo thanh toán:', await paymentResponse.text());
-            return;
+                if (!detailResponse.ok) console.error('Lỗi tạo hóa đơn chi tiết:', await detailResponse.text());
+            });
+
+            await Promise.all(detailPromises);
+
+            const vnpayResponse = await fetch(`http://localhost:8080/api/vnpay/submitOrder?amount=${totalDeposit}&orderInfo=${invoiceId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            });
+            console.log(`http://localhost:8080/api/vnpay/submitOrder?amount=${totalDeposit}&orderInfo=${invoiceId}`)
+
+
+            if (!vnpayResponse.ok) {
+                Swal.fire('Lỗi', 'Không thể kết nối VNPay.', 'error');
+                return;
+            }
+
+            const vnpayData = await vnpayResponse.json();
+
+            // Kiểm tra redirectUrl thay vì code === "00"
+            if (vnpayData.redirectUrl) {
+                window.location.href = vnpayData.redirectUrl; // Chuyển hướng đến trang thanh toán VNPay
+            } else {
+                Swal.fire('Lỗi', 'Không thể tạo URL thanh toán.', 'error');
+            }
+
+        } catch (error) {
+            console.error('Lỗi khi xử lý đặt lịch:', error);
+            Swal.fire('Lỗi', 'Có lỗi xảy ra trong quá trình xử lý.', 'error');
         }
-
-        const paymentData = await paymentResponse.json();
-        const paymentUrl = paymentData.url; // Lấy URL thanh toán từ API
-
-        // Chuyển hướng đến VNPay để thanh toán
-        window.location.href = paymentUrl;
     }
+
+
 
 </script>
 

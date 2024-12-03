@@ -1,28 +1,22 @@
-package com.example.DATN_WebFiveTus.config;
+package com.example.DATN_WebFiveTus.config.VNPay;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
+import java.util.*;
 
-public class VNPayConfig {
+public class VNPAYConfig {
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_ReturnUrl = "http://localhost:8080/customer";
+    public static String vnp_ReturnUrl = "http://localhost:8080/vnpay_jsp/vnpay_return.jsp";
     public static String vnp_TmnCode = "ILBJU0FH";
     public static String secretKey = "MYC3VERABWU2TXLJSOFRSOAYZX8T66C3";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
-    public static String vnp_Version = "2.1.0";
-    public static String vnp_Command = "pay";
+
     public static String md5(String message) {
         String digest = null;
         try {
@@ -77,7 +71,7 @@ public class VNPayConfig {
                 sb.append("&");
             }
         }
-        return hmacSHA512(secretKey, sb.toString());
+        return hmacSHA512(secretKey,sb.toString());
     }
 
     public static String hmacSHA512(final String key, final String data) {
