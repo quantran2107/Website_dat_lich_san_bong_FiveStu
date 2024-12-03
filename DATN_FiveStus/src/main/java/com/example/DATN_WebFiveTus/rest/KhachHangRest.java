@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,11 +37,7 @@ public class KhachHangRest {
         return ResponseEntity.ok(khachHangDTOS);
     }
 
-    @GetMapping("hien-thi-phan-trang")
-    public ResponseEntity<Page<KhachHangDTO>> getAllPaginated(@PageableDefault(size = 5) Pageable pageable) {
-        Page<KhachHangDTO> khachHangDTOS = khachHangService.getAll(pageable);
-        return ResponseEntity.ok(khachHangDTOS);
-    }
+
 
     @GetMapping("/search")
     public ResponseEntity<Page<KhachHangDTO>> searchAndFilterKhachHang(
@@ -50,14 +47,21 @@ public class KhachHangRest {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int pageSize) {
 
+        // Kiểm tra và điều chỉnh page nếu nhỏ hơn 0
         if (page < 0) {
-            page = 0;  // Kiểm tra và điều chỉnh page nếu nhỏ hơn 0
+            page = 0;
         }
 
-        Page<KhachHangDTO> result = khachHangService.searchAndFilter(query, status, gender, page, pageSize);
+        // Tạo Pageable với phân trang và sắp xếp theo createdAt (giảm dần)
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+
+        // Gọi service với Pageable để tìm kiếm, lọc, phân trang và sắp xếp
+        Page<KhachHangDTO> result = khachHangService.searchAndFilter(query, status, gender, pageable);
+
+        // Trả về kết quả tìm kiếm dưới dạng ResponseEntity
         return ResponseEntity.ok(result);
     }
-
 
 
     @GetMapping("/filter")

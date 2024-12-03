@@ -17,6 +17,7 @@ public interface DiaChiKhachHangRepository extends JpaRepository<DiaChiKhachHang
     List<DiaChiKhachHang> getAllJoinFetch();
 
     List<DiaChiKhachHang> findByIdKhachHang_Id(Integer id);
+    @Query("SELECT dckh FROM DiaChiKhachHang dckh WHERE dckh.idKhachHang.id = :idKhachHang AND dckh.deletedAt = false")
     Page<DiaChiKhachHang> findByIdKhachHang_Id(Integer idKhachHang, Pageable pageable);
 
     @Query("SELECT dckh FROM DiaChiKhachHang dckh WHERE dckh.idKhachHang.email = :email AND dckh.deletedAt = false")

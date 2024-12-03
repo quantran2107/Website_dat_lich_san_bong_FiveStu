@@ -32,7 +32,7 @@ public interface ThamSoRepository extends JpaRepository<ThamSo, Integer> {
                                 Pageable pageable);
 
 
-    @Query("SELECT ts FROM ThamSo ts where ts.ma=:ma")
+    @Query("SELECT ts FROM ThamSo ts where ts.ma=:ma and ts.trangThai=true ")
     ThamSo findByTenThamSo(String ma);
 
     @Query("SELECT ts FROM ThamSo ts")
@@ -49,5 +49,9 @@ public interface ThamSoRepository extends JpaRepository<ThamSo, Integer> {
     @Query("UPDATE ThamSo ts SET ts.deletedAt =true WHERE ts.id = :id and ts.isActive=true ")
     void deletedAt(Integer id);
 
+    @Modifying
+    @Transactional
+    @Query("update ThamSo ts set ts.trangThai = :status where ts.id = :id")
+    void updateTrangThai(Integer id, boolean status);
 
 }
