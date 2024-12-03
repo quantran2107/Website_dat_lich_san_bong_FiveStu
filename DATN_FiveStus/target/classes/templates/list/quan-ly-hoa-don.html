@@ -293,16 +293,6 @@
         <input type="text" class="form-control" id="loai" readonly>
         </div>
         </div>
-        <div class="form-row">
-        <div class="form-group col-md-6">
-        <label for="ngayDenSan" name="ngayDenSan">Ngày đến sân</label>
-        <input type="date" class="form-control" id="ngayDenSan" readonly>
-        </div>
-        <div class="form-group col-md-6">
-        <label for="ghiChu" name="ghiChu">Ghi chú</label>
-        <textarea class="form-control" id="ghiChu" readonly></textarea>
-        </div>
-        </div>
         </form>
         </div>
         </div>
@@ -375,10 +365,8 @@
         document.getElementById('maNhanVien').value = data.maNhanVien;
         document.getElementById('tongTien').value = data.tongTien;
         document.getElementById('tienCoc').value = data.tienCoc;
-        document.getElementById('loai').value = data.loai;
+        document.getElementById('loai').value = data.loai ? "Online" : "Tại quầy";
         document.getElementById('trangThai').value = data.trangThai;
-        document.getElementById('ghiChu').value = data.ghiChu;
-        document.getElementById('ngayDenSan').value = data.ngayDenSan;
         });
 
             fetch(`http://localhost:8080/hoa-don-chi-tiet/hien-thi/${id}`)
@@ -403,7 +391,7 @@
                                 <td>${chiTiet.maHoaDonChiTiet}</td>
                                 <td>${chiTiet.tenSanBong}</td>
                                 <td>${chiTiet.tenCa}</td>
-                                <td>${chiTiet.tongTien}</td>
+                                <td>${chiTiet.tongTienThucTe}</td>
                                 <td>
                                     <span style="width: 90%"
                                         class="${chiTiet.trangThai === 'Đã hủy' ? 'custom-3' : chiTiet.trangThai === 'Chờ nhận sân' ? 'custom-5' : 'custom-4'}">
@@ -557,12 +545,17 @@
         format: 'MM/DD/YYYY'
         }
         });
+
+        flatpickr("#ngayTaoMin", {});
+        flatpickr("#ngayTaoMax", {});
         initialTableData = [];
         currentSearchQuery = "";
         currentSearchMinMoney = "";
         currentSearchMaxMoney = "";
         currentStatusFilter = null;
         currentStatusFilter2 = null;
+        currentSearchMinDate = "";
+        currentSearchMaxDate = "";
         fetchDataAndRenderTable(); // Gọi hàm fetch và render table khi DOMContentLoaded
     }
 
@@ -704,7 +697,7 @@
                                                     <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-contact" onclick="filterTable2('da huy')" aria-selected="false">Đã hủy</button>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-contact" onclick="filterTable2('huy')" aria-selected="false">Chờ xác nhận</button>
+                                                    <button class="nav-link" role="tab" data-toggle="pill" aria-controls="pills-contact" onclick="filterTable2('cho thanh toan')" aria-selected="false">Chờ thanh toán</button>
                                                 </li>
                                             </ul>
                                             <div class="tab-content mb-1" id="pills-tabContent">
