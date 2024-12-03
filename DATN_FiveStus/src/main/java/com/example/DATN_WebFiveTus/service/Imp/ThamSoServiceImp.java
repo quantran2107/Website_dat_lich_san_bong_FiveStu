@@ -133,5 +133,10 @@ public class ThamSoServiceImp implements ThamSoService {
         return modelMapper.map(thamSoSave,ThamSoDTO.class);
     }
 
+    @Override
+    public void updateTrangThai(Integer id, boolean status) {
+         thamSoRepository.updateTrangThai(id, status);
+    }
+
 
 }

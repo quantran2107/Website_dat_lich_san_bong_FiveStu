@@ -1,6 +1,7 @@
 package com.example.DATN_WebFiveTus.service;
 
 import com.example.DATN_WebFiveTus.dto.ThamSoDTO;
+import com.example.DATN_WebFiveTus.entity.ThamSo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -30,4 +31,6 @@ public interface ThamSoService {
      Page<ThamSoDTO> searchThamSoss(String ma, String ten, String typeGiaTri, Boolean trangThai, Pageable pageable);
 
       ThamSoDTO saveFake(ThamSoDTO thamSoDTO);
+
+    void updateTrangThai(Integer id, boolean status);
 }
