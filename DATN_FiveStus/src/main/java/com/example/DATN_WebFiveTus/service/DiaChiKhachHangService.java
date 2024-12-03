@@ -24,6 +24,8 @@ public interface DiaChiKhachHangService {
 
     List<DiaChiKhachHangDTO> findById(Integer id);
 
+    DiaChiKhachHangDTO updateDiaChi(Integer diaChiId, DiaChiKhachHangDTO diaChiKhachHangDTO);
+
     Page<DiaChiKhachHangDTO> findByIdDC(Integer id, Pageable pageable);
 
     public List<DiaChiKhachHangDTO> getDiaChiByEmail(String email);
@@ -33,6 +35,6 @@ public interface DiaChiKhachHangService {
     public DiaChiKhachHangDTO updateDiaChiByEmail(String email, Integer id, DiaChiKhachHangDTO diaChiKhachHangDTO);
     public Optional<DiaChiKhachHang> getDiaChiByEmailAndId(String email, Integer id);
 
-    DiaChiKhachHangDTO addDiaChiByEmail(String email, DiaChiKhachHangDTO diaChiKhachHangDTO);
+    void addDiaChiByEmail(String email, DiaChiKhachHangDTO diaChiKhachHangDTO);
 
 }

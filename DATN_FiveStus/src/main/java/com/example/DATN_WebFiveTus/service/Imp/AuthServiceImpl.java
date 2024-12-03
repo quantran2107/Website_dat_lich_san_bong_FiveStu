@@ -93,6 +93,8 @@ public class AuthServiceImpl implements AuthService {
         khachHang.setEmail(signUpRequestDto.getEmail());
         khachHang.setMaKhachHang(signUpRequestDto.getEmail().substring(0, signUpRequestDto.getEmail().indexOf("@")));
         khachHang.setMatKhau(passwordEncoder.encode(signUpRequestDto.getPassword()));
+        khachHang.setTrangThai("active");
+        khachHang.setHoVaTen(signUpRequestDto.getName());
         khachHangRepository.save(khachHang);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 ApiResponseDto.builder()
