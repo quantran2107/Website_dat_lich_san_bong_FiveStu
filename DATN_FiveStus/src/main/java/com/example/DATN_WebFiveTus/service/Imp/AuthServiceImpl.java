@@ -90,6 +90,10 @@ public class AuthServiceImpl implements AuthService {
         if (userService.existByUsername(signUpRequestDto.getUsername())) {
             throw new UserAlreadyExistsException("Đăng ký không thành công: Tên người dùng đã tồn tại trong hệ thống.");
         }
+        KhachHang kh = khachHangRepository.findKhachHangBySoDienThoai(signUpRequestDto.getPhoneNumber());
+        if (kh!=null) {
+            throw new UserAlreadyExistsException("Đăng ký không thành công: Số điện thoại đã tồn tại trong hệ thống.");
+        }
 
         User user = createUser(signUpRequestDto);
         userService.save(user);
@@ -97,6 +101,7 @@ public class AuthServiceImpl implements AuthService {
         khachHang.setEmail(signUpRequestDto.getEmail());
         khachHang.setMaKhachHang(signUpRequestDto.getEmail().substring(0, signUpRequestDto.getEmail().indexOf("@")));
         khachHang.setMatKhau(passwordEncoder.encode(signUpRequestDto.getPassword()));
+        khachHang.setSoDienThoai(signUpRequestDto.getPhoneNumber());
         khachHang.setTrangThai("active");
         khachHang.setHoVaTen(signUpRequestDto.getName());
         khachHangRepository.save(khachHang);

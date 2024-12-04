@@ -32,5 +32,7 @@ public class SignUpRequestDto {
     @Size(max= 50, message = "Name can have have atmost 50 characters!")
     private String name;
 
+    private String phoneNumber;
+
     private Set<String> roles;
 }
