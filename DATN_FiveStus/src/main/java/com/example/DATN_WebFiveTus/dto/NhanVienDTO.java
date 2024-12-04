@@ -34,8 +34,6 @@ public class NhanVienDTO {
 
     private LocalDateTime createdAt;
 
-    private String imageNV;
-
     private Boolean gioiTinh;
 
     private String soDienThoai;
