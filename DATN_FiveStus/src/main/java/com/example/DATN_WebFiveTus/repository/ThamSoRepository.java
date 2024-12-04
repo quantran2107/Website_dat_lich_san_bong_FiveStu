@@ -24,7 +24,7 @@ public interface ThamSoRepository extends JpaRepository<ThamSo, Integer> {
             "(:ma IS NULL OR ts.ma LIKE %:ma%) AND " +
             "(:ten IS NULL OR ts.ten LIKE %:ten%) AND " +
             "(:typeGiaTri IS NULL OR ts.typeGiaTri LIKE %:typeGiaTri%) AND " +
-            "(:trangThai IS NULL OR ts.trangThai = :trangThai) AND ts.deletedAt = false")
+            "(:trangThai IS NULL OR ts.trangThai = :trangThai) AND ts.deletedAt = false AND ts.trangThai=true")
     Page<ThamSo> searchThamSoss(@Param("ma") String ma,
                                 @Param("ten") String ten,
                                 @Param("typeGiaTri") String typeGiaTri,
