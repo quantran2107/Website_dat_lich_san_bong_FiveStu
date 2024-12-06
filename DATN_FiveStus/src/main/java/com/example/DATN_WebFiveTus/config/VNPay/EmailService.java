@@ -1,6 +1,7 @@
 package com.example.DATN_WebFiveTus.config.VNPay;
 
 import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
+import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.entity.HoaDon;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -9,6 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
@@ -23,19 +25,21 @@ public class EmailService {
     private SpringTemplateEngine springTemplateEngine;
 
     @Async
-    public void sendInvoiceEmail(Integer idHoaDon, List<HoaDonChiTietDTO> hoaDonChiTietList, HoaDon hoaDon) {
+    @Transactional
+    public void sendInvoiceEmail(HoaDonDTO hoaDonDTO, List<HoaDonChiTietDTO> hoaDonChiTietList) {
         try {
-            // Tạo mẫu email
+            // Tạo Context cho Thymeleaf
             Context context = new Context();
-            context.setVariable("hoaDon", hoaDon);
+            context.setVariable("hoaDon", hoaDonDTO);
             context.setVariable("chiTietHoaDon", hoaDonChiTietList);
 
+            // Render nội dung email từ template
             String emailContent = springTemplateEngine.process("invoiceTemplate", context);
 
             // Tạo email
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            helper.setTo(hoaDon.getKhachHang().getEmail());
+            helper.setTo(hoaDonDTO.getEmailKhachHang());
             helper.setSubject("Hóa đơn thanh toán thành công");
             helper.setText(emailContent, true);
 
@@ -45,4 +49,5 @@ public class EmailService {
             System.err.println("Lỗi khi gửi email: " + e.getMessage());
         }
     }
+
 }

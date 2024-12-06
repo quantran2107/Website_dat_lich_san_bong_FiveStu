@@ -32,7 +32,7 @@ public interface HoaDonService {
 
     void deletedAt(Integer id);
 
-//    void sendInvoiceEmail(Integer idHoaDon, List<HoaDonChiTietDTO> hoaDonChiTietList);
+    void sendInvoiceEmail(HoaDonDTO hoaDonDTO, List<HoaDonChiTietDTO> hoaDonChiTietList);
 
     void updateTrangThaiHoaDon(Integer idHoaDon, String trangThai);
 
