@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Lấy danh sách sân bóng
-        fetch('http://localhost:8080/san-bong/hien-thi')
+        fetch('http://localhost:8080/san-bong/hien-thi-active')
             .then(response => response.json())
             .then(sanBongs => displaySanBong(sanBongs))
             .catch(error => showError('Error fetching san bong data:', error));
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Lấy danh sách sân bóng
-    fetch('http://localhost:8080/san-bong/hien-thi')
+    fetch('http://localhost:8080/san-bong/hien-thi-active')
         .then(response => response.json())
         .then(sanBongs => displaySanBong(sanBongs))
         .catch(error => showError('Error fetching san bong data:', error));

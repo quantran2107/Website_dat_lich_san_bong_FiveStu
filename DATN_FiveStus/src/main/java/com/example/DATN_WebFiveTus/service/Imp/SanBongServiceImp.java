@@ -55,7 +55,7 @@ private LoaiSanRepository loaiSanRepository;
         LoaiSan loaiSan=loaiSanRepository.findById(sanBongDTO.getIdLoaiSan()).orElseThrow(() -> new ResourceNotfound("Không tồn tại loại sân bóng ID ạ: "+sanBongDTO.getIdLoaiSan()));
         SanBong sanBong=modelMapper.map(sanBongDTO,SanBong.class);
         sanBong.setLoaiSan(loaiSan);
-        sanBong.setTrangThai("Đang hoạt động");
+        sanBong.setTrangThai("Hoạt động");
         SanBong sanBongSave=sanBongRepository.save(sanBong);
         return modelMapper.map(sanBongSave,SanBongDTO.class);
     }
@@ -79,6 +79,12 @@ private LoaiSanRepository loaiSanRepository;
     @Override
     public List<SanBongDTO> getAllJoinFetch() {
         return sanBongRepository.getAllJoinFetch().stream().map((sanBong) ->modelMapper
+                .map(sanBong,SanBongDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SanBongDTO> getAllJoinFetchActive() {
+        return sanBongRepository.getAllJoinFetchActive().stream().map((sanBong) ->modelMapper
                 .map(sanBong,SanBongDTO.class)).collect(Collectors.toList());
     }
 
@@ -165,6 +171,10 @@ private LoaiSanRepository loaiSanRepository;
         return sanBong != null; // Nếu có đối tượng sanBong, trả về true (trùng tên), nếu không trả về false
     }
 
+    @Override
+    public void updateTrangThai(Integer id, String status) {
+        sanBongRepository.updateTrangThai(id,status);
+    }
 
 
 }

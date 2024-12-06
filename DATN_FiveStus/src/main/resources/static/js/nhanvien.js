@@ -10,6 +10,46 @@ $(document).ready(function () {
         $('#qrCodeModal').modal('hide');
     })
 
+    $('#load').on('click',()=>{
+        $('#searchInput').val('')
+        loadTable(apiGetAll, '', currentPage, recordsPerPage);
+    })
+
+    $('#uploadButton').on('click', function () {
+        // Tạo input file động
+        const fileInput = $('<input type="file" style="display: none;">');
+        $('body').append(fileInput); // Thêm vào DOM
+
+        // Gắn sự kiện khi chọn file
+        fileInput.on('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                $.ajax({
+                    type: 'POST',
+                    enctype: 'multipart/form-data',
+                    url: 'nhan-vien/upload',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 1000000,
+                    success: function () {
+                        showSuccessToast("Tải lên file thành công!");
+                    },
+                    error: function () {
+                        showErrorToast("Tải lên file thất bại!");
+                    }
+                });
+            }
+            fileInput.remove();
+            loadTable(apiGetAll, '', currentPage, recordsPerPage);
+        });
+        fileInput.click();
+
+    });
 
     function showSuccessToast(message) {
         Toastify({
@@ -38,81 +78,11 @@ $(document).ready(function () {
     }
 
     $('#btnExcelMau').on('click', function () {
-        // URL tải xuống file Excel từ Google Sheets
         let url = 'https://docs.google.com/spreadsheets/d/1bDAR1kH1wQIMQ6JLkgmmLLQlrMioKFYY/export?format=xlsx';
-
-        // Tạo một thẻ <a> tạm thời và thiết lập thuộc tính href
         let $a = $('<a></a>').attr('href', url).attr('download', 'file.xlsx').appendTo('body');
-
-        // Kích hoạt sự kiện click để tải xuống file
         $a[0].click();
-
-        // Xóa thẻ <a> tạm thời sau khi tải xong
         $a.remove();
     });
-
-    $('#file').on('change', function () {
-        let fileName = '';
-        let newFileName = $(this).val().split('\\').pop(); // Lấy tên file đã chọn mới
-
-        if (newFileName) { // Nếu có chọn file mới
-            fileName = newFileName; // Lưu tên file mới
-            $('#labelFile').html('<label for="file" style="padding: 3px; border-radius: 5px;">' + fileName + '</label>'); // Thay đổi nội dung của label
-            $('#btnSubmitFile').show(); // Hiển thị nút btn để gửi file
-        } else { // Nếu không chọn file mới
-            // Giữ nguyên file đã chọn trước đó, nếu có
-            if (fileName) {
-                $('#labelFile').html('<label for="file" style="padding: 3px; border-radius: 5px;">' + fileName + '</label>'); // Giữ nguyên nội dung của label
-                $('#btnSubmitFile').show(); // Hiển thị nút btn để gửi file
-            } else {
-                // Nếu không có file đã chọn trước đó, không làm gì cả
-            }
-        }
-    });
-    $('#load').on('click', () => {
-        $('#actionMenuButton3').text('Tất cả');
-        $('#searchInput').val('')
-        loadTable(apiGetAll, '', currentPage, recordsPerPage);
-    })
-
-    $('#btnSubmitFile').click(function () {
-        ajaxSubmitForm(); // Gọi hàm ajaxSubmitForm để gửi dữ liệu form
-    });
-
-    function ajaxSubmitForm() {
-        let form = new FormData();
-        let file = $('#file')[0].files[0]; // Lấy file từ input
-        form.append('file', file); // Thêm file vào FormData
-
-        // Vô hiệu hóa nút gửi
-        $('#btnSubmitFile').prop('disabled', true);
-
-        $.ajax({
-            type: 'POST',
-            enctype: 'multipart/form-data',
-            url: 'nhan-vien/upload', // Đường dẫn API xử lý upload file
-            data: form,
-            processData: false,
-            contentType: false,
-            cache: false,
-            timeout: 1000000,
-
-            success: function (data, textStatus, jqXHR) {
-                showSuccessToast("Tải file lên thành công!")
-                $('#btnSubmitFile').hide();
-                $('#file').val(''); // Xóa giá trị của input file
-                $('#labelFile').html('<label for="file"style="margin: 8px"><i class="fas fa-file-excel fa-lg"></i></label>'); // Reset label
-                loadTable(apiGetAll, '', currentPage, recordsPerPage);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                $('#btnSubmitFile').hide();
-                $('#file').val(''); // Xóa giá trị của input file
-                $('#labelFile').html('<label for="file"style="margin: 8px"><i class="fas fa-file-excel fa-lg"></i></label>'); // Reset label
-                showErrorToast("Tải file thất bại!")
-                $('#btnSubmitFile').prop('disabled', false); // Bật lại nút gửi
-            }
-        });
-    }
 
 
     // code Qr

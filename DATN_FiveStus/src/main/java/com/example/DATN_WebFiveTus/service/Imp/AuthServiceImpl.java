@@ -12,12 +12,14 @@ import com.example.DATN_WebFiveTus.dto.request.SignInRequestDto;
 import com.example.DATN_WebFiveTus.dto.request.SignUpRequestDto;
 import com.example.DATN_WebFiveTus.dto.response.SignInResponseDto;
 import com.example.DATN_WebFiveTus.entity.KhachHang;
+import com.example.DATN_WebFiveTus.entity.NhanVien;
 import com.example.DATN_WebFiveTus.entity.auth.ResponseStatus;
 import com.example.DATN_WebFiveTus.entity.auth.Role;
 import com.example.DATN_WebFiveTus.entity.auth.User;
 import com.example.DATN_WebFiveTus.exception.RoleNotFoundException;
 import com.example.DATN_WebFiveTus.exception.UserAlreadyExistsException;
 import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
+import com.example.DATN_WebFiveTus.repository.NhanVienReposity;
 import com.example.DATN_WebFiveTus.repository.UserRepository;
 import com.example.DATN_WebFiveTus.service.AuthService;
 import com.example.DATN_WebFiveTus.service.UserService;
@@ -76,6 +78,8 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private KhachHangRepository khachHangRepository;
 
+    @Autowired
+    private NhanVienReposity nhanVienReposity;
 
     @Override
     public ResponseEntity<ApiResponseDto<?>> signUp(SignUpRequestDto signUpRequestDto)
@@ -86,6 +90,10 @@ public class AuthServiceImpl implements AuthService {
         if (userService.existByUsername(signUpRequestDto.getUsername())) {
             throw new UserAlreadyExistsException("Đăng ký không thành công: Tên người dùng đã tồn tại trong hệ thống.");
         }
+        KhachHang kh = khachHangRepository.findKhachHangBySoDienThoai(signUpRequestDto.getPhoneNumber());
+        if (kh!=null) {
+            throw new UserAlreadyExistsException("Đăng ký không thành công: Số điện thoại đã tồn tại trong hệ thống.");
+        }
 
         User user = createUser(signUpRequestDto);
         userService.save(user);
@@ -93,6 +101,7 @@ public class AuthServiceImpl implements AuthService {
         khachHang.setEmail(signUpRequestDto.getEmail());
         khachHang.setMaKhachHang(signUpRequestDto.getEmail().substring(0, signUpRequestDto.getEmail().indexOf("@")));
         khachHang.setMatKhau(passwordEncoder.encode(signUpRequestDto.getPassword()));
+        khachHang.setSoDienThoai(signUpRequestDto.getPhoneNumber());
         khachHang.setTrangThai("active");
         khachHang.setHoVaTen(signUpRequestDto.getName());
         khachHangRepository.save(khachHang);
@@ -106,16 +115,41 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<ApiResponseDto<?>> signIn(SignInRequestDto signInRequestDto) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(signInRequestDto.getUsername(), signInRequestDto.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
+        if (roles.contains("ROLE_EMPLOYEE")) {
+            NhanVien nv = nhanVienReposity.findByUsername(signInRequestDto.getUsername());
+            if (nv != null && nv.getTrangThai().equals("inactive")) {
+                return ResponseEntity.ok(
+                        ApiResponseDto.builder()
+                                .status(String.valueOf(ResponseStatus.FAIL))
+                                .message("Tài khoản đã dừng hoạt động!")
+                                .response(null)
+                                .build()
+                );
+            }
+        }
+        if (roles.contains("ROLE_USER")) {
+            KhachHang kh = khachHangRepository.findKhachHangByEmail1(signInRequestDto.getUsername()).orElse(null);
+            if (kh != null && kh.getTrangThai().equals("inactive")) {
+                return ResponseEntity.ok(
+                        ApiResponseDto.builder()
+                                .status(String.valueOf(ResponseStatus.FAIL))
+                                .message("Tài khoản đã dừng hoạt động!")
+                                .response(null)
+                                .build()
+                );
+            }
+        }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+
+
 
         SignInResponseDto signInResponseDto = SignInResponseDto.builder()
                 .username(userDetails.getUsername())

@@ -252,6 +252,7 @@ public class SanCaServiceImp implements SanCaService {
                         newSanCa.setGia(sanCaDTO.getGia());
                         newSanCa.setTrangThai("Hoạt động");
                         newSanCa.setDeletedAt(false);
+                        System.out.println("Sân ca new: "+newSanCa);
 
                         // Lưu sanCa vào cơ sở dữ liệu
                         sanCaRepository.save(newSanCa);
