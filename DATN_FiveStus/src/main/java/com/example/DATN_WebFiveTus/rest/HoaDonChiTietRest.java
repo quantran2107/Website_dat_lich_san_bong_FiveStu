@@ -152,4 +152,11 @@ public class HoaDonChiTietRest {
         HoaDonChiTietDTO hoaDonChiTietDTO = hoaDonChiTietService.huyLichDat(id);
         return ResponseEntity.ok(hoaDonChiTietDTO);
     }
+
+    @PutMapping("/update-trang-thai-chi-tiet/{idHoaDonChiTiet}")
+    public ResponseEntity<Void> updateTrangThaiHoaDonChiTiet(@PathVariable Integer idHoaDonChiTiet, @RequestParam String trangThai) {
+        hoaDonChiTietService.updateTrangThaiHoaDonChiTiet(idHoaDonChiTiet, trangThai);
+        return ResponseEntity.ok().build();
+    }
+
 }

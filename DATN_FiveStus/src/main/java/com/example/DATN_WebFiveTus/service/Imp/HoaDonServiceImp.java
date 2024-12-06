@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
+import com.example.DATN_WebFiveTus.config.VNPay.EmailService;
 import com.example.DATN_WebFiveTus.config.security.CookieUtils;
 import com.example.DATN_WebFiveTus.config.security.jwt.JwtUtils;
 import com.example.DATN_WebFiveTus.dto.*;
@@ -75,6 +76,9 @@ public class HoaDonServiceImp implements HoaDonService {
     @Autowired
     private JavaMailSender javaMailSender; // Để gửi email
 
+//    @Autowired
+//    private EmailService emailService;
+
     @Autowired
     private SpringTemplateEngine springTemplateEngine;
 
@@ -114,7 +118,12 @@ public class HoaDonServiceImp implements HoaDonService {
         HoaDon hoaDon = modelMapper.map(hoaDonDTO, HoaDon.class);
         hoaDon.setMaHoaDon(generateMaHoaDon());
         hoaDon.setId(hoaDonDTO.getId());
-        hoaDon.setTrangThai("Chờ thanh toán");
+        // Thiết lập trạng thái dựa trên idNhanVien
+        if (nhanVien != null) {
+            hoaDon.setTrangThai("Chờ thanh toán");
+        } else {
+            hoaDon.setTrangThai("Chờ đặt cọc");
+        }
         Date now = Date.from(Instant.now());
         hoaDon.setKhachHang(khachHang);
         hoaDon.setTongTienSan(hoaDonDTO.getTongTienSan());
@@ -228,6 +237,13 @@ public class HoaDonServiceImp implements HoaDonService {
 
         return new PageImpl<>(hoaDonDTOList, pageable, hoaDonList.size());
     }
+    @Override
+    public void updateTrangThaiHoaDon(Integer idHoaDon, String trangThai) {
+        HoaDon hoaDon = hoaDonRepository.findById(idHoaDon)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn với id " + idHoaDon));
+        hoaDon.setTrangThai(trangThai);
+        hoaDonRepository.save(hoaDon);
+    }
 
     @Override
     public HoaDonDTO huyLichDat(Integer id) {
@@ -237,6 +253,14 @@ public class HoaDonServiceImp implements HoaDonService {
         hoaDonRepository.save(hoaDon);
         return modelMapper.map(hoaDon,HoaDonDTO.class);
     }
+
+//    @Async
+//    @Override
+//    public void sendInvoiceEmail(Integer idHoaDon, List<HoaDonChiTietDTO> hoaDonChiTietList) {
+//        HoaDon hoaDon = hoaDonRepository.findById(idHoaDon)
+//                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn với id " + idHoaDon));
+//        emailService.sendInvoiceEmail(idHoaDon, hoaDonChiTietList, hoaDon);
+//    }
 
     @Override
     public NhanVienDTO getNhanVienTrongCa(HttpServletRequest request) {
