@@ -1,14 +1,10 @@
 $(document).ready(function () {
-    let list = [];
-
-    let apiGetUrl = "http://localhost:8080/lich-lam-viec/hien-thi";
-
+    let selectedDrop ="Chọn ca"
     $('#uploadButton').on('click', function () {
-        // Tạo input file động
+
         const fileInput = $('<input type="file" style="display: none;">');
         $('body').append(fileInput); // Thêm vào DOM
 
-        // Gắn sự kiện khi chọn file
         fileInput.on('change', function () {
             const file = this.files[0];
             if (file) {
@@ -26,37 +22,41 @@ $(document).ready(function () {
                     timeout: 1000000,
                     success: function () {
                         showSuccessToast("Tải lên file thành công!");
+                        loadTable()
                     },
                     error: function () {
                         showErrorToast("Tải lên file thất bại!");
                     }
                 });
             }
-            fileInput.remove(); // Xóa input sau khi xử lý xong
+            fileInput.remove();
         });
 
-        // Kích hoạt input file
         fileInput.click();
     });
 
+    loadForm();
 
-    loadTable('', '', '');
-    $.ajax({
-        url: 'http://localhost:8080/nhan-vien/hien-thi',
-        method: 'GET',
-        success: function(response) {
-            response.forEach(function(nv) {
-                let nvValue = JSON.stringify(nv);
-                let option = $('<option></option>')
-                    .val(nvValue)
-                    .text(nv.hoTen);
-                $('#nhanVienSel').append(option);
+    function loadForm() {
 
-            });
-        },
-        error: function(xhr, status, error) {
-        }
-    });
+        $.ajax({
+            url: 'http://localhost:8080/lich-lam-viec/hien-thi?date=' + (formatDateToYYYYMMDD(new Date())) + '&status=' + "Chọn ca",
+            method: 'GET',
+            success: function (response) {
+                response.forEach(function (nv) {
+                    let nvValue = JSON.stringify(nv);
+                    let option = $('<option></option>')
+                        .val(nvValue)
+                        .text(nv.hoTen);
+                    $('#nhanVienSel').append(option);
+
+                });
+            },
+            error: function (xhr, status, error) {
+            }
+        });
+    }
+
 
     function showSuccessToast(message) {
         Toastify({
@@ -98,97 +98,83 @@ $(document).ready(function () {
         event.preventDefault();
         let selectedStatus = $(this).text().trim();
         $('#actionMenuButton3').text(selectedStatus);
-
-        let key = $('#searchInput').val();
-        let selectedDate = $('#date-input').val();
-        loadTable(key, selectedStatus, selectedDate);
-
+        loadTable();
     });
     $('#date-input').change(function () {
-        let selectedDate = $(this).val();
-        let key = $('#searchInput').val();
-        let selectedValue = $('#actionMenuButton3').text().trim();
-        loadTable(key, selectedValue, selectedDate);
+        loadTable();
     });
     $('#searchInput').on('input', function () {
-        let key = $(this).val().trim();
-        let selectedDate = $('#date-input').val();
-        let selectedValue = $('#actionMenuButton3').text().trim();
-        loadTable(key, selectedValue, selectedDate);
+        loadTable();
     });
-    $('#load').on('click',()=>{
-        $('#actionMenuButton3').text('Tất cả');
+    $('#load').on('click', () => {
+        $('#actionMenuButton3').text('Chọn ca');
         $('#searchInput').val('')
         $('#date-input').val('');
-        loadTable('', '', '');
+        loadTable();
     })
 
-    function loadTable(keyString = '', ca = '', date = '') {
+    function loadRow(list, key) {
+        $('#tbodyContainer').empty();
+        let tbody = ``;
+        if (key !== '') {
+            list = list.filter(lich =>
+                lich["nhanVien"].maNhanVien.toLowerCase().includes(key.toLowerCase()) ||
+                lich["nhanVien"].hoTen.toLowerCase().includes(key.toLowerCase())
+            );
+        }
 
-        let tbody = '';
-        $.getJSON(apiGetUrl, function (data) {
-            list = data;
+        if (list.length === 0) {
+            tbody += `<tr style="cursor: default"><td colspan="8" style="font-size: 18px; padding: 20px">Chưa có dữ liệu</td></tr>`
+            $('#tbodyContainer').html(tbody);
+        } else {
 
-            let today = new Date();
+            list.forEach((lich, index) => {
 
-            let year = today.getFullYear();
-            let month = ('0' + (today.getMonth() + 1)).slice(-2);
-            let day = ('0' + today.getDate()).slice(-2);
-
-            let formattedDate = year + '-' + month + '-' + day;
-            if (keyString !== '' && ca !== '' && date !== '') {
-                list = list.filter(lich => lich["gioBatDau"] === ca && lich["ngay"] === date &&
-                    (lich["nhanVien"].maNhanVien.toLowerCase().includes(keyString.toLowerCase()) ||
-                        lich["nhanVien"].hoTen.toLowerCase().includes(keyString.toLowerCase())));
-            }
-            if (date !== '' && keyString === '' && ca !== '') {
-                list = list.filter(lich => lich["gioBatDau"] === ca && lich["ngay"] === date);
-            }
-            if (date !== '' && keyString === '' && ca === '') {
-                list = list.filter(lich => lich["ngay"] === date);
-            }
-
-            if (date === '' && keyString === '' && ca === '') {
-                list = list.filter(lich => lich["ngay"] === formattedDate
-                );
-            }
-
-            if (date === '' && keyString !== '' & ca !== '') {
-                list = list.filter(lich => lich["ngay"] === formattedDate && lich["gioBatDau"] === ca &&
-                    (lich["nhanVien"].maNhanVien.toLowerCase().includes(keyString.toLowerCase()) ||
-                        lich["nhanVien"].hoTen.toLowerCase().includes(keyString.toLowerCase())));
-            }
-
-            if (date === '' && keyString === '' && ca !== '') {
-                list = list.filter(lich => lich["ngay"] === formattedDate && lich["gioBatDau"] === ca);
-            }
-
-            if (date === '' && keyString !== '' && ca === '') {
-                list = list.filter(lich => lich["ngay"] === formattedDate &&
-                    (lich["nhanVien"].maNhanVien.toLowerCase().includes(keyString.toLowerCase()) ||
-                        lich["nhanVien"].hoTen.toLowerCase().includes(keyString.toLowerCase())));
-            }
-
-            if (list.length === 0) {
-                tbody += `<tr style="cursor: default"><td colspan="8" style="font-size: 18px; padding: 20px">Chưa có dữ liệu</td></tr>`
-                $('#tbodyContainer').html(tbody);
-            } else {
-                list.forEach((lich, index) => {
-                    let ngayFormatted = new Date(lich["ngay"]).toLocaleDateString('vi-VN');
-                    let gioBd = lich["gioBatDau"]=== null?"--:--":lich["gioBatDau"].slice(0, -3);
-                    let giokt = lich["gioKetThuc"]=== null?"--:--":lich["gioKetThuc"].slice(0, -3);
-                    tbody += `<tr style="cursor: default">
+                let ngayFormatted = new Date(lich["ngay"]).toLocaleDateString('vi-VN');
+                let gioBd = lich["gioBatDau"] === null ? "--:--" : lich["gioBatDau"].slice(0, -3);
+                let giokt = lich["gioKetThuc"] === null ? "--:--" : lich["gioKetThuc"].slice(0, -3);
+                tbody += `<tr style="cursor: default">
                             <td class="special-td">${index + 1}</td>
                             <td class="special-td">${lich["nhanVien"].maNhanVien}</td>
                             <td class="special-td">${lich["nhanVien"].hoTen}</td>                                                
                             <td class="special-td">${lich["viTri"]}</td>
-                            <td class="special-td">${lich["gioBatDau"] > '00:30:00' &&  lich["gioKetThuc"] <'13:00:00'? 'Ca sáng' : 'Ca chiều'}</td>
+                            <td class="special-td">${lich["gioBatDau"] > '00:30:00' && lich["gioKetThuc"] < '13:00:00' ? 'Ca sáng' : 'Ca chiều'}</td>
                             <td class="special-td">${gioBd}</td>
                             <td class="special-td">${giokt}</td>
                             <td class="special-td">${ngayFormatted}</td>
                         </tr>`;
-                });
-                $('#tbodyContainer').html(tbody);
+            });
+            $('#tbodyContainer').html(tbody);
+        }
+    }
+
+    function formatDateToYYYYMMDD(date) {
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+
+        month = month < 10 ? '0' + month : month;
+        day = day < 10 ? '0' + day : day;
+
+        return year + '-' + month + '-' + day;
+    }
+
+    loadTable();
+
+    function loadTable() {
+        let selected = $('#actionMenuButton3').text().trim()
+        console.log(selected)
+        let today = new Date();
+        let day = $('#date-input').val();
+        let key = $('#searchInput').val().trim();
+
+        $.ajax({
+            url: 'http://localhost:8080/lich-lam-viec/hien-thi?date=' + (day === "" ? formatDateToYYYYMMDD(today) : day) + "&status=" + selected,
+            method: 'GET',
+            success: function (response) {
+                loadRow(response, key)
+            },
+            error: function (xhr, status, error) {
             }
         });
     }
