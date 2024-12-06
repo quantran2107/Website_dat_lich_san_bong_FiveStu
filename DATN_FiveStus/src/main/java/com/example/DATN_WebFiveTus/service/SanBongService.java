@@ -23,6 +23,8 @@ public interface SanBongService {
 
     List<SanBongDTO> getAllJoinFetch();
 
+    List<SanBongDTO> getAllJoinFetchActive();
+
     void deletedAt(Integer id);
 
     Page<SanBongDTO> pages(Integer pageNo, Integer pageSize);

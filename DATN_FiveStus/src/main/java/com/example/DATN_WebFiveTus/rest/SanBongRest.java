@@ -114,5 +114,9 @@ public class SanBongRest {
         }
     }
 
+    @GetMapping("hien-thi-active")
+    public ResponseEntity<List> getAllActive() {
+        return ResponseEntity.ok(sanBongService.getAllJoinFetchActive());
+    }
 
 }
