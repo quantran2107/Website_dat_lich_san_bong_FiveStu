@@ -27,5 +27,12 @@ public class SignUpRequestDto {
     @Size(max = 20, message = "Password can have have atmost 20 characters!")
     private String password;
 
+    @NotBlank(message = "Name is required!")
+    @Size(min= 5, message = "Name must have atleast 3 characters!")
+    @Size(max= 50, message = "Name can have have atmost 50 characters!")
+    private String name;
+
+    private String phoneNumber;
+
     private Set<String> roles;
 }

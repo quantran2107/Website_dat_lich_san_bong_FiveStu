@@ -386,12 +386,14 @@
         const startIndex = currentPage * pageSize; // Tính số thứ tự bắt đầu của trang hiện tại
 
         khachHangData.forEach((khachHang, index) => {
+            const hoVaTen = khachHang.hoVaTen || 'Không có';
+            const soDienThoai = khachHang.soDienThoai || 'Không có';
             const rowHTML = `
             <tr>
-                <td>${startIndex + index + 1}</td> <!-- Tính số thứ tự -->
-                <td>${khachHang.hoVaTen}</td>
+                <td>${startIndex + index + 1}</td>
+                <td>${hoVaTen}</td>
                 <td>${khachHang.email}</td>
-                <td>${khachHang.soDienThoai}</td>
+                 <td>${soDienThoai}</td>
                 <td>${new Date(khachHang.createdAt).toLocaleDateString()}</td>
                 <td>${khachHang.gioiTinh ? 'Nam' : 'Nữ'}</td>
                 <td>

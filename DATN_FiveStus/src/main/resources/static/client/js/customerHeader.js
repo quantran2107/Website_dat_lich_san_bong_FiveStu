@@ -69,18 +69,10 @@ $(document).ready(function () {
                <li class="nav-item">
                     <a class="nav-link me-5" href="/khach-hang/dat-san" >Đặt sân</a>
                 </li>
-                <li class="nav-item dropdown">
-                  <a class="nav-link me-5 dropdown-toggle border-0" th:href="@{#}" data-bs-toggle="dropdown"
-                     aria-expanded="false">Danh sách đặt lịch</a>
-                  <ul class="dropdown-menu fw-bold">
-                    <li>
-                      <a th:href="@{#}" class="dropdown-item">Về chúng tôi</a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="/history-book">Danh sách của bạn</a>
-                    </li>
-                  </ul>
+                <li class="nav-item">
+                    <a class="nav-link me-5" href="/history-book" >Danh sách đặt lịch</a>
                 </li>
+               
             `;
             userMenuLink.parent().append(dropdownHtml);
             userMenuLink.attr('data-bs-toggle', 'dropdown');

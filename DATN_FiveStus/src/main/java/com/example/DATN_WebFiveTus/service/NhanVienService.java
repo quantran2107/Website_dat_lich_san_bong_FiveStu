@@ -15,7 +15,7 @@ public interface NhanVienService {
 
     Boolean updateNew(NhanVienDTO nv);
 
-    Boolean addNew(NhanVienDTO nv) throws RoleNotFoundException;
+    Object addNew(NhanVienDTO nv) throws RoleNotFoundException;
 
     List<NhanVienDTO> getActiveNV();
 

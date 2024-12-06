@@ -58,30 +58,8 @@ public class KhachHangController {
         if (id != null) {
             // Lấy thông tin khách hàng theo id
             KhachHangDTO khachHangDTO = khachHangService.findById(id);
-
-            // Tạo đối tượng Pageable để phân trang địa chỉ khách hàng
-            Pageable pageable = PageRequest.of(pageDiaChi, sizeDiaChi, Sort.by("createdAt").descending()); // Sử dụng pageDiaChi và sizeDiaChi từ request
-
-            // Lấy tất cả địa chỉ của khách hàng theo id mà không lọc deletedAt
-            Page<DiaChiKhachHangDTO> diaChiPage = diaChiKhachHangService.findByIdDC(id, pageable);
-
-            // Lọc các địa chỉ có deleteAt = false (chỉ lấy những địa chỉ không bị xóa)
-            List<DiaChiKhachHangDTO> diaChiList = diaChiPage.getContent().stream()
-                    .filter(diaChi -> Boolean.FALSE.equals(diaChi.getDeletedAt()))  // Kiểm tra điều kiện deleteAt = false
-                    .collect(Collectors.toList());
-
-            // Kiểm tra nếu danh sách địa chỉ rỗng và trang hiện tại > 0, thì chuyển đến trang trước
-            if (diaChiList.isEmpty() && pageDiaChi > 0) {
-                return "redirect:/quan-ly-khach-hang-detail?id=" + id + "&page=" + (pageDiaChi - 1); // Sửa đổi thành pageDiaChi - 1
-            }
-
-            // Tính tổng số trang dựa trên số lượng tất cả các địa chỉ không bị xóa (không phải số lượng đã lọc)
-            int totalPages = (int) Math.ceil((double) diaChiPage.getTotalElements() / sizeDiaChi);
-
             // Thêm các đối tượng vào model để truyền dữ liệu vào view
             model.addAttribute("khachHang", khachHangDTO);
-            model.addAttribute("diaChiList", diaChiList);
-            model.addAttribute("totalPages", totalPages);
             model.addAttribute("currentPage", pageDiaChi);
             model.addAttribute("id", id);
             model.addAttribute("sizeDiaChi", sizeDiaChi);
