@@ -112,15 +112,49 @@ $(document).ready(function () {
             timeout: 1000000,
             success: function () {
                 showSuccessToast("Tải lên file thành công!")
-                $('#btnSubmitFile').prop('disabled', false);
-                $('#file').val(''); // Xóa giá trị của input file
-                $('#labelFile').html('<label for="file" style="margin: 15px;"><i class="fas fa-file-excel fa-2x"></i></label>');
+                // $('#btnSubmitFile').prop('disabled', false);
+                // $('#file').val(''); // Xóa giá trị của input file
+                // $('#labelFile').html('<label for="file" style="margin: 15px;"><i class="fas fa-file-excel fa-2x"></i></label>');
+                renderFaker();
             },
             error: function () {
                 showErrorToast("Tải lên file thất bại!")
                 $('#btnSubmitFile').prop('disabled', false);
             }
         });
+    }
+    function renderFaker(){
+
+        $('#daDung').empty();
+
+        let html =`<div class="col ml-auto">
+                  <button class="btn btn-outline-success" id="load" style="float: right;" ><i
+                            class="fas fa-sync" title="Tải lại"></i></button>
+                          <button class="btn btn-outline-success" id="btnExcelMau"
+                                    style="float: right;margin-right: 8px;padding-bottom: 0px">
+                                 <label>Mẫu excel</label> <i
+                                          class="fas fa-file-excel fa-lg"></i></button>
+                          <div style="float: right;padding-top: 0">
+                                 <input accept=".xlsx, .xls" id="file" name="file" style="width: 0.1px;
+                                                                                            height: 0.1px;
+                                                                                            opacity: 0;
+                                                                                             overflow: hidden;
+                                                                                             position: absolute;
+                                                                                               z-index: -1;"
+                                                                       type="file"/>
+                                  <div id="labelFile"
+                                        class="btn btn-outline-success"
+                                        style="padding: 0px; border-radius: 5px; margin-right: 10px;margin-top: 0px" title="Chọn file">
+                                         <label for="file" style="margin: 7px"><i
+                                               class="fas fa-file-excel fa-lg"></i></label>
+                                          </div>
+                                    <button class="btn btn-outline-success" id="btnSubmitFile"
+                                              style="display: none;padding: 6px; border-radius: 5px; margin-right: 10px; margin-bottom: 15px">
+                                                                    Gửi file
+                                      </button>
+                </div>`;
+
+        $('#daDung').html(html);
     }
 
     $('#status-select .dropdown-item').click(function (event) {
@@ -204,8 +238,8 @@ $(document).ready(function () {
             } else {
                 list.forEach((lich, index) => {
                     let ngayFormatted = new Date(lich["ngay"]).toLocaleDateString('vi-VN');
-                    let gioBd = lich["gioBatDau"].slice(0, -3);
-                    let giokt = lich["gioKetThuc"].slice(0, -3);
+                    let gioBd = lich["gioBatDau"]=== null?"--:--":lich["gioBatDau"].slice(0, -3);
+                    let giokt = lich["gioKetThuc"]=== null?"--:--":lich["gioKetThuc"].slice(0, -3);
                     tbody += `<tr style="cursor: default">
                             <td class="special-td">${index + 1}</td>
                             <td class="special-td">${lich["nhanVien"].maNhanVien}</td>

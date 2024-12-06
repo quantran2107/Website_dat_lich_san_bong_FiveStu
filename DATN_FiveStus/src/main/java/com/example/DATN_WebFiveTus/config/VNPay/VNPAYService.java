@@ -64,8 +64,6 @@ public class VNPAYService {
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
-        // Log kiểm tra
-        System.out.println("vnp_OrderInfo: " + vnp_Params.get("vnp_OrderInfo"));
 
         // Xây dựng hash data và query
         List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());

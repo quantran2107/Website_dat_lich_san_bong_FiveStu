@@ -1,5 +1,8 @@
 package com.example.DATN_WebFiveTus.config.VNPay;
 
+import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
+import com.example.DATN_WebFiveTus.service.HoaDonChiTietService;
+import com.example.DATN_WebFiveTus.service.HoaDonService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +14,22 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 @Controller
 //@RestController
 @RequestMapping("/api/vnpay")
 public class VNPAYController {
+
     @Autowired
     private VNPAYService vnPayService;
+
+    @Autowired
+    private HoaDonService hoaDonService;
+
+    @Autowired
+    private HoaDonChiTietService hoaDonChiTietService;
 
     // Chuyển hướng người dùng đến cổng thanh toán VNPAY
     @PostMapping("/submitOrder")
@@ -37,7 +49,28 @@ public class VNPAYController {
     public String paymentCompleted(HttpServletRequest request, Model model) {
         int paymentStatus = vnPayService.orderReturn(request);
 
-        String orderInfo = request.getParameter("vnp_OrderInfo");
+        // Lấy thông tin vnp_OrderInfo
+        String orderInfoRaw = request.getParameter("vnp_OrderInfo"); // Dạng "Thanh toan tien coc dat lich san bong <id>"
+        Integer idHoaDon = null;
+
+        try {
+            // Tách id từ chuỗi orderInfoRaw
+            if (orderInfoRaw != null && orderInfoRaw.contains(" ")) {
+                String[] parts = orderInfoRaw.split(" ");
+                idHoaDon = Integer.parseInt(parts[parts.length - 1]); // Lấy phần cuối cùng
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Error parsing idHoaDon from vnp_OrderInfo: " + e.getMessage());
+        }
+        System.out.println(idHoaDon);
+
+        // Nếu không lấy được id hóa đơn, trả về lỗi
+        if (idHoaDon == null) {
+            System.err.println("Invalid vnp_OrderInfo format: " + orderInfoRaw);
+            return "/orderFail";
+        }
+
+        // Xử lý các thông tin khác
         String paymentTime = request.getParameter("vnp_PayDate");
         String transactionId = request.getParameter("vnp_TransactionNo");
         String totalPrice = request.getParameter("vnp_Amount");
@@ -51,7 +84,6 @@ public class VNPAYController {
             System.err.println("Error parsing totalPrice: " + e.getMessage());
         }
 
-        // Chuyển đổi `vnp_PayDate` từ chuỗi sang định dạng ngày tháng năm
         String formattedDate = "";
         try {
             if (paymentTime != null) {
@@ -64,11 +96,27 @@ public class VNPAYController {
             System.err.println("Error parsing paymentTime: " + e.getMessage());
         }
 
+        // Cập nhật trạng thái hóa đơn và hóa đơn chi tiết
+        if (paymentStatus == 1) { // Thanh toán thành công
+            hoaDonService.updateTrangThaiHoaDon(idHoaDon, "Chờ thanh toán");
+            List<HoaDonChiTietDTO> hoaDonChiTietList = hoaDonChiTietService.searchFromHoaDon(idHoaDon);
+            for (HoaDonChiTietDTO chiTiet : hoaDonChiTietList) {
+                hoaDonChiTietService.updateTrangThaiHoaDonChiTiet(chiTiet.getId(), "Chờ nhận sân");
+            }
+        } else { // Thanh toán thất bại
+            hoaDonService.updateTrangThaiHoaDon(idHoaDon, "Đã huỷ");
+            List<HoaDonChiTietDTO> hoaDonChiTietList = hoaDonChiTietService.searchFromHoaDon(idHoaDon);
+            for (HoaDonChiTietDTO chiTiet : hoaDonChiTietList) {
+                hoaDonChiTietService.updateTrangThaiHoaDonChiTiet(chiTiet.getId(), "Đã huỷ");
+            }
+        }
+
         // Thêm dữ liệu vào model
-        model.addAttribute("orderId", orderInfo);
+        model.addAttribute("orderId", idHoaDon);
         model.addAttribute("totalPrice", totalAmount);
-        model.addAttribute("paymentTime", formattedDate); // Truyền thời gian đã được format
+        model.addAttribute("paymentTime", formattedDate);
         model.addAttribute("transactionId", transactionId);
+
         return paymentStatus == 1 ? "/orderSuccess" : "/orderFail";
     }
 

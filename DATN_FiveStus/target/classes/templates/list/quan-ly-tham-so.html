@@ -15,7 +15,7 @@
 
     #search {
         height: 38px; /* Đặt chiều cao cho ô input */
-        width: 250px; /* Đặt chiều rộng cho ô input */
+        width: 400px; /* Đặt chiều rộng cho ô input */
     }
 
     /* Tùy chỉnh bảng trong thẻ card */
@@ -661,10 +661,10 @@
             <td>${parameter.trangThai ? 'Kích hoạt' : 'Vô hiệu hóa'}</td>
             <td>
 
-            <button type="button" class="btn btn-warning btn-sm edit-button"
+              <button class="btn btn-sm btn-outline-success edit-button" type="button" title="Sửa""
                     data-bs-toggle="modal" data-bs-target="#editModal"
                     data-id="${parameter.id}">
-                <i class="bi bi-pencil-square"></i>
+                      <span class="fe fe-edit-3"></span>
             </button>
 
             <label class="switch">

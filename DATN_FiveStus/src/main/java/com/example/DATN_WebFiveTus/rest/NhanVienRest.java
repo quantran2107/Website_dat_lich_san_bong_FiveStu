@@ -42,7 +42,7 @@ public class NhanVienRest {
     }
 
     @PostMapping("add")
-    public ResponseEntity<Boolean> add(@RequestBody NhanVienDTO nv) throws MessagingException, RoleNotFoundException {
+    public ResponseEntity<?> add(@RequestBody NhanVienDTO nv) throws MessagingException, RoleNotFoundException {
         return ResponseEntity.ok(nhanVienService.addNew(nv));
     }
     @PostMapping("upload")

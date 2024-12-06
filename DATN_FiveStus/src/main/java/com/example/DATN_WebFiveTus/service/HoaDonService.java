@@ -27,9 +27,11 @@ public interface HoaDonService {
 
     Page<HoaDonDTO> phanTrang(Pageable pageable);
 
-    void delete (Integer id);
+    void delete(Integer id);
 
     void deletedAt(Integer id);
+
+    void updateTrangThaiHoaDon(Integer idHoaDon, String trangThai);
 
     List<HoaDonDTO> getHDforNV(int id);
 

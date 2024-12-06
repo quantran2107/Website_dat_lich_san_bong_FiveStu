@@ -235,6 +235,7 @@ CREATE TABLE hoa_don_chi_tiet (
   id INT AUTO_INCREMENT PRIMARY KEY,
   id_hoa_don INT NULL,
   id_san_ca INT NULL,
+  id_nhan_vien INT  NULL,
   id_phieu_giam_gia INT  NULL,
   ma_hoa_don_chi_tiet VARCHAR(100)  NULL,
   tong_tien DECIMAL(10, 2) NULL,
