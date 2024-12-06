@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public interface SanBongRepository extends JpaRepository<SanBong, Integer> {
 
-    @Query("SELECT sb FROM SanBong sb where sb.deletedAt=false ")
+    @Query("SELECT sb FROM SanBong sb where sb.deletedAt=false")
     List<SanBong> getAllJoinFetch();
 
     @Query("SELECT sb FROM SanBong sb where sb.deletedAt=false")
@@ -57,4 +57,6 @@ public interface SanBongRepository extends JpaRepository<SanBong, Integer> {
     @Query("update SanBong sb set sb.trangThai = :status where sb.id = :id")
     void updateTrangThai(Integer id, String status);
 
+    @Query("SELECT sb FROM SanBong sb where sb.deletedAt=false AND sb.trangThai like '%Hoạt động%'")
+    List<SanBong> getAllJoinFetchActive();
 }

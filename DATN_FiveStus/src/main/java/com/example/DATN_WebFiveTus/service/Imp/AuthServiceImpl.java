@@ -90,6 +90,10 @@ public class AuthServiceImpl implements AuthService {
         if (userService.existByUsername(signUpRequestDto.getUsername())) {
             throw new UserAlreadyExistsException("Đăng ký không thành công: Tên người dùng đã tồn tại trong hệ thống.");
         }
+        KhachHang kh = khachHangRepository.findKhachHangBySoDienThoai(signUpRequestDto.getPhoneNumber());
+        if (kh!=null) {
+            throw new UserAlreadyExistsException("Đăng ký không thành công: Số điện thoại đã tồn tại trong hệ thống.");
+        }
 
         User user = createUser(signUpRequestDto);
         userService.save(user);
@@ -97,6 +101,7 @@ public class AuthServiceImpl implements AuthService {
         khachHang.setEmail(signUpRequestDto.getEmail());
         khachHang.setMaKhachHang(signUpRequestDto.getEmail().substring(0, signUpRequestDto.getEmail().indexOf("@")));
         khachHang.setMatKhau(passwordEncoder.encode(signUpRequestDto.getPassword()));
+        khachHang.setSoDienThoai(signUpRequestDto.getPhoneNumber());
         khachHang.setTrangThai("active");
         khachHang.setHoVaTen(signUpRequestDto.getName());
         khachHangRepository.save(khachHang);
@@ -120,6 +125,18 @@ public class AuthServiceImpl implements AuthService {
         if (roles.contains("ROLE_EMPLOYEE")) {
             NhanVien nv = nhanVienReposity.findByUsername(signInRequestDto.getUsername());
             if (nv != null && nv.getTrangThai().equals("inactive")) {
+                return ResponseEntity.ok(
+                        ApiResponseDto.builder()
+                                .status(String.valueOf(ResponseStatus.FAIL))
+                                .message("Tài khoản đã dừng hoạt động!")
+                                .response(null)
+                                .build()
+                );
+            }
+        }
+        if (roles.contains("ROLE_USER")) {
+            KhachHang kh = khachHangRepository.findKhachHangByEmail1(signInRequestDto.getUsername()).orElse(null);
+            if (kh != null && kh.getTrangThai().equals("inactive")) {
                 return ResponseEntity.ok(
                         ApiResponseDto.builder()
                                 .status(String.valueOf(ResponseStatus.FAIL))
