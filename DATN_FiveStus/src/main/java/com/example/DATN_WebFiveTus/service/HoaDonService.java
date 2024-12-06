@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.service;
 
+import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
 import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +31,8 @@ public interface HoaDonService {
     void delete(Integer id);
 
     void deletedAt(Integer id);
+
+//    void sendInvoiceEmail(Integer idHoaDon, List<HoaDonChiTietDTO> hoaDonChiTietList);
 
     void updateTrangThaiHoaDon(Integer idHoaDon, String trangThai);
 

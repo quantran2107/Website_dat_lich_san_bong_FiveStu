@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
+import com.example.DATN_WebFiveTus.config.VNPay.EmailService;
 import com.example.DATN_WebFiveTus.config.security.CookieUtils;
 import com.example.DATN_WebFiveTus.config.security.jwt.JwtUtils;
 import com.example.DATN_WebFiveTus.dto.*;
@@ -74,6 +75,9 @@ public class HoaDonServiceImp implements HoaDonService {
     }
     @Autowired
     private JavaMailSender javaMailSender; // Để gửi email
+
+//    @Autowired
+//    private EmailService emailService;
 
     @Autowired
     private SpringTemplateEngine springTemplateEngine;
@@ -249,6 +253,14 @@ public class HoaDonServiceImp implements HoaDonService {
         hoaDonRepository.save(hoaDon);
         return modelMapper.map(hoaDon,HoaDonDTO.class);
     }
+
+//    @Async
+//    @Override
+//    public void sendInvoiceEmail(Integer idHoaDon, List<HoaDonChiTietDTO> hoaDonChiTietList) {
+//        HoaDon hoaDon = hoaDonRepository.findById(idHoaDon)
+//                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn với id " + idHoaDon));
+//        emailService.sendInvoiceEmail(idHoaDon, hoaDonChiTietList, hoaDon);
+//    }
 
     @Override
     public NhanVienDTO getNhanVienTrongCa(HttpServletRequest request) {
