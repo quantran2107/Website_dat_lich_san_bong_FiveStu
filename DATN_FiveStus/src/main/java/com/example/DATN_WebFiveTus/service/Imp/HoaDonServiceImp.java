@@ -8,16 +8,9 @@ import com.example.DATN_WebFiveTus.entity.HoaDon;
 import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
 import com.example.DATN_WebFiveTus.entity.KhachHang;
 import com.example.DATN_WebFiveTus.entity.NhanVien;
-import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
-import com.example.DATN_WebFiveTus.repository.HoaDonChiTietRepository;
-import com.example.DATN_WebFiveTus.repository.HoaDonRepository;
-import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
-import com.example.DATN_WebFiveTus.repository.NhanVienReposity;
-import com.example.DATN_WebFiveTus.repository.PhieuGiamGiaRepository;
+import com.example.DATN_WebFiveTus.repository.*;
 import com.example.DATN_WebFiveTus.service.HoaDonService;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +19,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.context.Context;
-import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.security.SecureRandom;
 import java.time.Instant;
@@ -47,8 +35,6 @@ import java.util.stream.Collectors;
 @Service
 public class HoaDonServiceImp implements HoaDonService {
 
-    private HoaDonRepository hoaDonRepository;
-
     @Autowired
     private HoaDonChiTietRepository hoaDonChiTietRepository;
 
@@ -62,25 +48,22 @@ public class HoaDonServiceImp implements HoaDonService {
     private KhachHangRepository khachHangRepository;
 
     private ModelMapper modelMapper;
-    @Autowired
-    private HoaDonService hoaDonService;
+
+    private final EmailService emailService;
+
+    private final HoaDonRepository hoaDonRepository;
 
     @Autowired
-    public HoaDonServiceImp(HoaDonRepository hoaDonRepository, NhanVienReposity nhanVienReposity, PhieuGiamGiaRepository phieuGiamGiaRepository, KhachHangRepository khachHangRepository, ModelMapper modelMapper) {
-        this.hoaDonRepository = hoaDonRepository;
+    public HoaDonServiceImp(NhanVienReposity nhanVienReposity,
+                            PhieuGiamGiaRepository phieuGiamGiaRepository, KhachHangRepository khachHangRepository,
+                            HoaDonRepository hoaDonRepository, EmailService emailService,ModelMapper modelMapper) {
         this.nhanVienReposity = nhanVienReposity;
         this.phieuGiamGiaRepository = phieuGiamGiaRepository;
         this.khachHangRepository = khachHangRepository;
+        this.hoaDonRepository = hoaDonRepository;
+        this.emailService = emailService;
         this.modelMapper = modelMapper;
     }
-    @Autowired
-    private JavaMailSender javaMailSender; // Để gửi email
-
-//    @Autowired
-//    private EmailService emailService;
-
-    @Autowired
-    private SpringTemplateEngine springTemplateEngine;
 
     @Override
     public List<HoaDonDTO> getAll() {
@@ -254,13 +237,11 @@ public class HoaDonServiceImp implements HoaDonService {
         return modelMapper.map(hoaDon,HoaDonDTO.class);
     }
 
-//    @Async
-//    @Override
-//    public void sendInvoiceEmail(Integer idHoaDon, List<HoaDonChiTietDTO> hoaDonChiTietList) {
-//        HoaDon hoaDon = hoaDonRepository.findById(idHoaDon)
-//                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn với id " + idHoaDon));
-//        emailService.sendInvoiceEmail(idHoaDon, hoaDonChiTietList, hoaDon);
-//    }
+    @Async
+    @Override
+    public void sendInvoiceEmail(HoaDonDTO hoaDonDTO, List<HoaDonChiTietDTO> hoaDonChiTietList) {
+        emailService.sendInvoiceEmail(hoaDonDTO, hoaDonChiTietList);
+    }
 
     @Override
     public NhanVienDTO getNhanVienTrongCa(HttpServletRequest request) {

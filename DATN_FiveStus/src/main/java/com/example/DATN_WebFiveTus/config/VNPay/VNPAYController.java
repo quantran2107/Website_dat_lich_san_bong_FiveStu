@@ -1,9 +1,9 @@
 package com.example.DATN_WebFiveTus.config.VNPay;
 
 import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
+import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.service.HoaDonChiTietService;
 import com.example.DATN_WebFiveTus.service.HoaDonService;
-import com.example.DATN_WebFiveTus.service.Imp.HoaDonServiceImp;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -105,7 +105,14 @@ public class VNPAYController {
         if (paymentStatus == 1) { // Thanh toán thành công
             hoaDonService.updateTrangThaiHoaDon(idHoaDon, "Chờ thanh toán");
             List<HoaDonChiTietDTO> hoaDonChiTietList = hoaDonChiTietService.searchFromHoaDon(idHoaDon);
-//            hoaDonService.sendInvoiceEmail(idHoaDon, hoaDonChiTietList);
+
+            HoaDonDTO hoaDonDTO = hoaDonService.getOne(idHoaDon);
+            if (hoaDonDTO.getHoVaTenKhachHang() == null || hoaDonDTO.getEmailKhachHang() == null) {
+                throw new RuntimeException("Thông tin khách hàng không tồn tại.");
+            }
+            System.out.println(hoaDonDTO);
+            System.out.println(hoaDonChiTietList);
+            hoaDonService.sendInvoiceEmail(hoaDonDTO, hoaDonChiTietList);
             for (HoaDonChiTietDTO chiTiet : hoaDonChiTietList) {
                 hoaDonChiTietService.updateTrangThaiHoaDonChiTiet(chiTiet.getId(), "Chờ nhận sân");
             }
