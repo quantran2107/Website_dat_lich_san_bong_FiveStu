@@ -37,9 +37,11 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.SecureRandom;
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -296,8 +298,12 @@ public class NhanVienServiceImp implements NhanVienService {
         int randomNumber = random.nextInt(1000);
 
         String username = lastName + initials.toString() + randomNumber;
+        String normalized = Normalizer.normalize(username, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        String result = pattern.matcher(normalized).replaceAll("");
+        result = result.replace("đ", "d").replace("Đ", "D");
 
-        return username;
+        return result;
     }
 
     private void createUser(NhanVien nhanVien) throws RoleNotFoundException {
