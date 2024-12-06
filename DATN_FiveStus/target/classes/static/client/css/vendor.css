@@ -7066,6 +7066,15 @@ textarea.form-control-lg {
     }
 }
 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
 @media (max-width: 767.98px) {
     .modal-fullscreen-md-down {
         width: 100vw;
