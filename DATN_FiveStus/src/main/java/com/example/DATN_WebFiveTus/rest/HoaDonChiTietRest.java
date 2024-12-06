@@ -64,7 +64,6 @@ public class HoaDonChiTietRest {
         return ResponseEntity.ok(hoaDonChiTietDTO);
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         hoaDonChiTietService.updateTrangThai(id);
