@@ -69,7 +69,7 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
     @Modifying
     @Transactional
     @Query("update HoaDonChiTiet hdct set hdct.trangThai='Đang hoạt động'  where hdct.id=:id")
-    void  updateTrangThai(Integer id);
+    void updateTrangThai(Integer id);
 
     @Modifying
     @Transactional

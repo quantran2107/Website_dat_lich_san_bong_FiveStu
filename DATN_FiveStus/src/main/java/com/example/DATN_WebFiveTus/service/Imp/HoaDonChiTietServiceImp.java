@@ -35,6 +35,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
     private KhachHangRepository khachHangRepository;
 
+    @Autowired
     private NhanVienReposity nhanVienReposity;
 
     private SanCaRepository sanCaRepository;
@@ -113,7 +114,21 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
     @Override
     public HoaDonChiTietDTO update(Integer id, HoaDonChiTietDTO hoaDonChiTietDTO) {
-        return null;
+        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hóa đơn chi tiết không tồn tại với ID: " + id));
+
+        NhanVien nhanVien = nhanVienReposity.findById(hoaDonChiTietDTO.getIdNhanVien())
+                .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại với ID: " + hoaDonChiTietDTO.getIdNhanVien()));
+
+        hoaDonChiTiet.setNhanVien(nhanVien);
+        hoaDonChiTiet.setTongTien(hoaDonChiTietDTO.getTongTien());
+        hoaDonChiTiet.setTienGiamGia(hoaDonChiTietDTO.getTienGiamGia());
+        hoaDonChiTiet.setTongTienThucTe(hoaDonChiTietDTO.getTongTienThucTe());
+        hoaDonChiTiet.setTrangThai("Đã thanh toán");
+
+        HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
+
+        return modelMapper.map(hoaDonChiTietSave, HoaDonChiTietDTO.class);
     }
 
     @Override

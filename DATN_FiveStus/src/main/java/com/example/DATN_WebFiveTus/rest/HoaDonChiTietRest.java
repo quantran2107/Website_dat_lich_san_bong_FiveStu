@@ -64,7 +64,6 @@ public class HoaDonChiTietRest {
         return ResponseEntity.ok(hoaDonChiTietDTO);
     }
 
-
     @PutMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id) {
         hoaDonChiTietService.updateTrangThai(id);
@@ -157,6 +156,13 @@ public class HoaDonChiTietRest {
     public ResponseEntity<Void> updateTrangThaiHoaDonChiTiet(@PathVariable Integer idHoaDonChiTiet, @RequestParam String trangThai) {
         hoaDonChiTietService.updateTrangThaiHoaDonChiTiet(idHoaDonChiTiet, trangThai);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<HoaDonChiTietDTO> updateHoaDonChiTiet(@PathVariable Integer id,
+                                                                @RequestBody HoaDonChiTietDTO hoaDonChiTietDTO) {
+        HoaDonChiTietDTO updatedHoaDonChiTiet = hoaDonChiTietService.update(id, hoaDonChiTietDTO);
+        return ResponseEntity.ok(updatedHoaDonChiTiet);
     }
 
 }
