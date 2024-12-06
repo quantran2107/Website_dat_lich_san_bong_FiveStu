@@ -30,19 +30,15 @@
         .content p {
             text-align: center; /* Căn giữa đoạn văn */
         }
+        .content .content1 p{
+            text-align: start;
+        }
         .footer {
             background-color: #f1f1f1;
             padding: 10px;
             text-align: center;
             border-bottom-left-radius: 5px;
             border-bottom-right-radius: 5px;
-        }
-        ul {
-            list-style-type: none; /* Loại bỏ dấu chấm trong danh sách */
-            padding: 0;
-        }
-        ul li {
-            margin-bottom: 5px;
         }
         table {
             width: 100%;
@@ -68,13 +64,13 @@
     <div class="content">
         <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi. Dưới đây là thông tin hóa đơn của bạn:</p>
         <h3>Thông Tin Khách Hàng</h3>
-        <ul>
-            <li th:text="'Tên: ' + ${hoaDon.hoVaTenKhachHang}">Tên khách hàng</li>
-            <li th:text="'Số điện thoại: ' + ${hoaDon.soDienThoaiKhachHang}">Số điện thoại</li>
-            <li th:text="'Email: ' + ${hoaDon.emailKhachHang}">Email</li>
-            <li th:text="'Thời gian đặ: ' + ${hoaDon.ngayTao}">Thời gian đặt</li>
-            <li th:text="'Mã hoá đơn: ' + ${hoaDon.maHoaDon}">Mã hoá đơn</li>
-        </ul>
+            <div class="content1" style="text-align: start">
+                <p th:text="'Tên: ' + ${hoaDon.hoVaTenKhachHang}">Tên khách hàng</p>
+                <p th:text="'Số điện thoại: ' + ${hoaDon.soDienThoaiKhachHang}">Số điện thoại</p>
+                <p th:text="'Email: ' + ${hoaDon.emailKhachHang}">Email</p>
+                <p th:text="'Thời gian đặ: ' + ${hoaDon.ngayTao}">Thời gian đặt</p>
+                <p th:text="'Mã hoá đơn: ' + ${hoaDon.maHoaDon}">Mã hoá đơn</p>
+            </div>
         <h3>Thông Tin Sân Bóng</h3>
         <table>
             <thead>
@@ -89,9 +85,9 @@
             <tbody>
             <tr th:each="chiTiet, stat : ${chiTietHoaDon}">
                 <td th:text="${stat.index + 1}">1</td>
-                <td th:text="${chiTiet.maHoaDonChiTiet}">Mã/td>
+                <td th:text="${chiTiet.maHoaDonChiTiet}">Mã</td>
                 <td th:text="${chiTiet.tenSanBong}">Tên sân</td>
-                <td th:text="${chiTiet.thoiGianBatDauCa + ' - ' + chiTiet.thoiGianKetThucCa}">Giờ</td>
+                <td th:text="${#strings.substringAfter(chiTiet.thoiGianBatDauCa, 'T') + ' - ' + #strings.substringAfter(chiTiet.thoiGianKetThucCa, 'T')}">Giờ</td>
                 <td th:text="${chiTiet.tongTien}">Giá</td>
             </tr>
             </tbody>
