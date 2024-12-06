@@ -134,6 +134,18 @@ public class AuthServiceImpl implements AuthService {
                 );
             }
         }
+        if (roles.contains("ROLE_USER")) {
+            KhachHang kh = khachHangRepository.findKhachHangByEmail1(signInRequestDto.getUsername()).orElse(null);
+            if (kh != null && kh.getTrangThai().equals("inactive")) {
+                return ResponseEntity.ok(
+                        ApiResponseDto.builder()
+                                .status(String.valueOf(ResponseStatus.FAIL))
+                                .message("Tài khoản đã dừng hoạt động!")
+                                .response(null)
+                                .build()
+                );
+            }
+        }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 

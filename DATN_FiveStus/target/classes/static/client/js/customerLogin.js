@@ -211,7 +211,18 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: JSON.stringify(formData),
             success: function (response) {
-
+                if (response.response === null){
+                    Swal.fire({
+                        title: `${response.message}`,
+                        icon: "error",
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                    })
+                    return;
+                }
                 let tokenJWT = response.response["token"];
                 Cookies.set('authToken', tokenJWT, {path: '/', secure: true, sameSite: 'Strict'});
                 $.ajaxSetup({
@@ -225,7 +236,7 @@ $(document).ready(function () {
                     window.location.reload();
                 }
             },
-            error: function () {
+            error: function (response) {
                 $('#userEmailCustomer').addClass('is-invalid');
                 $('#passCustomer').addClass('is-invalid');
                 $('#passCustomerError').remove();
