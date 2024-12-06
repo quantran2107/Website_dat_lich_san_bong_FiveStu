@@ -207,7 +207,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-row mb-1" id="custom-div">
+                                            <div class="form-row mb-1" id="custom-div" style="display: none;">
                                                 <div class="col-12">
                                                     <div class="stat-card stat-custom">
                                                         <div class="stat-title">Tùy chỉnh</div>
@@ -607,10 +607,13 @@
 
         // Kiểm tra nếu là nút "TÙY CHỈNH" thì hiển thị ô nhập ngày
         var customDateInputs = document.getElementById("customDateInputs");
+        var customDiv = document.getElementById("custom-div");
         if (timeRange === 'custom') {
             customDateInputs.style.display = "inline-flex";
+            customDiv.style.display = "flex";
         } else {
             customDateInputs.style.display = "none";
+            customDiv.style.display = "none";
         }
         const selectedData = dataSets[timeRange];
 
@@ -639,7 +642,7 @@
 
         setTimeout(function () {
             selectFilter(document.querySelector('.btn-filter.active'), 'week');
-        }, 1500);
+        }, 3000);
 
         ngayBatDauInput.addEventListener('change', function () {
             fetchCustomData();
