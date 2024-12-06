@@ -2761,6 +2761,13 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
     //Thanh toán
     async function thanhToan(invoiceId) {
         try {
+            const responseNhanVien = await fetch('http://localhost:8080/hoa-don/get-nhan-vien-trong-ca');
+            if (!responseNhanVien.ok) {
+                throw new Error("Không thể lấy thông tin nhân viên");
+            }
+            const nhanVienData = await responseNhanVien.json();
+            const idNhanVien = nhanVienData.id;
+
             // Kiểm tra trạng thái của hóa đơn
             const checkResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${invoiceId}`);
             if (!checkResponse.ok) throw new Error(`Error ${checkResponse.status}: ${await checkResponse.text()}`);
@@ -2776,9 +2783,20 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
             // Lấy các giá trị liên quan đến thanh toán
             const totalToPayElement = document.getElementById(`tongTienPhaiTra${invoiceId}`);
             const changeElement = document.getElementById(`tienTraLai${invoiceId}`);
+            const tongTienElement = document.getElementById(`tongTien${invoiceId}`);
+            const tienGiamElement = document.getElementById(`tienGiam${invoiceId}`);
 
-            const totalToPay = parseFloat(totalToPayElement.value) || 0;
-            const change = parseFloat(changeElement.value);
+            const totalToPay = totalToPayElement.value.replace(/\./g, '');
+            const change = changeElement.value.replace(/\./g, '');
+            const tongTien = tongTienElement.value.replace(/\./g, '');
+            const tienGiam = tienGiamElement.value.replace(/\./g, '');
+
+            var payload = {
+                tongTien: tongTien,
+                tienGiamGia: tienGiam,
+                tongTienThucTe: totalToPay,
+                idNhanVien: idNhanVien // Lấy idNhanVien từ API
+            };
 
             if (isNaN(change) || change < 0) {
                 showErrorToast("Số tiền trả lại không hợp lệ.");
@@ -2797,17 +2815,18 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                 showCancelButton: true,
                 confirmButtonText: 'Có',
                 cancelButtonText: 'Không'
-            }).then((result) => {
+            }).then(async (result) => {
                 if (result.isConfirmed) {
                     // Tiến hành thanh toán
-                    const api1 = fetch(`http://localhost:8080/hoa-don-chi-tiet/thanhtoan/${invoiceId}`, {
+                    const api1 = await fetch(`http://localhost:8080/hoa-don-chi-tiet/update/${invoiceId}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
-                        }
+                        },
+                        body: JSON.stringify(payload)
                     });
 
-                    const api2 = fetch(`http://localhost:8080/hoa-don/update-thanh-toan/${invoiceId}`, {
+                    const api2 = await fetch(`http://localhost:8080/hoa-don/update-thanh-toan/${invoiceId}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
