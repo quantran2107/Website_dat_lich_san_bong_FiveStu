@@ -69,7 +69,7 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
     @Modifying
     @Transactional
     @Query("update HoaDonChiTiet hdct set hdct.trangThai='Đang hoạt động'  where hdct.id=:id")
-    void  updateTrangThai(Integer id);
+    void updateTrangThai(Integer id);
 
     @Modifying
     @Transactional
@@ -93,9 +93,11 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
     @Query("SELECT COUNT(hdct) FROM HoaDonChiTiet hdct " +
             "JOIN hdct.sanCa sc " +
             "WHERE sc.id = :idSanCa " +
-            "AND hdct.ngayDenSan = :ngayDenSan")
+            "AND hdct.ngayDenSan = :ngayDenSan " +
+            "AND hdct.trangThai != 'Đã huỷ'")
     Long countByIdSanCaAndNgayDenSan(@Param("idSanCa") Long idSanCa,
                                      @Param("ngayDenSan") LocalDate ngayDenSan);
+
 
     @Query("SELECT hdct FROM HoaDonChiTiet hdct join fetch HoaDon hd ON hdct.hoaDon.id = hd.id WHERE hd.id = :idHoaDon")
     HoaDonChiTiet findByIdHoaDon(@Param("idHoaDon") Integer idHoaDon);

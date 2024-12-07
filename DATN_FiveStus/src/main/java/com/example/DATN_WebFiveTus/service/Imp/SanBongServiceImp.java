@@ -83,6 +83,12 @@ private LoaiSanRepository loaiSanRepository;
     }
 
     @Override
+    public List<SanBongDTO> getAllJoinFetchActive() {
+        return sanBongRepository.getAllJoinFetchActive().stream().map((sanBong) ->modelMapper
+                .map(sanBong,SanBongDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
     public void deletedAt(Integer id) {
         SanBong sanBong=sanBongRepository.findById(id).orElseThrow(()-> new ResourceNotfound("Không tồn tại xoá id: "+id));
         sanBongRepository.deletedAt(id);

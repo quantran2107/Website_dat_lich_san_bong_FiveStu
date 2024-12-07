@@ -1,5 +1,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="contentHeaderClient">
+  <style>
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+  </style>
   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <symbol xmlns="http://www.w3.org/2000/svg" id="shopping-carriage" viewBox="0 0 24 24" fill="none">
       <path
@@ -366,8 +377,8 @@
                          class="ps-3 text-input">
                   <input id="userEmailCustomer" type="text" name="username" placeholder="Email đăng nhập" style="margin-top: 1rem"
                          class="ps-3 text-input">
-                  <input id="passCustomer" type="password" name="password" placeholder="Mật khẩu" class="ps-3 text-input" style="margin-top: 1rem">
-                  <input id="confirm-password" type="password" name="confirm-password" placeholder="Nhập lại mật khẩu" class="ps-3 text-input" style="margin-top: 1rem">
+                  <input id="passCustomer" autocomplete="off" type="password" name="password" placeholder="Mật khẩu" class="ps-3 text-input" style="margin-top: 1rem">
+                  <input id="confirm-password" autocomplete="off" type="password" name="confirm-password" placeholder="Nhập lại mật khẩu" class="ps-3 text-input" style="margin-top: 1rem">
                   <input id="phoneNumber" type="number" name="phoneNumber" placeholder="Số điện thoại" style="margin-top: 1rem"
                          class="ps-3 text-input">
                   <div class="checkbox d-flex justify-content-between mt-4">

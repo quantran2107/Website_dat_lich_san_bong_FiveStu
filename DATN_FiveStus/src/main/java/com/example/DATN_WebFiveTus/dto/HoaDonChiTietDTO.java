@@ -30,6 +30,12 @@ public class HoaDonChiTietDTO {
 
     private String maHoaDon;
 
+    private Integer idNhanVien;
+
+    private String tenNhanVien;
+
+    private String maNhanVien;
+
     private String maHoaDonChiTiet;
 
     private Integer idSanCa;

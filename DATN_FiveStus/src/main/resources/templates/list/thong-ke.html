@@ -207,7 +207,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-row mb-1" id="custom-div">
+                                            <div class="form-row mb-1" id="custom-div" style="display: none;">
                                                 <div class="col-12">
                                                     <div class="stat-card stat-custom">
                                                         <div class="stat-title">Tùy chỉnh</div>
@@ -279,12 +279,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row my-4">
-                        <div class="col-md-12">
-                            <div class="card shadow">
                                 <div class="card-body">
                                     <canvas id="myLineChart" width="400" height="200"></canvas>
                                 </div>
@@ -483,9 +477,13 @@
     const customLabels = [];
 
     async function fetchCustomData() {
+        // Xóa dữ liệu cũ trước khi fetch mới
+        dataSets.custom.data = [];
+        dataSets.custom.dataSet2 = [];
+        customLabels.length = 0;
 
         const startDateCustom = formatToFullDate(ngayBatDauInput.value);
-        const totalDays = calculateTotalDays(ngayBatDauInput.value,ngayKetThucInput.value);
+        const totalDays = calculateTotalDays(ngayBatDauInput.value, ngayKetThucInput.value);
         const dichVuPromisesCustom = [];
 
         // Duyệt qua từng ngày trong tuần để lấy dữ liệu
@@ -535,7 +533,6 @@
             // Tăng ngày lên 1 ngày cho ngày tiếp theo
             startDateCustom.setDate(startDateCustom.getDate() + 1); // Thêm một ngày vào startDate
         }
-
     }
 
     const ctx = document.getElementById('myLineChart').getContext('2d');
@@ -561,8 +558,8 @@
                     position: 'top',
                 },
                 title: {
-                    display: true,
-                    text: 'Tổng doanh thu dịch vụ'
+                    display: false,
+                    text: ''
                 }
             },
             scales: {
@@ -607,10 +604,13 @@
 
         // Kiểm tra nếu là nút "TÙY CHỈNH" thì hiển thị ô nhập ngày
         var customDateInputs = document.getElementById("customDateInputs");
+        var customDiv = document.getElementById("custom-div");
         if (timeRange === 'custom') {
             customDateInputs.style.display = "inline-flex";
+            customDiv.style.display = "flex";
         } else {
             customDateInputs.style.display = "none";
+            customDiv.style.display = "none";
         }
         const selectedData = dataSets[timeRange];
 
@@ -639,7 +639,7 @@
 
         setTimeout(function () {
             selectFilter(document.querySelector('.btn-filter.active'), 'week');
-        }, 1500);
+        }, 3000);
 
         ngayBatDauInput.addEventListener('change', function () {
             fetchCustomData();

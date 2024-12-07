@@ -339,7 +339,7 @@
 
                 </div>
             </div>
-        </div> <!-- .container-fluid -->
+        </div>
         <div th:include="fragment/modal :: modal"></div>
     </main>
 </div>
@@ -372,7 +372,7 @@
                         if (result.isConfirmed) {
                             updateTrangThai(id, status, this);
                         } else {
-                            this.checked = true; // Khôi phục trạng thái nếu hủy
+                            this.checked = true;
                         }
                     });
                 } else {
@@ -505,14 +505,13 @@
                 method: 'GET',
                 success: function (response) {
                     if (response) {
-                        // Tên sân bóng đã tồn tại trong cùng loại sân
+
                         Swal.fire({
                             icon: "error",
                             title: "Tên sân bóng đã tồn tại",
                             text: "Vui lòng nhập tên sân bóng khác."
                         });
                     } else {
-                        // Tạo đối tượng sanBong để gửi lên server
                         const sanBong = {
                             tenSanBong: tenSanBong,
                             trangThai: trangThai,
@@ -530,9 +529,6 @@
 
                                 $('#myModalEdit').modal('hide');
 
-                                // var currentTab = $('ul.nav-tabs li a.active');
-                                // var tabContentId = currentTab.attr('href');
-                                // $(tabContentId).load(location.href + ' ' + tabContentId);
 
                                 const updatedRow = $('#parameterTable tbody tr[data-id-loai-san="' + id + '"]');
 
@@ -575,8 +571,8 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 var activeTab = $('#loaiSanTab .nav-link.active');
-                var tabId = activeTab.attr('href').replace('#', ''); // Get the ID of the tab
-                var id = tabId.split('-')[1]; // Extract the ID from the tab ID (e.g. "loai-san-1" -> "1")
+                var tabId = activeTab.attr('href').replace('#', '');
+                var id = tabId.split('-')[1];
 
                 // Send DELETE request to API
                 $.ajax({
@@ -736,6 +732,9 @@
                                             showConfirmButton: false,
                                             timer: 1500
                                         });
+                                        var currentTab = $('ul.nav-tabs li a.active');
+                                        var tabContentId = currentTab.attr('href');
+                                        $(tabContentId).load(location.href + ' ' + tabContentId);
                                         clearFormSanCa();
                                         $('#formSanCa').hide();
                                     },
@@ -797,7 +796,7 @@
 
     function submitSanBong() {
         $('form').off('submit').on('submit', function (event) {
-            event.preventDefault(); // Ngừng hành động mặc định của form
+            event.preventDefault();
 
             function updateIdLoaiSanInput() {
                 var activeTab = $('#loaiSanTab .nav-link.active');
@@ -806,16 +805,14 @@
                 $('#idLoaiSanInput').val(idLoaiSan);
             }
 
-            // Cập nhật idLoaiSanInput cho tab đầu tiên khi trang được tải
             updateIdLoaiSanInput();
 
-            // Lắng nghe sự kiện khi chuyển tab
             $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
                 updateIdLoaiSanInput();
             });
 
             var tenSanBong = $(this).find('#tenSanBong').val().trim();
-            var idLoaiSan = $('#idLoaiSanInput').val(); // Được set từ tab đã chọn
+            var idLoaiSan = $('#idLoaiSanInput').val();
 
             if (!tenSanBong || tenSanBong.trim() === '') {
                 Swal.fire({
@@ -860,6 +857,7 @@
 
                                 // Làm sạch form và cập nhật lại danh sách sân bóng
                                 clearFormSanBong();
+                                //
                                 refreshCurrentTab();
                             },
                             error: function (xhr, status, error) {
@@ -880,11 +878,29 @@
     }
 
     // Hàm cập nhật lại danh sách sân bóng của tab hiện tại
+    // function refreshCurrentTab() {
+    //     var currentTab = $('ul.nav-tabs li a.active');
+    //     var tabContentId = currentTab.attr('href');
+    //     $(tabContentId).load(location.href + ' ' + tabContentId);
+    // }
     function refreshCurrentTab() {
+        // Lưu trạng thái của tab đang active
         var currentTab = $('ul.nav-tabs li a.active');
         var tabContentId = currentTab.attr('href');
-        $(tabContentId).load(location.href + ' ' + tabContentId);
+        localStorage.setItem('activeTab', tabContentId);
+        location.reload();
     }
+
+    $(document).ready(function() {
+
+        var activeTab = localStorage.getItem('activeTab');
+        if (activeTab) {
+            $('ul.nav-tabs li a[href="' + activeTab + '"]').tab('show');
+        }
+    });
+
+
+
 
 
     function displaySelectedDays() {

@@ -26,6 +26,8 @@ public interface HoaDonChiTietService {
 
     void deletedAt(Integer id);
 
+    void updateTrangThaiHoaDonChiTiet(Integer idHoaDonChiTiet, String trangThai);
+
     List<HoaDonChiTietDTO> searchFromHoaDon(Integer idHoaDon);
 
     Page<HoaDonChiTietDTO> getHoaDonChiTietByTrangThai(String trangThai, String soDienThoaiKhachHang, Pageable pageable);
