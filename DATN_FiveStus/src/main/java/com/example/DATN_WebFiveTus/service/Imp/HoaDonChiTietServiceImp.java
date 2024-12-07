@@ -9,6 +9,7 @@ import com.example.DATN_WebFiveTus.entity.SanCa;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.*;
 import com.example.DATN_WebFiveTus.service.HoaDonChiTietService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
@@ -267,23 +269,29 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         NhanVien nhanVien = null;
 
         // Kiểm tra điều kiện trước khi tìm nhân viên
-        if (hoaDonChiTietDTO.getIdNhanVien() != null) {
-            nhanVien = nhanVienReposity.findById(hoaDonChiTietDTO.getIdNhanVien())
-                    .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại với ID: " + hoaDonChiTietDTO.getIdNhanVien()));
-        }
+
         HoaDon hoaDon = hoaDonRepository.findById(hoaDonChiTietDTO.getIdHoaDon()).orElseThrow();
         hoaDonChiTiet.setMaHoaDonChiTiet(generateMaHoaDonChiTiet());
         // Thiết lập trạng thái dựa trên idNhanVien
-        if (nhanVien != null) {
-            hoaDonChiTiet.setTrangThai("Chờ nhận sân");
-        } else {
-            hoaDonChiTiet.setTrangThai("Chờ đặt cọc");
-        }
+
         hoaDonChiTiet.setSanCa(sanCa);
         hoaDonChiTiet.setHoaDon(hoaDon);
         hoaDonChiTiet.setNgayDenSan(new java.sql.Date(hoaDonChiTietDTO.getNgayDenSan().getTime()));
         hoaDonChiTiet.setKieuNgayDat(hoaDonChiTietDTO.getKieuNgayDat());
         hoaDonChiTiet.setTongTien(hoaDonChiTietDTO.getTongTien());
+
+        System.out.println("IdNhanVienHoaDon: " + hoaDonChiTietDTO.getIdNhanVienHoaDon());
+        System.out.println("hoaDonChiTiet: " + hoaDonChiTietDTO.toString());
+        System.out.println("hoaDon: " + hoaDon.toString());
+
+        if (hoaDon.getNhanVien() != null) {
+            nhanVien = nhanVienReposity.findById(hoaDon.getNhanVien().getId())
+                    .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại với ID: " + hoaDonChiTietDTO.getIdNhanVien()));
+            hoaDonChiTiet.setTrangThai("Chờ nhận sân");
+        }else{
+            hoaDonChiTiet.setTrangThai("Chờ đặt cọc");
+        }
+
         HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
         return modelMapper.map(hoaDonChiTietSave, HoaDonChiTietDTO.class);
     }

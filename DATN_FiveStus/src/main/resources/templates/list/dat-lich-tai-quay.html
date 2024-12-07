@@ -2766,7 +2766,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                 throw new Error("Không thể lấy thông tin nhân viên");
             }
             const nhanVienData = await responseNhanVien.json();
-            const idNhanVien = nhanVienData.id;
+            const idNhanVienHoaDon = nhanVienData.id;
 
             // Kiểm tra trạng thái của hóa đơn
             const checkResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${invoiceId}`);
@@ -2795,7 +2795,7 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
                 tongTien: tongTien,
                 tienGiamGia: tienGiam,
                 tongTienThucTe: totalToPay,
-                idNhanVien: idNhanVien // Lấy idNhanVien từ API
+                idNhanVienHoaDon: idNhanVienHoaDon // Lấy idNhanVien từ API
             };
 
             if (isNaN(change) || change < 0) {

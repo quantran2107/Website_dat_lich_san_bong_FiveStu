@@ -91,22 +91,20 @@ public class HoaDonServiceImp implements HoaDonService {
 
         // Khởi tạo đối tượng NhanVien
         NhanVien nhanVien = null;
+        HoaDon hoaDon = modelMapper.map(hoaDonDTO, HoaDon.class);
 
         // Kiểm tra điều kiện trước khi tìm nhân viên
         if (hoaDonDTO.getIdNhanVien() != null) {
             nhanVien = nhanVienReposity.findById(hoaDonDTO.getIdNhanVien())
                     .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại với ID: " + hoaDonDTO.getIdNhanVien()));
+            hoaDon.setTrangThai("Chờ thanh toán");
+        }else{
+            hoaDon.setTrangThai("Chờ đặt cọc");
         }
 
-        HoaDon hoaDon = modelMapper.map(hoaDonDTO, HoaDon.class);
         hoaDon.setMaHoaDon(generateMaHoaDon());
         hoaDon.setId(hoaDonDTO.getId());
         // Thiết lập trạng thái dựa trên idNhanVien
-        if (nhanVien != null) {
-            hoaDon.setTrangThai("Chờ thanh toán");
-        } else {
-            hoaDon.setTrangThai("Chờ đặt cọc");
-        }
         Date now = Date.from(Instant.now());
         hoaDon.setKhachHang(khachHang);
         hoaDon.setTongTienSan(hoaDonDTO.getTongTienSan());
