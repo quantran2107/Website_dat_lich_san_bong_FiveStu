@@ -135,7 +135,7 @@ $(document).ready(function () {
             <div class="tab-pane fade show active" id="future" role="tabpanel" aria-labelledby="home-tab">
                <table class="table table-hover" style="width: 100%; border-collapse: collapse;">
                                     <thead>
-                                    <tr>
+                                    <tr >
                                         <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">#</th>
                                         <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Tên sân</th>
                                         <th scope="col" style="position: sticky; top: 0; background-color: white; z-index: 10; border: 1px solid #ccc; padding: 8px;">Thời gian (Ca)</th>                                        
@@ -270,10 +270,6 @@ $(document).ready(function () {
 
     }
 
-
-    // function detailsHD(item) {
-    //
-    // }
 
     function formatDate(dateString) {
         const date = new Date(dateString);
