@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    let selectedDrop ="Chọn ca"
+
     $('#uploadButton').on('click', function () {
 
         const fileInput = $('<input type="file" style="display: none;">');
@@ -115,6 +115,10 @@ $(document).ready(function () {
 
     function loadRow(list, key) {
         $('#tbodyContainer').empty();
+
+        let totalPages = Math.ceil(list.length / 10);
+        let selectOptions = `<option value="1" selected>1</option>`;
+
         let tbody = ``;
         if (key !== '') {
             list = list.filter(lich =>
@@ -122,31 +126,73 @@ $(document).ready(function () {
                 lich["nhanVien"].hoTen.toLowerCase().includes(key.toLowerCase())
             );
         }
-
         if (list.length === 0) {
             tbody += `<tr style="cursor: default"><td colspan="8" style="font-size: 18px; padding: 20px">Chưa có dữ liệu</td></tr>`
             $('#tbodyContainer').html(tbody);
-        } else {
+            $('#pageSelect').empty();
+            return
+        }
 
-            list.forEach((lich, index) => {
 
-                let ngayFormatted = new Date(lich["ngay"]).toLocaleDateString('vi-VN');
-                let gioBd = lich["gioBatDau"] === null ? "--:--" : lich["gioBatDau"].slice(0, -3);
-                let giokt = lich["gioKetThuc"] === null ? "--:--" : lich["gioKetThuc"].slice(0, -3);
-                tbody += `<tr style="cursor: default">
-                            <td class="special-td">${index + 1}</td>
-                            <td class="special-td">${lich["nhanVien"].maNhanVien}</td>
-                            <td class="special-td">${lich["nhanVien"].hoTen}</td>                                                
+        if ($('#pageSelect option').length < 1) {
+            for (let i = 2; i <= totalPages; i++) {
+                selectOptions += `<option value="${i}" >${i}</option>`;
+            }
+            $('#pageSelect').html(selectOptions);
+        }
+
+        let currentPage = $('#pageSelect').val();
+
+        const startIndex = (currentPage - 1) * 10;
+        const endIndex = Math.min(startIndex + 10, list.length);
+        const paginatedList = list.slice(startIndex, endIndex);
+
+        paginatedList.forEach((lich, index) => {
+            let ngayFormatted = new Date(lich["ngay"]).toLocaleDateString('vi-VN');
+            let gioBd = lich["gioBatDau"] === null ? "--:--" : lich["gioBatDau"].slice(0, -3);
+            let giokt = lich["gioKetThuc"] === null ? "--:--" : lich["gioKetThuc"].slice(0, -3);
+            let nhanVien =  lich["nhanVien"];
+            tbody += `<tr style="cursor: default">
+                            <td class="special-td">${startIndex + index + 1}</td>
+                            <td class="special-td">${nhanVien["maNhanVien"]}</td>
+                            <td class="special-td">${nhanVien["hoTen"]}</td>                                                
                             <td class="special-td">${lich["viTri"]}</td>
                             <td class="special-td">${lich["gioBatDau"] > '00:30:00' && lich["gioKetThuc"] < '13:00:00' ? 'Ca sáng' : 'Ca chiều'}</td>
                             <td class="special-td">${gioBd}</td>
                             <td class="special-td">${giokt}</td>
                             <td class="special-td">${ngayFormatted}</td>
                         </tr>`;
-            });
-            $('#tbodyContainer').html(tbody);
-        }
+        });
+        $('#tbodyContainer').html(tbody);
+
     }
+
+    $('#prevButton').on('click', function () {
+        const $select = $('#pageSelect');
+        const $selected = $select.find('option:selected'); // Lấy option đang được chọn
+        const $prev = $selected.prev('option'); // Lấy option trước đó
+
+        if ($prev.length) { // Nếu có option trước đó
+            $prev.prop('selected', true); // Chọn option trước đó
+        }
+        loadTable()
+    });
+
+    $('#nextButton').on('click', function () {
+        const $select = $('#pageSelect');
+        const $selected = $select.find('option:selected'); // Lấy option đang được chọn
+        const $next = $selected.next('option'); // Lấy option tiếp theo
+
+        if ($next.length) { // Nếu có option tiếp theo
+            $next.prop('selected', true); // Chọn option tiếp theo
+        }
+        loadTable()
+    });
+
+
+    $('#pageSelect').on('change', function () {
+        loadTable();
+    });
 
     function formatDateToYYYYMMDD(date) {
         let year = date.getFullYear();
@@ -163,7 +209,6 @@ $(document).ready(function () {
 
     function loadTable() {
         let selected = $('#actionMenuButton3').text().trim()
-        console.log(selected)
         let today = new Date();
         let day = $('#date-input').val();
         let key = $('#searchInput').val().trim();
