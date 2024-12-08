@@ -43,7 +43,7 @@ public class VNPAYService {
 
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
 
-        vnp_Params.put("vnp_OrderInfo", "Thanh toan dat lich san bong " + orderInfo);
+        vnp_Params.put("vnp_OrderInfo", "Thanh toan tien coc dat lich san bong " + orderInfo);
 
         vnp_Params.put("vnp_OrderType", orderType);
         vnp_Params.put("vnp_Locale", "vn");
@@ -64,8 +64,6 @@ public class VNPAYService {
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
-        // Log kiểm tra
-        System.out.println("vnp_OrderInfo: " + vnp_Params.get("vnp_OrderInfo"));
 
         // Xây dựng hash data và query
         List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());

@@ -43,6 +43,10 @@ public class HoaDonChiTiet {
     @JoinColumn(name = "id_phieu_giam_gia", nullable = false)
     private PhieuGiamGia phieuGiamGia;
 
+    @ManyToOne
+    @JoinColumn(name = "id_nhan_vien", nullable = false)
+    private NhanVien nhanVien;
+
     @Column(name = "ma_hoa_don_chi_tiet")
     private String maHoaDonChiTiet;
 

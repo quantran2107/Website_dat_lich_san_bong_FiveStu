@@ -121,4 +121,10 @@ public class HoaDonRest {
         return ResponseEntity.ok(hoaDonService.getNhanVienTrongCa(request));
     }
 
+    @PutMapping("/update-trang-thai/{idHoaDon}")
+    public ResponseEntity<Void> updateTrangThaiHoaDon(@PathVariable Integer idHoaDon, @RequestParam String trangThai) {
+        hoaDonService.updateTrangThaiHoaDon(idHoaDon, trangThai);
+        return ResponseEntity.ok().build();
+    }
+
 }
