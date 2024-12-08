@@ -1,13 +1,9 @@
 package com.example.DATN_WebFiveTus.service;
 
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
-import com.example.DATN_WebFiveTus.dto.SanCaDTO;
-import com.example.DATN_WebFiveTus.entity.SanBong;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Map;
 
 public interface SanBongService {
 

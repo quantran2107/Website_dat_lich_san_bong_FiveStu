@@ -1,14 +1,13 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.SanBongDTO;
-import com.example.DATN_WebFiveTus.dto.SanCaDTO;
 import com.example.DATN_WebFiveTus.entity.LoaiSan;
 import com.example.DATN_WebFiveTus.entity.SanBong;
-import com.example.DATN_WebFiveTus.entity.SanCa;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.LoaiSanRepository;
 import com.example.DATN_WebFiveTus.repository.SanBongRepository;
 import com.example.DATN_WebFiveTus.service.SanBongService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,20 +16,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class SanBongServiceImp implements SanBongService {
 private LoaiSanRepository loaiSanRepository;
 
     private SanBongRepository sanBongRepository;
 
     private ModelMapper modelMapper;
-
 
     @Autowired
     public SanBongServiceImp(LoaiSanRepository loaiSanRepository, SanBongRepository sanBongRepository, ModelMapper modelMapper) {

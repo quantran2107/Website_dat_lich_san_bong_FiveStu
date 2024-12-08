@@ -175,6 +175,7 @@
                                                     <div class="col-md-12 ">
                                                         <div class="card shadow">
                                                             <div class="card-body">
+
                                                                 <div class="mt-3">
                                                                     <form id="formAddNgayTrongTuan">
                                                                         <input type="hidden" name="id" value="1"
@@ -209,6 +210,36 @@
                                                                             id="selectedDays"
                                                                             class="form-control"></span></p>
                                                                 </div>
+
+                                                                <!--                                                                <div class="mt-3">-->
+<!--                                                                    <form id="formAddNgayTrongTuan">-->
+<!--                                                                        <input type="hidden" name="id" value="1" id="addId">-->
+<!--                                                                        <h8 class="card-title">Chọn ngày:</h8>-->
+<!--                                                                        <div class="checkbox-label">-->
+<!--                                                                            &lt;!&ndash; Button Chọn tất cả &ndash;&gt;-->
+<!--                                                                            <button type="button" class="btn btn-primary btn-sm mb-2" onclick="toggleAllCheckboxes(this)">-->
+<!--                                                                                Chọn tất cả-->
+<!--                                                                            </button>-->
+<!--                                                                            <div class="checkbox-label">-->
+<!--                                                                                <div th:each="ntt : ${listNTT}" class="checkbox-item">-->
+<!--                                                                                    <input class="m-2 dayCheckbox" type="checkbox" th:value="${ntt.id}"-->
+<!--                                                                                           id="dayCheckbox-${ntt.id}" name="days">-->
+<!--                                                                                    <label th:for="'dayCheckbox-' + ${ntt.id}" th:text="${ntt.thuTrongTuan}"></label>-->
+<!--                                                                                </div>-->
+<!--                                                                            </div>-->
+<!--                                                                        </div>-->
+<!--                                                                        <div class="form-group col-md-6">-->
+<!--                                                                            <button type="button" class="btn btn-success btn-sm" onclick="displaySelectedDays()">-->
+<!--                                                                                Thêm ngày-->
+<!--                                                                            </button>-->
+<!--                                                                        </div>-->
+<!--                                                                    </form>-->
+<!--                                                                </div>-->
+
+<!--                                                                <div class="mt-3">-->
+<!--                                                                    <p>Thứ được chọn sẽ thêm vào đây: <span id="selectedDays" class="form-control"></span></p>-->
+<!--                                                                </div>-->
+
 
                                                                 <hr>
 
@@ -496,6 +527,15 @@
                     icon: "error",
                     title: "Đã xảy ra lỗi",
                     text: "Bạn vui lòng nhập tên sân bóng"
+                });
+                return;
+            }
+
+            if (!tenSanBong.startsWith('Sân bóng')) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Tên sân bóng không hợp lệ",
+                    text: "Tên sân bóng phải bắt đầu bằng 'Sân bóng'."
                 });
                 return;
             }
@@ -823,6 +863,15 @@
                 return;
             }
 
+            if (!tenSanBong.startsWith('Sân bóng')) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Tên sân bóng không hợp lệ",
+                    text: "Tên sân bóng phải bắt đầu bằng 'Sân bóng'."
+                });
+                return;
+            }
+
             // Gọi API để kiểm tra tên sân bóng có trùng không
             $.ajax({
                 url: `http://localhost:8080/san-bong/checkTrungSanBong?idLoaiSan=${idLoaiSan}&tenSanBong=${encodeURIComponent(tenSanBong)}`,
@@ -900,7 +949,61 @@
     });
 
 
-
+    // function toggleAllCheckboxes(button) {
+    //     var activeTabHref = getActiveTabHref(); // Lấy href của tab đang active
+    //     var checkboxes = document.querySelectorAll(activeTabHref + ' .dayCheckbox');
+    //     var allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+    //
+    //     checkboxes.forEach(function (checkbox) {
+    //         checkbox.checked = !allChecked; // Đảo ngược trạng thái hiện tại
+    //     });
+    //
+    //     // Cập nhật trạng thái nút
+    //     button.textContent = allChecked ? "Chọn tất cả" : "Bỏ chọn tất cả";
+    //
+    //     // Cập nhật danh sách ngày đã chọn
+    //     updateSelectedDaysDisplay(activeTabHref);
+    // }
+    //
+    // function updateSelectedDaysDisplay(activeTabHref) {
+    //     var checkboxes = document.querySelectorAll(activeTabHref + ' .dayCheckbox');
+    //     var selectedDays = [];
+    //
+    //     checkboxes.forEach(function (checkbox) {
+    //         if (checkbox.checked) {
+    //             selectedDays.push(checkbox.nextElementSibling.textContent.trim());
+    //         }
+    //     });
+    //
+    //     // Hiển thị danh sách các ngày đã chọn
+    //     document.querySelector(activeTabHref + ' #selectedDays').textContent = selectedDays.join(', ');
+    // }
+    //
+    // function displaySelectedDays() {
+    //     var activeTabHref = getActiveTabHref(); // Lấy href của tab đang active
+    //
+    //     // Cập nhật danh sách ngày đã chọn
+    //     updateSelectedDaysDisplay(activeTabHref);
+    //
+    //     // Kiểm tra nếu không có ngày nào được chọn
+    //     var selectedDays = document.querySelector(activeTabHref + ' #selectedDays').textContent;
+    //     if (!selectedDays) {
+    //         Swal.fire({
+    //             icon: "error",
+    //             title: "Đã xảy ra lỗi",
+    //             text: "Vui lòng chọn ít nhất một ngày",
+    //             confirmButtonText: "OK"
+    //         });
+    //     } else {
+    //         // Hiển thị formSanCa khi có ít nhất một ngày được chọn
+    //         $(activeTabHref).find('#formSanCa').css('display', 'block');
+    //     }
+    // }
+    //
+    // function getActiveTabHref() {
+    //     var activeTab = document.querySelector('#loaiSanTab .nav-link.active');
+    //     return activeTab.getAttribute('href');
+    // }
 
 
     function displaySelectedDays() {
