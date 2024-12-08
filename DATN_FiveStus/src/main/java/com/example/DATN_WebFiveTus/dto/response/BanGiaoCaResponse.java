@@ -11,16 +11,7 @@ import java.math.BigDecimal;
 
 public class BanGiaoCaResponse {
 
-    private int id;
-
-    private BigDecimal tienMatDauCa;
-
-    private BigDecimal tienMatSB;
-
-    private BigDecimal chuyenKhoanSB;
-
-    private BigDecimal tienMatDatCoc;
-
-    private BigDecimal chuyenKhoanDatCoc;
+    private String hinhThuc;
+    private BigDecimal tongTien;
 
 }

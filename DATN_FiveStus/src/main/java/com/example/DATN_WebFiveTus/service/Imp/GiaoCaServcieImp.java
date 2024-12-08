@@ -57,9 +57,17 @@ public class GiaoCaServcieImp implements GiaoCaService {
     public ApiResponseDto<?> banGiao(HttpServletRequest request) {
         GiaoCa giaoCa = getGiaoCa(request);
         if (giaoCa != null) {
-            BanGiaoCaResponse banGiaoCaResponse = banGiaoCaResponse(giaoCa.getCreatedAt());
-            giaoCa.setTienMatTrongCa(banGiaoCaResponse.getTienMatSB());
-            giaoCa.setTienChuyenKhoanTrongCa(banGiaoCaResponse.getChuyenKhoanSB());
+            List<BanGiaoCaResponse> list = banGiaoCaResponse(giaoCa.getNhanVien().getId());
+            if (list.isEmpty()) {
+                return ApiResponseDto.builder().status(String.valueOf(HttpStatus.NOT_FOUND)).message("Not found!").response(false).build();
+            }
+            for (BanGiaoCaResponse bg:list){
+                if (bg.getHinhThuc().equalsIgnoreCase("chuyển khoản")){
+                    giaoCa.setTienChuyenKhoanTrongCa(bg.getTongTien());
+                } else {
+                    giaoCa.setTienMatTrongCa(bg.getTongTien());
+                }
+            }
             giaoCa.setTongTienTrongCa(giaoCa.getTienChuyenKhoanTrongCa().add(giaoCa.getTienMatTrongCa()));
             giaoCa.setTrangThai(false);
             giaoCaRepository.save(giaoCa);
@@ -79,11 +87,6 @@ public class GiaoCaServcieImp implements GiaoCaService {
             giaoCa.setNhanVien(nv);
             giaoCa.setTrangThai(true);
             giaoCa.setTienMatCaTruoc(BigDecimal.valueOf(requestBody.getTienMatDauCa() + requestBody.getTienChuyenKhoanDauCa()));
-//            giaoCa.setTienMatTrongCa(BigDecimal.valueOf(0));
-//            giaoCa.setTienChuyenKhoanTrongCa(BigDecimal.valueOf(0));
-//            giaoCa.setTongTienTrongCa(BigDecimal.valueOf(0));
-//            giaoCa.setTongTienMatThucTe(BigDecimal.valueOf(0));
-//            giaoCa.setTongTienPhatSinh(BigDecimal.valueOf(0));
             giaoCaRepository.save(giaoCa);
             return true;
         }
@@ -126,45 +129,7 @@ public class GiaoCaServcieImp implements GiaoCaService {
         return null;
     }
 
-    private BanGiaoCaResponse banGiaoCaResponse(LocalDateTime createdAt) {
-
-        BanGiaoCaResponse result = new BanGiaoCaResponse();
-        result.setChuyenKhoanDatCoc(BigDecimal.valueOf(0));
-        result.setTienMatDatCoc(BigDecimal.valueOf(0));
-
-        List<ChiTietHinhThucThanhToan> listCK = chiTietHinhThucThanhToanRepository.findByCreatedAndChuyenKhoan(createdAt);
-        List<ChiTietHinhThucThanhToan> listTM = chiTietHinhThucThanhToanRepository.findByCreatedAndTienMat(createdAt);
-        if (listTM.isEmpty() && listCK.isEmpty()) {
-            result.setTienMatSB(BigDecimal.valueOf(0));
-            result.setChuyenKhoanSB(BigDecimal.valueOf(0));
-            return result;
-        }
-        if (!listTM.isEmpty() && !listCK.isEmpty()) {
-            BigDecimal totalAmountCK = listCK.stream()
-                    .map(ChiTietHinhThucThanhToan::getSoTien)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-            BigDecimal totalAmountTM = listTM.stream()
-                    .map(ChiTietHinhThucThanhToan::getSoTien)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-            result.setChuyenKhoanSB(totalAmountCK);
-            result.setTienMatSB(totalAmountTM);
-            return result;
-        }
-        if (listTM.isEmpty()) {
-            BigDecimal totalAmount = listCK.stream()
-                    .map(ChiTietHinhThucThanhToan::getSoTien)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-            result.setChuyenKhoanSB(totalAmount);
-            result.setTienMatSB(BigDecimal.valueOf(0));
-            return result;
-        }
-        BigDecimal totalAmount = listTM.stream()
-                .map(ChiTietHinhThucThanhToan::getSoTien)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        result.setTienMatSB(totalAmount);
-        result.setChuyenKhoanSB(BigDecimal.valueOf(0));
-        return result;
-
-
+    private List<BanGiaoCaResponse> banGiaoCaResponse(Integer id) {
+        return chiTietHinhThucThanhToanRepository.getHinhThucThanhToanTongTien(id);
     }
 }
