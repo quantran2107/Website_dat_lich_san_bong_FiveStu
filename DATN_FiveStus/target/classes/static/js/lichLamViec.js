@@ -151,10 +151,11 @@ $(document).ready(function () {
             let ngayFormatted = new Date(lich["ngay"]).toLocaleDateString('vi-VN');
             let gioBd = lich["gioBatDau"] === null ? "--:--" : lich["gioBatDau"].slice(0, -3);
             let giokt = lich["gioKetThuc"] === null ? "--:--" : lich["gioKetThuc"].slice(0, -3);
+            let nhanVien =  lich["nhanVien"];
             tbody += `<tr style="cursor: default">
                             <td class="special-td">${startIndex + index + 1}</td>
-                            <td class="special-td">${lich["nhanVien"].maNhanVien}</td>
-                            <td class="special-td">${lich["nhanVien"].hoTen}</td>                                                
+                            <td class="special-td">${nhanVien["maNhanVien"]}</td>
+                            <td class="special-td">${nhanVien["hoTen"]}</td>                                                
                             <td class="special-td">${lich["viTri"]}</td>
                             <td class="special-td">${lich["gioBatDau"] > '00:30:00' && lich["gioKetThuc"] < '13:00:00' ? 'Ca sáng' : 'Ca chiều'}</td>
                             <td class="special-td">${gioBd}</td>
