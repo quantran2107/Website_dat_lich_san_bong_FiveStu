@@ -41,9 +41,12 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
             "WHERE hdct.trangThai = :trangThai " +
             "AND hdct.ngayDenSan = CURRENT_DATE " +
             "AND hd.deletedAt = false " +
-            "AND (:soDienThoaiKhachHang IS NULL OR kh.soDienThoai LIKE %:soDienThoaiKhachHang%)")
+            "AND (:keyWord IS NULL OR kh.soDienThoai LIKE %:keyWord% " +
+            "OR hdct.maHoaDonChiTiet LIKE %:keyWord% " +
+            "OR kh.hoVaTen LIKE %:keyWord% " +
+            "OR kh.email LIKE %:keyWord%)")
     Page<HoaDonChiTiet> findByTrangThai(@Param("trangThai") String trangThai,
-                                        @Param("soDienThoaiKhachHang") String soDienThoaiKhachHang,
+                                        @Param("keyWord") String keyWord,
                                         Pageable pageable);
 
     @Query("SELECT hdct FROM HoaDonChiTiet hdct " +
@@ -94,10 +97,9 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
             "JOIN hdct.sanCa sc " +
             "WHERE sc.id = :idSanCa " +
             "AND hdct.ngayDenSan = :ngayDenSan " +
-            "AND hdct.trangThai != 'Đã huỷ'")
+            "AND hdct.trangThai <> 'Đã huỷ'")
     Long countByIdSanCaAndNgayDenSan(@Param("idSanCa") Long idSanCa,
                                      @Param("ngayDenSan") LocalDate ngayDenSan);
-
 
     @Query("SELECT hdct FROM HoaDonChiTiet hdct join fetch HoaDon hd ON hdct.hoaDon.id = hd.id WHERE hd.id = :idHoaDon")
     HoaDonChiTiet findByIdHoaDon(@Param("idHoaDon") Integer idHoaDon);
