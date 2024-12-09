@@ -1,5 +1,6 @@
 package com.example.DATN_WebFiveTus.service;
 
+import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
 import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.dto.NhanVienDTO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,9 +28,13 @@ public interface HoaDonService {
 
     Page<HoaDonDTO> phanTrang(Pageable pageable);
 
-    void delete (Integer id);
+    void delete(Integer id);
 
     void deletedAt(Integer id);
+
+    void sendInvoiceEmail(HoaDonDTO hoaDonDTO, List<HoaDonChiTietDTO> hoaDonChiTietList);
+
+    void updateTrangThaiHoaDon(Integer idHoaDon, String trangThai);
 
     List<HoaDonDTO> getHDforNV(int id);
 

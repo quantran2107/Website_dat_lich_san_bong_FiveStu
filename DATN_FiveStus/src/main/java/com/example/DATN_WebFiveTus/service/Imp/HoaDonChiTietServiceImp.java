@@ -4,13 +4,12 @@ import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
 import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.entity.HoaDon;
 import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
+import com.example.DATN_WebFiveTus.entity.NhanVien;
 import com.example.DATN_WebFiveTus.entity.SanCa;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
-import com.example.DATN_WebFiveTus.repository.HoaDonChiTietRepository;
-import com.example.DATN_WebFiveTus.repository.HoaDonRepository;
-import com.example.DATN_WebFiveTus.repository.KhachHangRepository;
-import com.example.DATN_WebFiveTus.repository.SanCaRepository;
+import com.example.DATN_WebFiveTus.repository.*;
 import com.example.DATN_WebFiveTus.service.HoaDonChiTietService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
@@ -36,6 +36,9 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
     private HoaDonRepository hoaDonRepository;
 
     private KhachHangRepository khachHangRepository;
+
+    @Autowired
+    private NhanVienReposity nhanVienReposity;
 
     private SanCaRepository sanCaRepository;
 
@@ -47,12 +50,14 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
     @Autowired
     private SpringTemplateEngine springTemplateEngine;
 
+
     @Autowired
     public HoaDonChiTietServiceImp(HoaDonChiTietRepository hoaDonChiTietRepository, HoaDonRepository hoaDonRepository, SanCaRepository sanCaRepository, ModelMapper modelMapper) {
         this.hoaDonChiTietRepository = hoaDonChiTietRepository;
         this.hoaDonRepository = hoaDonRepository;
         this.sanCaRepository = sanCaRepository;
         this.khachHangRepository = khachHangRepository;
+        this.nhanVienReposity = nhanVienReposity;
         this.modelMapper = modelMapper;
     }
 
@@ -111,7 +116,21 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
     @Override
     public HoaDonChiTietDTO update(Integer id, HoaDonChiTietDTO hoaDonChiTietDTO) {
-        return null;
+        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hóa đơn chi tiết không tồn tại với ID: " + id));
+
+        NhanVien nhanVien = nhanVienReposity.findById(hoaDonChiTietDTO.getIdNhanVien())
+                .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại với ID: " + hoaDonChiTietDTO.getIdNhanVien()));
+
+        hoaDonChiTiet.setNhanVien(nhanVien);
+        hoaDonChiTiet.setTongTien(hoaDonChiTietDTO.getTongTien());
+        hoaDonChiTiet.setTienGiamGia(hoaDonChiTietDTO.getTienGiamGia());
+        hoaDonChiTiet.setTongTienThucTe(hoaDonChiTietDTO.getTongTienThucTe());
+        hoaDonChiTiet.setTrangThai("Đã thanh toán");
+
+        HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
+
+        return modelMapper.map(hoaDonChiTietSave, HoaDonChiTietDTO.class);
     }
 
     @Override
@@ -245,21 +264,35 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
     @Override
     public HoaDonChiTietDTO save2(HoaDonChiTietDTO hoaDonChiTietDTO) {
         HoaDonChiTiet hoaDonChiTiet = modelMapper.map(hoaDonChiTietDTO, HoaDonChiTiet.class);
-
         SanCa sanCa = sanCaRepository.findById(hoaDonChiTietDTO.getIdSanCa()).orElseThrow();
+        // Khởi tạo đối tượng NhanVien
+        NhanVien nhanVien = null;
+
+        // Kiểm tra điều kiện trước khi tìm nhân viên
 
         HoaDon hoaDon = hoaDonRepository.findById(hoaDonChiTietDTO.getIdHoaDon()).orElseThrow();
-
         hoaDonChiTiet.setMaHoaDonChiTiet(generateMaHoaDonChiTiet());
+        // Thiết lập trạng thái dựa trên idNhanVien
+
         hoaDonChiTiet.setSanCa(sanCa);
         hoaDonChiTiet.setHoaDon(hoaDon);
         hoaDonChiTiet.setNgayDenSan(new java.sql.Date(hoaDonChiTietDTO.getNgayDenSan().getTime()));
-        hoaDonChiTiet.setTrangThai("Chờ nhận sân");
-        hoaDonChiTiet.setKieuNgayDat("Theo ngày");
+        hoaDonChiTiet.setKieuNgayDat(hoaDonChiTietDTO.getKieuNgayDat());
         hoaDonChiTiet.setTongTien(hoaDonChiTietDTO.getTongTien());
 
-        HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
+        System.out.println("IdNhanVienHoaDon: " + hoaDonChiTietDTO.getIdNhanVienHoaDon());
+        System.out.println("hoaDonChiTiet: " + hoaDonChiTietDTO.toString());
+        System.out.println("hoaDon: " + hoaDon.toString());
 
+        if (hoaDon.getNhanVien() != null) {
+            nhanVien = nhanVienReposity.findById(hoaDon.getNhanVien().getId())
+                    .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại với ID: " + hoaDonChiTietDTO.getIdNhanVien()));
+            hoaDonChiTiet.setTrangThai("Chờ nhận sân");
+        }else{
+            hoaDonChiTiet.setTrangThai("Chờ đặt cọc");
+        }
+
+        HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
         return modelMapper.map(hoaDonChiTietSave, HoaDonChiTietDTO.class);
     }
 
@@ -268,7 +301,13 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         Long count = hoaDonChiTietRepository.countByIdSanCaAndNgayDenSan(idSanCa, ngayDenSan);
         return count > 0;  // Nếu count > 0 tức là sân ca đã được đặt
     }
-
+    @Override
+    public void updateTrangThaiHoaDonChiTiet(Integer idHoaDonChiTiet, String trangThai) {
+        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(idHoaDonChiTiet)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn chi tiết với id " + idHoaDonChiTiet));
+        hoaDonChiTiet.setTrangThai(trangThai);
+        hoaDonChiTietRepository.save(hoaDonChiTiet);
+    }
     @Override
     public List<HoaDonChiTietDTO> findByIdKhachHang(Integer id) {
         List<HoaDonChiTiet> list = hoaDonChiTietRepository.findHoaDonChiTietByIdKhachHang(id);

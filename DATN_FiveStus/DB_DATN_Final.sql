@@ -235,6 +235,7 @@ CREATE TABLE hoa_don_chi_tiet (
   id INT AUTO_INCREMENT PRIMARY KEY,
   id_hoa_don INT NULL,
   id_san_ca INT NULL,
+  id_nhan_vien INT  NULL,
   id_phieu_giam_gia INT  NULL,
   ma_hoa_don_chi_tiet VARCHAR(100)  NULL,
   tong_tien DECIMAL(10, 2) NULL,
@@ -409,8 +410,8 @@ CREATE TABLE lich_su_checkin (
 
 INSERT INTO khach_hang (ma_khach_hang, mat_khau, ho_va_ten, email, gioi_tinh, so_dien_thoai, trang_thai, created_at, updated_at, deleted_at)
 VALUES
-  ('KH001', 'password1', 'Nguyen Van A', 'nguyenvana@gmail.com', true, '0987456321', 'active', NOW(), NOW(), 1),
-  ('KH002', 'password2', 'Nguyen Van B', 'nguyenvanb@gmail.com', false, '0963258741', 'active', NOW(), NOW(), 1),
+  ('KH001', 'password1', 'Nguyen Van A', 'lyly1062004@gmail.com', true, '0987456321', 'active', NOW(), NOW(), 1),
+  ('KH002', 'password2', 'Nguyen Van B', 'trananhquan0868@gmail.com', false, '0963258741', 'active', NOW(), NOW(), 1),
   ('KH003', 'password3', 'Nguyen Van C', 'nguyenvanc@gmail.com', true, '0321456987', 'inactive', NOW(), NOW(), 1),
   ('KH004', 'password4', 'Nguyen Van D', 'nguyenvand@gmail.com', false, '0369852147', 'active', NOW(), NOW(), 0),
   ('KH005', 'password5', 'Nguyen Van E', 'nguyenvane@gmail.com', true, '0147852369', 'active', NOW(), NOW(), 0);
@@ -2396,8 +2397,8 @@ VALUES
 (3,'bangdxph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','bangdxph39949'),
 (4,'lynhkph12345@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','lynhkph12345'),
 (5,'haipnph39949@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','haipnph39949'),
-(6,'nguyenvana@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanA'),
-(7,'nguyenvanb@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanB'),
+(6,'lyly1062004@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanA'),
+(7,'trananhquan0868@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanB'),
 (8,'nguyenvanc@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanC'),
 (9,'nguyenvand@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanD'),
 (10,'nguyenvane@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanE');
