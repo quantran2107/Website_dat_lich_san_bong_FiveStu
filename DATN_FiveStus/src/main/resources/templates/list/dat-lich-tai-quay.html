@@ -769,7 +769,7 @@
     let selectedInvoiceId = null; // Biến lưu trữ ID hóa đơn chi tiết được chọn
 
     // Lắng nghe sự kiện click trên bảng "Đang Hoạt Động"
-    document.getElementById('dang-hoat-dong-table').addEventListener('click', function (event) {
+    document.getElementById('dang-hoat-dong-table').addEventListener('click', async function (event) {
         const clickedRow = event.target.closest('tr'); // Lấy dòng được click
         if (clickedRow) {
             // Xóa lớp `table-active` khỏi tất cả các dòng
@@ -782,9 +782,9 @@
             // Lưu lại ID hóa đơn chi tiết
             selectedInvoiceId = clickedRow.getAttribute('data-id'); // Lấy ID từ data-id
             // Hiển thị dịch vụ liên quan đến hóa đơn được chọn
-            fillDichVuChoHoaDon(selectedInvoiceId);
             // Gọi hàm để hiển thị thông tin hóa đơn bên phải
-            loadInvoiceDetails(selectedInvoiceId);
+            await loadInvoiceDetails(selectedInvoiceId);
+            fillDichVuChoHoaDon(selectedInvoiceId);
         }
     });
     //End
@@ -1158,6 +1158,7 @@
                 document.getElementById('errorGiaPhuPhi').style.display = 'none'; // Ẩn thông báo lỗi
             });
 
+            tinhTongThanhToan();
         } catch (error) {
             console.error(error);
             showErrorToast('Không thể thêm phụ phí.');
@@ -1181,6 +1182,7 @@
         $('#phuPhiModal').modal('show');
         // Tải danh sách phụ phí có sẵn trong modal
         await loadAvailablePhuPhi(selectedInvoiceId);  // Hàm để lấy và hiển thị danh sách phụ phí
+        tinhTongThanhToan();
     });
 
     // Hàm xử lý xóa phụ phí
@@ -1221,7 +1223,7 @@
             await loadAvailablePhuPhi(invoiceId);  // Cập nhật bảng phụ phí
             const totalTienPhuPhi = await fetchTienPhuPhi(invoiceId); // Cập nhật tổng tiền phụ phí
             document.getElementById('tienPhuPhi').value = totalTienPhuPhi.toLocaleString() + ' VND'; // Cập nhật ô input
-
+            tinhTongThanhToan();
         } catch (error) {
             console.error(error);
             showErrorToast('Không thể xóa phụ phí.');
@@ -1578,83 +1580,385 @@
             const idTabActive = document.querySelector('#serviceTabs .nav-link.active').id; // Tab hiện tại
             const trangThai = "Đã đặt";
             const idHoaDonChiTiet = selectedInvoiceId; // ID hóa đơn chi tiết đã chọn
+            const dongia2 = parseInt(button.getAttribute('data-price'));
 
             if (!idHoaDonChiTiet) {
                 showErrorToast('Không thể thêm dịch vụ. ID hóa đơn chi tiết không hợp lệ!');
                 return;
             }
 
-            // Gán dữ liệu DTO
-            const dichVuSanBongDTO = {
-                idDoThue: idTabActive === 'tab1' ? id : null,
-                idNuocUong: idTabActive === 'tab2' ? id : null,
-                idHoaDonChiTiet: idHoaDonChiTiet,
-                soLuong: soLuong,
-                trangThai: trangThai,
-                deletedAt: false,
-            };
+            // URL kiểm tra tồn tại
+            const checkUrl = idTabActive === 'tab1'
+                ? `http://localhost:8080/dich-vu-san-bong/tim-dvsb-do-thue?idHDCT=${idHoaDonChiTiet}&idDoThue=${id}`
+                : `http://localhost:8080/dich-vu-san-bong/tim-dvsb-nuoc-uong?idHDCT=${idHoaDonChiTiet}&idNuocUong=${id}`;
 
-            console.log('Dữ liệu gửi đi:', dichVuSanBongDTO);
+            // Gửi API kiểm tra
+            fetch(checkUrl)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else if (response.status === 400) {
+                        return null;
+                    }
+                    throw new Error('Error checking service existence.');
+                })
+                .then(data => {
+                    if (data) {
+                        // Kiểm tra loại dịch vụ và lấy donGia phù hợp
+                        const donGia = idTabActive === 'tab1' ? data.donGiasDoThue : data.donGiasNuocUong;
+
+                        if (donGia !== undefined) {
+                            // Đã tồn tại: Cộng dồn số lượng và cập nhật
+                            const soLuongMoi = data.soLuong + soLuong;
+                            const tongTien = soLuongMoi * donGia;
+
+                            const updatePayload = {
+                                idDoThue: idTabActive === 'tab1' ? id : null,
+                                idNuocUong: idTabActive === 'tab2' ? id : null,
+                                idHoaDonChiTiet: idHoaDonChiTiet,
+                                soLuong: soLuongMoi,
+                                trangThai: trangThai,
+                                tongTien: tongTien,
+                                deletedAt: false,
+                            };
+
+                            const updateUrl = `http://localhost:8080/dich-vu-san-bong/${data.id}`;
+                            return fetch(updateUrl, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(updatePayload),
+                            });
+                        }
+                    } else {
+                        const payload = {
+                            idDoThue: idTabActive === 'tab1' ? id : null,
+                            idNuocUong: idTabActive === 'tab2' ? id : null,
+                            idHoaDonChiTiet,
+                            soLuong,
+                            trangThai,
+                            tongTien: soLuong * dongia2,
+                            deletedAt: false,
+                        };
+
+                        return fetch('http://localhost:8080/dich-vu-san-bong', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(payload),
+                        });
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Error processing service.');
+                    console.log('Xử lý dịch vụ thành công!');
+                    fillDichVuChoHoaDon(selectedInvoiceId);
+
+                    // Tính toán số lượng tồn kho còn lại
+                    const soLuongConLai = soLuongTonKho - soLuong;
+                    const updateStockUrl = idTabActive === 'tab1'
+                        ? `http://localhost:8080/do_thue/updateSoLuong/${id}`
+                        : `http://localhost:8080/nuoc_uong/updateSoLuong/${id}`;
+                    return fetch(updateStockUrl, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ soLuongs: soLuongConLai }),
+                    });
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Error updating stock.');
+                    console.log('Cập nhật tồn kho thành công!');
+                    showSuccessToast('Thêm dịch vụ và cập nhật tồn kho thành công!');
+
+                    // Cập nhật UI
+                    const khoConElement = button.closest('.product-card').querySelector('.kho-con');
+                    if (khoConElement) {
+                        khoConElement.textContent = `Kho Còn: ${soLuongTonKho - soLuong}`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showErrorToast('Có lỗi xảy ra khi xử lý dịch vụ!');
+                });
+        }
+
+        if (event.target.classList.contains('update-btn')) {
+            const button = event.target;
+            const idDichVu = button.getAttribute('data-id'); // ID dịch vụ
+            const idHoaDonChiTiet = button.getAttribute('data-id-hdct'); // ID hóa đơn chi tiết
+            const soLuongInput = button.closest('.product-card').querySelector('.quantity-input');
+            const soLuongThem = parseInt(soLuongInput.value, 10); // Số lượng nhập thêm
+
+            if (!soLuongThem || soLuongThem <= 0) {
+                showErrorToast('Vui lòng nhập số lượng hợp lệ!');
+                return;
+            }
 
             try {
-                // Gửi API POST
-                const postResponse = await fetch('http://localhost:8080/dich-vu-san-bong', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(dichVuSanBongDTO),
-                });
+                // 1. Gọi API để lấy thông tin chi tiết dịch vụ
+                const detailUrl = `http://localhost:8080/dich-vu-san-bong/${idDichVu}`;
+                const detailResponse = await fetch(detailUrl);
 
-                if (!postResponse.ok) throw new Error(`POST error: ${await postResponse.text()}`);
+                if (!detailResponse.ok) throw new Error('Không lấy được thông tin dịch vụ.');
+                const detailData = await detailResponse.json();
 
-                console.log('Thêm dịch vụ thành công!');
+                const idDoThue = detailData.idDoThue;
+                const idNuocUong = detailData.idNuocUong;
+                const soLuongTonKho = idDoThue ? detailData.soLuongsDoThue : detailData.soLuongsNuocUong;
 
-                // Tính toán số lượng còn lại
-                const soLuongConLai = soLuongTonKho - soLuong; // Số lượng còn lại = Tồn kho ban đầu - Số lượng nhập
+                // 2. Xây dựng URL kiểm tra tồn tại
+                const checkUrl = idDoThue
+                    ? `http://localhost:8080/dich-vu-san-bong/tim-dvsb-do-thue?idHDCT=${idHoaDonChiTiet}&idDoThue=${idDoThue}`
+                    : `http://localhost:8080/dich-vu-san-bong/tim-dvsb-nuoc-uong?idHDCT=${idHoaDonChiTiet}&idNuocUong=${idNuocUong}`;
 
-                // Tạo DTO cho API PUT
-                const updateSoLuongDTO = {
-                    soLuongs: soLuongConLai, // Số lượng còn lại
+                // 3. Gọi API kiểm tra tồn tại
+                const checkResponse = await fetch(checkUrl);
+
+                let checkData = null; // Định nghĩa checkData ở đây
+                if (checkResponse.ok) {
+                    // Dịch vụ đã tồn tại, thực hiện cập nhật số lượng
+                    checkData = await checkResponse.json();
+
+                    const updatePayload = {
+                        idDoThue: idDoThue || null,
+                        idNuocUong: idNuocUong || null,
+                        idHoaDonChiTiet,
+                        soLuong: soLuongThem,
+                        trangThai: checkData.trangThai,
+                    };
+
+                    const updateUrl = `http://localhost:8080/dich-vu-san-bong/${idDichVu}`;
+                    const updateResponse = await fetch(updateUrl, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(updatePayload),
+                    });
+
+                    if (!updateResponse.ok) throw new Error('Cập nhật số lượng thất bại.');
+                    showSuccessToast('Cập nhật số lượng thành công!');
+                } else if (checkResponse.status === 400) {
+                    // Dịch vụ chưa tồn tại, thực hiện thêm mới
+                    const addPayload = {
+                        idHoaDonChiTiet,
+                        soLuong: soLuongThem,
+                        idDoThue: idDoThue || null,
+                        idNuocUong: idNuocUong || null,
+                    };
+
+                    const addResponse = await fetch('http://localhost:8080/dich-vu-san-bong', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(addPayload),
+                    });
+
+                    if (!addResponse.ok) throw new Error('Thêm dịch vụ thất bại.');
+                    fillDichVuChoHoaDon(selectedInvoiceId);
+                    showSuccessToast('Thêm dịch vụ thành công!');
+                } else {
+                    throw new Error('Lỗi kiểm tra dịch vụ.');
+                }
+
+                // 4. Cập nhật số lượng tồn kho
+                const soLuongHienTai = checkData ? checkData.soLuong : 0; // Lấy số lượng hiện tại từ checkData
+                const chenhLechSoLuong = soLuongThem - soLuongHienTai; // Tính chênh lệch số lượng
+
+                if (chenhLechSoLuong !== 0) {
+                    const soLuongConLai = soLuongTonKho - chenhLechSoLuong; // Điều chỉnh tồn kho dựa trên chênh lệch
+
+                    const updateStockUrl = idDoThue
+                        ? `http://localhost:8080/do_thue/updateSoLuong/${idDoThue}`
+                        : `http://localhost:8080/nuoc_uong/updateSoLuong/${idNuocUong}`;
+
+                    const updateStockPayload = {
+                        soLuongs: soLuongConLai, // Số lượng tồn kho mới
+                    };
+
+                    const stockResponse = await fetch(updateStockUrl, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(updateStockPayload),
+                    });
+
+                    if (!stockResponse.ok) throw new Error('Cập nhật tồn kho thất bại.');
+
+                    // Cập nhật hiển thị kho
+                    const khoConElement = button.closest('.product-card').querySelector('.kho-con');
+                    if (khoConElement) {
+                        khoConElement.textContent = `Kho Còn: ${soLuongConLai}`;
+                    }
+
+                    console.log('Cập nhật tồn kho thành công!');
+                    showSuccessToast('Cập nhật số lượng và tồn kho thành công!');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showErrorToast('Có lỗi xảy ra khi xử lý dịch vụ!');
+            }
+        }
+
+        if (event.target.classList.contains('cancel-btn')) {
+            const button = event.target;
+            const idDichVu = button.getAttribute('data-id'); // ID dịch vụ
+            const idHoaDonChiTiet = selectedInvoiceId;
+
+            try {
+                // 1. Gọi API để lấy thông tin chi tiết dịch vụ
+                const detailUrl = `http://localhost:8080/dich-vu-san-bong/${idDichVu}`;
+                const detailResponse = await fetch(detailUrl);
+
+                if (!detailResponse.ok) throw new Error('Không lấy được thông tin dịch vụ.');
+                const detailData = await detailResponse.json();
+
+                const idDoThue = detailData.idDoThue;
+                const idNuocUong = detailData.idNuocUong;
+                const soLuongTonKho = idDoThue ? detailData.soLuongsDoThue : detailData.soLuongsNuocUong;
+
+                // 2. Xây dựng URL kiểm tra tồn tại
+                const checkUrl = idDoThue
+                    ? `http://localhost:8080/dich-vu-san-bong/tim-dvsb-do-thue?idHDCT=${idHoaDonChiTiet}&idDoThue=${idDoThue}`
+                    : `http://localhost:8080/dich-vu-san-bong/tim-dvsb-nuoc-uong?idHDCT=${idHoaDonChiTiet}&idNuocUong=${idNuocUong}`;
+
+                // 3. Gọi API kiểm tra tồn tại
+                const checkResponse = await fetch(checkUrl);
+
+                let checkData = null; // Định nghĩa checkData ở đây
+                if (checkResponse.ok) {
+                    // Dịch vụ đã tồn tại, thực hiện cập nhật số lượng về 0
+                    checkData = await checkResponse.json();
+
+                    const updatePayload = {
+                        idDoThue: idDoThue || null,
+                        idNuocUong: idNuocUong || null,
+                        idHoaDonChiTiet,
+                        soLuong: 0, // Số lượng hủy bỏ
+                        trangThai: checkData.trangThai,
+                        deletedAt: true,
+                    };
+
+                    const updateUrl = `http://localhost:8080/dich-vu-san-bong/${idDichVu}`;
+                    const updateResponse = await fetch(updateUrl, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(updatePayload),
+                    });
+
+                    if (!updateResponse.ok) throw new Error('Cập nhật số lượng thất bại.');
+                    fillDichVuChoHoaDon(selectedInvoiceId);
+                    showSuccessToast('Số lượng đã được hủy thành công!');
+                } else if (checkResponse.status === 400) {
+                    // Dịch vụ chưa tồn tại trong giỏ hàng
+                    showErrorToast('Dịch vụ chưa được thêm vào giỏ hàng.');
+                } else {
+                    throw new Error('Lỗi kiểm tra dịch vụ.');
+                }
+
+                // 4. Cập nhật số lượng tồn kho (số lượng được hủy bỏ sẽ không làm thay đổi tồn kho)
+                const soLuongHienTai = checkData ? checkData.soLuong : 0; // Lấy số lượng hiện tại từ checkData
+                const soLuongConLai = soLuongTonKho + soLuongHienTai;
+
+                const updateStockUrl = idDoThue
+                    ? `http://localhost:8080/do_thue/updateSoLuong/${idDoThue}`
+                    : `http://localhost:8080/nuoc_uong/updateSoLuong/${idNuocUong}`;
+
+                const updateStockPayload = {
+                    soLuongs: soLuongConLai, // Cập nhật lại số lượng tồn kho
                 };
 
-                console.log('Số lượng tồn kho ban đầu:', soLuongTonKho);
-                console.log('Số lượng khách nhập:', soLuong);
-                console.log('Số lượng còn lại (gửi đi):', soLuongConLai);
-
-                // Xác định URL PUT API dựa trên tab
-                const updateUrl = idTabActive === 'tab1'
-                    ? `http://localhost:8080/do_thue/updateSoLuong/${id}`
-                    : `http://localhost:8080/nuoc_uong/updateSoLuong/${id}`;
-
-                // Gửi API PUT để cập nhật tồn kho
-                const putResponse = await fetch(updateUrl, {
+                const stockResponse = await fetch(updateStockUrl, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(updateSoLuongDTO),
+                    body: JSON.stringify(updateStockPayload),
                 });
 
-                if (!putResponse.ok) throw new Error(`PUT error: ${await putResponse.text()}`);
+                if (!stockResponse.ok) throw new Error('Cập nhật tồn kho thất bại.');
 
-                console.log('Cập nhật tồn kho thành công!');
-                showSuccessToast('Thêm dịch vụ và cập nhật tồn kho thành công!');
-
-                // Cập nhật lại số lượng còn trong box sản phẩm (modal)
+                // Cập nhật hiển thị kho
                 const khoConElement = button.closest('.product-card').querySelector('.kho-con');
                 if (khoConElement) {
                     khoConElement.textContent = `Kho Còn: ${soLuongConLai}`;
                 }
 
+                console.log('Cập nhật tồn kho thành công!');
+                showSuccessToast('Cập nhật số lượng và tồn kho thành công!');
             } catch (error) {
                 console.error('Error:', error);
-                showErrorToast('Có lỗi xảy ra khi thêm dịch vụ hoặc cập nhật tồn kho!');
+                showErrorToast('Có lỗi xảy ra khi hủy dịch vụ!');
             }
         }
     });
 
-    function fillDichVuChoHoaDon(idHDCT) {
+    async function tinhTongTienDichVu() {
+        try {
+            // Gọi API để lấy thông tin hóa đơn chi tiết
+            const invoiceResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${selectedInvoiceId}`, {cache: "no-store"});
+            const invoiceData = await invoiceResponse.json();
+
+            // Gọi API để lấy danh sách dịch vụ
+            const servicesResponse = await fetch(`http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${invoiceData.id}`, {cache: "no-store"});
+            const services = await servicesResponse.json();
+
+            let totalCost = 0; // Khởi tạo tổng tiền dịch vụ
+
+            if (Array.isArray(services) && services.length > 0) {
+                // Tính tổng tiền từ các dịch vụ
+                totalCost = services.reduce((sum, service) => {
+                    return sum + (parseFloat(service.tongTien) || 0); // Đảm bảo chuyển đổi sang số
+                }, 0);
+            }
+
+            // Cập nhật giá trị dịch vụ, mặc định là 0 nếu không có dịch vụ
+            document.getElementById(`giaDichVu`).value = totalCost.toLocaleString() + ' VND';
+        } catch (error) {
+            console.error('Lỗi khi tính tổng tiền:', error);
+            // Đặt giá trị tiền dịch vụ về 0 trong trường hợp lỗi
+            document.getElementById(`giaDichVu`).value = '0 VND';
+        }
+    }
+
+    // Hàm chuyển đổi từ chuỗi tiền tệ dạng "130.000 VND" thành số
+    function parseCurrency(value) {
+        return parseFloat(value.replace(/[^\d]/g, '')); // Loại bỏ tất cả ký tự không phải số và chuyển thành số
+    }
+
+    // Hàm tính tổng
+    function tinhTongThanhToan() {
+        // Lấy giá trị từ các input theo ID và chuyển đổi
+        const tienSan = parseCurrency(document.getElementById('tienSan').value) || 0;
+        const tienCoc = parseCurrency(document.getElementById('tienCoc').value) || 0;
+        const giaDichVu = parseCurrency(document.getElementById('giaDichVu').value) || 0;
+        const tienPhuPhi = parseCurrency(document.getElementById('tienPhuPhi').value) || 0;
+
+        // Tính tổng
+        const tongTien = tienSan - tienCoc + giaDichVu + tienPhuPhi;
+
+        // Hiển thị kết quả định dạng tiền tệ Việt Nam
+        const tongTienFormatted = tongTien.toLocaleString() + ' VND';
+
+        console.log('Tổng tiền thanh toán:', tongTienFormatted);
+
+        // Cập nhật giá trị vào ô input hoặc giao diện
+        document.getElementById('tongTien').value = tongTienFormatted;
+    }
+
+
+
+    async function fillDichVuChoHoaDon(idHDCT) {
+        await tinhTongTienDichVu();
+        tinhTongThanhToan();
         $.ajax({
             url: `http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${idHDCT}`,
             type: 'GET',
