@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -50,13 +50,15 @@ public class HoaDonChiTietRest {
     @GetMapping("/trang-thai")
     public ResponseEntity<?> getHoaDonChiTietByTrangThai(
             @RequestParam(defaultValue = "false") String trangThai,
-            @RequestParam(required = false) String soDienThoaiKhachHang,
+            @RequestParam(required = false) String keyWord,
             @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size) {
+            @RequestParam(defaultValue = "5") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<HoaDonChiTietDTO> result = hoaDonChiTietService.getHoaDonChiTietByTrangThai(trangThai, soDienThoaiKhachHang, pageable);
+        Page<HoaDonChiTietDTO> result = hoaDonChiTietService.getHoaDonChiTietByTrangThai(
+                trangThai, keyWord, pageable);
         return ResponseEntity.ok(result);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOne(@PathVariable("id") Integer id) {
@@ -90,7 +92,7 @@ public class HoaDonChiTietRest {
             // Xử lý khi không có ngày được cung cấp, có thể trả về một danh sách rỗng hoặc thông báo lỗi
             result = new ArrayList<>();  // Hoặc xử lý theo cách bạn muốn
         } else {
-            result = hoaDonChiTietService.findByNgayDenSan(ngayDenSan);
+            result = hoaDonChiTietService.findByNgayDenSan((java.sql.Date) ngayDenSan);
         }
         return ResponseEntity.ok(result);
     }
@@ -147,7 +149,7 @@ public class HoaDonChiTietRest {
     }
 
     @PutMapping("/huy-lich-dat/{id}")
-    public ResponseEntity<HoaDonChiTietDTO> huyLichDat(@PathVariable Integer id){
+    public ResponseEntity<HoaDonChiTietDTO> huyLichDat(@PathVariable Integer id) {
         HoaDonChiTietDTO hoaDonChiTietDTO = hoaDonChiTietService.huyLichDat(id);
         return ResponseEntity.ok(hoaDonChiTietDTO);
     }
