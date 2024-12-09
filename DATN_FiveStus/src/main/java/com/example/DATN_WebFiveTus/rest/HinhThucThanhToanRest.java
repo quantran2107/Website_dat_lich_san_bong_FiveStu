@@ -19,15 +19,15 @@ public class HinhThucThanhToanRest {
     @Autowired
     private CTHTTTService cthttService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getHtttForIdHD(@PathVariable int id) {
-        return ResponseEntity.ok(cthttService.getHtttById(id));
-    }
-
-    @PostMapping("add")
-    public ResponseEntity<?> addNew(@RequestBody HTTTDto htttDto){
-        return ResponseEntity.ok(cthttService.addNew(htttDto));
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<?> getHtttForIdHD(@PathVariable int id) {
+//        return ResponseEntity.ok(cthttService.getHtttById(id));
+//    }
+//
+//    @PostMapping("add")
+//    public ResponseEntity<?> addNew(@RequestBody HTTTDto htttDto){
+//        return ResponseEntity.ok(cthttService.addNew(htttDto));
+//    }
 
     @GetMapping("find-by-id-hdct/{id}")
     public ResponseEntity<?> getChiTietHTTTByHoaDonChiTietId(@PathVariable int id) {
@@ -35,4 +35,5 @@ public class HinhThucThanhToanRest {
         List<ChiTietHinhThucThanhToanDTO> chiTietHinhThucThanhToanDTOS = cthttService.findByHoaDonChiTietId(id);
         return ResponseEntity.ok(chiTietHinhThucThanhToanDTOS);
     }
+
 }

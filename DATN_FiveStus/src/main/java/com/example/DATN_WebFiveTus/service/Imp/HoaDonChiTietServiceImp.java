@@ -280,10 +280,6 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         hoaDonChiTiet.setKieuNgayDat(hoaDonChiTietDTO.getKieuNgayDat());
         hoaDonChiTiet.setTongTien(hoaDonChiTietDTO.getTongTien());
 
-        System.out.println("IdNhanVienHoaDon: " + hoaDonChiTietDTO.getIdNhanVienHoaDon());
-        System.out.println("hoaDonChiTiet: " + hoaDonChiTietDTO.toString());
-        System.out.println("hoaDon: " + hoaDon.toString());
-
         if (hoaDon.getNhanVien() != null) {
             nhanVien = nhanVienReposity.findById(hoaDon.getNhanVien().getId())
                     .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại với ID: " + hoaDonChiTietDTO.getIdNhanVien()));

@@ -430,7 +430,8 @@
                                                 <label for="tongTien">Tổng tiền</label>
                                                 <input class="form-control" id="tongTien" type="text" readonly>
                                             </div>
-                                        </div></div>
+                                        </div>
+                                    </div>
                                     <hr>
                                     <div class="row">
                                         <div class="col-md-12">
@@ -467,6 +468,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group mb-3">
@@ -483,7 +485,6 @@
                                         </div>
                                     </div>
 
-
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group mb-3">
@@ -495,22 +496,17 @@
                                                 <div class="input-group mb-3" >
                                                     <!--     nút mở modal-->
                                                     <div class="form-group mb-3" style="display: flex;align-items: center">
-                                                        <button type="button" class="btn-outline-warning" style="
-                                                                            display: flex;
-                                                                            align-items: center;
-                                                                            padding: 10px 15px;
-                                                                            border: none;
-                                                                            border-radius: 5px;
-                                                                            cursor: pointer;
-                                                                            font-size: 16px;
-                                                                        " data-toggle="modal" data-target="#exampleModal${invoiceId}" onclick="fillHttt(${invoiceId})">
+                                                        <button type="button" class="btn-outline-warning"
+                                                                style="display: flex; align-items: center; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;"
+                                                                data-toggle="modal" data-target="#exampleModal" title="Tiền khách đưa">
                                                             <i class="fas fa-credit-card" style="margin-right: 5px;"></i>
                                                         </button>
+
                                                         <input type="text" style="margin-left: 82px" class="form-control" id="tienKhachDua" readonly >
                                                         <span class="input-group-text">VND</span>
                                                     </div>
                                                 </div>
-                                                <!--                    ket thuc nut modal-->
+                                                <!-- ket thuc nut modal-->
                                             </div>
                                         </div>
                                     </div>
@@ -549,14 +545,13 @@
     </main>
 
     <!--    Modal table check-in-->
-    <div class="modal fade" id="checkInListModal" tabindex="-1" aria-labelledby="checkInListModalLabel"
-         aria-hidden="true">
+    <div class="modal fade" id="checkInListModal" tabindex="-1"
+         aria-labelledby="checkInListModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="checkInListModalLabel">Danh Sách Sân Chờ Nhận</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                </div>
                 <div class="modal-body">
                     <!-- Input tìm kiếm -->
                     <div class="mb-3 d-flex">
@@ -603,7 +598,6 @@
                 <div class="modal-header bg-success text-white">
                     <h5 class="modal-title" id="phuPhiModalLabel">Thêm Phụ Phí</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-
                 </div>
                 <div class="modal-body">
                     <form id="phuPhiForm">
@@ -651,61 +645,44 @@
 <!--    Modal để thực hiện hình thức thanh toán-->
     <div class="modal fade" id="exampleModal" tabindex="-1"
          aria-labelledby="exampleModalLabel" aria-hidden="true" >
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog ">
             <div class="modal-content">
                 <div class="modal-header"style="background-color: #198754; color: white">
                     <h3 class="modal-title" id="exampleModalLabel"
                         style="text-align: center ;flex: 1">Thanh toán</h3>
-                    <button type="button" class="close" data-dismiss="modal"
-                            aria-label="Đóng">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <!--                                                        Nội dung của Modal-->
+                    <!--Nội dung của Modal-->
                     <div style="align-items: center;justify-content: center;">
                         <div style="display: flex;margin-bottom: 10px">
                             <label style="flex:1"><h5>Tổng tiền hàng</h5></label>
                             <h5 id="tongTienHang"  style="float: right"></h5>
-                            <h5>₫</h5>
+                            <h5>VND</h5>
                         </div>
                         <div style="display: flex;justify-content: center; margin-bottom: 10px">
-                            <button type="button"
-                                    style="border: 2px solid #28a745; background-color: transparent; color: #28a745; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s, color 0.3s;"
-                                    onmouseover="this.style.backgroundColor='#28a745'; this.style.color='#fff';"
-                                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='#28a745';"
-                                    onclick="maGDInput(true,${invoiceId})">
-                                Chuyển khoản<i style="margin-left: 5px"
-                                               class="fas fa-university"></i>
+                            <button type="button" id="btnChuyenKhoan" class="btn btn-outline-success" style="margin-right: 5px;" data-id-hinh-thuc-thanh-toan="1" >
+                                Chuyển khoản <i class="fas fa-university" style="margin-left: 5px"></i>
                             </button>
-                            <button type="button"
-                                    style="border: 2px solid #28a745; background-color: transparent; color: #28a745; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; margin-left: 5px; transition: background-color 0.3s, color 0.3s;"
-                                    onmouseover="this.style.backgroundColor='#28a745'; this.style.color='#fff';"
-                                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='#28a745';"
-                                    onclick="maGDInput(false,${invoiceId})">
-                                Tiền mặt<i style="margin-left: 5px"
-                                           class="fas fa-money-bill-wave"></i>
+                            <!-- Nút Tiền mặt -->
+                            <button type="button" id="btnTienMat" class="btn btn-outline-success" data-id-hinh-thuc-thanh-toan="2" >
+                                Tiền mặt <i class="fas fa-money-bill-wave" style="margin-left: 5px"></i>
                             </button>
                         </div>
                         <div style="margin-bottom: 10px">
-                            <label for="khachDua${invoiceId}" style="font-weight: bold;">Tiền
+                            <label for="khachDua" style="font-weight: bold;">Tiền
                                 khách đưa:</label>
                             <div style="display: flex">
                                 <input type="number"
-                                       id="khachDua${invoiceId}"
+                                       id="khachDua"
                                        class="form-control"
                                        placeholder="Nhập tiền khách đưa"
-                                       style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none;  "
-
-                                       onfocus="this.style.borderBottom='2px solid #0056b3';"
-                                       onblur="this.style.borderBottom='2px solid #007bff';">
+                                       style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none;  ">
                                 <input type="text"
-                                       id="maGD${invoiceId}"
+                                       id="maGD"
                                        class="form-control"
                                        placeholder="Mã giao dịch"
-                                       style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none; display: none"
-                                       onfocus="this.style.borderBottom='2px solid #0056b3';"
-                                       onblur="this.style.borderBottom='2px solid #007bff';">
+                                       style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none; display: none">
                             </div>
                         </div>
                         <div style="margin-bottom: 60px; margin-top: 60px" >
@@ -719,7 +696,7 @@
                                 <th>Hành động</th>
 
                                 </thead>
-                                <tbody id="tbody${invoiceId}">
+                                <tbody id="tbodyCTHTTT">
                                 <tr>
                                     <td style=" text-align: center" colspan="5">Chưa có thông tin</td>
                                 </tr>
@@ -728,18 +705,13 @@
                         </div>
                         <div style="display: flex" >
                             <label style="flex:1" ><h5>Tiền còn thiếu</h5></label>
-
-                            <h5 id="tienConThieu${invoiceId}" style="float: right" ></h5>
-                            <h5>₫</h5>
+                            <h5 id="tienConThieu" style="float: right" ></h5>
+                            <h5>VND</h5>
                         </div>
                     </div>
-
-
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-success"
-                            onclick="changerHttt(${invoiceId})">Xác nhận
-                    </button>
+                    <button type="button" class="btn btn-outline-success" id="btnXacNhanThanhToan">Xác nhận</button>
                 </div>
             </div>
         </div>
@@ -872,7 +844,7 @@
                 });
             } else {
                 const emptyRow = document.createElement('tr');
-                emptyRow.innerHTML = `<td colspan="9" class="text-center">Không có dữ liệu</td>`;
+                emptyRow.innerHTML = `<td colspan="9" class="text-center"></td>`;
                 tableBody.appendChild(emptyRow);
             }
 
@@ -1203,7 +1175,6 @@
         document.getElementById('errorGiaPhuPhi').style.display = 'none';
     });
 
-
     // Mở modal khi nhấn nút + và hiển thị phụ phí có sẵn
     document.getElementById('btnAddPhuPhi').addEventListener('click', async function() {
         // Mở modal để thêm phụ phí
@@ -1257,6 +1228,231 @@
         }
     }
 
+    //End phụ phí
+
+    // Code phần xử lý hình thức thanh toán
+
+    // Đảm bảo khi click vào nút "Tiền khách đưa" sẽ mở modal
+    document.querySelectorAll('.btn-outline-warning').forEach(button => {
+        button.addEventListener('click', async function () {
+            const modalId = `#exampleModal`; // ID của modal
+            $(modalId).modal('show'); // Mở modal
+            // Reset trạng thái ban đầu của modal
+            resetModalState();
+            if (selectedInvoiceId) {
+                await loadChiTietHTTTTable(selectedInvoiceId);
+            } else {
+                showErrorToast('Không xác định được hóa đơn chi tiết.');
+            }
+        });
+    });
+    // Hàm reset trạng thái modal
+    function resetModalState() {
+        // Chọn nút "Tiền mặt" làm mặc định
+        const chuyenKhoanButton = document.getElementById('btnChuyenKhoan');
+        const tienMatButton = document.getElementById('btnTienMat');
+
+        tienMatButton.classList.add('btn-success');
+        tienMatButton.style.color = 'white';
+
+        chuyenKhoanButton.classList.remove('btn-success');
+        chuyenKhoanButton.classList.add('btn-outline-success');
+        chuyenKhoanButton.style.color = '';
+
+        // Ẩn input "Mã giao dịch"
+        maGDInput(false);
+
+        // Reset các input
+        document.getElementById('khachDua').value = ''; // Reset tiền khách đưa
+        document.getElementById('maGD').value = ''; // Reset mã giao dịch
+    }
+    // Hàm để xử lý hiển thị/ẩn input Mã giao dịch và điều chỉnh layout khi chọn "Chuyển khoản" hoặc "Tiền mặt"
+    function maGDInput(check) {
+        const maGDInput = document.getElementById('maGD');  // Input Mã giao dịch
+        const khachDuaInput = document.getElementById('khachDua');  // Input Tiền khách đưa
+
+        // Nếu chọn Chuyển khoản, hiển thị Mã giao dịch
+        if (check) {
+            maGDInput.style.display = "block";  // Hiển thị Mã giao dịch
+            khachDuaInput.style.width = "50%";  // Điều chỉnh chiều rộng của "Tiền khách đưa"
+        } else {
+            maGDInput.style.display = "none";  // Ẩn Mã giao dịch
+            khachDuaInput.style.width = "100%";  // Chiều rộng của "Tiền khách đưa" đầy đủ
+        }
+    }
+
+    // Gắn sự kiện click cho các nút "Chuyển khoản" và "Tiền mặt"
+    document.getElementById('btnChuyenKhoan').addEventListener('click', function() {
+        // Xóa lớp "active" (btn-success) khỏi cả hai nút
+        document.getElementById('btnChuyenKhoan').classList.add('btn-success');
+        document.getElementById('btnChuyenKhoan').style.color = 'white';  // Thêm màu chữ trắng
+        document.getElementById('btnTienMat').classList.remove('btn-success');
+        document.getElementById('btnTienMat').style.color = '';  // Đặt lại màu chữ của Tiền mặt
+
+        // Hiển thị input mã giao dịch khi chọn "Chuyển khoản"
+        maGDInput(true);
+    });
+
+    document.getElementById('btnTienMat').addEventListener('click', function() {
+        // Xóa lớp "active" (btn-success) khỏi cả hai nút
+        document.getElementById('btnTienMat').classList.add('btn-success');
+        document.getElementById('btnTienMat').style.color = 'white';  // Thêm màu chữ trắng
+        document.getElementById('btnChuyenKhoan').classList.remove('btn-success');
+        document.getElementById('btnChuyenKhoan').style.color = '';  // Đặt lại màu chữ của Chuyển khoản
+
+        // Ẩn input mã giao dịch khi chọn "Tiền mặt"
+        maGDInput(false);
+    });
+
+    // Hàm hiển thị danh sách chi tiết hình thức thanh toán lên bảng
+    async function loadChiTietHTTTTable(invoiceId) {
+        try {
+            // Gọi API lấy danh sách chi tiết hình thức thanh toán
+            const response = await fetch(`http://localhost:8080/chi-tiet-hinh-thuc-thanh-toan/find-by-id-hdct/${invoiceId}`);
+            if (!response.ok) {
+                throw new Error('Không thể tải dữ liệu chi tiết hình thức thanh toán.');
+            }
+
+            const data = await response.json();
+
+            // Lấy bảng hiển thị danh sách
+            const tbody = document.getElementById(`tbodyCTHTTT`);
+            tbody.innerHTML = ''; // Xóa nội dung cũ trong bảng
+
+            if (data.length > 0) {
+                // Duyệt qua danh sách và thêm từng hàng vào bảng
+                data.forEach((item, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.maGiaoDich || ''}</td>
+                    <td>${item.idHinhThucThanhToan === 1 ? 'Chuyển khoản' : 'Tiền mặt'}</td>
+                    <td>${item.soTien.toLocaleString()} VND</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-danger btnDeleteHTTT"
+                                data-id="${item.id}"
+                                title="Xóa">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                `;
+                    tbody.appendChild(row);
+                });
+
+                // Gắn sự kiện cho các nút "Xóa" sau khi thêm hàng
+                document.querySelectorAll('.btnDeleteHTTT').forEach(button => {
+                    button.addEventListener('click', async function () {
+                        const htttId = this.getAttribute('data-id');
+                        await deleteChiTietHTTT(htttId, selectedInvoiceId);
+                    });
+                });
+            } else {
+                // Hiển thị thông báo nếu không có dữ liệu
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="5" class="text-center">Không có dữ liệu</td>`;
+                tbody.appendChild(row);
+            }
+        } catch (error) {
+            // console.error(error);
+            // showErrorToast('Lỗi khi tải dữ liệu chi tiết hình thức thanh toán.');
+        }
+    }
+
+    // Hàm xóa chi tiết hình thức thanh toán
+    async function deleteChiTietHTTT(htttId, invoiceId) {
+        try {
+            // Hiển thị xác nhận trước khi xóa
+            const result = await Swal.fire({
+                title: 'Xác nhận xóa',
+                text: 'Bạn có chắc chắn muốn xóa chi tiết này?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy',
+            });
+
+            if (!result.isConfirmed) return;
+            // Gửi yêu cầu xóa tới API
+            const response = await fetch(`http://localhost:8080/chi-tiet-hinh-thuc-thanh-toan/xoa/${htttId}`, {
+                method: 'PUT',
+            });
+
+            if (!response.ok) {
+                throw new Error('Không thể xóa chi tiết hình thức thanh toán.');
+            }
+
+            // Tải lại danh sách sau khi xóa
+            await loadChiTietHTTTTable(invoiceId);
+            showSuccessToast('Xóa thành công.');
+        } catch (error) {
+            console.error(error);
+            showErrorToast('Lỗi khi xóa chi tiết hình thức thanh toán.');
+        }
+    }
+
+
+    //Thêm hình thức thanh toán
+    document.getElementById('btnXacNhanThanhToan').addEventListener('click', async function () {
+        const khachDua = document.getElementById('khachDua').value.trim();
+        const maGD = document.getElementById('maGD').value.trim();
+        const chuyenKhoanButton = document.getElementById('btnChuyenKhoan');
+        const tienMatButton = document.getElementById('btnTienMat');
+
+        // Xác định idHinhThucThanhToan
+        let idHinhThucThanhToan = null;
+        if (chuyenKhoanButton.classList.contains('btn-success')) {
+            idHinhThucThanhToan = chuyenKhoanButton.getAttribute('data-id-hinh-thuc-thanh-toan');
+        } else if (tienMatButton.classList.contains('btn-success')) {
+            idHinhThucThanhToan = tienMatButton.getAttribute('data-id-hinh-thuc-thanh-toan');
+        }
+
+        // Kiểm tra đầu vào
+        if (!khachDua || isNaN(khachDua) || parseFloat(khachDua) <= 0) {
+            return showErrorToast('Số tiền khách đưa không hợp lệ.');
+        }
+        if (idHinhThucThanhToan === "1" && !maGD) {
+            return showErrorToast('Mã giao dịch không được bỏ trống khi chọn Chuyển khoản.');
+        }
+
+        // Chuẩn bị dữ liệu để gửi
+        const payload = {
+            idHinhThucThanhToan: parseInt(idHinhThucThanhToan),
+            soTien: parseFloat(khachDua),
+            maGiaoDich: idHinhThucThanhToan === "1" ? maGD : null,
+            idHoaDonChiTiet: selectedInvoiceId,
+            trangThai: "Đã thêm",
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/chi-tiet-hinh-thuc-thanh-toan/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                throw new Error('Không thể lưu chi tiết hình thức thanh toán.');
+            }
+
+            const data = await response.json();
+            await loadChiTietHTTTTable(selectedInvoiceId); // Tải lại bảng chi tiết hình thức thanh toán
+            showSuccessToast('Lưu thông tin thanh toán thành công!');
+
+            // **RESET INPUTS SAU KHI LƯU THÀNH CÔNG**
+            document.getElementById('khachDua').value = ''; // Xóa tiền khách đưa
+            document.getElementById('maGD').value = '';     // Xóa mã giao dịch
+            resetModalState();
+        } catch (error) {
+            console.error(error);
+            showErrorToast('Lỗi khi lưu thông tin thanh toán.');
+        }
+    });
+
+    //End hình thức thanh toán
 
     //Code phần bên phải (Thanh toán)
     async function loadInvoiceDetails(invoiceId) {
