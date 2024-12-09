@@ -8,8 +8,8 @@
     .switch {
         position: relative;
         display: inline-block;
-        width: 40px;  /* Giảm kích thước width */
-        height: 24px; /* Giảm kích thước height */
+        width: 30px;  /* Giảm kích thước width */
+        height: 18px; /* Giảm kích thước height */
     }
 
     .switch input {
@@ -34,11 +34,11 @@
     .slider:before {
         position: absolute;
         content: "";
-        height: 16px;  /* Giảm chiều cao của nút tròn */
-        width: 16px;   /* Giảm chiều rộng của nút tròn */
+        height: 12px;  /* Giảm chiều cao của nút tròn */
+        width: 12px;   /* Giảm chiều rộng của nút tròn */
         border-radius: 50%;  /* Làm cho nó thành vòng tròn */
-        left: 4px;
-        bottom: 4px;
+        left: 3px;  /* Điều chỉnh khoảng cách từ bên trái */
+        bottom: 3px;
         background-color: white;
         transition: .4s;
     }
@@ -50,16 +50,30 @@
 
     /* Khi slider di chuyển */
     input:checked + .slider:before {
-        transform: translateX(16px);  /* Điều chỉnh lại vị trí của nút tròn */
+        transform: translateX(12px);  /* Điều chỉnh vị trí của nút tròn */
     }
 
-    /* Giảm kích thước nút edit */
-    .btn-sm {
+    /* Giảm kích thước nút */
+    .btn {
         font-size: 12px; /* Giảm kích thước font */
-        padding: 5px 10px; /* Giảm padding để nút nhỏ lại */
+        padding: 4px 8px; /* Giảm padding để nút nhỏ lại */
+        margin: 0 2px; /* Giảm khoảng cách giữa các nút */
     }
 
+    /* Căn giữa nội dung trong ô */
+    td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 5px; /* Giảm khoảng cách bên trong */
+    }
+
+    /* Cố định độ cao và hiển thị nội dung ngang hàng */
+    td button, td .switch {
+        display: inline-block;
+        vertical-align: middle;
+    }
 </style>
+
 <body class="vertical  light  ">
 <div class="wrapper">
     <div th:include="fragment/navbar :: navbar"></div>
@@ -154,6 +168,10 @@
                                                                            th:attr="checked=${sanBong.trangThai == 'Hoạt động'}">
                                                                     <span class="slider round"></span>
                                                                 </label>
+
+                                                                <button onclick="deletedSanBong(this)"
+                                                                        class="btn btn-danger"><span
+                                                                        class="fe fe-trash-2"></span></button>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -500,6 +518,15 @@
                 return;
             }
 
+            if (!tenSanBong.trim().startsWith("Sân bóng")) {
+                Swal.fire({
+                    icon: "warning", // Đổi sang icon cảnh báo
+                    title: "Cảnh báo",
+                    text: "Tên sân bóng nên bắt đầu bằng 'Sân bóng'"
+                });
+                return;
+            }
+
             $.ajax({
                 url: `http://localhost:8080/san-bong/checkTrungSanBong?idLoaiSan=${idLoaiSan}&tenSanBong=${encodeURIComponent(tenSanBong)}&id=${id}`,
                 method: 'GET',
@@ -559,6 +586,55 @@
 
         });
     }
+
+    function deletedSanBong(button) {
+        // Gắn sự kiện click một lần cho nút xóa
+        $('tbody').on('click', '.btn-danger', function () {
+            const sanBongId = $(button).closest('tr').data('id-loai-san');
+            if (!sanBongId) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Lỗi!",
+                    text: "Không thể xác định sân bóng cần xóa."
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: "Xóa bản ghi?",
+                text: "Bạn có chắc chắn muốn xóa bản ghi này?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Xóa",
+                cancelButtonText: "Hủy"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: "http://localhost:8080/san-bong/" + sanBongId,
+                        success: function () {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Thành công!",
+                                text: "Bản ghi đã được xóa thành công!"
+                            });
+                            // Xóa hàng từ giao diện hoặc làm mới danh sách
+                            refreshCurrentTab();
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Lỗi xóa bản ghi: " + error
+                            });
+                            refreshCurrentTab();
+                        }
+                    });
+                }
+            });
+        });
+    }
+
 
     function deleteTabActive() {
         Swal.fire({
@@ -823,6 +899,15 @@
                 return;
             }
 
+            if (!tenSanBong.trim().startsWith("Sân bóng")) {
+                Swal.fire({
+                    icon: "warning", // Đổi sang icon cảnh báo
+                    title: "Cảnh báo",
+                    text: "Tên sân bóng nên bắt đầu bằng 'Sân bóng'"
+                });
+                return;
+            }
+
             // Gọi API để kiểm tra tên sân bóng có trùng không
             $.ajax({
                 url: `http://localhost:8080/san-bong/checkTrungSanBong?idLoaiSan=${idLoaiSan}&tenSanBong=${encodeURIComponent(tenSanBong)}`,
@@ -877,12 +962,7 @@
         }
     }
 
-    // Hàm cập nhật lại danh sách sân bóng của tab hiện tại
-    // function refreshCurrentTab() {
-    //     var currentTab = $('ul.nav-tabs li a.active');
-    //     var tabContentId = currentTab.attr('href');
-    //     $(tabContentId).load(location.href + ' ' + tabContentId);
-    // }
+
     function refreshCurrentTab() {
         // Lưu trạng thái của tab đang active
         var currentTab = $('ul.nav-tabs li a.active');
