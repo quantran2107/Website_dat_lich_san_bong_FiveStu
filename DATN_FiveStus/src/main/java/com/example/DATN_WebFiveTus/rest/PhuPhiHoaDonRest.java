@@ -32,20 +32,13 @@ public class PhuPhiHoaDonRest {
                 .stream()
                 .filter(phuPhi -> !phuPhi.isDeletedAt())  // Lọc những bản ghi có deletedAt là false
                 .collect(Collectors.toList());
-
         return ResponseEntity.ok(phuPhiHoaDonDTOList);
     }
 
-    //    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity<String> deletePhuPhi(@PathVariable int id) {
-//        phuPhiHoaDonService.deletePhuPhi(id);
-//        return ResponseEntity.ok("Phụ phí đã được xóa thành công.");
-//    }
     @PutMapping("/delete/{id}")
     public ResponseEntity<PhuPhiHoaDonDTO> updateDeletedAt(@PathVariable int id) {
         // Gọi service để cập nhật giá trị deletedAt
         PhuPhiHoaDonDTO updatedPhuPhi = phuPhiHoaDonService.updateDeletedAt(id);
-
         if (updatedPhuPhi != null) {
             return ResponseEntity.ok(updatedPhuPhi);
         } else {
