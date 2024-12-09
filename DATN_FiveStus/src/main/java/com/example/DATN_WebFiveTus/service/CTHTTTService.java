@@ -6,9 +6,12 @@ import com.example.DATN_WebFiveTus.dto.HTTTDto;
 import java.util.List;
 
 public interface CTHTTTService {
-    List<HTTTDto> getHtttById(int id);
+//    List<HTTTDto> getHtttById(int id);
 
-    Boolean addNew(HTTTDto htttDto);
+//    Boolean addNew(HTTTDto htttDto);
 
     List<ChiTietHinhThucThanhToanDTO> findByHoaDonChiTietId(int hoaDonChiTietId);
+
+    void deletedSoft(int idHinhThucThanhToan);
+    ChiTietHinhThucThanhToanDTO save(ChiTietHinhThucThanhToanDTO chiTietHinhThucThanhToanDTO);
 }

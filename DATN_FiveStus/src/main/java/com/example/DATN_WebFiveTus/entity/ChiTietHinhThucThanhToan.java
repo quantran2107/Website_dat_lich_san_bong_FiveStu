@@ -42,7 +42,10 @@ public class ChiTietHinhThucThanhToan {
     private HinhThucThanhToan hinhThucThanhToan;
 
     @Column(name = "so_tien")
-    private BigDecimal soTien;
+    private Float soTien;
+
+    @Column(name = "ma_giao_dich", length = 100)
+    private String maGiaoDich;
 
     @Column(name = "trang_thai", length = 50)
     private String trangThai;

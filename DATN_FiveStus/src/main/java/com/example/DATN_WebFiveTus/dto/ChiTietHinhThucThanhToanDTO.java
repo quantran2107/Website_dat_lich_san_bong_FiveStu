@@ -25,6 +25,10 @@ public class ChiTietHinhThucThanhToanDTO {
 
     private Integer idHinhThucThanhToan;
 
+    private Float soTien;
+
+    private String maGiaoDich;
+
     private String trangThai;
 
     private LocalDateTime createdAt;

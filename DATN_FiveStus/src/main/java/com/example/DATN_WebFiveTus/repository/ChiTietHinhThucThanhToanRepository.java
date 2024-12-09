@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface ChiTietHinhThucThanhToanRepository extends JpaRepository<ChiTietHinhThucThanhToan,Integer> {
-    @Query("SELECT c FROM ChiTietHinhThucThanhToan c WHERE c.hoaDonChiTiet.id = :idHoaDonChiTiet")
+    @Query("SELECT c FROM ChiTietHinhThucThanhToan c WHERE c.hoaDonChiTiet.id = :idHoaDonChiTiet and c.deletedAt = false")
     List<ChiTietHinhThucThanhToan> findByIdHdct(@Param("idHoaDonChiTiet") int id);
     List<ChiTietHinhThucThanhToan> findByHoaDonChiTiet_Id(int hoaDonChiTietId);
 

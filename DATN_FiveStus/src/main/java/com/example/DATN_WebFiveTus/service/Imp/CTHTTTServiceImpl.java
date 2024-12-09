@@ -2,9 +2,13 @@ package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.ChiTietHinhThucThanhToanDTO;
 import com.example.DATN_WebFiveTus.dto.HTTTDto;
+import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
 import com.example.DATN_WebFiveTus.entity.ChiTietHinhThucThanhToan;
 import com.example.DATN_WebFiveTus.entity.HinhThucThanhToan;
+import com.example.DATN_WebFiveTus.entity.HoaDon;
 import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
+import com.example.DATN_WebFiveTus.entity.NhanVien;
+import com.example.DATN_WebFiveTus.entity.SanCa;
 import com.example.DATN_WebFiveTus.repository.ChiTietHinhThucThanhToanRepository;
 import com.example.DATN_WebFiveTus.repository.HinhThucThanhToanRepository;
 import com.example.DATN_WebFiveTus.repository.HoaDonChiTietRepository;
@@ -34,33 +38,36 @@ public class CTHTTTServiceImpl implements CTHTTTService {
     private ModelMapper modelMapper;
 
     @Override
-    public List<HTTTDto> getHtttById(int id) {
-        List<HTTTDto> list = chiTietHinhThucThanhToanRepository.findByIdHdct(id).stream().map(HTTTDto::new).collect(Collectors.toList());
-        return list;
-    }
-
-    @Override
-    public Boolean addNew(HTTTDto htttDto) {
-        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(htttDto.getIdHD()).orElse(null);
-        assert hoaDonChiTiet != null;
-        System.out.println(hoaDonChiTiet.getId());
-        HinhThucThanhToan hinhThucThanhToan = hinhThucThanhToanRepository.findById(htttDto.getIdHttt()).get();
-
-        ChiTietHinhThucThanhToan ctHttt = new ChiTietHinhThucThanhToan();
-        ctHttt.setTrangThai("active");
-        ctHttt.setHinhThucThanhToan(hinhThucThanhToan);
-        ctHttt.setHoaDonChiTiet(hoaDonChiTiet);
-        ctHttt.setSoTien((htttDto.getSoTien()));
-        chiTietHinhThucThanhToanRepository.save(ctHttt);
-        return true;
-    }
-
-    @Override
     public List<ChiTietHinhThucThanhToanDTO> findByHoaDonChiTietId(int hoaDonChiTietId) {
-        List<ChiTietHinhThucThanhToan> chiTietHinhThucThanhToanList = chiTietHinhThucThanhToanRepository.findByHoaDonChiTiet_Id(hoaDonChiTietId);
+        List<ChiTietHinhThucThanhToan> chiTietHinhThucThanhToanList = chiTietHinhThucThanhToanRepository.findByIdHdct(hoaDonChiTietId);
         return chiTietHinhThucThanhToanList.stream()
                 .map(chiTietHinhThucThanhToan -> modelMapper.map(chiTietHinhThucThanhToan, ChiTietHinhThucThanhToanDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deletedSoft(int idHinhThucThanhToan) {
+        ChiTietHinhThucThanhToan chiTietHinhThucThanhToan = chiTietHinhThucThanhToanRepository.findById(idHinhThucThanhToan).orElseThrow();
+        chiTietHinhThucThanhToan.setDeletedAt(true);
+        ChiTietHinhThucThanhToan chiTietHinhThucThanhToanSave = chiTietHinhThucThanhToanRepository.save(chiTietHinhThucThanhToan);
+    }
+
+    @Override
+    public ChiTietHinhThucThanhToanDTO save(ChiTietHinhThucThanhToanDTO chiTietHinhThucThanhToanDTO) {
+        ChiTietHinhThucThanhToan chiTietHinhThucThanhToan = modelMapper.map(chiTietHinhThucThanhToanDTO, ChiTietHinhThucThanhToan.class);
+        HinhThucThanhToan hinhThucThanhToan = hinhThucThanhToanRepository.findById(chiTietHinhThucThanhToanDTO.getIdHinhThucThanhToan()).orElseThrow();
+        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(chiTietHinhThucThanhToanDTO.getIdHoaDonChiTiet()).orElseThrow();
+        chiTietHinhThucThanhToan.setHinhThucThanhToan(hinhThucThanhToan);
+        chiTietHinhThucThanhToan.setHoaDonChiTiet(hoaDonChiTiet);
+        chiTietHinhThucThanhToan.setSoTien(chiTietHinhThucThanhToanDTO.getSoTien());
+        if(hinhThucThanhToan.getId() == 1){
+            chiTietHinhThucThanhToan.setMaGiaoDich(chiTietHinhThucThanhToanDTO.getMaGiaoDich());
+        }else{
+            chiTietHinhThucThanhToan.setMaGiaoDich(null);
+        }
+        chiTietHinhThucThanhToan.setDeletedAt(false);
+        ChiTietHinhThucThanhToan chiTietHTTTSave = chiTietHinhThucThanhToanRepository.save(chiTietHinhThucThanhToan);
+        return modelMapper.map(chiTietHTTTSave, ChiTietHinhThucThanhToanDTO.class);
     }
 
 }
