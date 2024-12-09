@@ -1,0 +1,3259 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="~{fragment/head :: head}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+  .form-group label {
+    font-weight: bold;
+  }
+
+  .form-group input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+  }
+
+  .row {
+    margin-bottom: 15px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  h5.text-primary {
+    color: #007bff;
+    margin-top: 20px;
+  }
+
+  .col-lg-3-dich-vu {
+    flex: 0 0 auto;
+    width: 30%;
+  }
+
+  h5.card-title {
+    color: #28a745;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .hidden-field {
+    display: none;
+  }
+
+  .form-group label {
+    font-weight: bold;
+  }
+
+  .form-group input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+  }
+
+  .row {
+    margin-bottom: 15px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  /*#dichVuDaThueContainer {*/
+  /*    padding: 20px; !* Padding cho container *!*/
+  /*    max-height: 400px; !* Chiều cao tối đa cho container *!*/
+  /*    overflow-y: auto; !* Thêm thanh cuộn dọc khi vượt quá chiều cao *!*/
+  /*    border: 1px solid #dee2e6; !* Viền cho container *!*/
+  /*    border-radius: 10px; !* Bo tròn góc *!*/
+  /*    width: 250px; !* Chiều rộng cho container *!*/
+  /*    height: 300px; !* Chiều cao cho container *!*/
+  /*}*/
+
+  #colTest {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-body {
+    flex: 1;
+  }
+
+  .d-flex {
+    flex-wrap: wrap;
+  }
+
+  #dichVuDaThueContainer {
+    flex: 0 0 250px; /* Set width to 250px */
+  }
+
+
+  #dichVuThueList {
+    overflow-y: auto;
+    padding: 10px;
+  }
+
+
+  /*#colTest {*/
+  /*    display: flex;*/
+  /*    flex-direction: column;*/
+  /*    height: 250px; !* Set height to 330px *!*/
+  /*}*/
+
+  /*.card-body {*/
+  /*    flex: 1;*/
+  /*}*/
+
+  /*.d-flex {*/
+  /*    flex-wrap: wrap;*/
+  /*}*/
+
+  /*#dichVuDaThueContainer {*/
+  /*    flex: 0 0 250px; !* Set width to 250px *!*/
+  /*}*/
+
+  /*#dichVuThueList {*/
+  /*    overflow-y: auto; !* Enable vertical scrolling if content overflows *!*/
+  /*    padding: 10px;*/
+  /*    height: calc(250px  !* Height of other elements if any *!);*/
+  /*}*/
+
+  #filter {
+    padding: 8px;
+    margin-right: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    color: #333;
+  }
+
+</style>
+<body class="vertical light">
+<div class="wrapper">
+  <div th:include="~{fragment/navbar :: navbar}"></div>
+  <div th:include="~{fragment/sidebar :: sidebar}"></div>
+
+  <!-- Main Content -->
+  <main class="main-content" role="main">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <h2 class="page-title">Đặt lịch</h2>
+        </div>
+      </div>
+
+      <div class="row mt-4" id="content-ban-hang">
+        <div class="col-md-7">
+          <div class="row h-100">
+            <!-- Phần trên bên trái -->
+            <div class="col-12 mb-3">
+              <div class="card shadow h-100">
+                <div class="card-body">
+                  <!-- Tiêu đề của box -->
+                  <h5 class="card-title text-success">Danh sách hóa đơn</h5>
+                  <!-- Nội dung phần trên bên trái -->
+                  <div class="toolbar row mb-3 mt-3">
+                    <div class="col-md-12">
+                      <form class="form-inline" id="filterForm"
+                            style="display: flex; align-items: center;">
+                        <!-- Search -->
+                        <div class="form-group"
+                             style="flex-grow: 1; display: flex; align-items: center;">
+                          <label class="me-2" for="search">Tìm kiếm</label>
+                          <input class="form-control me-2" id="search" placeholder="Tìm kiếm theo số điện thoại" style="width: 400px;" type="text" oninput="searchByPhone()">
+                          <!-- Nút Reset -->
+                          <button class="btn btn-primary me-2" onclick="resetFilters()"
+                                  title="Reset" type="button">
+                            <span class="fe fe-refresh-ccw"></span>
+                          </button>
+                          <button class="btn btn-warning " onclick="scanQRCode()"
+                                  title="Quét QR hóa đơn" type="button">
+                            <span class="fe fe-grid"></span>
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+
+                  <!-- Phần bên trái chia thành 2 tab -->
+                  <div class="row mt-4">
+                    <div class="col-12">
+                      <!-- Tabs -->
+                      <ul class="nav nav-tabs" id="tabList">
+                        <li class="nav-item">
+                          <a aria-controls="dang-hoat-dong" aria-selected="true"
+                             class="nav-link active"
+                             data-bs-toggle="tab" href="#dang-hoat-dong"
+                             id="dang-hoat-dong-tab"
+                             role="tab">Đang hoạt động</a>
+                        </li>
+                        <li class="nav-item">
+                          <a aria-controls="cho-nhan" aria-selected="false" class="nav-link"
+                             data-bs-toggle="tab" href="#cho-nhan" id="cho-nhan-tab"
+                             role="tab">Chờ nhận sân</a>
+                        </li>
+                      </ul>
+                      <div class="tab-content mt-3">
+                        <!-- Tab Content for "Đang hoạt động" -->
+                        <div aria-labelledby="dang-hoat-dong-tab"
+                             class="tab-pane fade show active"
+                             id="dang-hoat-dong"
+                             role="tabpanel">
+                          <table class="table table-striped mt-2">
+                            <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Tên KH</th>
+                              <th>SDT</th>
+                              <th>Email</th>
+                              <th>Sân ca</th>
+                              <th>Thời gian</th>
+                              <th>Ngày đặt lịch</th>
+                            </tr>
+                            </thead>
+                            <tbody id="dang-hoat-dong-table">
+                            <!-- Dữ liệu của bảng "Đang hoạt động" sẽ được chèn vào đây -->
+                            </tbody>
+                          </table>
+                          <!-- Pagination -->
+                          <nav aria-label="Table Paging" class="mb-0 text-muted">
+                            <ul class="pagination justify-content-end mb-0"
+                                id="paginationDangHoatDong">
+                              <!-- Pagination buttons will be inserted here by JavaScript -->
+                            </ul>
+                          </nav>
+                        </div>
+
+                        <!-- Tab Content for "Chờ nhận sân" -->
+                        <div aria-labelledby="cho-nhan-tab" class="tab-pane fade" id="cho-nhan"
+                             role="tabpanel">
+                          <table class="table table-striped mt-2">
+                            <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Tên KH</th>
+                              <th>SDT</th>
+                              <th>Email</th>
+                              <th>Sân ca</th>
+                              <th>Thời gian</th>
+                              <th>Ngày đặt lịch</th>
+                              <th>Hành động</th>
+                            </tr>
+                            </thead>
+                            <tbody id="cho-nhan-table">
+                            <!-- Dữ liệu của bảng "Chờ nhận sân" sẽ được chèn vào đây -->
+                            </tbody>
+                          </table>
+                          <!-- Pagination -->
+                          <nav aria-label="Table Paging" class="mb-0 text-muted">
+                            <ul class="pagination justify-content-end mb-0"
+                                id="paginationChoNhan">
+                              <!-- Pagination buttons will be inserted here by JavaScript -->
+                            </ul>
+                          </nav>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Phần dưới bên trái -->
+            <div class="col-12" id="colTest">
+              <div class="card shadow h-100">
+                <div class="card-body">
+                  <!-- Tiêu đề của box -->
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h5>Dịch Vụ Đã Thuê</h5>
+                    <button class="btn btn-outline-success" title="Thêm dịch vụ" type="button"
+                            id="openServiceModal">
+                      <span class="fe fe-plus"></span>
+                    </button>
+                  </div>
+                  <div id="dichVuDaThueContainer" class="mt-4">
+                    <div id="dichVuThueList" class="row"
+                         style="max-height: 600px; overflow-y: auto;">
+                      <div class="col-12">
+                        <!-- Nội dung dịch vụ đã thuê sẽ ở đây -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal fade" id="serviceModal" tabindex="-1" role="dialog"
+             aria-labelledby="serviceModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+              <div class="modal-header bg-warning">
+                <h5 class="modal-title" id="serviceModalLabel">Thêm Dịch Vụ</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <ul class="nav nav-tabs flex" id="serviceTabs" role="tablist">
+                  <li class="nav-item flex-grow-1">
+                    <a class="nav-link active" id="tab1" data-toggle="tab" href="#doThueTab"
+                       role="tab">Đồ Thuê</a>
+
+                  </li>
+                  <li class="nav-item flex-grow-1">
+                    <a class="nav-link" id="tab2" data-toggle="tab" href="#nuocUongTab" role="tab">Nước
+                      Uống</a>
+
+                  </li>
+                </ul>
+                <input type="text" class="form-control search-input" placeholder="Tìm kiếm">
+                <div id="selectedServices"></div> <!-- Div để hiển thị dịch vụ đã chọn -->
+
+                <div class="tab-content" id="serviceTabContent"
+                     style="max-height: 600px; overflow-y: auto;">
+                  <div class="tab-pane fade show active row" id="doThueTab" role="tabpanel">
+                    <div class="search-results"></div>
+                  </div>
+                  <div class="tab-pane fade row" id="nuocUongTab" role="tabpanel">
+                    <div class="search-results"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button id="showSelectedServices2" type="button" class="btn btn-primary">Xác Nhận
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phần Tabs và Nội dung Tabs bên phải -->
+        <div class="col-md-5">
+          <div class="card shadow h-100">
+            <div class="card-body">
+              <!-- Tiêu đề của box -->
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <!-- Tiêu đề của box -->
+                <h5 class="card-title text-success mb-3">Thông tin hóa đơn</h5>
+                <!-- Khung chứa các nút nằm bên phải -->
+                <div class="d-flex">
+                  <!-- Nút Thêm hóa đơn -->
+                  <button id="addInvoiceButton" class="btn btn-outline-primary me-2"
+                          title="Thêm hóa đơn"
+                          type="button">
+                    <span class="fe fe-plus"></span>
+                  </button>
+                </div>
+              </div>
+              <!-- Phần Tabs nằm ngang -->
+              <ul class="nav nav-tabs" id="tabListRight">
+                <!-- Tabs sẽ được tạo động tại đây -->
+              </ul>
+              <!-- Phần Nội dung Tabs nằm bên dưới -->
+              <div class="tab-content" id="tabContentRight">
+                <!-- Nội dung các tab sẽ được tạo động tại đây -->
+                <form>
+                  <div class="row">
+                    <!-- Thông tin khách hàng -->
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label for="hoVaTenKhachHang">Tên khách hàng</label>
+                        <input class="form-control" id="hoVaTenKhachHang" type="text" readonly placeholder="Chưa có dữ liệu">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label for="soDienThoaiKhachHang">Số Điện Thoại</label>
+                        <input class="form-control" id="soDienThoaiKhachHang" type="text" readonly placeholder="Chưa có dữ liệu">
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label for="trangThai">Trạng thái</label>
+                        <input class="form-control" id="trangThai" type="text" readonly>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label for="tenSan">Tên sân</label>
+                        <input class="form-control" id="tenSan" type="text" readonly>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label for="thoiGianBatDau">Thời gian bắt đầu</label>
+                        <input class="form-control" id="thoiGianBatDau" type="datetime-local" readonly>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label for="thoiGianKetThuc">Thời gian kết thúc</label>
+                        <input class="form-control" id="thoiGianKetThuc" type="datetime-local" readonly>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group mb-3">
+                        <label for="thoiGianTaoHoaDon">Thời gian tạo hóa đơn</label>
+                        <input class="form-control" id="thoiGianTaoHoaDon" type="text" readonly>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label for="giaSan">Giá Sân</label>
+                        <input class="form-control" id="giaSan" type="text" readonly placeholder="Chưa có dữ liệu">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label for="giaDichVu">Giá Dịch Vụ</label>
+                        <input class="form-control" id="giaDichVu" type="text" readonly placeholder="Chưa có dữ liệu">
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label for="tienCocSan">Tiền Cọc Sân</label>
+                        <input class="form-control" id="tienCocSan" type="text" readonly placeholder="Chưa có dữ liệu">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label for="tienCocThua">Tiền Cọc Thừa</label>
+                        <input class="form-control" id="tienCocThua" type="text" readonly placeholder="Chưa có dữ liệu">
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group mb-3">
+                        <label for="tienPhuPhi">Tiền Phụ Phí</label>
+                        <input class="form-control" id="tienPhuPhi" type="text" readonly placeholder="Chưa có dữ liệu">
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <h4 class="text-success">Thanh Toán</h4>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="form-group mb-3">
+                        <label for="phieuGiamGia">Phiếu Giảm Giá</label>
+                        <div class="input-group mb-3">
+                          <input class="form-control" id="phieuGiamGia" type="text" placeholder="Nhập phiếu giảm giá nếu có">
+                          <button class="btn btn-outline-success" type="button" id="btnAddDiscount">+</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="form-group mb-3">
+                        <label>Hình thức thanh toán</label><br>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="hinhThucThanhToan" id="chuyenKhoan" value="chuyenKhoan" checked>
+                          <label class="form-check-label" for="chuyenKhoan" style="font-weight: normal;">Chuyển khoản</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="hinhThucThanhToan" id="tienMat" value="tienMat">
+                          <label class="form-check-label" for="tienMat" style="font-weight: normal;">Tiền mặt</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="form-group mb-3">
+                        <label for="tienKhachDua">Tiền Khách Đưa</label>
+                        <div class="input-group mb-3">
+                          <input type="text" class="form-control" id="tienKhachDua" placeholder="Nhập số tiền khách đưa">
+                          <span class="input-group-text">VND</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-12">
+                      <div class="form-group mb-3">
+                        <label for="tienTraLai">Tiền Trả Lại</label>
+                        <div class="input-group mb-3">
+                          <input type="text" class="form-control" id="tienTraLai" placeholder="Tiền trả lại" readonly>
+                          <span class="input-group-text">VND</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group mb-3 text-center">
+                        <label for="tienSan">Tổng Tiền Phải Trả:</label>
+                        <div id="tienSan" class="text-danger" style="font-size: 1.5em;">0</div>
+                      </div>
+                    </div>
+                    <div class="col-md-12 text-center">
+                      <button id="btnThanhToan1" class="btn btn-success" type="button">Thanh toán</button>
+                    </div>
+                  </div>
+                </form>
+
+
+                <!-- Modal để thêm phụ phí -->
+                <div id="phuPhiModal" class="modal fade" tabindex="-1"
+                     aria-labelledby="phuPhiModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="phuPhiModalLabel">Thêm Phụ Phí</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                      </div>
+                      <div class="modal-body">
+                        <form id="phuPhiForm">
+                          <div class="form-group mb-3">
+                            <label for="tenPhuPhi">Tên Phụ Phí</label>
+                            <input type="text" id="tenPhuPhi" class="form-control"
+                                   placeholder="Tên Phụ Phí" required>
+                          </div>
+                          <div class="form-group mb-3">
+                            <label for="giaPhuPhi">Giá Phụ Phí</label>
+                            <div class="input-group">
+                              <input type="number" id="giaPhuPhi" class="form-control"
+                                     placeholder="0" required>
+                              <span class="input-group-text">VND</span>
+                            </div>
+                          </div>
+                          <button type="button" class="btn btn-success" id="btnThemPhuPhi">
+                            Thêm Phụ Phí
+                          </button>
+                        </form>
+                        <table class="table mt-3">
+                          <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Tên Phụ Phí</th>
+                            <th>Giá Phụ Phí</th>
+                            <th>Chọn</th>
+                          </tr>
+                          </thead>
+                          <tbody id="phuPhiList">
+                          <tr>
+                            <!--                                Hiển thị phụ phí hóa đơn-->
+                          </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div th:include="~{fragment/modal :: modal}"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script th:include="~{fragment/script :: script}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+  $(document).ready(function () {
+    // Lắng nghe sự kiện nhập liệu trên ô tìm kiếm
+    $('.search-input').on('input', function () {
+      const searchTerm = $(this).val();
+      const activeTab = $('#serviceModal .nav-link.active').attr('href');  // Lấy ID của tab hiện tại
+      // alert("Tab hien tạI "+activeTab)
+      let apiUrl = '';
+
+      if (activeTab === '#doThueTab') {
+        apiUrl = `http://localhost:8080/do_thue/searchTenDoThue?tenDoThue=${searchTerm}`;
+        console.log("doThue: " + apiUrl)
+        dichVuDo(searchTerm);
+      } else if (activeTab === '#nuocUongTab') {
+        apiUrl = `http://localhost:8080/nuoc_uong/searchTenNuocUong?tenNuocUong=${searchTerm}`;
+        console.log("nuocUong: " + apiUrl)
+        dichVuNuoc(searchTerm);
+      }
+    });
+
+    // Lắng nghe sự kiện chuyển tab để reset ô tìm kiếm nếu cần
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function () {
+      $('.search-input').val('');
+      $('.search-results').empty();
+    });
+  });
+
+  $(document).ready(function () {
+    // Hàm chuyển tab
+    function switchTab(tabId) {
+      if (tabId === 'cho-nhan-tab') {
+        $('#colTest').hide(); // Ẩn phần dịch vụ đã thuê
+      } else {
+        $('#colTest').show(); // Hiện phần dịch vụ đã thuê
+      }
+    }
+
+    // Gọi hàm switchTab khi một tab được nhấn
+    $('#tabList .nav-link').on('click', function () {
+      const tabId = $(this).attr('id'); // Lấy ID của tab được nhấn
+      switchTab(tabId); // Gọi hàm switchTab với ID của tab
+    });
+
+    // Khởi tạo hiển thị ban đầu
+    const initialTabId = $('#tabList .nav-link.active').attr('id'); // Lấy ID của tab active đầu tiên
+    switchTab(initialTabId); // Gọi hàm switchTab với tab active ban đầu
+  });
+
+
+  $(document).ready(function () {
+    $('#showSelectedServices2').on('click', function () {
+      console.log('Nút Xác Nhận đã được nhấn'); // Dòng kiểm tra sự kiện
+
+      $('#serviceModal').modal('hide');
+    });
+  });
+
+  function fillDichVuChoHoaDon(idHDCT) {
+    updateServiceCost();
+    $.ajax({
+      url: `http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${idHDCT}`,
+      type: 'GET',
+      success: function (data) {
+        // console.log(data); // Kiểm tra dữ liệu trả về
+
+        let content = '<div class="row" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start;">';
+
+        data.forEach(item => {
+          content += `
+                <div class="col-lg-3-dich-vu col-md-4 col-sm-6" style="margin-bottom: 20px;"> <!-- Thêm class lưới để chia cột -->
+                    <div class="product-card" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); width: 100%; background-color: #ffffff; padding: 15px; text-align: center; position: relative;">
+                        <div class="price-tag" style="position: absolute; top: 10px; right: 10px; background-color: #ff4d4d; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 14px;">
+                            ${item.idDoThue ? formatCurrency(item.donGiasDoThue) : formatCurrency(item.donGiasNuocUong)}
+                        </div>
+
+                        <img src="${item.idDoThue ? item.imageDataDoThue : item.imageDataNuocUong}" class="card-img-top" alt="${item.idDoThue ? item.tenDoThue : item.tenNuocUong}" style="width: 100%; height: 160px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;">
+
+                        <h5 class="card-title" style="margin: 10px 0; font-size: 18px; font-weight: bold; color: #333;">
+                            ${item.idDoThue ? item.tenDoThue : item.tenNuocUong}
+                        </h5>
+
+                        <div class="input-group" style="margin: 10px 0;">
+                            <input type="number" class="form-control so-luong-chon" value="${item.soLuong}" min="0" style="width: 60px; display: inline-block;">
+                        </div>
+
+                        <div class="d-flex justify-content-between" style="margin-top: 10px;">
+                            <button class="btn btn-danger cancel-btn" data-id="${item.id}" data-id-hdct="${idHDCT}" data-so-luong="${item.soLuong}" data-id-do-thue="${item.idDoThue || null}" data-id-nuoc-uong="${item.idNuocUong || null}" type="button" style="width: 48%;">Hủy</button>
+                            <button class="btn btn-success update-btn" data-id="${item.id}" data-id-hdct="${idHDCT}" data-ten-dich-vu="${item.idDoThue ? item.tenDoThue : item.tenNuocUong}" data-don-gia="${item.idDoThue ? item.donGiasDoThue : item.donGiasNuocUong}" data-so-luong="${item.soLuong}" data-id-do-thue="${item.idDoThue || null}" data-id-nuoc-uong="${item.idNuocUong || null}" type="button" style="width: 48%;">Cập nhật</button>
+                        </div>
+                    </div>
+                </div>`;
+        });
+
+        content += '</div>';
+
+        $('#dichVuDaThueContainer .col-12').html(content);
+
+        // Thêm sự kiện cho nút "Cập nhật"
+        $('.update-btn').on('click', function () {
+          const itemId = $(this).data('id');
+          const idHDCT = $(this).data('id-hdct');
+          const idDoThue = $(this).data('id-do-thue') || null;
+          const idNuocUong = $(this).data('id-nuoc-uong') || null;
+          const soLuongSau = parseInt($(this).closest('.product-card').find('.so-luong-chon').val()); // Số lượng sau khi cập nhật
+          const soLuongTruoc = parseInt($(this).data('so-luong')); // Lấy số lượng trước khi cập nhật
+          const donGia = parseFloat($(this).data('don-gia'));
+          const tongTien = soLuongSau * donGia;
+
+          // Validate số lượng
+          if (soLuongSau < 0) {
+            showWarningToast("Số lượng không được nhỏ hơn 0!");
+            return; // Dừng nếu không hợp lệ
+          }
+
+          // Gọi API để lấy thông tin hiện tại
+          let apiUrl, updateUrl;
+
+          if (idDoThue) {
+            apiUrl = `http://localhost:8080/do_thue/${idDoThue}`; // Lấy số lượng hiện tại
+            updateUrl = `http://localhost:8080/do_thue/updateSoLuong/${idDoThue}`; // Cập nhật số lượng tồn kho
+          } else if (idNuocUong) {
+            apiUrl = `http://localhost:8080/nuoc_uong/${idNuocUong}`; // Lấy số lượng hiện tại
+            updateUrl = `http://localhost:8080/nuoc_uong/updateSoLuong/${idNuocUong}`; // Cập nhật số lượng tồn kho
+          }
+
+          // Gọi API để lấy số lượng hiện tại
+          $.ajax({
+            url: apiUrl,
+            type: 'GET',
+            success: function (response) {
+              const soLuongHienTai = response.soLuongs; // Số lượng hiện tại trong kho
+
+              // Tính số lượng còn lại
+              const soLuongConLai = soLuongHienTai + soLuongTruoc - soLuongSau;
+
+              // Validate số lượng còn lại
+              if (soLuongConLai < 0) {
+                showWarningToast(`Số lượng trong kho hiện tại là ${soLuongHienTai}. Không đủ số lượng!`);
+                return; // Dừng nếu không hợp lệ
+              }
+
+              // Cập nhật thông tin dịch vụ
+              updateService({
+                idHoaDonChiTiet: idHDCT,
+                idNuocUong: idDoThue ? null : idNuocUong,
+                idDoThue: idDoThue || null,
+                soLuong: soLuongSau,
+                tongTien: tongTien,
+                trangThai: "Đã đặt",
+                deletedAt: false
+              }, itemId);
+
+              updateServiceCost();
+              // Gọi hàm updateStockWithCurrentAmount để cập nhật số lượng tồn kho
+              updateStockWithCurrentAmount(apiUrl, updateUrl, itemId, soLuongTruoc, soLuongSau);
+              showSuccessToast("Cập nhật số lượng thành công!");
+            },
+            error: function (error) {
+              showErrorToast('Lỗi khi lấy thông tin kho!');
+            }
+          });
+        });
+
+        // Thêm sự kiện cho nút "Hủy"
+        $('.cancel-btn').on('click', function () {
+          const itemId = $(this).data('id');
+          const idHDCT = $(this).data('id-hdct');
+          const idDoThue = $(this).data('id-do-thue') || null;
+          const idNuocUong = $(this).data('id-nuoc-uong') || null;
+          const soLuongTruoc = $(this).data('so-luong'); // Số lượng trước khi hủy
+
+          console.log("soLuongTruoc1: " + soLuongTruoc)
+
+          // Gọi hàm xóa
+          deleteService({
+            idHoaDonChiTiet: idHDCT,
+            idNuocUong: idDoThue ? null : idNuocUong,
+            idDoThue: idDoThue || null,
+            soLuong: 0,
+            tongTien: 0,
+            trangThai: "Đã hủy",
+            deletedAt: true
+          }, itemId, idDoThue, idNuocUong, soLuongTruoc);
+
+        });
+      },
+      error: function (error) {
+        console.log('Error fetching data: ', error);
+      }
+    });
+  }
+
+  $(document).on('click', '.cancel-btns2', function () {
+    // Khởi tạo giá trị trước đó cho tất cả các ô input
+    $('.so-luong-chon').each(function () {
+      let initialQuantity = parseInt($(this).val()) || 0; // Lấy giá trị hiện tại từ ô input
+      $(this).data('previous-value', initialQuantity); // Gán giá trị hiện tại là giá trị trước đó
+    });
+
+    let input = $(this);
+    let quantityChosen = parseInt(input.val()) || 0; // Lấy giá trị hiện tại của input
+    let stockQuantityElem = input.closest('.input-group').siblings('.kho-con'); // Lấy phần tử chứa số lượng kho
+    let stockQuantity = parseInt(stockQuantityElem.text().replace('Kho còn: ', '')); // Lấy số lượng kho hiện tại
+    let previousQuantity = parseInt(input.data('previous-value')) || 0; // Lấy giá trị trước đó của input
+
+    // Chỉ tiếp tục nếu giá trị đã thay đổi
+    if (quantityChosen !== previousQuantity) {
+      // Tính toán sự thay đổi
+      let changeInQuantity = quantityChosen - previousQuantity;
+
+      // Cập nhật hàng tồn kho
+      stockQuantity -= changeInQuantity;
+
+      // Kiểm tra nếu kho còn âm
+      if (stockQuantity < 0) {
+        quantityChosen += stockQuantity; // Điều chỉnh số lượng chọn
+        stockQuantity = 0; // Đặt kho còn lại bằng 0
+      }
+
+      // Cập nhật giao diện hiển thị kho và giá trị input
+      stockQuantityElem.text(`Kho còn: ${stockQuantity}`);
+      input.val(quantityChosen); // Đảm bảo input không vượt quá kho
+      input.data('previous-value', quantityChosen); // Cập nhật giá trị trước đó
+
+    } else {
+      // Nếu không thay đổi, giữ lại giá trị trước đó
+      input.val(previousQuantity);
+    }
+
+
+    const $this = $(this);
+    let id = $this.data('id');
+    let idDoThue = $this.data('id-do-thue');
+    let idNuocUong = $this.data('id-nuoc-uong');
+    let donGias = $this.data('don-gia');
+    let tenDichVu = $this.data('ten-dich-vu');
+
+    let soLuongChons = parseInt($this.closest('.input-group').find('.so-luong-chon').val()) || 0;
+    let idHoaDonChiTiet = selectedInvoiceId;
+
+    Swal.fire({
+      title: 'Xác nhận huỷ',
+      text: "Bạn có chắc chắn muốn huỷ dịch vụ này không?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Có, huỷ!',
+      cancelButtonText: 'Không, quay lại!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: `http://localhost:8080/dich-vu-san-bong/${id}`,
+          type: 'PUT',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            id: id,
+            idDoThue: idDoThue,
+            idNuocUong: idNuocUong,
+            tongTien: 0,
+            soLuong: 0,
+            idHoaDonChiTiet: idHoaDonChiTiet,
+            trangThai: "Đã huỷ",
+            deletedAt: true
+          }),
+          success: function (response) {
+            if (idDoThue) {
+              $.ajax({
+                url: `http://localhost:8080/do_thue/${idDoThue}`,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                  idDoThue: idDoThue,
+                  tenDoThue: tenDichVu,
+                  donGias: donGias,
+                  soLuongs: stockQuantity + soLuongChons,
+                  trangThai: "Chưa chọn"
+                }),
+                success: function (response) {
+                  Swal.fire({
+                    title: 'Thành công!',
+                    text: 'Số lượng đồ thuê cập nhật hủy thành công',
+                    icon: 'success',
+                    showConfirmButton: false, // Ẩn nút xác nhận
+                    timer: 2000 // Thời gian tự động đóng thông báo (2000ms = 2 giây)
+                  });
+                  $this.closest('.card-body').find('.kho-con').text(`Kho còn: ${stockQuantity + soLuongChons}`);
+                  fillDichVuChoHoaDon(getSelectedInvoiceId())
+                },
+                error: function (error) {
+                  console.error("Lỗi khi cập nhật số lượng đồ thuê:", error);
+                }
+              });
+            }
+
+            if (idNuocUong) {
+              $.ajax({
+                url: `http://localhost:8080/nuoc_uong/${idNuocUong}`,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                  idNuocUong: idNuocUong,
+                  tenNuocUong: tenDichVu,
+                  donGias: donGias,
+                  soLuongs: stockQuantity + soLuongChons,
+                  trangThai: "Chưa chọn"
+                }),
+                success: function (response) {
+                  $this.closest('.card-body').find('.kho-con').text(`Kho còn: ${stockQuantity + soLuongChons}`);
+                  fillDichVuChoHoaDon(getSelectedInvoiceId())
+                },
+                error: function (error) {
+                  console.error("Lỗi khi cập nhật số lượng nước uống:", error);
+                }
+              });
+            }
+
+            $this.closest('.input-group').find('.so-luong-chon').val(0);
+          },
+          error: function (xhr, status, error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Cập nhật thất bại',
+              text: 'Có lỗi xảy ra khi cập nhật số lượng.',
+            });
+          }
+        });
+      }
+    });
+  });
+
+
+  function getSelectedInvoiceId() {
+    // Hàm này cần được định nghĩa để trả về ID của hóa đơn được chọn
+    // Ví dụ:
+    return selectedInvoiceId; // Thay thế bằng biến chứa ID của hóa đơn
+  }
+
+  function setSelectedInvoiceId(invoiceId) {
+    selectedInvoiceId = invoiceId;
+  }
+
+
+
+  let idDoThues = null;
+  let donGiaDoThues = null;
+  // let soLuongDoThues = null;
+  let soLuongChons = null;
+  let tenDoThues = null;
+  let soLuongs = null
+
+
+  function dichVuDo(tenSearchAPI) {
+    idNuocUongs = null;
+    donGiaNuocUongs = null;
+    soLuongChonNuocs = null;
+    tenSearchAPI = tenSearchAPI || '';
+
+    $.ajax({
+      url: `http://localhost:8080/do_thue/searchTenDoThue?tenDoThue=${tenSearchAPI}`,
+      type: 'GET',
+      dataType: 'json',
+      success: function (data) {
+        let content = '<div class="row" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">';
+
+        data.forEach(item => {
+          content += `
+            <div class="product-card" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); width: 250px; background-color: #ffffff; padding: 15px; text-align: center; position: relative;">
+               <div class="price-tag" style="position: absolute; top: 10px; right: 10px; background-color: #ff4d4d; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 14px;">
+                    ${formatCurrency(item.donGias)} <!-- Gọi hàm formatCurrency để định dạng giá -->
+                </div>
+                <img src="${item.imageData}" class="card-img-top" alt="${item.tenDoThue}" style="width: 100%; height: 160px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;"> <!-- Điều chỉnh kích thước hình ảnh -->
+                <h5 class="card-title" style="margin: 10px 0; font-size: 18px; font-weight: bold; color: #333;">${item.tenDoThue}</h5> <!-- Đưa tên xuống dưới hình -->
+                <p class="card-text kho-con" style="margin: 5px 0; font-size: 14px; color: #666;">Kho Còn: ${item.soLuongs}</p>
+                <div class="input-group" style="margin: 10px 0;">
+                    <input type="number" class="form-control so-luong-chon" value="0" min="0" style="width: 60px; display: inline-block;">
+                </div>
+                <div class="input-group-append" style="margin-top: 10px;">
+                    <button class="btn btn-success add-btn" data-ten-do-thue="${item.tenDoThue}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button" style="width: 100%; margin-bottom: 5px;">Thêm</button>
+                </div>
+            </div>`;
+        });
+        content += '</div>';
+        $('#doThueTab').html(content);
+
+        $('.add-btn').on('click', function () {
+          const productCard = $(this).closest('.product-card');
+          const soLuongChon = parseInt(productCard.find('.so-luong-chon').val()); // Lấy số lượng từ input
+          const soLuongCon = parseInt($(this).data('so-luong')); // Lấy số lượng kho còn
+          const donGia = parseFloat($(this).data('don-gia')); // Lấy đơn giá
+          const idDoThue = $(this).data('id'); // Lấy ID nước uống
+          const idHoaDonChiTiet = selectedInvoiceId; // ID Hóa đơn chi tiết
+
+          // Kiểm tra số lượng có hợp lệ không
+          if (soLuongChon > soLuongCon || soLuongChon <= 0) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Lỗi số lượng',
+              text: `Số lượng chọn phải nằm trong khoảng (0 - ${soLuongCon})`,
+            });
+            return;
+          }
+
+          // Kiểm tra xem dịch vụ nước uống đã tồn tại trong hóa đơn hay chưa
+          const checkUrl = `http://localhost:8080/dich-vu-san-bong/tim-dvsb-do-thue?idHDCT=${idHoaDonChiTiet}&idDoThue=${idDoThue}`;
+
+          $.ajax({
+            url: checkUrl,
+            type: 'GET',
+            success: function (response) {
+              // Nếu trả về 200 và có dữ liệu, tức là đã có trong hóa đơn, tiến hành cập nhật số lượng
+              const soLuongHienTai = response.soLuong; // Số lượng hiện tại trong hóa đơn
+              const soLuongMoi = soLuongHienTai + soLuongChon; // Cộng số lượng mới vào số lượng cũ
+              const tongTien = soLuongMoi * donGia;
+
+              const updatePayload = {
+                idDoThue: idDoThue,
+                idHoaDonChiTiet: idHoaDonChiTiet,
+                soLuong: soLuongMoi,
+                tongTien: tongTien,
+                trangThai: response.trangThai, // Giữ lại trạng thái hiện tại
+                deletedAt: response.deletedAt // Giữ lại giá trị deletedAt hiện tại
+              };
+
+              updateService(updatePayload, response.id);
+
+              const soLuongKhoConLai = soLuongCon - soLuongChon;
+              productCard.find('.kho-con').text(`Kho Còn: ${soLuongKhoConLai}`);
+
+              // Cập nhật lại data của nút "Thêm" để chứa số lượng kho mới
+              $(this).data('so-luong', soLuongKhoConLai);
+
+              // Gọi hàm updateStockWithCurrentAmount để cập nhật số lượng tồn kho
+              const apiUrl = `http://localhost:8080/do_thue/${idDoThue}`;
+              const updateUrl = `http://localhost:8080/do_thue/updateSoLuong/${idDoThue}`;
+
+              updateServiceCost();
+              updateStockWithCurrentAmount(apiUrl, updateUrl, idDoThue, 0, soLuongChon);
+
+              showSuccessToast("Cập nhật số lượng thành công!");
+            },
+            error: function (xhr) {
+              if (xhr.status === 400) {
+                // Nếu trả về 400, tức là chưa có dịch vụ này trong hóa đơn, tiến hành thêm mới
+                const tongTien = soLuongChon * donGia;
+
+                // Tạo payload gửi tới API
+                const payload = {
+                  idDoThue: idDoThue,
+                  idHoaDonChiTiet: idHoaDonChiTiet,
+                  tongTien: tongTien,
+                  soLuong: soLuongChon
+                };
+
+                // Gửi request tới API để thêm dịch vụ nước uống vào hóa đơn
+                $.ajax({
+                  url: 'http://localhost:8080/dich-vu-san-bong',
+                  type: 'POST',
+                  contentType: 'application/json',
+                  data: JSON.stringify(payload),
+                  success: function (response) {
+                    // Cập nhật số lượng kho sau khi thêm thành công
+                    const soLuongKhoConLai = soLuongCon - soLuongChon;
+                    productCard.find('.kho-con').text(`Kho Còn: ${soLuongKhoConLai}`);
+
+                    // Cập nhật lại data của nút "Thêm" để chứa số lượng kho mới
+                    $(this).data('so-luong', soLuongKhoConLai);
+
+                    // Gọi hàm updateStockWithCurrentAmount để cập nhật số lượng tồn kho
+                    const apiUrl = `http://localhost:8080/do_thue/${idDoThue}`;
+                    const updateUrl = `http://localhost:8080/do_thue/updateSoLuong/${idDoThue}`;
+
+                    updateServiceCost();
+                    updateStockWithCurrentAmount(apiUrl, updateUrl, idDoThue, 0, soLuongChon);
+
+                    fillDichVuChoHoaDon(selectedInvoiceId);
+                    showSuccessToast("Thêm dịch vụ thành công");
+                  },
+                  error: function (xhr, status, error) {
+                    showErrorToast("Lỗi khi thêm dịch vụ!"); // Thêm thông báo lỗi nếu gặp lỗi
+                  }
+                });
+              } else {
+                showErrorToast("Lỗi khi kiểm tra dịch vụ!");
+              }
+            }
+          });
+        });
+
+      },
+
+    });
+
+  }
+
+  // Gọi hàm dichVuDo khi nút #openServiceModal được click
+  $('#openServiceModal').on('click', dichVuDo);
+  let idNuocUongs = null;
+  let donGiaNuocUongs = null;
+  // let soLuongs = null;
+  let soLuongChonNuocs = null;
+  let tenNuocUongs = null
+
+  async function updateServiceCost() {
+    try {
+      // console.log(selectedInvoiceId);
+
+      // Gọi API để lấy thông tin hóa đơn chi tiết
+      const invoiceResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${selectedInvoiceId}`, {cache: "no-store"});
+      const invoiceData = await invoiceResponse.json();
+
+      // Gọi API để lấy danh sách dịch vụ
+      const servicesResponse = await fetch(`http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${invoiceData.id}`, {cache: "no-store"});
+      const services = await servicesResponse.json();
+
+      let totalInvoice = 0; // Khai báo biến tổng hóa đơn
+
+      // Kiểm tra nếu danh sách dịch vụ trống
+      if (Array.isArray(services) && services.length > 0) {
+        // Tính tổng tiền từ các dịch vụ
+        const totalCost = services.reduce((sum, service) => {
+          return sum + (parseFloat(service.tongTien) || 0); // Đảm bảo chuyển đổi sang số
+        }, 0);
+
+        // Cập nhật giá dịch vụ
+        document.getElementById(`giaDichVu${selectedInvoiceId}`).value = totalCost.toLocaleString('vi-VN');
+
+        // Tính tổng tiền hóa đơn
+        totalInvoice = (invoiceData.giaSanCa - (invoiceData.giaSanCa * 0.5)) + totalCost;
+        document.getElementById(`tongTien${selectedInvoiceId}`).value = totalInvoice.toLocaleString('vi-VN');
+
+        // Tính tổng tiền phải trả
+        const tongTien = parseFloat(document.getElementById(`tongTien${selectedInvoiceId}`).value.replace(/\./g, '').replace(/,/g, '.')) || 0;
+        const tienGiam = parseFloat(document.getElementById(`tienGiam${selectedInvoiceId}`).value.replace(/\./g, '').replace(/,/g, '.')) || 0;
+        const tongTienPhaiTra = tongTien - tienGiam;
+
+        // Hiển thị tổng tiền phải trả
+        document.getElementById(`tongTienPhaiTra${selectedInvoiceId}`).value = tongTienPhaiTra.toLocaleString('de-DE', {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0
+        });
+      } else {
+        // Nếu không còn dịch vụ nào, hiển thị 0 cho tổng tiền dịch vụ
+        document.getElementById(`giaDichVu${selectedInvoiceId}`).value = '0';
+        document.getElementById(`tongTien${selectedInvoiceId}`).value = '0';
+      }
+
+      // Gọi API để lấy phụ phí nếu có
+      const feesResponse = await fetch(`http://localhost:8080/api/phu-phi-hoa-don/${selectedInvoiceId}`, {cache: "no-store"});
+      const fees = await feesResponse.json();
+
+      if (totalInvoice) {
+        const additionalFees = fees.reduce((sum, fee) => sum + (parseFloat(fee.amount) || 0), 0); // Đảm bảo chuyển đổi sang số
+        const finalInvoiceTotal = totalInvoice + additionalFees;
+        document.getElementById(`tongTien${selectedInvoiceId}`).value = finalInvoiceTotal.toLocaleString('vi-VN');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  function dichVuNuoc(tenSearchAPI) {
+    idDoThues = null;
+    donGiaDoThues = null;
+    soLuongChons = null;
+    tenSearchAPI = tenSearchAPI || '';
+    $.ajax({
+      url: `http://localhost:8080/nuoc_uong/searchTenNuocUong?tenNuocUong=${tenSearchAPI}`,
+      type: 'GET',
+      dataType: 'json',
+      success: function (data) {
+        let content = '<div class="row" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">';
+
+        data.forEach(item => {
+          content += `
+        <div class="product-card" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); width: 250px; background-color: #ffffff; padding: 15px; text-align: center; position: relative;">
+            <div class="price-tag" style="position: absolute; top: 10px; right: 10px; background-color: #ff4d4d; color: white; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 14px;">
+                ${formatCurrency(item.donGias)} <!-- Gọi hàm formatCurrency để định dạng giá -->
+            </div>
+            <img src="${item.imageData}" class="card-img-top" alt="${item.tenNuocUong}" style="width: 100%; height: 160px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;">
+            <h5 class="card-title" style="margin: 10px 0; font-size: 18px; font-weight: bold; color: #333;">${item.tenNuocUong}</h5>
+            <p class="card-text kho-con" style="margin: 5px 0; font-size: 14px; color: #666;" data-original-so-luong="${item.soLuongs}">Kho Còn: ${item.soLuongs}</p>
+            <div class="input-group" style="margin: 10px 0;">
+                <input type="number" class="form-control so-luong-chon" value="0" min="0" style="width: 60px; display: inline-block;">
+            </div>
+            <div class="input-group-append" style="margin-top: 10px;">
+                <button class="btn btn-success add-btn-nuoc" data-ten-nuoc-uong="${item.tenNuocUong}" data-id="${item.id}" data-don-gia="${item.donGias}" data-so-luong="${item.soLuongs}" type="button" style="width: 100%; margin-bottom: 5px;">Thêm</button>
+            </div>
+        </div>`;
+        });
+        content += '</div>';
+        $('#nuocUongTab').html(content);
+
+        // Gán sự kiện cho các nút "Thêm"
+        $('.add-btn-nuoc').on('click', function () {
+          const productCard = $(this).closest('.product-card');
+          const soLuongChon = parseInt(productCard.find('.so-luong-chon').val()); // Lấy số lượng từ input
+          const soLuongCon = parseInt($(this).data('so-luong')); // Lấy số lượng kho còn
+          const donGia = parseFloat($(this).data('don-gia')); // Lấy đơn giá
+          const idNuocUong = $(this).data('id'); // Lấy ID nước uống
+          const idHoaDonChiTiet = selectedInvoiceId; // ID Hóa đơn chi tiết
+
+          // Kiểm tra số lượng có hợp lệ không
+          if (soLuongChon > soLuongCon || soLuongChon <= 0) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Lỗi số lượng',
+              text: `Số lượng chọn phải nằm trong khoảng (0 - ${soLuongCon})`,
+            });
+            return;
+          }
+
+          // Kiểm tra xem dịch vụ nước uống đã tồn tại trong hóa đơn hay chưa
+          const checkUrl = `http://localhost:8080/dich-vu-san-bong/tim-dvsb-nuoc-uong?idHDCT=${idHoaDonChiTiet}&idNuocUong=${idNuocUong}`;
+
+          $.ajax({
+            url: checkUrl,
+            type: 'GET',
+            success: function (response) {
+              // Nếu trả về 200 và có dữ liệu, tức là đã có trong hóa đơn, tiến hành cập nhật số lượng
+              const soLuongHienTai = response.soLuong; // Số lượng hiện tại trong hóa đơn
+              const soLuongMoi = soLuongHienTai + soLuongChon; // Cộng số lượng mới vào số lượng cũ
+              const tongTien = soLuongMoi * donGia;
+
+              const updatePayload = {
+                idNuocUong: idNuocUong,
+                idHoaDonChiTiet: idHoaDonChiTiet,
+                soLuong: soLuongMoi,
+                tongTien: tongTien,
+                trangThai: response.trangThai, // Giữ lại trạng thái hiện tại
+                deletedAt: response.deletedAt // Giữ lại giá trị deletedAt hiện tại
+              };
+
+              updateService(updatePayload, response.id);
+
+              const soLuongKhoConLai = soLuongCon - soLuongChon;
+              productCard.find('.kho-con').text(`Kho Còn: ${soLuongKhoConLai}`);
+
+              // Cập nhật lại data của nút "Thêm" để chứa số lượng kho mới
+              $(this).data('so-luong', soLuongKhoConLai);
+
+              // Gọi hàm updateStockWithCurrentAmount để cập nhật số lượng tồn kho
+              const apiUrl = `http://localhost:8080/nuoc_uong/${idNuocUong}`;
+              const updateUrl = `http://localhost:8080/nuoc_uong/updateSoLuong/${idNuocUong}`;
+
+              updateServiceCost();
+              updateStockWithCurrentAmount(apiUrl, updateUrl, idNuocUong, 0, soLuongChon);
+
+              showSuccessToast("Cập nhật số lượng thành công!");
+            },
+            error: function (xhr) {
+              if (xhr.status === 400) {
+                // Nếu trả về 400, tức là chưa có dịch vụ này trong hóa đơn, tiến hành thêm mới
+                const tongTien = soLuongChon * donGia;
+
+                console.log("donGia: " + donGia);
+                console.log("tongTien: " + tongTien);
+
+                // Tạo payload gửi tới API
+                const payload = {
+                  idNuocUong: idNuocUong,
+                  idHoaDonChiTiet: idHoaDonChiTiet,
+                  tongTien: tongTien,
+                  soLuong: soLuongChon
+                };
+
+                // Gửi request tới API để thêm dịch vụ nước uống vào hóa đơn
+                $.ajax({
+                  url: 'http://localhost:8080/dich-vu-san-bong',
+                  type: 'POST',
+                  contentType: 'application/json',
+                  data: JSON.stringify(payload),
+                  success: function (response) {
+                    // Cập nhật số lượng kho sau khi thêm thành công
+                    const soLuongKhoConLai = soLuongCon - soLuongChon;
+                    productCard.find('.kho-con').text(`Kho Còn: ${soLuongKhoConLai}`);
+
+                    // Cập nhật lại data của nút "Thêm" để chứa số lượng kho mới
+                    $(this).data('so-luong', soLuongKhoConLai);
+
+                    // Gọi hàm updateStockWithCurrentAmount để cập nhật số lượng tồn kho
+                    const apiUrl = `http://localhost:8080/nuoc_uong/${idNuocUong}`;
+                    const updateUrl = `http://localhost:8080/nuoc_uong/updateSoLuong/${idNuocUong}`;
+
+                    updateServiceCost();
+                    updateStockWithCurrentAmount(apiUrl, updateUrl, idNuocUong, 0, soLuongChon);
+
+                    fillDichVuChoHoaDon(selectedInvoiceId);
+                    showSuccessToast("Thêm dịch vụ thành công");
+                  },
+                  error: function (xhr, status, error) {
+                    showErrorToast("Lỗi khi thêm dịch vụ!"); // Thêm thông báo lỗi nếu gặp lỗi
+                  }
+                });
+              } else {
+                showErrorToast("Lỗi khi kiểm tra dịch vụ!");
+              }
+            }
+          });
+        });
+      },
+      error: function (xhr, status, error) {
+
+      }
+    });
+  }
+
+  $('#serviceModal').on('shown.bs.modal', function () {
+    dichVuDo(); // Load "Đồ Thuê" tab content when modal is shown
+    dichVuNuoc();
+  });
+
+  $('#tab1').on('click', dichVuDo);
+  $('#tab2').on('click', dichVuNuoc);
+
+
+  // Sử dụng event delegation để bắt sự kiện click
+  $(document).on('click', '.cancel-btn2', function () {
+    // Lấy thông tin cần thiết
+    let idNuocUongs = $(this).data('id');
+    let donGiaNuocUongs = $(this).data('don-gia');
+    let soLuongs = $(this).data('so-luong');
+    let tenNuocUongs = $(this).data('ten-nuoc-uong');
+    let soLuongChons = parseInt($(this).closest('.input-group').find('.so-luong-chon').val()) || 0; // Đảm bảo giá trị là số
+
+    // Hiển thị hộp thoại xác nhận trước khi thực hiện hủy
+    Swal.fire({
+      title: 'Xác nhận hủy',
+      text: `Bạn có chắc chắn muốn hủy dịch vụ ${tenNuocUongs} không?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Có, hủy!',
+      cancelButtonText: 'Không, quay lại'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Thực hiện gọi AJAX để cập nhật số lượng
+        $.ajax({
+          url: `http://localhost:8080/nuoc_uong/${idNuocUongs}`,
+          type: 'PUT',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            idNuocUong: idNuocUongs,
+            tenNuocUong: tenNuocUongs,
+            donGias: donGiaNuocUongs,
+            soLuongs: soLuongs, // Tính toán số lượng mới
+            trangThai: "Chưa chọn"
+          }),
+          success: function (response) {
+            let newSoLuong = soLuongs; // Tính toán lại số lượng mới
+
+            if (newSoLuong <= 0) {
+              Swal.fire({
+                icon: 'warning',
+                title: 'Hết hàng',
+                text: 'Số lượng trong kho đã hết.',
+              });
+            } else {
+              Swal.fire({
+                icon: 'success',
+                title: 'Đã hủy thành công',
+                text: `Số lượng còn lại: ${newSoLuong}`,
+              });
+            }
+
+            // Cập nhật số lượng còn lại trên giao diện
+            $(this).closest('.card-body').find('.kho-con').text(`Kho còn: ${newSoLuong}`);
+
+          }.bind(this), // Bind đúng ngữ cảnh this để sử dụng bên trong success callback
+          error: function (xhr, status, error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Cập nhật thất bại',
+              text: 'Có lỗi xảy ra khi cập nhật số lượng.',
+            });
+          }
+        });
+      }
+    });
+  });
+
+
+  function showSuccessToast(message) {
+    Toastify({
+      text: message,
+      duration: 3000,
+      gravity: "top",
+      position: "right",
+      style: {
+        background: "#4CAF50",
+      },
+      stopOnFocus: true
+    }).showToast();
+  }
+
+  function showErrorToast(message) {
+    Toastify({
+      text: message,
+      duration: 3000,
+      gravity: "top",
+      position: "center",
+      style: {
+        background: "#f44336",
+      },
+      stopOnFocus: true
+    }).showToast();
+  }
+
+  async function checkIn(id) {
+    try {
+      // Tìm hàng tương ứng với ID trong bảng và lấy giá trị hoVaTenKhachHang và maHoaDonChiTiet
+      const row = document.querySelector(`tr[data-id='${id}']`);
+      if (!row) throw new Error('Không tìm thấy hàng với ID: ' + id);
+
+      // Cập nhật trạng thái của bản ghi
+      const response = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ trangThai: 'Đang hoạt động' })
+      });
+
+      if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
+
+      // Làm mới bảng dữ liệu trong tab "Đang hoạt động"
+      await fetchData('Chờ nhận sân', 0, 'cho-nhan-table');
+
+      // Tùy chọn: Hiển thị thông báo thành công
+      showSuccessToast('Check in thành công.');
+      // location.reload();
+
+    } catch (error) {
+      console.error('Error during check-in:', error);
+      showErrorToast('Có lỗi xảy ra khi check-in.');
+    }
+  }
+
+
+  let currentPage = 0;
+
+  // Hàm tìm kiếm theo số điện thoại
+  async function searchByPhone() {
+    const trangThai = "Đang hoạt động"; // Điều chỉnh trạng thái theo nhu cầu
+    const tableId = "yourTableId"; // ID của bảng để hiển thị dữ liệu
+    const soDienThoaiKhachHang = document.getElementById("search").value.trim();
+
+    // Gọi lại hàm fetchData với tham số tìm kiếm
+    await fetchData(trangThai, currentPage, tableId, soDienThoaiKhachHang);
+  }
+
+  // Thêm sự kiện input cho ô tìm kiếm để gọi fetchData mỗi khi người dùng nhập ký tự mới
+  document.getElementById('search').addEventListener('input', function() {
+    const soDienThoaiKhachHang = this.value; // Lấy giá trị hiện tại từ ô tìm kiếm
+    fetchData('Đang hoạt động', 0, 'dang-hoat-dong-table', soDienThoaiKhachHang);
+    fetchData('Chờ nhận sân', 0, 'cho-nhan-table', soDienThoaiKhachHang);
+  });
+
+  async function createPriceForm(apiUrl) {
+    try {
+      const response = await fetch(apiUrl); // Gọi API với URL truyền vào
+      const data = await response.json();
+
+      if (data.content && Array.isArray(data.content)) {
+        // Lấy thông tin từ hóa đơn đầu tiên
+        const hoVaTenKhachHang = data.content[0].hoVaTenKhachHang;
+        const soDienThoaiKhachHang = data.content[0].soDienThoaiKhachHang;
+
+        // Tính tổng `giaSanCa` từ tất cả các hóa đơn
+        const totalGiaSanCa = data.content.reduce((total, item) => total + item.giaSanCa, 0);
+        const depositAmount = totalGiaSanCa / 2; // Tính tiền cọc bằng 1 nửa tổng tiền sân
+
+        // Tính tổng `tienPhuPhi` bằng cách gọi API phụ phí cho từng `invoiceId`
+        let totalPhuPhi = 0;
+        let totalDichVu = 0;
+        for (const item of data.content) {
+          const invoiceId = item.id;
+          const phuPhiResponse = await fetch(`http://localhost:8080/api/phu-phi-hoa-don/${invoiceId}`);
+          const phuPhiData = await phuPhiResponse.json();
+
+          // Tính tổng `tienPhuPhi` cho mỗi hóa đơn và cộng vào `totalPhuPhi`
+          totalPhuPhi += phuPhiData.reduce((sum, phuPhiItem) => sum + phuPhiItem.tienPhuPhi, 0);
+
+          const dichVuResponse = await fetch(`http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${invoiceId}`);
+          const dichVuData = await dichVuResponse.json();
+
+          totalDichVu += dichVuData.reduce((sum, dichVuItem) => sum + dichVuItem.tongTien, 0);
+        }
+
+        const totalTongTien = totalGiaSanCa + totalPhuPhi + totalDichVu - depositAmount;
+
+        // Tạo HTML cho form với các thông tin cần hiển thị
+        const formHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="customerName">Tên khách hàng</label>
+                            <input class="form-control" id="customerName" type="text" value="${hoVaTenKhachHang}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="customerPhone">Số điện thoại</label>
+                            <input class="form-control" id="customerPhone" type="text" value="${soDienThoaiKhachHang}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="totalPrice">Tổng giá sân</label>
+                            <input class="form-control" id="totalPrice" type="text" value="${totalGiaSanCa}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="depositAmount">Tiền cọc</label>
+                            <input class="form-control" id="depositAmount" type="text" value="${depositAmount}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="totalDichVu">Tiền dịch vụ</label>
+                            <input class="form-control" id="totalDichVu" type="text" value="${totalDichVu}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="totalPhuPhi">Tiền phụ phí</label>
+                            <input class="form-control" id="totalPhuPhi" type="text" value="${totalPhuPhi}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group mb-3">
+                            <label for="totalTongTien">Tổng tiền</label>
+                            <input class="form-control" id="totalTongTien" type="text" value="${totalTongTien}" readonly>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        // Ghi HTML vào div có id là tabContentRight
+        document.getElementById('tabContentRight').innerHTML = formHTML;
+      } else {
+        throw new Error("Dữ liệu không hợp lệ");
+      }
+    } catch (error) {
+      console.error("Lỗi khi gọi API:", error);
+      document.getElementById('tabContentRight').innerHTML = `<p>Không thể tạo form.</p>`;
+    }
+  }
+
+  // Hàm fetch data từ server và hiển thị ra bảng
+  async function fetchData(trangThai, page, tableId, soDienThoaiKhachHang = '') {
+    try {
+      const pageSize = 5;
+      const url = `http://localhost:8080/hoa-don-chi-tiet/trang-thai?trangThai=${encodeURIComponent(trangThai)}&page=${page}&size=${pageSize}&soDienThoaiKhachHang=${encodeURIComponent(soDienThoaiKhachHang)}`;
+      console.log(`Fetching data from URL: ${url}`);
+
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Error ${response.status}: ${await response.text()}`);
+
+      const data = await response.json();
+      console.log('Data received:', data);
+
+      const tableBody = document.getElementById(tableId);
+      if (!tableBody) {
+        return;
+      }
+      tableBody.innerHTML = ''; // Xóa nội dung cũ của bảng
+
+      // Tạo bảng động từ dữ liệu
+      if (Array.isArray(data.content)) {
+        data.content.forEach((item, index) => {
+          const row = document.createElement('tr');
+          row.classList.add('invoice-row');
+          row.setAttribute('data-id', item.id);
+          row.addEventListener('click', showInvoiceDetails);
+          row.innerHTML = `
+                    <td hidden>${item.id}</td>
+                    <td hidden class="maHoaDonChiTiet">${item.maHoaDonChiTiet}</td>
+                    <td>${index + 1 + (page * pageSize)}</td>
+                    <td class="tenKH">${item.hoVaTenKhachHang}</td>
+                    <td class="sdt">${item.soDienThoaiKhachHang}</td>
+                    <td>${item.emailKhachHang}</td>
+                    <td>${item.tenSanBong}</td>
+                    <td>${item.tenCa}</td>
+                    <td>${item.ngayDenSan}</td>
+                    <td>
+                        ${trangThai === 'Đang hoạt động' ? '' : '<button class="btn btn-outline-success check-in-btn" title="Check in"><span class="fe fe-check-circle"></span></button>'}
+                    </td>
+                `;
+
+          tableBody.appendChild(row); // Thêm dòng vào bảng
+        });
+
+      } else {
+        console.error('Dữ liệu không hợp lệ: data.content không phải là mảng.');
+      }
+
+      updatePagination(data.totalPages, page, tableId); // Cập nhật phân trang
+    } catch (error) {
+      showErrorToast('Có lỗi xảy ra khi tải dữ liệu.');
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  // Thêm sự kiện cho các nút check-in
+  document.addEventListener('click', function (event) {
+    if (event.target && event.target.matches('.check-in-btn')) {
+      const row = event.target.closest('tr');
+      const id = row.getAttribute('data-id');
+
+      // Sử dụng SweetAlert để xác nhận
+      Swal.fire({
+        title: 'Xác nhận',
+        text: "Bạn có chắc chắn muốn check-in không?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Có',
+        cancelButtonText: 'Không'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          checkIn(id);
+        }
+      });
+    }
+  });
+
+
+  // Sự kiện khi nhấn nút "Thêm dịch vụ"
+  document.getElementById('openServiceModal').addEventListener('click', function (event) {
+    if (selectedInvoiceId) {
+      // Mở modal nếu hóa đơn đã được chọn
+      $('#serviceModal').modal('show');
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Chưa chọn hóa đơn',
+        text: 'Vui lòng chọn hóa đơn trước khi thêm dịch vụ.',
+      }).then(() => {
+        event.preventDefault(); // Ngăn chặn việc mở modal
+      });
+    }
+  });
+
+
+  function updatePagination(totalPages, currentPage, tableId) {
+    const paginationElement = document.getElementById(`pagination${tableId === 'dang-hoat-dong-table' ? 'DangHoatDong' : 'ChoNhan'}`);
+    paginationElement.innerHTML = '';
+
+    // Nếu chỉ có một trang, không hiển thị phân trang
+    if (totalPages <= 1) return;
+
+    // Thêm trang đầu tiên
+    paginationElement.innerHTML += `
+        <li class="page-item ${currentPage === 0 ? 'active' : ''}">
+            <button class="page-link" type="button" onclick="handlePageClick(0, '${tableId}')">1</button>
+        </li>
+    `;
+
+    // Thêm dấu "..." trước các trang gần trang hiện tại nếu cần
+    if (currentPage > 2) {
+      paginationElement.innerHTML += `
+            <li class="page-item dropdown">
+                <button class="page-link dropdown-toggle" type="button" id="dropdownMenu${tableId}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">...</button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu${tableId}">
+                    ${generatePageLinks(1, Math.min(currentPage - 1, totalPages - 2), tableId)}
+                </div>
+            </li>
+        `;
+    }
+
+    // Thêm các trang gần trang hiện tại
+    const startPage = Math.max(1, currentPage - 1);
+    const endPage = Math.min(totalPages - 2, currentPage + 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+      paginationElement.innerHTML += `
+            <li class="page-item ${i === currentPage ? 'active' : ''}">
+                <button class="page-link" type="button" onclick="handlePageClick(${i}, '${tableId}')">${i + 1}</button>
+            </li>
+        `;
+    }
+
+    // Thêm dấu "..." sau các trang gần trang hiện tại nếu cần
+    if (currentPage < totalPages - 3) {
+      paginationElement.innerHTML += `
+            <li class="page-item dropdown">
+                <button class="page-link dropdown-toggle" type="button" id="dropdownMenuEnd${tableId}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">...</button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuEnd${tableId}">
+                    ${generatePageLinks(Math.max(currentPage + 2, 1), totalPages - 1, tableId)}
+                </div>
+            </li>
+        `;
+    }
+
+    // Thêm trang cuối cùng
+    paginationElement.innerHTML += `
+        <li class="page-item ${currentPage === totalPages - 1 ? 'active' : ''}">
+            <button class="page-link" type="button" onclick="handlePageClick(${totalPages - 1}, '${tableId}')">${totalPages}</button>
+        </li>
+    `;
+
+    // Khởi tạo dropdown
+    $('.dropdown-toggle').dropdown();
+  }
+
+  function generatePageLinks(startPage, endPage, tableId) {
+    let links = '';
+    for (let i = startPage; i <= endPage; i++) {
+      links += `
+            <a class="dropdown-item" href="#" onclick="handlePageClick(${i}, '${tableId}')">${i + 1}</a>
+        `;
+    }
+    return links;
+  }
+
+  function handlePageClick(page, tableId) {
+    const trangThai = tableId === 'dang-hoat-dong-table' ? 'Đang hoạt động' : 'Chờ nhận sân';
+    const soDienThoaiKhachHang = document.getElementById('search').value; // Lấy giá trị từ ô tìm kiếm
+    fetchData(trangThai, page, tableId, soDienThoaiKhachHang);
+  }
+
+  function loadTabData(tabId) {
+    const trangThai = tabId === 'dang-hoat-dong' ? 'Đang hoạt động' : 'Chờ nhận sân';
+    const soDienThoaiKhachHang = document.getElementById('search').value; // Lấy giá trị từ ô tìm kiếm
+    fetchData(trangThai, 0, `${tabId}-table`, soDienThoaiKhachHang);
+  }
+
+
+  document.addEventListener('DOMContentLoaded', () => {
+    loadTabData('dang-hoat-dong');
+
+    document.querySelectorAll('.nav-link').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabId = tab.getAttribute('aria-controls');
+        loadTabData(tabId);
+      });
+    });
+  });
+
+  let tabCount = 0;  // Số lượng tab hiện tại
+  const maxTabs = 5; // Giới hạn số lượng tab
+
+  function removeTab(event, tabId) {
+    event.preventDefault();
+
+    // Xóa tab khỏi danh sách
+    document.getElementById(`${tabId}-tab`).parentElement.remove();
+
+    // Xóa nội dung tab
+    document.getElementById(tabId).remove();
+
+    tabCount--;
+  }
+
+  function resetFilters() {
+    document.getElementById('search').value = '';
+
+    fetchData('Đang hoạt động', 0, 'dang-hoat-dong-table', '');
+    fetchData('Chờ nhận sân', 0, 'cho-nhan-table', '');
+  }
+
+  let selectedInvoiceId = null;
+
+
+  function showInvoiceDetails(event) {
+    const row = event.currentTarget; // Lấy dòng hiện tại được chọn
+    const invoiceId = row.getAttribute('data-id'); // Lấy id hóa đơn chi tiết từ thuộc tính data-id
+    selectedInvoiceId = row.getAttribute('data-id');
+    fillDichVuChoHoaDon(invoiceId);
+    const tabName =
+            `HD ${invoiceId}`
+    ;
+
+    // Xóa form mặc định nếu chưa tạo tab nào
+    const defaultForm = document.querySelector('#tabContentRight > form');
+    if (defaultForm) {
+      defaultForm.remove();
+    }
+
+    // Kiểm tra nếu tab đã tồn tại thì kích hoạt nó
+    if (document.getElementById(
+            `tab-${invoiceId}`
+    )) {
+      const existingTab = document.getElementById(
+              `tab-${invoiceId}`
+      );
+      const tab = new bootstrap.Tab(existingTab);
+      tab.show();
+      return;
+    }
+
+    // Tạo mới tab
+    const tabListRight = document.getElementById('tabListRight');
+    const tabContentRight = document.getElementById('tabContentRight');
+
+    // Tạo phần tử tab mới
+    const newTab = document.createElement('li');
+    newTab.classList.add('nav-item');
+    newTab.innerHTML =
+            `
+            <a class="nav-link" id="tab-${invoiceId}" data-bs-toggle="tab" href="#content-${invoiceId}" role="tab"
+                onclick="fillDichVuChoHoaDon(${invoiceId}); setSelectedInvoiceId(${invoiceId});" >
+                ${tabName}
+            <button type="button" class="close" onclick="removeTab2(event, 'tab-${invoiceId}')" title="Xóa">
+            <span class="fe fe-x-circle" style="color: #ff0000; font-size: 15px;"></span>
+            </button>
+            </a>
+            `;
+    tabListRight.appendChild(newTab);
+
+    // Tạo phần tử nội dung cho tab mới
+    const newTabContent = document.createElement('div');
+    newTabContent.classList.add('tab-pane', 'fade');
+    newTabContent.setAttribute('id', `content-${invoiceId}`);
+    newTabContent.setAttribute('role', 'tabpanel');
+    newTabContent.innerHTML = `
+            <!-- Nội dung hóa đơn -->
+        <form>
+        <div class="row">
+        <div class="col-md-6" hidden >
+        <div class="form-group mb-3" >
+        <label for="id${invoiceId}">ID</label>
+        <input type="text" id="id${invoiceId}" class="form-control" readonly >
+        </div>
+        <div class="form-group mb-3" hidden>
+        <label for="idHoaDon${invoiceId}">ID Hóa đơn</label>
+        <input type="text" id="idHoaDon${invoiceId}" class="form-control" readonly>
+        </div>
+        </div>
+        <div class="col-md-6" hidden>
+        <div class="form-group mb-3">
+        <label for="maHoaDon${invoiceId}">Mã hóa đơn</label>
+        <input type="text" id="maHoaDon${invoiceId}" class="form-control" readonly>
+        </div>
+        </div>
+        <div class="col-md-6" hidden>
+        <div class="form-group mb-3">
+        <label for="maHoaDonChiTiet${invoiceId}">Mã hóa đơn chi tiết</label>
+        <input type="text" id="maHoaDonChiTiet${invoiceId}" class="form-control" readonly>
+        </div>
+        </div>
+        </div>
+            <!-- Tên Khách Hàng -->
+        <div class="row">
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="hoVaTenKhachHang${invoiceId}">Tên khách hàng</label>
+        <input type="text" id="hoVaTenKhachHang${invoiceId}" class="form-control" readonly>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="soDienThoaiKhachHang${invoiceId}">Số Điện Thoại</label>
+        <input class="form-control" id="soDienThoaiKhachHang${invoiceId}" type="text" readonly placeholder="Chưa có dữ liệu">
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6" hidden>
+        <div class="form-group mb-3">
+        <label for="trangThai${invoiceId}">Trạng thái</label>
+        <input class="form-control" id="trangThai${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        <div class="col-md-12">
+        <div class="form-group mb-3">
+        <label for="tenSanBong${invoiceId}">Tên sân</label>
+        <input class="form-control" id="tenSanBong${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="thoiGianBatDauCa${invoiceId}">Thời gian bắt đầu</label>
+        <input class="form-control" id="thoiGianBatDauCa${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="thoiGianKetThucCa${invoiceId}">Thời gian kết thúc</label>
+        <input class="form-control" id="thoiGianKetThucCa${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="ngayTaoHoaDon${invoiceId}">Ngày tạo hóa đơn</label>
+<input class="form-control" id="ngayTaoHoaDon${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="ngayDenSan${invoiceId}">Ngày check-in</label>
+        <input class="form-control" id="ngayDenSan${invoiceId}" type="text" readonly>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="tienSan${invoiceId}">Giá sân</label>
+        <input class="form-control" id="tienSan${invoiceId}" type="text" readonly >
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="tienCoc${invoiceId}">Tiền cọc Sân</label>
+        <input class="form-control" id="tienCoc${invoiceId}" type="text" readonly >
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="giaDichVu${invoiceId}">Giá dịch Vụ</label>
+        <input class="form-control" id="giaDichVu${invoiceId}" type="text" readonly >
+        </div>
+        </div>
+        <div class="col-md-6">
+        <div class="form-group mb-3">
+        <label for="tienPhuPhi${invoiceId}">Tiền phụ Phí</label>
+        <input class="form-control" id="tienPhuPhi${invoiceId}" type="text" readonly >
+        </div>
+        </div>
+        </div>
+        <div class="row">
+   <div class="col-md-12">
+    <div class="form-group mb-3">
+        <label for="phuPhiSelect${invoiceId}">Phụ phí hóa đơn</label>
+        <div class="input-group mb-3">
+            <!-- Dropdown danh sách phụ phí -->
+            <select id="phuPhiSelect${invoiceId}" class="form-control">
+                <option value="">Chưa có phụ phí hóa đơn !!!</option>
+            </select>
+            <button class="btn btn-outline-success" type="button" id="btnAddPhuPhi${invoiceId}" data-invoice-id="${invoiceId}">+</button>
+        </div>
+    </div>
+</div>
+</div>
+        <div class="row">
+        <div class="col-md-12">
+        <div class="form-group mb-3">
+        <label for="tongTien${invoiceId}">Tổng tiền</label>
+        <input class="form-control" id="tongTien${invoiceId}" type="text" readonly>
+        </div>
+        </div></div>
+        <hr>
+        <div class="row">
+        <div class="col-md-12">
+        <h4 class="text-success">Thanh Toán</h4>
+        </div>
+        </div>
+        <div class="row">
+    <div class="col-md-4">
+        <div class="form-group mb-3">
+            <label for="phieuGiamGia${invoiceId}">Phiếu Giảm Giá</label>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="form-group mb-3">
+            <div class="input-group mb-3">
+                <input class="form-control" id="phieuGiamGia${invoiceId}" type="text" placeholder="Phiếu Giảm Giá" readonly>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <div class="row">
+        <div class="col-md-4">
+        <div class="form-group mb-3">
+        <label for="tienGiam${invoiceId}">Số tiền giảm</label>
+        </div>
+        </div>
+        <div class="col-md-8">
+        <div class="form-group mb-3">
+        <div class="input-group mb-3">
+        <input class="form-control" id="tienGiam${invoiceId}" type="text" placeholder="Số tiền giảm" readonly>
+        <span class="input-group-text">VND</span>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="col-md-4">
+        <div class="form-group mb-3">
+        <label for="tongTienPhaiTra${invoiceId}">Tổng tiền phải trả:</label>
+        </div>
+        </div>
+        <div class="col-md-8">
+        <div class="form-group mb-3">
+        <div class="input-group mb-3">
+        <input type="text" class="form-control" id="tongTienPhaiTra${invoiceId}" readonly>
+        <span class="input-group-text">VND</span>
+        </div>
+        </div>
+        </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="tienKhachDua${invoiceId}">Tiền khách đưa</label>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group mb-3">
+                    <div class="input-group mb-3" >
+
+                    <!--     nút mở modal-->
+
+                         <div class="form-group mb-3" style="display: flex;align-items: center">
+
+                              <button type="button" class="btn-outline-warning" style="
+                                                                            display: flex;
+                                                                            align-items: center;
+                                                                            padding: 10px 15px;
+                                                                            border: none;
+                                                                            border-radius: 5px;
+                                                                            cursor: pointer;
+                                                                            font-size: 16px;
+                                                                        " data-toggle="modal" data-target="#exampleModal${invoiceId}" onclick="fillHttt(${invoiceId})">
+                                   <i class="fas fa-credit-card" style="margin-right: 5px;"></i>
+                              </button>
+                                <input type="text" style="margin-left: 82px" class="form-control" id="tienKhachDua${invoiceId}" readonly >
+                                    <span class="input-group-text">VND</span>
+                         </div>
+
+
+                    </div>
+<!--                    ket thuc nut modal-->
+
+                </div>
+             </div>
+        </div>
+
+        <div class="row">
+<div class="col-md-4">
+        <div class="form-group mb-3">
+        <label for="tienTraLai${invoiceId}">Tiền trả lại</label>
+        </div>
+        </div>
+        <div class="col-md-8">
+        <div class="form-group mb-3">
+        <div class="input-group mb-3">
+        <input type="text" class="form-control" id="tienTraLai${invoiceId}" readonly>
+        <span class="input-group-text">VND</span>
+        </div>
+        </div>
+        </div>
+        </div>
+
+
+<!--         Modal-->
+         <div class="modal fade" id="exampleModal${invoiceId}" tabindex="-1"
+                                             aria-labelledby="exampleModalLabel" aria-hidden="true" >
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header"style="background-color: #198754; color: white">
+                                                        <h3 class="modal-title" id="exampleModalLabel"
+                                                            style="text-align: center ;flex: 1">Thanh toán</h3>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Đóng">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <!--                                                        Nội dung của Modal-->
+                                                        <div style="align-items: center;justify-content: center;">
+                                                            <div style="display: flex;margin-bottom: 10px">
+                                                                <label style="flex:1"><h5>Tổng tiền hàng</h5></label>
+                                                                <h5 id="tongTienHang${invoiceId}"  style="float: right"></h5>
+                                                                <h5>₫</h5>
+                                                            </div>
+                                                            <div style="display: flex;justify-content: center; margin-bottom: 10px">
+                                                                <button type="button"
+                                                                        style="border: 2px solid #28a745; background-color: transparent; color: #28a745; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s, color 0.3s;"
+onmouseover="this.style.backgroundColor='#28a745'; this.style.color='#fff';"
+                                                                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#28a745';"
+                                                                        onclick="maGDInput(true,${invoiceId})">
+                                                                    Chuyển khoản<i style="margin-left: 5px"
+                                                                                   class="fas fa-university"></i>
+                                                                </button>
+                                                                <button type="button"
+                                                                        style="border: 2px solid #28a745; background-color: transparent; color: #28a745; padding: 10px 20px; border-radius: 5px; font-size: 16px; cursor: pointer; margin-left: 5px; transition: background-color 0.3s, color 0.3s;"
+                                                                        onmouseover="this.style.backgroundColor='#28a745'; this.style.color='#fff';"
+                                                                        onmouseout="this.style.backgroundColor='transparent'; this.style.color='#28a745';"
+                                                                        onclick="maGDInput(false,${invoiceId})">
+                                                                    Tiền mặt<i style="margin-left: 5px"
+                                                                               class="fas fa-money-bill-wave"></i>
+                                                                </button>
+                                                            </div>
+                                                            <div style="margin-bottom: 10px">
+                                                                <label for="khachDua${invoiceId}" style="font-weight: bold;">Tiền
+                                                                khách đưa:</label>
+                                                                <div style="display: flex">
+                                                                    <input type="number"
+                                                                           id="khachDua${invoiceId}"
+                                                                           class="form-control"
+                                                                           placeholder="Nhập tiền khách đưa"
+                                                                           style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none;  "
+
+onfocus="this.style.borderBottom='2px solid #0056b3';"
+                                                                           onblur="this.style.borderBottom='2px solid #007bff';">
+                                                                    <input type="text"
+                                                                           id="maGD${invoiceId}"
+                                                                           class="form-control"
+                                                                           placeholder="Mã giao dịch"
+                                                                           style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none; display: none"
+                                                                           onfocus="this.style.borderBottom='2px solid #0056b3';"
+                                                                           onblur="this.style.borderBottom='2px solid #007bff';">
+                                                                </div>
+                                                            </div>
+                                                            <div style="margin-bottom: 60px; margin-top: 60px" >
+                                                                <table class="table table-hover">
+                                                                    <thead >
+
+                                                                        <th>STT</th>
+                                                                        <th>Mã giao dịch</th>
+                                                                        <th>Phương thức</th>
+                                                                        <th>Số tiền</th>
+                                                                        <th>Hành động</th>
+
+                                                                    </thead>
+                                                                    <tbody id="tbody${invoiceId}">
+                                                                        <tr>
+                                                                        <td style=" text-align: center" colspan="5">Chưa có thông tin</td>
+                                                                        </tr>
+                                                                     </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div style="display: flex" >
+                                                                <label style="flex:1" ><h5>Tiền còn thiếu</h5></label>
+
+                                                                <h5 id="tienConThieu${invoiceId}" style="float: right" ></h5>
+<h5>₫</h5>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-success"
+                                                                onclick="changerHttt(${invoiceId})">Xác nhận
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+        <hr>
+
+        <div class="row">
+        <div class="col-md-12 text-center">
+        <button class="btn btn-success" type="button" onclick="thanhToan(${invoiceId})">Thanh toán</button>
+        </div>
+        </div>
+
+        </form>
+        `;
+    tabContentRight.appendChild(newTabContent);
+
+
+    // Tăng giá trị tabCount cho tab tiếp theo
+    tabCount++;
+
+    // Gọi API để lấy dữ liệu và điền vào form
+    fetch(`http://localhost:8080/hoa-don-chi-tiet/${invoiceId}`)
+            .then(response => response.json())
+            .then(data => {
+              // Điền dữ liệu vào các trường trong form
+              document.getElementById(`id${invoiceId}`).value = data.id;
+              document.getElementById(`idHoaDon${invoiceId}`).value = data.idHoaDon;
+              document.getElementById(`maHoaDon${invoiceId}`).value = data.maHoaDon;
+              document.getElementById(`maHoaDonChiTiet${invoiceId}`).value = data.maHoaDonChiTiet;
+              document.getElementById(`hoVaTenKhachHang${invoiceId}`).value = data.hoVaTenKhachHang;
+              document.getElementById(`soDienThoaiKhachHang${invoiceId}`).value = data.soDienThoaiKhachHang;
+              document.getElementById(`trangThai${invoiceId}`).value = data.trangThai;
+              document.getElementById(`tenSanBong${invoiceId}`).value = data.tenSanBong;
+              document.getElementById(`thoiGianBatDauCa${invoiceId}`).value = new Date(data.thoiGianBatDauCa).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+              document.getElementById(`thoiGianKetThucCa${invoiceId}`).value = new Date(data.thoiGianKetThucCa).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+              document.getElementById(`ngayTaoHoaDon${invoiceId}`).value = data.ngayTaoHoaDon;
+              document.getElementById(`ngayDenSan${invoiceId}`).value = data.ngayDenSan;
+              document.getElementById(`tienSan${invoiceId}`).value = parseInt(data.giaSanCa).toLocaleString('vi-VN');
+              document.getElementById(`tienCoc${invoiceId}`).value = parseInt(data.giaSanCa * 0.5).toLocaleString('vi-VN');
+              // document.getElementById(`ghiChu${invoiceId}`).value = data.ghiChu;
+              // fillHttt(invoiceId);
+              //Hàm xóa phụ phí
+              document.addEventListener('click', function (event) {
+                if (event.target && event.target.classList.contains('btn-danger')) {
+                  const phuPhiId = event.target.getAttribute('data-id');
+
+                  fetch(`http://localhost:8080/api/phu-phi-hoa-don/delete/${phuPhiId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' }
+                  })
+                          .then(response => {
+                            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                            return response.json();
+                          })
+                          .then(() => {
+                            // Sau khi xóa, làm mới danh sách phụ phí
+                            fetchAndRenderPhuPhis(selectedInvoiceId);
+                          })
+                          .catch(error => {
+                            console.error('Error updating deleteAt for phu phi:', error);
+                          });
+                }
+              });
+              function fetchAndRenderPhuPhis(invoiceId) {
+                fetch(`http://localhost:8080/api/phu-phi-hoa-don/${invoiceId}`)
+                        .then(response => response.json())
+                        .then(phuPhis => {
+                          const tableBody = document.getElementById('phuPhiList');
+                          const selectElement = document.getElementById(`phuPhiSelect${invoiceId}`);
+                          renderPhuPhiList(phuPhis, tableBody, selectElement);
+
+                          // Tính tổng phụ phí
+                          const totalPhuPhi = phuPhis.reduce((sum, phuPhi) => sum + parseFloat(phuPhi.tienPhuPhi), 0);
+                          document.getElementById(`tienPhuPhi${invoiceId}`).value = `${totalPhuPhi.toLocaleString('vi-VN')}`;
+                        })
+                        .catch(error => {
+                          console.error('Error fetching phu phis:', error);
+                        });
+              }
+
+
+              function renderPhuPhiList(phuPhis, tableBody, selectElement) {
+                tableBody.innerHTML = ''; // Xóa nội dung cũ
+                selectElement.innerHTML = ''; // Xóa các tùy chọn cũ
+
+                if (!phuPhis || phuPhis.length === 0) {
+                  // Nếu không có phụ phí, hiển thị thông báo
+                  tableBody.innerHTML = `
+                          <tr class="empty-row">
+                             <td colspan="4" style="color: red; text-align: center;">Không có phụ phí nào!</td>
+                          </tr>`;
+                  selectElement.innerHTML = `<option value="">Chưa có phụ phí nào!</option>`;
+                  return;
+                }
+
+                phuPhis.forEach((phuPhi, index) => {
+                  // Tạo hàng cho bảng
+                  const row = `<tr>
+            <td>${index + 1}</td>
+            <td>${phuPhi.ten}</td>
+            <td>${parseInt(phuPhi.tienPhuPhi).toLocaleString('vi-VN')} VND</td>
+            <td><button class="btn btn-danger btn-sm" data-id="${phuPhi.id}">Xóa</button></td>
+        </tr>`;
+                  tableBody.insertAdjacentHTML('afterbegin', row); // Thêm vào đầu bảng
+                  Array.from(tableBody.rows).forEach((row, index) => {
+                    row.cells[0].innerText = index + 1; // Cập nhật cột số thứ tự
+                  });
+
+                  // Tạo tùy chọn cho <select>
+                  const option = document.createElement("option");
+                  option.value = phuPhi.id;
+                  option.textContent = `${phuPhi.ten} - Số tiền: ${parseInt(phuPhi.tienPhuPhi).toLocaleString('vi-VN')} VND`;
+                  selectElement.insertAdjacentElement('afterbegin', option); // Thêm vào đầu <select>
+                });
+
+                // Đặt mục đầu tiên trong danh sách <select> làm mặc định
+                if (selectElement.options.length > 0) {
+                  selectElement.selectedIndex = 0; // Chọn mục đầu tiên
+                }
+              }
+
+
+              //hàm mở modal phụ phí
+              document.getElementById(`btnAddPhuPhi${invoiceId}`).addEventListener('click', function () {
+                fetchAndRenderPhuPhis(invoiceId); // Lấy danh sách phụ phí trước khi mở modal
+
+                const addPhuPhiModal = new bootstrap.Modal(document.getElementById('phuPhiModal'));
+                addPhuPhiModal.show();
+
+                // Reset các trường trong modal
+                document.getElementById('tenPhuPhi').value = '';
+                document.getElementById('giaPhuPhi').value = '';
+
+                // Thêm phụ phí mới
+                document.getElementById('btnThemPhuPhi').onclick = function () {
+                  const tenPhuPhi = document.getElementById('tenPhuPhi').value;
+                  const giaPhuPhi = document.getElementById('giaPhuPhi').value;
+                  const idHoaDonChiTiet = document.getElementById(`id${invoiceId}`).value;
+
+                  if (!tenPhuPhi || !giaPhuPhi) {
+                    Swal.fire({
+                      title: 'Lỗi!',
+                      text: 'Vui lòng điền đầy đủ thông tin!',
+                      icon: 'error',
+                      confirmButtonText: 'OK'
+                    });
+                    return;
+                  }
+                  if (isNaN(giaPhuPhi) || giaPhuPhi < 0) {
+                    Swal.fire({
+                      title: 'Lỗi!',
+                      text: 'Giá phụ phí phải là một số không nhỏ hơn 0!',
+                      icon: 'error',
+                      confirmButtonText: 'OK'
+                    });
+                    return;
+                  }
+
+                  fetch('http://localhost:8080/api/phu-phi-hoa-don/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      ten: tenPhuPhi,
+                      tienPhuPhi: giaPhuPhi,
+                      hoaDonChiTietId: idHoaDonChiTiet,
+                      ghiChu: "Ly lon",
+                      trangThai: "Quan lon"
+                    })
+                  })
+                          .then(response => {
+                            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                            return response.json();
+                          })
+                          .then(() => {
+                            Swal.fire({
+                              title: 'Thành công!',
+                              text: 'Thêm phụ phí thành công!',
+                              icon: 'success',
+                              confirmButtonText: 'OK'
+                            });
+                            fetchAndRenderPhuPhis(invoiceId); // Làm mới danh sách, hàm render sẽ xử lý số thứ tự
+                          })
+                          .catch(error => {
+                            console.error('Error adding new phu phi:', error);
+                          });
+                };
+              });
+
+              // Gọi API để tìm các dịch vụ sân bóng dựa trên id_hoa_don_chi_tiet
+              let totalInvoice; // Định nghĩa biến ở đây
+
+              fetch(`http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${data.id}`)
+                      .then(response => {
+                        if (!response.ok) {
+                          throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                      })
+                      .then(services => {
+                        // Tính tổng tiền từ các dịch vụ
+                        const totalCost = services.reduce((sum, service) => sum + service.tongTien, 0);
+
+                        // Hiển thị tổng tiền DVSB lên ô input
+                        document.getElementById(`giaDichVu${invoiceId}`).value = totalCost.toLocaleString('vi-VN');
+
+                        // Tính tổng tiền hóa đơn
+                        totalInvoice = (data.giaSanCa - (data.giaSanCa * 0.5)) + totalCost; // Chỉnh sửa ở đây
+                        document.getElementById(`tongTien${invoiceId}`).value = totalInvoice.toLocaleString('vi-VN');
+
+                        // Gọi API để lấy danh sách phụ phí theo id hóa đơn chi tiết
+                        return fetch(`http://localhost:8080/api/phu-phi-hoa-don/${selectedInvoiceId}`);
+                      })
+                      .then(response => {
+                        if (!response.ok) {
+                          throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                      })
+                      .then(phuPhis => {
+                        const phuPhiSelect = document.getElementById(`phuPhiSelect${selectedInvoiceId}`);
+                        const tableBody = document.getElementById('phuPhiList');
+
+                        // Sử dụng hàm renderPhuPhiList để hiển thị phụ phí
+                        renderPhuPhiList(phuPhis, tableBody, phuPhiSelect);
+
+                        // Tính tổng tiền của tất cả các phụ phí
+                        const totalPhuPhi = phuPhis.reduce((sum, phuPhi) => sum + parseFloat(phuPhi.tienPhuPhi), 0);
+                        document.getElementById(`tienPhuPhi${invoiceId}`).value = totalPhuPhi.toLocaleString('vi-VN');
+
+                        // Cập nhật tổng tiền hóa đơn sau khi có phụ phí
+                        totalInvoice += totalPhuPhi; // Cộng tổng phụ phí vào tổng tiền hóa đơn
+                        document.getElementById(`tongTien${invoiceId}`).value = totalInvoice.toLocaleString('vi-VN');
+                        // Gọi API để tìm phiếu giảm giá dựa trên tổng tiền
+                        return fetch(`http://localhost:8080/api-phieu-giam-gia/fill-PGG?tongTien=${totalInvoice}`);
+                      })
+                      .then(response => {
+                        if (!response.ok) {
+                          throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.json();
+                      })
+                      .then(discountVouchers => {
+                        // Kiểm tra nếu discountVouchers là một mảng
+                        if (!Array.isArray(discountVouchers)) {
+                          console.error('Expected discount vouchers to be an array');
+                          return;
+                        }
+
+                        // Tìm phiếu giảm giá có giá trị giảm cao nhất
+                        let maxDiscountVoucher = null;
+                        let maxDiscountValue = 0;
+                        // Cập nhật giá trị của updatedTotalInvoice
+                        updatedTotalInvoice = document.getElementById(`tongTien${invoiceId}`).value;
+
+                        // Loại bỏ dấu chấm để xử lý đúng định dạng số
+                        const updatedTotalInvoiceFormatted = updatedTotalInvoice.replace(/\./g, ''); // Loại bỏ tất cả dấu chấm
+
+                        const updatedTotalInvoiceNumber = parseFloat(updatedTotalInvoiceFormatted); // Chuyển đổi thành số
+
+                        discountVouchers.forEach(voucher => {
+                          let tienGiam;
+
+                          // Tính số tiền giảm
+                          if (voucher.hinhThucGiamGia) {
+                            // Nếu hinhThucGiamGia là true, thì tienGiam = mucGiam (VND)
+                            tienGiam = voucher.mucGiam;
+                          } else {
+                            // Nếu hinhThucGiamGiam là false, thì tienGiam = updatedTotalInvoice * mucGiam
+                            tienGiam = updatedTotalInvoiceNumber * (voucher.mucGiam / 100); // Giả sử mucGiam là phần trăm
+                          }
+
+                          // Kiểm tra xem giá trị giảm này có lớn hơn giá trị lớn nhất chưa
+                          if (tienGiam > maxDiscountValue) {
+                            maxDiscountValue = tienGiam;
+                            maxDiscountVoucher = voucher;
+                          }
+                        });
+
+                        // Nếu tìm thấy phiếu giảm giá, áp dụng nó
+                        if (maxDiscountVoucher) {
+                          const giaTriToiDa = maxDiscountVoucher.giaTriToiDa;
+                          let tienGiamToUse = Math.min(maxDiscountValue, giaTriToiDa); // Sử dụng giá trị tối đa nếu tiền giảm lớn hơn
+
+                          // Hiển thị số tiền giảm trong ô input
+                          const tienGiamInput = document.getElementById(`tienGiam${invoiceId}`);
+
+                          tienGiamInput.value = tienGiamToUse.toLocaleString('vi-VN');
+
+                          // console.log(tienGiamToUse.toLocaleString('vi-VN'))
+                          // Hiển thị thông tin của phiếu giảm giá
+                          const phieuGiamGiaMa = document.getElementById(`phieuGiamGia${invoiceId}`);
+
+                          phieuGiamGiaMa.value = `${maxDiscountVoucher.maPhieuGiamGia} - ${maxDiscountVoucher.tenPhieuGiamGia}`;
+
+                          // Kiểm tra nếu updatedTotalInvoiceNumber là một số hợp lệ
+                          if (isNaN(updatedTotalInvoiceNumber)) {
+                            return; // Ngăn không thực hiện tiếp nếu giá trị không hợp lệ
+                          }
+
+                          // Tính tổng tiền sau khi áp dụng giảm giá
+                          const totalAfterDiscount = updatedTotalInvoiceNumber - tienGiamToUse; // Tính tổng tiền sau khi giảm
+                          const tongTienPhaiTraInput = document.getElementById(`tongTienPhaiTra${invoiceId}`);
+                          tongTienPhaiTraInput.value = totalAfterDiscount.toLocaleString('vi-VN'); // Hiển thị tổng tiền cuối cùng
+
+                        } else {
+                          // Không có phiếu giảm giá nào
+                          const tienGiamInput = document.getElementById(`tienGiam${invoiceId}`);
+                          if (tienGiamInput) {
+                            tienGiamInput.value = '0.00'; // Không có giảm giá
+                          }
+
+                        }
+                      })
+                      .catch(error => {
+                        console.error('Error fetching discount vouchers:', error);
+                      });
+
+              $.ajax({
+                url: `http://localhost:8080/httt/${invoiceId}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                  if (Array.isArray(response) && response.length === 0) {
+                    let tienThieuText = $(`#tienConThieu${invoiceId}`);
+                    tienThieuText.text($(`#tongTienPhaiTra${invoiceId}`).val());
+                  } else {
+                    loadTableHtttInModal(response, invoiceId);
+                  }
+                },
+                error: function (xhr, status, error) {
+                  console.error("Lỗi khi gửi yêu cầu:", error);
+                }
+              });
+            })
+            .catch(error => {
+              console.error('Error fetching invoice details:', error);
+            });
+
+    // Thêm event listener cho ô nhập tiền khách đưa
+    document.getElementById(`tienKhachDua${invoiceId}`).addEventListener("input", function () {
+      updateChangeInput(invoiceId); // Gọi hàm cập nhật tiền trả lại khi người dùng nhập tiền
+    });
+
+    // Thêm event listener cho ô tổng tiền phải trả
+    document.getElementById(`tongTienPhaiTra${invoiceId}`).addEventListener("input", function () {
+      updateChangeInput(invoiceId); // Gọi hàm cập nhật tiền trả lại khi tổng tiền phải trả thay đổi
+    });
+
+    function updateChangeInput(invoiceId) {
+      const tienKhachDuaElement = document.getElementById(`tienKhachDua${invoiceId}`);
+      const totalInvoiceElement = document.getElementById(`tongTienPhaiTra${invoiceId}`);
+      const tienTraLaiElement = document.getElementById(`tienTraLai${invoiceId}`);
+
+      // Kiểm tra sự tồn tại của các phần tử
+      if (!tienKhachDuaElement || !totalInvoiceElement || !tienTraLaiElement) {
+        console.error(`Không tìm thấy phần tử với ID "tienKhachDua${invoiceId}", "tongTienPhaiTra${invoiceId}", hoặc "tienTraLai${invoiceId}".`);
+        return; // Kết thúc hàm nếu không tìm thấy phần tử
+      }
+
+      // Lấy giá trị tiền khách đưa và tổng tiền phải trả, loại bỏ dấu chấm
+      const tienKhachDua = parseFloat(tienKhachDuaElement.value.replace(/\./g, '').replace(',', '.')) || 0; // Lấy giá trị tiền khách đưa
+      const totalInvoice = parseFloat(totalInvoiceElement.value.replace(/\./g, '').replace(',', '.')) || 0; // Lấy giá trị tổng tiền phải trả
+
+      // Tính tiền trả lại
+      const tienTraLai = tienKhachDua - totalInvoice; // Tiền trả lại
+      console.log(tienKhachDua, totalInvoice, tienTraLai)
+      // Cập nhật giá trị ô nhập tiền trả lại với định dạng tiền
+      tienTraLaiElement.value = tienTraLai.toLocaleString('vi-VN'); // Hiển thị số tiền trả lại với 2 chữ số thập phân
+    }
+    // Kích hoạt tab vừa tạo
+    const tab = new bootstrap.Tab(document.getElementById(`tab-${invoiceId}`));
+    tab.show()
+
+  }
+
+  function removeTab2(event, tabId) {
+    event.stopPropagation(); // Ngăn sự kiện bấm vào tab
+
+    // Xóa tab khỏi danh sách tab
+    const tabElement = document.getElementById(tabId);
+    if (tabElement) {
+      tabElement.parentElement.remove();
+    }
+
+    // Xóa nội dung tương ứng của tab
+    const contentId = tabId.replace('tab-', 'content-');
+    const contentElement = document.getElementById(contentId);
+    if (contentElement) {
+      contentElement.remove();
+    }
+
+    // Nếu tab bị xóa đang được hiển thị thì kích hoạt tab đầu tiên còn lại
+    if (tabElement && tabElement.classList.contains('active')) {
+      const tabListRight = document.getElementById('tabListRight');
+      const firstTab = tabListRight.querySelector('.nav-link');
+
+      // Kiểm tra xem có tab nào còn lại không
+      if (firstTab) {
+        const firstTabInstance = new bootstrap.Tab(firstTab);
+        firstTabInstance.show();
+
+        // Lấy ID của tab đầu tiên còn lại
+        const firstTabId = firstTab.id.replace('tab-', '');
+        setSelectedInvoiceId(firstTabId)
+        fillDichVuChoHoaDon(getSelectedInvoiceId());
+      }else{
+        setSelectedInvoiceId(0);
+        fillDichVuChoHoaDon(getSelectedInvoiceId());
+      }
+    }
+  }
+
+  $(document).ready(function () {
+    $('#addInvoiceButton').on('click', function () {
+      // Thay toàn bộ nội dung của trang bằng URL mới
+      window.location.href = 'http://localhost:8080/list-san-ca';
+    });
+  });
+
+
+  // FE input hidden/show
+  function maGDInput(check, id) {
+    const myDiv = document.getElementById(`maGD` + id);
+
+    if (check === true) {
+      myDiv.style.display = "block";
+    } else {
+      myDiv.style.display = "none";
+    }
+  }
+
+
+  // sử dụng load Table trong Modal Httt
+  function loadTableHtttInModal(response, invoiceId) {
+    let tbody = $(`#tbody${invoiceId}`);
+    tbody.empty();
+    let tongTien = 0;
+
+    // Duyệt qua từng đối tượng trong response và thêm hàng vào tbody
+    $.each(response, function (index, item) {
+      const row = `
+        <tr>
+            <td>${index + 1}</td>
+            <td></td>
+            <td>${item.idHttt === 1 ? "Chuyển khoản" : "Tiền mặt"}</td>
+            <td>${item["soTien"]}</td>
+            <td></td>
+        </tr>
+        `;
+      tbody.append(row);
+      tongTien += parseFloat(item.soTien); // Chuyển số tiền sang dạng số
+    });
+
+    let tienThieuText = $(`#tienConThieu${invoiceId}`);
+
+    // Lấy giá trị tổng tiền phải trả từ input, loại bỏ dấu chấm ngăn cách hàng nghìn
+    let tongTienPhaiTra = parseFloat($(`#tongTienPhaiTra${invoiceId}`).val().replace(/\./g, '').replace(',', '.')) || 0;
+
+    // Tính tiền còn thiếu
+    let tienThieu = tongTienPhaiTra - tongTien;
+
+    // Hiển thị số tiền khách đã đưa vào ô input
+    $(`#tienKhachDua${invoiceId}`).val(tongTien.toLocaleString('vi-VN'));
+
+    // Xử lý trường hợp tiền thiếu
+    if (tienThieu < 0) {
+      tienThieuText.text(0); // Nếu tiền thừa, hiển thị thiếu là 0
+      $(`#tienTraLai${invoiceId}`).val((-tienThieu).toLocaleString('vi-VN')); // Tiền trả lại
+    } else {
+      tienThieuText.text(tienThieu.toLocaleString('vi-VN')); // Hiển thị số tiền còn thiếu
+      $(`#tienTraLai${invoiceId}`).val(0); // Nếu không có tiền thừa, tiền trả lại là 0
+    }
+  }
+
+
+  // load api httt
+  function fillHttt(invoiceId) {
+
+    let tongTien = $(`#tongTienHang${invoiceId}`);
+    tongTien.text($(`#tongTienPhaiTra${invoiceId}`).val());
+
+    $.ajax({
+      url: `http://localhost:8080/httt/${invoiceId}`,
+      type: 'GET',
+      dataType: 'json',
+      success: function (response) {
+        if (Array.isArray(response) && response.length === 0) {
+          let tienThieuText = $(`#tienConThieu${invoiceId}`);
+          tienThieuText.text($(`#tongTienPhaiTra${invoiceId}`).val());
+        } else {
+          loadTableHtttInModal(response, invoiceId);
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Lỗi khi gửi yêu cầu:", error);
+      }
+    });
+  }
+
+  function changerHttt(invoiceId) {
+
+    let httt, a;
+
+    let inputElement = document.getElementById(`maGD${invoiceId}`);
+    let isVisible = inputElement.offsetWidth > 0 && inputElement.offsetHeight > 0;
+    let khachDua = document.getElementById(`khachDua${invoiceId}`).value;
+    httt = isVisible ? 1 : 2;
+    a = {
+      idHD: invoiceId,
+      idHttt: httt,
+      soTien: khachDua
+    }
+
+    if (khachDua === '' || khachDua <= 0) {
+      Swal.fire({
+        title: 'Trống!',
+        text: 'Xin mời điền lại số tiền khách hàng đã đưa!',
+        icon: 'warning',
+        confirmButtonText: 'OK'
+      });
+      return;
+    }
+
+    $.ajax({
+      url: 'http://localhost:8080/httt/add', // Thay đổi URL theo server của bạn
+      type: 'POST', // Phương thức POST để gửi dữ liệu
+      contentType: 'application/json', // Định dạng gửi dữ liệu là JSON
+      data: JSON.stringify(a), // Dữ liệu được gửi dưới dạng chuỗi JSON
+      success: function (response) {
+
+        $(`#khachDua${invoiceId}`).val('');
+        fillHttt(invoiceId);
+        Swal.fire({
+          title: 'Thành công!',
+          text: 'Thêm thành công!',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        })
+      },
+      error: function (xhr, status, error) {
+        Swal.fire({
+          title: 'Thất bại!',
+          text: 'Có lỗi xảy ra!',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+        return;
+      }
+    });
+
+  }
+
+  //Thanh toán
+  async function thanhToan(invoiceId) {
+    try {
+      const responseNhanVien = await fetch('http://localhost:8080/hoa-don/get-nhan-vien-trong-ca');
+      if (!responseNhanVien.ok) {
+        throw new Error("Không thể lấy thông tin nhân viên");
+      }
+      const nhanVienData = await responseNhanVien.json();
+      const idNhanVien = nhanVienData.id;
+
+      // Kiểm tra trạng thái của hóa đơn
+      const checkResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${invoiceId}`);
+      if (!checkResponse.ok) throw new Error(`Error ${checkResponse.status}: ${await checkResponse.text()}`);
+
+      const invoiceData = await checkResponse.json();
+
+      // Kiểm tra xem trạng thái của hóa đơn đã là "Đang hoạt động" hay chưa
+      if (invoiceData.trangThai !== 'Đang hoạt động') {
+        showErrorToast('Bạn chưa check in, không thể thanh toán.');
+        return;
+      }
+
+      // Lấy các giá trị liên quan đến thanh toán
+      const totalToPayElement = document.getElementById(`tongTienPhaiTra${invoiceId}`);
+      const changeElement = document.getElementById(`tienTraLai${invoiceId}`);
+      const tongTienElement = document.getElementById(`tongTien${invoiceId}`);
+      const tienGiamElement = document.getElementById(`tienGiam${invoiceId}`);
+
+      const totalToPay = totalToPayElement.value.replace(/\./g, '');
+      const change = changeElement.value.replace(/\./g, '');
+      const tongTien = tongTienElement.value.replace(/\./g, '');
+      const tienGiam = tienGiamElement.value.replace(/\./g, '');
+
+      var payload = {
+        tongTien: tongTien,
+        tienGiamGia: tienGiam,
+        tongTienThucTe: totalToPay,
+        idNhanVien: idNhanVien // Lấy idNhanVien từ API
+      };
+
+      if (isNaN(change) || change < 0) {
+        showErrorToast("Số tiền trả lại không hợp lệ.");
+        return;
+      }
+      if (totalToPay <= 0) {
+        showErrorToast("Tổng tiền phải trả không hợp lệ.");
+        return;
+      }
+
+      // Hiển thị thông báo xác nhận thanh toán
+      Swal.fire({
+        title: 'Xác nhận thanh toán',
+        text: "Bạn có chắc chắn thanh toán không?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Có',
+        cancelButtonText: 'Không'
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          // Tiến hành thanh toán
+          const api1 = await fetch(`http://localhost:8080/hoa-don-chi-tiet/update/${invoiceId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          });
+
+          const api2 = await fetch(`http://localhost:8080/hoa-don/update-thanh-toan/${invoiceId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+
+          Promise.all([api1, api2])
+                  .then(responses => {
+                    responses.forEach(response => {
+                      // console.log(`Response from ${response.url}: ${response.status}`);
+                    });
+
+                    // Hiển thị thông báo thành công
+                    Swal.fire({
+                      title: 'Thành công!',
+                      text: 'Thanh toán thành công!',
+                      icon: 'success',
+                      confirmButtonText: 'OK'
+                    }).then(() => {
+                      // Gọi hàm xuất PDF
+                      exportPDFWithTemplate(invoiceId);
+
+                      // Đặt thời gian delay trước khi reload trang
+                      setTimeout(() => {
+                        window.location.reload(); // Reload trang sau 3 giây
+                      }, 1000); // Điều chỉnh thời gian tùy ý
+                    });
+                  })
+                  .catch(err => {
+                    console.error('Có lỗi xảy ra:', err);
+                    // Xử lý lỗi chung
+                    Swal.fire({
+                      title: 'Lỗi!',
+                      text: 'Đã xảy ra lỗi trong quá trình thanh toán.',
+                      icon: 'error',
+                      confirmButtonText: 'OK'
+                    });
+                  });
+        }
+      });
+    } catch (error) {
+      console.error('Có lỗi xảy ra khi kiểm tra trạng thái hóa đơn:', error);
+      showErrorToast('Đã xảy ra lỗi, không thể thực hiện thanh toán.');
+    }
+  }
+
+
+
+
+  function exportPDFWithTemplate(invoiceId) {
+    // Lấy dữ liệu từ form
+    const hoVaTenKhachHang = document.getElementById(`hoVaTenKhachHang${invoiceId}`).value || "Nguyễn Văn A";
+    const soDienThoaiKhachHang = document.getElementById(`soDienThoaiKhachHang${invoiceId}`).value || "0123456789";
+    const idHoaDon = document.getElementById(`idHoaDon${invoiceId}`).value;
+    const tenSanBong = document.getElementById(`tenSanBong${invoiceId}`).value || "Sân A";
+    const thoiGianBatDauCa = document.getElementById(`thoiGianBatDauCa${invoiceId}`).value || "8:00 AM";
+    const thoiGianKetThucCa = document.getElementById(`thoiGianKetThucCa${invoiceId}`).value || "10:00 AM";
+    const ngayTaoHoaDon = document.getElementById(`ngayTaoHoaDon${invoiceId}`).value || "01/02/2024";
+    const tongTien = document.getElementById(`tongTien${invoiceId}`).value || "500,000";
+    const phuPhi = document.getElementById(`tienPhuPhi${invoiceId}`).value || "500,000";
+    const tienSan = document.getElementById(`tienSan${invoiceId}`).value || "500,000";
+    const tongTienPhaiTra = document.getElementById(`tongTienPhaiTra${invoiceId}`).value || "0";
+
+    $.ajax({
+      url: `http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${invoiceId}`,
+      type: 'GET',
+      success: function (data) {
+        let serviceDetailsHTML = '';
+        let totalServiceCost = 0;
+
+        if (data.length > 0) {
+          serviceDetailsHTML += `
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <thead>
+                        <tr style="background-color: #f1f1f1;">
+                            <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">STT</th>
+                            <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Tên dịch vụ</th>
+                            <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Số lượng</th>
+                            <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Giá (VND)</th>
+                            <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Tổng tiền (VND)</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+          // Lặp qua các dịch vụ trong dữ liệu
+          data.forEach((item, index) => {
+            let itemName = '';
+            let itemTotal = 0;
+
+            // Kiểm tra xem dịch vụ là đồ thuê hay nước uống
+            if (item.idDoThue) {
+              itemName = item.tenDoThue;
+              itemTotal = item.soLuong * item.donGiasDoThue;
+            } else if (item.idNuocUong) {
+              itemName = item.tenNuocUong;
+              itemTotal = item.soLuong * item.donGiasNuocUong;
+            }
+
+            totalServiceCost += itemTotal;
+
+            serviceDetailsHTML += `
+                        <tr>
+                            <td style="border: 1px solid #eee; padding: 8px;">${index + 1}</td>
+                            <td style="border: 1px solid #eee; padding: 8px;">${itemName}</td>
+                            <td style="border: 1px solid #eee; padding: 8px; text-align: center;">${item.soLuong}</td>
+                            <td style="border: 1px solid #eee; padding: 8px; text-align: right;">${formatCurrency(item.idDoThue ? item.donGiasDoThue : item.donGiasNuocUong)}</td>
+                            <td style="border: 1px solid #eee; padding: 8px; text-align: right;">${formatCurrency(itemTotal)}</td>
+                        </tr>`;
+          });
+
+          serviceDetailsHTML += `
+                    </tbody>
+                </table>`;
+        }
+
+        const template = `
+            <div style="max-width: 800px; margin: auto; padding: 30px; border: 1px solid #eee; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #555;">
+              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.1; z-index: 0;">
+                    <img src="/img/logo.png" alt="Logo" style="width: 500px; height: auto;">
+                </div>
+                <table cellpadding="0" cellspacing="0" style="width: 100%; text-align: left;">
+                    <!-- Header -->
+                    <tr class="top">
+                        <td colspan="2" style="padding-bottom: 20px;">
+                            <table style="width: 100%;">
+                                <tr>
+                                    <td style="text-align: left; vertical-align: top;">
+                                        <img src="/img/logo.png" alt="Logo" style="width: 100px; vertical-align: middle;">
+                                        <div style="display: inline-block; vertical-align: middle; margin-left: 10px;">
+                                            <h2 style="font-size: 18px; font-weight: bold; margin: 0; color: #65da7d;">FIVE STU</h2>
+                                            <h3 style="font-size: 12px; font-weight: normal; margin: 0; color: #28a745;">Đáp ứng mọi nhu cầu đặt lịch của bạn</h3>
+                                        </div>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <strong style="font-size: 30px; color: #28a745;">HÓA ĐƠN</strong><br>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Thông tin khách hàng -->
+                    <tr class="information">
+                        <td colspan="2" style="padding-bottom: 20px;">
+                            <table style="width: 100%;">
+                                <tr>
+                                    <td>
+                                        <strong style="color: #65da7d;">Hóa đơn cho:</strong><br>
+                                        ${hoVaTenKhachHang}<br>
+                                        SĐT: ${soDienThoaiKhachHang}
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <strong style="color: #65da7d;">Ngày tạo:</strong> ${ngayTaoHoaDon}<br>
+                                        <strong style="color: #65da7d;">Hóa đơn #:</strong> ${idHoaDon}<br>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Thông tin hóa đơn -->
+                    <tr class="heading">
+                        <td colspan="2" style="padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 16px;">
+                            <strong style="color: #65da7d;">Thông tin hóa đơn</strong>
+                        </td>
+                    </tr>
+                    <tr class="item">
+                        <td>Tên sân:</td>
+                        <td style="text-align: right;">${tenSanBong}</td>
+                    </tr>
+                    <tr class="item">
+                        <td>Thời gian bắt đầu:</td>
+                        <td style="text-align: right;">${thoiGianBatDauCa}</td>
+                    </tr>
+                    <tr class="item">
+                        <td>Thời gian kết thúc:</td>
+                        <td style="text-align: right;">${thoiGianKetThucCa}</td>
+                    </tr>
+
+                    <!-- Chi tiết dịch vụ đã thuê -->
+                    <tr class="heading">
+                        <td colspan="2" style="padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 16px;">
+                            <strong style="color: #65da7d;">Chi tiết dịch vụ đã thuê</strong>
+                        </td>
+                    </tr>
+                    ${serviceDetailsHTML}
+
+                    <!-- Chi phí khác -->
+                    <tr class="heading">
+                        <td colspan="2" style="border-bottom: 2px solid #eee; padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 16px; background-color: #f9f9f9;">
+                            <strong style="color: #65da7d;">💰 Chi phí khác</strong>
+                        </td>
+                    </tr>
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr class="item">
+                            <td style="border: 1px solid #eee; padding: 8px;">Phụ phí:</td>
+                            <td style="border: 1px solid #eee; padding: 8px; text-align: right;">${phuPhi} VND</td>
+                        </tr>
+                        <tr class="item">
+                            <td style="border: 1px solid #eee; padding: 8px;">Tiền sân:</td>
+                            <td style="border: 1px solid #eee; padding: 8px; text-align: right;">${tienSan} VND</td>
+                        </tr>
+                    </table>
+
+                    <!-- Tổng chi phí -->
+                    <div style="padding-top: 20px; font-weight: bold; font-size: 16px; text-align: right; color: #d9534f;">
+                        Tổng tiền: <span style="font-size: 20px; font-weight: bold;">${tongTienPhaiTra} VND</span>
+                    </div>
+
+                    <br>
+
+                    <!-- Cảm ơn -->
+                    <p style="text-align: center; font-size: 14px; color: #777;">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
+
+                    <!-- Footer -->
+                    <footer style="text-align: center; font-size: 12px; color: #999;">
+                        <p>FIVE STU | Địa chỉ: 123 Đường ABC, TP. HCM</p>
+                        <p>Email: contact@fivestu.com | Số điện thoại: (028) 1234 5678</p>
+                    </footer>
+                </div>`;
+
+        const element = document.createElement('div');
+        element.innerHTML = template;
+        html2pdf().from(element).save(`hoa_don_${invoiceId}.pdf`);
+        console.log(template); // Xem trước mẫu trước khi xuất
+      },
+      error: function (error) {
+        console.log('Lỗi khi lấy dữ liệu dịch vụ: ', error);
+      }
+    });
+  }
+
+  function formatCurrency(value) {
+    if (typeof value === 'undefined' || value === null || isNaN(value)) {
+      return '0'; // Giá trị mặc định nếu không hợp lệ
+    }
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' VND';
+  }
+
+  function updateService(payload, idDVSB) {
+    $.ajax({
+      url: `http://localhost:8080/dich-vu-san-bong/${idDVSB}`, // Sử dụng idDoThue hoặc idNuocUong để tạo URL
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        idHoaDonChiTiet: payload.idHoaDonChiTiet,
+        idNuocUong: payload.idNuocUong,
+        idDoThue: payload.idDoThue,
+        soLuong: payload.soLuong,
+        tongTien: payload.tongTien,
+        trangThai: payload.trangThai,
+        deletedAt: payload.deletedAt
+      }),
+      success: function (response) {
+        // console.log('Cập nhật thành công:', response);
+        // Cập nhật lại danh sách dịch vụ (có thể gọi lại hàm fillDichVuChoHoaDon)
+        fillDichVuChoHoaDon(payload.idHoaDonChiTiet);
+      },
+      error: function (error) {
+        console.error('Cập nhật thất bại:', error);
+      }
+    });
+  }
+
+  function deleteService(payload, idDVSB, idDoThue, idNuocUong, soLuongTruoc) {
+    Swal.fire({
+      title: 'Bạn có chắc chắn?',
+      text: "Hành động này không thể hoàn tác!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Xóa',
+      cancelButtonText: 'Hủy'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: `http://localhost:8080/dich-vu-san-bong/${idDVSB}`,
+          type: 'PUT',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            idHoaDonChiTiet: payload.idHoaDonChiTiet,
+            idNuocUong: payload.idNuocUong,
+            idDoThue: payload.idDoThue,
+            soLuong: payload.soLuong,
+            tongTien: payload.tongTien,
+            trangThai: payload.trangThai,
+            deletedAt: payload.deletedAt
+          }),
+          success: function (response) {
+            Swal.fire(
+                    'Đã xóa!',
+                    'Dịch vụ đã được xóa thành công.',
+                    'success'
+            );
+            fillDichVuChoHoaDon(payload.idHoaDonChiTiet);
+            updateServiceCost();
+
+            // Chỉ cập nhật số lượng kho khi xóa thành công
+            if (idDoThue) {
+              const apiUrl = `http://localhost:8080/do_thue/${idDoThue}`; // Lấy số lượng hiện tại từ API
+              const updateUrl = `http://localhost:8080/do_thue/updateSoLuong/${idDoThue}`; // Cập nhật lại số lượng tồn kho
+              updateStockAfterCancel(apiUrl, updateUrl, soLuongTruoc);
+            } else if (idNuocUong) {
+              const apiUrl = `http://localhost:8080/nuoc_uong/${idNuocUong}`; // Lấy số lượng hiện tại từ API
+              const updateUrl = `http://localhost:8080/nuoc_uong/updateSoLuong/${idNuocUong}`; // Cập nhật lại số lượng tồn kho
+              updateStockAfterCancel(apiUrl, updateUrl, soLuongTruoc);
+            }
+          },
+          error: function (error) {
+            Swal.fire(
+                    'Xóa thất bại',
+                    'Có lỗi xảy ra khi xóa dịch vụ.',
+                    'error'
+            );
+            console.error('Xóa thất bại:', error);
+          }
+        });
+      } else {
+        Swal.fire(
+                'Đã hủy',
+                'Hành động xóa đã bị hủy.',
+                'info'
+        );
+      }
+    });
+  }
+
+  function updateStockWithCurrentAmount(apiUrl, updateUrl, itemId, soLuongTruoc, soLuongSau) {
+    $.ajax({
+      url: apiUrl, // URL lấy dữ liệu item từ API
+      type: 'GET',
+      success: function (response) {
+        const soLuongHienTai = response.soLuongs; // Số lượng hiện tại trong kho
+
+        // Tính số lượng còn lại sau khi cập nhật
+        const soLuongConLai = soLuongHienTai + soLuongTruoc - soLuongSau;
+
+        $.ajax({
+          url: updateUrl, // URL cập nhật số lượng trong kho
+          type: 'PUT',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            soLuongs: soLuongConLai // Truyền số lượng mới vào
+          }),
+          success: function (updateResponse) {
+            console.log("Cập nhật số lượng kho thành công", updateResponse);
+          },
+          error: function (error) {
+            showErrorToast("Lỗi khi cập nhật số lượng kho!"); // Hiển thị thông báo lỗi nếu có lỗi
+            console.log("Lỗi khi cập nhật số lượng kho: ", error);
+          }
+        });
+      },
+      error: function (error) {
+        showErrorToast('Lỗi khi lấy dữ liệu kho!'); // Hiển thị thông báo lỗi nếu có lỗi khi gọi API
+        console.log('Error fetching stock data: ', error);
+      }
+    });
+  }
+
+  function updateStockAfterCancel(apiUrl, updateUrl, soLuongTruoc) {
+    $.ajax({
+      url: apiUrl, // URL lấy dữ liệu item từ API
+      type: 'GET',
+      success: function (response) {
+        const soLuongHienTai = response.soLuongs; // Số lượng hiện tại trong kho
+
+        // Cộng số lượng trước khi hủy vào kho
+        const soLuongConLai = soLuongHienTai + soLuongTruoc;
+
+        console.log("soLuongTruoc2: " + soLuongTruoc)
+
+        // Gọi API để cập nhật số lượng
+        $.ajax({
+          url: updateUrl, // URL cập nhật số lượng trong kho
+          type: 'PUT',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            soLuongs: soLuongConLai // Truyền số lượng mới vào
+          }),
+          success: function (updateResponse) {
+            console.log("Cập nhật số lượng kho sau khi hủy thành công", updateResponse);
+          },
+          error: function (error) {
+            console.log("Lỗi khi cập nhật số lượng kho sau khi hủy: ", error);
+          }
+        });
+      },
+      error: function (error) {
+        console.log('Error fetching stock data: ', error);
+      }
+    });
+  }
+
+  function showWarningToast(message) {
+    Toastify({
+      text: message,
+      duration: 3000,
+      gravity: "top",
+      position: "right",
+      style: {
+        background: "#d9b038", // Màu đỏ cho thông báo lỗi
+      },
+      stopOnFocus: true
+    }).showToast();
+  }
+
+  async function updateServiceCost() {
+    try {
+      // console.log(selectedInvoiceId);
+
+      // Gọi API để lấy thông tin hóa đơn chi tiết
+      const invoiceResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${selectedInvoiceId}`, {cache: "no-store"});
+      const invoiceData = await invoiceResponse.json();
+
+      // Gọi API để lấy danh sách dịch vụ
+      const servicesResponse = await fetch(`http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${invoiceData.id}`, {cache: "no-store"});
+      const services = await servicesResponse.json();
+
+      let totalInvoice = 0; // Khai báo biến tổng hóa đơn
+
+      // Kiểm tra nếu danh sách dịch vụ trống
+      if (Array.isArray(services) && services.length > 0) {
+        // Tính tổng tiền từ các dịch vụ
+        const totalCost = services.reduce((sum, service) => {
+          return sum + (parseFloat(service.tongTien) || 0); // Đảm bảo chuyển đổi sang số
+        }, 0);
+
+        // Cập nhật giá dịch vụ
+        document.getElementById(`giaDichVu${selectedInvoiceId}`).value = totalCost.toLocaleString('vi-VN');
+
+        // Tính tổng tiền hóa đơn
+        totalInvoice = (invoiceData.giaSanCa - (invoiceData.giaSanCa * 0.5)) + totalCost;
+        document.getElementById(`tongTien${selectedInvoiceId}`).value = totalInvoice.toLocaleString('vi-VN');
+
+        // Tính tổng tiền phải trả
+        const tongTien = parseFloat(document.getElementById(`tongTien${selectedInvoiceId}`).value.replace(/\./g, '').replace(/,/g, '.')) || 0;
+        const tienGiam = parseFloat(document.getElementById(`tienGiam${selectedInvoiceId}`).value.replace(/\./g, '').replace(/,/g, '.')) || 0;
+        const tongTienPhaiTra = tongTien - tienGiam;
+
+        // Hiển thị tổng tiền phải trả
+        document.getElementById(`tongTienPhaiTra${selectedInvoiceId}`).value = tongTienPhaiTra.toLocaleString('de-DE', {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0
+        });
+      } else {
+        // Nếu không còn dịch vụ nào, hiển thị 0 cho tổng tiền dịch vụ
+        document.getElementById(`giaDichVu${selectedInvoiceId}`).value = '0';
+        document.getElementById(`tongTien${selectedInvoiceId}`).value = '0';
+      }
+
+      // Gọi API để lấy phụ phí nếu có
+      const feesResponse = await fetch(`http://localhost:8080/api/phu-phi-hoa-don/${selectedInvoiceId}`, {cache: "no-store"});
+      const fees = await feesResponse.json();
+
+      if (totalInvoice) {
+        const additionalFees = fees.reduce((sum, fee) => sum + (parseFloat(fee.amount) || 0), 0); // Đảm bảo chuyển đổi sang số
+        const finalInvoiceTotal = totalInvoice + additionalFees;
+        document.getElementById(`tongTien${selectedInvoiceId}`).value = finalInvoiceTotal.toLocaleString('vi-VN');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  function convertToFixedFormat(numberStr) {
+    // Thay dấu phẩy bằng dấu chấm
+    let result = numberStr.replace(',', '.');
+
+    // Nếu kết quả chưa có đủ 3 chữ số sau dấu chấm, thêm '0' vào cuối
+    if (result.split('.')[1].length < 3) {
+      result += '0';
+    }
+
+    return result;
+  }
+
+</script>
+</body>
+</html>
