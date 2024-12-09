@@ -11,6 +11,5 @@ public interface PhuPhiHoaDonService {
 
     List<PhuPhiHoaDonDTO> findByHoaDonChiTietId(int hoaDonChiTietId);
 
-//    void deletePhuPhi(int id);
     PhuPhiHoaDonDTO updateDeletedAt(int id);
 }
