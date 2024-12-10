@@ -2185,12 +2185,11 @@
         });
     }
 
-    async function thanhToan(invoiceId) {
-        try {
-            exportPDFWithTemplate(selectedInvoiceId);
-        } catch (e) {
-
+    function formatCurrency(value) {
+        if (typeof value === 'undefined' || value === null || isNaN(value)) {
+            return '0'; // Giá trị mặc định nếu không hợp lệ
         }
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' VND';
     }
 
     function exportPDFWithTemplate(invoiceId) {
@@ -2215,6 +2214,7 @@
                 let totalServiceCost = 0;
 
                 if (data.length > 0) {
+                    // Xây dựng bảng chi tiết dịch vụ
                     serviceDetailsHTML += `
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
                     <thead>
@@ -2245,125 +2245,126 @@
                         totalServiceCost += itemTotal;
 
                         serviceDetailsHTML += `
-                        <tr>
-                            <td style="border: 1px solid #eee; padding: 8px;">${index + 1}</td>
-                            <td style="border: 1px solid #eee; padding: 8px;">${itemName}</td>
-                            <td style="border: 1px solid #eee; padding: 8px; text-align: center;">${item.soLuong}</td>
-                            <td style="border: 1px solid #eee; padding: 8px; text-align: right;">${formatCurrency(item.idDoThue ? item.donGiasDoThue : item.donGiasNuocUong)}</td>
-                            <td style="border: 1px solid #eee; padding: 8px; text-align: right;">${formatCurrency(itemTotal)}</td>
-                        </tr>`;
+                    <tr>
+                        <td style="border: 1px solid #eee; padding: 8px;">${index + 1}</td>
+                        <td style="border: 1px solid #eee; padding: 8px;">${itemName}</td>
+                        <td style="border: 1px solid #eee; padding: 8px; text-align: center;">${item.soLuong}</td>
+                        <td style="border: 1px solid #eee; padding: 8px; text-align: right;">${formatCurrency(item.idDoThue ? item.donGiasDoThue : item.donGiasNuocUong)}</td>
+                        <td style="border: 1px solid #eee; padding: 8px; text-align: right;">${formatCurrency(itemTotal)}</td>
+                    </tr>`;
                     });
 
                     serviceDetailsHTML += `
-                    </tbody>
-                </table>`;
+                </tbody>
+            </table>`;
                 }
 
                 const template = `
-            <div style="max-width: 800px; margin: auto; padding: 30px; border: 1px solid #eee; font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; color: #555;">
-              <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.1; z-index: 0;">
-                    <img src="/img/logo.png" alt="Logo" style="width: 500px; height: auto;">
-                </div>
-                <table cellpadding="0" cellspacing="0" style="width: 100%; text-align: left;">
-                    <!-- Header -->
-                    <tr class="top">
-                        <td colspan="2" style="padding-bottom: 20px;">
-                            <table style="width: 100%;">
-                                <tr>
-                                    <td style="text-align: left; vertical-align: top;">
-                                        <img src="/img/logo.png" alt="Logo" style="width: 100px; vertical-align: middle;">
-                                        <div style="display: inline-block; vertical-align: middle; margin-left: 10px;">
-                                            <h2 style="font-size: 18px; font-weight: bold; margin: 0; color: #65da7d;">FIVE STU</h2>
-                                            <h3 style="font-size: 12px; font-weight: normal; margin: 0; color: #28a745;">Đáp ứng mọi nhu cầu đặt lịch của bạn</h3>
-                                        </div>
-                                    </td>
-                                    <td style="text-align: right;">
-                                        <strong style="font-size: 30px; color: #28a745;">HÓA ĐƠN</strong><br>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- Thông tin khách hàng -->
-                    <tr class="information">
-                        <td colspan="2" style="padding-bottom: 20px;">
-                            <table style="width: 100%;">
-                                <tr>
-                                    <td>
-                                        <strong style="color: #65da7d;">Hóa đơn cho:</strong><br>
-                                        ${hoVaTenKhachHang}<br>
-                                        SĐT: ${soDienThoaiKhachHang}
-                                    </td>
-                                    <td style="text-align: right;">
-                                        <strong style="color: #65da7d;">Ngày tạo:</strong> ${ngayTaoHoaDon}<br>
-                                        <strong style="color: #65da7d;">Hóa đơn #:</strong> ${idHoaDon}<br>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- Thông tin hóa đơn -->
-                    <tr class="heading">
-                        <td colspan="2" style="padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 16px;">
-                            <strong style="color: #65da7d;">Thông tin hóa đơn</strong>
-                        </td>
-                    </tr>
-                    <tr class="item">
-                        <td>Tên sân:</td>
-                        <td style="text-align: right;">${tenSanBong}</td>
-                    </tr>
-                    <tr class="item">
-                        <td>Thời gian bắt đầu:</td>
-                        <td style="text-align: right;">${thoiGianBatDauCa}</td>
-                    </tr>
-                    <tr class="item">
-                        <td>Thời gian kết thúc:</td>
-                        <td style="text-align: right;">${thoiGianKetThucCa}</td>
-                    </tr>
-
-                    <!-- Chi tiết dịch vụ đã thuê -->
-                    <tr class="heading">
-                        <td colspan="2" style="padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 16px;">
-                            <strong style="color: #65da7d;">Chi tiết dịch vụ đã thuê</strong>
-                        </td>
-                    </tr>
-                    ${serviceDetailsHTML}
-
-                    <!-- Chi phí khác -->
-                    <tr class="heading">
-                        <td colspan="2" style="border-bottom: 2px solid #eee; padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 16px; background-color: #f9f9f9;">
-                            <strong style="color: #65da7d;">💰 Chi phí khác</strong>
-                        </td>
-                    </tr>
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <tr class="item">
-                            <td style="border: 1px solid #eee; padding: 8px;">Phụ phí:</td>
-                            <td style="border: 1px solid #eee; padding: 8px; text-align: right;">${phuPhi} VND</td>
-                        </tr>
-                        <tr class="item">
-                            <td style="border: 1px solid #eee; padding: 8px;">Tiền sân:</td>
-                            <td style="border: 1px solid #eee; padding: 8px; text-align: right;">${tienSan} VND</td>
+    <div style="max-width: 800px; margin: auto; padding: 30px; border: 2px solid #000; border-radius: 10px; font-family: 'Helvetica Neue', 'Helvetica', Arial, sans-serif; color: #333; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.05; z-index: 0;">
+            <img src="/img/logo.png" alt="Logo" style="width: 500px; height: auto;">
+        </div>
+        <table cellpadding="0" cellspacing="0" style="width: 100%; text-align: left;">
+            <!-- Header -->
+            <tr class="top">
+                <td colspan="2" style="padding-bottom: 20px;">
+                    <table style="width: 100%; border-bottom: 4px solid #004d00; padding-bottom: 10px;">
+                        <tr>
+                            <td style="text-align: left; vertical-align: top;">
+                                <img src="/img/logo.png" alt="Logo" style="width: 100px; vertical-align: middle;">
+                                <div style="display: inline-block; vertical-align: middle; margin-left: 10px;">
+                                    <h2 style="font-size: 20px; font-weight: bold; margin: 0; color: #004d00;">FIVE STU</h2>
+                                    <h3 style="font-size: 14px; font-weight: normal; margin: 0; color: #555;">Đáp ứng mọi nhu cầu đặt lịch của bạn</h3>
+                                </div>
+                            </td>
+                            <td style="text-align: right;">
+                                <strong style="font-size: 36px; color: #004d00;">HÓA ĐƠN</strong><br>
+                            </td>
                         </tr>
                     </table>
+                </td>
+            </tr>
 
-                    <!-- Tổng chi phí -->
-                    <div style="padding-top: 20px; font-weight: bold; font-size: 16px; text-align: right; color: #d9534f;">
-                        Tổng tiền: <span style="font-size: 20px; font-weight: bold;">${tongTienPhaiTra} VND</span>
-                    </div>
+            <!-- Thông tin khách hàng -->
+            <tr class="information">
+                <td colspan="2" style="padding-bottom: 20px;">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td>
+                                <strong style="color: #004d00;">Hóa đơn cho:</strong><br>
+                                ${hoVaTenKhachHang}<br>
+                                SĐT: ${soDienThoaiKhachHang}
+                            </td>
+                            <td style="text-align: right;">
+                                <strong style="color: #004d00;">Ngày tạo:</strong> ${ngayTaoHoaDon}<br>
+                                <strong style="color: #004d00;">Hóa đơn #:</strong> ${idHoaDon}<br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
 
-                    <br>
+            <!-- Thông tin hóa đơn -->
+            <tr class="heading">
+                <td colspan="2" style="padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 18px; background-color: #004d00; color: #fff; border-top: 3px solid #000;">
+                    <strong style="color: #004d00;">Thông tin hóa đơn</strong>
+                </td>
+            </tr>
+            <tr class="item">
+                <td>Tên sân:</td>
+                <td style="text-align: right;">${tenSanBong}</td>
+            </tr>
+            <tr class="item">
+                <td>Thời gian bắt đầu:</td>
+                <td style="text-align: right;">${thoiGianBatDauCa}</td>
+            </tr>
+            <tr class="item">
+                <td>Thời gian kết thúc:</td>
+                <td style="text-align: right;">${thoiGianKetThucCa}</td>
+            </tr>
 
-                    <!-- Cảm ơn -->
-                    <p style="text-align: center; font-size: 14px; color: #777;">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
+            <!-- Chi tiết dịch vụ đã thuê -->
+            <tr class="heading">
+                <td colspan="2" style="padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 18px; background-color: #004d00; color: #fff; border-top: 3px solid #000;">
+                    <strong style="color: #004d00;">Chi tiết dịch vụ đã thuê</strong>
+                </td>
+            </tr>
+            ${serviceDetailsHTML}
 
-                    <!-- Footer -->
-                    <footer style="text-align: center; font-size: 12px; color: #999;">
-                        <p>FIVE STU | Địa chỉ: 123 Đường ABC, TP. HCM</p>
-                        <p>Email: contact@fivestu.com | Số điện thoại: (028) 1234 5678</p>
-                    </footer>
-                </div>`;
+            <!-- Chi phí khác -->
+            <tr class="heading">
+                <td colspan="2" style="border-bottom: 3px solid #000; padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 18px; background-color: #f9f9f9; color: #333;">
+                    <strong>💰 Chi phí khác</strong>
+                </td>
+            </tr>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                <tr class="item">
+                    <td style="border: 2px solid #333; padding: 10px;">Phụ phí:</td>
+                    <td style="border: 2px solid #333; padding: 10px; text-align: right;">${phuPhi} VND</td>
+                </tr>
+                <tr class="item">
+                    <td style="border: 2px solid #333; padding: 10px;">Tiền sân:</td>
+                    <td style="border: 2px solid #333; padding: 10px; text-align: right;">${tienSan} VND</td>
+                </tr>
+            </table>
+
+            <!-- Tổng chi phí -->
+            <div style="padding-top: 20px; font-weight: bold; font-size: 18px; text-align: right; color: #d9534f;">
+                Tổng tiền: <span style="font-size: 22px; font-weight: bold;">${tongTienPhaiTra} VND</span>
+            </div>
+
+            <br>
+
+            <!-- Cảm ơn -->
+            <p style="text-align: center; font-size: 14px; color: #777;">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
+
+            <!-- Footer -->
+            <footer style="text-align: center; font-size: 12px; color: #999;">
+                <p>FIVE STU | Địa chỉ: 123 Đường ABC, TP. HCM</p>
+                <p>Email: contact@fivestu.com | Số điện thoại: (028) 1234 5678</p>
+            </footer>
+        </table>
+    </div>`;
 
                 const element = document.createElement('div');
                 element.innerHTML = template;
@@ -2436,7 +2437,7 @@
 
             const updatedHoaDonChiTiet = await updateResponse.json();
             showSuccessToast('Thanh toán thành công!');
-
+            exportPDFWithTemplate(selectedInvoiceId);
             // Cập nhật lại giao diện, ví dụ tải lại danh sách hóa đơn
             await fetchData();  // Giả sử bạn có hàm này để làm mới dữ liệu
             location.reload();  // Reload trang để làm mới tất cả dữ liệu
