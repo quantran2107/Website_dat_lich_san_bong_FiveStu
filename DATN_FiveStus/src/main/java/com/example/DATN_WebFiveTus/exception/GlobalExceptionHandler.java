@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
                 .body(
                         ApiResponseDto.builder()
                                 .status(String.valueOf(ResponseStatus.FAIL))
-                                .message("Registration Failed: Please provide valid data.")
+                                .message("Đăng ký không thành công: Vui lòng cung cấp dữ liệu hợp lệ.")
                                 .response(errorMessage)
                                 .build()
                 );

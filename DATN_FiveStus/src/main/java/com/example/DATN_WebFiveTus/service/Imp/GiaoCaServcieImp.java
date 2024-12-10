@@ -121,7 +121,6 @@ public class GiaoCaServcieImp implements GiaoCaService {
             String username = jwtUtils.getUserNameFromJwtToken(token);
             NhanVien nv = nhanVienReposity.findByUsername(username);
             if (nv != null) {
-
                 return giaoCaRepository.getRowLast(nv.getId());
             }
             return null;

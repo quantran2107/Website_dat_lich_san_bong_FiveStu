@@ -42,18 +42,25 @@ $(document).ready(function () {
         $.each(response, function (index, item) {
             let ngayDat = formatDate(item["ngayDat"]);
             let ca = formatHour(item["thoiGianBatDau"]);
+            let tenSanBong = item["tenSanBong"] === null ? "Không có": item["tenSanBong"];
+            let tienCoc = item["tienCoc"] ===null? "Không có":item["tienCoc"];
+            let tongGiamGia = item["tongGiamGia"] ===null ? "Không có":item["tongGiamGia"];
+            let trangThaiHoaDon = item["trangThaiHoaDon"] ===null ? "Không có":item["trangThaiHoaDon"];
+            let maHoaDon = item["maHoaDon"] ===null ? "Không có":item["maHoaDon"];
+            let tongTien = item["tongTien"] ===null ? "Không có":item["tongTien"];
+
             if (item["cancel"]) {
                 huy++;
                 let row = `
                 <tr>
                     <td style="border: 1px solid #ccc; padding: 8px;">${huy}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tenSanBong"]}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${tenSanBong}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${ca}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${ngayDat}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongTien"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tienCoc"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongGiamGia"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["maHoaDon"]}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${tongTien}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${tienCoc}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${tongGiamGia}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${maHoaDon}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">Đã hủy</td>
                 </tr>
                 `
@@ -63,14 +70,14 @@ $(document).ready(function () {
                 let row = `
                 <tr>
                     <td style="border: 1px solid #ccc; padding: 8px;">${wait}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tenSanBong"]}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${tenSanBong}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${ca}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${ngayDat}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongTien"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tienCoc"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongGiamGia"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["maHoaDon"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["trangThaiHoaDon"]}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${tongTien}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${tienCoc}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${tongGiamGia}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${maHoaDon}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${trangThaiHoaDon}</td>
                    <td style="border: 1px solid #ccc; padding: 8px;">
                        
                         <button type="button" class="btn btn-outline-danger"  id="huy${item['idHdct']}" >Hủy</button>
@@ -89,14 +96,14 @@ $(document).ready(function () {
                 let row = `
                 <tr>
                     <td style="border: 1px solid #ccc; padding: 8px;">${done}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tenSanBong"]}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${tenSanBong}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${ca}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${ngayDat}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongTien"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tienCoc"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongGiamGia"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["maHoaDon"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["trangThaiHoaDon"]}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${tongTien}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${tienCoc}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${tongGiamGia}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${maHoaDon}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${trangThaiHoaDon}</td>
                 </tr>
                 `;
                 $(`#tbodySince`).append(row);

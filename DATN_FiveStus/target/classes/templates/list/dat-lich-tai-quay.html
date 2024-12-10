@@ -2712,11 +2712,13 @@ onfocus="this.style.borderBottom='2px solid #0056b3';"
         let inputElement = document.getElementById(`maGD${invoiceId}`);
         let isVisible = inputElement.offsetWidth > 0 && inputElement.offsetHeight > 0;
         let khachDua = document.getElementById(`khachDua${invoiceId}`).value;
+        let tongtien = document.getElementById(`tongTienHang${invoiceId}`).textContent.trim().replace(/\./g, "");
+        let soTien = parseFloat(khachDua)>parseFloat(tongtien)?parseFloat(tongtien):parseFloat(khachDua)
         httt = isVisible ? 1 : 2;
         a = {
             idHD: invoiceId,
             idHttt: httt,
-            soTien: khachDua
+            soTien: soTien
         }
 
         if (khachDua === '' || khachDua <= 0) {

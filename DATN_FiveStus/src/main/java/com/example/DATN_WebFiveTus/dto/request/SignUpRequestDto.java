@@ -13,23 +13,23 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SignUpRequestDto {
-    @NotBlank(message = "Username is required!")
-    @Size(min= 3, message = "Username must have atleast 3 characters!")
-    @Size(max= 20, message = "Username can have have atmost 20 characters!")
+    @NotBlank(message = "Tên người dùng là bắt buộc!")
+    @Size(min= 3, message = "Tên người dùng phải có ít nhất 3 ký tự!")
+    @Size(max= 20, message = "Tên người dùng có thể có tối đa 20 ký tự!")
     private String username;
 
-    @Email(message = "Email is not in valid format!")
-    @NotBlank(message = "Email is required!")
+    @Email(message = "Email không đúng định dạng!")
+    @NotBlank(message = "Email là bắt buộc!")
     private String email;
 
-    @NotBlank(message = "Password is required!")
-    @Size(min = 8, message = "Password must have atleast 8 characters!")
-    @Size(max = 20, message = "Password can have have atmost 20 characters!")
+    @NotBlank(message = "Mật khẩu là bắt buộc!")
+    @Size(min = 8, message = "Mật khẩu phải có ít nhất 8 ký tự!")
+    @Size(max = 20, message = "Mật khẩu có thể có tối đa 20 ký tự!")
     private String password;
 
-    @NotBlank(message = "Name is required!")
-    @Size(min= 5, message = "Name must have atleast 3 characters!")
-    @Size(max= 50, message = "Name can have have atmost 50 characters!")
+    @NotBlank(message = "Tên là bắt buộc!")
+    @Size(min= 5, message = "Tên phải có ít nhất 3 ký tự!")
+    @Size(max= 50, message = "Tên có thể có tối đa 50 ký tự!")
     private String name;
 
     private String phoneNumber;

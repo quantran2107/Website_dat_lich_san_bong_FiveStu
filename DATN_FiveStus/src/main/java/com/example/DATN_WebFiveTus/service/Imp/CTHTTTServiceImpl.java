@@ -1,14 +1,19 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
+import com.example.DATN_WebFiveTus.config.security.CookieUtils;
+import com.example.DATN_WebFiveTus.config.security.jwt.JwtUtils;
 import com.example.DATN_WebFiveTus.dto.ChiTietHinhThucThanhToanDTO;
 import com.example.DATN_WebFiveTus.dto.HTTTDto;
 import com.example.DATN_WebFiveTus.entity.ChiTietHinhThucThanhToan;
 import com.example.DATN_WebFiveTus.entity.HinhThucThanhToan;
 import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
+import com.example.DATN_WebFiveTus.entity.NhanVien;
 import com.example.DATN_WebFiveTus.repository.ChiTietHinhThucThanhToanRepository;
 import com.example.DATN_WebFiveTus.repository.HinhThucThanhToanRepository;
 import com.example.DATN_WebFiveTus.repository.HoaDonChiTietRepository;
+import com.example.DATN_WebFiveTus.repository.NhanVienReposity;
 import com.example.DATN_WebFiveTus.service.CTHTTTService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +31,12 @@ public class CTHTTTServiceImpl implements CTHTTTService {
 
     @Autowired
     private HoaDonChiTietRepository hoaDonChiTietRepository;
-    ;
+
+    @Autowired
+    private JwtUtils jwtUtils;
+
+    @Autowired
+    private NhanVienReposity nhanVienReposity;
 
     @Autowired
     private HinhThucThanhToanRepository hinhThucThanhToanRepository;
@@ -40,9 +50,18 @@ public class CTHTTTServiceImpl implements CTHTTTService {
     }
 
     @Override
-    public Boolean addNew(HTTTDto htttDto) {
+    public Boolean addNew(HTTTDto htttDto, HttpServletRequest request) {
         HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(htttDto.getIdHD()).orElse(null);
         assert hoaDonChiTiet != null;
+        String token = CookieUtils.getCookie(request, "authToken");
+        if (token != null && jwtUtils.validateJwtToken(token) && jwtUtils.checkBlackList(token)) {
+            String username = jwtUtils.getUserNameFromJwtToken(token);
+            NhanVien nv = nhanVienReposity.findByUsername(username);
+            if (nv != null) {
+                hoaDonChiTiet.setNhanVien(nv);
+                hoaDonChiTietRepository.save(hoaDonChiTiet);
+            }
+        }
         System.out.println(hoaDonChiTiet.getId());
         HinhThucThanhToan hinhThucThanhToan = hinhThucThanhToanRepository.findById(htttDto.getIdHttt()).get();
 

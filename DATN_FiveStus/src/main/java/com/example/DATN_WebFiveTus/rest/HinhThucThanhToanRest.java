@@ -5,6 +5,7 @@ import com.example.DATN_WebFiveTus.dto.HTTTDto;
 import com.example.DATN_WebFiveTus.dto.PhuPhiHoaDonDTO;
 import com.example.DATN_WebFiveTus.entity.ChiTietHinhThucThanhToan;
 import com.example.DATN_WebFiveTus.service.CTHTTTService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,8 @@ public class HinhThucThanhToanRest {
     }
 
     @PostMapping("add")
-    public ResponseEntity<?> addNew(@RequestBody HTTTDto htttDto){
-        return ResponseEntity.ok(cthttService.addNew(htttDto));
+    public ResponseEntity<?> addNew(@RequestBody HTTTDto htttDto, HttpServletRequest request){
+        return ResponseEntity.ok(cthttService.addNew(htttDto,request));
     }
 
     @GetMapping("find-by-id-hdct/{id}")

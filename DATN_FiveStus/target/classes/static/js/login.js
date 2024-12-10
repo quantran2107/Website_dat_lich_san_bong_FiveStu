@@ -1,19 +1,47 @@
 $(document).ready(function () {
 
-    $('#maNVNC').on('click', function () {
+    $('#username').on('click', function () {
+        removeError();
+    })
+    $('#password').on('click', function () {
+        removeError();
+    })
+
+    function removeError() {
         $('#username').remove('is-invalid');
         $('#password').remove('is-invalid');
         $('#passwordError').remove();
-    })
+        $('#usernameError').remove();
+    }
 
     $('#loginForm').on('submit', function (event) {
         event.preventDefault(); // Ngăn chặn việc gửi form mặc định
         $('#loginForm .is-invalid').removeClass('is-invalid');
-        $('#passwordError').remove();
+        removeError();
+        let username = $('#username').val().trim();
+        let password= $('#password').val().trim()
+        if (username === "") {
+            $('#username').addClass('is-invalid');
+            $('#username').after('<div id="usernameError" class="invalid-feedback">Chưa nhập email người dùng!</div>');
+            return;
+        }
+        if (password === '') {
+            $('#password').addClass('is-invalid');
+            $('#password').after('<div id="usernameError" class="invalid-feedback">Chưa nhập mật khẩu!</div>');
+            return;
+        }
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(username)) {
+            $('#username').addClass('is-invalid');
+            $('#username').after('<div id="usernameError" class="invalid-feedback">Email không đúng định dạng!</div>');
+            return;
+        }
+
         let formData = {
             username: $('#username').val().trim(),
             password: $('#password').val().trim()
         };
+
 
         $.ajax({
             url: '/api/auth/sign-in',
@@ -21,7 +49,7 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: JSON.stringify(formData),
             success: function (response) {
-                if (response.response === null){
+                if (response.response === null) {
                     let timerInterval;
                     Swal.fire({
                         title: `${response.message}`,
@@ -54,7 +82,7 @@ $(document).ready(function () {
                     }
                 });
                 let roles = response.response["roles"];
-                if (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_MANAGER")||roles.includes("ROLE_EMPLOYEE")) {
+                if (roles.includes("ROLE_ADMIN") || roles.includes("ROLE_MANAGER") || roles.includes("ROLE_EMPLOYEE")) {
                     window.location.href = '/dich-vu';
                 }
             },
@@ -66,7 +94,6 @@ $(document).ready(function () {
             }
         });
     });
-
 
 
 });
