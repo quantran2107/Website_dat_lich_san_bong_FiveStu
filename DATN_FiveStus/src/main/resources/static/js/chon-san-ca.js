@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const ngayDenSan = ngayDenSanInput.value;
         const idNgayTrongTuan = getDayOfWeek(ngayDenSan);
 
-        fetch(`http://localhost:8080/san-ca/danh-sach-san-ca/${sanBongId}/${idNgayTrongTuan}`)
+        fetch(`http://localhost:8080/san-ca/danh-sach-san-ca-2/${sanBongId}/${idNgayTrongTuan}`)
             .then(response => response.json())
             .then(sanCaList => renderSanCaList(sanCaList, sanCaDetailsSection))
             .catch(error => showError('Error fetching san ca data:', error));
