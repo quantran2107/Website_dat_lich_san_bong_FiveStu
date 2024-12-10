@@ -295,14 +295,10 @@
                                     </button>
                                 </div>
                             </div>
-                            <!-- Phần Tabs nằm ngang -->
-                            <ul class="nav nav-tabs" id="tabListRight">
-                                <!-- Tabs sẽ được tạo động tại đây -->
-                            </ul>
                             <!-- Phần Nội dung Tabs nằm bên dưới -->
                             <div class="tab-content" id="tabContentRight">
                                 <!-- Nội dung các tab sẽ được tạo động tại đây -->
-                                <form>
+                                <form  id="paymentForm">
                                     <div class="row">
                                         <div class="col-md-6" hidden>
                                             <div class="form-group mb-3">
@@ -421,7 +417,7 @@
                                                         <option value="">Chưa có phụ phí hóa đơn !!!</option>
                                                     </select>
                                                     <button class="btn btn-outline-success" type="button"
-                                                            id="btnAddPhuPhi" data-invoice-id="${invoiceId}">+
+                                                            id="btnAddPhuPhi" >+
                                                     </button>
                                                 </div>
                                             </div>
@@ -508,7 +504,7 @@
                                                         <button type="button" class="btn-outline-warning"
                                                                 style="display: flex; align-items: center; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;"
                                                                 data-toggle="modal" data-target="#exampleModal"
-                                                                title="Tiền khách đưa">
+                                                                title="Tiền khách đưa" id="btnTienKhachDua">
                                                             <i class="fas fa-credit-card"
                                                                style="margin-right: 5px;"></i>
                                                         </button>
@@ -795,25 +791,51 @@
     let selectedInvoiceId = null; // Biến lưu trữ ID hóa đơn chi tiết được chọn
 
     // Lắng nghe sự kiện click trên bảng "Đang Hoạt Động"
-    document.getElementById('dang-hoat-dong-table').addEventListener('click', async function (event) {
-        const clickedRow = event.target.closest('tr'); // Lấy dòng được click
-        if (clickedRow) {
-            // Xóa lớp `table-active` khỏi tất cả các dòng
-            const rows = document.querySelectorAll('#dang-hoat-dong-table tr');
-            rows.forEach(row => row.classList.remove('table-active'));
+    document.addEventListener('DOMContentLoaded', function () {
+        // Disable tất cả các ô input trong form
+        const formElements = document.querySelectorAll('#paymentForm input');
+        formElements.forEach(element => {
+            element.disabled = true;  // Disable tất cả các input
+        });
 
-            // Thêm lớp `table-active` vào dòng được click
-            clickedRow.classList.add('table-active');
+        // Disable button thanh toán
+        document.getElementById('thanhToanHoaDon').disabled = true;
+        document.getElementById('btnAddPhuPhi').disabled = true;
+        document.getElementById('btnTienKhachDua').disabled = true;
 
-            // Lưu lại ID hóa đơn chi tiết
-            selectedInvoiceId = clickedRow.getAttribute('data-id'); // Lấy ID từ data-id
-            // Hiển thị dịch vụ liên quan đến hóa đơn được chọn
-            // Gọi hàm để hiển thị thông tin hóa đơn bên phải
-            await loadInvoiceDetails(selectedInvoiceId);
-            fillDichVuChoHoaDon(selectedInvoiceId);
-            // Gọi hàm để cập nhật tiền khách đưa (bảng chi tiết hình thức thanh toán)
-            await loadChiTietHTTTTable(selectedInvoiceId);  // Lấy tổng tiền từ bảng chi tiết thanh toán
-        }
+        // Lắng nghe sự kiện click trên bảng "Đang Hoạt Động"
+        document.getElementById('dang-hoat-dong-table').addEventListener('click', async function (event) {
+            const clickedRow = event.target.closest('tr'); // Lấy dòng được click
+            if (clickedRow) {
+                // Xóa lớp `table-active` khỏi tất cả các dòng
+                const rows = document.querySelectorAll('#dang-hoat-dong-table tr');
+                rows.forEach(row => row.classList.remove('table-active'));
+
+                // Thêm lớp `table-active` vào dòng được click
+                clickedRow.classList.add('table-active');
+
+                // Lưu lại ID hóa đơn chi tiết
+                selectedInvoiceId = clickedRow.getAttribute('data-id'); // Lấy ID từ data-id
+
+                // Enable các ô input trong form
+                const formElements = document.querySelectorAll('#paymentForm input');
+                formElements.forEach(element => {
+                    element.disabled = false;  // Enable tất cả các input
+                });
+
+                // Enable button thanh toán
+                document.getElementById('thanhToanHoaDon').disabled = false;
+                document.getElementById('btnAddPhuPhi').disabled = false;
+                document.getElementById('btnTienKhachDua').disabled = false;
+
+                // Gọi hàm để hiển thị thông tin hóa đơn bên phải
+                await loadInvoiceDetails(selectedInvoiceId);
+                fillDichVuChoHoaDon(selectedInvoiceId);
+
+                // Gọi hàm để cập nhật tiền khách đưa (bảng chi tiết hình thức thanh toán)
+                await loadChiTietHTTTTable(selectedInvoiceId);  // Lấy tổng tiền từ bảng chi tiết thanh toán
+            }
+        });
     });
     //End
 
@@ -2412,16 +2434,12 @@
                 body: JSON.stringify(payload),
             });
 
-            if (!updateResponse.ok) {
-                throw new Error('Không thể thanh toán hóa đơn chi tiết.');
-            }
-
             const updatedHoaDonChiTiet = await updateResponse.json();
             showSuccessToast('Thanh toán thành công!');
 
             // Cập nhật lại giao diện, ví dụ tải lại danh sách hóa đơn
             await fetchData();  // Giả sử bạn có hàm này để làm mới dữ liệu
-
+            location.reload();  // Reload trang để làm mới tất cả dữ liệu
         } catch (error) {
             console.error(error);
             showErrorToast('Lỗi khi thanh toán hóa đơn chi tiết.');
