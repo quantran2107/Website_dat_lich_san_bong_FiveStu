@@ -453,6 +453,10 @@
                                                     <input class="form-control" id="phieuGiamGia" type="text"
                                                            placeholder="Phiếu Giảm Giá" readonly>
                                                 </div>
+                                                <div class="input-group mb-3" hidden>
+                                                    <input class="form-control" id="idPhieuGiamGia" hidden type="text"
+                                                           placeholder="Phiếu Giảm Giá" readonly>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -685,15 +689,16 @@
                             <label for="khachDua" style="font-weight: bold;">Tiền
                                 khách đưa:</label>
                             <div style="display: flex">
-                               <div id="khachDuaDiv">
-                                   <input type="number"
-                                          id="khachDua"
-                                          class="form-control"
-                                          placeholder="Nhập tiền khách đưa"
-                                          style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none;  ">
-                                   <div id="errorTienKhachDua" style="color: red; display: none;">Tiền khách đưa không hợp lệ!
-                                   </div>
-                               </div>
+                                <div id="khachDuaDiv">
+                                    <input type="number"
+                                           id="khachDua"
+                                           class="form-control"
+                                           placeholder="Nhập tiền khách đưa"
+                                           style="border: none; border-bottom: 2px solid #007bff; outline: none; box-shadow: none;  ">
+                                    <div id="errorTienKhachDua" style="color: red; display: none;">Tiền khách đưa không
+                                        hợp lệ!
+                                    </div>
+                                </div>
                                 <div id="maGDDiv" style=" display: none">
                                     <input type="text"
                                            id="maGD"
@@ -2099,10 +2104,10 @@
                     bestDiscount = discount;
                 }
             });
-
             if (bestDiscount) {
                 // Hiển thị mã phiếu giảm giá và số tiền giảm lên giao diện
                 document.getElementById('phieuGiamGia').value = bestDiscount.maPhieuGiamGia;
+                document.getElementById('idPhieuGiamGia').value = bestDiscount.id;
                 document.getElementById('tienGiam').value = maxDiscountValue.toLocaleString('vi-VN') + ' VND';
             }
         } catch (error) {
@@ -2161,7 +2166,7 @@
     async function thanhToan(invoiceId) {
         try {
             exportPDFWithTemplate(selectedInvoiceId);
-        }catch (e) {
+        } catch (e) {
 
         }
     }
@@ -2348,6 +2353,81 @@
             }
         });
     }
+
+    async function thanhToan() {
+        // Lấy dữ liệu hóa đơn chi tiết hiện tại
+        const response = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${selectedInvoiceId}`);
+        const data = await response.json();
+
+        const tienKhachDua = parseCurrency(document.getElementById('tienKhachDua').value.trim()) || 0;
+        const tongTienPhaiTra = parseCurrency(document.getElementById('tongTienPhaiTra').value.trim()) || 0;
+        const tongTien = parseCurrency(document.getElementById('tongTien').value.trim()) || 0;
+        const tienGiamGia = parseCurrency(document.getElementById('tienGiam').value.trim()) || 0;
+        const idPhieuGiamGia = document.getElementById('idPhieuGiamGia').value;
+        const responseNhanVien = await fetch('http://localhost:8080/hoa-don/get-nhan-vien-trong-ca');
+        if (!responseNhanVien.ok) {
+            throw new Error("Không thể lấy thông tin nhân viên");
+        }
+        const nhanVienData = await responseNhanVien.json();
+        const idNhanVien = nhanVienData.id;
+        // Kiểm tra nếu tiền khách đưa nhỏ hơn tổng tiền phải trả
+        if (tienKhachDua < tongTienPhaiTra) {
+            showErrorToast('Chưa thanh toán đủ tiền!');
+            return;
+        }
+
+        // Hiển thị xác nhận trước khi thanh toán
+        const result = await Swal.fire({
+            title: 'Xác nhận thanh toán',
+            text: 'Bạn có chắc chắn muốn thanh toán không?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6', // Đổi màu confirmButton
+            cancelButtonColor: '#d33', // Đổi màu cancelButton
+            confirmButtonText: 'Thanh toán', // Đổi tên nút xác nhận
+            cancelButtonText: 'Hủy',
+        });
+
+        if (!result.isConfirmed) {
+            return; // Nếu người dùng không xác nhận, dừng lại
+        }
+
+        // Chuẩn bị payload cho API PUT
+        const payload = {
+            idHoaDon: data.idHoaDon,
+            idSanCa: data.idSanCa,
+            idNhanVien : idNhanVien,
+            idphieuGiamGia: idPhieuGiamGia,
+            tongTien: tongTien,
+            tienGiamGia: tienGiamGia,
+            tongTienThucTe: tongTienPhaiTra,
+        };
+        console.log(payload)
+        try {
+            const updateResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/thanh-toan/${selectedInvoiceId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!updateResponse.ok) {
+                throw new Error('Không thể thanh toán hóa đơn chi tiết.');
+            }
+
+            const updatedHoaDonChiTiet = await updateResponse.json();
+            showSuccessToast('Thanh toán thành công!');
+
+            // Cập nhật lại giao diện, ví dụ tải lại danh sách hóa đơn
+            await fetchData();  // Giả sử bạn có hàm này để làm mới dữ liệu
+
+        } catch (error) {
+            console.error(error);
+            showErrorToast('Lỗi khi thanh toán hóa đơn chi tiết.');
+        }
+    }
+
 
 </script>
 </body>
