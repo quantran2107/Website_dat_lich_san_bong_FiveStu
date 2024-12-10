@@ -1,4 +1,4 @@
-CREATE DATABASE DuAnTotNghiep;
+Create DATABASE DuAnTotNghiep;
 
 USE DuAnTotNghiep;
 
@@ -30,7 +30,6 @@ CREATE TABLE dia_chi_khach_hang (
   updated_at DATETIME,
   deleted_at BIT,
   CONSTRAINT fk_diaChiKhachHang_khachHang FOREIGN KEY (id_khach_hang) REFERENCES khach_hang(id)
-
 );
 
 -- Table: chuc_vu
@@ -53,6 +52,7 @@ CREATE TABLE nhan_vien (
   ho_ten VARCHAR(100) NOT NULL,
   email VARCHAR(100) NOT NULL,
   gioi_tinh VARCHAR(100) NOT NULL,
+  ngay_sinh Date NULL,
   so_dien_thoai VARCHAR(100) NOT NULL,
   dia_chi VARCHAR(100) NOT NULL,
   trang_thai VARCHAR(100) NOT NULL,
@@ -268,6 +268,8 @@ CREATE TABLE chi_tiet_hinh_thuc_thanh_toan (
   id INT AUTO_INCREMENT PRIMARY KEY,
   id_hoa_don_chi_tiet INT,
   id_hinh_thuc_thanh_toan INT,
+  so_tien DECIMAL(10, 2),
+  ma_giao_dich varchar(100) null,
   trang_thai VARCHAR(50),
   created_at DATETIME, 
   updated_at DATETIME,
@@ -2417,4 +2419,4 @@ INSERT INTO `duantotnghiep`.`user_roles`
 (`user_id`,
 `role_id`)
 VALUES
-(1,1),(1,4),(2,1),(2,4),(3,1),(3,4),(4,1),(4,4),(5,1),(5,4),(6,1),(7,1),(8,1),(9,1),(10,1);
+(1,1),(1,2),(2,1),(2,4),(3,1),(3,4),(4,1),(4,4),(5,1),(5,4),(6,1),(7,1),(8,1),(9,1),(10,1);
