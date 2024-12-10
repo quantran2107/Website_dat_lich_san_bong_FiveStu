@@ -374,25 +374,51 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
     }
 
     @Override
-    public HoaDonChiTietDTO thanhToan(Integer id,HoaDonChiTietDTO hoaDonChiTietDTO) {
+    public HoaDonChiTietDTO thanhToan(Integer id, HoaDonChiTietDTO hoaDonChiTietDTO) {
+        // Lấy thông tin hóa đơn chi tiết hiện tại
         HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hóa đơn chi tiết không tồn tại với ID: " + id));
+
         SanCa sanCa = sanCaRepository.findById(hoaDonChiTietDTO.getIdSanCa()).orElseThrow();
-        // Khởi tạo đối tượng NhanVien
         NhanVien nhanVien = nhanVienReposity.findById(hoaDonChiTietDTO.getIdNhanVien()).orElseThrow();
-        // Kiểm tra điều kiện trước khi tìm nhân viên
         HoaDon hoaDon = hoaDonRepository.findById(hoaDonChiTietDTO.getIdHoaDon()).orElseThrow();
-        PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findById(hoaDonChiTietDTO.getIdphieuGiamGia()).orElseThrow();
-        // Thiết lập trạng thái dựa trên idNhanVien
+
+        // Cập nhật trạng thái của hóa đơn chi tiết hiện tại
         hoaDonChiTiet.setSanCa(sanCa);
         hoaDonChiTiet.setHoaDon(hoaDon);
         hoaDonChiTiet.setNhanVien(nhanVien);
         hoaDonChiTiet.setTongTien(hoaDonChiTietDTO.getTongTien());
-        hoaDonChiTiet.setPhieuGiamGia(phieuGiamGia);
+        hoaDonChiTiet.setPhieuGiamGia(phieuGiamGiaRepository.findById(hoaDonChiTietDTO.getIdphieuGiamGia()).orElseThrow());
         hoaDonChiTiet.setTienGiamGia(hoaDonChiTietDTO.getTienGiamGia());
         hoaDonChiTiet.setTongTienThucTe(hoaDonChiTietDTO.getTongTienThucTe());
         hoaDonChiTiet.setTrangThai("Đã thanh toán");
+
+        // Lưu hóa đơn chi tiết đã cập nhật
         HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
+
+        // Kiểm tra tất cả các hóa đơn chi tiết của hóa đơn này
+        List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietRepository.searchFromHoaDon(hoaDon.getId());
+        boolean allCompletedOrCancelled = true;
+
+        // Kiểm tra trạng thái của các hóa đơn chi tiết
+        for (HoaDonChiTiet chiTiet : hoaDonChiTietList) {
+            if (!"Đã thanh toán".equals(chiTiet.getTrangThai()) && !"Đã hủy".equals(chiTiet.getTrangThai())) {
+                allCompletedOrCancelled = false;
+                break;
+            }
+        }
+
+        // Cập nhật trạng thái của hóa đơn
+        if (allCompletedOrCancelled) {
+            hoaDon.setTrangThai("Đã hoàn thành");
+        } else {
+            hoaDon.setTrangThai("Đã hoàn thành một phần");
+        }
+
+        // Lưu lại hóa đơn với trạng thái cập nhật
+        hoaDonRepository.save(hoaDon);
+
+        // Trả về đối tượng DTO sau khi đã lưu
         return modelMapper.map(hoaDonChiTietSave, HoaDonChiTietDTO.class);
     }
 
