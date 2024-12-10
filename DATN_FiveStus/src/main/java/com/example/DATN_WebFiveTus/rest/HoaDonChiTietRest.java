@@ -166,5 +166,10 @@ public class HoaDonChiTietRest {
         HoaDonChiTietDTO updatedHoaDonChiTiet = hoaDonChiTietService.update(id, hoaDonChiTietDTO);
         return ResponseEntity.ok(updatedHoaDonChiTiet);
     }
+    @PutMapping("/thanh-toan/{id}")
+    public ResponseEntity<HoaDonChiTietDTO> thanhToanHoaDonChiTiet(@PathVariable Integer id,@RequestBody HoaDonChiTietDTO hoaDonChiTietDTO) {
+        HoaDonChiTietDTO updatedHoaDonChiTiet = hoaDonChiTietService.thanhToan(id,hoaDonChiTietDTO);
+        return ResponseEntity.ok(updatedHoaDonChiTiet);
+    }
 
 }

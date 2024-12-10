@@ -110,8 +110,6 @@ public class VNPAYController {
             if (hoaDonDTO.getHoVaTenKhachHang() == null || hoaDonDTO.getEmailKhachHang() == null) {
                 throw new RuntimeException("Thông tin khách hàng không tồn tại.");
             }
-            System.out.println(hoaDonDTO);
-            System.out.println(hoaDonChiTietList);
             hoaDonService.sendInvoiceEmail(hoaDonDTO, hoaDonChiTietList);
             for (HoaDonChiTietDTO chiTiet : hoaDonChiTietList) {
                 hoaDonChiTietService.updateTrangThaiHoaDonChiTiet(chiTiet.getId(), "Chờ nhận sân");

@@ -27,6 +27,7 @@ public interface PhieuGiamGiaChiTietRepository extends JpaRepository<PhieuGiamGi
             "AND pggct.deletedAt = false")
     List<PhieuGiamGiaChiTiet> findAllByIdPhieuGiamGia(@Param("idPhieuGiamGia") Integer idPhieuGiamGia);
 
+
     @Query("SELECT pggct FROM PhieuGiamGiaChiTiet pggct " +
             "JOIN FETCH pggct.khachHang " +
             "JOIN FETCH pggct.phieuGiamGia " +

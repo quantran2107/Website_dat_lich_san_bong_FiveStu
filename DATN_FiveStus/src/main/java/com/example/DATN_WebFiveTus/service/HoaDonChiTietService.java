@@ -52,4 +52,5 @@ public interface HoaDonChiTietService {
 
     HoaDonChiTietDTO huyLichDat(Integer id);
 
+    HoaDonChiTietDTO thanhToan(Integer id,HoaDonChiTietDTO hoaDonChiTietDTO);
 }
