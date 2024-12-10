@@ -5,6 +5,8 @@ import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.entity.HoaDon;
 import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
 import com.example.DATN_WebFiveTus.entity.NhanVien;
+import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
+import com.example.DATN_WebFiveTus.entity.PhieuGiamGiaChiTiet;
 import com.example.DATN_WebFiveTus.entity.SanCa;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.*;
@@ -36,6 +38,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
     private HoaDonRepository hoaDonRepository;
 
     private KhachHangRepository khachHangRepository;
+    private PhieuGiamGiaRepository phieuGiamGiaRepository;
 
     @Autowired
     private NhanVienReposity nhanVienReposity;
@@ -52,13 +55,14 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
 
     @Autowired
-    public HoaDonChiTietServiceImp(HoaDonChiTietRepository hoaDonChiTietRepository, HoaDonRepository hoaDonRepository, SanCaRepository sanCaRepository, ModelMapper modelMapper) {
+    public HoaDonChiTietServiceImp(HoaDonChiTietRepository hoaDonChiTietRepository, HoaDonRepository hoaDonRepository, SanCaRepository sanCaRepository, ModelMapper modelMapper,PhieuGiamGiaRepository phieuGiamGiaRepository) {
         this.hoaDonChiTietRepository = hoaDonChiTietRepository;
         this.hoaDonRepository = hoaDonRepository;
         this.sanCaRepository = sanCaRepository;
         this.khachHangRepository = khachHangRepository;
         this.nhanVienReposity = nhanVienReposity;
         this.modelMapper = modelMapper;
+        this.phieuGiamGiaRepository = phieuGiamGiaRepository;
     }
 
     @Override
@@ -284,7 +288,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
             nhanVien = nhanVienReposity.findById(hoaDon.getNhanVien().getId())
                     .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại với ID: " + hoaDonChiTietDTO.getIdNhanVien()));
             hoaDonChiTiet.setTrangThai("Chờ nhận sân");
-        }else{
+        } else {
             hoaDonChiTiet.setTrangThai("Chờ đặt cọc");
         }
 
@@ -297,6 +301,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         Long count = hoaDonChiTietRepository.countByIdSanCaAndNgayDenSan(idSanCa, ngayDenSan);
         return count > 0;  // Nếu count > 0 tức là sân ca đã được đặt
     }
+
     @Override
     public void updateTrangThaiHoaDonChiTiet(Integer idHoaDonChiTiet, String trangThai) {
         HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(idHoaDonChiTiet)
@@ -304,6 +309,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         hoaDonChiTiet.setTrangThai(trangThai);
         hoaDonChiTietRepository.save(hoaDonChiTiet);
     }
+
     @Override
     public List<HoaDonChiTietDTO> findByIdKhachHang(Integer id) {
         List<HoaDonChiTiet> list = hoaDonChiTietRepository.findHoaDonChiTietByIdKhachHang(id);
@@ -364,7 +370,30 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn với id " + id));
         hoaDonChiTiet.setTrangThai("Đã hủy");
         hoaDonChiTietRepository.save(hoaDonChiTiet);
-        return modelMapper.map(hoaDonChiTiet,HoaDonChiTietDTO.class);
+        return modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class);
+    }
+
+    @Override
+    public HoaDonChiTietDTO thanhToan(Integer id,HoaDonChiTietDTO hoaDonChiTietDTO) {
+        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hóa đơn chi tiết không tồn tại với ID: " + id));
+        SanCa sanCa = sanCaRepository.findById(hoaDonChiTietDTO.getIdSanCa()).orElseThrow();
+        // Khởi tạo đối tượng NhanVien
+        NhanVien nhanVien = nhanVienReposity.findById(hoaDonChiTietDTO.getIdNhanVien()).orElseThrow();
+        // Kiểm tra điều kiện trước khi tìm nhân viên
+        HoaDon hoaDon = hoaDonRepository.findById(hoaDonChiTietDTO.getIdHoaDon()).orElseThrow();
+        PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findById(hoaDonChiTietDTO.getIdphieuGiamGia()).orElseThrow();
+        // Thiết lập trạng thái dựa trên idNhanVien
+        hoaDonChiTiet.setSanCa(sanCa);
+        hoaDonChiTiet.setHoaDon(hoaDon);
+        hoaDonChiTiet.setNhanVien(nhanVien);
+        hoaDonChiTiet.setTongTien(hoaDonChiTietDTO.getTongTien());
+        hoaDonChiTiet.setPhieuGiamGia(phieuGiamGia);
+        hoaDonChiTiet.setTienGiamGia(hoaDonChiTietDTO.getTienGiamGia());
+        hoaDonChiTiet.setTongTienThucTe(hoaDonChiTietDTO.getTongTienThucTe());
+        hoaDonChiTiet.setTrangThai("Đã thanh toán");
+        HoaDonChiTiet hoaDonChiTietSave = hoaDonChiTietRepository.save(hoaDonChiTiet);
+        return modelMapper.map(hoaDonChiTietSave, HoaDonChiTietDTO.class);
     }
 
 }

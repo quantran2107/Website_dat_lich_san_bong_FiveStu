@@ -1,6 +1,7 @@
 package com.example.DATN_WebFiveTus.repository;
 
 import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
+import com.example.DATN_WebFiveTus.entity.PhieuGiamGiaChiTiet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -39,4 +40,6 @@ public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, Inte
             "AND (pg.dieuKienSuDung <= :tongTien)")
     List<PhieuGiamGia> fillPhieuGiamGia(
             @Param("tongTien") Double tongTien);
+
+
 }
