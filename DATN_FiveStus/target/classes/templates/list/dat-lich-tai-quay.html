@@ -2192,7 +2192,7 @@
         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' VND';
     }
 
-    function exportPDFWithTemplate(invoiceId) {
+    async function exportPDFWithTemplate(invoiceId) {
         // Lấy dữ liệu từ form
         const hoVaTenKhachHang = document.getElementById(`hoVaTenKhachHang`).value || "Nguyễn Văn A";
         const soDienThoaiKhachHang = document.getElementById(`soDienThoaiKhachHang`).value || "0123456789";
@@ -2205,6 +2205,8 @@
         const phuPhi = document.getElementById(`tienPhuPhi`).value || "500,000";
         const tienSan = document.getElementById(`tienSan`).value || "500,000";
         const tongTienPhaiTra = document.getElementById(`tongTienPhaiTra`).value || "0";
+        const tienKhachDua = document.getElementById(`tienKhachDua`).value || "0";
+        const tienTraLai = document.getElementById(`tienTraLai`).value || "0";
 
         $.ajax({
             url: `http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${invoiceId}`,
@@ -2353,6 +2355,16 @@
                 Tổng tiền: <span style="font-size: 22px; font-weight: bold;">${tongTienPhaiTra} VND</span>
             </div>
 
+            <!-- Tiền khách đưa -->
+            <div style="padding-top: 20px; font-weight: bold; font-size: 14px; text-align: right; color: #333;">
+                Tiền khách đưa: <span style="font-size: 16px; font-weight: bold;">${tienKhachDua} VND</span>
+            </div>
+
+            <!-- Tiền trả lại -->
+            <div style="padding-top: 20px; font-weight: bold; font-size: 14px; text-align: right; color: #333;">
+                Tiền trả lại: <span style="font-size: 16px; font-weight: bold;">${tienTraLai} VND</span>
+            </div>
+
             <br>
 
             <!-- Cảm ơn -->
@@ -2368,7 +2380,14 @@
 
                 const element = document.createElement('div');
                 element.innerHTML = template;
-                html2pdf().from(element).save(`hoa_don_${invoiceId}.pdf`);
+                html2pdf()
+                    .from(element)
+                    .save(`hoa_don_${invoiceId}.pdf`)
+                    .then(() => {
+                        setTimeout(() => {
+                            location.reload();
+                        }, 5000);
+                    });
                 console.log(template); // Xem trước mẫu trước khi xuất
             },
             error: function (error) {
@@ -2415,6 +2434,8 @@
             return; // Nếu người dùng không xác nhận, dừng lại
         }
 
+        await exportPDFWithTemplate(selectedInvoiceId);
+
         // Chuẩn bị payload cho API PUT
         const payload = {
             idHoaDon: data.idHoaDon,
@@ -2437,10 +2458,8 @@
 
             const updatedHoaDonChiTiet = await updateResponse.json();
             showSuccessToast('Thanh toán thành công!');
-            exportPDFWithTemplate(selectedInvoiceId);
             // Cập nhật lại giao diện, ví dụ tải lại danh sách hóa đơn
             await fetchData();  // Giả sử bạn có hàm này để làm mới dữ liệu
-            location.reload();  // Reload trang để làm mới tất cả dữ liệu
         } catch (error) {
             console.error(error);
             showErrorToast('Lỗi khi thanh toán hóa đơn chi tiết.');
