@@ -2219,13 +2219,13 @@
                     // Xây dựng bảng chi tiết dịch vụ
                     serviceDetailsHTML += `
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-                    <thead>
-                        <tr style="background-color: #f1f1f1;">
-                            <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">STT</th>
-                            <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Tên dịch vụ</th>
-                            <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Số lượng</th>
-                            <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Giá (VND)</th>
-                            <th style="border: 1px solid #eee; padding: 8px; font-weight: bold;">Tổng tiền (VND)</th>
+                    <thead style="background-color: #004d00; color: #fff;">
+                        <tr>
+                            <th style="border: 1px solid #333; padding: 8px;">STT</th>
+                            <th style="border: 1px solid #333; padding: 8px;">Tên dịch vụ</th>
+                            <th style="border: 1px solid #333; padding: 8px; text-align: center;">Số lượng</th>
+                            <th style="border: 1px solid #333; padding: 8px; text-align: right;">Giá (VND)</th>
+                            <th style="border: 1px solid #333; padding: 8px; text-align: right;">Tổng tiền (VND)</th>
                         </tr>
                     </thead>
                     <tbody>`;
@@ -2326,11 +2326,6 @@
             </tr>
 
             <!-- Chi tiết dịch vụ đã thuê -->
-            <tr class="heading">
-                <td colspan="2" style="padding-top: 20px; padding-bottom: 10px; font-weight: bold; font-size: 18px; background-color: #004d00; color: #fff; border-top: 3px solid #000;">
-                    <strong style="color: #004d00;">Chi tiết dịch vụ đã thuê</strong>
-                </td>
-            </tr>
             ${serviceDetailsHTML}
 
             <!-- Chi phí khác -->
@@ -2351,19 +2346,21 @@
             </table>
 
             <!-- Tổng chi phí -->
-            <div style="padding-top: 20px; font-weight: bold; font-size: 18px; text-align: right; color: #d9534f;">
-                Tổng tiền: <span style="font-size: 22px; font-weight: bold;">${tongTienPhaiTra} VND</span>
+            <div style="padding: 10px; background-color: #f9f9f9; border: 1px solid #333; margin-top: 20px;">
+                <div style="font-size: 16px; font-weight: bold; display: flex; justify-content: space-between;">
+                    <span>Tổng tiền:</span>
+                    <span style="text-align: right; flex-grow: 1;">${tongTienPhaiTra} VND</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Tiền khách đưa:</span>
+                    <span style="text-align: right; flex-grow: 1;">${tienKhachDua} VND</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Tiền trả lại:</span>
+                    <span style="text-align: right; flex-grow: 1;">${tienTraLai} VND</span>
+                </div>
             </div>
 
-            <!-- Tiền khách đưa -->
-            <div style="padding-top: 20px; font-weight: bold; font-size: 14px; text-align: right; color: #333;">
-                Tiền khách đưa: <span style="font-size: 16px; font-weight: bold;">${tienKhachDua} VND</span>
-            </div>
-
-            <!-- Tiền trả lại -->
-            <div style="padding-top: 20px; font-weight: bold; font-size: 14px; text-align: right; color: #333;">
-                Tiền trả lại: <span style="font-size: 16px; font-weight: bold;">${tienTraLai} VND</span>
-            </div>
 
             <br>
 
@@ -2371,7 +2368,7 @@
             <p style="text-align: center; font-size: 14px; color: #777;">Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
 
             <!-- Footer -->
-            <footer style="text-align: center; font-size: 12px; color: #999;">
+            <footer style="border-top: 1px solid #ddd; padding-top: 10px; margin-top: 20px; font-size: 12px; color: #999; text-align: center;">
                 <p>FIVE STU | Địa chỉ: 123 Đường ABC, TP. HCM</p>
                 <p>Email: contact@fivestu.com | Số điện thoại: (028) 1234 5678</p>
             </footer>
