@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a4fba042-6764-46ef-9ee6-f525a3c9a84d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/fragment/head.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/fragment/head.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/dat-lich-tai-quay.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/dat-lich-tai-quay.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/fragment/head.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/fragment/head.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/list/dat-lich-tai-quay.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/dat-lich-tai-quay.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -363,7 +359,7 @@
       <workItem from="1733772233794" duration="694000" />
       <workItem from="1733811274525" duration="5441000" />
       <workItem from="1733971942086" duration="7261000" />
-      <workItem from="1734025248731" duration="6855000" />
+      <workItem from="1734025248731" duration="8382000" />
     </task>
     <servers />
   </component>
