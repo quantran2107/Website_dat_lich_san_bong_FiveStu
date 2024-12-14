@@ -257,8 +257,8 @@ function updateVoucherStatus(checkbox) {
         text: 'Bạn chắc chắn muốn kết thúc phiếu giảm giá?',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'Cancel'
+        confirmButtonText: 'Có',
+        cancelButtonText: 'Không'
     }).then((result) => {
         if (result.isConfirmed) {
             // Update status
@@ -409,7 +409,7 @@ function showAddForm() {
         <div class="form-group col-md-6">
         <label for="soLuong">Số lượng</label>
         <div class="input-group mb-3">
-        <input type="text" class="form-control" id="soLuong" placeholder="Số lượng">
+        <input type="text" class="form-control" id="soLuong" placeholder="Số lượng" >
         <span class="input-group-text">#</span>
         </div>
         <span id="soLuongError" class="text-danger"></span>
@@ -494,7 +494,6 @@ function showAddForm() {
 
     cardBody1.innerHTML = form;
     document.getElementById('doiTuongTatCa').checked = true;
-    // Xử lý sự kiện change cho các radio buttons
 
     document.addEventListener('change', function (event) {
         const doiTuongCaNhan = document.getElementById('doiTuongCaNhan');
@@ -562,12 +561,15 @@ function showAddForm() {
             }
         }
     });
+    const soLuongInput = document.getElementById('soLuong');
     // Xử lý sự kiện change cho các radio buttons
     doiTuongCaNhan.onchange = function () {
         if (doiTuongCaNhan.checked) {
             // Hiển thị bảng và phân trang khi chọn tìm kiếm theo cá nhân
             tableKhachHangContainer.style.display = 'block';
             paginationContainer.style.display = 'block';
+            soLuongInput.disabled = true;
+            calculateSoLuongFromCheckboxes();
         }
         fetchKhachHang(searchKH.value, currentPage, pageSize); // Gọi hàm fetchKhachHang với query hiện tại
     };
@@ -577,6 +579,8 @@ function showAddForm() {
             // Ẩn bảng và phân trang khi chọn tìm kiếm tất cả
             tableKhachHangContainer.style.display = 'none';
             paginationContainer.style.display = 'none';
+            soLuongInput.disabled = false;
+            soLuongInput.value = '';
             fetch('http://localhost:8080/khach-hang/hien-thi')
                 .then(response => response.json())
                 .then(data => {
@@ -586,7 +590,17 @@ function showAddForm() {
                 .catch(error => console.error('Error fetching khach hang:', error));
         }
     };
-
+// Hàm tính số lượng dựa trên số ô checkbox được tick
+    function calculateSoLuongFromCheckboxes() {
+        const selectedCheckboxes = document.querySelectorAll('input.item-checkbox:checked');
+        soLuongInput.value = selectedCheckboxes.length;
+    }
+    // Gắn sự kiện thay đổi cho các checkbox trong bảng khách hàng
+    document.addEventListener('change', (event) => {
+        if (doiTuongCaNhan.checked && event.target.classList.contains('item-checkbox')) {
+            calculateSoLuongFromCheckboxes();
+        }
+    });
     // Hàm fetch dữ liệu khách hàng từ máy chủ và xử lý dữ liệu trả về
     function fetchKhachHang(query, page, pageSize) {
         fetch('http://localhost:8080/khach-hang/hien-thi')
@@ -735,12 +749,12 @@ function showAddForm() {
         const selectedEmailsKhachHangs = selectedKhachHangs.map(khachHang => khachHang.email);
 
         const data = {
-            maPhieuGiamGia: document.getElementById('maPhieuGiamGia').value,
+            maPhieuGiamGia: document.getElementById('maPhieuGiamGia').value ,
             tenPhieuGiamGia: document.getElementById('tenPhieuGiamGia').value,
             mucGiam: document.getElementById('mucGiam').value,
             hinhThucGiamGia: getSelectedRadioValue('hinhThucGiamGia'),
             giaTriToiDa: document.getElementById('giaTriToiDa').value,
-            soLuong: document.getElementById('soLuong').value,
+            soLuong: document.getElementById('soLuong').value  ,
             dieuKienSuDung: document.getElementById('dieuKienSuDung').value,
             ngayBatDau: document.getElementById('ngayBatDau').value,
             ngayKetThuc: document.getElementById('ngayKetThuc').value,
@@ -756,8 +770,8 @@ function showAddForm() {
                 text: 'Bạn chắc chắn muốn thêm phiếu giảm giá?',
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'Cancel'
+                confirmButtonText: 'Có',
+                cancelButtonText: 'Không'
             }).then((result) => {
                 if (result.isConfirmed) {
                     fetch('http://localhost:8080/api-phieu-giam-gia/save', {
@@ -777,10 +791,24 @@ function showAddForm() {
                         })
                         .then(async phieuGiamGia => {
                             const idPhieuGiamGia = phieuGiamGia.id;
-                            const chiTietData = selectedIdKhachHangs.map(idKhachHang => ({
-                                idPhieuGiamGia,
-                                idKhachHang
-                            }));
+
+                            // Tạo phiếu giảm giá chi tiết
+                            const chiTietData = [];
+                            if (data.doiTuongApDung === 'true') { // Cá nhân
+                                selectedIdKhachHangs.forEach(idKhachHang => {
+                                    chiTietData.push({
+                                        idPhieuGiamGia,
+                                        idKhachHang
+                                    });
+                                });
+                            } else if (data.doiTuongApDung === 'false') { // Công khai
+                                for (let i = 0; i < data.soLuong; i++) {
+                                    chiTietData.push({
+                                        idPhieuGiamGia,
+                                        idKhachHang: null // Công khai, chưa có khách hàng
+                                    });
+                                }
+                            }
 
                             // Lưu chi tiết phiếu giảm giá
                             for (const chiTiet of chiTietData) {
@@ -826,7 +854,6 @@ function showAddForm() {
             });
         }
     });
-
 
     function validateForm() {
         // Lấy các giá trị từ các trường input
@@ -1031,6 +1058,7 @@ function cancelAdd() {
 
                             </div>
         `;
+    fetchDataAndRenderTable();
 }
 
 
@@ -1316,9 +1344,20 @@ function showUpdate(id) {
                         fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pggct/${id}`)
                             .then(response => response.json())
                             .then(dataCT => {
+                                console.log(dataCT);
+                                if (!dataCT) {
+                                    console.warn('API trả về null hoặc không có dữ liệu.');
+                                    dataCT = [];
+                                }
+
+                                if (!Array.isArray(dataCT)) {
+                                    dataCT = [dataCT];
+                                }
+
                                 dataCT.forEach(chiTiet => {
                                     checkedStatus[chiTiet.idKhachHang] = true;
                                 });
+
                                 // Sau khi lấy trạng thái checked, hiển thị dữ liệu và phân trang
                                 displayCustomersOnPage(currentPage);
                                 createPaginationButtons();

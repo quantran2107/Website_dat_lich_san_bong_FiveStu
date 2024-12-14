@@ -1,8 +1,10 @@
 package com.example.DATN_WebFiveTus.rest;
 
 import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaChiTietDTO;
+import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import com.example.DATN_WebFiveTus.entity.PhieuGiamGiaChiTiet;
 import com.example.DATN_WebFiveTus.service.Imp.PhieuGiamGiaChiTietServiceImp;
+import com.example.DATN_WebFiveTus.service.PhieuGiamGiaChiTietService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -27,7 +30,8 @@ public class PhieuGiamGiaChiTietRest {
     @Autowired
     private PhieuGiamGiaChiTietServiceImp serviceImp;
 
-
+    @Autowired
+    private PhieuGiamGiaChiTietService phieuGiamGiaChiTietService;
 
     @GetMapping("hien-thi")
     public ResponseEntity<List<PhieuGiamGiaChiTietDTO>> getAll() {
@@ -69,4 +73,15 @@ public class PhieuGiamGiaChiTietRest {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @GetMapping("/pgg-cong-khai")
+    public ResponseEntity<?> getAllPGGCongKhai(@RequestParam("tongTien") Double tongTien) {
+        List<PhieuGiamGiaChiTietDTO> phieuGiamGiaList = phieuGiamGiaChiTietService.getAllPGGCTCongKhai(tongTien);
+        return ResponseEntity.ok(phieuGiamGiaList);
+    }
+
+    @GetMapping("/pgg-ca-nhan/{idKhachHang}")
+    public ResponseEntity<?> getAllPGGCaNhan(@PathVariable("idKhachHang") Integer idKhachHang,@RequestParam("tongTien") Double tongTien) {
+        List<PhieuGiamGiaChiTietDTO> phieuGiamGiaList = phieuGiamGiaChiTietService.getAllPGGCTCaNhan(idKhachHang,tongTien);
+        return ResponseEntity.ok(phieuGiamGiaList);
+    }
 }

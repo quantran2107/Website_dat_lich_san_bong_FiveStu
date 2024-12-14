@@ -298,7 +298,7 @@
                             <!-- Phần Nội dung Tabs nằm bên dưới -->
                             <div class="tab-content" id="tabContentRight">
                                 <!-- Nội dung các tab sẽ được tạo động tại đây -->
-                                <form  id="paymentForm">
+                                <form id="paymentForm">
                                     <div class="row">
                                         <div class="col-md-6" hidden>
                                             <div class="form-group mb-3">
@@ -329,6 +329,7 @@
                                             <div class="form-group mb-3">
                                                 <label for="hoVaTenKhachHang">Tên khách hàng</label>
                                                 <input type="text" id="hoVaTenKhachHang" class="form-control" readonly>
+                                                <input type="text" id="idKhachHang" class="form-control" readonly hidden>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -417,7 +418,7 @@
                                                         <option value="">Chưa có phụ phí hóa đơn !!!</option>
                                                     </select>
                                                     <button class="btn btn-outline-success" type="button"
-                                                            id="btnAddPhuPhi" >+
+                                                            id="btnAddPhuPhi">+
                                                     </button>
                                                 </div>
                                             </div>
@@ -446,16 +447,14 @@
                                         <div class="col-md-8">
                                             <div class="form-group mb-3">
                                                 <div class="input-group mb-3">
-                                                    <input class="form-control" id="phieuGiamGia" type="text"
-                                                           placeholder="Phiếu Giảm Giá" readonly>
+                                                    <input class="form-control" id="phieuGiamGia" type="text" placeholder="Phiếu Giảm Giá" readonly>
+                                                    <button class="btn btn-outline-success" id="btnShowModal" type="button" title="Chọn phiếu giảm giá">+</button>
                                                 </div>
-                                                <div class="input-group mb-3" hidden>
-                                                    <input class="form-control" id="idPhieuGiamGia" hidden type="text"
-                                                           placeholder="Phiếu Giảm Giá" readonly>
-                                                </div>
+                                                <input class="form-control" id="idPhieuGiamGia" hidden type="text" placeholder="Phiếu Giảm Giá" readonly>
                                             </div>
                                         </div>
                                     </div>
+
 
                                     <div class="row">
                                         <div class="col-md-4">
@@ -652,6 +651,44 @@
         </div>
     </div>
     <!--    End Modal-->
+<!--    Modal chọn phiếu giảm giá-->
+    <!-- Modal -->
+    <div class="modal fade" id="modalPhieuGiamGia" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Chọn Phiếu Giảm Giá</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Search bar -->
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="searchPhieuGiamGia" placeholder="Tìm kiếm phiếu giảm giá">
+                    </div>
+                    <!-- Table -->
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã Phiếu Giảm Giá</th>
+                            <th>Tên Phiếu Giảm Giá</th>
+                            <th>Loại</th>
+                            <th>Số Lượng</th>
+                            <th>Hành Động</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tablePhieuGiamGiaBody">
+                        <!-- Dữ liệu sẽ được thêm bởi JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--    End-->
     <!--    Modal để thực hiện hình thức thanh toán-->
     <div class="modal fade" id="exampleModal" tabindex="-1"
          aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -746,6 +783,13 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    $(document).ready(function () {
+        $('#addInvoiceButton').on('click', function () {
+            // Thay toàn bộ nội dung của trang bằng URL mới
+            window.location.href = 'http://localhost:8080/list-san-ca';
+        });
+    });
+
     //Hàm thông báo
     function showSuccessToast(message) {
         Toastify({
@@ -851,7 +895,6 @@
             const url = `http://localhost:8080/hoa-don-chi-tiet/trang-thai?trangThai=${encodeURIComponent(trangThai)}&page=${page}&size=${pageSize}&keyWord=${encodeURIComponent(keyWord)}`;
 
             const response = await fetch(url);
-
             const data = await response.json();
 
             currentPage = data.number;
@@ -862,17 +905,59 @@
 
             tableBody.innerHTML = ''; // Xóa nội dung cũ của bảng
 
+            // Lấy thông số thời gian check-in
+            const checkInParam = await fetchCheckInTimeParam();
+            const { value: maxTime, type: timeUnit } = checkInParam;
+
+            const currentTime = new Date();
+            const currentTotalMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
+
             // Hiển thị dữ liệu trong bảng
             if (Array.isArray(data.content) && data.content.length > 0) {
-                data.content.forEach((item, index) => {
-                    const thoiGianBatDau = new Date(item.thoiGianBatDauCa).toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                    const thoiGianKetThuc = new Date(item.thoiGianKetThucCa).toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
+                for (const item of data.content) {
+                    const index = data.content.indexOf(item);
+                    const thoiGianBatDau = new Date(item.thoiGianBatDauCa);
+                    const thoiGianKetThuc = new Date(item.thoiGianKetThucCa);
+
+                    const startTotalMinutes = thoiGianBatDau.getHours() * 60 + thoiGianBatDau.getMinutes();
+
+                        // Tính toán chênh lệch thời gian
+                        let timeDifference = currentTotalMinutes - startTotalMinutes;
+
+                        // Chuyển đổi tham số thành phút
+                        const maxTimeInMinutes =
+                            timeUnit === 'Phút' ? maxTime :
+                                timeUnit === 'Giờ' ? maxTime * 60 :
+                                    timeUnit === 'Ngày' ? maxTime * 24 * 60 : 0;
+                    console.log(`max time ${maxTime}`)
+                    console.log(`timeUnit ${timeUnit}`)
+                        console.log(`- Thời gian đã vượt quá: ${timeDifference} phút`);
+                    console.log(maxTimeInMinutes)
+                        // Nếu vượt quá giới hạn thời gian check-in
+                        if (item.trangThai === 'Chờ nhận sân'  && isModal && timeDifference > maxTimeInMinutes) {
+                            console.log(`Hóa đơn chi tiết ID: ${item.id} vượt quá thời gian, cập nhật trạng thái thành 'Đã hủy'.`);
+                            try {
+                                const response = await fetch(`http://localhost:8080/hoa-don-chi-tiet/huy/${item.id}`, {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({ trangThai: 'Đã hủy' }),
+                                });
+
+                                if (!response.ok) {
+                                    const errorMessage = await response.text();
+                                    console.error(`Failed to update status for ID ${item.id}: ${errorMessage}`);
+                                } else {
+                                    console.log(`Successfully updated status for ID ${item.id} to 'Đã hủy'`);
+                                }
+                            } catch (error) {
+                                console.error(`Error updating status for ID ${item.id}:`, error);
+                            }
+                            continue; // Bỏ qua các hóa đơn đã hủy
+                        }
+
+
                     const row = document.createElement('tr');
                     row.setAttribute('data-id', item.id);
                     row.innerHTML = `
@@ -882,19 +967,19 @@
                     <td>${item.soDienThoaiKhachHang || ''}</td>
                     <td>${item.emailKhachHang || ''}</td>
                     <td>${item.tenSanBong || ''}</td>
-                    <td>${thoiGianBatDau} - ${thoiGianKetThuc}</td>
+                    <td>${thoiGianBatDau.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${thoiGianKetThuc.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
                     <td>${item.ngayDenSan || ''}</td>
                     ${trangThai === "Chờ nhận sân" && isModal ? `<td>
-                        <button class="btn btn-outline-success check-in-btn" title="Check in"  onclick="checkIn('${item.id}')">
+                        <button class="btn btn-outline-success check-in-btn" title="Check in" onclick="checkIn('${item.id}')">
                             <span class="fe fe-check-circle"></span>
                         </button>
                     </td>` : ''}
                 `;
                     tableBody.appendChild(row);
-                });
+                }
             } else {
                 const emptyRow = document.createElement('tr');
-                emptyRow.innerHTML = `<td colspan="9" class="text-center"></td>`;
+                emptyRow.innerHTML = `<td colspan="9" class="text-center">Không có dữ liệu</td>`;
                 tableBody.appendChild(emptyRow);
             }
 
@@ -902,7 +987,6 @@
             if (paginationContainerId) {
                 updatePagination(currentPage, totalPages, keyWord, trangThai, tableBodyId, paginationContainerId, isModal);
             }
-
             // Ẩn cột "Hành động" nếu không phải trạng thái "Chờ nhận sân"
             if (!isModal) {
                 const actionColumn = document.querySelector(`table thead th:nth-child(9)`);
@@ -951,6 +1035,7 @@
             paginationContainer.appendChild(nextButton);
         }
     }
+
 
     document.getElementById('search').addEventListener('input', function () {
         const searchValue = this.value.trim();
@@ -1024,12 +1109,21 @@
 
     // Hàm gọi API để lấy tỷ lệ tiền cọc
     async function fetchDepositRate() {
-        const response = await fetch('http://localhost:8080/tham-so/searchMaFake/TSTIEN_COC');
-        const data = await response.json();
-        return {
-            value: data.giaTri,  // Giá trị tỷ lệ tiền cọc
-            type: data.typeGiaTri // Loại tỷ lệ (% hoặc giá trị cố định)
-        };
+        try {
+            const response = await fetch('http://localhost:8080/tham-so/searchMaFake/TSTIEN_COC');
+            const data = await response.json();
+            return {
+                value: data.giaTri,  // Giá trị tỷ lệ tiền cọc
+                type: data.typeGiaTri // Loại tỷ lệ (% hoặc giá trị cố định)
+            };
+        } catch (error) {
+            // console.error('Lỗi khi lấy tham số TSTIEN_COC:', error);
+            // Trả về giá trị mặc định nếu không tìm thấy hoặc gặp lỗi
+            return {
+                value: 0,  // Giá trị mặc định = 0
+                type: '%'  // Loại mặc định là %, để xử lý an toàn
+            };
+        }
     }
 
     // Hàm tính toán tiền cọc
@@ -1045,6 +1139,7 @@
 
         return deposit;
     }
+
 
     //Code phần phụ phí
 
@@ -1591,6 +1686,7 @@
             document.getElementById('maHoaDon').value = data.maHoaDon || 'Chưa có dữ liệu';
             document.getElementById('maHoaDonChiTiet').value = data.maHoaDonChiTiet || 'Chưa có dữ liệu';
             document.getElementById('hoVaTenKhachHang').value = data.hoVaTenKhachHang || 'Chưa có dữ liệu';
+            document.getElementById('idKhachHang').value = data.idKhachHang || 'Chưa có dữ liệu';
             document.getElementById('soDienThoaiKhachHang').value = data.soDienThoaiKhachHang || 'Chưa có dữ liệu';
             // document.getElementById('trangThai').value = data.trangThai || 'Chưa có dữ liệu';
             document.getElementById('tenSanBong').value = data.tenSanBong || 'Chưa có dữ liệu';
@@ -1605,7 +1701,7 @@
             document.getElementById('tienSan').value = data.giaSanCa?.toLocaleString() + ' VND' || 'Chưa có dữ liệu';
             // Tính toán tiền cọc từ tiền sân
             const deposit = await calculateDeposit(data.giaSanCa || 0);
-            document.getElementById('tienCoc').value = deposit.toLocaleString() + ' VND'; // Cập nhật tiền cọc
+            document.getElementById('tienCoc').value = (deposit > 0 ? deposit.toLocaleString() : '0') + ' VND';
             // Gọi API để lấy tiền phụ phí và hiển thị lên ô input
             const tienPhuPhi = await fetchTienPhuPhi(invoiceId);
             document.getElementById('tienPhuPhi').value = tienPhuPhi.toLocaleString() + ' VND'; // Hiển thị tiền phụ phí
@@ -1980,7 +2076,7 @@
                     // Dịch vụ chưa tồn tại trong giỏ hàng
                     // showErrorToast('Dịch vụ chưa được thêm vào giỏ hàng.');
                 } else {
-                    throw new Error('Lỗi kiểm tra dịch vụ.');
+                    // throw new Error('Lỗi kiểm tra dịch vụ.');
                 }
 
                 // 4. Cập nhật số lượng tồn kho (số lượng được hủy bỏ sẽ không làm thay đổi tồn kho)
@@ -2011,7 +2107,7 @@
                     khoConElement.textContent = `Kho Còn: ${soLuongConLai}`;
                 }
 
-                console.log('Cập nhật tồn kho thành công!');
+                // console.log('Cập nhật tồn kho thành công!');
                 showSuccessToast('Cập nhật số lượng và tồn kho thành công!');
             } catch (error) {
                 // console.error('Error:', error);
@@ -2089,6 +2185,61 @@
 
 
     //Hàm tính tiền giảm giá
+    document.getElementById('btnShowModal').addEventListener('click', async () => {
+        const modal = new bootstrap.Modal(document.getElementById('modalPhieuGiamGia'));
+        modal.show();
+
+        const idKhachHang = document.getElementById('idKhachHang').value; // Lấy ID khách hàng từ input
+        const tongTien = parseFloat(document.getElementById('tongTien').value); // Lấy tổng tiền từ input
+
+        try {
+            // Gọi API lấy dữ liệu phiếu giảm giá công khai
+            const responseCongKhai = await fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pgg-cong-khai?tongTien=${tongTien}`);
+            const dataCongKhai = await responseCongKhai.json();
+
+            // Gọi API lấy dữ liệu phiếu giảm giá cá nhân (nếu có idKhachHang)
+            let dataCaNhan = [];
+            if (idKhachHang) {
+                const responseCaNhan = await fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pgg-ca-nhan/${idKhachHang}?tongTien=${tongTien}`);
+                dataCaNhan = await responseCaNhan.json();
+            }
+
+            // Hiển thị dữ liệu lên bảng
+            renderPhieuGiamGiaTable([...dataCongKhai, ...dataCaNhan]);
+        } catch (error) {
+            console.error('Lỗi khi lấy dữ liệu phiếu giảm giá:', error);
+        }
+    });
+
+    // Hàm hiển thị dữ liệu phiếu giảm giá lên bảng
+    function renderPhieuGiamGiaTable(data) {
+        const tableBody = document.getElementById('tablePhieuGiamGiaBody');
+        tableBody.innerHTML = ''; // Xóa dữ liệu cũ trong bảng
+
+        data.forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${item.maPhieuGiamGia || ''}</td>
+            <td>${item.tenPhieuGiamGia || ''}</td>
+            <td>${item.doiTuongApDungPhieuGiamGia === 0 ? 'Công Khai' : 'Cá Nhân'}</td>
+            <td>${item.soLuong || 0}</td>
+            <td>
+                <button class="btn btn-outline-primary" onclick="selectPhieuGiamGia('${item.id}', '${item.tenPhieuGiamGia}')">Chọn</button>
+            </td>
+        `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Hàm chọn phiếu giảm giá và đóng modal
+    function selectPhieuGiamGia(id, ten) {
+        document.getElementById('phieuGiamGia').value = ten;
+        document.getElementById('idPhieuGiamGia').value = id;
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalPhieuGiamGia'));
+        modal.hide();
+    }
+
     async function applyBestDiscount(totalInvoice) {
         try {
             // Lấy giá trị tổng tiền từ input
@@ -2192,7 +2343,7 @@
         return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' VND';
     }
 
-    function exportPDFWithTemplate(invoiceId) {
+    async function exportPDFWithTemplate(invoiceId) {
         // Lấy dữ liệu từ form
         const hoVaTenKhachHang = document.getElementById(`hoVaTenKhachHang`).value || "Nguyễn Văn A";
         const soDienThoaiKhachHang = document.getElementById(`soDienThoaiKhachHang`).value || "0123456789";
@@ -2205,6 +2356,8 @@
         const phuPhi = document.getElementById(`tienPhuPhi`).value || "500,000";
         const tienSan = document.getElementById(`tienSan`).value || "500,000";
         const tongTienPhaiTra = document.getElementById(`tongTienPhaiTra`).value || "0";
+        const tienKhachDua = document.getElementById(`tienKhachDua`).value || "0";
+        const tienTraLai = document.getElementById(`tienTraLai`).value || "0";
 
         $.ajax({
             url: `http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${invoiceId}`,
@@ -2353,6 +2506,16 @@
                 Tổng tiền: <span style="font-size: 22px; font-weight: bold;">${tongTienPhaiTra} VND</span>
             </div>
 
+            <!-- Tiền khách đưa -->
+            <div style="padding-top: 20px; font-weight: bold; font-size: 14px; text-align: right; color: #333;">
+                Tiền khách đưa: <span style="font-size: 16px; font-weight: bold;">${tienKhachDua} VND</span>
+            </div>
+
+            <!-- Tiền trả lại -->
+            <div style="padding-top: 20px; font-weight: bold; font-size: 14px; text-align: right; color: #333;">
+                Tiền trả lại: <span style="font-size: 16px; font-weight: bold;">${tienTraLai} VND</span>
+            </div>
+
             <br>
 
             <!-- Cảm ơn -->
@@ -2368,7 +2531,14 @@
 
                 const element = document.createElement('div');
                 element.innerHTML = template;
-                html2pdf().from(element).save(`hoa_don_${invoiceId}.pdf`);
+                html2pdf()
+                    .from(element)
+                    .save(`hoa_don_${invoiceId}.pdf`)
+                    .then(() => {
+                        setTimeout(() => {
+                            location.reload();
+                        }, 0001);
+                    });
                 console.log(template); // Xem trước mẫu trước khi xuất
             },
             error: function (error) {
@@ -2415,11 +2585,13 @@
             return; // Nếu người dùng không xác nhận, dừng lại
         }
 
+        await exportPDFWithTemplate(selectedInvoiceId);
+
         // Chuẩn bị payload cho API PUT
         const payload = {
             idHoaDon: data.idHoaDon,
             idSanCa: data.idSanCa,
-            idNhanVien : idNhanVien,
+            idNhanVien: idNhanVien,
             idphieuGiamGia: idPhieuGiamGia,
             tongTien: tongTien,
             tienGiamGia: tienGiamGia,
@@ -2437,17 +2609,27 @@
 
             const updatedHoaDonChiTiet = await updateResponse.json();
             showSuccessToast('Thanh toán thành công!');
-            exportPDFWithTemplate(selectedInvoiceId);
             // Cập nhật lại giao diện, ví dụ tải lại danh sách hóa đơn
             await fetchData();  // Giả sử bạn có hàm này để làm mới dữ liệu
-            location.reload();  // Reload trang để làm mới tất cả dữ liệu
         } catch (error) {
-            console.error(error);
-            showErrorToast('Lỗi khi thanh toán hóa đơn chi tiết.');
+            // console.error(error);
+            // showErrorToast('Lỗi khi thanh toán hóa đơn chi tiết.');
         }
     }
 
 
+    //Xử lý tham số check in
+    async function fetchCheckInTimeParam() {
+        try {
+            const response = await fetch('http://localhost:8080/tham-so/searchMaFake/TS_Gio_Check_In');
+            if (!response.ok) throw new Error('Failed to fetch check-in time parameter.');
+            const data = await response.json();
+            return {value: parseInt(data.giaTri, 10), type: data.typeGiaTri};
+        } catch (error) {
+            console.error('Error fetching check-in parameter:', error);
+            return {value: 0, type: 'phút'}; // Giá trị mặc định nếu lỗi
+        }
+    }
 </script>
 </body>
 </html>

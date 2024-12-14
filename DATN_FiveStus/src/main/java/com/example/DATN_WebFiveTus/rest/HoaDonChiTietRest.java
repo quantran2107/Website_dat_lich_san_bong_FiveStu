@@ -83,7 +83,16 @@ public class HoaDonChiTietRest {
         }
     }
 
-
+    @PutMapping("huy/{id}")
+    public ResponseEntity<String> updateTrangThaiHuy(@PathVariable("id") Integer id) {
+        try {
+            hoaDonChiTietService.updateTrangThaiHuy(id);
+            return ResponseEntity.ok("Cập nhật trạng thái thành công");
+        } catch (Exception e) {
+            // Ghi log lỗi và trả về mã lỗi
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi: " + e.getMessage());
+        }
+    }
     @GetMapping("/ngay-den-san")
     public ResponseEntity<?> finByNgayDenSan(
             @RequestParam(required = false) Date ngayDenSan) {

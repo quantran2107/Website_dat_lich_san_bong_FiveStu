@@ -61,39 +61,53 @@ public class PhieuGiamGiaChiTietServiceImp implements PhieuGiamGiaChiTietService
 
     @Override
     public PhieuGiamGiaChiTietDTO save(PhieuGiamGiaChiTietDTO phieuGiamGiaChiTietDTO) {
-
         // Convert DTO to entity
         PhieuGiamGiaChiTiet phieuGiamGiaChiTiet = modelMapper.map(phieuGiamGiaChiTietDTO, PhieuGiamGiaChiTiet.class);
-
-        // Save entity to repository
+        System.out.println(phieuGiamGiaChiTiet.getKhachHang());
+        // Kiểm tra kiểu công khai
+        if (phieuGiamGiaChiTiet.getKhachHang() == null) {
+            phieuGiamGiaChiTiet.setKhachHang(null);
+        }
+        else{
+            KhachHang khachHang = khachHangRepository.getReferenceById(phieuGiamGiaChiTietDTO.getIdKhachHang());
+            phieuGiamGiaChiTiet.setKhachHang(khachHang);
+        }
+        // Lưu entity vào repository
         PhieuGiamGiaChiTiet savedEntity = phieuGiamGiaChiTietRepository.save(phieuGiamGiaChiTiet);
 
-        // Gửi email thông báo
-        sendEmail(savedEntity);
+        // Gửi email bất đồng bộ nếu có khách hàng
+        if (savedEntity.getKhachHang() != null) {
+            sendEmail(savedEntity); // Không chờ đợi kết quả
+        }
 
+        // Trả về DTO sau khi lưu
         return modelMapper.map(savedEntity, PhieuGiamGiaChiTietDTO.class);
-
     }
 
     @Async
     public void sendEmail(PhieuGiamGiaChiTiet savedEntity) {
-        KhachHang khachHang = khachHangRepository.getReferenceById(savedEntity.getKhachHang().getId());
-        PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.getReferenceById(savedEntity.getPhieuGiamGia().getId());
-
-        // Gửi email thông báo
-        String emailKhachHang = khachHang.getEmail();
-
-        if (emailKhachHang == null || emailKhachHang.isEmpty()) {
-            throw new IllegalArgumentException("Email khách hàng không được trống");
-        }
-
         try {
+            // Kiểm tra khách hàng
+            KhachHang khachHang = savedEntity.getKhachHang();
+            if (khachHang == null ) {
+                return; // Không gửi email nếu không có khách hàng
+            }
+
+            KhachHang khachHangEntity = khachHangRepository.getReferenceById(khachHang.getId());
+            PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.getReferenceById(savedEntity.getPhieuGiamGia().getId());
+
+            String emailKhachHang = khachHangEntity.getEmail();
+            if (emailKhachHang == null || emailKhachHang.isEmpty()) {
+                throw new IllegalArgumentException("Email khách hàng không được trống");
+            }
+
+            // Tạo email
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
             Context context = new Context();
             context.setVariable("ten", phieuGiamGia.getTenPhieuGiamGia());
-            String hinhThuc = phieuGiamGia.getHinhThucGiamGia() == true ? "%" : "VND";
+            String hinhThuc = phieuGiamGia.getHinhThucGiamGia() ? "%" : "VND";
             context.setVariable("mucGiam", phieuGiamGia.getMucGiam() + " " + hinhThuc);
             context.setVariable("ketThuc", phieuGiamGia.getNgayKetThuc());
             context.setVariable("batDau", phieuGiamGia.getNgayBatDau());
@@ -101,18 +115,18 @@ public class PhieuGiamGiaChiTietServiceImp implements PhieuGiamGiaChiTietService
 
             String html = springTemplateEngine.process("pgg", context);
 
-            mimeMessage.setContent(html, "text/html; charset=utf-8");
-
             helper.setTo(emailKhachHang);
             helper.setSubject("Thông báo bạn có một phiếu giảm giá mới!");
             helper.setText(html, true);
 
-            javaMailSender.send(mimeMessage); // Gửi email
-
+            // Gửi email
+            javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            e.printStackTrace(); // Xử lý ngoại lệ MessagingException
+            // Ghi log lỗi gửi email
+            e.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace(); // Xử lý ngoại lệ khác
+            // Ghi log các lỗi khác
+            e.printStackTrace();
         }
     }
 
@@ -136,6 +150,30 @@ public class PhieuGiamGiaChiTietServiceImp implements PhieuGiamGiaChiTietService
     public List<PhieuGiamGiaChiTietDTO> findByIdPGG(Integer idPhieuGiamGia) {
         List<PhieuGiamGiaChiTiet> phieuGiamGiaCTList = phieuGiamGiaChiTietRepository.findAllByIdPhieuGiamGia(idPhieuGiamGia);
         return phieuGiamGiaCTList.stream()
+                .map(phieuGiamGiaChiTiet -> modelMapper.map(phieuGiamGiaChiTiet, PhieuGiamGiaChiTietDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PhieuGiamGiaChiTietDTO> findByIdKhachHang(Integer idKhachHang) {
+        List<PhieuGiamGiaChiTiet> phieuGiamGiaCTList = phieuGiamGiaChiTietRepository.findAllByIdKhachHang(idKhachHang);
+        return phieuGiamGiaCTList.stream()
+                .map(phieuGiamGiaChiTiet -> modelMapper.map(phieuGiamGiaChiTiet, PhieuGiamGiaChiTietDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PhieuGiamGiaChiTietDTO> getAllPGGCTCongKhai(Double tongTien) {
+        List<PhieuGiamGiaChiTiet> phieuGiamGiaChiTietList = phieuGiamGiaChiTietRepository.getAllPGGCongKhai(tongTien);
+        return phieuGiamGiaChiTietList.stream()
+                .map(phieuGiamGiaChiTiet -> modelMapper.map(phieuGiamGiaChiTiet, PhieuGiamGiaChiTietDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PhieuGiamGiaChiTietDTO> getAllPGGCTCaNhan(Integer idKhachHang,Double tongTien) {
+        List<PhieuGiamGiaChiTiet> phieuGiamGiaChiTietList = phieuGiamGiaChiTietRepository.getAllPGGCaNhan(idKhachHang,tongTien);
+        return phieuGiamGiaChiTietList.stream()
                 .map(phieuGiamGiaChiTiet -> modelMapper.map(phieuGiamGiaChiTiet, PhieuGiamGiaChiTietDTO.class))
                 .collect(Collectors.toList());
     }
@@ -170,7 +208,7 @@ public class PhieuGiamGiaChiTietServiceImp implements PhieuGiamGiaChiTietService
             throw new IllegalArgumentException("Email khách hàng không được trống");
         }
 
-        // Gửi email nếu trạng thái đã thay đổi từ false thành true
+        // Gửi email bất đồng bộ
         if (!currentDeletedAt && deletedAt) {
             sendEmail1(emailKhachHang, "Thông báo bạn có một phiếu giảm giá hết hạn!", "pgg-het-han", context);
         } else {
@@ -179,7 +217,8 @@ public class PhieuGiamGiaChiTietServiceImp implements PhieuGiamGiaChiTietService
 
     }
 
-    private void sendEmail1(String to, String subject, String templateName, Context context) {
+    @Async
+    public void sendEmail1(String to, String subject, String templateName, Context context) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");

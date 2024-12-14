@@ -518,11 +518,9 @@
                 // Làm sạch form
                 $('#editParameterForm')[0].reset();
 
-                console.log("FormData ID: ", formData.id);
 
                 const updatedRow = $('#parameterTable tbody tr[data-id="' + formData.id + '"]');
 
-                console.log("Số updateRow: " + updatedRow.html());
 
                 if (updatedRow.length > 0) {
                     updatedRow.find('td:nth-child(1)').text(formData.ma);
@@ -534,7 +532,7 @@
                     const statusCell = updatedRow.find('td:nth-child(6)');
                     statusCell.text(formData.trangThai ? 'Kích hoạt' : 'Vô hiệu hóa');
                 } else {
-                    console.log("Hàng không tồn tại.");
+                    // console.log("Hàng không tồn tại.");
                 }
 
 
