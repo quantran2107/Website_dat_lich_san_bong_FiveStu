@@ -89,7 +89,7 @@ public class PhieuGiamGiaRest {
 
     @PutMapping("/{id}")
     public ResponseEntity<PhieuGiamGiaDTO> update(@PathVariable("id") Integer id, @RequestBody PhieuGiamGiaDTO phieuGiamGiaDTO) {
-        PhieuGiamGiaDTO phieuGiamGiaDTODetail = phieuGiamGiaService.save(phieuGiamGiaDTO);
+        PhieuGiamGiaDTO phieuGiamGiaDTODetail = phieuGiamGiaService.update(id,phieuGiamGiaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(phieuGiamGiaDTODetail);
     }
 
