@@ -299,6 +299,7 @@ public class KhachHangImp implements KhachHangService {
         khachHang.setSoDienThoai(khachHangDTO.getSoDienThoai());
         khachHang.setTrangThai("active");
         khachHang.setGioiTinh(true);
+        khachHang.setEmail("Chưa có");
 
         KhachHang khachHangSave = khachHangRepository.save(khachHang);
 
