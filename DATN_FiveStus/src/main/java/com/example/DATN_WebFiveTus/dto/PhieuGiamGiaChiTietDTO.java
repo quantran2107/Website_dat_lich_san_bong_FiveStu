@@ -27,6 +27,8 @@ public class PhieuGiamGiaChiTietDTO {
 
     private Boolean trangThai;
 
+    private Boolean doiTuongApDungPhieuGiamGia;
+
     private String emailKhachHang;
 
     private String soDienThoaiKhachHang;

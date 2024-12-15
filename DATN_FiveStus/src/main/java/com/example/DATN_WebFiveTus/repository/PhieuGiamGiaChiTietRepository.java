@@ -31,10 +31,17 @@ public interface PhieuGiamGiaChiTietRepository extends JpaRepository<PhieuGiamGi
     @Query("SELECT pggct FROM PhieuGiamGiaChiTiet pggct " +
             "JOIN FETCH pggct.khachHang " +
             "JOIN FETCH pggct.phieuGiamGia " +
-            "WHERE pggct.khachHang.id = :idKhachHang " )
+            "WHERE pggct.khachHang.id = :idKhachHang and pggct.deletedAt = false" )
     List<PhieuGiamGiaChiTiet> findAllByIdKhachHang(@Param("idKhachHang") Integer idKhachHang);
 
-    @Query("SELECT pggct FROM PhieuGiamGiaChiTiet pggct WHERE pggct.id = :id AND pggct.khachHang.id = :idKhachHang")
+    @Query("SELECT pggct FROM PhieuGiamGiaChiTiet pggct WHERE pggct.phieuGiamGia.id = :id AND pggct.khachHang.id = :idKhachHang")
     Optional<PhieuGiamGiaChiTiet> findByIdAndKhachHangId(@Param("id") Integer id, @Param("idKhachHang") Integer idKhachHang);
 
+    @Query("SELECT pggct FROM PhieuGiamGiaChiTiet pggct " +
+            "JOIN FETCH  pggct.phieuGiamGia pgg where pggct.deletedAt=false and pgg.deletedAt = false and pgg.doiTuongApDung = false and pgg.dieuKienSuDung <= :tongTien")
+    List<PhieuGiamGiaChiTiet> getAllPGGCongKhai( @Param("tongTien") Double tongTien);
+
+    @Query("SELECT pggct FROM PhieuGiamGiaChiTiet pggct JOIN FETCH  pggct.khachHang kh " +
+            "JOIN FETCH  pggct.phieuGiamGia pgg where pggct.deletedAt=false and pgg.deletedAt = false and pgg.doiTuongApDung = true and kh.id = :idKhachHang and pgg.dieuKienSuDung <= :tongTien")
+    List<PhieuGiamGiaChiTiet> getAllPGGCaNhan(@Param("idKhachHang") Integer idKhachHang, @Param("tongTien") Double tongTien);
 }

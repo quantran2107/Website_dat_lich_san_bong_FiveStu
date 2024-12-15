@@ -37,6 +37,7 @@ public interface HoaDonChiTietService {
     void updateTrangThai(Integer id);
 
     void updateTrangThaiThanhToan(Integer id);
+    void updateTrangThaiHuy(Integer id);
 
     List<HoaDonChiTietDTO> findByNgayDenSan(Date ngayDenSan);
 

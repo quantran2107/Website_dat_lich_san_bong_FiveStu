@@ -230,6 +230,11 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         hoaDonChiTietRepository.updateTrangThaiThanhToan(id);
     }
 
+    @Override
+    public void updateTrangThaiHuy(Integer id) {
+        hoaDonChiTietRepository.updateTrangThaiHuy(id);
+    }
+
     public List<HoaDonChiTietDTO> findByNgayDenSan(Date ngayDenSan) {
         // Lấy danh sách HoaDonChiTiet từ repository
         List<HoaDonChiTiet> list = hoaDonChiTietRepository.findByNgayDenSan(ngayDenSan);
@@ -288,6 +293,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
             nhanVien = nhanVienReposity.findById(hoaDon.getNhanVien().getId())
                     .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại với ID: " + hoaDonChiTietDTO.getIdNhanVien()));
             hoaDonChiTiet.setTrangThai("Chờ nhận sân");
+            hoaDonChiTiet.setTongTienThucTe(hoaDonChiTietDTO.getTongTien());
         } else {
             hoaDonChiTiet.setTrangThai("Chờ đặt cọc");
         }

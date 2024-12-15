@@ -188,7 +188,7 @@ public class SanCaRest {
 
 
 
-    @GetMapping("/danh-sach-san-ca/{idSanBong}/{idNgayTrongTuan}")
+    @GetMapping("/danh-sach-san-ca-2/{idSanBong}/{idNgayTrongTuan}")
     public ResponseEntity<List> danhSachSanCa(@PathVariable("idSanBong") Integer idSanBong,
                                               @PathVariable("idNgayTrongTuan") Integer idNgayTrongTuan){
         List<SanCaDTO> listSanCa = sanCaService.findSanCaBySan(idSanBong,idNgayTrongTuan);
