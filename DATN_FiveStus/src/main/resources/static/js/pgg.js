@@ -897,7 +897,7 @@ function showAddForm() {
         } else if (!mucGiam) {
             document.getElementById('mucGiamError').innerText = 'Mức giảm không được để trống';
             isValid = false;
-        } else if (hinhThucGiamGiaPercent.checked && parseFloat(mucGiam) >= 100) {
+        } else if (hinhThucGiamGiaPercent.checked && parseFloat(mucGiam) > 100) {
             document.getElementById('mucGiamError').innerText = "Mức giảm phải nhỏ hơn 100%";
             isValid = false;
         }

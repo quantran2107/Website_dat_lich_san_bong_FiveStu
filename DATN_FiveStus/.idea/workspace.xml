@@ -77,10 +77,11 @@
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Spring Boot.DatnWebFiveTusApplication (1).executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.DatnWebFiveTusApplication.executor&quot;: &quot;Run&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Merging nhanhQuan&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;nhanhQuan&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/puddi/Desktop/Clontest\n        2/Website_dat_lich_san_bong_FiveStu/DATN_FiveStus&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -101,7 +102,7 @@
       <recent name="C:\Users\puddi\Desktop\Clontest 2\Website_dat_lich_san_bong_FiveStu\DATN_FiveStus\src\main\resources\templates" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.DatnWebFiveTusApplication (1)">
+  <component name="RunManager" selected="Spring Boot.DatnWebFiveTusApplication">
     <configuration name="GenerateInvoicePDFWithSaveDialog" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.example.DATN_WebFiveTus.config.PDF.GenerateInvoicePDFWithSaveDialog" />
       <module name="DATN_WebFiveTus" />
@@ -160,8 +161,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.DatnWebFiveTusApplication (1)" />
         <item itemvalue="Spring Boot.DatnWebFiveTusApplication" />
+        <item itemvalue="Spring Boot.DatnWebFiveTusApplication (1)" />
         <item itemvalue="Application.GenerateInvoicePDFWithTimesFont" />
         <item itemvalue="Application.GenerateInvoicePDFWithSaveDialog" />
         <item itemvalue="HTTP Request.generated-requests | #17" />

@@ -121,7 +121,8 @@
                 </span>
                 </td>
                 <td class="ngayTao">${hoaDon.ngayTao}</td>
-                <td class="tongTien">${hoaDon.tongTien}</td>
+                <td class="tongTien">${hoaDon.tongTien.toLocaleString()} VNĐ</td>
+                <td class="tienCoc">${hoaDon.tienCoc.toLocaleString()} VNĐ</td>
                 <td class="trangThai">
                     <span style="width: 90%"
                           class="${hoaDon.trangThai === 'Đã hủy' ? 'custom-3' : hoaDon.trangThai === 'Chờ thanh toán' ? 'custom-5' : 'custom-4'}">
@@ -274,14 +275,12 @@
         <label for="tienCoc" name="tienCoc">Tiền cọc</label>
         <div class="input-group">
         <input type="text" class="form-control" id="tienCoc" readonly>
-        <span class="input-group-text">$</span>
         </div>
         </div>
         <div class="form-group col-md-3">
         <label for="tongTien" name="tongTien">Tổng tiền</label>
         <div class="input-group">
         <input type="text" class="form-control" id="tongTien" readonly>
-        <span class="input-group-text">$</span>
         </div>
         </div>
         <div class="form-group col-md-3">
@@ -363,8 +362,8 @@
         document.getElementById('hoVaTenKhachHang').value = data.hoVaTenKhachHang;
         document.getElementById('soDienThoaiKhachHang').value = data.soDienThoaiKhachHang;
         document.getElementById('maNhanVien').value = data.maNhanVien;
-        document.getElementById('tongTien').value = data.tongTien;
-        document.getElementById('tienCoc').value = data.tienCoc;
+        document.getElementById('tongTien').value = data.tongTien.toLocaleString() + " VNĐ";
+        document.getElementById('tienCoc').value = data.tienCoc.toLocaleString() + " VNĐ";
         document.getElementById('loai').value = data.loai ? "Online" : "Tại quầy";
         document.getElementById('trangThai').value = data.trangThai;
         });
@@ -391,7 +390,7 @@
                                 <td>${chiTiet.maHoaDonChiTiet}</td>
                                 <td>${chiTiet.tenSanBong}</td>
                                 <td>${chiTiet.tenCa}</td>
-                                <td>${chiTiet.tongTien}</td>
+                                <td>${chiTiet.tongTien.toLocaleString()} VNĐ</td>
                                 <td>
                                     <span style="width: 90%"
                                         class="${chiTiet.trangThai === 'Đã hủy' ? 'custom-3' : chiTiet.trangThai === 'Chờ nhận sân' ? 'custom-5' : 'custom-4'}">
@@ -706,6 +705,7 @@
                                                                 <th>Loại</th>
                                                                 <th>Ngày tạo</th>
                                                                 <th>Tổng tiền</th>
+                                                                <th>Tổng cọc</th>
                                                                 <th>Trạng thái</th>
                                                                 <th>Hành động</th>
                                                             </tr>
