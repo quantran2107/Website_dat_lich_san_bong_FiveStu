@@ -964,37 +964,44 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let customers = []; // Biến lưu danh sách khách hàng từ API
 
-    // Gọi API khi trang được tải
-    fetchCustomers();
-
 // Lấy danh sách khách hàng từ API khi trang được tải
+    let currentPage = 0;
+    const pageSize = 10;
+    let totalPages = 0;
+    let allCustomers = []; // Lưu toàn bộ danh sách khách hàng
+
+// Lấy toàn bộ danh sách khách hàng từ API và tính toán phân trang
     async function fetchCustomers() {
         try {
-            const response = await fetch('http://localhost:8080/khach-hang/search-active?page=0&pageSize=5');
+            const response = await fetch('http://localhost:8080/khach-hang/search-active?page=0&pageSize=1000'); // Lấy toàn bộ dữ liệu
             const data = await response.json();
-            customers = data.content.map(customer => ({
+
+            // Lưu toàn bộ khách hàng
+            allCustomers = data.content.map(customer => ({
                 id: customer.id,
                 name: customer.hoVaTen,
                 phone: customer.soDienThoai
             }));
 
-            // Hiển thị danh sách khách hàng ban đầu
-            displayCustomers(customers);
+            // Tính tổng số trang dựa trên kích thước trang
+            totalPages = Math.ceil(allCustomers.length / pageSize);
+
+            // Hiển thị khách hàng ở trang đầu tiên
+            displayCustomers(getCustomersByPage(currentPage));
+
+            // Hiển thị phân trang
+            displayPagination();
         } catch (error) {
             console.error('Lỗi khi gọi API:', error);
         }
     }
 
-    // Tìm kiếm khách hàng
-    const searchInput = document.getElementById('searchCustomer');
-    searchInput.addEventListener('input', function () {
-        console.log("Đang tìm kiếm khách hàng...");
-        const query = this.value.toLowerCase();
-        const filteredCustomers = customers.filter(customer =>
-            customer.name.toLowerCase().includes(query) || customer.phone.includes(query)
-        );
-        displayCustomers(filteredCustomers);
-    });
+// Lấy danh sách khách hàng theo trang
+    function getCustomersByPage(page) {
+        const startIndex = page * pageSize;
+        const endIndex = startIndex + pageSize;
+        return allCustomers.slice(startIndex, endIndex);
+    }
 
 // Hiển thị danh sách khách hàng
     function displayCustomers(customerList) {
@@ -1004,7 +1011,7 @@ document.addEventListener("DOMContentLoaded", function () {
         customerList.forEach((customer, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
-            <td>${index + 1}</td>
+            <td>${index + 1 + currentPage * pageSize}</td>
             <td>${customer.name}</td>
             <td>${customer.phone}</td>
             <td>
@@ -1016,6 +1023,46 @@ document.addEventListener("DOMContentLoaded", function () {
             tbody.appendChild(row);
         });
     }
+
+// Hiển thị điều hướng phân trang
+    function displayPagination() {
+        const paginationDiv = document.getElementById('pagination');
+        paginationDiv.innerHTML = ''; // Xóa nội dung cũ
+
+        for (let i = 0; i < totalPages; i++) {
+            const button = document.createElement('button');
+            button.className = 'btn btn-sm btn-light mx-1';
+            button.textContent = i + 1;
+            button.disabled = i === currentPage; // Vô hiệu hóa nút trang hiện tại
+
+            button.addEventListener('click', () => {
+                currentPage = i;
+                displayCustomers(getCustomersByPage(currentPage)); // Hiển thị khách hàng theo trang
+                displayPagination(); // Cập nhật lại trạng thái các nút phân trang
+            });
+
+            paginationDiv.appendChild(button);
+        }
+    }
+
+// Tìm kiếm khách hàng
+    const searchInput = document.getElementById('searchCustomer');
+    searchInput.addEventListener('input', function () {
+        const query = this.value.toLowerCase();
+        const filteredCustomers = allCustomers.filter(customer =>
+            customer.name.toLowerCase().includes(query) || customer.phone.includes(query)
+        );
+
+        // Tính lại tổng số trang và hiển thị
+        totalPages = Math.ceil(filteredCustomers.length / pageSize);
+        currentPage = 0; // Quay về trang đầu khi tìm kiếm
+
+        displayCustomers(getCustomersByPage(currentPage));
+        displayPagination();
+    });
+
+// Gọi lần đầu để hiển thị khách hàng trang đầu
+    fetchCustomers();
 
     $('#customerTable').off('click').on('click', function (event) {
         if (event.target.tagName === 'BUTTON') {
@@ -1051,6 +1098,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.querySelector('#datLich').addEventListener('click', async function () {
     console.log("Button Đặt Lịch đã được nhấn."); // Để xác nhận rằng hàm đã được gọi
+
+    // Hiển thị hộp thoại xác nhận
+    const result = await Swal.fire({
+        title: 'Xác nhận thanh toán',
+        text: 'Bạn có chắc chắn muốn thanh toán không?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6', // Đổi màu confirmButton
+        cancelButtonColor: '#d33', // Đổi màu cancelButton
+        confirmButtonText: 'Thanh toán', // Đổi tên nút xác nhận
+        cancelButtonText: 'Hủy',
+    });
+
+    if (!result.isConfirmed) {
+        console.log('Người dùng đã hủy thanh toán.');
+        return; // Dừng thực hiện nếu người dùng chọn "Hủy"
+    }
+
+    console.log('Người dùng xác nhận thanh toán.');
+
     // Lấy danh sách các dòng sân ca từ bảng
     const rows = document.querySelectorAll("#sanCaTable tbody tr");
     let hasBookedSlot = false;
@@ -1092,11 +1159,10 @@ document.querySelector('#datLich').addEventListener('click', async function () {
 
         // Gọi API để tìm khách hàng bằng số điện thoại
         const responseKhachHang = await fetch('http://localhost:8080/khach-hang/tim-kiem-kh?soDienThoai=' + soDienThoai);
-        const khachHangData = await responseKhachHang.json();
 
-        // Nếu không tìm thấy khách hàng, gọi API để thêm mới
+        // Nếu mã trạng thái là 400, thêm khách hàng mới
         let idKhachHang;
-        if (!khachHangData) {
+        if (responseKhachHang.status === 400) {
             const responseSaveKhachHang = await fetch('http://localhost:8080/khach-hang/save2', {
                 method: 'POST',
                 headers: {
@@ -1109,8 +1175,11 @@ document.querySelector('#datLich').addEventListener('click', async function () {
             });
             const savedKhachHang = await responseSaveKhachHang.json();
             idKhachHang = savedKhachHang.id;
-        } else {
+        } else if (responseKhachHang.status === 200) {
+            const khachHangData = await responseKhachHang.json();
             idKhachHang = khachHangData.id;
+        } else {
+            throw new Error('Có lỗi xảy ra khi tìm kiếm khách hàng');
         }
 
         // Lấy giá trị từ các trường input
