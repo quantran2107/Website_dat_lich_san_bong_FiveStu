@@ -36,7 +36,7 @@ public interface HoaDonRepository extends JpaRepository<HoaDon, Integer> {
             "AND (:trangThai IS NULL OR hd.trangThai LIKE :trangThai) " +
             "AND (:ngayTaoMin IS NULL OR hd.ngayTao >=  :ngayTaoMin) " +
             "AND (:ngayTaoMax IS NULL OR hd.ngayTao <=  :ngayTaoMax)" +
-            "ORDER BY hd.updatedAt ")
+            "ORDER BY hd.updatedAt DESC")
     List<HoaDon> searchAndFilter(
             @Param("loai") Boolean loai,
             @Param("trangThai") String trangThai,

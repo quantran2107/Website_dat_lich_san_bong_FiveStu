@@ -1127,7 +1127,8 @@ document.querySelector('#datLich').addEventListener('click', async function () {
             idKhachHang: idKhachHang,
             tongTienSan: tongTienSan,
             tienCoc: tongTienCoc,
-            idNhanVien: idNhanVien // Lấy idNhanVien từ API
+            idNhanVien: idNhanVien, // Lấy idNhanVien từ API
+            tongTien: tongTienSan
         };
 
         // Gọi API để tạo hóa đơn

@@ -293,6 +293,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
             nhanVien = nhanVienReposity.findById(hoaDon.getNhanVien().getId())
                     .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại với ID: " + hoaDonChiTietDTO.getIdNhanVien()));
             hoaDonChiTiet.setTrangThai("Chờ nhận sân");
+            hoaDonChiTiet.setTongTienThucTe(hoaDonChiTietDTO.getTongTien());
         } else {
             hoaDonChiTiet.setTrangThai("Chờ đặt cọc");
         }

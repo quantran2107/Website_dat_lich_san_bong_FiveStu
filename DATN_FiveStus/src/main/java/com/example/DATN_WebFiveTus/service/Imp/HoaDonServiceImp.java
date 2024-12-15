@@ -108,6 +108,7 @@ public class HoaDonServiceImp implements HoaDonService {
         Date now = Date.from(Instant.now());
         hoaDon.setKhachHang(khachHang);
         hoaDon.setTongTienSan(hoaDonDTO.getTongTienSan());
+        hoaDon.setTongTien(hoaDonDTO.getTongTien());
         hoaDon.setTienCoc(hoaDonDTO.getTienCoc());
         hoaDon.setNhanVien(nhanVien); // Nếu nhân viên null thì set null
         hoaDon.setNgayTao(now);

@@ -495,6 +495,54 @@
             });
             return;
         }
+        if (formData.typeGiaTri === 'VND') {
+            if (isNaN(formData.giaTri)) {
+                Swal.fire('Lỗi', 'Giá trị VND phải là số hợp lệ.', 'error');
+                return;
+            }
+            if (formData.giaTri <= 0) {
+                Swal.fire('Lỗi', 'Giá trị VND phải lớn hơn 0.', 'error');
+                return;
+            }
+            if (formData.giaTri > 999999999) {
+                Swal.fire('Lỗi', 'Giá trị VND phải nhỏ hơn hoặc bằng 999,999,999.', 'error');
+                return;
+            }
+        }
+
+        if (formData.typeGiaTri === '%') {
+            if (!Number.isInteger(Number(formData.giaTri))) {
+                Swal.fire('Lỗi', 'Giá trị phần trăm phải là số nguyên.', 'error');
+                return;
+            }
+            if (formData.giaTri < 0 || formData.giaTri > 100) {
+                Swal.fire('Lỗi', 'Giá trị phần trăm phải từ 0 đến 100.', 'error');
+                return;
+            }
+        }
+
+        if (formData.typeGiaTri === 'Phút') {
+            if (!Number.isInteger(Number(formData.giaTri))) {
+                Swal.fire('Lỗi', 'Giá trị phải là số nguyên.', 'error');
+                return;
+            }
+            if (formData.giaTri < 0 || formData.giaTri > 150) {
+                Swal.fire('Lỗi', 'Giá trị Phút phải từ 0 đến 150.', 'error');
+                return;
+            }
+        }
+
+        if (formData.typeGiaTri === 'Giờ') {
+            if (!Number.isInteger(Number(formData.giaTri))) {
+                Swal.fire('Lỗi', 'Giá trị phải là số nguyên.', 'error');
+                return;
+            }
+            if (formData.giaTri < 0 || formData.giaTri > 150) {
+                Swal.fire('Lỗi', 'Giá trị Giờ phải từ 0 đến 150.', 'error');
+                return;
+            }
+        }
+
 
         // Gửi yêu cầu cập nhật
         $.ajax({
