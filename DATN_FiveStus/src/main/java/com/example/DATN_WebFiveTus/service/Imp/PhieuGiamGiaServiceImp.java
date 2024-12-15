@@ -108,10 +108,13 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
 
     @Override
     public PhieuGiamGiaDTO update(Integer id, PhieuGiamGiaDTO phieuGiamGiaDTO) {
-        PhieuGiamGia existingEntity = phieuGiamGiaRepository.findById(id)
+        PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu giảm giá với id " + id));
         // Save updated entity
-        PhieuGiamGia updatedEntity = phieuGiamGiaRepository.save(existingEntity);
+        phieuGiamGia.setSoLuong(phieuGiamGiaDTO.getSoLuong());
+        phieuGiamGia.setTrangThai(phieuGiamGiaDTO.getTrangThai());
+        phieuGiamGia.setDeletedAt(phieuGiamGiaDTO.getDeletedAt());
+        PhieuGiamGia updatedEntity = phieuGiamGiaRepository.save(phieuGiamGia);
 
         // Convert updated entity back to DTO
         return modelMapper.map(updatedEntity, PhieuGiamGiaDTO.class);

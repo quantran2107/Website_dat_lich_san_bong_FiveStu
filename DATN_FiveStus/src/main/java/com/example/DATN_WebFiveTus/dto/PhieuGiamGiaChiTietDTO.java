@@ -33,11 +33,19 @@ public class PhieuGiamGiaChiTietDTO {
 
     private String soDienThoaiKhachHang;
 
-    private String tenPhieuGiamGiaPhieuGiamGia;
+    private String tenPhieuGiamGia;
 
     private String mucGiamPhieuGiamGia;
 
+    private String maPhieuGiamGia;
+
+    private String trangThaiPhieuGiamGia;
+
     private String hinhThucGiamGiaPhieuGiamGia;
+
+    private Integer soLuongPhieuGiamGia;
+
+    private Float giaTriToiDaPhieuGiamGia;
 
     private Date ngayBatDauPhieuGiamGia;
 

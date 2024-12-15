@@ -50,9 +50,9 @@ $(document).ready(function () {
                     <td style="border: 1px solid #ccc; padding: 8px;">${item["tenSanBong"]}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${ca}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${ngayDat}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongTien"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tienCoc"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongGiamGia"]}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${(item["tongTien"] ? item["tongTien"].toLocaleString() : '0') + ' VND'}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;"> ${(item["tienCoc"] ? item["tienCoc"].toLocaleString() : '0') + ' VND'}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${(item["tongGiamGia"] ? item["tongGiamGia"].toLocaleString() : '0') + ' VND'}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${item["maHoaDon"]}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">Đã hủy</td>
                 </tr>
@@ -66,9 +66,9 @@ $(document).ready(function () {
                     <td style="border: 1px solid #ccc; padding: 8px;">${item["tenSanBong"]}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${ca}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${ngayDat}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongTien"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tienCoc"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongGiamGia"]}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${(item["tongTien"] ? item["tongTien"].toLocaleString() : '0') + ' VND'}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;"> ${(item["tienCoc"] ? item["tienCoc"].toLocaleString() : '0') + ' VND'}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${(item["tongGiamGia"] ? item["tongGiamGia"].toLocaleString() : '0') + ' VND'}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${item["maHoaDon"]}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${item["trangThaiHoaDon"]}</td>
                    <td style="border: 1px solid #ccc; padding: 8px;">
@@ -92,9 +92,9 @@ $(document).ready(function () {
                     <td style="border: 1px solid #ccc; padding: 8px;">${item["tenSanBong"]}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${ca}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${ngayDat}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongTien"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tienCoc"]}</td>
-                    <td style="border: 1px solid #ccc; padding: 8px;">${item["tongGiamGia"]}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${(item["tongTien"] ? item["tongTien"].toLocaleString() : '0') + ' VND'}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;"> ${(item["tienCoc"] ? item["tienCoc"].toLocaleString() : '0') + ' VND'}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${(item["tongGiamGia"] ? item["tongGiamGia"].toLocaleString() : '0') + ' VND'}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${item["maHoaDon"]}</td>
                     <td style="border: 1px solid #ccc; padding: 8px;">${item["trangThaiHoaDon"]}</td>
                 </tr>
