@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" rel="stylesheet">
+<head th:include="fragment/head :: head">
+</head>
+<style>
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Ẩn nút tăng giảm trên Firefox */
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.8);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .loading-overlay .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        color: green; /* Màu xanh lá cây */
+    }
+
+    .loading-hidden {
+        display: none;
+    }
+
+    .loading-text {
+        margin-top: 10px;
+        font-size: 1.5rem;
+        color: green; /* Màu xanh lá cây */
+    }
+    /* Thêm khoảng cách giữa các nút và dropdown */
+    .pagination .page-item {
+        margin-right: 4px; /* Tạo khoảng cách 4px giữa các phần tử */
+    }
+
+    .pagination .page-item:last-child {
+        margin-right: 0; /* Đảm bảo không có khoảng cách bên phải phần tử cuối cùng */
+    }
+
+    /* Căn chỉnh các phần tử cho đẹp mắt */
+    .page-item select.custom-select {
+        width: auto; /* Đảm bảo dropdown có kích thước phù hợp */
+        margin-right: 4px; /* Khoảng cách giữa dropdown và nút "Next" */
+    }
+
+    .page-item a.btn {
+        margin-left: -3px; /* Khoảng cách giữa nút "Lùi" và dropdown */
+    }
+
+
+
+</style>
+<body class="vertical light">
+<div class="wrapper">
+    <div th:include="fragment/navbar :: navbar"></div>
+    <div th:include="fragment/sidebar :: sidebar"></div>
+    <div class="loading-overlay loading-hidden" id="loadingOverlay">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <div class="loading-text">Đang gửi mật khẩu về email...</div>
+    </div>
+
+    <main class="main-content" role="main">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <h2 class="mb-2 page-title">Quản lý khách hàng</h2>
+                    <p class="card-text"></p>
+                    <div class="row my-4">
+                        <div class="col-md-12">
+
+                            <!--                            Ly lon-->
+                            <div class="card shadow">
+                                <div class="card-body">
+                                    <div class="toolbar row mb-3 mt-3">
+                                        <div class="col-md-12">
+                                            <form class="form-inline" id="filterForm"
+                                                  style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+
+                                                <!-- Search -->
+                                                <div class="form-group" style="flex-grow: 1; display: flex; align-items: center;">
+                                                    <label class="mr-2" for="search" style="white-space: nowrap;">Tìm kiếm</label>
+                                                    <input class="form-control" id="search"
+                                                           oninput="debounceSearch(this.value)"
+                                                           placeholder="Tìm kiếm theo tên, email hoặc SDT"
+                                                           style="flex-grow: 1;" type="text">
+                                                </div>
+
+                                                <!-- Dropdown - Status -->
+                                                <div class="dropdown">
+                                                    <button class="btn btn-outline-success dropdown-toggle" type="button"
+                                                            id="dropdownFilterStatus" data-bs-toggle="dropdown" aria-expanded="false" style="width: 150px;">
+                                                        Trạng thái
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownFilterStatus">
+                                                        <li><a class="dropdown-item" href="#" data-value="all">Trạng thái</a></li>
+                                                        <li><a class="dropdown-item" href="#" data-value="active">Hoạt động</a></li>
+                                                        <li><a class="dropdown-item" href="#" data-value="inactive">Không hoạt động</a></li>
+                                                    </ul>
+                                                </div>
+
+                                                <div class="dropdown">
+                                                    <button class="btn btn-outline-success dropdown-toggle" type="button"
+                                                            id="dropdownFilterGender" data-bs-toggle="dropdown" aria-expanded="false" style="width: 150px;">
+                                                        Giới tính
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownFilterGender">
+                                                        <li><a class="dropdown-item" href="#" data-value="all">Giới tính</a></li>
+                                                        <li><a class="dropdown-item" href="#" data-value="true">Nam</a></li>
+                                                        <li><a class="dropdown-item" href="#" data-value="false">Nữ</a></li>
+                                                    </ul>
+                                                </div>
+
+
+
+                                                <!-- Reset Button -->
+                                                <button class="btn btn-primary" onclick="resetFilters()" title="Reset" type="button">
+                                                    <span class="fe fe-refresh-ccw"></span>
+                                                </button>
+
+                                                <!-- Add Button -->
+                                                <button type="button" class="btn btn-success"
+                                                        data-bs-toggle="modal" data-bs-target="#addModal"
+                                                        data-whatever="@mdo" title="Thêm">
+                                                    <span class="fe fe-plus"></span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="card shadow mt-5">
+                                <div class="card-body" id="tableCardBody">
+                                    <table class="table datatables" id="dataTable-1">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Họ và tên</th>
+                                            <th>Email</th>
+                                            <th>SDT</th>
+                                            <th>Ngày tham gia</th>
+                                            <th>Giới tính</th>
+                                            <th>Trạng thái</th>
+                                            <th>Thao tác</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="khachHangTable">
+                                        <!-- Các hàng khách hàng sẽ được chèn vào đây thông qua JS -->
+                                        </tbody>
+                                    </table>
+                                    <div class="row justify-content-center mt-4">
+                                        <div class="col-12">
+                                            <nav aria-label="Table Paging" class="mb-0 text-muted">
+                                                <ul class="pagination justify-content-end mb-0" id="pagination">
+                                                    <!-- Dropdown for pages and navigation buttons will go here -->
+                                                    <li class="page-item" id="prevPageButton">
+                                                        <a class="btn btn-success" href="#" onclick="changePage(currentPage - 1)" aria-label="Previous">
+                                                            <span aria-hidden="true">&lt;</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <select class="custom-select" id="pageDropdown" onchange="changePageFromDropdown(this)">
+                                                            <!-- Options for page numbers will be inserted here dynamically -->
+                                                        </select>
+                                                    </li>
+                                                    <li class="page-item" id="nextPageButton">
+                                                        <a class="btn btn-success" href="#" onclick="changePage(currentPage + 1)" aria-label="Next">
+                                                            <span aria-hidden="true">&gt;</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div aria-hidden="true" aria-labelledby="addModalLabel" class="modal fade" id="addModal" role="dialog" tabindex="-1">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addModalLabel">Thêm khách hàng</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/quan-ly-khach-hang/them" id="addForm" method="post">
+                                                <div class="form-row">
+                                                    <div class="form-group col-12">
+                                                        <label for="maKhachHang">Mã khách hàng</label>
+                                                        <input class="form-control" id="maKhachHang" name="maKhachHang" placeholder="Nhập mã khách hàng"  type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="hoVaTen">Họ và tên</label>
+                                                        <input class="form-control" id="hoVaTen" name="hoVaTen" placeholder="Nhập họ và tên"  type="text">
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="email">Email</label>
+                                                        <input class="form-control" id="email" name="email" placeholder="Nhập địa chỉ email"  type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="soDienThoai">Số điện thoại</label>
+                                                        <input class="form-control" id="soDienThoai" name="soDienThoai" placeholder="Nhập số điện thoại" type="number">
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="gioiTinh">Giới tính</label>
+                                                        <select class="form-control" id="gioiTinh" name="gioiTinh" >
+                                                            <option value="true">Nam</option>
+                                                            <option value="false">Nữ</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-success" type="submit">Thêm</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- end section -->
+            </div> <!-- end row -->
+        </div> <!-- end container-fluid -->
+</div> <!-- end main content -->
+</main>
+</div>
+</body>
+<div th:include="fragment/script :: script"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<!-- Bootstrap 5.3.3 Bundle (bao gồm cả CSS và JS) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+<script>
+    const dropdowns = document.querySelectorAll('.dropdown-toggle');
+    dropdowns.forEach((dropdown) => {
+        dropdown.addEventListener('click', function () {
+            const menu = this.nextElementSibling;
+            menu.classList.toggle('show');  // Toggle sự hiển thị của dropdown
+        });
+    });
+
+    // Lắng nghe sự kiện click để chọn mục và đóng dropdown
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function (e) {
+            const dropdownMenu = e.target.closest('.dropdown-menu');  // Lấy dropdown chứa item
+            const dropdownToggle = dropdownMenu.previousElementSibling; // Lấy button dropdown
+
+            // Cập nhật giá trị của dropdown toggle với lựa chọn đã chọn
+            dropdownToggle.innerText = e.target.innerText;
+
+            // Đóng dropdown
+            dropdownMenu.classList.remove('show');
+
+            // Cập nhật bộ lọc
+            const filterType = dropdownToggle.id.includes('Status') ? 'status' : 'gender';
+            const filterValue = e.target.getAttribute('data-value');  // Lấy giá trị từ data-value
+            filterKhachHang(filterType, filterValue);
+        });
+    });
+    function resetFilters() {
+        // Đặt lại giá trị hiển thị của dropdown
+        document.getElementById('dropdownFilterStatus').innerText = 'Trạng thái';
+        document.getElementById('dropdownFilterGender').innerText = 'Giới tính';
+
+        // Đặt lại các filter bên trong JavaScript
+        currentFilterStatus = 'all';
+        currentFilterGender = 'all';
+        document.getElementById('search').value = '';  // Xóa từ khóa tìm kiếm
+
+        // Đặt lại currentPage về 0 (trang đầu tiên)
+        currentPage = 0;
+
+        // Gọi lại hàm tải dữ liệu từ trang 0 (trang đầu tiên) và không có bộ lọc
+        loadKhachHangData(0, '', currentFilterStatus, currentFilterGender);
+    }
+
+
+
+    let debounceTimer;
+    function debounceSearch(query) {
+        if (!query.trim()) {
+            loadKhachHangData(0, '', currentFilterStatus, currentFilterGender); // Hiển thị lại toàn bộ dữ liệu nếu query trống
+            return;
+        }
+
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            loadKhachHangData(0, query, currentFilterStatus, currentFilterGender);
+        }, 300);
+    }
+
+    let currentFilterStatus = 'all';
+    let currentFilterGender = 'all';
+    let currentPage = 0;
+    let totalPages = 1;
+
+    function filterKhachHang(selectedType, value) {
+        if (selectedType === 'status') {
+            currentFilterStatus = value || 'all';
+            document.getElementById('dropdownFilterStatus').innerText =
+                currentFilterStatus === 'all' ? 'Trạng thái' : (currentFilterStatus === 'active' ? 'Hoạt động' : 'Không hoạt động');
+        } else if (selectedType === 'gender') {
+            currentFilterGender = value || 'all';
+            document.getElementById('dropdownFilterGender').innerText =
+                currentFilterGender === 'all' ? 'Giới tính' : (currentFilterGender === 'true' ? 'Nam' : 'Nữ');
+        }
+
+        loadKhachHangData(0, '', currentFilterStatus, currentFilterGender);
+    }
+
+    async function loadKhachHangData(page = 0, query = '', status = 'all', gender = 'all') {
+        try {
+            let url = `/khach-hang/search?page=${page}&pageSize=5&query=${encodeURIComponent(query)}`;
+
+            // Thêm các tham số lọc nếu có
+            if (status !== 'all') {
+                url += `&status=${status}`;
+            }
+            if (gender !== 'all') {
+                url += `&gender=${gender}`;
+            }
+
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error('Không thể tải dữ liệu khách hàng');
+            }
+
+            const data = await response.json();
+            console.log("Dữ liệu nhận được từ API:", data); // Log dữ liệu để kiểm tra xem đã đảo ngược chưa
+
+            // Cập nhật bảng dữ liệu
+            if (data.content && data.content.length > 0) {
+                updateKhachHangTable(data.content); // Cập nhật dữ liệu cho bảng
+            } else {
+                updateKhachHangTable([]); // Nếu không có dữ liệu
+            }
+
+            // Cập nhật phân trang
+            currentPage = data.number || 0;
+            totalPages = data.totalPages || 1;
+            updatePagination(); // Cập nhật phân trang
+
+        } catch (error) {
+            alert('Không thể tải dữ liệu khách hàng.');
+        }
+    }
+
+
+    function updateKhachHangTable(khachHangData) {
+        const tableBody = document.getElementById('khachHangTable');
+
+        // Xóa toàn bộ nội dung của bảng trước khi thêm mới
+        tableBody.innerHTML = '';
+
+        if (khachHangData.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center">Không có dữ liệu khớp với tìm kiếm</td></tr>';
+            return;
+        }
+
+        const pageSize = 5; // Số mục hiển thị trên mỗi trang
+        const startIndex = currentPage * pageSize; // Tính số thứ tự bắt đầu của trang hiện tại
+
+        khachHangData.forEach((khachHang, index) => {
+            const hoVaTen = khachHang.hoVaTen || 'Không có';
+            const soDienThoai = khachHang.soDienThoai || 'Không có';
+            const rowHTML = `
+            <tr>
+                <td>${startIndex + index + 1}</td>
+                <td>${hoVaTen}</td>
+                <td>${khachHang.email}</td>
+                 <td>${soDienThoai}</td>
+                <td>${new Date(khachHang.createdAt).toLocaleDateString()}</td>
+                <td>${khachHang.gioiTinh ? 'Nam' : 'Nữ'}</td>
+                <td>
+                    <span class="${khachHang.trangThai === 'active' ? 'custom-4' : 'custom-3'}">
+                        ${khachHang.trangThai === 'active' ? 'Hoạt động' : 'Không hoạt động'}
+                    </span>
+                </td>
+                <td style="display: flex">
+                    <a href="/quan-ly-khach-hang-detail?id=${khachHang.id}">
+                        <button class="btn mb-2 mr-1 btn-outline-success" type="button" title="Sửa">
+                            <span class="fe fe-edit-3"></span>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+        `;
+
+            tableBody.insertAdjacentHTML('beforeend', rowHTML);
+        });
+    }
+
+
+    function updatePagination() {
+        const pageDropdown = document.getElementById('pageDropdown');
+        pageDropdown.innerHTML = '';
+
+        // Tạo các lựa chọn trang
+        for (let i = 0; i < totalPages; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = `Trang ${i + 1}`;
+            if (currentPage === i) {
+                option.selected = true;
+            }
+            pageDropdown.appendChild(option);
+        }
+
+        // Cập nhật nút "Lùi"
+        const prevPageButton = document.getElementById('prevPageButton');
+        prevPageButton.style.display = currentPage === 0 ? 'none' : 'inline-block';
+
+        // Cập nhật nút "Tiếp"
+        const nextPageButton = document.getElementById('nextPageButton');
+        nextPageButton.style.display = currentPage === totalPages - 1 ? 'none' : 'inline-block';
+    }
+
+
+
+    function changePage(page) {
+        if (page >= 0 && page < totalPages) {
+            currentPage = page; // Cập nhật currentPage ngay lập tức
+            loadKhachHangData(page, '', currentFilterStatus, currentFilterGender);
+        }
+    }
+
+
+    function changePageFromDropdown(selectElement) {
+        const selectedPage = parseInt(selectElement.value, 10);
+        currentPage = selectedPage; // Cập nhật currentPage trước khi gọi hàm load
+        loadKhachHangData(selectedPage, '', currentFilterStatus, currentFilterGender);
+    }
+
+
+    window.onload = () => loadKhachHangData(0);
+
+
+    // Hàm tạo mã khách hàng ngẫu nhiên
+    function generateMaKhachHang() {
+        const randomNumber = Math.floor(100000 + Math.random() * 900000); // Tạo số ngẫu nhiên 6 chữ số
+        const maKhachHang = `KH${randomNumber}`;
+        return maKhachHang;
+    }
+
+    // Sự kiện khi mở modal
+    $('#addModal').on('show.bs.modal', function () {
+        // Tạo mã khách hàng mới và gán vào input
+        const maKhachHang = generateMaKhachHang();
+        document.getElementById('maKhachHang').value = maKhachHang;
+    });
+
+    document.getElementById("addForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Ngăn chặn hành động mặc định của submit form
+
+        let isValid = true;
+
+        // Reset trạng thái lỗi trước khi kiểm tra lại
+        document.querySelectorAll('.is-invalid').forEach((element) => {
+            element.classList.remove('is-invalid');
+        });
+        document.querySelectorAll('.invalid-feedback').forEach((element) => {
+            element.remove();
+        });
+
+        // Lấy giá trị từ các trường input
+        let hoVaTen = document.getElementById("hoVaTen").value.trim();
+        let email = document.getElementById("email").value.trim();
+        let soDienThoai = document.getElementById("soDienThoai").value.trim();
+
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const phonePattern = /^[0-9]{10,12}$/;
+        const namePattern = /^[a-zA-ZÀ-Ỹà-ỹ\s]+$/;
+
+        if (hoVaTen === '') {
+            let hoVaTenInput = document.getElementById("hoVaTen");
+            hoVaTenInput.classList.add('is-invalid');
+            hoVaTenInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng nhập họ và tên.</div>');
+            isValid = false;
+        } else if (!namePattern.test(hoVaTen)) {
+            let hoVaTenInput = document.getElementById("hoVaTen");
+            hoVaTenInput.classList.add('is-invalid');
+            hoVaTenInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Họ và tên không được chứa ký tự đặc biệt hoặc số.</div>');
+            isValid = false;
+        }
+
+        if (email === '') {
+            let emailInput = document.getElementById("email");
+            emailInput.classList.add('is-invalid');
+            emailInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng nhập email.</div>');
+            isValid = false;
+        } else if (!emailPattern.test(email)) {
+            let emailInput = document.getElementById("email");
+            emailInput.classList.add('is-invalid');
+            emailInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Email sai định dạng! Vui lòng nhập lại.</div>');
+            isValid = false;
+        }
+        if (soDienThoai === '') {
+            let soDienThoaiInput = document.getElementById("soDienThoai");
+            soDienThoaiInput.classList.add('is-invalid');
+            soDienThoaiInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Vui lòng nhập số điện thoại.</div>');
+            isValid = false;
+        } else if (!phonePattern.test(soDienThoai)) {
+            let soDienThoaiInput = document.getElementById("soDienThoai");
+            soDienThoaiInput.classList.add('is-invalid');
+            soDienThoaiInput.insertAdjacentHTML('afterend', '<div class="invalid-feedback">Số điện thoại sai định dạng! Vui lòng nhập lại (10-12 chữ số).</div>');
+            isValid = false;
+        }
+        if (isValid) {
+            // Kiểm tra sự tồn tại của mã khách hàng, email và số điện thoại
+            Promise.all([
+                fetch(`/quan-ly-khach-hang/kiem-tra-ma-khach-hang?maKhachHang=${encodeURIComponent(maKhachHang)}`).then(response => response.json()),
+                fetch(`/quan-ly-khach-hang/kiem-tra-email?email=${encodeURIComponent(email)}`).then(response => response.json()),
+                fetch(`/quan-ly-khach-hang/kiem-tra-so-dien-thoai?soDienThoai=${encodeURIComponent(soDienThoai)}`).then(response => response.json())
+            ]).then(([maKhachHangExists, emailExists, soDienThoaiExists]) => {
+                if (!maKhachHangExists && !emailExists && !soDienThoaiExists) {
+                    // Hiển thị hộp thoại xác nhận
+                    Swal.fire({
+                        title: 'Xác nhận',
+                        text: 'Bạn chắc chắn muốn thêm khách hàng này không?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: 'Cancel',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Đóng modal trước khi hiển thị overlay loading
+                            $('#addModal').modal('hide');
+                            // Xóa backdrop nếu có
+                            const backdrop = document.querySelector('.modal-backdrop');
+                            if (backdrop) {
+                                backdrop.remove();
+                            }
+
+                            // Hiển thị overlay loading sau khi đóng modal
+                            document.getElementById("loadingOverlay").classList.remove('loading-hidden');
+
+                            // Gửi form bằng AJAX
+                            let formData = new FormData(document.getElementById("addForm"));
+                            fetch(document.getElementById("addForm").action, {
+                                method: 'POST',
+                                body: formData
+                            })
+                                .then(response => response.text())
+                                .then(text => {
+                                    // Ẩn overlay loading khi hoàn thành
+                                    document.getElementById("loadingOverlay").classList.add('loading-hidden');
+
+                                    // Hiển thị thông báo thành công
+                                    Swal.fire({
+                                        title: 'Thành công!',
+                                        text: text,
+                                        icon: 'success'
+                                    }).then(() => {
+                                        // Reset form
+                                        document.getElementById("addForm").reset();
+
+                                        // Tải lại dữ liệu khách hàng
+                                        loadKhachHangData();
+                                    });
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+
+                                    // Ẩn overlay loading khi có lỗi
+                                    document.getElementById("loadingOverlay").classList.add('loading-hidden');
+
+                                    Swal.fire({
+                                        title: 'Lỗi!',
+                                        text: 'Đã xảy ra lỗi khi thêm khách hàng.',
+                                        icon: 'error'
+                                    });
+                                });
+                        }
+                    });
+                } else {
+                    let errorMessage = '';
+                    if (maKhachHangExists) errorMessage += 'Mã khách hàng đã tồn tại. ';
+                    if (emailExists) errorMessage += 'Email đã tồn tại. ';
+                    if (soDienThoaiExists) errorMessage += 'Số điện thoại đã tồn tại.';
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: errorMessage.trim(),
+                        icon: 'error'
+                    });
+                }
+            });
+        }
+    });
+</script>
+
+</html>

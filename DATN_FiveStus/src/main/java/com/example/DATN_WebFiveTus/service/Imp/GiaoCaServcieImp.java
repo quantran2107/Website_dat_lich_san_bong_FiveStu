@@ -59,7 +59,12 @@ public class GiaoCaServcieImp implements GiaoCaService {
         if (giaoCa != null) {
             List<BanGiaoCaResponse> list = banGiaoCaResponse(giaoCa.getNhanVien().getId());
             if (list.isEmpty()) {
-                return ApiResponseDto.builder().status(String.valueOf(HttpStatus.NOT_FOUND)).message("Not found!").response(false).build();
+                giaoCa.setTienChuyenKhoanTrongCa(BigDecimal.valueOf(0));
+                giaoCa.setTienMatTrongCa(BigDecimal.valueOf(0));
+                giaoCa.setTongTienTrongCa(BigDecimal.valueOf(0));
+                giaoCa.setTrangThai(false);
+                giaoCaRepository.save(giaoCa);
+                return ApiResponseDto.builder().status(String.valueOf(HttpStatus.CREATED)).message("Done!").response(true).build();
             }
             for (BanGiaoCaResponse bg:list){
                 if (bg.getHinhThuc().equalsIgnoreCase("chuyển khoản")){
