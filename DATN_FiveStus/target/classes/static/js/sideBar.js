@@ -334,7 +334,7 @@ $(document).ready(function () {
         const newUl =`
              <ul class="navbar-nav flex-fill w-100 mb-3">
                 <li class="nav-item dropdown">
-                    <a class="nav-link pl-3" th:href="@{/dich-vu}">
+                    <a class="nav-link pl-3" href="/dich-vu">
                         <i class="fe fe-shopping-cart"></i>
                         <span class="ml-3 item-text">Quản lý dịch vụ</span>
                     </a>
@@ -343,7 +343,7 @@ $(document).ready(function () {
 
             <ul class="navbar-nav flex-fill w-100 mb-3">
                 <li class="nav-item dropdown">
-                    <a class="nav-link pl-3" th:href="@{/dat-lich-tai-quay}">
+                    <a class="nav-link pl-3" href="/dat-lich-tai-quay">
                         <i class="fe fe-clipboard"></i>
                         <span class="ml-3 item-text">Đặt lịch</span>
                     </a>
@@ -351,7 +351,7 @@ $(document).ready(function () {
             </ul>
             <ul class="navbar-nav flex-fill w-100 mb-3">
                 <li class="nav-item active">
-                    <a class="nav-link pl-3" th:href="@{/list-san-ca}">
+                    <a class="nav-link pl-3" href="/list-san-ca">
                         <i class="fe fe-codepen"></i>
                         <span class="ml-3 item-text">Quản lý sân ca</span>
                     </a>
@@ -383,6 +383,12 @@ $(document).ready(function () {
             if (result.isConfirmed) {
                window.location.href ="/admin/logout"
             }
-        });;
+        });
     }
+    
+    $(window).on("load", function () {
+        $("#preloader").fadeOut("slow", function () {
+            $("body").css("visibility", "visible");
+        });
+    });
 });

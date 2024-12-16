@@ -66,14 +66,16 @@ public class GiaoCaServcieImp implements GiaoCaService {
                 giaoCaRepository.save(giaoCa);
                 return ApiResponseDto.builder().status(String.valueOf(HttpStatus.CREATED)).message("Done!").response(true).build();
             }
+            BigDecimal tongTien = BigDecimal.ZERO;
             for (BanGiaoCaResponse bg:list){
-                if (bg.getHinhThuc().equalsIgnoreCase("chuyển khoản")){
+                if (bg.getHinhThucThanhToan().equalsIgnoreCase("chuyển khoản")){
                     giaoCa.setTienChuyenKhoanTrongCa(bg.getTongTien());
                 } else {
                     giaoCa.setTienMatTrongCa(bg.getTongTien());
                 }
+                tongTien = tongTien.add(bg.getTongTien());
             }
-            giaoCa.setTongTienTrongCa(giaoCa.getTienChuyenKhoanTrongCa().add(giaoCa.getTienMatTrongCa()));
+            giaoCa.setTongTienTrongCa(tongTien);
             giaoCa.setTrangThai(false);
             giaoCaRepository.save(giaoCa);
             return ApiResponseDto.builder().status(String.valueOf(HttpStatus.CREATED)).message("Done!").response(true).build();

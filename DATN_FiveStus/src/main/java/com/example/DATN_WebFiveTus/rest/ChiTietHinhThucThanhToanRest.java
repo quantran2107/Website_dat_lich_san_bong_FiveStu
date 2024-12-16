@@ -4,6 +4,7 @@ import com.example.DATN_WebFiveTus.dto.ChiTietHinhThucThanhToanDTO;
 import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
 import com.example.DATN_WebFiveTus.service.CTHTTTService;
 import com.example.DATN_WebFiveTus.service.HoaDonChiTietService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +30,8 @@ public class ChiTietHinhThucThanhToanRest {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> save2(@RequestBody ChiTietHinhThucThanhToanDTO chiTietHinhThucThanhToanDTO) {
-        ChiTietHinhThucThanhToanDTO chiTHTTTSave = chiCthtttService.save(chiTietHinhThucThanhToanDTO);
+    public ResponseEntity<?> save2(@RequestBody ChiTietHinhThucThanhToanDTO chiTietHinhThucThanhToanDTO, HttpServletRequest request) {
+        ChiTietHinhThucThanhToanDTO chiTHTTTSave = chiCthtttService.save(chiTietHinhThucThanhToanDTO,request);
         return ResponseEntity.ok(chiTHTTTSave);
     }
 
