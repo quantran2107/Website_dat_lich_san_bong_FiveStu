@@ -74,14 +74,14 @@ public class PhieuGiamGiaChiTietRest {
     }
 
     @GetMapping("/pgg-cong-khai")
-    public ResponseEntity<?> getAllPGGCongKhai(@RequestParam("tongTien") Double tongTien) {
-        List<PhieuGiamGiaChiTietDTO> phieuGiamGiaList = phieuGiamGiaChiTietService.getAllPGGCTCongKhai(tongTien);
+    public ResponseEntity<?> getAllPGGCongKhai(@RequestParam("tongTien") Double tongTien,@RequestParam(required = false) String keyword) {
+        List<PhieuGiamGiaChiTietDTO> phieuGiamGiaList = phieuGiamGiaChiTietService.getAllPGGCTCongKhai(tongTien,keyword);
         return ResponseEntity.ok(phieuGiamGiaList);
     }
 
     @GetMapping("/pgg-ca-nhan/{idKhachHang}")
-    public ResponseEntity<?> getAllPGGCaNhan(@PathVariable("idKhachHang") Integer idKhachHang,@RequestParam("tongTien") Double tongTien) {
-        List<PhieuGiamGiaChiTietDTO> phieuGiamGiaList = phieuGiamGiaChiTietService.getAllPGGCTCaNhan(idKhachHang,tongTien);
+    public ResponseEntity<?> getAllPGGCaNhan(@PathVariable("idKhachHang") Integer idKhachHang,@RequestParam("tongTien") Double tongTien,@RequestParam(required = false) String keyword) {
+        List<PhieuGiamGiaChiTietDTO> phieuGiamGiaList = phieuGiamGiaChiTietService.getAllPGGCTCaNhan(idKhachHang,tongTien,keyword);
         return ResponseEntity.ok(phieuGiamGiaList);
     }
 }

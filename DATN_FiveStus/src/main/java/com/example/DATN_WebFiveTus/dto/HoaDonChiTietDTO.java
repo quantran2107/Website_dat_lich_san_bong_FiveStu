@@ -68,7 +68,6 @@ public class HoaDonChiTietDTO {
 
     private LocalDateTime thoiGianKetThucCa;
 
-    @JsonIgnore
     private Integer idKhachHang;
 
     private String hoVaTenKhachHang;

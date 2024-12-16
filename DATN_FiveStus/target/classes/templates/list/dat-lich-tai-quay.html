@@ -329,7 +329,8 @@
                                             <div class="form-group mb-3">
                                                 <label for="hoVaTenKhachHang">Tên khách hàng</label>
                                                 <input type="text" id="hoVaTenKhachHang" class="form-control" readonly>
-                                                <input type="text" id="idKhachHang" class="form-control" readonly hidden>
+                                                <input type="text" id="idKhachHang" class="form-control" readonly
+                                                       hidden>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -447,10 +448,20 @@
                                         <div class="col-md-8">
                                             <div class="form-group mb-3">
                                                 <div class="input-group mb-3">
-                                                    <input class="form-control" id="phieuGiamGia" type="text" placeholder="Phiếu Giảm Giá" readonly>
-                                                    <button class="btn btn-outline-success" id="btnShowModal" type="button" title="Chọn phiếu giảm giá">+</button>
+                                                    <input class="form-control" id="phieuGiamGia" type="text"
+                                                           placeholder="Phiếu Giảm Giá" readonly>
+                                                    <button class="btn btn-outline-success" id="btnShowModal"
+                                                            type="button" title="Chọn phiếu giảm giá">+
+                                                    </button>
                                                 </div>
-                                                <input class="form-control" id="idPhieuGiamGia" hidden type="text" placeholder="Phiếu Giảm Giá" readonly>
+                                                <input class="form-control" id="idPhieuGiamGia" hidden type="text"
+                                                       placeholder="Phiếu Giảm Giá" readonly>
+                                                <input class="form-control" id="idPhieuGiamGiaChiTiet" hidden type="text"
+                                                       placeholder="Phiếu Giảm Giá" readonly>
+                                                <input class="form-control" id="soLuongPhieuGiamGia" hidden type="text"
+                                                       placeholder="Phiếu Giảm Giá" readonly>
+                                                <input class="form-control" id="trangThaiPhieuGiamGia" hidden type="text"
+                                                       placeholder="Phiếu Giảm Giá" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -651,7 +662,7 @@
         </div>
     </div>
     <!--    End Modal-->
-<!--    Modal chọn phiếu giảm giá-->
+    <!--    Modal chọn phiếu giảm giá-->
     <!-- Modal -->
     <div class="modal fade" id="modalPhieuGiamGia" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -663,7 +674,8 @@
                 <div class="modal-body">
                     <!-- Search bar -->
                     <div class="mb-3">
-                        <input type="text" class="form-control" id="searchPhieuGiamGia" placeholder="Tìm kiếm phiếu giảm giá">
+                        <input type="text" class="form-control" id="searchPhieuGiamGia"
+                               placeholder="Tìm kiếm phiếu giảm giá">
                     </div>
                     <!-- Table -->
                     <table class="table table-bordered">
@@ -673,7 +685,9 @@
                             <th>Mã Phiếu Giảm Giá</th>
                             <th>Tên Phiếu Giảm Giá</th>
                             <th>Loại</th>
-                            <th>Số Lượng</th>
+                            <th>Mức giảm</th>
+                            <th>Giá trị tối đa</th>
+<!--                            <th>Số Lượng</th>-->
                             <th>Hành Động</th>
                         </tr>
                         </thead>
@@ -683,12 +697,14 @@
                     </table>
                 </div>
                 <div class="modal-footer">
+                    <div id="pagination" class="d-flex justify-content-center"></div>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
+
             </div>
         </div>
     </div>
-<!--    End-->
+    <!--    End-->
     <!--    Modal để thực hiện hình thức thanh toán-->
     <div class="modal fade" id="exampleModal" tabindex="-1"
          aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -846,6 +862,7 @@
         document.getElementById('thanhToanHoaDon').disabled = true;
         document.getElementById('btnAddPhuPhi').disabled = true;
         document.getElementById('btnTienKhachDua').disabled = true;
+        document.getElementById('btnShowModal').disabled = true;
 
         // Lắng nghe sự kiện click trên bảng "Đang Hoạt Động"
         document.getElementById('dang-hoat-dong-table').addEventListener('click', async function (event) {
@@ -871,13 +888,17 @@
                 document.getElementById('thanhToanHoaDon').disabled = false;
                 document.getElementById('btnAddPhuPhi').disabled = false;
                 document.getElementById('btnTienKhachDua').disabled = false;
+                document.getElementById('btnShowModal').disabled = false;
 
                 // Gọi hàm để hiển thị thông tin hóa đơn bên phải
                 await loadInvoiceDetails(selectedInvoiceId);
-                fillDichVuChoHoaDon(selectedInvoiceId);
+                await fillDichVuChoHoaDon(selectedInvoiceId);
 
                 // Gọi hàm để cập nhật tiền khách đưa (bảng chi tiết hình thức thanh toán)
                 await loadChiTietHTTTTable(selectedInvoiceId);  // Lấy tổng tiền từ bảng chi tiết thanh toán
+                calculateBestDiscount()
+                tinhTongThanhToan()
+
             }
         });
     });
@@ -907,7 +928,7 @@
 
             // Lấy thông số thời gian check-in
             const checkInParam = await fetchCheckInTimeParam();
-            const { value: maxTime, type: timeUnit } = checkInParam;
+            const {value: maxTime, type: timeUnit} = checkInParam;
 
             const currentTime = new Date();
             const currentTotalMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
@@ -921,41 +942,41 @@
 
                     const startTotalMinutes = thoiGianBatDau.getHours() * 60 + thoiGianBatDau.getMinutes();
 
-                        // Tính toán chênh lệch thời gian
-                        let timeDifference = currentTotalMinutes - startTotalMinutes;
+                    // Tính toán chênh lệch thời gian
+                    let timeDifference = currentTotalMinutes - startTotalMinutes;
 
-                        // Chuyển đổi tham số thành phút
-                        const maxTimeInMinutes =
-                            timeUnit === 'Phút' ? maxTime :
-                                timeUnit === 'Giờ' ? maxTime * 60 :
-                                    timeUnit === 'Ngày' ? maxTime * 24 * 60 : 0;
-                    console.log(`max time ${maxTime}`)
-                    console.log(`timeUnit ${timeUnit}`)
-                        console.log(`- Thời gian đã vượt quá: ${timeDifference} phút`);
-                    console.log(maxTimeInMinutes)
-                        // Nếu vượt quá giới hạn thời gian check-in
-                        if (item.trangThai === 'Chờ nhận sân'  && isModal && timeDifference > maxTimeInMinutes) {
-                            console.log(`Hóa đơn chi tiết ID: ${item.id} vượt quá thời gian, cập nhật trạng thái thành 'Đã hủy'.`);
-                            try {
-                                const response = await fetch(`http://localhost:8080/hoa-don-chi-tiet/huy/${item.id}`, {
-                                    method: 'PUT',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: JSON.stringify({ trangThai: 'Đã hủy' }),
-                                });
+                    // Chuyển đổi tham số thành phút
+                    const maxTimeInMinutes =
+                        timeUnit === 'Phút' ? maxTime :
+                            timeUnit === 'Giờ' ? maxTime * 60 :
+                                timeUnit === 'Ngày' ? maxTime * 24 * 60 : 0;
+                    // console.log(`max time ${maxTime}`)
+                    // console.log(`timeUnit ${timeUnit}`)
+                    // console.log(`- Thời gian đã vượt quá: ${timeDifference} phút`);
+                    // console.log(maxTimeInMinutes)
+                    // Nếu vượt quá giới hạn thời gian check-in
+                    if (item.trangThai === 'Chờ nhận sân' && isModal && timeDifference > maxTimeInMinutes) {
+                        // console.log(`Hóa đơn chi tiết ID: ${item.id} vượt quá thời gian, cập nhật trạng thái thành 'Đã hủy'.`);
+                        try {
+                            const response = await fetch(`http://localhost:8080/hoa-don-chi-tiet/huy/${item.id}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({trangThai: 'Đã hủy'}),
+                            });
 
-                                if (!response.ok) {
-                                    const errorMessage = await response.text();
-                                    console.error(`Failed to update status for ID ${item.id}: ${errorMessage}`);
-                                } else {
-                                    console.log(`Successfully updated status for ID ${item.id} to 'Đã hủy'`);
-                                }
-                            } catch (error) {
-                                console.error(`Error updating status for ID ${item.id}:`, error);
+                            if (!response.ok) {
+                                // const errorMessage = await response.text();
+                                // console.error(`Failed to update status for ID ${item.id}: ${errorMessage}`);
+                            } else {
+                                // console.log(`Successfully updated status for ID ${item.id} to 'Đã hủy'`);
                             }
-                            continue; // Bỏ qua các hóa đơn đã hủy
+                        } catch (error) {
+                            // console.error(`Error updating status for ID ${item.id}:`, error);
                         }
+                        continue; // Bỏ qua các hóa đơn đã hủy
+                    }
 
 
                     const row = document.createElement('tr');
@@ -967,7 +988,10 @@
                     <td>${item.soDienThoaiKhachHang || ''}</td>
                     <td>${item.emailKhachHang || ''}</td>
                     <td>${item.tenSanBong || ''}</td>
-                    <td>${thoiGianBatDau.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${thoiGianKetThuc.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                    <td>${thoiGianBatDau.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    })} - ${thoiGianKetThuc.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}</td>
                     <td>${item.ngayDenSan || ''}</td>
                     ${trangThai === "Chờ nhận sân" && isModal ? `<td>
                         <button class="btn btn-outline-success check-in-btn" title="Check in" onclick="checkIn('${item.id}')">
@@ -1706,7 +1730,6 @@
             const tienPhuPhi = await fetchTienPhuPhi(invoiceId);
             document.getElementById('tienPhuPhi').value = tienPhuPhi.toLocaleString() + ' VND'; // Hiển thị tiền phụ phí
             await loadAvailablePhuPhi(selectedInvoiceId);
-            // Tính toán tổng tiền phải trả và hiển thị
         } catch (error) {
             // console.error('Error fetching invoice details:', error);
         }
@@ -1865,7 +1888,7 @@
                 })
                 .then(response => {
                     if (!response.ok) throw new Error('Error processing service.');
-                    console.log('Xử lý dịch vụ thành công!');
+                    // console.log('Xử lý dịch vụ thành công!');
                     fillDichVuChoHoaDon(selectedInvoiceId);
 
                     // Tính toán số lượng tồn kho còn lại
@@ -1883,8 +1906,8 @@
                 })
                 .then(response => {
                     if (!response.ok) throw new Error('Error updating stock.');
-                    console.log('Cập nhật tồn kho thành công!');
-                    showSuccessToast('Thêm dịch vụ và cập nhật tồn kho thành công!');
+                    // console.log('Cập nhật tồn kho thành công!');
+                    // showSuccessToast('Thêm dịch vụ và cập nhật tồn kho thành công!');
 
                     // Cập nhật UI
                     const khoConElement = button.closest('.product-card').querySelector('.kho-con');
@@ -2012,8 +2035,8 @@
                         khoConElement.textContent = `Kho Còn: ${soLuongConLai}`;
                     }
 
-                    console.log('Cập nhật tồn kho thành công!');
-                    showSuccessToast('Cập nhật số lượng và tồn kho thành công!');
+                    // console.log('Cập nhật tồn kho thành công!');
+                    // showSuccessToast('Cập nhật số lượng và tồn kho thành công!');
                 }
             } catch (error) {
                 // console.error('Error:', error);
@@ -2137,6 +2160,7 @@
 
             // Cập nhật giá trị dịch vụ, mặc định là 0 nếu không có dịch vụ
             document.getElementById(`giaDichVu`).value = totalCost.toLocaleString() + ' VND';
+
         } catch (error) {
             console.error('Lỗi khi tính tổng tiền:', error);
             // Đặt giá trị tiền dịch vụ về 0 trong trường hợp lỗi
@@ -2159,138 +2183,237 @@
         // Hiển thị kết quả định dạng tiền tệ Việt Nam
         const tongTienFormatted = tongTien.toLocaleString() + ' VND';
 
-        // Gọi hàm tính tiền giảm giá
-        await applyBestDiscount(tongTien); // Đảm bảo đợi API trả về kết quả trước khi tiếp tục
-
         const tienGiam = parseCurrency(document.getElementById('tienGiam').value.trim()) || 0;
         const tongTienPhaiTra = tongTien - tienGiam;
         const tongTienPhaiTraFormatted = tongTienPhaiTra.toLocaleString() + ' VND';
-
         // Lấy tiền khách đưa và tính tiền trả lại
         const tienKhachDua = parseCurrency(document.getElementById('tienKhachDua').value.trim()) || 0;
-        let tienTraLai = tienKhachDua - tongTienPhaiTra;
 
+        let tienTraLai = tienKhachDua - tongTienPhaiTra;
         // Kiểm tra nếu tiền trả lại < 0 thì set về 0
         if (tienTraLai < 0) {
             tienTraLai = 0;
         }
-
         const tienTraLaiFormatted = tienTraLai.toLocaleString() + ' VND';
-
         // Cập nhật giá trị vào ô input hoặc giao diện
         document.getElementById('tongTien').value = tongTienFormatted;
         document.getElementById('tongTienPhaiTra').value = tongTienPhaiTraFormatted;
         document.getElementById('tienTraLai').value = tienTraLaiFormatted;
     }
 
+    // Hàm hiển thị dữ liệu phiếu giảm giá lên bảng
 
-    //Hàm tính tiền giảm giá
     document.getElementById('btnShowModal').addEventListener('click', async () => {
         const modal = new bootstrap.Modal(document.getElementById('modalPhieuGiamGia'));
         modal.show();
 
-        const idKhachHang = document.getElementById('idKhachHang').value; // Lấy ID khách hàng từ input
-        const tongTien = parseFloat(document.getElementById('tongTien').value); // Lấy tổng tiền từ input
+        const idKhachHang = document.getElementById('idKhachHang').value.trim();
+        const tongTien = parseCurrency(document.getElementById('tongTien').value.trim()) || 0;
 
         try {
-            // Gọi API lấy dữ liệu phiếu giảm giá công khai
-            const responseCongKhai = await fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pgg-cong-khai?tongTien=${tongTien}`);
-            const dataCongKhai = await responseCongKhai.json();
+            // Gọi API để lấy danh sách phiếu giảm giá
+            const [congKhaiResponse, caNhanResponse] = await Promise.all([
+                fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pgg-cong-khai?tongTien=${tongTien}`),
+                fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pgg-ca-nhan/${idKhachHang}?tongTien=${tongTien}`)
+            ]);
 
-            // Gọi API lấy dữ liệu phiếu giảm giá cá nhân (nếu có idKhachHang)
-            let dataCaNhan = [];
-            if (idKhachHang) {
-                const responseCaNhan = await fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pgg-ca-nhan/${idKhachHang}?tongTien=${tongTien}`);
-                dataCaNhan = await responseCaNhan.json();
+            const pggCongKhai = await congKhaiResponse.json();
+            const pggCaNhan = await caNhanResponse.json();
+
+            // Kết hợp danh sách phiếu giảm giá công khai và cá nhân
+            let combinedPGG = [...pggCongKhai, ...pggCaNhan];
+
+            // Hàm hiển thị danh sách phiếu giảm giá
+            function displayPhieuGiamGia(data) {
+                const tableBody = document.getElementById('tablePhieuGiamGiaBody');
+                tableBody.innerHTML = ''; // Xóa dữ liệu cũ
+                const itemsPerPage = 5;
+                let currentPage = 0;
+                const totalPages = Math.ceil(data.length / itemsPerPage);
+
+                // Hàm hiển thị bảng với dữ liệu của trang hiện tại
+                function displayPage(page) {
+                    const startIndex = page * itemsPerPage;
+                    const endIndex = Math.min(startIndex + itemsPerPage, data.length);
+                    const pageItems = data.slice(startIndex, endIndex);
+
+                    tableBody.innerHTML = ''; // Xóa dữ liệu cũ
+                    pageItems.forEach((pgg, index) => {
+                        const mucGiam = (pgg.hinhThucGiamGiaPhieuGiamGia === false || pgg.hinhThucGiamGiaPhieuGiamGia === 'false')
+                            ? `${parseFloat(pgg.mucGiamPhieuGiamGia || 0).toLocaleString()} VND`
+                            : `${parseFloat(pgg.mucGiamPhieuGiamGia || 0).toLocaleString()} %`;
+
+                        const giaTriToiDa = pgg.giaTriToiDaPhieuGiamGia
+                            ? `${parseFloat(pgg.giaTriToiDaPhieuGiamGia).toLocaleString()} VND`
+                            : 'Không giới hạn';
+
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                        <td>${startIndex + index + 1}</td>
+                        <td>${pgg.maPhieuGiamGia || ''}</td>
+                        <td>${pgg.tenPhieuGiamGia || ''}</td>
+                        <td>${pgg.doiTuongApDungPhieuGiamGia === false ? 'Công khai' : 'Cá nhân'}</td>
+                        <td>${mucGiam}</td>
+                        <td>${giaTriToiDa}</td>
+                        <td>
+                            <button class="btn btn-success btn-chon-pgg"
+                                    data-id="${pgg.id}"
+                                    data-id-pgg = "${pgg.idPhieuGiamGia}"
+                                    data-ma="${pgg.maPhieuGiamGia}"
+                                    data-gia-so-luong ="${pgg.soLuongPhieuGiamGia}"
+                                    data-gia-trang-thai="${pgg.trangThaiPhieuGiamGia}"
+                                    data-muc-giam="${pgg.mucGiamPhieuGiamGia}"
+                                    data-hinh-thuc="${pgg.hinhThucGiamGiaPhieuGiamGia}"
+                                    data-gia-tri-toi-da="${pgg.giaTriToiDaPhieuGiamGia || 0}">
+                                Chọn
+                            </button>
+                        </td>
+                    `;
+                        tableBody.appendChild(row);
+                    });
+                }
+
+                // Phân trang và hiển thị trang đầu tiên
+                function createPagination() {
+                    const paginationContainer = document.getElementById('pagination');
+                    paginationContainer.innerHTML = '';
+
+                    if (currentPage > 0) {
+                        const prevButton = document.createElement('button');
+                        prevButton.className = 'btn btn-success me-2';
+                        prevButton.textContent = '<';
+                        prevButton.onclick = () => {
+                            currentPage--;
+                            displayPage(currentPage);
+                            createPagination();
+                        };
+                        paginationContainer.appendChild(prevButton);
+                    }
+
+                    const pageDisplay = document.createElement('span');
+                    pageDisplay.className = 'btn btn-outline-secondary';
+                    pageDisplay.textContent = `Trang ${currentPage + 1}`;
+                    paginationContainer.appendChild(pageDisplay);
+
+                    if (currentPage < totalPages - 1) {
+                        const nextButton = document.createElement('button');
+                        nextButton.className = 'btn btn-success ms-2';
+                        nextButton.textContent = '>';
+                        nextButton.onclick = () => {
+                            currentPage++;
+                            displayPage(currentPage);
+                            createPagination();
+                        };
+                        paginationContainer.appendChild(nextButton);
+                    }
+                }
+
+                displayPage(currentPage);
+                createPagination();
             }
 
-            // Hiển thị dữ liệu lên bảng
-            renderPhieuGiamGiaTable([...dataCongKhai, ...dataCaNhan]);
+            // Hiển thị danh sách đầy đủ ban đầu
+            displayPhieuGiamGia(combinedPGG);
+
+            // Xử lý tìm kiếm
+            document.getElementById('searchPhieuGiamGia').addEventListener('input', async function () {
+                const keyword = this.value.trim();
+                if (keyword === '') {
+                    displayPhieuGiamGia(combinedPGG); // Hiển thị danh sách đầy đủ
+                } else {
+                    try {
+                        const [searchCongKhaiResponse, searchCaNhanResponse] = await Promise.all([
+                            fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pgg-cong-khai?tongTien=${tongTien}&keyword=${keyword}`),
+                            fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pgg-ca-nhan/${idKhachHang}?tongTien=${tongTien}&keyword=${keyword}`)
+                        ]);
+                        const searchCongKhai = await searchCongKhaiResponse.json();
+                        const searchCaNhan = await searchCaNhanResponse.json();
+                        const searchResults = [...searchCongKhai, ...searchCaNhan];
+                        displayPhieuGiamGia(searchResults); // Hiển thị danh sách tìm kiếm
+                    } catch (error) {
+                        console.error('Lỗi khi tìm kiếm:', error);
+                    }
+                }
+            });
         } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu phiếu giảm giá:', error);
+            console.error('Lỗi khi tải danh sách phiếu giảm giá:', error);
         }
     });
 
-    // Hàm hiển thị dữ liệu phiếu giảm giá lên bảng
-    function renderPhieuGiamGiaTable(data) {
-        const tableBody = document.getElementById('tablePhieuGiamGiaBody');
-        tableBody.innerHTML = ''; // Xóa dữ liệu cũ trong bảng
-
-        data.forEach((item, index) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${item.maPhieuGiamGia || ''}</td>
-            <td>${item.tenPhieuGiamGia || ''}</td>
-            <td>${item.doiTuongApDungPhieuGiamGia === 0 ? 'Công Khai' : 'Cá Nhân'}</td>
-            <td>${item.soLuong || 0}</td>
-            <td>
-                <button class="btn btn-outline-primary" onclick="selectPhieuGiamGia('${item.id}', '${item.tenPhieuGiamGia}')">Chọn</button>
-            </td>
-        `;
-            tableBody.appendChild(row);
-        });
-    }
-
-    // Hàm chọn phiếu giảm giá và đóng modal
-    function selectPhieuGiamGia(id, ten) {
-        document.getElementById('phieuGiamGia').value = ten;
-        document.getElementById('idPhieuGiamGia').value = id;
-        const modal = bootstrap.Modal.getInstance(document.getElementById('modalPhieuGiamGia'));
-        modal.hide();
-    }
-
-    async function applyBestDiscount(totalInvoice) {
+    async function calculateBestDiscount() {
         try {
-            // Lấy giá trị tổng tiền từ input
-            // Gọi API để lấy danh sách phiếu giảm giá phù hợp
-            const response = await fetch(`http://localhost:8080/api-phieu-giam-gia/fill-PGG?tongTien=${totalInvoice}`);
+            const tongTien = parseCurrency(document.getElementById('tongTien').value.trim()) || 0;
+            const idKhachHang = document.getElementById('idKhachHang').value.trim();
 
-            const discountList = await response.json();
-            if (!Array.isArray(discountList) || discountList.length === 0) {
-                return;
-            }
+            // Gọi API để lấy danh sách phiếu giảm giá công khai và cá nhân
+            const [congKhaiResponse, caNhanResponse] = await Promise.all([
+                fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pgg-cong-khai?tongTien=${tongTien}`),
+                fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pgg-ca-nhan/${idKhachHang}?tongTien=${tongTien}`)
+            ]);
 
-            // Tìm phiếu giảm giá tốt nhất
-            let bestDiscount = null;
-            let maxDiscountValue = 0;
+            const pggCongKhai = await congKhaiResponse.json();
+            const pggCaNhan = await caNhanResponse.json();
 
-            discountList.forEach(discount => {
-                let discountValue = 0;
+            // Kết hợp danh sách phiếu giảm giá
+            const combinedPGG = [...pggCongKhai, ...pggCaNhan];
 
-                if (discount.hinhThucGiamGia) {
-                    // Giảm giá cố định (VND)
-                    discountValue = discount.mucGiam;
-                } else {
-                    // Giảm giá theo %
-                    discountValue = (totalInvoice * discount.mucGiam) / 100;
+            let bestDiscount = 0;
+            let bestPgg = null;
+
+            // Duyệt qua danh sách để tìm phiếu giảm giá tốt nhất
+            combinedPGG.forEach(pgg => {
+                let tienGiam = 0;
+
+                // Chuyển đổi giá trị `mucGiamPhieuGiamGia` và `giaTriToiDaPhieuGiamGia` sang dạng số
+                const mucGiam = parseFloat(pgg.mucGiamPhieuGiamGia) || 0;
+                const giaTriToiDa = parseFloat(pgg.giaTriToiDaPhieuGiamGia) || 0;
+
+                // Kiểm tra lại giá trị kiểu Boolean của hinhThucGiamGiaPhieuGiamGia
+                const isDiscountPercentage = pgg.hinhThucGiamGiaPhieuGiamGia === true || pgg.hinhThucGiamGiaPhieuGiamGia === 'true' || pgg.hinhThucGiamGiaPhieuGiamGia === 1;
+
+                if (isDiscountPercentage) { // Giảm giá theo %
+                    // Tính tiền giảm theo phần trăm
+                    tienGiam = (tongTien * mucGiam) / 100;
+
+                    // Giới hạn tiền giảm theo giá trị tối đa nếu có
+                    if (giaTriToiDa > 0) {
+                        tienGiam = Math.min(tienGiam, giaTriToiDa);
+                    }
+                } else { // Giảm giá theo VND
+                    tienGiam = mucGiam; // Tiền giảm là giá trị VND
                 }
 
-                // Nếu có `giaTriToiDa`, giới hạn giá trị giảm
-                if (discount.giaTriToiDa > 0) {
-                    discountValue = Math.min(discountValue, discount.giaTriToiDa);
-                }
-
-                // Kiểm tra và lưu lại phiếu giảm giá tốt nhất
-                if (discountValue > maxDiscountValue) {
-                    maxDiscountValue = discountValue;
-                    bestDiscount = discount;
+                // Kiểm tra và cập nhật phiếu giảm giá tốt nhất
+                if (tienGiam > bestDiscount) {
+                    bestDiscount = tienGiam;
+                    bestPgg = pgg;
                 }
             });
-            if (bestDiscount) {
-                // Hiển thị mã phiếu giảm giá và số tiền giảm lên giao diện
-                document.getElementById('phieuGiamGia').value = bestDiscount.maPhieuGiamGia;
-                document.getElementById('idPhieuGiamGia').value = bestDiscount.id;
-                document.getElementById('tienGiam').value = maxDiscountValue.toLocaleString('vi-VN') + ' VND';
+
+            // Hiển thị phiếu giảm giá tốt nhất vào các ô input
+            if (bestPgg) {
+                document.getElementById('phieuGiamGia').value = bestPgg.maPhieuGiamGia;
+                document.getElementById('idPhieuGiamGiaChiTiet').value = bestPgg.id;
+                document.getElementById('idPhieuGiamGia').value = bestPgg.idPhieuGiamGia;
+                document.getElementById('soLuongPhieuGiamGia').value = bestPgg.soLuongPhieuGiamGia;
+                document.getElementById('trangThaiPhieuGiamGia').value = bestPgg.trangThaiPhieuGiamGia;
+                // Hiển thị tiền giảm đúng: % nếu giảm theo phần trăm, VND nếu giảm theo tiền
+                document.getElementById('tienGiam').value = bestDiscount.toLocaleString() + 'VND'; // Hiển thị VND nếu giảm theo tiền
+                tinhTongThanhToan()
+            } else {
+                document.getElementById('phieuGiamGia').value = '';
+                document.getElementById('idPhieuGiamGia').value = '';
+                document.getElementById('idPhieuGiamGiaChiTiet').value = '';
+                document.getElementById('tienGiam').value = '0 VND';
             }
         } catch (error) {
+            console.error('Lỗi khi tính toán phiếu giảm giá tốt nhất:', error);
         }
     }
 
-
     async function fillDichVuChoHoaDon(idHDCT) {
         await tinhTongTienDichVu();
-        tinhTongThanhToan();
+         await tinhTongThanhToan();
         $.ajax({
             url: `http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${idHDCT}`,
             type: 'GET',
@@ -2499,11 +2622,11 @@
                         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
                             <tr class="item">
                                 <td style="border: 2px solid #333; padding: 10px;">Phụ phí:</td>
-                                <td style="border: 2px solid #333; padding: 10px; text-align: right;">${phuPhi} VND</td>
+                                <td style="border: 2px solid #333; padding: 10px; text-align: right;">${phuPhi}</td>
                             </tr>
                             <tr class="item">
                                 <td style="border: 2px solid #333; padding: 10px;">Tiền sân:</td>
-                                <td style="border: 2px solid #333; padding: 10px; text-align: right;">${tienSan} VND</td>
+                                <td style="border: 2px solid #333; padding: 10px; text-align: right;">${tienSan}</td>
                             </tr>
                         </table>
 
@@ -2512,15 +2635,15 @@
                         <div style="padding: 10px; background-color: #f9f9f9; border: 1px solid #333; margin-top: 20px;">
                             <div style="font-size: 16px; font-weight: bold; display: flex; justify-content: space-between;">
                                 <span>Tổng tiền:</span>
-                                <span style="text-align: right; flex-grow: 1;">${tongTienPhaiTra} VND</span>
+                                <span style="text-align: right; flex-grow: 1;">${tongTienPhaiTra}</span>
                             </div>
                             <div style="display: flex; justify-content: space-between;">
                                 <span>Tiền khách đưa:</span>
-                                <span style="text-align: right; flex-grow: 1;">${tienKhachDua} VND</span>
+                                <span style="text-align: right; flex-grow: 1;">${tienKhachDua}</span>
                             </div>
                             <div style="display: flex; justify-content: space-between;">
                                 <span>Tiền trả lại:</span>
-                                <span style="text-align: right; flex-grow: 1;">${tienTraLai} VND</span>
+                                <span style="text-align: right; flex-grow: 1;">${tienTraLai}</span>
                             </div>
                         </div>
                         <br>
@@ -2546,10 +2669,9 @@
                             location.reload();
                         }, 0001);
                     });
-                console.log(template); // Xem trước mẫu trước khi xuất
             },
             error: function (error) {
-                console.log('Lỗi khi lấy dữ liệu dịch vụ: ', error);
+                // console.log('Lỗi khi lấy dữ liệu dịch vụ: ', error);
             }
         });
     }
@@ -2563,7 +2685,11 @@
         const tongTienPhaiTra = parseCurrency(document.getElementById('tongTienPhaiTra').value.trim()) || 0;
         const tongTien = parseCurrency(document.getElementById('tongTien').value.trim()) || 0;
         const tienGiamGia = parseCurrency(document.getElementById('tienGiam').value.trim()) || 0;
-        const idPhieuGiamGia = document.getElementById('idPhieuGiamGia').value;
+        const idPhieuGiamGia = document.getElementById('idPhieuGiamGia').value || 0;
+        const idPhieuGiamGiaChiTiet = document.getElementById('idPhieuGiamGiaChiTiet').value|| 0;
+        const soLuongPhieuGiamGia = parseInt(document.getElementById('soLuongPhieuGiamGia').value) || 0;
+        const trangThaiPhieuGiamGia = document.getElementById('trangThaiPhieuGiamGia').value;
+        const idKhachHang = document.getElementById('idKhachHang').value || 0;
         const responseNhanVien = await fetch('http://localhost:8080/hoa-don/get-nhan-vien-trong-ca');
         if (!responseNhanVien.ok) {
             throw new Error("Không thể lấy thông tin nhân viên");
@@ -2604,17 +2730,38 @@
             tienGiamGia: tienGiamGia,
             tongTienThucTe: tongTienPhaiTra,
         };
-        console.log(payload)
         try {
-            const updateResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/thanh-toan/${selectedInvoiceId}`, {
+           await fetch(`http://localhost:8080/hoa-don-chi-tiet/thanh-toan/${selectedInvoiceId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(payload),
             });
-
-            const updatedHoaDonChiTiet = await updateResponse.json();
+            // Cập nhật phiếu giảm giá chi tiết
+            await fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/${idPhieuGiamGiaChiTiet}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    idPhieuGiamGia: idPhieuGiamGia,
+                    idKhachHang: idKhachHang,
+                    deletedAt: true, // Xóa nếu cần
+                }),
+            });
+            // Cập nhật phiếu giảm giá
+            await fetch(`http://localhost:8080/api-phieu-giam-gia/${idPhieuGiamGia}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    soLuong: soLuongPhieuGiamGia - 1, // Giảm số lượng phiếu giảm giá
+                    trangThai: soLuongPhieuGiamGia - 1 <= 0 ? 'Đã kết thúc' : trangThaiPhieuGiamGia, // Nếu số lượng <= 0, đổi trạng thái
+                    deletedAt: data.soLuong - 1 <= 0 ? true : false, // Nếu hết số lượng, set deletedAt
+                }),
+            });
             showSuccessToast('Thanh toán thành công!');
             // Cập nhật lại giao diện, ví dụ tải lại danh sách hóa đơn
             await fetchData();  // Giả sử bạn có hàm này để làm mới dữ liệu

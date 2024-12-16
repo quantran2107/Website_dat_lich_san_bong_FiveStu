@@ -13,7 +13,7 @@ public interface PhieuGiamGiaChiTietService {
     PhieuGiamGiaChiTietDTO getOne(Integer id);
     List<PhieuGiamGiaChiTietDTO> findByIdPGG(Integer ids);
     List<PhieuGiamGiaChiTietDTO> findByIdKhachHang(Integer idKhachHang);
-    List<PhieuGiamGiaChiTietDTO> getAllPGGCTCongKhai(Double tongTien);
-    List<PhieuGiamGiaChiTietDTO> getAllPGGCTCaNhan(Integer idKhachHang,Double tongTien);
+    List<PhieuGiamGiaChiTietDTO> getAllPGGCTCongKhai(Double tongTien,String keyWord);
+    List<PhieuGiamGiaChiTietDTO> getAllPGGCTCaNhan(Integer idKhachHang,Double tongTien,String keyWord);
     void updateDeletedAt(Integer id, Integer idKhachHang, Boolean deletedAt);
 }

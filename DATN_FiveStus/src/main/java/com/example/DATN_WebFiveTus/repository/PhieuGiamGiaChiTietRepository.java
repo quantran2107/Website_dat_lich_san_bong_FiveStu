@@ -38,10 +38,31 @@ public interface PhieuGiamGiaChiTietRepository extends JpaRepository<PhieuGiamGi
     Optional<PhieuGiamGiaChiTiet> findByIdAndKhachHangId(@Param("id") Integer id, @Param("idKhachHang") Integer idKhachHang);
 
     @Query("SELECT pggct FROM PhieuGiamGiaChiTiet pggct " +
-            "JOIN FETCH  pggct.phieuGiamGia pgg where pggct.deletedAt=false and pgg.deletedAt = false and pgg.doiTuongApDung = false and pgg.dieuKienSuDung <= :tongTien")
-    List<PhieuGiamGiaChiTiet> getAllPGGCongKhai( @Param("tongTien") Double tongTien);
+            "JOIN FETCH pggct.phieuGiamGia pgg " +
+            "WHERE pggct.deletedAt = false " +
+            "AND pgg.deletedAt = false " +
+            "AND pgg.doiTuongApDung = false " +
+            "AND pgg.trangThai = 'Đang diễn ra' " +
+            "AND pgg.dieuKienSuDung <= :tongTien " +
+            "AND (:keyWord IS NULL OR :keyWord = '' OR " +
+            "     LOWER(pgg.maPhieuGiamGia) LIKE LOWER(CONCAT('%', :keyWord, '%')) OR " +
+            "     LOWER(pgg.tenPhieuGiamGia) LIKE LOWER(CONCAT('%', :keyWord, '%')))")
+    List<PhieuGiamGiaChiTiet> getAllPGGCongKhai(@Param("tongTien") Double tongTien,
+                                                @Param("keyWord") String keyWord);
 
-    @Query("SELECT pggct FROM PhieuGiamGiaChiTiet pggct JOIN FETCH  pggct.khachHang kh " +
-            "JOIN FETCH  pggct.phieuGiamGia pgg where pggct.deletedAt=false and pgg.deletedAt = false and pgg.doiTuongApDung = true and kh.id = :idKhachHang and pgg.dieuKienSuDung <= :tongTien")
-    List<PhieuGiamGiaChiTiet> getAllPGGCaNhan(@Param("idKhachHang") Integer idKhachHang, @Param("tongTien") Double tongTien);
+
+    @Query("SELECT pggct FROM PhieuGiamGiaChiTiet pggct " +
+            "JOIN FETCH pggct.khachHang kh " +
+            "JOIN FETCH pggct.phieuGiamGia pgg " +
+            "WHERE pggct.deletedAt = false AND pgg.deletedAt = false AND pgg.doiTuongApDung = true " +
+            "AND pgg.trangThai = 'Đang diễn ra' " +
+            "AND kh.id = :idKhachHang " +
+            "AND pgg.dieuKienSuDung <= :tongTien " +
+            "AND (:keyWord IS NULL OR " +
+            "     LOWER(pgg.maPhieuGiamGia) LIKE LOWER(CONCAT('%', :keyWord, '%')) OR " +
+            "     LOWER(pgg.tenPhieuGiamGia) LIKE LOWER(CONCAT('%', :keyWord, '%')))")
+    List<PhieuGiamGiaChiTiet> getAllPGGCaNhan(@Param("idKhachHang") Integer idKhachHang,
+                                              @Param("tongTien") Double tongTien,
+                                              @Param("keyWord") String keyWord);
+
 }

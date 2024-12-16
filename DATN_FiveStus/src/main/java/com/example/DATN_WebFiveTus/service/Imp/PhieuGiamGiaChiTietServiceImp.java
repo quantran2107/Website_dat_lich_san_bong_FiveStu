@@ -67,8 +67,7 @@ public class PhieuGiamGiaChiTietServiceImp implements PhieuGiamGiaChiTietService
         // Kiểm tra kiểu công khai
         if (phieuGiamGiaChiTiet.getKhachHang() == null) {
             phieuGiamGiaChiTiet.setKhachHang(null);
-        }
-        else{
+        } else {
             KhachHang khachHang = khachHangRepository.getReferenceById(phieuGiamGiaChiTietDTO.getIdKhachHang());
             phieuGiamGiaChiTiet.setKhachHang(khachHang);
         }
@@ -89,7 +88,7 @@ public class PhieuGiamGiaChiTietServiceImp implements PhieuGiamGiaChiTietService
         try {
             // Kiểm tra khách hàng
             KhachHang khachHang = savedEntity.getKhachHang();
-            if (khachHang == null ) {
+            if (khachHang == null) {
                 return; // Không gửi email nếu không có khách hàng
             }
 
@@ -132,10 +131,14 @@ public class PhieuGiamGiaChiTietServiceImp implements PhieuGiamGiaChiTietService
 
     @Override
     public PhieuGiamGiaChiTietDTO update(Integer id, PhieuGiamGiaChiTietDTO phieuGiamGiaChiTietDTO) {
-        PhieuGiamGiaChiTiet existingEntity = phieuGiamGiaChiTietRepository.findById(id)
+        PhieuGiamGiaChiTiet phieuGiamGiaChiTiet = phieuGiamGiaChiTietRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu giảm giá chi tiết với id " + id));
-
-        PhieuGiamGiaChiTiet updatedEntity = phieuGiamGiaChiTietRepository.save(existingEntity);
+        PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findById(phieuGiamGiaChiTietDTO.getIdPhieuGiamGia()).orElseThrow();
+        KhachHang khachHang = khachHangRepository.findById(phieuGiamGiaChiTietDTO.getIdKhachHang()).orElseThrow();
+        phieuGiamGiaChiTiet.setPhieuGiamGia(phieuGiamGia);
+        phieuGiamGiaChiTiet.setKhachHang(khachHang);
+        phieuGiamGiaChiTiet.setDeletedAt(phieuGiamGiaChiTietDTO.getDeletedAt());
+        PhieuGiamGiaChiTiet updatedEntity = phieuGiamGiaChiTietRepository.save(phieuGiamGiaChiTiet);
         return modelMapper.map(updatedEntity, PhieuGiamGiaChiTietDTO.class);
     }
 
@@ -163,16 +166,16 @@ public class PhieuGiamGiaChiTietServiceImp implements PhieuGiamGiaChiTietService
     }
 
     @Override
-    public List<PhieuGiamGiaChiTietDTO> getAllPGGCTCongKhai(Double tongTien) {
-        List<PhieuGiamGiaChiTiet> phieuGiamGiaChiTietList = phieuGiamGiaChiTietRepository.getAllPGGCongKhai(tongTien);
+    public List<PhieuGiamGiaChiTietDTO> getAllPGGCTCongKhai(Double tongTien,String keyWord) {
+        List<PhieuGiamGiaChiTiet> phieuGiamGiaChiTietList = phieuGiamGiaChiTietRepository.getAllPGGCongKhai(tongTien,keyWord);
         return phieuGiamGiaChiTietList.stream()
                 .map(phieuGiamGiaChiTiet -> modelMapper.map(phieuGiamGiaChiTiet, PhieuGiamGiaChiTietDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<PhieuGiamGiaChiTietDTO> getAllPGGCTCaNhan(Integer idKhachHang,Double tongTien) {
-        List<PhieuGiamGiaChiTiet> phieuGiamGiaChiTietList = phieuGiamGiaChiTietRepository.getAllPGGCaNhan(idKhachHang,tongTien);
+    public List<PhieuGiamGiaChiTietDTO> getAllPGGCTCaNhan(Integer idKhachHang, Double tongTien,String keyWord) {
+        List<PhieuGiamGiaChiTiet> phieuGiamGiaChiTietList = phieuGiamGiaChiTietRepository.getAllPGGCaNhan(idKhachHang, tongTien,keyWord);
         return phieuGiamGiaChiTietList.stream()
                 .map(phieuGiamGiaChiTiet -> modelMapper.map(phieuGiamGiaChiTiet, PhieuGiamGiaChiTietDTO.class))
                 .collect(Collectors.toList());
