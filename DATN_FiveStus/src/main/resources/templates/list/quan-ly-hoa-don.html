@@ -453,25 +453,58 @@
         confirmAction('Bạn có chắc chắn?', 'Bạn có muốn hủy lịch đặt này không?')
             .then((result) => {
                 if (result.isConfirmed) {
-                    fetch(`http://localhost:8080/hoa-don/huy-lich-dat/${id}`, {
-                        method: 'PUT',
+                    // Bước 1: Lấy danh sách hóa đơn chi tiết thuộc hóa đơn
+                    fetch(`http://localhost:8080/hoa-don-chi-tiet/hien-thi/${id}`, {
+                        method: 'GET',
                         headers: {
                             'Content-Type': 'application/json'
                         }
                     })
                         .then(response => {
                             if (!response.ok) {
-                                throw new Error('Có lỗi xảy ra khi hủy lịch đặt');
+                                throw new Error('Không thể lấy danh sách hóa đơn chi tiết');
                             }
                             return response.json();
                         })
-                        .then(data => {
+                        .then(detailInvoices => {
+                            // Bước 2: Hủy lần lượt từng hóa đơn chi tiết
+                            const cancelDetailPromises = detailInvoices.map(detail => {
+                                return fetch(`http://localhost:8080/hoa-don-chi-tiet/huy-lich-dat/${detail.id}`, {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                }).then(response => {
+                                    if (!response.ok) {
+                                        throw new Error(`Lỗi khi hủy hóa đơn chi tiết ${detail.id}`);
+                                    }
+                                });
+                            });
+
+                            // Đợi tất cả các hóa đơn chi tiết được hủy
+                            return Promise.all(cancelDetailPromises);
+                        })
+                        .then(() => {
+                            // Bước 3: Hủy hóa đơn chính
+                            return fetch(`http://localhost:8080/hoa-don/huy-lich-dat/${id}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Có lỗi xảy ra khi hủy hóa đơn');
+                            }
+                            return response.json();
+                        })
+                        .then(() => {
                             Swal.fire(
                                 'Thành công!',
-                                'Lịch đặt đã được hủy.',
+                                'Lịch đặt đã được hủy cùng với tất cả chi tiết.',
                                 'success'
                             );
-                            console.log(data);
                             fetchDataAndRenderTable();
                         })
                         .catch(error => {
