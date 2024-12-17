@@ -1,17 +1,17 @@
 package com.example.DATN_WebFiveTus.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 
 import java.math.BigDecimal;
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
 
-public class BanGiaoCaResponse {
+public interface BanGiaoCaResponse {
 
-    private String hinhThuc;
-    private BigDecimal tongTien;
+    @Value("#{target.hinh_thuc_thanh_toan}")
+    String getHinhThucThanhToan();
+
+    @Value("#{target.tong_so_tien}")
+    BigDecimal getTongTien();
+
 
 }

@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/head :: head"></head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+    .search-box-container {
+        display: flex;
+        align-items: center; /* Căn chỉnh theo chiều dọc */
+    }
+
+    .search-box-container .form-group {
+        margin-bottom: 0; /* Loại bỏ khoảng cách dưới của ô input */
+        margin-right: 10px; /* Khoảng cách giữa input và nút */
+    }
+
+    #search {
+        height: 38px; /* Đặt chiều cao cho ô input */
+        width: 400px; /* Đặt chiều rộng cho ô input */
+    }
+
+    /* Tùy chỉnh bảng trong thẻ card */
+    .card {
+        background-color: #ffffff; /* Đặt nền trắng */
+        border-radius: 10px; /* Bo góc mềm mại */
+    }
+
+    .card-header .btn {
+        font-size: 0.875rem; /* Nhỏ hơn nút mặc định một chút */
+        padding: 5px 10px; /* Điều chỉnh kích thước nút */
+    }
+
+    /* Thiết kế của switch */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;  /* Giảm kích thước width */
+        height: 24px; /* Giảm kích thước height */
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;  /* Giảm chiều cao của nút tròn */
+        width: 16px;   /* Giảm chiều rộng của nút tròn */
+        border-radius: 50%;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: #4CAF50;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(16px);  /* Điều chỉnh lại vị trí của nút tròn */
+    }
+
+
+
+</style>
+<body class="vertical light">
+<div class="wrapper">
+    <div th:include="fragment/navbar :: navbar"></div>
+    <div th:include="fragment/sidebar :: sidebar"></div>
+    <main role="main" class="main-content">
+        <div class="col-12">
+            <h2 class="mb-2 page-title">Quản lý tham số</h2>
+            <div class="card shadow-sm mb-4 bg-white">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <div class="search-box-container">
+                            <div class="form-group mb-0">
+                                <label for="search" class="font-weight-bold">Tìm kiếm</label>
+                                <input type="text" class="form-control" id="search"
+                                       placeholder="Tìm kiếm theo mã tham số, tên tham số">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card shadow-sm my-4">
+                <div class="card-header d-flex justify-content-between align-items-center bg-white text-black">
+                    <h5 class="mb-0">Danh Sách Tham Số</h5>
+                    <!--                    <button type="button"  class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addParameterModal">-->
+                    <!--                        <i class="bi bi-plus-circle"></i>-->
+                    <!--                    </button>-->
+                </div>
+                <div class="card-body">
+                    <table id="parameterTable" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Mã</th>
+                            <th>Tên</th>
+                            <th>Giá Trị</th>
+                            <th>Loại Giá Trị</th>
+                            <th>Mô Tả</th>
+                            <th>Trạng Thái</th>
+                            <th>Hành Động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Rows will be populated dynamically here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <!-- Modal for adding a parameter -->
+            <div class="modal fade" id="addParameterModal" tabindex="-1" aria-labelledby="addParameterModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addParameterModalLabel">Thêm Tham Số</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addParameterForm">
+                                <div class="mb-3">
+                                    <label for="parameterName" class="form-label">Tên</label>
+                                    <input type="text" class="form-control" id="parameterName" name="ten">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="parameterValue" class="form-label">Giá Trị</label>
+                                    <input type="text" class="form-control" id="parameterValue" name="giaTri">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="parameterType" class="form-label">Loại Giá Trị</label>
+                                    <select class="form-control" id="parameterType" name="typeGiaTri">
+                                        <option value="%">%</option>
+                                        <option value="VND">VND</option>
+                                        <option value="Giờ">Giờ</option>
+                                        <option value="Phút">Phút</option>
+                                        <option value="Lần">Lần</option>
+                                        <option value="Ngày">Ngày</option>
+                                        <option value="Người">Người</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="parameterDescription" class="form-label">Mô Tả</label>
+                                    <textarea class="form-control" id="parameterDescription" name="moTa"></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Thêm</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Modal for editing a   -->
+            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editParameterModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editParameterModalLabel">Chỉnh Sửa Tham Số</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editParameterForm">
+                                <input type="hidden" id="editParameterId" name="id"/>
+                                <div class="mb-3">
+                                    <label for="editParameterCode" class="form-label">Mã</label>
+                                    <input type="text" class="form-control" id="editParameterCode" name="ma" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editParameterName" class="form-label">Tên</label>
+                                    <input type="text" class="form-control" id="editParameterName" name="ten">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editParameterValue" class="form-label">Giá Trị</label>
+                                    <input type="text" class="form-control" id="editParameterValue" name="giaTri">
+                                </div>
+                                <!--                                <div class="mb-3">-->
+                                <!--                                    <label for="editParameterType" class="form-label">Loại Giá Trị</label>-->
+                                <!--                                    <input type="text" class="form-control" id="editParameterType" name="typeGiaTri">-->
+                                <!--                                </div>-->
+
+                                <div class="mb-3">
+                                    <label for="editParameterType" class="form-label">Loại Giá Trị</label>
+                                    <select class="form-control" id="editParameterType" name="typeGiaTri">
+                                        <option value="%">%</option>
+                                        <option value="VND">VND</option>
+                                        <option value="Giờ">Giờ</option>
+                                        <option value="Phút">Phút</option>
+                                        <option value="Lần">Lần</option>
+                                        <option value="Ngày">Ngày</option>
+                                        <option value="Người">Người</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editParameterDescription" class="form-label">Mô Tả</label>
+                                    <textarea class="form-control" id="editParameterDescription" name="moTa"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editParameterStatus" class="form-label">Trạng Thái</label>
+                                    <select class="form-select" id="editParameterStatus" name="trangThai" disabled>
+                                        <option value="true">Kích hoạt</option>
+                                        <option value="false">Vô hiệu hóa</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--            <nav aria-label="Page navigation">-->
+            <!--                <ul class="pagination justify-content-end" id="pagination">-->
+            <!--                    &lt;!&ndash; Pagination items will be populated dynamically here &ndash;&gt;-->
+            <!--                </ul>-->
+            <!--            </nav>-->
+        </div>
+
+        <div th:include="fragment/modal :: modal"></div>
+    </main>
+</div>
+
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+<script>
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.status-switch').forEach(switchElement => {
+            switchElement.addEventListener('change', function() {
+                const id = this.getAttribute('data-id');
+                const status = this.checked;
+
+                if (!status) {
+                    Swal.fire({
+                        title: 'Bạn có chắc chắn?',
+                        text: "Bạn có muốn vô hiệu hoá tham số này?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Có, vô hiệu hoá',
+                        cancelButtonText: 'Không, quay lại',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            updateTrangThai(id, status, this);
+                        } else {
+                            this.checked = true; // Khôi phục trạng thái ban đầu nếu hủy
+                        }
+                    });
+                } else {
+                    updateTrangThai(id, status, this);
+                }
+            });
+        });
+
+        function updateTrangThai(id, status, switchElement) {
+            fetch(`http://localhost:8080/tham-so/updateTrangThai/${id}?status=${status}`, {
+                method: 'PUT',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: 'Trạng thái đã được cập nhật thành công.',
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        // Cập nhật trực tiếp trạng thái trong bảng
+                        const row = switchElement.closest('tr'); // Tìm hàng hiện tại
+                        const statusCell = row.querySelector('td:nth-child(6)'); // Chọn cột trạng thái (cột thứ 6)
+                        if (statusCell) {
+                            statusCell.textContent = status ? 'Kích hoạt' : 'Vô hiệu hóa'; // Cập nhật văn bản trạng thái
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi!',
+                            text: 'Có lỗi xảy ra khi cập nhật trạng thái.',
+                        });
+                        switchElement.checked = !status; // Khôi phục trạng thái nếu lỗi
+                    }
+                })
+                .catch(error => {
+                    console.error('Có lỗi xảy ra:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi!',
+                        text: 'Có lỗi xảy ra khi cập nhật trạng thái.',
+                    });
+                    switchElement.checked = !status; // Khôi phục trạng thái nếu có lỗi
+                });
+        }
+    });
+
+
+
+
+
+
+    $(document).on('click', '#addParameterButton', function () {
+        var addModal = new bootstrap.Modal(document.getElementById('parameterModal'));
+        addModal.show();
+    });
+
+    function removeVietnameseTones(str) {
+        str = str.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // Loại bỏ dấu
+        str = str.replace(/đ/g, 'd').replace(/Đ/g, 'D');
+        return str;
+    }
+
+    function generateMaThamSoFromName(name) {
+        // Loại bỏ dấu và thay khoảng trắng bằng _
+        let maThamSo = removeVietnameseTones(name).replace(/\s+/g, '_').toUpperCase();
+        return maThamSo;
+    }
+
+    $('#addParameterForm').on('submit', function (e) {
+        e.preventDefault();
+
+        var tenThamSo = $('#parameterName').val();
+        var giaTri = $('#parameterValue').val();
+        var typeGiaTri = $('#parameterType').val();
+        var moTa = $('#parameterDescription').val();
+        var trangThai = $('#parameterStatus').is(':checked');
+
+        // Kiểm tra tên tham số
+        if (!tenThamSo.trim()) {
+            Swal.fire('Lỗi', 'Vui lòng nhập tên tham số.', 'error');
+            return;
+        }
+
+        // Kiểm tra giá trị tham số (tuỳ chọn: nếu giá trị tham số là bắt buộc)
+        if (!giaTri.trim()) {
+            Swal.fire('Lỗi', 'Vui lòng nhập giá trị cho tham số.', 'error');
+            return;
+        }
+
+        // Kiểm tra loại giá trị tham số (nếu bắt buộc)
+        if (!typeGiaTri.trim()) {
+            Swal.fire('Lỗi', 'Vui lòng chọn loại giá trị.', 'error');
+            return;
+        }
+
+        // Tạo mã tham số từ tên tham số
+        var maThamSo = 'TS' + generateMaThamSoFromName(tenThamSo);
+
+        var formData = {
+            ma: maThamSo,
+            ten: tenThamSo,
+            giaTri: giaTri,
+            typeGiaTri: typeGiaTri,
+            isActive: true,
+            moTa: moTa,
+            trangThai: false
+        };
+
+        $.ajax({
+            url: 'http://localhost:8080/tham-so',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (response) {
+                Swal.fire(
+                    'Thêm mới!',
+                    'Dữ liệu đã được thêm thành công.',
+                    'success'
+                );
+
+                // Đóng modal (giả sử modal có id là 'addParameterModal')
+                $('#addParameterModal').modal('hide');
+
+                // Làm sạch form
+                $('#addParameterForm')[0].reset();
+
+                // Cập nhật bảng dữ liệu
+                fetchDataAndRenderTable();
+            },
+            error: function (xhr, status, error) {
+                var errorMessage = xhr.responseJSON ? xhr.responseJSON.message : xhr.responseText;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Không thể thêm tham số: ' + errorMessage
+                });
+            }
+        });
+    });
+
+
+    // Khi nhấn nút Edit
+    $(document).on('click', '.edit-button', function () {
+        var thamSoId = $(this).data('id');
+        $.ajax({
+            url: 'http://localhost:8080/tham-so/' + thamSoId,
+            method: 'GET',
+            success: function (data) {
+                // Điền dữ liệu vào form
+                $('#editParameterId').val(data.id);
+                $('#editParameterCode').val(data.ma);
+                $('#editParameterName').val(data.ten);
+                $('#editParameterValue').val(data.giaTri);
+                $('#editParameterType').val(data.typeGiaTri).change(); // Giá trị typeGiaTri sẽ được chọn đúng
+                $('#editParameterDescription').val(data.moTa);
+                $('#editParameterStatus').val(data.trangThai === true ? 'true' : 'false'); // Đảm bảo trạng thái là 'true' hoặc 'false'
+
+                // Hiển thị modal
+                var editModalElement = document.getElementById('editModal');
+                var editModal = bootstrap.Modal.getOrCreateInstance(editModalElement);
+                editModal.show();
+            },
+            error: function (xhr) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Không thể lấy thông tin tham số: ' + xhr.responseText
+                });
+            }
+        });
+    });
+
+    // Khi submit form
+    $('#editParameterForm').on('submit', function (e) {
+        e.preventDefault();
+
+        // Lấy dữ liệu từ form
+        var formData = {
+            id: $('#editParameterId').val(),
+            ma: $('#editParameterCode').val(),
+            ten: $('#editParameterName').val(),
+            giaTri: $('#editParameterValue').val(),
+            typeGiaTri: $('#editParameterType').val(),
+            moTa: $('#editParameterDescription').val(),
+            trangThai: $('#editParameterStatus').val() === 'true' // Chuyển chuỗi 'true' thành boolean
+        };
+
+        // Validate các trường input
+        if (!formData.ma || formData.ma.trim() === "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Mã tham số không được để trống!'
+            });
+            return;
+        }
+
+        if (!formData.ten || formData.ten.trim() === "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Tên tham số không được để trống!'
+            });
+            return;
+        }
+
+        if (!formData.giaTri || formData.giaTri.trim() === "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Lỗi',
+                text: 'Giá trị tham số không được để trống!'
+            });
+            return;
+        }
+        if (formData.typeGiaTri === 'VND') {
+            if (isNaN(formData.giaTri)) {
+                Swal.fire('Lỗi', 'Giá trị VND phải là số hợp lệ.', 'error');
+                return;
+            }
+            if (formData.giaTri <= 0) {
+                Swal.fire('Lỗi', 'Giá trị VND phải lớn hơn 0.', 'error');
+                return;
+            }
+            if (formData.giaTri > 999999999) {
+                Swal.fire('Lỗi', 'Giá trị VND phải nhỏ hơn hoặc bằng 999,999,999.', 'error');
+                return;
+            }
+        }
+
+        if (formData.typeGiaTri === '%') {
+            if (!Number.isInteger(Number(formData.giaTri))) {
+                Swal.fire('Lỗi', 'Giá trị phần trăm phải là số nguyên.', 'error');
+                return;
+            }
+            if (formData.giaTri < 0 || formData.giaTri > 100) {
+                Swal.fire('Lỗi', 'Giá trị phần trăm phải từ 0 đến 100.', 'error');
+                return;
+            }
+        }
+
+        if (formData.typeGiaTri === 'Phút') {
+            if (!Number.isInteger(Number(formData.giaTri))) {
+                Swal.fire('Lỗi', 'Giá trị phải là số nguyên.', 'error');
+                return;
+            }
+            if (formData.giaTri < 0 || formData.giaTri > 150) {
+                Swal.fire('Lỗi', 'Giá trị Phút phải từ 0 đến 150.', 'error');
+                return;
+            }
+        }
+
+        if (formData.typeGiaTri === 'Giờ') {
+            if (!Number.isInteger(Number(formData.giaTri))) {
+                Swal.fire('Lỗi', 'Giá trị phải là số nguyên.', 'error');
+                return;
+            }
+            if (formData.giaTri < 0 || formData.giaTri > 150) {
+                Swal.fire('Lỗi', 'Giá trị Giờ phải từ 0 đến 150.', 'error');
+                return;
+            }
+        }
+
+
+        // Gửi yêu cầu cập nhật
+        $.ajax({
+            url: 'http://localhost:8080/tham-so/' + formData.id,
+            method: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function () {
+                Swal.fire(
+                    'Cập nhật!',
+                    'Dữ liệu đã được cập nhật thành công.',
+                    'success'
+                );
+
+                // Cập nhật bảng dữ liệu
+                // fetchDataAndRenderTable();
+
+                // Đóng modal
+                $('#editModal').modal('hide');
+
+                // Làm sạch form
+                $('#editParameterForm')[0].reset();
+
+
+                const updatedRow = $('#parameterTable tbody tr[data-id="' + formData.id + '"]');
+
+
+                if (updatedRow.length > 0) {
+                    updatedRow.find('td:nth-child(1)').text(formData.ma);
+                    updatedRow.find('td:nth-child(2)').text(formData.ten);
+                    updatedRow.find('td:nth-child(3)').text(formData.giaTri);
+                    updatedRow.find('td:nth-child(4)').text(formData.typeGiaTri);
+                    updatedRow.find('td:nth-child(5)').text(formData.moTa);
+
+                    const statusCell = updatedRow.find('td:nth-child(6)');
+                    statusCell.text(formData.trangThai ? 'Kích hoạt' : 'Vô hiệu hóa');
+                } else {
+                    // console.log("Hàng không tồn tại.");
+                }
+
+
+            },
+            error: function (xhr) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Không thể cập nhật thông tin tham số: ' + xhr.responseText
+                });
+            }
+        });
+    });
+
+
+    // Reset modal khi đóng
+    $('#editModal').on('hidden.bs.modal', function () {
+        $('#editParameterForm')[0].reset(); // Reset form
+    });
+
+    //
+    let currentSearchMa = null;
+    let currentSearchName = null;
+
+    function fetchDataAndRenderTable(page = 0, size = 10) {
+        let apiURL = `/tham-so/searchs?page=${page}&size=${size}`;
+
+        if (currentSearchMa) {
+            apiURL += `&ma=${encodeURIComponent(currentSearchMa)}`;
+        }
+        if (currentSearchName) {
+            apiURL += `&ten=${encodeURIComponent(currentSearchName)}`;
+        }
+
+        fetch(apiURL)
+            .then(response => response.json())
+            .then(data => {
+                renderTable(data, page, size);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
+    function searchParameters(query) {
+        query = query.trim();
+
+        if (query.startsWith('TS')) { // Assuming 'TS' is the prefix for mã tham số
+            currentSearchMa = query;
+            currentSearchName = null;
+        } else {
+            currentSearchName = query;
+            currentSearchMa = null;
+        }
+
+        fetchDataAndRenderTable();
+    }
+
+    document.getElementById('search').addEventListener('input', function () {
+        const searchValue = this.value;
+        searchParameters(searchValue);
+    });
+
+    function renderTable(data, page, size) {
+        const tableBody = document.querySelector('#parameterTable tbody');
+        const pagination = document.querySelector('#pagination');
+
+        tableBody.innerHTML = '';
+
+        data.content.forEach(parameter => {
+            const row = `<tr data-id="${parameter.id}">
+            <td>${parameter.ma}</td>
+            <td>${parameter.ten}</td>
+            <td>${parameter.giaTri}</td>
+            <td>${parameter.typeGiaTri}</td>
+            <td>${parameter.moTa}</td>
+            <td>${parameter.trangThai ? 'Kích hoạt' : 'Vô hiệu hóa'}</td>
+            <td>
+
+              <button class="btn btn-sm btn-outline-success edit-button" type="button" title="Sửa""
+                    data-bs-toggle="modal" data-bs-target="#editModal"
+                    data-id="${parameter.id}">
+                      <span class="fe fe-edit-3"></span>
+            </button>
+
+            <label class="switch">
+                <input type="checkbox" class="status-switch" data-id="${parameter.id}" ${parameter.trangThai ? 'checked' : ''}>
+                <span class="slider round"></span>
+            </label>
+
+
+            </td>
+        </tr>`;
+            tableBody.insertAdjacentHTML('beforeend', row);
+        });
+
+        pagination.innerHTML = '';
+        for (let i = 0; i < data.totalPages; i++) {
+            const pageItem = `<li class="page-item ${i === page ? 'active' : ''}">
+            <a class="page-link" href="#" data-page="${i}">${i + 1}</a>
+        </li>`;
+            pagination.insertAdjacentHTML('beforeend', pageItem);
+        }
+
+        // Handle pagination click events
+        document.querySelectorAll('.page-link').forEach(link => {
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+                const page = parseInt(this.getAttribute('data-page'));
+                fetchDataAndRenderTable(page);
+            });
+        });
+    }
+
+
+        // Initial data fetch
+        fetchDataAndRenderTable();
+</script>
+
+</body>
+
+
+<div th:include="fragment/script :: script"></div>
+</html>
+

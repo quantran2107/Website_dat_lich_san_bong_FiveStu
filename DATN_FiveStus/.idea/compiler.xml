@@ -8,7 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="DATN_WebFiveTus" />
-        <module name="DATN_FiveStus" />
       </profile>
     </annotationProcessing>
   </component>

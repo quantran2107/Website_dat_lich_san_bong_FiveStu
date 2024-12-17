@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/head :: head"></head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<body class="vertical light">
+<div class="wrapper">
+    <div th:include="fragment/navbar :: navbar"></div>
+    <div th:include="fragment/sidebar :: sidebar"></div>
+    <main role="main" class="main-content">
+        <div class="container-fluid">
+
+            <div class="container">
+                <div class="card shadow">
+                    <div class="row">
+                        <div class="col-md-4 ">
+                            <h2>Thông Tin</h2>
+                            <form th:action="@{/ca/add}" th:object="${ca}" th:method="POST">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="tenCa">Tên ca:</label>
+                                        <input type="text" class="form-control" id="tenCa" th:field="*{tenCa}">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail3">Giá ca</label>
+                                        <input type="text" class="form-control" id="inputEmail3ab" th:field="*{giaCa}"
+                                               placeholder="Giá ca">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail3">Thời gian bắt đầu</label>
+                                        <input type="datetime-local" class="form-control" id="inputEmail3s"
+                                               th:field="*{thoiGianBatDau}" placeholder="Thời gian bắt đầu">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail3">Thời gian kết thúc</label>
+                                        <input type="datetime-local" class="form-control" id="inputEmail3"
+                                               th:field="*{thoiGianKetThuc}" placeholder="Thời gian kết thúc">
+                                    </div>
+                                </div>
+
+                                <div class="button-container">
+                                    <button type="submit" class="btn btn-primary">Thêm ca</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-8">
+                            <h2>Danh Sách Ca</h2>
+                            <div class="row my-4">
+                                <div class="col-md-12">
+                                    <form action="/listCa" method="get" class="form-inline">
+                                        <label class="mr-2">Filter:</label>
+                                        <input type="text" name="keyWords" class="form-control mr-2">
+                                        <button type="submit" class="btn btn-primary">Search</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <table class="table table-striped table-hover table-borderless">
+                                <thead>
+                                <tr>
+                                    <th class="gray-white-background">
+                                        <a th:href="@{/listCa(pageNum=${currentPage}, sortField='tenCa', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">STT</a>
+                                    </th>
+                                    <th class="gray-white-background">
+                                        <a th:href="@{/listCa(pageNum=${currentPage}, sortField='tenCa', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Tên Ca</a>
+                                    </th>
+                                    <th class="gray-white-background">
+                                        <a th:href="@{/listCa(pageNum=${currentPage}, sortField='giaCa', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Giá ca</a>
+                                    </th>
+                                    <th class="gray-white-background">
+                                        <a th:href="@{/listCa(pageNum=${currentPage}, sortField='thoiGianBatDau', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Bắt đầu</a>
+                                    </th>
+                                    <th class="gray-white-background">
+                                        <a th:href="@{/listCa(pageNum=${currentPage}, sortField='thoiGianKetThuc', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Kết thúc</a>
+                                    </th>
+
+                                    <th class="gray-white-background">
+                                        <a th:href="@{/listCa(pageNum=${currentPage}, sortField='trangThai', sortDirection=${sortDirection == 'asc' ? 'desc' : 'asc'})}">Trạng Thái</a>
+                                    </th>
+
+                                    <th class="gray-white-background">Hành động</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="a, b : ${caDTOList}">
+                                    <td th:text="${b.count}"></td>
+                                    <td th:text="${a.tenCa}"></td>
+                                    <td>
+                                        <span th:if="${#temporals.format(a.thoiGianBatDau, 'HH:mm') >= '08:00' and #temporals.format(a.thoiGianKetThuc, 'HH:mm') <= '18:00'}" th:text="${a.giaCa * 1.5}"></span>
+                                        <span th:unless="${#temporals.format(a.thoiGianBatDau, 'HH:mm') >= '08:00' and #temporals.format(a.thoiGianKetThuc, 'HH:mm') <= '18:00'}" th:text="${a.giaCa}"></span>
+                                    </td>
+                                    <td th:text="${#temporals.format(a.thoiGianBatDau, 'HH:mm')}"></td>
+                                    <td th:text="${#temporals.format(a.thoiGianKetThuc, 'HH:mm')}"></td>
+                                    <td th:text="${a.trangThai}"></td>
+                                    <td>
+                                        <button type="button" class="btn btn-success edit-btn" data-toggle="modal" data-target="#editModal" th:attr="data-id=${a.id}">Edit</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="pagination">
+                                <ul class="pagination">
+                                    <!-- Nút Previous -->
+                                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                                        <a class="page-link"
+                                           th:href="@{/listCa(pageNum=${currentPage - 1}, sortField=${sortField}, sortDirection=${sortDirection})}">&laquo;</a>
+                                    </li>
+
+                                    <!-- Danh sách các trang -->
+                                    <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+                                        th:classappend="${i == currentPage} ? 'active'">
+                                        <a class="page-link"
+                                           th:href="@{/listCa(pageNum=${i}, sortField=${sortField}, sortDirection=${sortDirection})}"
+                                           th:text="${i}"></a>
+                                    </li>
+
+                                    <!-- Nút Next -->
+                                    <li class="page-item"
+                                        th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                        <a class="page-link"
+                                           th:href="@{/listCa(pageNum=${currentPage + 1}, sortField=${sortField}, sortDirection=${sortDirection})}">&raquo;</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+
+
+
+                            <!-- Modal  -->
+                            <!-- Modal Edit -->
+                            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editModalLabel">Chỉnh sửa ca</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form th:action="@{/ca/update}" th:object="${ca}" th:method="post">
+                                                <input type="hidden" th:field="*{id}" id="editId">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="editTenCa">Tên ca</label>
+                                                        <input type="text" class="form-control" id="editTenCa" th:field="*{tenCa}" placeholder="Tên CA">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="editGiaCa">Giá ca</label>
+                                                        <input type="text" class="form-control" id="editGiaCa" th:field="*{giaCa}" placeholder="Giá ca">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="editThoiGianBatDau">Thời gian bắt đầu</label>
+                                                        <input type="datetime-local" class="form-control" id="editThoiGianBatDau" th:field="*{thoiGianBatDau}" placeholder="Thời gian bắt đầu">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="editThoiGianKetThuc">Thời gian kết thúc</label>
+                                                        <input type="datetime-local" class="form-control" id="editThoiGianKetThuc" th:field="*{thoiGianKetThuc}" placeholder="Thời gian kết thúc">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="editTrangThaiCa">Trạng thái</label>
+                                                        <select id="editTrangThaiCa" class="form-control" th:field="*{trangThai}">
+                                                            <option th:each="a : ${listTT}" th:value="${a}" th:text="${a}"></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn mb-2 btn-primary">Update</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:include="fragment/modal :: modal"></div>
+    </main>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.edit-btn').on('click', function () {
+            var id = $(this).data('id');
+            $.ajax({
+                url: '/ca/edit/' + id,
+                method: 'GET',
+                success: function (data) {
+                    $('#editId').val(data.id);
+                    $('#editTenCa').val(data.tenCa);
+                    $('#editGiaCa').val(data.giaCa);
+                    $('#editThoiGianBatDau').val(data.thoiGianBatDau);
+                    $('#editThoiGianKetThuc').val(data.thoiGianKetThuc);
+                    $('#editTrangThaiCa').val(data.trangThai);
+                }
+            });
+        });
+    });
+</script>
+</body>
+<div th:include="fragment/script :: script"></div>
+</html>

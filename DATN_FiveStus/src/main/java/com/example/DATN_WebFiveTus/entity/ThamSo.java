@@ -60,7 +60,7 @@ public class ThamSo {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @Column(name = "deleted_at", columnDefinition = "BIT(0) DEFAULT 0")
+    @Column(name = "deleted_at", columnDefinition = "BIT(1) DEFAULT 0")
     private Boolean deletedAt = true;
 
 }

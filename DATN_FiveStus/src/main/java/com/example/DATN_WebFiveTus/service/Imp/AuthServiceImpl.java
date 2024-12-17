@@ -149,8 +149,6 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-
-
         SignInResponseDto signInResponseDto = SignInResponseDto.builder()
                 .username(userDetails.getUsername())
                 .email(userDetails.getEmail())
