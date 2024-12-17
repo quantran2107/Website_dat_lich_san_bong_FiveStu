@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<div th:include="~{fragment/client/headClient :: headClient}"></div>
+
+<body>
+
+<div th:include="~{fragment/client/contentHeaderClient :: contentHeaderClient}"></div>
+
+<div th:include="~{fragment/client/headerClient :: headerClient}"></div>
+
+<section class="discount-coupon py-5 mb-5" style="position: relative;">
+    <div class="container" style="position: relative; z-index: 2;">
+        <div class="row align-items-center">
+            <div class="col-lg-12 text-center text-lg-left mb-4 mb-lg-0">
+                <h1 class="text-success font-weight-bold">Chào mừng bạn đến với Sân bóng FiveStu</h1>
+                <p class="lead text-dark">Trải nghiệm dịch vụ đặt sân bóng nhanh chóng cùng chúng tôi</p>
+                <p>
+                    <a href="javascript:void(0);" class="btn btn-success btn-lg py-3 px-5 mr-3 mb-2"
+                       onclick="checkLoginAndRedirect()">Đặt sân ngay</a>
+                    <a th:href="@{/khach-hang-noi-quy3}" class="text-success py-3 px-5 mb-2">Nội quy</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <img th:src="@{/client/images/img1.jpg}" alt="Sân bóng FiveStu" class="img-fluid rounded shadow"
+         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.3; z-index: 1;">
+</section>
+
+
+<section id="featured-products" class="product-store">
+    <div class="container-md">
+        <div class="display-header d-flex align-items-center justify-content-between">
+            <h2 class="section-title text-uppercase">Về chúng tôi</h2>
+        </div>
+        <div class="container content-section">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center text-md-left mb-4 mb-md-0"> <img th:src="@{/client/images/img2.jpg}" alt="FiveStu"
+                                                                                  class="img-fluid img-container rounded shadow"> </div>
+                <div class="col-md-8">
+                    <h4 class="text-success">Sân bóng Fivestu - Nơi kết nối đam mê bóng đá</h4>
+                    <p class="lead">Fivestu là địa điểm lý tưởng dành cho những ai yêu thích bóng đá. Với cơ sở vật chất hiện
+                        đại,
+                        mặt cỏ chất lượng cao, và không gian rộng rãi, sân bóng của chúng tôi đáp ứng mọi nhu cầu luyện tập và thi
+                        đấu. Hãy đến và trải nghiệm những trận cầu đỉnh cao cùng bạn bè tại Fivestu, nơi kết nối đam mê và tinh
+                        thần
+                        thể thao.</p>
+                </div>
+            </div>
+        </div>
+        <div class="container content-section">
+            <div class="row align-items-center my-5">
+                <div class="col-md-8">
+                    <h4 class="text-success">Trải nghiệm sân bóng đẳng cấp tại Fivestu</h4>
+                    <p class="lead">Sân bóng Fivestu được thiết kế với tiêu chuẩn chuyên nghiệp, sẵn sàng phục vụ các trận đấu
+                        và giải đấu mọi cấp độ. Chúng tôi luôn đảm bảo chất lượng sân bãi, ánh sáng, và dịch vụ tốt nhất để mang
+                        đến trải nghiệm tuyệt vời cho từng trận bóng. Hãy chọn Fivestu làm điểm đến cho những phút giây sôi động
+                        cùng trái bóng tròn!</p>
+                </div>
+                <div class="col-md-4 text-center text-md-left mb-4 mb-md-0"> <img th:src="@{/client/images/img3.jpg}" alt="FiveStu"
+                                                                                  class="img-fluid img-container rounded shadow"> </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<section id="latest-products" class="product-store py-2 my-2 py-md-5 my-md-5 pt-0">
+    <div class="container-md">
+        <div class="display-header d-flex align-items-center justify-content-between">
+            <h2 class="section-title text-uppercase">Tại sao bạn nên chọn đặt sân tại FiveStu</h2>
+        </div>
+        <div class="row no-gutters">
+            <div class="col-md-4">
+                <div class="post-entry">
+                    <a href="#">
+                        <img th:src="@{/client/images/online.png}"alt="FiveStu" class="img-fluid"
+                             style="height: 480px;width: 400px;object-fit: contain;">
+                    </a>
+                    <div class="caption">
+                        <div class="caption-inner">
+                            <h4 class="mb-3">Đặt sân online nhanh chóng và tiện lợi</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="post-entry">
+                    <a href="#">
+                        <img th:src="@{/client/images/money.png}"alt="FiveStu" class="img-fluid"
+                             style="height: 480px;width: 400px;object-fit: contain;">
+                    </a>
+                    <div class="caption">
+                        <div class="caption-inner">
+                            <h4 class="mb-3">Giá cả phải chăng, phù hợp với mọi đối tượng</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="post-entry">
+                    <a href="#">
+                        <img th:src="@{/client/images/good.png}" alt="FiveStu" class="img-fluid"
+                             style="height: 480px;width: 400px;object-fit: contain;">
+                    </a>
+                    <div class="caption">
+                        <div class="caption-inner">
+                            <h4 class="mb-3">Dịch vụ đầy đủ, đa dạng loại sân phù hợp nhu cầu</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:include="~{fragment/client/footerClient :: footerClient}"></div>
+<script th:src="@{/client/js/jquery-1.11.0.min.js}"></script>
+<script th:src="@{/client/js/plugins.js}"></script>
+<script th:src="@{/client/js/script.js}"></script>
+<script>
+    async function loadCustomer() {
+        const response = await fetch('http://localhost:8080/customer/get-customer');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data.response; // Trả về thông tin khách hàng, giả sử bạn cần id khách hàng
+    }
+
+    async function checkLoginAndRedirect() {
+        try {
+            const customer = await loadCustomer();
+            if (customer && customer.id) {
+                // Nếu có thông tin khách hàng (đã đăng nhập), chuyển hướng đến trang đặt sân
+                window.location.href = '/khach-hang/dat-san';  // Thay vì th:href, dùng JavaScript để chuyển hướng
+            } else {
+                // Nếu không có thông tin khách hàng (chưa đăng nhập), mở modal login
+                $('#modallogin').modal('show');
+            }
+        } catch (error) {
+            console.error('Lỗi khi kiểm tra khách hàng:', error);
+            // Nếu gặp lỗi, bạn có thể mở modal hoặc xử lý lỗi ở đây
+            $('#modallogin').modal('show');
+        }
+    }
+
+</script>
+</body>
+
+</html>

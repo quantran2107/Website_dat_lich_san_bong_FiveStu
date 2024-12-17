@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông báo mã OTP</title>
+    <style>
+        body {
+            background-color: #1bb240;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .card {
+            border: none;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            font-size: 1.5em;
+        }
+        .list-group-item {
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            Thông tin mã OTP
+        </div>
+        <div class="card-body">
+            <p class="card-text">Dưới đây là thông tin mã OTP:</p>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Mã:</strong> <span th:text="${otp}"></span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"
+        integrity="sha384-z9D76r5IL6+ZUOrof8sdFkmp2t/Sc5E5rQt1H2lbNA7W+NEIidAzA4ynazfCiC2J"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+jAErYTkOY7PhC3QPP0+qzkf2TIJ7U8T6Z6"
+        crossorigin="anonymous"></script>
+</body>
+</html>

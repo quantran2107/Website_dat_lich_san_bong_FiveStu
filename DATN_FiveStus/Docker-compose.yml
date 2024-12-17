@@ -62,7 +62,7 @@
 # networks:
 #   my_app_network:
 #     driver: bridge
-version: '3.9'
+  version: '3.9'
 
 services:
   db:
