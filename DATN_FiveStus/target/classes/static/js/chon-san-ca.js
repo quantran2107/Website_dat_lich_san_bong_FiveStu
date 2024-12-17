@@ -46,12 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
             dropdownButton.textContent = 'Nhiều ngày'; // Cập nhật nội dung nút
             infoButtonContainer.style.display = 'none'; // Ẩn nút "Điền thông tin"
             sanCaTableBody.innerHTML = '';
-        } else if (type === 'Theo tuần') {
-            inputNgayDon.style.display = 'none';
-            inputNhieuNgay.style.display = 'none';
-            dropdownButton.textContent = 'Theo tuần'; // Cập nhật nội dung nút
-            infoButtonContainer.style.display = 'none'; // Hiển thị nút "Điền thông tin"
-            sanCaTableBody.innerHTML = '';
         }
 
         // Lấy danh sách sân bóng
@@ -836,6 +830,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     // Cập nhật STT sau khi thêm dòng
                     updateSTT();
                     calculateTotalPrice();
+                    paginateTable('sanCaTableBody', 0, 5);
                 })
                 .catch(error => showError('Error fetching san ca data:', error));
         } else {
@@ -845,6 +840,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 updateSTT(); // Cập nhật lại STT sau khi xóa dòng
                 calculateTotalPrice();
             }
+            paginateTable('sanCaTableBody', 0, 5);
         }
     }
 
@@ -1063,6 +1059,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Gọi lần đầu để hiển thị khách hàng trang đầu
     fetchCustomers();
+    paginateTable('sanCaTableBody', 0, 5);
 
     $('#customerTable').off('click').on('click', function (event) {
         if (event.target.tagName === 'BUTTON') {
@@ -1072,15 +1069,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 phone: event.target.getAttribute('data-phone')
             };
 
-            // Điền thông tin khách hàng vào modal đặt lịch
+            // Điền thông tin khách hàng vào các trường
             document.getElementById('hoVaTen').value = selectedCustomer.name;
-            if(selectedCustomer.phone==null){
-                document.getElementById('soDienThoai').value = "Không có";
-            }else{
-                document.getElementById('soDienThoai').value = selectedCustomer.phone;
-            }
+            document.getElementById('soDienThoai').value = selectedCustomer.phone || 'Không có';
 
-            // Đóng modal chọn khách hàng
+            // Đóng modal
             $('#selectCustomerModal').modal('hide');
         }
     });
@@ -1094,6 +1087,7 @@ document.addEventListener("DOMContentLoaded", function () {
     flatpickr("#ngayKetThuc", {
         minDate: "today"
     });
+
 });
 
 document.querySelector('#datLich').addEventListener('click', async function () {
@@ -1484,4 +1478,63 @@ async function getLoaiSanId(tenSanBong) {
     const response = await fetch(`http://localhost:8080/san-bong/findByName?tenSanBong=${tenSanBong}`);
     const data = await response.json();
     return data.idLoaiSan;
+}
+
+function paginateTable(tableBodyId, currentPage, rowsPerPage) {
+    const tableBody = document.getElementById(tableBodyId);
+    if (!tableBody) {
+        console.error(`Table body with ID "${tableBodyId}" not found.`);
+        return;
+    }
+
+    const rows = tableBody.querySelectorAll('tr');
+    const totalRows = rows.length;
+    const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+    console.log(`Total rows: ${totalRows}, Rows per page: ${rowsPerPage}, Total pages: ${totalPages}`);
+
+    // Ẩn tất cả các hàng
+    rows.forEach((row, index) => {
+        row.style.display = 'none';
+        if (index >= currentPage * rowsPerPage && index < (currentPage + 1) * rowsPerPage) {
+            row.style.display = '';
+        }
+    });
+
+    updatePagination(currentPage, totalPages, '', '', tableBodyId, 'paginationContainer', false);
+}
+
+function updatePagination(currentPage, totalPages, keyWord, trangThai, tableBodyId, paginationContainerId, isModal) {
+    const paginationContainer = document.getElementById(paginationContainerId);
+    if (!paginationContainer) {
+        console.error(`Pagination container with ID "${paginationContainerId}" not found.`);
+        return;
+    }
+
+    paginationContainer.innerHTML = '';
+
+    if (currentPage > 0) {
+        const prevButton = document.createElement('button');
+        prevButton.className = 'btn btn-success me-2';
+        prevButton.textContent = '<';
+        prevButton.onclick = () => {
+            paginateTable(tableBodyId, currentPage - 1, 5);
+        };
+        paginationContainer.appendChild(prevButton);
+    }
+
+    const pageDisplay = document.createElement('span');
+    pageDisplay.className = 'btn btn-outline-secondary';
+    pageDisplay.textContent = `Trang ${currentPage + 1} / ${totalPages}`;
+    paginationContainer.appendChild(pageDisplay);
+
+    if (currentPage < totalPages - 1) {
+        const nextButton = document.createElement('button');
+        nextButton.className = 'btn btn-success ms-2';
+        nextButton.textContent = '>';
+        nextButton.onclick = () => {
+            paginateTable(tableBodyId, currentPage + 1, 5);
+        };
+        paginationContainer.appendChild(nextButton);
+    }
 }

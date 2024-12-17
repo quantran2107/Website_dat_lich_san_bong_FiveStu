@@ -185,7 +185,6 @@
                                                 </button>
                                                 <div id="loaiNgayDropdown" aria-labelledby="actionMenuButton2" class="dropdown-menu">
                                                     <a class="dropdown-item" href="#" data-value="Theo ngày">Theo ngày</a>
-                                                    <a class="dropdown-item" href="#" data-value="Theo tuần">Theo tuần</a>
                                                     <a class="dropdown-item" href="#" data-value="Nhiều ngày">Nhiều ngày</a>
                                                 </div>
                                             </div>
@@ -293,11 +292,13 @@
                                                         <th>Thao tác</th>
                                                     </tr>
                                                     </thead>
-                                                    <tbody>
+                                                    <tbody id="sanCaTableBody">
 
                                                     </tbody>
                                                 </table>
-
+                                                <div class="modal-footer">
+                                                    <div id="paginationContainer" class="d-flex justify-content-center"></div>
+                                                </div>
                                                 <div class="payment-summary">
                                                     <div class="row mt-2">
                                                         <div class="col-md-6">

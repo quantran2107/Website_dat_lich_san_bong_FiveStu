@@ -49,7 +49,6 @@ public class SanCa {
     @Column(name = "gia")
     private Double gia;
 
-
     @Column(name = "trang_thai", length = 50)
     private String trangThai;
 
