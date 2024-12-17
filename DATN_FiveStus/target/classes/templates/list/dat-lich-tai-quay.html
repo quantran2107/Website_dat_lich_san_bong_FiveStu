@@ -687,7 +687,7 @@
                             <th>Loại</th>
                             <th>Mức giảm</th>
                             <th>Giá trị tối đa</th>
-                            <!--                            <th>Số Lượng</th>-->
+<!--                            <th>Số Lượng</th>-->
                             <th>Hành Động</th>
                         </tr>
                         </thead>
@@ -699,8 +699,8 @@
                 <div class="modal-footer">
                     <div id="pagination" class="d-flex justify-content-center"></div>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="khongApDungPGG">Không áp dụng</button>
                 </div>
-
             </div>
         </div>
     </div>
@@ -799,6 +799,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+
     $(document).ready(function () {
         $('#addInvoiceButton').on('click', function () {
             // Thay toàn bộ nội dung của trang bằng URL mới
@@ -1130,40 +1131,6 @@
             // showErrorToast('Có lỗi xảy ra khi check-in.');
         }
     }
-
-    // Hàm gọi API để lấy tỷ lệ tiền cọc
-    async function fetchDepositRate() {
-        try {
-            const response = await fetch('http://localhost:8080/tham-so/searchMaFake/TSTIEN_COC');
-            const data = await response.json();
-            return {
-                value: data.giaTri,  // Giá trị tỷ lệ tiền cọc
-                type: data.typeGiaTri // Loại tỷ lệ (% hoặc giá trị cố định)
-            };
-        } catch (error) {
-            // console.error('Lỗi khi lấy tham số TSTIEN_COC:', error);
-            // Trả về giá trị mặc định nếu không tìm thấy hoặc gặp lỗi
-            return {
-                value: 0,  // Giá trị mặc định = 0
-                type: '%'  // Loại mặc định là %, để xử lý an toàn
-            };
-        }
-    }
-
-    // Hàm tính toán tiền cọc
-    async function calculateDeposit(giaSan) {
-        const depositRate = await fetchDepositRate();  // Lấy tỷ lệ tiền cọc
-
-        let deposit = 0;
-        if (depositRate.type === '%') {
-            deposit = (giaSan * depositRate.value) / 100; // Tính theo phần trăm
-        } else {
-            deposit = depositRate.value; // Giá trị cố định
-        }
-
-        return deposit;
-    }
-
 
     //Code phần phụ phí
 
@@ -1720,12 +1687,10 @@
             document.getElementById('thoiGianKetThucCa').value = data.thoiGianKetThucCa
                 ? new Date(data.thoiGianKetThucCa).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
                 : '';
-            document.getElementById('ngayTaoHoaDon').value = data.ngayTaoHoaDon || 'Chưa có dữ liệu';
-            document.getElementById('ngayDenSan').value = data.ngayDenSan || 'Chưa có dữ liệu';
-            document.getElementById('tienSan').value = data.giaSanCa?.toLocaleString() + ' VND' || 'Chưa có dữ liệu';
-            // Tính toán tiền cọc từ tiền sân
-            const deposit = await calculateDeposit(data.giaSanCa || 0);
-            document.getElementById('tienCoc').value = (deposit > 0 ? deposit.toLocaleString() : '0') + ' VND';
+            document.getElementById('ngayTaoHoaDon').value = data.ngayTaoHoaDon || '';
+            document.getElementById('ngayDenSan').value = data.ngayDenSan || '';
+            document.getElementById('tienSan').value = data.giaSanCa?.toLocaleString() + ' VND' || '0 VND';
+            document.getElementById('tienCoc').value = data.tienCocHdct?.toLocaleString() + ' VND' || '0 VND';
             // Gọi API để lấy tiền phụ phí và hiển thị lên ô input
             const tienPhuPhi = await fetchTienPhuPhi(invoiceId);
             document.getElementById('tienPhuPhi').value = tienPhuPhi.toLocaleString() + ' VND'; // Hiển thị tiền phụ phí
@@ -2184,7 +2149,10 @@
         const tongTienFormatted = tongTien.toLocaleString() + ' VND';
 
         const tienGiam = parseCurrency(document.getElementById('tienGiam').value.trim()) || 0;
-        const tongTienPhaiTra = tongTien - tienGiam;
+        let tongTienPhaiTra = tongTien - tienGiam;
+        if (tongTienPhaiTra <= 0) {
+            tongTienPhaiTra = 0;
+        }
         const tongTienPhaiTraFormatted = tongTienPhaiTra.toLocaleString() + ' VND';
         // Lấy tiền khách đưa và tính tiền trả lại
         const tienKhachDua = parseCurrency(document.getElementById('tienKhachDua').value.trim()) || 0;
@@ -2255,16 +2223,16 @@
                         <td>${pgg.doiTuongApDungPhieuGiamGia === false ? 'Công khai' : 'Cá nhân'}</td>
                         <td>${mucGiam}</td>
                         <td>${giaTriToiDa}</td>
-                        <td>
+                        <td >
                             <button class="btn btn-success btn-chon-pgg"
                                     data-id="${pgg.id}"
                                     data-id-pgg = "${pgg.idPhieuGiamGia}"
                                     data-ma="${pgg.maPhieuGiamGia}"
                                     data-gia-so-luong ="${pgg.soLuongPhieuGiamGia}"
-                                    data-gia-trang-thai="${pgg.trangThaiPhieuGiamGia}"
+                                    data-trang-thai="${pgg.trangThaiPhieuGiamGia}"
                                     data-muc-giam="${pgg.mucGiamPhieuGiamGia}"
                                     data-hinh-thuc="${pgg.hinhThucGiamGiaPhieuGiamGia}"
-                                    data-gia-tri-toi-da="${pgg.giaTriToiDaPhieuGiamGia || 0}">
+                                    data-gia-tri-toi-da="${pgg.giaTriToiDaPhieuGiamGia || 0}" >
                                 Chọn
                             </button>
                         </td>
@@ -2286,6 +2254,7 @@
                             currentPage--;
                             displayPage(currentPage);
                             createPagination();
+                            addPhieuGiamGiaClickHandler();
                         };
                         paginationContainer.appendChild(prevButton);
                     }
@@ -2303,6 +2272,7 @@
                             currentPage++;
                             displayPage(currentPage);
                             createPagination();
+                            addPhieuGiamGiaClickHandler();
                         };
                         paginationContainer.appendChild(nextButton);
                     }
@@ -2310,10 +2280,62 @@
 
                 displayPage(currentPage);
                 createPagination();
+                addPhieuGiamGiaClickHandler();
             }
 
             // Hiển thị danh sách đầy đủ ban đầu
             displayPhieuGiamGia(combinedPGG);
+            // Thêm sự kiện cho nút "Chọn"
+
+            function addPhieuGiamGiaClickHandler() {
+                document.querySelectorAll('.btn-chon-pgg').forEach(button => {
+                    button.addEventListener('click', function () {
+                        // Xác định dòng chứa nút "Chọn" đang được nhấn
+                        // Lấy dữ liệu từ thuộc tính data
+                        let tienGiam = 0;
+                        const tongTien = parseCurrency(document.getElementById('tongTien').value.trim()) || 0;
+                        const tenPhieu = this.getAttribute('data-ma');
+                        const mucGiam = parseFloat(this.getAttribute('data-muc-giam')) || 0 ;
+                        const giaTriToiDa = parseFloat(this.getAttribute('data-gia-tri-toi-da')) || 0;
+                        const idPhieuGiamGia = this.getAttribute('data-id-pgg');
+                        const idPhieuGiamGiaChiTiet = this.getAttribute('data-id');
+                        const soLuongPhieuGiamGia = this.getAttribute('data-gia-so-luong');
+                        const trangThaiPhieuGiamGia = this.getAttribute('data-trang-thai');
+                        const hinhThucGiamGiaPhieuGiamGia = this.getAttribute('data-hinh-thuc');
+                        // Kiểm tra lại giá trị kiểu Boolean của hinhThucGiamGiaPhieuGiamGia
+                        const isDiscountPercentage = hinhThucGiamGiaPhieuGiamGia === true || hinhThucGiamGiaPhieuGiamGia === 'true' || hinhThucGiamGiaPhieuGiamGia === 1;
+
+                        if (isDiscountPercentage) { // Giảm giá theo %
+                            // Tính tiền giảm theo phần trăm
+                            tienGiam = (tongTien * mucGiam) / 100;
+
+                            // Giới hạn tiền giảm theo giá trị tối đa nếu có
+                            if (giaTriToiDa > 0) {
+                                tienGiam = Math.min(tienGiam, giaTriToiDa);
+                            }
+                        } else { // Giảm giá theo VND
+                            tienGiam = mucGiam; // Tiền giảm là giá trị VND
+                        }
+                        // Đặt dữ liệu vào các ô input
+                        document.getElementById('phieuGiamGia').value = tenPhieu;
+                        document.getElementById('tienGiam').value = tienGiam.toLocaleString() + 'VND';
+                        document.getElementById('idPhieuGiamGia').value = idPhieuGiamGia;
+                        document.getElementById('idPhieuGiamGiaChiTiet').value = idPhieuGiamGiaChiTiet;
+                        document.getElementById('soLuongPhieuGiamGia').value = soLuongPhieuGiamGia;
+                        document.getElementById('trangThaiPhieuGiamGia').value = trangThaiPhieuGiamGia;
+
+                        // Tính toán lại tổng thanh toán
+                        tinhTongThanhToan();
+
+                        // Hiển thị thông báo thành công
+                        showSuccessToast('Đã áp dụng phiếu giảm giá');
+
+                        // Ẩn modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('modalPhieuGiamGia'));
+                        modal.hide();
+                    });
+                });
+            }
 
             // Xử lý tìm kiếm
             document.getElementById('searchPhieuGiamGia').addEventListener('input', async function () {
@@ -2331,12 +2353,12 @@
                         const searchResults = [...searchCongKhai, ...searchCaNhan];
                         displayPhieuGiamGia(searchResults); // Hiển thị danh sách tìm kiếm
                     } catch (error) {
-                        console.error('Lỗi khi tìm kiếm:', error);
+                        // console.error('Lỗi khi tìm kiếm:', error);
                     }
                 }
             });
         } catch (error) {
-            console.error('Lỗi khi tải danh sách phiếu giảm giá:', error);
+            // console.error('Lỗi khi tải danh sách phiếu giảm giá:', error);
         }
     });
 
@@ -2413,7 +2435,7 @@
 
     async function fillDichVuChoHoaDon(idHDCT) {
         await tinhTongTienDichVu();
-        await tinhTongThanhToan();
+         await tinhTongThanhToan();
         $.ajax({
             url: `http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${idHDCT}`,
             type: 'GET',
@@ -2684,9 +2706,10 @@
         const tienKhachDua = parseCurrency(document.getElementById('tienKhachDua').value.trim()) || 0;
         const tongTienPhaiTra = parseCurrency(document.getElementById('tongTienPhaiTra').value.trim()) || 0;
         const tongTien = parseCurrency(document.getElementById('tongTien').value.trim()) || 0;
+        const tienCocHdct = parseCurrency(document.getElementById('tienCoc').value.trim()) || 0;
         const tienGiamGia = parseCurrency(document.getElementById('tienGiam').value.trim()) || 0;
-        const idPhieuGiamGia = document.getElementById('idPhieuGiamGia').value || 0;
-        const idPhieuGiamGiaChiTiet = document.getElementById('idPhieuGiamGiaChiTiet').value|| 0;
+        const idPhieuGiamGia = document.getElementById('idPhieuGiamGia').value || null;
+        const idPhieuGiamGiaChiTiet = document.getElementById('idPhieuGiamGiaChiTiet').value|| null;
         const soLuongPhieuGiamGia = parseInt(document.getElementById('soLuongPhieuGiamGia').value) || 0;
         const trangThaiPhieuGiamGia = document.getElementById('trangThaiPhieuGiamGia').value;
         const idKhachHang = document.getElementById('idKhachHang').value || 0;
@@ -2725,13 +2748,14 @@
             idHoaDon: data.idHoaDon,
             idSanCa: data.idSanCa,
             idNhanVien: idNhanVien,
-            idphieuGiamGia: idPhieuGiamGia,
+            idphieuGiamGia: idPhieuGiamGia || null,
             tongTien: tongTien,
-            tienGiamGia: tienGiamGia,
+            tienCocHdct: tienCocHdct,
+            tienGiamGia: tienGiamGia || null,
             tongTienThucTe: tongTienPhaiTra,
         };
         try {
-            await fetch(`http://localhost:8080/hoa-don-chi-tiet/thanh-toan/${selectedInvoiceId}`, {
+           await fetch(`http://localhost:8080/hoa-don-chi-tiet/thanh-toan/${selectedInvoiceId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -2784,6 +2808,22 @@
             return {value: 0, type: 'phút'}; // Giá trị mặc định nếu lỗi
         }
     }
+
+    document.getElementById('khongApDungPGG').addEventListener('click', function () {
+        // Reset ô Phiếu  Giá
+        document.getElementById('phieuGiamGia').value = 'Phiếu giảm giá';
+        document.getElementById('idPhieuGiamGia').value = '';
+        document.getElementById('idPhieuGiamGiaChiTiet').value = '';
+        document.getElementById('soLuongPhieuGiamGia').value = '';
+        document.getElementById('trangThaiPhieuGiamGia').value = '';
+
+        // Reset số tiền giảm về 0 VND
+        document.getElementById('tienGiam').value = '0 VND';
+        tinhTongThanhToan()
+        // Hiển thị thông báo thành công (nếu muốn)
+        showSuccessToast('Đã bỏ áp dụng phiếu giảm giá.');
+    });
+
 </script>
 </body>
 </html>

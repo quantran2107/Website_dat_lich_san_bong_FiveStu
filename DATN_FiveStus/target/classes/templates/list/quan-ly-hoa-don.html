@@ -121,8 +121,8 @@
                 </span>
                 </td>
                 <td class="ngayTao">${hoaDon.ngayTao}</td>
-                <td class="tongTien">${hoaDon.tongTien.toLocaleString()} VNĐ</td>
-                <td class="tienCoc">${hoaDon.tienCoc.toLocaleString()} VNĐ</td>
+                <td class="tongTien">${hoaDon.tongTien.toLocaleString()} VND</td>
+                <td class="tienCoc">${hoaDon.tienCoc.toLocaleString()} VND</td>
                 <td class="trangThai">
                     <span style="width: 90%"
                           class="${hoaDon.trangThai === 'Đã hủy' ? 'custom-3' : hoaDon.trangThai === 'Chờ thanh toán' ? 'custom-5' : 'custom-4'}">
@@ -227,6 +227,172 @@
         fetchDataAndRenderTable();
     }
 
+    //Ly viết
+
+    //Hàm thông báo
+    function showSuccessToast(message) {
+        Toastify({
+            text: message,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            style: {
+                background: "#4CAF50",
+            },
+            stopOnFocus: true
+        }).showToast();
+    }
+
+    //Hàm lấy tham số hoàn tiền
+    async function fetchCancellationTimeParam() {
+        try {
+            const response = await fetch('http://localhost:8080/tham-so/searchMaFake/TS_Gio_Huy');
+            if (!response.ok) throw new Error('Failed to fetch cancellation time parameter.');
+            const data = await response.json();
+            return { value: parseInt(data.giaTri, 10), type: data.typeGiaTri }; // Chuyển đổi đúng kiểu
+        } catch (error) {
+            console.error('Error fetching cancellation parameter:', error);
+            return { value: 0, type: 'Phút' }; // Giá trị mặc định nếu lỗi
+        }
+    }
+    async function renderCancellationActions(chiTiet) {
+        // Lấy tham số giờ hủy từ API
+        const cancelParam = await fetchCancellationTimeParam();
+        const { value: maxTime, type: timeUnit } = cancelParam;
+
+        const currentTime = new Date(); // Thời gian hiện tại
+        const currentTotalMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
+
+        const thoiGianBatDau = new Date(chiTiet.thoiGianBatDauCa);
+        const startTotalMinutes = thoiGianBatDau.getHours() * 60 + thoiGianBatDau.getMinutes();
+
+        // Tính toán chênh lệch thời gian còn lại
+        let timeDifference = startTotalMinutes - currentTotalMinutes;
+
+        // Chuyển đổi tham số thành phút
+        const maxTimeInMinutes =
+            timeUnit === 'Phút' ? maxTime :
+                timeUnit === 'Giờ' ? maxTime * 60 :
+                    timeUnit === 'Ngày' ? maxTime * 24 * 60 : 0;
+
+        // Log đầy đủ thông tin
+        console.log(`Thời gian hiện tại: ${currentTime}`);
+        console.log(`Thời gian bắt đầu ca: ${thoiGianBatDau}`);
+        console.log(`Thời gian chênh lệch: ${timeDifference} phút`);
+        console.log(`Thời gian tối thiểu để hoàn tiền: ${maxTimeInMinutes} phút`);
+
+        // Cờ để kiểm tra auto-cancel đã xử lý hay chưa
+        if (chiTiet.trangThai === 'Đã hủy') {
+            return ''; // Tránh lặp vô hạn
+        }
+
+        // Xử lý logic: nếu chênh lệch phút lớn hơn giới hạn → Hiển thị nút "Hoàn tiền"
+        if (timeDifference >= maxTimeInMinutes) {
+            return `
+         <button class="btn mb-2 mr-1 btn-outline-danger" type="button" onclick="cancelDetailInvoice(${chiTiet.id})" title="Hủy lịch đặt">
+            <span class="fe fe-trash-2"></span>
+        </button>
+        <button class="btn mb-2 mr-1 btn-outline-warning" type="button" onclick="refundDetailInvoice(${chiTiet.id})" title="Hoàn tiền cọc">
+            <span class="fe fe-rotate-ccw"></span>
+        </button>
+        `;
+        }
+        // Nếu chênh lệch nhỏ hơn giới hạn → Trả về trống và xử lý auto-cancel
+        else {
+            // Chỉ gọi autoCancelDetailInvoice nếu chưa hủy
+            if (chiTiet.trangThai !== 'Đã hủy') {
+                await autoCancelDetailInvoice(chiTiet.id);
+            }
+            return '';
+        }
+    }
+
+
+    async function refundDetailInvoice(id) {
+        confirmAction('Xác nhận hoàn tiền', 'Bạn có muốn hoàn tiền cho lịch đặt này không?')
+            .then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`http://localhost:8080/hoa-don-chi-tiet/hoan-tien-coc/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Có lỗi xảy ra khi hoàn tiền.');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Hoàn tiền thành công:', data);
+                            showSuccessToast('Hoàn tiền thành công!');
+                            fetch(`http://localhost:8080/hoa-don-chi-tiet/${id}`, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Không thể lấy thông tin hóa đơn.');
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    showDetailContent(data.idHoaDon); // Gọi lại để cập nhật giao diện
+                                });
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire(
+                                'Thất bại!',
+                                'Không thể hoàn tiền. Vui lòng thử lại!',
+                                'error'
+                            );
+                        });
+                }
+            });
+    }
+
+
+    async function autoCancelDetailInvoice(id) {
+        try {
+            // Gọi API để hủy lịch đặt
+            const response = await fetch(`http://localhost:8080/hoa-don-chi-tiet/huy-lich-dat/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Có lỗi xảy ra khi tự động hủy.');
+            }
+
+            console.log(`Hủy lịch đặt ID ${id} thành công.`);
+
+            // Gọi lại API để lấy thông tin chi tiết hóa đơn và cập nhật giao diện
+            const detailResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!detailResponse.ok) {
+                throw new Error('Không thể lấy thông tin hóa đơn chi tiết.');
+            }
+
+            const data = await detailResponse.json();
+            showDetailContent(data.idHoaDon); // Gọi lại giao diện
+        } catch (error) {
+            console.error('Error auto-canceling booking:', error);
+        }
+    }
+
+
+    //End Ly viết
 
     function filterTable() {
         const statusFilter = document.getElementById('statusFilter').value;
@@ -312,7 +478,8 @@
         <th>STT</th>
         <th>Mã hóa đơn chi tiết</th>
         <th>Sân</th>
-        <th>Ca</th>
+        <th>Thời gian</th>
+        <th>Ngày đến sân</th>
         <th>Tổng tiền</th>
         <th>Trạng thái</th>
         </tr>
@@ -362,8 +529,8 @@
         document.getElementById('hoVaTenKhachHang').value = data.hoVaTenKhachHang;
         document.getElementById('soDienThoaiKhachHang').value = data.soDienThoaiKhachHang;
         document.getElementById('maNhanVien').value = data.maNhanVien;
-        document.getElementById('tongTien').value = data.tongTien.toLocaleString() + " VNĐ";
-        document.getElementById('tienCoc').value = data.tienCoc.toLocaleString() + " VNĐ";
+        document.getElementById('tongTien').value = data.tongTien.toLocaleString() + " VND";
+        document.getElementById('tienCoc').value = data.tienCoc.toLocaleString() + " VND";
         document.getElementById('loai').value = data.loai ? "Online" : "Tại quầy";
         document.getElementById('trangThai').value = data.trangThai;
         });
@@ -383,14 +550,19 @@
                     const dichVuPromises = [];
                     const phuPhiPromises = [];
 
-                    data.forEach((chiTiet, index) => {
+                    data.forEach(async (chiTiet, index) => {
+                        const actionHTML = await renderCancellationActions(chiTiet);
+
+                        const startTime = new Date(chiTiet.thoiGianBatDauCa);
+                        const endTime = new Date(chiTiet.thoiGianKetThucCa);
                         const row = document.createElement('tr');
                         row.innerHTML = `
                                 <td>${index + 1}</td>
                                 <td>${chiTiet.maHoaDonChiTiet}</td>
                                 <td>${chiTiet.tenSanBong}</td>
-                                <td>${chiTiet.tenCa}</td>
-                                <td>${chiTiet.tongTien.toLocaleString()} VNĐ</td>
+                                <td>${startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                                <td>${chiTiet.ngayDenSan}</td>
+                                <td>${chiTiet.tongTien.toLocaleString()} VND</td>
                                 <td>
                                     <span style="width: 90%"
                                         class="${chiTiet.trangThai === 'Đã hủy' ? 'custom-3' : chiTiet.trangThai === 'Chờ nhận sân' ? 'custom-5' : 'custom-4'}">
@@ -398,11 +570,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                ${chiTiet.trangThai === 'Chờ nhận sân' ? `
-                                    <button class="btn mb-2 mr-1 btn-outline-danger" type="button" onclick="cancelDetailInvoice(${chiTiet.id})">
-                                        <span class="fe fe-trash-2"></span>
-                                    </button>
-                                ` : ''}
+                                    ${chiTiet.trangThai === 'Chờ nhận sân' ? actionHTML : ''}
                                 </td>
                             `;
                         tableBody.appendChild(row);
@@ -503,7 +671,7 @@
                             return response.json();
                         })
                         .then(data => {
-                            alert("Hủy lịch đặt thành công!");
+                            // alert("Hủy lịch đặt thành công!");
                             console.log(data);
                             fetch(`http://localhost:8080/hoa-don-chi-tiet/${id}`,{
                                 method: 'GET',
