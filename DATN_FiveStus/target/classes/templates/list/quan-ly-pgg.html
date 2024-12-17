@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="fragment/head :: head"></head>
+<head>
+    <style>
+        /* Styles for table and other elements */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .loading-overlay .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: green; /* Màu xanh lá cây */
+        }
+        .loading-hidden {
+            display: none;
+        }
+        .loading-text {
+            margin-top: 10px;
+            font-size: 1.5rem;
+            color: green; /* Màu xanh lá cây */
+        }
+    </style>
+</head>
+<body class="vertical  light  ">
+<div class="wrapper">
+    <div th:include="fragment/navbar :: navbar"></div>
+    <div th:include="fragment/sidebar :: sidebar"></div>
+    <main class="main-content" role="main">
+        <div class="col-12">
+            <h2 class="mb-2 page-title">Quản lý phiếu giảm giá</h2>
+            <p class="card-text"></p>
+            <div class="row my-4">
+                <!-- Small table -->
+                <div class="col-md-12">
+                    <!--                    Loading-->
+                    <div class="loading-overlay loading-hidden" id="loadingOverlay">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <div class="loading-text">Loading...</div>
+                    </div>
+
+                    <!-- ô Search -->
+                    <div class="card shadow">
+                        <div class="card-body" id="tableCardBody1">
+                            <div class="toolbar row mb-3 mt-3">
+                                <div class="col-md-12">
+                                    <form class="form-inline" id="filterForm"
+                                          style="display: flex; justify-content: space-between; align-items: center;">
+                                        <!-- Search -->
+                                        <div class="form-group" style="flex-grow: 1;">
+                                            <label for="search">Tìm kiếm</label>
+                                            <input class="form-control ml-3 mr-5" id="search"
+                                                   oninput="searchPGG(this.value)"
+                                                   placeholder="Tìm kiếm theo mã hoặc tên" style="width: 400px;"
+                                                   type="text">
+                                        </div>
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <button class="btn btn-success"
+                                                    onclick="showAddForm(this)"
+                                                    title="Thêm" type="button">
+                                                <span class="fe fe-plus"></span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="col-md-12 mt-4">
+                                    <form class="form-inline" id="filterDateForm"
+                                          style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div class="form-group d-flex" style="flex-grow: 1;">
+                                            <label for="searchStartDate">Từ</label>
+                                            <input class="form-control ml-3 mr-3" id="searchStartDate" onchange="searchByDate()" style="width: 163px;" type="date">
+                                            <label for="searchEndDate">Đến</label>
+                                            <input class="form-control" id="searchEndDate" onchange="searchByDate()" style="width: 163px; margin-left: 15px;" type="date">
+
+                                            <div class="dropdown">
+                                                <button aria-expanded="false"
+                                                        aria-haspopup="true"
+                                                        class="btn btn-outline-success ml-3 mr-3 dropdown-toggle"
+                                                        data-toggle="dropdown" id="actionMenuButton1"
+                                                        type="button">Kiểu
+                                                </button>
+                                                <div aria-labelledby="actionMenuButton1" class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setDoiTuongApDung(true)">Cá nhân</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setDoiTuongApDung(false)">Công khai</a>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown mr-3">
+                                                <button aria-expanded="false"
+                                                        aria-haspopup="true"
+                                                        class="btn btn-outline-success dropdown-toggle"
+                                                        data-toggle="dropdown" id="actionMenuButton2"
+                                                        type="button">Loại
+                                                </button>
+                                                <div aria-labelledby="actionMenuButton2" class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setHinhThucGiamGia(true)">Giảm theo %</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setHinhThucGiamGia(false)">Giảm theo VND</a>
+                                                </div>
+                                            </div>
+                                            <div class="dropdown mr-3">
+                                                <button aria-expanded="false"
+                                                        aria-haspopup="true"
+                                                        class="btn btn-outline-success dropdown-toggle"
+                                                        data-toggle="dropdown" id="actionMenuButton3"
+                                                        type="button">Trạng thái
+                                                </button>
+                                                <div aria-labelledby="actionMenuButton3" class="dropdown-menu"
+                                                     id="statusFilter">
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setStatusFilter('Đã kết thúc')">Đã kết thúc</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setStatusFilter('Sắp diễn ra')">Sắp diễn ra</a>
+                                                    <a class="dropdown-item" href="#"
+                                                       onclick="setStatusFilter('Đang diễn ra')">Đang diễn ra</a>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-outline-success"
+                                                    onclick="exportToExcel()"
+                                                    title="Xuất Excel" type="button">
+                                                <span class="fe fe-file-text"></span>
+                                            </button>
+                                        </div>
+                                        <div class="form-group d-flex gap-2">
+                                            <button class="btn btn-primary" onclick="resetFilters()"
+                                                    title="Reset" type="button">
+                                                <span class="fe fe-refresh-ccw"></span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- End Search -->
+                    <!-- Table -->
+                    <div class="card shadow mt-5">
+                        <div class="card-body" id="tableCardBody">
+                            <table class="table datatables" id="dataTable"
+                                   style="justify-content: center; text-align: center">
+                                <thead style="justify-content: center; text-align: center">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Mã</th>
+                                    <th>Tên</th>
+                                    <th>Kiểu</th>
+                                    <th>Loại</th>
+                                    <th>Số lượng</th>
+                                    <th>Thời gian</th>
+                                    <th>Trạng thái</th>
+                                    <th>Hành động</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tableBody">
+                                <!-- Dữ liệu sẽ được thêm vào đây -->
+                                </tbody>
+                            </table>
+                            <!-- Phân trang -->
+                            <nav aria-label="Table Paging" class="mb-0 text-muted">
+                                <ul class="pagination justify-content-end mb-0" id="pagination">
+                                    <!-- Các nút phân trang sẽ được thêm bởi JavaScript -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:include="fragment/modal :: modal"></div>
+</div>
+</body>
+<script th:include="fragment/script :: script"></script>
+<script th:src="@{/js/pgg.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.6/xlsx.full.min.js"></script>
+
+<script>
+    function exportToExcel() {
+        try {
+            // Tạo workbook mới
+            var wb = XLSX.utils.book_new();
+
+            // Tạo bản sao của bảng HTML và loại bỏ cột "Hành động"
+            var table = document.getElementById('dataTable').cloneNode(true);
+            var headerRow = table.querySelector('thead tr');
+            var actionHeaderIndex = Array.from(headerRow.children).findIndex(th => th.textContent === 'Hành động');
+
+            if (actionHeaderIndex > -1) {
+                // Xóa cột "Hành động" từ bảng
+                Array.from(table.querySelectorAll('tbody tr')).forEach(row => row.deleteCell(actionHeaderIndex));
+                headerRow.deleteCell(actionHeaderIndex);
+            }
+
+            // Chuyển đổi bảng HTML đã chỉnh sửa thành sheet
+            var ws = XLSX.utils.table_to_sheet(table);
+
+            // Thêm sheet vào workbook
+            XLSX.utils.book_append_sheet(wb, ws, "Phiếu giảm giá");
+
+            // Xuất file Excel
+            XLSX.writeFile(wb, 'phieu_giam_gia.xlsx');
+        } catch (error) {
+            console.error("Có lỗi xảy ra khi xuất dữ liệu:", error);
+        }
+    }
+</script>
+
+</html>

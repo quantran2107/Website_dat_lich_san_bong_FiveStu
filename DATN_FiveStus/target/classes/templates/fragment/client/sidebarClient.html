@@ -1,0 +1,115 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="sidebarClient">
+    <aside
+            style="display: flex;
+             justify-content: space-between;
+              align-items: center;
+              color: white;
+              padding: 10px 20px;
+              position: fixed; top: 0;
+              left: 0;
+              right: 0;
+              z-index: 1000;
+               background-image: url('/client/images/sidebar-img.jpg'); /* Thay đổi URL này thành hình ảnh bạn muốn */
+               background-size: cover; /* Đảm bảo hình ảnh chiếm toàn bộ không gian */
+               background-position: center; /* Căn giữa hình ảnh */
+               background-repeat: no-repeat; /* Không lặp lại hình ảnh */">
+        <div>
+            <img src="/img/logo.png" alt="Logo" style="border-radius: 50%; width: 70px; height: 70px;">
+        </div>
+        <nav style="display: flex; gap: 15px;">
+            <a href="#"
+               style="color: white;
+              text-decoration: none;
+              padding: 10px 15px;
+              border: none;
+              border-radius: 5px;
+              transition: background-color 0.3s;
+              font-size: 16px;
+              font-weight: bold;
+              background-color: rgb(255,255,255,0.1);"
+               onmouseover="this.style.backgroundColor='rgb(255,255,255,0.8)'; this.style.color='#0fba00';"
+               onmouseout="this.style.backgroundColor='rgb(255,255,255,0.1)'; this.style.color='white';"
+            >Trang Chủ</a>
+            <a href="#"
+               style="color: white;
+              text-decoration: none;
+              padding: 10px 15px;
+              border: none;
+              border-radius: 5px;
+              transition: background-color 0.3s;
+              font-size: 16px;
+              font-weight: bold;
+              background-color: rgb(255,255,255,0.1);"
+               onmouseover="this.style.backgroundColor='rgb(255,255,255,0.8)'; this.style.color='#0fba00';"
+               onmouseout="this.style.backgroundColor='rgb(255,255,255,0.1)'; this.style.color='white';">Giới Thiệu</a>
+            <a href="#"
+               style="color: white;
+              text-decoration: none;
+              padding: 10px 15px;
+              border: none;
+              border-radius: 5px;
+              transition: background-color 0.3s;
+              font-size: 16px;
+              font-weight: bold;
+              background-color: rgb(255,255,255,0.1);"
+               onmouseover="this.style.backgroundColor='rgb(255,255,255,0.8)'; this.style.color='#0fba00';"
+               onmouseout="this.style.backgroundColor='rgb(255,255,255,0.1)'; this.style.color='white';">Dịch Vụ</a>
+            <a href="#"
+               style="color: white;
+              text-decoration: none;
+              padding: 10px 15px;
+              border: none;
+              border-radius: 5px;
+              transition: background-color 0.3s;
+              font-size: 16px;
+              font-weight: bold;
+              background-color: rgb(255,255,255,0.1);"
+               onmouseover="this.style.backgroundColor='rgb(255,255,255,0.8)'; this.style.color='#0fba00';"
+               onmouseout="this.style.backgroundColor='rgb(255,255,255,0.1)'; this.style.color='white';">Liên Hệ</a>
+            <a href="http://localhost:8080/khach-hang-noi-quy3"
+
+               style="color: white;
+              text-decoration: none;
+              padding: 10px 15px;
+              border: none;
+              border-radius: 5px;
+              transition: background-color 0.3s;
+              font-size: 16px;
+              font-weight: bold;
+              background-color: rgb(255,255,255,0.1);"
+               onmouseout="this.style.backgroundColor='rgb(255,255,255,0.1)'; this.style.color='white';">Điều Khoản</a>
+        </nav>
+        <nav style="display: flex; gap: 15px;">
+            <a href="#"
+               id="customer"
+               style="color: white;
+            text-decoration: underline;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: rgb(255,255,255,0);"
+             >
+
+            </a>
+            <a href="#"
+               id="customerLog"
+               style="color: white;
+              text-decoration: none;
+              padding: 10px 15px;
+              border: none;
+              border-radius: 5px;
+              transition: background-color 0.3s;
+              font-size: 16px;
+              font-weight: bold;
+              background-color: rgb(255,255,255,0.1);"
+               onmouseover="this.style.backgroundColor='rgb(255,255,255,0.8)'; this.style.color='#0fba00';"
+               onmouseout="this.style.backgroundColor='rgb(255,255,255,0.1)'; this.style.color='white';"></a>
+        </nav>
+    </aside>
+<!--    <script src="/client/js/sidebarClient.js"></script>-->
+</div>
+

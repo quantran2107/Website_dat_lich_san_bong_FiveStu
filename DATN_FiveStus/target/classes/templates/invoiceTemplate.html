@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông Tin Đặt Sân Bóng</title>
+    <style>
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 600px;
+            font-family: Arial, sans-serif;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .header {
+            background-color: #198754;
+            padding: 20px;
+            text-align: center;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            color: #fff;
+        }
+        .header h2 {
+            margin: 0;
+        }
+        .content {
+            padding: 20px;
+        }
+        .content p {
+            text-align: center; /* Căn giữa đoạn văn */
+        }
+        .content .content1 p{
+            text-align: start;
+        }
+        .footer {
+            background-color: #f1f1f1;
+            padding: 10px;
+            text-align: center;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h2>FiveStu</h2>
+        <h2>Phiếu Đặt Lịch Sân Bóng!</h2>
+    </div>
+    <div class="content">
+        <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi. Dưới đây là thông tin hóa đơn của bạn:</p>
+        <h3>Thông Tin Khách Hàng</h3>
+            <div class="content1" style="text-align: start">
+                <p th:text="'Tên: ' + ${hoaDon.hoVaTenKhachHang}">Tên khách hàng</p>
+                <p th:text="'Số điện thoại: ' + ${hoaDon.soDienThoaiKhachHang}">Số điện thoại</p>
+                <p th:text="'Email: ' + ${hoaDon.emailKhachHang}">Email</p>
+                <p th:text="'Thời gian đặ: ' + ${hoaDon.ngayTao}">Thời gian đặt</p>
+                <p th:text="'Mã hoá đơn: ' + ${hoaDon.maHoaDon}">Mã hoá đơn</p>
+            </div>
+        <h3>Thông Tin Sân Bóng</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>STT</th>
+                <th>Mã sân</th>
+                <th>Tên sân</th>
+                <th>Giờ</th>
+                <th>Giá</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="chiTiet, stat : ${chiTietHoaDon}">
+                <td th:text="${stat.index + 1}">1</td>
+                <td th:text="${chiTiet.maHoaDonChiTiet}">Mã</td>
+                <td th:text="${chiTiet.tenSanBong}">Tên sân</td>
+                <td th:text="${#strings.substringAfter(chiTiet.thoiGianBatDauCa, 'T') + ' - ' + #strings.substringAfter(chiTiet.thoiGianKetThucCa, 'T')}">Giờ</td>
+                <td th:text="${chiTiet.tongTien}">Giá</td>
+            </tr>
+            </tbody>
+        </table>
+        <h3 th:text="'Tổng tiền: ' + ${hoaDon.tongTienSan}">Tổng tiền</h3>
+        <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
+    </div>
+    <div class="footer">
+        <p>Sân bóng Five Stu</p>
+    </div>
+</div>
+</body>
+</html>

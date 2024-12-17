@@ -1,0 +1,54 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<header id="header" class="site-header text-black" th:fragment="headerClient">
+
+    <nav id="header-nav" class="navbar navbar-expand-lg">
+        <div class="container-lg">
+            <a class="navbar-brand" th:href="@{/khach-hang/trang-chu}">
+                <img th:src="@{/client/images/main-logo.png}" alt="FiveStu" class="logo"
+                     style="height: auto;width: 121px;">
+            </a>
+            <button class="navbar-toggler d-flex d-lg-none order-3 border-0 p-1 ms-2" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <svg class="navbar-icon">
+                    <use xlink:href="#navbar-icon"></use>
+                </svg>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="bdNavbar">
+                <div class="offcanvas-header px-4 pb-0">
+                    <a class="navbar-brand ps-3" th:href="@{/khach-hang/trang-chu}">
+                        <img th:src="@{/client/images/main-logo.png}" class="logo" alt="logo">
+                    </a>
+                    <button type="button" class="btn-close btn-close-black p-5" data-bs-dismiss="offcanvas"
+                            aria-label="Close"
+                            data-bs-target="#bdNavbar"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul id="navbar" class="navbar-nav fw-bold justify-content-center align-items-center flex-grow-1">
+                        <li id="trangChu" class="nav-item">
+                            <a class="nav-link me-5" th:href="@{/khach-hang/trang-chu}">Trang chủ</a>
+                        </li>
+                        <li id="noiquy" class="nav-item">
+                            <a class="nav-link me-5" th:href="@{/khach-hang-noi-quy3}">Nội quy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div  class="user-items ps-0 ps-md-5">
+                <ul class="d-flex justify-content-end list-unstyled align-item-center m-0" id="customerSider">
+                    <li class="pe-3 nav-item dropdown">
+                        <a href="#" id="userMenuLink" data-bs-toggle="modal" data-bs-target="#modallogin"
+                           class="border-0">
+                            <svg class="user" width="24" height="24">
+                                <use xlink:href="#user"></use>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+    <script src="/client/js/customerHeader.js"></script>
+</header>

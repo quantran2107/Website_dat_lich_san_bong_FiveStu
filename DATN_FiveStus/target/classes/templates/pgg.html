@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông Báo Phiếu Giảm Giá</title>
+    <style>
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            max-width: 600px;
+            font-family: Arial, sans-serif;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .header {
+            background-color: #198754;
+            padding: 20px;
+            text-align: center;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            color: #fff;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .content {
+            padding: 20px;
+        }
+        .footer {
+            background-color: #f1f1f1;
+            padding: 10px;
+            text-align: center;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        .button {
+            color: #fff;
+            background-color: #198754;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .button:hover {
+            background-color: #145c32;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Bạn có một phiếu giảm giá:
+            <br>
+            <span th:text="${ten}"></span></h1>
+    </div>
+    <div class="content">
+        <h2>Thông Báo Phiếu Giảm Giá</h2>
+        <p>Xin chào quý khách hàng thân yêu,</p>
+        <p>Sân bóng Five Stu gửi đến bạn một phiếu giảm giá đặc biệt.</p>
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Chi Tiết</th>
+            </tr>
+            <tr>
+                <td>Giảm</td>
+                <td><span th:text="${mucGiam}"></span> cho đơn hàng từ: <span th:text="${dieuKienToiThieu}"></span></td>
+            </tr>
+            <tr>
+                <td>Có hiệu lực từ</td>
+                <td><span th:text="${batDau}"></span></td>
+            </tr>
+            <tr>
+                <td>Đến ngày</td>
+                <td><span th:text="${ketThuc}"></span></td>
+            </tr>
+        </table>
+        <p>Hãy sử dụng phiếu giảm giá này khi bạn đặt sân trên trang web của chúng tôi để nhận được ưu đãi đặc biệt.</p>
+        <a th:href="@{http://localhost:8080/khach-hang/trang-chu}" class="button" style="color: #ccced0">Xem Chi Tiết</a>
+        <p>Cảm ơn bạn đã ủng hộ chúng tôi!</p>
+    </div>
+    <div class="footer">
+        <p>Sân bóng Five Stu</p>
+    </div>
+</div>
+</body>
+</html>

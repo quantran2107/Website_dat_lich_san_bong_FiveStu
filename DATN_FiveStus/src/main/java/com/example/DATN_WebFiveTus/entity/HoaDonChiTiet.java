@@ -57,6 +57,9 @@ public class HoaDonChiTiet {
     @Column(name = "tong_tien")
     private Double tongTien;
 
+    @Column(name = "tien_coc_hdct")
+    private Double tienCocHdct;
+
     @Column(name = "tien_giam_gia")
     private Double tienGiamGia;
 

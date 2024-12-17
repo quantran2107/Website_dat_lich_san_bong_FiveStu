@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface NgayTrongTuanRepository extends JpaRepository<NgayTrongTuan,Integer> {
-    @Query("SELECT n FROM NgayTrongTuan n WHERE n.thuTrongTuan = :thuTrongTuan")
+    @Query("SELECT n FROM NgayTrongTuan n WHERE n.thuTrongTuan = :thuTrongTuan and n.deletedAt = false")
     NgayTrongTuan findNgayTrongTuanByThuTrongTuan(@Param("thuTrongTuan") String thuTrongTuan);
 }

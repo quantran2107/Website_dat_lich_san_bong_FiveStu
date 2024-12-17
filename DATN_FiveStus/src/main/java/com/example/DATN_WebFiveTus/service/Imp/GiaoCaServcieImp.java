@@ -59,16 +59,23 @@ public class GiaoCaServcieImp implements GiaoCaService {
         if (giaoCa != null) {
             List<BanGiaoCaResponse> list = banGiaoCaResponse(giaoCa.getNhanVien().getId());
             if (list.isEmpty()) {
-                return ApiResponseDto.builder().status(String.valueOf(HttpStatus.NOT_FOUND)).message("Not found!").response(false).build();
+                giaoCa.setTienChuyenKhoanTrongCa(BigDecimal.valueOf(0));
+                giaoCa.setTienMatTrongCa(BigDecimal.valueOf(0));
+                giaoCa.setTongTienTrongCa(BigDecimal.valueOf(0));
+                giaoCa.setTrangThai(false);
+                giaoCaRepository.save(giaoCa);
+                return ApiResponseDto.builder().status(String.valueOf(HttpStatus.CREATED)).message("Done!").response(true).build();
             }
+            BigDecimal tongTien = BigDecimal.ZERO;
             for (BanGiaoCaResponse bg:list){
-                if (bg.getHinhThuc().equalsIgnoreCase("chuyển khoản")){
+                if (bg.getHinhThucThanhToan().equalsIgnoreCase("chuyển khoản")){
                     giaoCa.setTienChuyenKhoanTrongCa(bg.getTongTien());
                 } else {
                     giaoCa.setTienMatTrongCa(bg.getTongTien());
                 }
+                tongTien = tongTien.add(bg.getTongTien());
             }
-            giaoCa.setTongTienTrongCa(giaoCa.getTienChuyenKhoanTrongCa().add(giaoCa.getTienMatTrongCa()));
+            giaoCa.setTongTienTrongCa(tongTien);
             giaoCa.setTrangThai(false);
             giaoCaRepository.save(giaoCa);
             return ApiResponseDto.builder().status(String.valueOf(HttpStatus.CREATED)).message("Done!").response(true).build();
@@ -86,7 +93,9 @@ public class GiaoCaServcieImp implements GiaoCaService {
             GiaoCa giaoCa = new GiaoCa();
             giaoCa.setNhanVien(nv);
             giaoCa.setTrangThai(true);
-            giaoCa.setTienMatCaTruoc(BigDecimal.valueOf(requestBody.getTienMatDauCa() + requestBody.getTienChuyenKhoanDauCa()));
+            giaoCa.setTienMatTrongCa(BigDecimal.valueOf(0));
+            giaoCa.setTienChuyenKhoanTrongCa(BigDecimal.valueOf(0));
+            giaoCa.setTienMatCaTruoc(BigDecimal.valueOf(requestBody.getTienMatDauCa() + requestBody.getTienChuyenKhoanDauCa()+requestBody.getTienMatCaTruoc()));
             giaoCaRepository.save(giaoCa);
             return true;
         }

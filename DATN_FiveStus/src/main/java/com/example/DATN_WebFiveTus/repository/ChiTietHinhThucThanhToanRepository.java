@@ -25,16 +25,16 @@ public interface ChiTietHinhThucThanhToanRepository extends JpaRepository<ChiTie
             ht.hinh_thuc_thanh_toan AS hinh_thuc_thanh_toan,
             SUM(ctht.so_tien) AS tong_so_tien
         FROM
-            duantotnghiep.chi_tiet_hinh_thuc_thanh_toan ctht
+            DuAnTotNghiep.chi_tiet_hinh_thuc_thanh_toan ctht
         JOIN
-            duantotnghiep.hoa_don_chi_tiet cthd ON ctht.id_hoa_don_chi_tiet = cthd.id
+            DuAnTotNghiep.hoa_don_chi_tiet cthd ON ctht.id_hoa_don_chi_tiet = cthd.id
         JOIN
-           duantotnghiep.hinh_thuc_thanh_toan ht ON ctht.id_hinh_thuc_thanh_toan = ht.id
+           DuAnTotNghiep.hinh_thuc_thanh_toan ht ON ctht.id_hinh_thuc_thanh_toan = ht.id
         JOIN
-            duantotnghiep.nhan_vien nv ON cthd.id_nhan_vien = nv.id
+            DuAnTotNghiep.nhan_vien nv ON cthd.id_nhan_vien = nv.id
         WHERE
             nv.id = :id
-             AND DATE(ctht.created_at) = CURDATE()
+             AND DATE(ctht.created_at) = CURDATE()- INTERVAL 1 DAY
         GROUP BY
             ht.hinh_thuc_thanh_toan;
 """, nativeQuery = true)

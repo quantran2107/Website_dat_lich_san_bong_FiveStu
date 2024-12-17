@@ -39,7 +39,7 @@ public interface HoaDonChiTietService {
     void updateTrangThaiThanhToan(Integer id);
     void updateTrangThaiHuy(Integer id);
 
-    List<HoaDonChiTietDTO> findByNgayDenSan(Date ngayDenSan);
+//    List<HoaDonChiTietDTO> findByNgayDenSan(Date ngayDenSan);
 
     HoaDonChiTietDTO save2(HoaDonChiTietDTO hoaDonChiTietDTO);
 
@@ -54,4 +54,6 @@ public interface HoaDonChiTietService {
     HoaDonChiTietDTO huyLichDat(Integer id);
 
     HoaDonChiTietDTO thanhToan(Integer id,HoaDonChiTietDTO hoaDonChiTietDTO);
+
+    void sendDailyReminders();
 }

@@ -1,16 +1,16 @@
 package com.example.DATN_WebFiveTus.service.Imp;
 
 import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
-import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
 import com.example.DATN_WebFiveTus.entity.HoaDon;
 import com.example.DATN_WebFiveTus.entity.HoaDonChiTiet;
 import com.example.DATN_WebFiveTus.entity.NhanVien;
-import com.example.DATN_WebFiveTus.entity.PhieuGiamGia;
-import com.example.DATN_WebFiveTus.entity.PhieuGiamGiaChiTiet;
 import com.example.DATN_WebFiveTus.entity.SanCa;
 import com.example.DATN_WebFiveTus.exception.ResourceNotfound;
 import com.example.DATN_WebFiveTus.repository.*;
 import com.example.DATN_WebFiveTus.service.HoaDonChiTietService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,19 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.security.SecureRandom;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +63,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
 
     @Autowired
-    public HoaDonChiTietServiceImp(HoaDonChiTietRepository hoaDonChiTietRepository, HoaDonRepository hoaDonRepository, SanCaRepository sanCaRepository, ModelMapper modelMapper,PhieuGiamGiaRepository phieuGiamGiaRepository) {
+    public HoaDonChiTietServiceImp(HoaDonChiTietRepository hoaDonChiTietRepository, HoaDonRepository hoaDonRepository, SanCaRepository sanCaRepository, ModelMapper modelMapper, PhieuGiamGiaRepository phieuGiamGiaRepository) {
         this.hoaDonChiTietRepository = hoaDonChiTietRepository;
         this.hoaDonRepository = hoaDonRepository;
         this.sanCaRepository = sanCaRepository;
@@ -204,6 +212,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         dto.setNgayTaoHoaDon(hoaDonChiTiet.getHoaDon().getNgayTao());
         dto.setNgayDenSan(hoaDonChiTiet.getNgayDenSan());
         dto.setTongTien(hoaDonChiTiet.getTongTien());
+        dto.setTienCocHdct(hoaDonChiTiet.getTienCocHdct());
         dto.setTienGiamGia(hoaDonChiTiet.getTienGiamGia());
         dto.setTongTienThucTe(hoaDonChiTiet.getTongTienThucTe());
         dto.setGhiChu(hoaDonChiTiet.getGhiChu());
@@ -235,9 +244,9 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         hoaDonChiTietRepository.updateTrangThaiHuy(id);
     }
 
-    public List<HoaDonChiTietDTO> findByNgayDenSan(Date ngayDenSan) {
+    public List<HoaDonChiTietDTO> findByNgayDenSan(java.util.Date ngayDenSan) {
         // Lấy danh sách HoaDonChiTiet từ repository
-        List<HoaDonChiTiet> list = hoaDonChiTietRepository.findByNgayDenSan(ngayDenSan);
+        List<HoaDonChiTiet> list = hoaDonChiTietRepository.findByNgayDenSan((java.sql.Date) ngayDenSan);
 
         // Ánh xạ và bổ sung thông tin cho DTO
         List<HoaDonChiTietDTO> dtoList = list.stream()
@@ -285,10 +294,12 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
         hoaDonChiTiet.setSanCa(sanCa);
         hoaDonChiTiet.setHoaDon(hoaDon);
-        hoaDonChiTiet.setNgayDenSan(new java.sql.Date(hoaDonChiTietDTO.getNgayDenSan().getTime()));
+        hoaDonChiTiet.setNgayDenSan(new java.util.Date(hoaDonChiTietDTO.getNgayDenSan().getTime()));
         hoaDonChiTiet.setKieuNgayDat(hoaDonChiTietDTO.getKieuNgayDat());
         hoaDonChiTiet.setTongTien(hoaDonChiTietDTO.getTongTien());
-
+        hoaDonChiTiet.setTienCocHdct(hoaDonChiTietDTO.getTienCocHdct());
+        hoaDonChiTiet.setDeletedAt(false);
+        hoaDonChiTiet.setTienGiamGia((double) 0);
         if (hoaDon.getNhanVien() != null) {
             nhanVien = nhanVienReposity.findById(hoaDon.getNhanVien().getId())
                     .orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại với ID: " + hoaDonChiTietDTO.getIdNhanVien()));
@@ -394,8 +405,18 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         hoaDonChiTiet.setHoaDon(hoaDon);
         hoaDonChiTiet.setNhanVien(nhanVien);
         hoaDonChiTiet.setTongTien(hoaDonChiTietDTO.getTongTien());
-        hoaDonChiTiet.setPhieuGiamGia(phieuGiamGiaRepository.findById(hoaDonChiTietDTO.getIdphieuGiamGia()).orElseThrow());
-        hoaDonChiTiet.setTienGiamGia(hoaDonChiTietDTO.getTienGiamGia());
+        hoaDonChiTiet.setTienCocHdct(hoaDonChiTietDTO.getTienCocHdct());
+        if (hoaDonChiTietDTO.getIdphieuGiamGia() != null) {
+            hoaDonChiTiet.setPhieuGiamGia(
+                    phieuGiamGiaRepository.findById(hoaDonChiTietDTO.getIdphieuGiamGia())
+                            .orElseThrow(() -> new RuntimeException("Phiếu giảm giá không tồn tại với ID: " + hoaDonChiTietDTO.getIdphieuGiamGia()))
+            );
+            hoaDonChiTiet.setTienGiamGia(hoaDonChiTietDTO.getTienGiamGia());
+        } else {
+            hoaDonChiTiet.setPhieuGiamGia(null);
+            hoaDonChiTiet.setTienGiamGia((double) 0);
+        }
+
         hoaDonChiTiet.setTongTienThucTe(hoaDonChiTietDTO.getTongTienThucTe());
         hoaDonChiTiet.setTrangThai("Đã thanh toán");
 
@@ -428,4 +449,54 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
         return modelMapper.map(hoaDonChiTietSave, HoaDonChiTietDTO.class);
     }
 
+    @Override
+    @Transactional
+    @Scheduled(cron = "0 39 2 * * ?", zone = "Asia/Ho_Chi_Minh")// Chạy mỗi phút
+    public void sendDailyReminders() {
+        ZonedDateTime nowInHCM = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+        LocalDate tomorrow = nowInHCM.plusDays(1).toLocalDate();
+//        log.info("Ngày cần nhắc nhở (GMT+7): " + tomorrow);
+
+//        System.out.println("Ngày cần check " + tomorrow);
+        // Lấy danh sách hóa đơn chi tiết cần nhắc nhở
+        List<HoaDonChiTiet> reminders = hoaDonChiTietRepository.findRemindersForTomorrow(tomorrow);
+
+//        log.info("Số lượng hóa đơn cần nhắc nhở: " + reminders.size());
+
+        for (HoaDonChiTiet hoaDonChiTiet : reminders) {
+            try {
+//                log.info("Đang gửi email cho khách hàng: " + hoaDonChiTiet.getHoaDon().getKhachHang().getEmail());
+                sendReminderEmail(hoaDonChiTiet);
+            } catch (MessagingException e) {
+                log.error("Lỗi khi gửi email: ", e);
+            }
+        }
+    }
+
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
+    private void sendReminderEmail(HoaDonChiTiet hoaDonChiTiet) throws MessagingException {
+        // Tạo nội dung email từ Thymeleaf
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+        String formattedDate = dateFormatter.format(hoaDonChiTiet.getNgayDenSan());
+        String thoiGianBatDau = hoaDonChiTiet.getSanCa().getCa().getThoiGianBatDau().format(TIME_FORMATTER);
+        String thoiGianKetThuc = hoaDonChiTiet.getSanCa().getCa().getThoiGianKetThuc().format(TIME_FORMATTER);
+        Context context = new Context();
+        context.setVariable("tenKhachHang", hoaDonChiTiet.getHoaDon().getKhachHang().getHoVaTen());
+        context.setVariable("tenSanBong", hoaDonChiTiet.getSanCa().getSanBong().getTenSanBong());
+        context.setVariable("ngayDenSan", formattedDate);
+        context.setVariable("thoiGianBatDau",thoiGianBatDau);
+        context.setVariable("thoiGianKetThuc", thoiGianKetThuc);
+
+        String htmlContent = springTemplateEngine.process("nhac-lich", context);
+
+        // Gửi email
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+        helper.setTo(hoaDonChiTiet.getHoaDon().getKhachHang().getEmail());
+        helper.setSubject("Nhắc Nhở: Bạn Sắp Có Lịch Đá Bóng");
+        helper.setText(htmlContent, true);
+
+        javaMailSender.send(message);
+    }
 }
