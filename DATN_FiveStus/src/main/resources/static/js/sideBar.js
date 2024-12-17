@@ -16,6 +16,7 @@ $(document).ready(function () {
                     logout(response);
                     return;
                 }
+                checkSideBar2()
                 checkStatus(response);
             },
             error: () => {
@@ -25,13 +26,11 @@ $(document).ready(function () {
     }
 
     function checkStatus(listRole) {
-
         $.ajax({
             url: 'http://localhost:8080/giao-ca/check-gc',
             type: 'GET',
             dataType: 'json',
             success: function (response) {
-                console.log(response);
                 switch (response.status) {
                     case 'OTHER_STAFF_ON_SHIFT':
                         showWarningMessage(response.response["nhanVien"]);
@@ -54,19 +53,40 @@ $(document).ready(function () {
     }
 
     function nhanCa(giaoCa) {
+        if (giaoCa !== null) {
+            $('#checkBox').prop('disabled', true)
+        }
+        if (parseFloat($('#tienMatDauCa').val()) < 0 || parseFloat($('#tienChuyenKhoanDauCa').val()) < 0) {
+            Swal.fire({
+                title: "Cảnh báo!",
+                text: `Số tiền bạn nhập vào không được âm!`,
+                icon: "warning",
+                showConfirmButton: false,
+                showCancelButton: true,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                cancelButtonText: 'Thoát!'
+            });
+            return;
+        }
         $('#modaltoggleNC').modal('show');
         $('#btnNhanCa').click(function () {
+
             let formNC = {
                 tienMatDauCa: null,
                 tienChuyenKhoanDauCa: null,
+                tienMatCaTruoc: null
             }
             if ($('#checkBox').is(':checked')) {
                 formNC.tienMatDauCa = $('#tienMatDauCa').val();
                 formNC.tienChuyenKhoanDauCa = $('#tienChuyenKhoanDauCa').val();
+                formNC.tienMatCaTruoc = 0;
             } else if (giaoCa === null) {
                 formNC.tienMatDauCa = $('#tienMatDauCa').val();
                 formNC.tienChuyenKhoanDauCa = $('#tienChuyenKhoanDauCa').val();
-            } else if (giaoCa["tienMatTrongCa"] !==parseFloat( $('#tienMatDauCa').val()) || giaoCa["tienChuyenKhoanTrongCa"] !==parseFloat( $('#tienChuyenKhoanDauCa').val())) {
+                formNC.tienMatCaTruoc = 0;
+            } else if (giaoCa["tienMatTrongCa"].toString() !== ($('#tienMatDauCa').val()) || giaoCa["tienChuyenKhoanTrongCa"].toString() !== ($('#tienChuyenKhoanDauCa').val())) {
+                console.log(giaoCa)
                 Swal.fire({
                     title: "Cảnh báo!",
                     text: `Số tiền bạn nhập vào không khớp với dữ liệu ca trước!`,
@@ -81,6 +101,7 @@ $(document).ready(function () {
             } else {
                 formNC.tienMatDauCa = $('#tienMatDauCa').val();
                 formNC.tienChuyenKhoanDauCa = $('#tienChuyenKhoanDauCa').val();
+                formNC.tienMatCaTruoc = giaoCa["tienMatCaTruoc"]
             }
 
             $.ajax({
@@ -174,7 +195,27 @@ $(document).ready(function () {
             success: function (response) {
                 console.log(response)
                 if (response.response === true) {
-                    window.location.href = "/admin/logout";
+                    let timerInterval;
+                    Swal.fire({
+                        title: `Kết thúc ca làm thành công`,
+                        icon: "success",
+                        timer: 2000,
+                        timerProgressBar: true,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        didOpen: () => {
+                            timerInterval = setInterval(() => {
+                            }, 100);
+                        },
+                        willClose: () => {
+                            clearInterval(timerInterval);
+                        }
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            window.location.href = "/admin/logout";
+                        }
+                    });
                 } else {
                     Swal.fire({
                         title: "Lưu thất bại! Có lỗi xảy ra",
@@ -205,6 +246,32 @@ $(document).ready(function () {
                     </a>
                 </li>
             </ul>
+            <ul class="navbar-nav flex-fill w-100 mb-3">
+                <li class="nav-item dropdown">
+                    <a class="nav-link pl-3" href="/dich-vu">
+                        <i class="fe fe-shopping-cart"></i>
+                        <span class="ml-3 item-text">Quản lý dịch vụ</span>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav flex-fill w-100 mb-3">
+                <li class="nav-item dropdown">
+                    <a class="nav-link pl-3" href="/dat-lich-tai-quay">
+                        <i class="fe fe-clipboard"></i>
+                        <span class="ml-3 item-text">Đặt lịch</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav flex-fill w-100 mb-3">
+                <li class="nav-item active">
+                    <a class="nav-link pl-3" href="/list-san-ca">
+                        <i class="fe fe-codepen"></i>
+                        <span class="ml-3 item-text">Quản lý sân ca</span>
+                    </a>
+                </li>
+            </ul>
+           
             <ul class="navbar-nav flex-fill w-100 mb-3">
                 <li class="nav-item active">
                     <a class="nav-link pl-3" href="/phieu-giam-gia">
@@ -237,23 +304,7 @@ $(document).ready(function () {
 <!--                    </a>-->
 <!--                </li>-->
 <!--            </ul>-->
-            <ul class="navbar-nav flex-fill w-100 mb-3">
-                <li class="nav-item dropdown">
-                    <a class="nav-link pl-3" href="/listSanBong">
-                        <i class="fe fe-columns"></i>
-                        <span class="ml-3 item-text">Quản lý sân và giá </span>
-                    </a>
-                </li>
-            </ul>
-            <ul class="navbar-nav flex-fill w-100 mb-3">
-                <li class="nav-item dropdown">
-                    <a class="nav-link pl-3" href="/listThamSo">
-                        <i class="fe fe-tool"></i>
-                        <span class="ml-3 item-text">Quản lý tham số</span>
-                    </a>
-                </li>
-            </ul>
-               <ul  class="navbar-nav flex-fill w-100 mb-3">
+            <ul  class="navbar-nav flex-fill w-100 mb-3">
                 <li class="nav-item dropdown">
                     <a aria-expanded="false" class="dropdown-toggle nav-link pl-3" data-toggle="collapse" href="#pages">
                         <i class="fe fe-user"></i>
@@ -273,9 +324,73 @@ $(document).ready(function () {
                     </ul>
                 </li>
             </ul>
+            <ul class="navbar-nav flex-fill w-100 mb-3">
+                <li class="nav-item dropdown">
+                    <a class="nav-link pl-3" href="/listSanBong">
+                        <i class="fe fe-columns"></i>
+                        <span class="ml-3 item-text">Quản lý sân và giá </span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav flex-fill w-100 mb-3">
+                <li class="nav-item dropdown">
+                    <a class="nav-link pl-3" href="/listThamSo">
+                        <i class="fe fe-tool"></i>
+                        <span class="ml-3 item-text">Quản lý tham số</span>
+                    </a>
+                </li>
+            </ul>
+             <ul class="navbar-nav flex-fill w-100 mb-3">
+                <li class="nav-item active">
+                    <a class="nav-link pl-3" href="#" id="logoutGC" >
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="ml-3 item-text">Đăng xuất</span>
+                    </a>
+                </li>
+            </ul>
             `;
         $(".w-100.d-flex").after(newUl);
     }
+
+    function checkSideBar2() {
+        const newUl = `
+             <ul class="navbar-nav flex-fill w-100 mb-3">
+                <li class="nav-item dropdown">
+                    <a class="nav-link pl-3" href="/dich-vu">
+                        <i class="fe fe-shopping-cart"></i>
+                        <span class="ml-3 item-text">Quản lý dịch vụ</span>
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav flex-fill w-100 mb-3">
+                <li class="nav-item dropdown">
+                    <a class="nav-link pl-3" href="/dat-lich-tai-quay">
+                        <i class="fe fe-clipboard"></i>
+                        <span class="ml-3 item-text">Đặt lịch</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav flex-fill w-100 mb-3">
+                <li class="nav-item active">
+                    <a class="nav-link pl-3" href="/list-san-ca">
+                        <i class="fe fe-codepen"></i>
+                        <span class="ml-3 item-text">Quản lý sân ca</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav flex-fill w-100 mb-3">
+                <li class="nav-item active">
+                    <a class="nav-link pl-3" href="#" id="logoutGC" >
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="ml-3 item-text">Đăng xuất</span>
+                    </a>
+                </li>
+            </ul>
+        `;
+        $(".w-100.d-flex").after(newUl);
+    }
+
     function showWarningMessage(nv) {
         let hoTen = nv["hoTen"];
         Swal.fire({
@@ -288,8 +403,14 @@ $(document).ready(function () {
             confirmButtonText: 'Đăng xuất',
         }).then((result) => {
             if (result.isConfirmed) {
-               window.location.href ="/admin/logout"
+                window.location.href = "/admin/logout"
             }
-        });;
+        });
     }
+
+    $(window).on("load", function () {
+        $("#preloader").fadeOut("slow", function () {
+            $("body").css("visibility", "visible");
+        });
+    });
 });

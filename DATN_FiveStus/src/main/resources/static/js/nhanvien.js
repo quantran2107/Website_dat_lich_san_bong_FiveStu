@@ -336,12 +336,11 @@ $(document).ready(function () {
                 const statusClass = employee.trangThai === 'active' ? 'custom-4' : 'custom-3';
                 const statusText = employee.trangThai === 'active' ? 'Hoạt động' : 'Đã nghỉ';
 
-                tbody += `<tr style="cursor: default">
-                <td class="special-td">${startIndex + index + 1}</td>
-                <td class="special-td">${employee.maNhanVien}</td>
-                <td class="special-td">${employee.hoTen}</td>
-                <td class="special-td">${employee.email}</td>
-                <td class="special-td">${employee.soDienThoai}</td>
+                tbody += ` <td class="special-td">${startIndex + index + 1}</td>
+                <td class="special-td">${employee.maNhanVien === null ? "Không có" : employee.maNhanVien}</td>
+                <td class="special-td">${employee["hoTen"] === null ? "Không có" : employee["hoTen"]}</td>
+                <td class="special-td">${employee.email === null ? "Không có" : employee.email}</td>
+                <td class="special-td">${employee["soDienThoai"] === null ? "Không có" : employee["soDienThoai"]}</td>
                 <td class="special-td">${employee.gioiTinh ? "Nam" : "Nữ"}</td>
                <td>
                     <span class="${statusClass}">
