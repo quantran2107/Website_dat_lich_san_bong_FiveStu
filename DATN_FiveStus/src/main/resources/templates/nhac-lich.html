@@ -1,10 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Nhắc Nhở: Bạn Sắp Có Lịch Đá Bóng</title>
+  <style>
+    .container {
+      margin: 0 auto;
+      padding: 20px;
+      max-width: 600px;
+      font-family: Arial, sans-serif;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+    .header {
+      background-color: #007bff;
+      padding: 20px;
+      text-align: center;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      color: #fff;
+    }
+    .header h1 {
+      margin: 0;
+    }
+    .content {
+      padding: 20px;
+    }
+    .footer {
+      background-color: #f1f1f1;
+      padding: 10px;
+      text-align: center;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+    .button {
+      color: #fff;
+      background-color: #007bff;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      display: inline-block;
+    }
+    .button:hover {
+      background-color: #0056b3;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
 </head>
 <body>
-$END$
+<div class="container">
+  <div class="header">
+    <h1>Nhắc Nhở: Bạn Sắp Có Lịch Đá Bóng</h1>
+  </div>
+  <div class="content">
+    <h2 style="text-align: center;">Nhắc Nhở Lịch Đá Bóng</h2>
+    <p>Xin chào <span th:text="${tenKhachHang}"></span>,</p>
+    <p>Sân bóng Five Stu nhắc bạn về lịch đá bóng của bạn như sau:</p>
+    <table>
+      <tr>
+        <th>#</th>
+        <th>Thông Tin</th>
+      </tr>
+      <tr>
+        <td>Sân</td>
+        <td><span th:text="${tenSanBong}"></span></td>
+      </tr>
+      <tr>
+        <td>Ngày đá</td>
+        <td><span th:text="${ngayDenSan}"></span></td>
+      </tr>
+      <tr>
+        <td>Thời gian bắt đầu</td>
+        <td><span th:text="${thoiGianBatDau}"></span></td>
+      </tr>
+      <tr>
+        <td>Thời gian kết thúc</td>
+        <td><span th:text="${thoiGianKetThuc}"></span></td>
+      </tr>
+    </table>
+    <p>Hãy đến đúng giờ và sẵn sàng tận hưởng thời gian đá bóng của bạn tại sân chúng tôi!</p>
+    <a th:href="@{http://localhost:8080/khach-hang/trang-chu}" class="button" style="color: #ccced0">Xem Chi Tiết</a>
+    <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
+  </div>
+  <div class="footer">
+    <p>Sân bóng Five Stu</p>
+  </div>
+</div>
 </body>
 </html>

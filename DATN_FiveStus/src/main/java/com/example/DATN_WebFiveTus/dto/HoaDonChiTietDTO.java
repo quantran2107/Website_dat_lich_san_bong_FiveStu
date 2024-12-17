@@ -82,6 +82,8 @@ public class HoaDonChiTietDTO {
 
     private Double tongTien;
 
+    private Double tienCocHdct;
+
     private Double tienGiamGia;
 
     private Double tongTienThucTe;
@@ -104,9 +106,9 @@ public class HoaDonChiTietDTO {
 
     private Boolean doiTuongApDungPhieuGianGia;
 
-    private java.sql.Date ngayBatDauPhieuGianGia;
+    private Date ngayBatDauPhieuGianGia;
 
-    private java.sql.Date ngayKetThucPhieuGianGia;
+    private Date ngayKetThucPhieuGianGia;
 
     private String trangThaiPhieuGianGia;
 

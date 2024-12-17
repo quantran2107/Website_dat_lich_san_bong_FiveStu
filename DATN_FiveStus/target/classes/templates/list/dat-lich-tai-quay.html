@@ -687,7 +687,7 @@
                             <th>Loại</th>
                             <th>Mức giảm</th>
                             <th>Giá trị tối đa</th>
-<!--                            <th>Số Lượng</th>-->
+                            <!--                            <th>Số Lượng</th>-->
                             <th>Hành Động</th>
                         </tr>
                         </thead>
@@ -2413,7 +2413,7 @@
 
     async function fillDichVuChoHoaDon(idHDCT) {
         await tinhTongTienDichVu();
-         await tinhTongThanhToan();
+        await tinhTongThanhToan();
         $.ajax({
             url: `http://localhost:8080/dich-vu-san-bong/tim-theo-idhdct/${idHDCT}`,
             type: 'GET',
@@ -2731,7 +2731,7 @@
             tongTienThucTe: tongTienPhaiTra,
         };
         try {
-           await fetch(`http://localhost:8080/hoa-don-chi-tiet/thanh-toan/${selectedInvoiceId}`, {
+            await fetch(`http://localhost:8080/hoa-don-chi-tiet/thanh-toan/${selectedInvoiceId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -81,10 +81,10 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
             // Tự động tạo mã phiếu giảm giá mới
             phieuGiamGia.setMaPhieuGiamGia(generateMaPhieuGiamGia());
         }
-        if (phieuGiamGia.getSoLuong() == null ) {
+        if (phieuGiamGia.getSoLuong() == null) {
             phieuGiamGia.setSoLuong(Integer.MAX_VALUE); // Set số lượng là dương vô cùng
         }
-
+        phieuGiamGia.setTrangThai(phieuGiamGiaDTO.getTrangThai());
         phieuGiamGia.setDeletedAt(false); // Đặt giá trị deletedAt trước khi lưu
         PhieuGiamGia savedEntity = phieuGiamGiaRepository.save(phieuGiamGia);
         return modelMapper.map(savedEntity, PhieuGiamGiaDTO.class);
@@ -103,7 +103,6 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
         }
         return sb.toString();
     }
-
 
 
     @Override

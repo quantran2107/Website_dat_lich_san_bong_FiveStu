@@ -71,6 +71,7 @@ public class PhieuGiamGiaChiTietServiceImp implements PhieuGiamGiaChiTietService
             KhachHang khachHang = khachHangRepository.getReferenceById(phieuGiamGiaChiTietDTO.getIdKhachHang());
             phieuGiamGiaChiTiet.setKhachHang(khachHang);
         }
+        phieuGiamGiaChiTiet.setDeletedAt(false);
         // Lưu entity vào repository
         PhieuGiamGiaChiTiet savedEntity = phieuGiamGiaChiTietRepository.save(phieuGiamGiaChiTiet);
 

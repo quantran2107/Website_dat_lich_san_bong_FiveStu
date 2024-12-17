@@ -347,32 +347,40 @@
         try {
             showLoading(); // Hiển thị loading khi bắt đầu tải dữ liệu
 
+            const currentTime = new Date(); // Thời gian hiện tại (ngày và giờ)
+
             // Lấy dữ liệu ca
             const caResponse = await fetch('http://localhost:8080/ca/hien-thi');
             const caData = await caResponse.json();
             const caTimes = caData.map(ca => {
-                const startTime = new Date(ca.thoiGianBatDau).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                const endTime = new Date(ca.thoiGianKetThuc).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                return { time: `${startTime} - ${endTime}`, id: ca.id };
+                const startTime = new Date(ca.thoiGianBatDau);
+                const endTime = new Date(ca.thoiGianKetThuc);
+
+                return {
+                    id: ca.id,
+                    startHour: startTime.getHours(),
+                    startMinute: startTime.getMinutes(),
+                    time: `${startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+                };
             });
 
-            // Lấy danh sách sân theo loại sân
+            // Lấy danh sách sân
             const sanResponse = await fetch(`http://localhost:8080/san-bong/findByIdLoaiSan/${idLoaiSan}`);
             const sanData = await sanResponse.json();
 
             // Lấy thông tin đặt trước của khách hàng
             const customerDetails = await getCustomerDetails();
-            const customerBooking = new Set(customerDetails.map(detail => detail.idSanCa)); // Tập hợp sân đã đặt
+            const customerBooking = new Set(customerDetails.map(detail => detail.idSanCa));
 
             const tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = ''; // Xóa dữ liệu cũ
 
-            const addedSanCa = new Set(); // Lưu các sân ca đã thêm để tránh trùng lặp
+            const addedSanCa = new Set(); // Tránh trùng lặp
+            const rowSpanAdded = new Set(); // Kiểm soát rowSpan cho từng ca
 
-            // Duyệt qua từng ca
+            // Duyệt qua từng ca và sân
             caTimes.forEach(ca => {
-                const rowSpanAdded = new Set(); // Kiểm soát rowSpan theo từng ca
-                sanData.forEach(san => {
+                sanData.forEach((san, index) => {
                     const row = document.createElement('tr');
 
                     // Thêm cột thời gian nếu chưa thêm
@@ -380,7 +388,7 @@
                         const cellCa = document.createElement('td');
                         cellCa.textContent = ca.time;
                         cellCa.style.verticalAlign = 'middle';
-                        cellCa.rowSpan = sanData.length; // Hợp nhất hàng
+                        cellCa.rowSpan = sanData.length; // Hợp nhất số hàng bằng chiều dài sanData
                         row.appendChild(cellCa);
                         rowSpanAdded.add(ca.id);
                     }
@@ -393,23 +401,29 @@
                     // Duyệt qua 7 ngày
                     for (let i = 0; i < 7; i++) {
                         const cell = document.createElement('td');
-                        const idSanBong = san.id;
-                        const idCa = ca.id;
                         const ngayDenSan = new Date(currentWeekStart);
                         ngayDenSan.setDate(ngayDenSan.getDate() + i);
 
-                        // Tạo ID duy nhất cho sân ca
-                        const idSanCa = `${idSanBong}-${idCa}-${ngayDenSan.toISOString().split('T')[0]}`;
+                        // Kết hợp ngày và giờ bắt đầu ca
+                        const combinedDateTime = new Date(
+                            ngayDenSan.getFullYear(),
+                            ngayDenSan.getMonth(),
+                            ngayDenSan.getDate(),
+                            ca.startHour,
+                            ca.startMinute
+                        );
 
-                        // Kiểm tra nếu đã thêm
-                        if (addedSanCa.has(idSanCa)) {
-                            continue; // Bỏ qua nếu đã tồn tại
+                        // Nếu thời gian đã qua
+                        if (combinedDateTime < currentTime) {
+                            cell.textContent = '';
+                            cell.style.backgroundColor = 'lightgray';
+                            cell.classList.add('disabled-cell');
+                            row.appendChild(cell);
+                            continue;
                         }
 
-                        addedSanCa.add(idSanCa); // Thêm vào tập hợp
-
-                        // Gọi API kiểm tra sân ca
-                        fetchSanCa(idSanBong, ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"][i], idCa)
+                        // Kiểm tra trạng thái sân ca
+                        fetchSanCa(san.id, ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"][i], ca.id)
                             .then(giaData => {
                                 if (giaData) {
                                     checkAvailability(giaData.id, ngayDenSan).then(status => {
@@ -441,10 +455,11 @@
                                     cell.style.backgroundColor = 'lightgray';
                                 }
                             });
+
                         row.appendChild(cell);
                     }
 
-                    tableBody.appendChild(row); // Thêm hàng vào bảng
+                    tableBody.appendChild(row);
                 });
             });
 
@@ -454,7 +469,6 @@
             hideLoading();
         }
     }
-
 
     // Hàm cập nhật thông tin đặt chỗ
     function updateBookingInfo() {
@@ -669,8 +683,9 @@
     }
 
     function formatCurrencyVND(amount) {
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+        return `${new Intl.NumberFormat('vi-VN').format(amount)} VND`;
     }
+
 
     // Hàm thiết lập các nút
     async function setupDeleteButtons(selectedBookings) {
@@ -804,6 +819,15 @@
         return new Date(year, month, day); // Trả về đối tượng Date
     }
 
+    async function calculateDeposit(price) {
+        const depositRate = await fetchDepositRate();
+        if (depositRate.type === '%') {
+            return (price * depositRate.value) / 100;
+        }
+        return depositRate.value;
+    }
+
+
     async function handleBooking(selectedBookings) {
         const totalDepositFormatted = parseFloat(
             document.getElementById('total-deposit').textContent.replace(/[^\d]/g, '')
@@ -878,6 +902,8 @@
 
             // Lưu chi tiết hóa đơn
             const detailPromises = selectedBookings.map(async (booking) => {
+                const deposit = calculateDeposit(booking.price);
+                console.log(deposit)
                 const formattedDate = formatDateToDDMMYYYY(parseDateString(booking.date));
                 const detailResponse = await fetch('http://localhost:8080/hoa-don-chi-tiet/save2', {
                     method: 'POST',
@@ -887,6 +913,7 @@
                         idSanCa: booking.idSanCa,
                         ngayDenSan: formattedDate,
                         tongTien: booking.price,
+                        tienCocHdct : deposit,
                         tongTienThucTe: booking.price,
                         deletedAt: false
                     }),

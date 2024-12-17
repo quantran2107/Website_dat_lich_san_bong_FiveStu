@@ -1,6 +1,5 @@
 package com.example.DATN_WebFiveTus.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,8 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,9 +16,7 @@ import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
-
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,7 +34,6 @@ public class Ca {
 
     @Column(name = "ten_ca", nullable = false, length = 100)
     private String tenCa;
-
 
     @Column(name = "thoi_gian_bat_dau")
     private LocalDateTime thoiGianBatDau;
