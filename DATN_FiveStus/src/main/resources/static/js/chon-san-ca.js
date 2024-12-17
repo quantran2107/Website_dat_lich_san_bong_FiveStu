@@ -413,27 +413,40 @@ document.addEventListener("DOMContentLoaded", function () {
             if (ngayDenSanInput.value) {
                 const formattedDate = formatDateToDDMMYYYY(ngayDenSanInput.value); // Định dạng ngày "Theo ngày"
                 ngayQuery = formattedDate;
-                // Kiểm tra trạng thái của sân ca theo ngày hoặc khoảng ngày
-                fetch(`http://localhost:8080/hoa-don-chi-tiet/kiem-tra-dat?idSanCa=${sanCa.id}&ngayDenSan=${ngayQuery}`)
-                    .then(response => response.text())
-                    .then(status => {
-                        if (status === 'Còn trống') {
+
+                // Lấy thời gian hiện tại
+                const currentTime = new Date();
+
+                // Kết hợp ngày đã chọn với thời gian bắt đầu của sân ca
+                const sanCaStartTime = new Date(`${formattedDate}T${sanCa.thoiGianBatDau}`);
+
+                // Kiểm tra nếu đã quá giờ
+                if (sanCaStartTime < currentTime) {
+                    statusParagraph.classList.add('custom-2');
+                    statusParagraph.textContent = 'Quá giờ đặt';
+                } else {
+                    // Kiểm tra trạng thái của sân ca theo ngày
+                    fetch(`http://localhost:8080/hoa-don-chi-tiet/kiem-tra-dat?idSanCa=${sanCa.id}&ngayDenSan=${ngayQuery}`)
+                        .then(response => response.text())
+                        .then(status => {
+                            if (status === 'Còn trống') {
+                                statusParagraph.classList.add('custom-1');
+                                statusParagraph.textContent = 'Còn trống';
+                            } else if (status === 'Đã được đặt') {
+                                statusParagraph.classList.add('custom-3');
+                                statusParagraph.textContent = 'Đã được đặt';
+                            } else {
+                                // Xử lý trạng thái không xác định
+                                statusParagraph.classList.add('custom-1');
+                                statusParagraph.textContent = 'Trạng thái không xác định';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Lỗi khi kiểm tra trạng thái:', error);
                             statusParagraph.classList.add('custom-1');
-                            statusParagraph.textContent = 'Còn trống';
-                        } else if (status === 'Đã được đặt') {
-                            statusParagraph.classList.add('custom-3');
-                            statusParagraph.textContent = 'Đã được đặt';
-                        } else {
-                            // Xử lý trạng thái không xác định
-                            statusParagraph.classList.add('custom-1');
-                            statusParagraph.textContent = 'Trạng thái không xác định';
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Lỗi khi kiểm tra trạng thái:', error);
-                        statusParagraph.classList.add('custom-1');
-                        statusParagraph.textContent = 'Lỗi khi kiểm tra trạng thái';
-                    });
+                            statusParagraph.textContent = 'Lỗi khi kiểm tra trạng thái';
+                        });
+                }
             }
         } else if (selectedDayType === 'Nhiều ngày') {
             if (ngayBatDauInput.value && ngayKetThucInput.value) {
@@ -687,12 +700,17 @@ document.addEventListener("DOMContentLoaded", function () {
         header.classList.add('san-ca-header');
 
         const formattedDate = formatDateToDDMMYYYY(ngayDenSanInput.value); // Định dạng ngày
+        const currentTime = new Date(); // Thời gian hiện tại (ngày và giờ)
+
+        // Kết hợp ngày chọn với thời gian bắt đầu của sân ca
+        const sanCaStartTime = new Date(`${formattedDate}T${sanCa.thoiGianBatDau}`); // Định dạng ISO 8601
+        const isPast = sanCaStartTime < currentTime; // Kiểm tra thời gian đã qua
 
         fetch(`http://localhost:8080/hoa-don-chi-tiet/kiem-tra-dat?idSanCa=${sanCa.id}&ngayDenSan=${formattedDate}`)
             .then(response => response.text())
             .then(status => {
                 // Kiểm tra trạng thái
-                if (status === 'Còn trống') {
+                if (status === 'Còn trống' && !isPast) {
                     // Chỉ hiển thị checkbox nếu loại ngày là "Theo ngày"
                     if (selectedDayType === 'Theo ngày') {
                         const checkboxContainer = document.createElement('div');
