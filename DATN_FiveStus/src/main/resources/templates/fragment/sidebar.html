@@ -1,6 +1,5 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <style>
-    /* Preloader style */
     #preloader {
         position: fixed;
         top: 0;
@@ -16,8 +15,23 @@
         font-weight: bold;
         color: #333;
     }
+    /* Dành cho Chrome, Safari và Edge */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 
-    /* Ẩn body trước khi trang tải xong */
+    /* Dành cho Firefox */
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    /* Dành cho các trình duyệt hỗ trợ chuẩn appearance */
+    input[type="number"] {
+        appearance: none;
+    }
+
     body {
         visibility: hidden;
     }

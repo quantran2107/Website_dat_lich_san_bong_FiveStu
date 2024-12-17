@@ -53,19 +53,40 @@ $(document).ready(function () {
     }
 
     function nhanCa(giaoCa) {
+        if (giaoCa !== null) {
+            $('#checkBox').prop('disabled', true)
+        }
+        if (parseFloat($('#tienMatDauCa').val()) < 0 || parseFloat($('#tienChuyenKhoanDauCa').val()) < 0) {
+            Swal.fire({
+                title: "Cảnh báo!",
+                text: `Số tiền bạn nhập vào không được âm!`,
+                icon: "warning",
+                showConfirmButton: false,
+                showCancelButton: true,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                cancelButtonText: 'Thoát!'
+            });
+            return;
+        }
         $('#modaltoggleNC').modal('show');
         $('#btnNhanCa').click(function () {
+
             let formNC = {
                 tienMatDauCa: null,
                 tienChuyenKhoanDauCa: null,
+                tienMatCaTruoc: null
             }
             if ($('#checkBox').is(':checked')) {
                 formNC.tienMatDauCa = $('#tienMatDauCa').val();
                 formNC.tienChuyenKhoanDauCa = $('#tienChuyenKhoanDauCa').val();
+                formNC.tienMatCaTruoc = 0;
             } else if (giaoCa === null) {
                 formNC.tienMatDauCa = $('#tienMatDauCa').val();
                 formNC.tienChuyenKhoanDauCa = $('#tienChuyenKhoanDauCa').val();
-            } else if (giaoCa["tienMatTrongCa"] !==parseFloat( $('#tienMatDauCa').val()) || giaoCa["tienChuyenKhoanTrongCa"] !==parseFloat( $('#tienChuyenKhoanDauCa').val())) {
+                formNC.tienMatCaTruoc = 0;
+            } else if (giaoCa["tienMatTrongCa"].toString() !== ($('#tienMatDauCa').val()) || giaoCa["tienChuyenKhoanTrongCa"].toString() !== ($('#tienChuyenKhoanDauCa').val())) {
+                console.log(giaoCa)
                 Swal.fire({
                     title: "Cảnh báo!",
                     text: `Số tiền bạn nhập vào không khớp với dữ liệu ca trước!`,
@@ -80,6 +101,7 @@ $(document).ready(function () {
             } else {
                 formNC.tienMatDauCa = $('#tienMatDauCa').val();
                 formNC.tienChuyenKhoanDauCa = $('#tienChuyenKhoanDauCa').val();
+                formNC.tienMatCaTruoc = giaoCa["tienMatCaTruoc"]
             }
 
             $.ajax({
@@ -330,8 +352,8 @@ $(document).ready(function () {
         $(".w-100.d-flex").after(newUl);
     }
 
-    function checkSideBar2(){
-        const newUl =`
+    function checkSideBar2() {
+        const newUl = `
              <ul class="navbar-nav flex-fill w-100 mb-3">
                 <li class="nav-item dropdown">
                     <a class="nav-link pl-3" href="/dich-vu">
@@ -381,11 +403,11 @@ $(document).ready(function () {
             confirmButtonText: 'Đăng xuất',
         }).then((result) => {
             if (result.isConfirmed) {
-               window.location.href ="/admin/logout"
+                window.location.href = "/admin/logout"
             }
         });
     }
-    
+
     $(window).on("load", function () {
         $("#preloader").fadeOut("slow", function () {
             $("body").css("visibility", "visible");

@@ -93,7 +93,9 @@ public class GiaoCaServcieImp implements GiaoCaService {
             GiaoCa giaoCa = new GiaoCa();
             giaoCa.setNhanVien(nv);
             giaoCa.setTrangThai(true);
-            giaoCa.setTienMatCaTruoc(BigDecimal.valueOf(requestBody.getTienMatDauCa() + requestBody.getTienChuyenKhoanDauCa()));
+            giaoCa.setTienMatTrongCa(BigDecimal.valueOf(0));
+            giaoCa.setTienChuyenKhoanTrongCa(BigDecimal.valueOf(0));
+            giaoCa.setTienMatCaTruoc(BigDecimal.valueOf(requestBody.getTienMatDauCa() + requestBody.getTienChuyenKhoanDauCa()+requestBody.getTienMatCaTruoc()));
             giaoCaRepository.save(giaoCa);
             return true;
         }
