@@ -457,6 +457,14 @@ function showAddForm() {
         </div>
         </div>
         </div>
+        <div class="form-row">
+        <div class="form-group col-md-12">
+        <label for="trangThai">Trạng thái</label>
+        <div class="input-group mb-3">
+        <input type="text" class="form-control" id="trangThai" disabled>
+        </div>
+        </div>
+        </div>
         </div>
             <!-- Bảng khách hàng bên phải -->
         <div class="col-md-6">
@@ -494,7 +502,30 @@ function showAddForm() {
 
     cardBody1.innerHTML = form;
     document.getElementById('doiTuongTatCa').checked = true;
+    const ngayBatDauInput = document.getElementById('ngayBatDau');
+    const ngayKetThucInput = document.getElementById('ngayKetThuc');
+    function updateTrangThai() {
+        const currentDate = new Date();
+        const startDate = new Date(ngayBatDauInput.value);
+        const endDate = new Date(ngayKetThucInput.value);
+        const soLuong = parseInt(document.getElementById('soLuong').value);
+        let trangThai = '';
+        if (currentDate <= startDate) {
+            trangThai = 'Sắp diễn ra';
+        } else if (currentDate > endDate) {
+            trangThai = 'Đã kết thúc';
+        } else {
+            trangThai = 'Đang diễn ra';
+        }
+        if (soLuong === 0) {
+            trangThai = 'Đã kết thúc';
+        }
+        document.getElementById('trangThai').value = trangThai;
+    }
 
+    document.getElementById('soLuong').addEventListener('change', updateTrangThai);
+    ngayBatDauInput.addEventListener('change', updateTrangThai);
+    ngayKetThucInput.addEventListener('change', updateTrangThai);
     document.addEventListener('change', function (event) {
         const doiTuongCaNhan = document.getElementById('doiTuongCaNhan');
         const doiTuongTatCa = document.getElementById('doiTuongTatCa');
@@ -760,6 +791,7 @@ function showAddForm() {
             ngayKetThuc: document.getElementById('ngayKetThuc').value,
             doiTuongApDung: getSelectedRadioValue('doiTuongApDung'),
             ghiChu: document.getElementById('ghiChu').value,
+            trangThai: document.getElementById('trangThai').value,
             idKhachHangs: selectedIdKhachHangs,
             emailKhachHangs: selectedEmailsKhachHangs
         };
@@ -1250,7 +1282,7 @@ function showUpdate(id) {
                 const endDate = new Date(ngayKetThucInput.value);
                 const soLuong = parseInt(document.getElementById('soLuong').value);
                 let trangThai = '';
-                if (currentDate < startDate) {
+                if (currentDate <= startDate) {
                     trangThai = 'Sắp diễn ra';
                 } else if (currentDate > endDate) {
                     trangThai = 'Đã kết thúc';
@@ -1264,8 +1296,8 @@ function showUpdate(id) {
             }
 
             document.getElementById('soLuong').addEventListener('change', updateTrangThai);
-            ngayBatDauInput.addEventListener('change', updateTrangThai);
-            ngayKetThucInput.addEventListener('change', updateTrangThai);
+            document.getElementById('ngayBatDau').addEventListener('change', updateTrangThai);
+            document.getElementById('ngayKetThuc').addEventListener('change', updateTrangThai);
 
 
             // Lấy danh sách khách hàng từ API và hiển thị trong bảng
@@ -1314,6 +1346,10 @@ function showUpdate(id) {
                         }
                     };
 
+
+                    document.getElementById('soLuong').addEventListener('change', updateTrangThai);
+                    ngayBatDauInput.addEventListener('change', updateTrangThai);
+                    ngayKetThucInput.addEventListener('change', updateTrangThai);
 
                     // Function để tạo các nút phân trang
                     const createPaginationButtons = () => {

@@ -93,18 +93,18 @@ public class HoaDonChiTietRest {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đã xảy ra lỗi: " + e.getMessage());
         }
     }
-    @GetMapping("/ngay-den-san")
-    public ResponseEntity<?> finByNgayDenSan(
-            @RequestParam(required = false) Date ngayDenSan) {
-        List<HoaDonChiTietDTO> result;
-        if (ngayDenSan == null) {
-            // Xử lý khi không có ngày được cung cấp, có thể trả về một danh sách rỗng hoặc thông báo lỗi
-            result = new ArrayList<>();  // Hoặc xử lý theo cách bạn muốn
-        } else {
-            result = hoaDonChiTietService.findByNgayDenSan((java.sql.Date) ngayDenSan);
-        }
-        return ResponseEntity.ok(result);
-    }
+//    @GetMapping("/ngay-den-san")
+//    public ResponseEntity<?> finByNgayDenSan(
+//            @RequestParam(required = false) Date ngayDenSan) {
+//        List<HoaDonChiTietDTO> result;
+//        if (ngayDenSan == null) {
+//            // Xử lý khi không có ngày được cung cấp, có thể trả về một danh sách rỗng hoặc thông báo lỗi
+//            result = new ArrayList<>();  // Hoặc xử lý theo cách bạn muốn
+//        } else {
+//            result = hoaDonChiTietService.findByNgayDenSan((java.sql.Date) ngayDenSan);
+//        }
+//        return ResponseEntity.ok(result);
+//    }
 
     @PostMapping("/save")
     public ResponseEntity<HoaDonChiTietDTO> save(@RequestBody HoaDonChiTietDTO hoaDonChiTietDTO) {
@@ -181,4 +181,9 @@ public class HoaDonChiTietRest {
         return ResponseEntity.ok(updatedHoaDonChiTiet);
     }
 
+    @GetMapping("/test-scheduler")
+    public ResponseEntity<String> testScheduler() {
+        hoaDonChiTietService.sendDailyReminders();
+        return ResponseEntity.ok("Scheduler test completed!");
+    }
 }

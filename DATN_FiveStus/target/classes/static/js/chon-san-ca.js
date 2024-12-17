@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Gán sự kiện cho các item trong dropdown
     const dropdownItems = document.querySelectorAll('#loaiNgayDropdown .dropdown-item');
     dropdownItems.forEach(item => {
-        item.addEventListener('click', function(event) {
+        item.addEventListener('click', function (event) {
             event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a>
             const type = this.getAttribute('data-value'); // Lấy giá trị loại ngày
             showInput(type); // Gọi hàm showInput
@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     let selectedDayType = 'Theo ngày';
+
     // Hàm hiển thị ô input ngày theo loại ngày đặt
     function showInput(type) {
         selectedDayType = type; // Cập nhật loại ngày đã chọn
@@ -78,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => showError('Error fetching san bong data:', error));
 
     // Hiển thị danh sách sân bóng
-        function displaySanBong(sanBongs) {
+    function displaySanBong(sanBongs) {
         const sanCaContainer = document.getElementById('sanCaContainer');
         sanCaContainer.innerHTML = ''; // Xóa nội dung cũ
 
@@ -412,27 +413,40 @@ document.addEventListener("DOMContentLoaded", function () {
             if (ngayDenSanInput.value) {
                 const formattedDate = formatDateToDDMMYYYY(ngayDenSanInput.value); // Định dạng ngày "Theo ngày"
                 ngayQuery = formattedDate;
-                // Kiểm tra trạng thái của sân ca theo ngày hoặc khoảng ngày
-                fetch(`http://localhost:8080/hoa-don-chi-tiet/kiem-tra-dat?idSanCa=${sanCa.id}&ngayDenSan=${ngayQuery}`)
-                    .then(response => response.text())
-                    .then(status => {
-                        if (status === 'Còn trống') {
+
+                // Lấy thời gian hiện tại
+                const currentTime = new Date();
+
+                // Kết hợp ngày đã chọn với thời gian bắt đầu của sân ca
+                const sanCaStartTime = new Date(`${formattedDate}T${sanCa.thoiGianBatDau}`);
+
+                // Kiểm tra nếu đã quá giờ
+                if (sanCaStartTime < currentTime) {
+                    statusParagraph.classList.add('custom-2');
+                    statusParagraph.textContent = 'Quá giờ đặt';
+                } else {
+                    // Kiểm tra trạng thái của sân ca theo ngày
+                    fetch(`http://localhost:8080/hoa-don-chi-tiet/kiem-tra-dat?idSanCa=${sanCa.id}&ngayDenSan=${ngayQuery}`)
+                        .then(response => response.text())
+                        .then(status => {
+                            if (status === 'Còn trống') {
+                                statusParagraph.classList.add('custom-1');
+                                statusParagraph.textContent = 'Còn trống';
+                            } else if (status === 'Đã được đặt') {
+                                statusParagraph.classList.add('custom-3');
+                                statusParagraph.textContent = 'Đã được đặt';
+                            } else {
+                                // Xử lý trạng thái không xác định
+                                statusParagraph.classList.add('custom-1');
+                                statusParagraph.textContent = 'Trạng thái không xác định';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Lỗi khi kiểm tra trạng thái:', error);
                             statusParagraph.classList.add('custom-1');
-                            statusParagraph.textContent = 'Còn trống';
-                        } else if (status === 'Đã được đặt') {
-                            statusParagraph.classList.add('custom-3');
-                            statusParagraph.textContent = 'Đã được đặt';
-                        } else {
-                            // Xử lý trạng thái không xác định
-                            statusParagraph.classList.add('custom-1');
-                            statusParagraph.textContent = 'Trạng thái không xác định';
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Lỗi khi kiểm tra trạng thái:', error);
-                        statusParagraph.classList.add('custom-1');
-                        statusParagraph.textContent = 'Lỗi khi kiểm tra trạng thái';
-                    });
+                            statusParagraph.textContent = 'Lỗi khi kiểm tra trạng thái';
+                        });
+                }
             }
         } else if (selectedDayType === 'Nhiều ngày') {
             if (ngayBatDauInput.value && ngayKetThucInput.value) {
@@ -515,7 +529,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const bookingButton = document.createElement('button');
                     bookingButton.textContent = 'Đặt lịch';
                     bookingButton.classList.add('btn', 'btn-booking');
-                    bookingButton.onclick = function() {
+                    bookingButton.onclick = function () {
 
                         // Nếu totalAvailableDays = 0, hiển thị thông báo và không thực hiện hành động tiếp theo
                         if (totalAvailableDays === 0) {
@@ -686,12 +700,17 @@ document.addEventListener("DOMContentLoaded", function () {
         header.classList.add('san-ca-header');
 
         const formattedDate = formatDateToDDMMYYYY(ngayDenSanInput.value); // Định dạng ngày
+        const currentTime = new Date(); // Thời gian hiện tại (ngày và giờ)
+
+        // Kết hợp ngày chọn với thời gian bắt đầu của sân ca
+        const sanCaStartTime = new Date(`${formattedDate}T${sanCa.thoiGianBatDau}`); // Định dạng ISO 8601
+        const isPast = sanCaStartTime < currentTime; // Kiểm tra thời gian đã qua
 
         fetch(`http://localhost:8080/hoa-don-chi-tiet/kiem-tra-dat?idSanCa=${sanCa.id}&ngayDenSan=${formattedDate}`)
             .then(response => response.text())
             .then(status => {
                 // Kiểm tra trạng thái
-                if (status === 'Còn trống') {
+                if (status === 'Còn trống' && !isPast) {
                     // Chỉ hiển thị checkbox nếu loại ngày là "Theo ngày"
                     if (selectedDayType === 'Theo ngày') {
                         const checkboxContainer = document.createElement('div');
@@ -1239,42 +1258,36 @@ async function themHoaDonChiTiet(idHoaDon) {
         // Lấy idSanBong từ API dựa trên tên sân bóng
         const idSanBong = await getSanBongId(tenSanBong);
         if (!idSanBong) {
-            console.error("Không thể lấy idSanBong từ tên sân bóng:", tenSanBong);
+            // console.error("Không thể lấy idSanBong từ tên sân bóng:", tenSanBong);
             return null; // Bỏ qua nếu không lấy được idSanBong
         }
 
         // Gọi API để lấy danh sách sân ca dựa trên idSanBong, idNgayTrongTuan, idCa
         const sanCa = await fetchSanCa(idSanBong, idNgayTrongTuan, idCa);
         if (!sanCa) {
-            console.error("Không thể lấy sân ca cho idSanBong:", idSanBong);
+            // console.error("Không thể lấy sân ca cho idSanBong:", idSanBong);
             return null; // Bỏ qua nếu không lấy được sân ca
         }
 
         const idSanCa = sanCa.id; // Giả sử bạn nhận được idSanCa từ API
 
         const gia = row.cells[5].textContent.trim();
-        console.log("Giá trị trong cột giá:", gia); // Kiểm tra giá trị gốc
+        // console.log("Giá trị trong cột giá:", gia); // Kiểm tra giá trị gốc
 
         const tongTien = gia.replace(/\./g, '').replace(/,/g, '').replace(' VNĐ', '');
-        console.log("Giá trị sau khi loại bỏ dấu chấm, dấu phẩy và ' VNĐ':", tongTien); // Kiểm tra giá trị sau khi loại bỏ
 
         const tongTienSo = Number(tongTien); // Chuyển đổi chuỗi sang số
-        console.log("Giá trị số tổng tiền:", tongTienSo); // Kiểm tra giá trị số
-
-        console.log("idSanCa:", idSanCa); // Kiểm tra idSanCa
-        console.log("ngayDenSan:", ngayDenSan); // Kiểm tra ngày đến sân
-        console.log("tongTien:", tongTienSo); // Kiểm tra tổng tiền
-
+        const tienCocHdct = await calculateDeposit(tongTienSo || 0);
         // Kiểm tra nếu idSanCa hoặc idHoaDon bị null
         if (!idHoaDon || !idSanCa) {
-            console.error("Lỗi: idHoaDon hoặc idSanCa bị null");
+            // console.error("Lỗi: idHoaDon hoặc idSanCa bị null");
             return null;
         }
 
         // Chuyển đổi ngày từ "yyyy-MM-dd" sang "dd/MM/yyyy"
         const dateParts = ngayDenSan.split("-");
         if (dateParts.length !== 3) {
-            console.error("Lỗi định dạng ngày:", ngayDenSan);
+            // console.error("Lỗi định dạng ngày:", ngayDenSan);
             return null;
         }
         const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`; // Định dạng lại ngày theo dd/MM/yyyy
@@ -1284,7 +1297,8 @@ async function themHoaDonChiTiet(idHoaDon) {
             idHoaDon: idHoaDon,
             idSanCa: idSanCa,
             ngayDenSan: formattedDate, // Sử dụng ngày đã định dạng lại
-            tongTien: tongTienSo // Chuyển đổi thành số nếu cần
+            tongTien: tongTienSo, // Chuyển đổi thành số nếu cần
+            tienCocHdct: Number(tienCocHdct)
         };
 
         console.log("Dữ liệu payload gửi đi:", JSON.stringify(chiTietPayload));
@@ -1478,6 +1492,39 @@ async function getLoaiSanId(tenSanBong) {
     const response = await fetch(`http://localhost:8080/san-bong/findByName?tenSanBong=${tenSanBong}`);
     const data = await response.json();
     return data.idLoaiSan;
+}
+
+// Hàm gọi API để lấy tỷ lệ tiền cọc
+async function fetchDepositRate() {
+    try {
+        const response = await fetch('http://localhost:8080/tham-so/searchMaFake/TSTIEN_COC');
+        const data = await response.json();
+        return {
+            value: data.giaTri,  // Giá trị tỷ lệ tiền cọc
+            type: data.typeGiaTri // Loại tỷ lệ (% hoặc giá trị cố định)
+        };
+    } catch (error) {
+        // console.error('Lỗi khi lấy tham số TSTIEN_COC:', error);
+        // Trả về giá trị mặc định nếu không tìm thấy hoặc gặp lỗi
+        return {
+            value: 0,  // Giá trị mặc định = 0
+            type: '%'  // Loại mặc định là %, để xử lý an toàn
+        };
+    }
+}
+
+// Hàm tính toán tiền cọc
+async function calculateDeposit(giaSan) {
+    const depositRate = await fetchDepositRate();  // Lấy tỷ lệ tiền cọc
+
+    let deposit = 0;
+    if (depositRate.type === '%') {
+        deposit = (giaSan * depositRate.value) / 100; // Tính theo phần trăm
+    } else {
+        deposit = depositRate.value; // Giá trị cố định
+    }
+
+    return deposit;
 }
 
 function paginateTable(tableBodyId, currentPage, rowsPerPage) {

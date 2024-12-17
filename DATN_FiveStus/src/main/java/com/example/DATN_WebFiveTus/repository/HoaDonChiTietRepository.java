@@ -112,5 +112,17 @@ public interface HoaDonChiTietRepository extends JpaRepository<HoaDonChiTiet, In
             "WHERE hdct.ngayDenSan BETWEEN :startDate AND :endDate")
     List<HoaDonChiTiet> findByNgayDenSanBetween(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
+    @Query("SELECT hdct FROM HoaDonChiTiet hdct " +
+            "JOIN FETCH hdct.hoaDon hd " +
+            "JOIN FETCH hd.khachHang kh " +
+            "JOIN FETCH hdct.sanCa sc " +
+            "JOIN FETCH sc.ca c " +
+            "WHERE hdct.trangThai = 'Chờ nhận sân' " +
+            "AND hdct.ngayDenSan = :ngayDenSan " +
+            "AND hdct.deletedAt = false " +
+            "AND hd.deletedAt = false")
+    List<HoaDonChiTiet> findRemindersForTomorrow(@Param("ngayDenSan") LocalDate ngayDenSan);
+
+
 
 }
