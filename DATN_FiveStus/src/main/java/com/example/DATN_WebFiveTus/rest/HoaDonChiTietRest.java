@@ -163,6 +163,12 @@ public class HoaDonChiTietRest {
         return ResponseEntity.ok(hoaDonChiTietDTO);
     }
 
+    @PutMapping("/hoan-tien-coc/{id}")
+    public ResponseEntity<HoaDonChiTietDTO> hoanTienCoc(@PathVariable Integer id) {
+        HoaDonChiTietDTO hoaDonChiTietDTO = hoaDonChiTietService.hoanTienCoc(id);
+        return ResponseEntity.ok(hoaDonChiTietDTO);
+    }
+
     @PutMapping("/update-trang-thai-chi-tiet/{idHoaDonChiTiet}")
     public ResponseEntity<Void> updateTrangThaiHoaDonChiTiet(@PathVariable Integer idHoaDonChiTiet, @RequestParam String trangThai) {
         hoaDonChiTietService.updateTrangThaiHoaDonChiTiet(idHoaDonChiTiet, trangThai);

@@ -391,6 +391,15 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
     }
 
     @Override
+    public HoaDonChiTietDTO hoanTienCoc(Integer id) {
+        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn với id " + id));
+        hoaDonChiTiet.setTrangThai("Đã hoàn tiền cọc");
+        hoaDonChiTietRepository.save(hoaDonChiTiet);
+        return modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class);
+    }
+
+    @Override
     public HoaDonChiTietDTO thanhToan(Integer id, HoaDonChiTietDTO hoaDonChiTietDTO) {
         // Lấy thông tin hóa đơn chi tiết hiện tại
         HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(id)

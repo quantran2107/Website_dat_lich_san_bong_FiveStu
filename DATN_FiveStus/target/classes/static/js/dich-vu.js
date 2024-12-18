@@ -119,7 +119,7 @@ function renderTable(items, page, size) {
                 <img src="${item.imageData}" alt="${item.tenDoThue || item.tenNuocUong || 'No image'}"
                 style="width: 70px; height: 70px; object-fit: cover;">
             </td>
-            <td>${item.donGias ? item.donGias + ' VND' : 'N/A'}</td>
+            <td>${item.donGias ? item.donGias.toLocaleString() + ' VND' : 'N/A'}</td>
             <td>${item.soLuongs || '0'}</td>
             <td>
                 <span class="${trangThai === 'Còn' ? 'custom-4' : 'custom-3'}"
@@ -390,7 +390,7 @@ async function exportToExcel(serviceType) {
                 row.innerHTML = `
                     <td>${index + 1}</td>
                     <td>${item.tenDoThue || item.tenNuocUong}</td>
-                    <td>${item.donGias ? item.donGias + ' VND' : 'N/A'}</td>
+                    <td>${item.donGias ? item.donGias.toLocaleString() + ' VND' : 'N/A'}</td>
                     <td>${item.soLuongs || '0'}</td>
                     <td>${item.trangThai || 'N/A'}</td>
                 `;
