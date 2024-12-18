@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -113,15 +113,18 @@ public class PhieuGiamGiaRest {
             @RequestParam(required = false) Boolean doiTuongApDung,
             @RequestParam(required = false) Boolean hinhThucGiamGia,
             @RequestParam(required = false) String trangThai,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") Date ngayBatDau,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") Date ngayKetThuc,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date ngayBatDau,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date ngayKetThuc,
             @PageableDefault(page = 0, size = 10) Pageable pageable) {
 
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Order.desc("createdAt")));
 
+        // Chuyển đổi java.util.Date sang java.sql.Date
+        java.sql.Date sqlNgayBatDau = ngayBatDau != null ? new java.sql.Date(ngayBatDau.getTime()) : null;
+        java.sql.Date sqlNgayKetThuc = ngayKetThuc != null ? new java.sql.Date(ngayKetThuc.getTime()) : null;
 
         Page<PhieuGiamGiaDTO> phieuGiamGiaPage = phieuGiamGiaService.searchPhieuGiamGia(
-                keyword, doiTuongApDung, hinhThucGiamGia, trangThai, ngayBatDau, ngayKetThuc, sortedPageable);
+                keyword, doiTuongApDung, hinhThucGiamGia, trangThai, sqlNgayBatDau, sqlNgayKetThuc, sortedPageable);
 
         return ResponseEntity.ok(phieuGiamGiaPage);
     }

@@ -63,7 +63,7 @@ function renderTable(data) {
     tableBody.innerHTML = '';
 
     tableData.forEach((phieuGiamGia, index) => {
-        const mucGiamText = phieuGiamGia.hinhThucGiamGia ? `${phieuGiamGia.mucGiam} %` : `${phieuGiamGia.mucGiam} VND`;
+        const mucGiamText = phieuGiamGia.hinhThucGiamGia ? `${phieuGiamGia.mucGiam} %` : `${phieuGiamGia.mucGiam ? phieuGiamGia.mucGiam.toLocaleString() : 0} VND`;
         const ngayBatDauFormatted = new Date(phieuGiamGia.ngayBatDau).toLocaleDateString();
         const ngayKetThucFormatted = new Date(phieuGiamGia.ngayKetThuc).toLocaleDateString();
         const now = new Date();
@@ -145,20 +145,9 @@ function renderTable(data) {
 }
 
 function searchByDate() {
-    const startDate = new Date(document.getElementById('searchStartDate').value);
-    const endDate = new Date(document.getElementById('searchEndDate').value);
-    if (!startDate || !endDate || isNaN(startDate) || isNaN(endDate)) {
-        return;
-    }
-
-    // Lọc dữ liệu theo khoảng ngày
-    const filteredData = initialTableData.filter(phieuGiamGia => {
-        const ngayBatDau = new Date(phieuGiamGia.ngayBatDau);
-        return ngayBatDau >= startDate && ngayBatDau <= endDate;
-    });
-
-    // Render lại bảng với dữ liệu đã lọc
-    renderTable({content: filteredData, totalPages: 1, number: 0, size: filteredData.length});
+    currentSearchStartDate = document.getElementById('searchStartDate').value;
+    currentSearchEndDate = document.getElementById('searchEndDate').value;
+    fetchDataAndRenderTable();
 }
 
 function showLoading() {
@@ -253,7 +242,7 @@ function showErrorToast(message) {
 // Confirm  SweetAlert2
 //Update trang thai
 function updateVoucherStatus(checkbox) {
-    const id = checkbox.dataset.id;
+    const idPhieuGiamGia = checkbox.dataset.id;
     const isChecked = checkbox.checked;
     if (!checkbox.id.startsWith('switch-')) {
         // Nếu không phải là switch, không thực hiện
@@ -270,20 +259,18 @@ function updateVoucherStatus(checkbox) {
     }).then((result) => {
         if (result.isConfirmed) {
             // Update status
-            fetch(`/api-phieu-giam-gia/${id}`)
+            fetch(`/api-phieu-giam-gia/${idPhieuGiamGia}`)
                 .then(response => response.json())
                 .then(data => {
                     const currentStatus = data.trangThai;
 
                     if ((currentStatus === 'Sắp diễn ra' || currentStatus === 'Đang diễn ra') && !isChecked) {
-                        const updateStatus = 'Đã kết thúc';
 
-                        fetch(`/api-phieu-giam-gia/trang-thai/${id}`, {
+                        fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/${idPhieuGiamGia}/ket-thuc`, {
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify({trangThai: updateStatus})
                         })
                             .then(response => {
                                 if (!response.ok) {
@@ -322,7 +309,6 @@ function updateVoucherStatus(checkbox) {
                     fetchDataAndRenderTable();
                 });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
-            console.log('Action canceled');
             fetchDataAndRenderTable();
         }
     });
@@ -1798,31 +1784,24 @@ function renderPagination(totalItems, pageSize, currentPage) {
 async function getSelectedIdKhachHangs() {
     const doiTuongTatCa = document.getElementById('doiTuongTatCa');
     if (doiTuongTatCa.checked) {
-        // Nếu đã chọn "Công khai", lấy danh sách tất cả ID và email khách hàng
+        // Lấy tất cả khách hàng nếu chọn Công khai
         try {
             // const response = await fetch('http://localhost:8080/khach-hang/hien-thi');
+            // if (!response.ok) throw new Error('Không thể lấy danh sách khách hàng');
             // const data = await response.json();
+            // return data.map(khachHang => khachHang.id);
             return [];
         } catch (error) {
-            // console.error('Error fetching khach hang:', error);
-            return []; // Trả về mảng rỗng nếu có lỗi
+
+            return [];
         }
     } else {
-        // Nếu không phải "Công khai", lấy danh sách ID và email khách hàng đã chọn từ checkbox
+        // Lấy các khách hàng được chọn từ checkbox
         const checkboxes = document.querySelectorAll('input.item-checkbox:checked');
-        const ids = Array.from(checkboxes).map(checkbox => checkbox.getAttribute('data-id'));
-
-        try {
-            const response = await fetch('http://localhost:8080/khach-hang/hien-thi');
-            const data = await response.json();
-            return data.filter(khachHang => ids.includes(khachHang.id.toString()))
-                .map(khachHang => ({id: khachHang.id, email: khachHang.email}));
-        } catch (error) {
-            // console.error('Error fetching khach hang:', error);
-            return []; // Trả về mảng rỗng nếu có lỗi
-        }
+        return Array.from(checkboxes).map(checkbox => parseInt(checkbox.dataset.id, 10));
     }
 }
+
 
 function validateForm() {
     // Lấy các giá trị từ các trường input
@@ -2039,12 +2018,9 @@ function handleAddFormSubmit() {
         event.preventDefault();
 
         try {
-            const selectedKhachHangs = await getSelectedIdKhachHangs();
-            const selectedIdKhachHangs = selectedKhachHangs.map(khachHang => khachHang.id);
-            const selectedEmailsKhachHangs = selectedKhachHangs.map(khachHang => khachHang.email);
+            const selectedIdKhachHangs = await getSelectedIdKhachHangs();
 
-            const data = collectFormData(selectedIdKhachHangs, selectedEmailsKhachHangs);
-
+            const data = collectFormData(selectedIdKhachHangs);
             if (!validateForm()) return;
 
             const confirmed = await Swal.fire({
@@ -2076,7 +2052,7 @@ function handleAddFormSubmit() {
     });
 }
 
-function collectFormData(selectedIdKhachHangs, selectedEmailsKhachHangs) {
+function collectFormData(selectedIdKhachHangs) {
     return {
         maPhieuGiamGia: document.getElementById('maPhieuGiamGia').value,
         tenPhieuGiamGia: document.getElementById('tenPhieuGiamGia').value,
@@ -2091,7 +2067,6 @@ function collectFormData(selectedIdKhachHangs, selectedEmailsKhachHangs) {
         ghiChu: document.getElementById('ghiChu').value,
         trangThai: document.getElementById('trangThai').value,
         idKhachHangs: selectedIdKhachHangs,
-        emailKhachHangs: selectedEmailsKhachHangs
     };
 }
 
@@ -2108,11 +2083,10 @@ async function savePhieuGiamGia(data, selectedIdKhachHangs) {
     }
 
     const phieuGiamGia = await response.json();
-
     const chiTietData = [];
     if (data.doiTuongApDung === 'true') { // Cá nhân
         selectedIdKhachHangs.forEach(idKhachHang => {
-            chiTietData.push({idPhieuGiamGia: phieuGiamGia.id, idKhachHang});
+            chiTietData.push({idPhieuGiamGia: phieuGiamGia.id,idKhachHang: idKhachHang});
         });
     } else { // Công khai
         for (let i = 0; i < data.soLuong; i++) {
@@ -2163,7 +2137,6 @@ function showUpdate(id) {
         .then(data => {
             // Điền dữ liệu vào form
             document.getElementById('id').value = data.id;
-            console.log(document.getElementById('id').value)
             document.getElementById('maPhieuGiamGia').value = data.maPhieuGiamGia;
             document.getElementById('tenPhieuGiamGia').value = data.tenPhieuGiamGia;
             document.getElementById('mucGiam').value = data.mucGiam;
@@ -2280,6 +2253,7 @@ function setupEventListenersUpdate() {
     doiTuongCaNhan.addEventListener('change', function () {
         if (doiTuongCaNhan.checked) {
             tableBenPhai.style.display = 'block'; // Hiển thị bảng khách hàng
+            soLuongInput.value = "0";
             soLuongInput.disabled = true; // Không cho phép chỉnh sửa số lượng
             calculateSoLuongFromCheckboxes();
         }
@@ -2312,43 +2286,32 @@ async function checkChiTietPhieuGiamGia(idPhieuGiamGia, selectedIds) {
         const response = await fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pggct/${idPhieuGiamGia}`);
         const data = await response.json();
 
-        // Tạo một mảng chỉ chứa các ID không tồn tại
-        const notFoundIds = selectedIds.filter(selectedId =>
-            !data.some(chiTiet => chiTiet.idKhachHang == selectedId)
-        );
+        // Lọc các ID không tồn tại hoặc có deletedAt = true
+        const notFoundOrDeletedIds = selectedIds.filter(id => {
+            const existing = data.find(chiTiet => chiTiet.idKhachHang == id);
+            return !existing || existing.deletedAt; // Không tồn tại hoặc bị xóa
+        });
 
-        return notFoundIds; // Trả về mảng ID khách hàng không tồn tại
+        return notFoundOrDeletedIds;
     } catch (error) {
-        console.error('Error checking chi tiet phieu giam gia:', error);
-        return []; // Trả về mảng rỗng nếu có lỗi
+        return [];
     }
 }
 
 // Hàm kiểm tra ID khách hàng đã tồn tại nhưng không có trong danh sách đã chọn
 async function getNotSelectedIds(idPhieuGiamGia, selectedIds) {
     try {
-        // Lấy danh sách ID khách hàng đã tồn tại từ API
         const response = await fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/pggct/${idPhieuGiamGia}`);
-        if (!response.ok) {
-            throw new Error('Lỗi khi lấy chi tiết phiếu giảm giá');
-        }
-        const existingData = await response.json();
+        const data = await response.json();
 
-        // Tạo tập hợp các ID khách hàng đã tồn tại từ dữ liệu nhận được từ API
-        const existingIdsSet = new Set(existingData.map(chiTiet => chiTiet.idKhachHang.toString())); // Chuyển tất cả thành chuỗi
+        // Lọc các ID có `deletedAt = false` nhưng không nằm trong `selectedIds`
+        const notSelectedIds = data
+            .filter(chiTiet => !selectedIds.includes(chiTiet.idKhachHang.toString()) && !chiTiet.deletedAt)
+            .map(chiTiet => chiTiet.idKhachHang.toString());
 
-        // Chuyển selectedIds thành chuỗi để so sánh chính xác
-        const selectedIdsSet = new Set(selectedIds.map(id => id.toString()));
-
-        // Tạo một mảng để lưu các ID đã tồn tại nhưng không có trong selectedIds
-        const notSelectedIds = Array.from(existingIdsSet).filter(idKhachHang => !selectedIdsSet.has(idKhachHang));
-
-        console.log('Các ID khách hàng đã tồn tại nhưng đã bị bỏ chọn:', notSelectedIds);
-
-        return notSelectedIds; // Trả về mảng các ID khách hàng đã tồn tại nhưng không có trong selectedIds
+        return notSelectedIds;
     } catch (error) {
-        console.error('Lỗi khi kiểm tra ID khách hàng đã tồn tại nhưng không có trong danh sách đã chọn:', error);
-        return []; // Trả về mảng rỗng nếu có lỗi
+        return [];
     }
 }
 
@@ -2387,8 +2350,8 @@ async function handleUpdateFormSubmit() {
                         deletedAt: document.getElementById('deletedAt').value,
                         trangThai: document.getElementById('trangThai').value
                     };
-                    console.log(dataUpdate)
-                    // Gọi API cập nhật phiếu giảm giá
+
+                    // Cập nhật thông tin phiếu giảm giá
                     const responseUpdate = await fetch(`http://localhost:8080/api-phieu-giam-gia/${dataUpdate.id}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
@@ -2400,37 +2363,11 @@ async function handleUpdateFormSubmit() {
                         throw new Error(`Error updating phiếu giảm giá: ${errorData.message}`);
                     }
 
-                    // Nếu là "Cá nhân", xử lý cập nhật khách hàng
-                    if (getSelectedRadioValue('doiTuongApDung')===true ||getSelectedRadioValue('doiTuongApDung')==="true") {
-                        const selectedIdKhachHangs = await getSelectedIdKhachHangs();
-                        console.log(selectedIdKhachHangs)
-                        // Gọi hàm kiểm tra chi tiết phiếu giảm giá với ID phiếu và danh sách ID kh
-                        // ách hàng đã chọn
-                        const notFoundIds = await checkChiTietPhieuGiamGia(dataUpdate.id, selectedIdKhachHangs);
-                        console.log(notFoundIds)
-                        const notSelectedIds = await getNotSelectedIds(dataUpdate.id, selectedIdKhachHangs);
-                        console.log(notSelectedIds)
-                        for (const khachHang of notFoundIds) {
-                            if (!khachHang) continue; // Bỏ qua ID không hợp lệ
-                            const chiTietData = {
-                                idPhieuGiamGia: dataUpdate.id,
-                                idKhachHang: khachHang.id // Chỉ truyền ID
-                            };
-
-                            const responseSave = await fetch('http://localhost:8080/api-phieu-giam-gia-chi-tiet/save', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(chiTietData),
-                            });
-
-                            if (!responseSave.ok) {
-                                const errorData = await responseSave.json();
-                                throw new Error(`Error saving chi tiết phiếu giảm giá: ${errorData.message}`);
-                            }
-                        }
-
-
-                        // Xử lý các ID đã tồn tại nhưng bị bỏ chọn (cập nhật deletedAt = true)
+                    // Nếu là "Cá nhân", xử lý danh sách khách hàng
+                    if (dataUpdate.doiTuongApDung === "true" || dataUpdate.doiTuongApDung === true) {
+                        const selectedIdKhachHangs = await getSelectedIdKhachHangs(); // Lấy danh sách ID khách hàng đã chọn
+                        const notSelectedIds = await getNotSelectedIds(dataUpdate.id, selectedIdKhachHangs); // Lấy danh sách ID không được chọn
+                        // Xử lý các ID bị bỏ chọn (deletedAt = true)
                         if (notSelectedIds.length > 0) {
                             for (const idKhachHang of notSelectedIds) {
                                 await fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/${dataUpdate.id}/khach-hang/${idKhachHang}`, {
@@ -2438,32 +2375,52 @@ async function handleUpdateFormSubmit() {
                                     headers: {
                                         'Content-Type': 'application/json',
                                     },
-                                    body: JSON.stringify(true), // Gửi giá trị boolean dưới dạng đối tượng JSON
+                                    body: JSON.stringify(true), // Cập nhật deletedAt = true
                                 });
                             }
                         }
-
                         // Xử lý các ID mới được chọn lại (cập nhật deletedAt = false)
                         if (selectedIdKhachHangs.length > 0) {
                             for (const idKhachHang of selectedIdKhachHangs) {
-                                await fetch(`http://localhost:8080/api-phieu-giam-gia-chi-tiet/${dataUpdate.id}/khach-hang/${idKhachHang}`, {
-                                    method: 'PUT',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: JSON.stringify(false), // Gửi giá trị boolean dưới dạng đối tượng JSON
-                                });
+                                const responseCheck = await fetch(
+                                    `http://localhost:8080/api-phieu-giam-gia-chi-tiet/${dataUpdate.id}/khach-hang/${idKhachHang}`
+                                );
 
+                                if (responseCheck.ok) {
+                                    const dataCheck = await responseCheck.json();
+                                    // Nếu tồn tại và `deletedAt = true`, cập nhật lại thành `false`
+                                    if (dataCheck.deletedAt) {
+                                        await fetch(
+                                            `http://localhost:8080/api-phieu-giam-gia-chi-tiet/${dataUpdate.id}/khach-hang/${idKhachHang}`,
+                                            {
+                                                method: 'PUT',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify(false), // Cập nhật lại trạng thái
+                                            }
+                                        );
+                                    }
+                                } else if (responseCheck.status === 400) {
+                                    // Nếu chưa tồn tại, thêm mới phiếu giảm giá chi tiết
+                                    await fetch(
+                                        `http://localhost:8080/api-phieu-giam-gia-chi-tiet/${dataUpdate.id}/chuyen-sang-ca-nhan`,
+                                        {
+                                            method: 'PUT',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify([idKhachHang]),
+                                        }
+                                    );
+                                } else {
+                                    throw new Error(`Error checking chi tiết phiếu giảm giá: ${responseCheck.status}`);
+                                }
                             }
                         }
                     }
 
                     Swal.fire({
-                        title: 'Sửa thành công',
+                        title: 'Thành công!',
                         text: 'Cập nhật phiếu giảm giá thành công!',
                         icon: 'success'
                     });
-                    showSuccessToast('Sửa thành công');
                     cancelAdd();
                 } catch (error) {
                     Swal.fire({

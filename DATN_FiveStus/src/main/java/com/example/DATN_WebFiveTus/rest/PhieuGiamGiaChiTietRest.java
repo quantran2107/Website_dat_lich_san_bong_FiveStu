@@ -58,10 +58,25 @@ public class PhieuGiamGiaChiTietRest {
         return ResponseEntity.ok(phieuGiamGiaChiTietDTO);
     }
 
+    @PutMapping("/{id}/chuyen-sang-ca-nhan")
+    public ResponseEntity<?> updateToCaNhan(@PathVariable("id") Integer idPhieuGiamGia,
+                                            @RequestBody List<Integer> khachHangIds) {
+        serviceImp.updatePhieuGiamGiaToCaNhan(idPhieuGiamGia, khachHangIds);
+        return ResponseEntity.ok("Cập nhật thành công");
+    }
+
     @GetMapping("/pggct/{idPhieuGiamGia}")
     public ResponseEntity<List<PhieuGiamGiaChiTietDTO>> findAllPGGCT(@PathVariable("idPhieuGiamGia") Integer idPhieuGiamGia) {
         List<PhieuGiamGiaChiTietDTO> phieuGiamGiaChiTietList = serviceImp.findByIdPGG(idPhieuGiamGia);
         return ResponseEntity.ok(phieuGiamGiaChiTietList);
+    }
+
+    @GetMapping("/{id}/khach-hang/{idKhachHang}")
+    public ResponseEntity<?> findByIdvaIdKhachHang(
+            @PathVariable("id") Integer id,
+            @PathVariable("idKhachHang") Integer idKhachHang) {
+        PhieuGiamGiaChiTietDTO phieuGiamGiaChiTietDTO = serviceImp.findByIdPGGAndKhachHang(id, idKhachHang);
+        return ResponseEntity.ok(phieuGiamGiaChiTietDTO);
     }
 
     @PutMapping("/{id}/khach-hang/{idKhachHang}")
@@ -84,4 +99,11 @@ public class PhieuGiamGiaChiTietRest {
         List<PhieuGiamGiaChiTietDTO> phieuGiamGiaList = phieuGiamGiaChiTietService.getAllPGGCTCaNhan(idKhachHang,tongTien,keyword);
         return ResponseEntity.ok(phieuGiamGiaList);
     }
+
+    @PutMapping("/{id}/ket-thuc")
+    public ResponseEntity<Void> endPhieuGiamGia(@PathVariable("id") Integer idPhieuGiamGia) {
+        serviceImp.updatePhieuGiamGiaStatusToEnded(idPhieuGiamGia);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }
