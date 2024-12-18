@@ -41,5 +41,5 @@ public interface PhieuGiamGiaRepository extends JpaRepository<PhieuGiamGia, Inte
     List<PhieuGiamGia> fillPhieuGiamGia(
             @Param("tongTien") Double tongTien);
 
-
+    boolean existsByMaPhieuGiamGia(String maPhieuGiamGia);
 }

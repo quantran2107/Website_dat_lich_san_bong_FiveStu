@@ -2,6 +2,7 @@ package com.example.DATN_WebFiveTus.config.VNPay;
 
 import com.example.DATN_WebFiveTus.dto.HoaDonChiTietDTO;
 import com.example.DATN_WebFiveTus.dto.HoaDonDTO;
+import com.example.DATN_WebFiveTus.dto.PhieuGiamGiaDTO;
 import com.example.DATN_WebFiveTus.entity.HoaDon;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -46,8 +47,28 @@ public class EmailService {
             // Gửi email
             javaMailSender.send(message);
         } catch (MessagingException e) {
-            System.err.println("Lỗi khi gửi email: " + e.getMessage());
+//            System.err.println("Lỗi khi gửi email: " + e.getMessage());
         }
     }
 
+    @Async
+    @Transactional
+    public void sendPGGEmail(String email, String subject, String templateName, Context context) {
+        try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            // Render nội dung email từ template
+            String emailContent = springTemplateEngine.process(templateName, context);
+
+            helper.setTo(email);
+            helper.setSubject(subject);
+            helper.setText(emailContent, true);
+
+            // Gửi email
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+//            System.err.println("Lỗi khi gửi email: " + e.getMessage());
+        }
+    }
 }

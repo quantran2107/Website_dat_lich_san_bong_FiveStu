@@ -15,9 +15,5 @@ public class PdfGeneratorRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Giả lập dữ liệu hóa đơn
-
-        // Tạo file PDF
-//        pdfService.generatePdf("output/hoaDon.pdf", hoaDon, chiTietHoaDon);
     }
 }

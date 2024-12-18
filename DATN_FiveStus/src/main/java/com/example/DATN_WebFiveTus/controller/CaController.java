@@ -142,41 +142,4 @@ public class CaController {
     }
 
 
-//    @GetMapping("/listCa")
-//    public String HienThi(Model model) {
-//        List<CaDTO> listRest = caRest.getAll().getBody();
-//        Set<String> listTT = new HashSet<>(listRest.stream()
-//                .map(CaDTO::getTrangThai)
-//                .collect(Collectors.toList()));
-//
-//        model.addAttribute("listTT",listTT);
-//
-//        model.addAttribute("listNTT", Arrays.asList(restTemplate.getForObject(
-//                "http://localhost:8080/ngay-trong-tuan/hien-thi",
-//                NgayTrongTuanDTO[].class
-//        )));
-//
-//        model.addAttribute("listC", Arrays.asList(restTemplate.getForObject(
-//                "http://localhost:8080/ca/hien-thi",
-//                CaDTO[].class
-//        )));
-//
-//        model.addAttribute("listSB", Arrays.asList(restTemplate.getForObject(
-//                "http://localhost:8080/san-bong/hien-thi",
-//                SanBongDTO[].class
-//        )));
-//
-//        model.addAttribute("listLS", Arrays.asList(restTemplate.getForObject(
-//                "http://localhost:8080/loai-san/hien-thi",
-//                LoaiSanDTO[].class
-//        )));
-//
-//
-//        model.addAttribute("sanBong",new SanBongDTO());
-//        model.addAttribute("loaiSan",new LoaiSanDTO());
-//        model.addAttribute("ca",new CaDTO());
-//        model.addAttribute("ngayTrongTuan",new NgayTrongTuanDTO());
-//        return "/list/quan-ly-ca";
-//    }
-
 }

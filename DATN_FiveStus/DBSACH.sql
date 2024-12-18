@@ -1,414 +1,29 @@
-Create DATABASE DuAnTotNghiep;
+-- Insert data into `phieu_giam_gia` and `phieu_giam_gia_chi_tiet`
+INSERT INTO phieu_giam_gia (id, ma_phieu_giam_gia, ten_phieu_giam_gia, so_luong, muc_giam, hinh_thuc_giam_gia, dieu_kien_su_dung, gia_tri_toi_da, doi_tuong_ap_dung, ngay_bat_dau, ngay_ket_thuc, trang_thai, ghi_chu, created_at, updated_at, deleted_at)
+VALUES
+(1, 'PGG001', 'Phiếu giảm giá 1', 10, 10.0, 1, 100000, 50000, 0, '2024-12-01', '2024-12-31', 'Đang diễn ra', 'Giảm giá 10%', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(2, 'PGG002', 'Phiếu giảm giá 2', 0, 15.0, 1, 150000, 75000, 0, '2024-11-01', '2024-11-15', 'Đang diễn ra', 'Giảm giá 15%', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(3, 'PGG003', 'Phiếu giảm giá 3', 20, 20.0, 1, 200000, 100000, 0, '2024-11-20', '2024-11-25', 'Đang diễn ra', 'Giảm giá 20%', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(4, 'PGG004', 'Phiếu giảm giá 4', 25, 25.0, 1, 250000, 125000, 0, '2024-12-05', '2024-12-10', 'Đang diễn ra', 'Giảm giá 25%', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(5, 'PGG005', 'Phiếu giảm giá 5', 0, 30.0, 1, 300000, 150000, 0, '2024-11-01', '2024-11-05', 'Đang diễn ra', 'Giảm giá 30%', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(6, 'PGG006', 'Phiếu giảm giá 6', 35, 35.0, 1, 350000, 175000, 0, '2024-12-20', '2024-12-25', 'Đang diễn ra', 'Giảm giá 35%', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(7, 'PGG007', 'Phiếu giảm giá 7', 0, 40.0, 1, 400000, 200000, 0, '2024-11-15', '2024-11-30', 'Đang diễn ra', 'Giảm giá 40%', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(8, 'PGG008', 'Phiếu giảm giá 8', 45, 45.0, 1, 450000, 225000, 0, '2024-12-15', '2024-12-20', 'Đang diễn ra', 'Giảm giá 45%', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(9, 'PGG009', 'Phiếu giảm giá 9', 50, 50.0, 1, 500000, 250000, 0, '2024-12-25', '2024-12-31', 'Đang diễn ra', 'Giảm giá 50%', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(10, 'PGG010', 'Phiếu giảm giá 10', 0, 55.0, 1, 550000, 275000, 0, '2024-10-01', '2024-10-31', 'Đang diễn ra', 'Giảm giá 55%', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0);
 
-USE DuAnTotNghiep;
-
--- Table: khach_hang
-CREATE TABLE khach_hang (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  ma_khach_hang VARCHAR(50) NOT NULL,
-  mat_khau VARCHAR(255) NULL,
-  ho_va_ten VARCHAR(100) NULL,
-  email VARCHAR(100) NULL,
-  gioi_tinh BOOLEAN NULL,
-  so_dien_thoai VARCHAR(50) NULL,
-  trang_thai VARCHAR(50) NULL,
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit
-);
--- Table: dia_chi_khach_hang
-CREATE TABLE dia_chi_khach_hang (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  id_khach_hang INT NOT NULL,
-  dia_chi_cu_the VARCHAR(255) DEFAULT '',
-	thanh_pho VARCHAR(100) DEFAULT '',
-  quan_huyen VARCHAR(100) DEFAULT '',
-  phuong_xa VARCHAR(100) DEFAULT '',
-  ghi_chu VARCHAR(100) DEFAULT '',
-  trang_thai VARCHAR(100) DEFAULT '',
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at BIT,
-  CONSTRAINT fk_diaChiKhachHang_khachHang FOREIGN KEY (id_khach_hang) REFERENCES khach_hang(id)
-);
-
--- Table: chuc_vu
-CREATE TABLE chuc_vu (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  ten_chuc_vu VARCHAR(100) NOT NULL,
-  ma_nhan_vien VARCHAR(100) NOT NULL,
-  trang_thai VARCHAR(100) NOT NULL,
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit
-);
-
--- Table: nhan_vien
-CREATE TABLE nhan_vien (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  ten_nhan_vien VARCHAR(100) NOT NULL,
-  ma_nhan_vien VARCHAR(100) NOT NULL,
-  mat_khau VARCHAR(100) NOT NULL,
-  ho_ten VARCHAR(100) NOT NULL,
-  email VARCHAR(100) NOT NULL,
-  gioi_tinh VARCHAR(100) NOT NULL,
-  ngay_sinh Date NULL,
-  so_dien_thoai VARCHAR(100) NOT NULL,
-  dia_chi VARCHAR(100) NOT NULL,
-  trang_thai VARCHAR(100) NOT NULL,
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit
-);
-
--- Table: diem_danh
-CREATE TABLE diem_danh (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  ten_chuc_vu VARCHAR(100) NOT NULL,
-  gio_vao DATETIME,
-  gio_ra DATETIME,
-  ghi_chu VARCHAR(100) NOT NULL,  
-  trang_thai VARCHAR(100) NOT NULL,
-  id_nhan_vien INT NOT NULL,
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit,
-  CONSTRAINT fk_diemDanh_nhanVien FOREIGN KEY (id_nhan_vien) REFERENCES nhan_vien(id)
-);
-
--- Table: phieu_giam_gia
-CREATE TABLE phieu_giam_gia (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  ma_phieu_giam_gia VARCHAR(100),
-  ten_phieu_giam_gia VARCHAR(100),
-  so_luong int,
-  muc_giam float,
-  hinh_thuc_giam_gia bit,
-  dieu_kien_su_dung float,
-  gia_tri_toi_da float,
-  doi_tuong_ap_dung bit,
-  ngay_bat_dau date,
-  ngay_ket_thuc date,
-  trang_thai VARCHAR(100),
-  ghi_chu VARCHAR(500),
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit
-);
-
-DELIMITER //
-
-CREATE TRIGGER before_insert_phieu_giam_gia
-BEFORE INSERT ON phieu_giam_gia
-FOR EACH ROW
-BEGIN
-  
-  -- Cập nhật trạng thái dựa trên ngày bắt đầu
-  IF DATE(NEW.ngay_bat_dau) > CURDATE() THEN
-    SET NEW.trang_thai = 'Sắp diễn ra';
-  ELSEIF DATE(NEW.ngay_ket_thuc) < CURDATE() THEN
-    SET NEW.trang_thai = 'Đã kết thúc';
-  ELSE
-    SET NEW.trang_thai = 'Đang diễn ra';
-  END IF;
-  
-  -- Đặt deleted_at là false
-  SET NEW.deleted_at = 0;
-
-  -- Cập nhật thời gian tạo và cập nhật
-  SET NEW.created_at = NOW();
-  SET NEW.updated_at = NOW();
-END //
-
-DELIMITER ;
-
-
-
--- Table: phieu_giam_gia_chi_tiet
-CREATE TABLE phieu_giam_gia_chi_tiet (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  id_khach_hang int  null,
-  id_phieu_giam_gia int  null,
-  trang_thai bit,
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit DEFAULT 0,
-    CONSTRAINT fk_phieuGiamGiaChiTiet_khachHang FOREIGN KEY (id_khach_hang) REFERENCES khach_hang(id),
-    CONSTRAINT fk_phieuGiamGiaChiTiet_phieuGiamGia FOREIGN KEY (id_phieu_giam_gia) REFERENCES phieu_giam_gia(id)
-);
-
-CREATE TRIGGER before_insert_phieu_giam_gia_chi_tiet
-BEFORE INSERT ON phieu_giam_gia_chi_tiet
-FOR EACH ROW
-  
-  -- Đặt deleted_at là false
-  SET NEW.deleted_at = 0;
-
-END //
-
-DELIMITER ;
-
--- Table: hoa_don
-CREATE TABLE hoa_don (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  id_nhan_vien INT  NULL,
-  id_khach_hang INT  NULL,
-  ma_hoa_don VARCHAR(100) NOT NULL,
-  ngay_tao DATETIME,
-  loai BIT,
-  tong_tien_san DECIMAL(10, 2) NULL, 
-  tien_coc DECIMAL(10, 2) NULL, 
-  tong_tien DECIMAL(10, 2) NULL, 
-  ghi_chu VARCHAR(100) DEFAULT '',
-  trang_thai VARCHAR(100) NOT NULL,
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit,
-CONSTRAINT fk_hoaDon_khachHang FOREIGN KEY (id_khach_hang) REFERENCES khach_hang(id),
-  CONSTRAINT fk_hoaDon_nhanVien FOREIGN KEY (id_nhan_vien) REFERENCES nhan_vien(id)
-);
-
--- loai_san
-CREATE TABLE loai_san (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  ten_loai_san VARCHAR(100) NOT NULL,
-  trang_thai VARCHAR(50),
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit
-);
--- Table: san_bong
-CREATE TABLE san_bong (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  ten_san_bong VARCHAR(100) ,
-  gia_san_bong float,
-  id_loai_san int not null,
-  CONSTRAINT fk_sanBong_loaiSan FOREIGN KEY (id_loai_san) REFERENCES loai_san(id),
-  trang_thai VARCHAR(50),
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit
-);
--- giaSanCa=giaCa++giaSanBong
--- Table: ca
-CREATE TABLE ca (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  ten_ca VARCHAR(100) NOT NULL,
-  gia_ca FLOAT,
-  thoi_gian_bat_dau DATETIME,
-  thoi_gian_ket_thuc DATETIME,
-  trang_thai VARCHAR(50),
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit
-);
-
-
--- ngay
-CREATE TABLE ngay_trong_tuan (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  thu_trong_tuan VARCHAR(100) NOT NULL,
-  trang_thai VARCHAR(50),
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit default 1
-);
-
--- Table: san_ca
-CREATE TABLE san_ca (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  id_ca INT ,
-  id_san_bong INT ,
-  id_ngay_trong_tuan INT  ,
-  gia Float ,
-  trang_thai VARCHAR(50),
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at BIT(1),
-  CONSTRAINT fk_sanCa_ca FOREIGN KEY (id_ca) REFERENCES ca(id),
-  CONSTRAINT fk_sanCa_sanBong FOREIGN KEY (id_san_bong) REFERENCES san_bong(id),
-  CONSTRAINT fk_sanCa_ngay_trong_tuan FOREIGN KEY (id_ngay_trong_tuan) REFERENCES ngay_trong_tuan(id)
-);
-
--- Table: hoa_don_chi_tiet
-CREATE TABLE hoa_don_chi_tiet (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  id_hoa_don INT NULL,
-  id_san_ca INT NULL,
-  id_nhan_vien INT  NULL,
-  id_phieu_giam_gia INT  NULL,
-  ma_hoa_don_chi_tiet VARCHAR(100)  NULL,
-  tong_tien DECIMAL(10, 2) NULL,
-  tien_giam_gia DECIMAL(10, 2) NULL,
-  tong_tien_thuc_te DECIMAL(10, 2) NULL,
-  ngay_den_san date null,
-  ghi_chu VARCHAR(100) DEFAULT '' null,
-  trang_thai VARCHAR(50) null,
-  kieu_ngay_dat VARCHAR(50) null,
-  created_at DATETIME null, 
-  updated_at DATETIME null,
-  deleted_at bit DEFAULT 0 ,
-  CONSTRAINT fk_hoaDonChiTiet_hoaDon FOREIGN KEY (id_hoa_don) REFERENCES hoa_don(id),
-  CONSTRAINT fk_hoaDonChiTiet_sanCa FOREIGN KEY (id_san_ca) REFERENCES san_ca(id),
-   CONSTRAINT fk_hoaDonChiTiet_phieuGiamGia FOREIGN KEY (id_phieu_giam_gia) REFERENCES phieu_giam_gia(id)
-);
-
--- Table: hinh_thuc_thanh_toan
-CREATE TABLE hinh_thuc_thanh_toan (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  hinh_thuc_thanh_toan VARCHAR(100) NOT NULL,
-  trang_thai VARCHAR(100),
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit 
-);
-
--- Table: chi_tiet_hinh_thuc_thanh_toan
-CREATE TABLE chi_tiet_hinh_thuc_thanh_toan (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  id_hoa_don_chi_tiet INT,
-  id_hinh_thuc_thanh_toan INT,
-  so_tien DECIMAL(10, 2),
-  ma_giao_dich varchar(100) null,
-  trang_thai VARCHAR(50),
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit,
-  CONSTRAINT fk_chiTietHinhThucThanhToan_hoaDonChiTiet FOREIGN KEY (id_hoa_don_chi_tiet) REFERENCES hoa_don_chi_tiet(id),
-  CONSTRAINT fk_chiTietHinhThucThanhToan_hinhThucThanhToan FOREIGN KEY (id_hinh_thuc_thanh_toan) REFERENCES hinh_thuc_thanh_toan(id)
-);
-
-
--- Table: lich_su_hoa_don
-CREATE TABLE lich_su_hoa_don (
-id INT AUTO_INCREMENT PRIMARY KEY,
-  id_hoa_don INT,
-  hanh_dong VARCHAR(255),
-  loai_hanh_dong VARCHAR(255),
-  ngay_tao DATETIME,
-  ngay_cap_nhat DATETIME,
-  ten_nguoi_tao VARCHAR(255),
-  ten_nguoi_cap_nhat VARCHAR(255),
-  so_lan_thay_doi INT,
-  trang_thai VARCHAR(50),
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit,
-  CONSTRAINT fk_lichSuHoaDon_hoaDon FOREIGN KEY (id_hoa_don) REFERENCES hoa_don(id)
-);
-
--- Table: do_thue
-CREATE TABLE do_thue (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  don_gia DECIMAL(10, 2),
-  so_luong INT,
-  ten_do_thue VARCHAR(255),
-  trang_thai VARCHAR(50),
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit default 0,
-  image_data VARCHAR(255)default'https://res.cloudinary.com/dsuehugin/image/upload/v1728565365/g7xqdec1fnavzvacfu2k.jpg'
-);
-
-
--- Table: nuoc_uong
-CREATE TABLE nuoc_uong (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  don_gia DECIMAL(10, 2),
-  so_luong INT,
-  ten_nuoc_uong VARCHAR(255),
-  trang_thai VARCHAR(50),
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit default 0,
-  image_data VARCHAR(255) 
-);
-
--- Table: dich_vu_san_bong
-CREATE TABLE dich_vu_san_bong (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  id_do_thue INT,
-  id_nuoc_uong INT,
-  id_hoa_don_chi_tiet INT,
-  tong_tien DECIMAL(10, 2),
-  so_luong INT,
-  trang_thai VARCHAR(50),
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit,
-  CONSTRAINT fk_dichVuSanBong_doThue FOREIGN KEY (id_do_thue) REFERENCES do_thue(id),
-  CONSTRAINT fk_dichVuSanBong_nuocUong FOREIGN KEY (id_nuoc_uong) REFERENCES nuoc_uong(id),
-  CONSTRAINT fk_chiTietDichVuSanBong_hoaDonChiTiet FOREIGN KEY (id_hoa_don_chi_tiet) REFERENCES hoa_don_chi_tiet(id)
-);
-
--- phu-phi
-
--- Table: phu_phi_hoa_don
-CREATE TABLE phu_phi_hoa_don (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  id_hoa_don_chi_tiet INT,
-  ma VARCHAR(100),
-  ten VARCHAR(100),
-  tien_phu_phi DECIMAL(10, 2),
-  ghi_chu VARCHAR(50),
-  trang_thai VARCHAR(50),
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit,
-  CONSTRAINT fk_phuPhiHoaDon_hoaDonChiTiet FOREIGN KEY (id_hoa_don_chi_tiet) REFERENCES hoa_don_chi_tiet(id)
-);
-
-
--- Table: tham_so
-CREATE TABLE tham_so (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  ma VARCHAR(255) NOT NULL,
-  ten VARCHAR(255) NOT NULL,
-  gia_tri VARCHAR(255) NOT NULL,
-  type_gia_tri VARCHAR(255) NOT NULL,
-  mo_ta TEXT,
-  trang_thai BOOLEAN NOT NULL,
-  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  deleted_at BIT(1) DEFAULT 1,
-  is_active BIT(1) DEFAULT 1
-);
-
-
-
--- Table: giao_ca
-CREATE TABLE giao_ca (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  id_nhan_vien INT,
-  tien_mat_ca_truoc DECIMAL(10,2),
-  tien_mat_trong_ca DECIMAL(10,2),
-  tien_ck_trong_ca DECIMAL(10,2),
-  tong_tien_trong_ca DECIMAL(10,2),
-  tong_tien_mat_thuc_te DECIMAL(10,2),
-  tong_tien_phat_sinh DECIMAL(10,2),
-  ghi_chu VARCHAR(255),
-  trang_thai bit,
-  created_at DATETIME, 
-  updated_at DATETIME,
-  deleted_at bit,
-  CONSTRAINT fk_giaoCa_nvGiaoCa FOREIGN KEY ( id_nhan_vien) REFERENCES nhan_vien(id)
-);
-
--- Table: lich_su_checkin
-CREATE TABLE lich_su_checkin (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  id_hoa_don_chi_tiet INT NOT NULL,
-  thoi_gian_checkin DATETIME NOT NULL,
-  mo_ta VARCHAR(255) ,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
-  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  deleted_at BIT DEFAULT 0,
-  CONSTRAINT fk_lichSuCheckin_hoaDonChiTiet FOREIGN KEY (id_hoa_don_chi_tiet ) REFERENCES hoa_don_chi_tiet(id)
-);
-
-
--- INserttt 
-
+INSERT INTO phieu_giam_gia_chi_tiet (id, id_khach_hang, id_phieu_giam_gia, trang_thai, created_at, updated_at, deleted_at)
+VALUES
+(1, NULL, 1, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(2, NULL, 1, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(3, NULL, 2, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(4, NULL, 3, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(5, NULL, 4, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(6, NULL, 5, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(7, NULL, 6, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(8, NULL, 7, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(9, NULL, 8, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(10, NULL, 9, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0);
 
 INSERT INTO khach_hang (ma_khach_hang, mat_khau, ho_va_ten, email, gioi_tinh, so_dien_thoai, trang_thai, created_at, updated_at, deleted_at)
 VALUES
@@ -451,158 +66,7 @@ VALUES
   ('Chuc vu 5', NOW(), NOW(), 'Ghi chu 5', 'active', 5, NOW(), NOW(), 0);
   
 
-INSERT INTO phieu_giam_gia (ma_phieu_giam_gia, ten_phieu_giam_gia, so_luong, muc_giam, hinh_thuc_giam_gia, dieu_kien_su_dung, gia_tri_toi_da, doi_tuong_ap_dung, ngay_bat_dau, ngay_ket_thuc, ghi_chu, created_at, updated_at)
-VALUES
-('PGG001', 'Phiếu giảm giá 1', 10, 10.0, 0, 100.0, 500.0, 1, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 1', NOW(), NOW()),
-('PGG002', 'Phiếu giảm giá 2', 20, 50.0, 1, 200.0, 1000.0, 0, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 2', NOW(), NOW()),
-('PGG003', 'Phiếu giảm giá 3', 30, 20.0, 0, 150.0, 750.0, 1, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 3', NOW(), NOW()),
-('PGG004', 'Phiếu giảm giá 4', 15, 5.0, 1, 50.0, 300.0, 0, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 4', NOW(), NOW()),
-('PGG005', 'Phiếu giảm giá 5', 25, 30.0, 0, 250.0, 1200.0, 1, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 5', NOW(), NOW()),
-('PGG006', 'Phiếu giảm giá 6', 50, 15.0, 1, 300.0, 1000.0, 0, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 6', NOW(), NOW()),
-('PGG007', 'Phiếu giảm giá 7', 40, 25.0, 0, 350.0, 1500.0, 1, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 7', NOW(), NOW()),
-('PGG008', 'Phiếu giảm giá 8', 35, 40.0, 1, 400.0, 1800.0, 0, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 8', NOW(), NOW()),
-('PGG009', 'Phiếu giảm giá 9', 60, 10.0, 0, 100.0, 500.0, 1, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 9', NOW(), NOW()),
-('PGG010', 'Phiếu giảm giá 10', 20, 35.0, 1, 450.0, 2000.0, 0, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 10', NOW(), NOW()),
-('PGG011', 'Phiếu giảm giá 11', 15, 12.0, 0, 120.0, 600.0, 1, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 11', NOW(), NOW()),
-('PGG012', 'Phiếu giảm giá 12', 55, 28.0, 1, 280.0, 1400.0, 0, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 12', NOW(), NOW()),
-('PGG013', 'Phiếu giảm giá 13', 45, 22.0, 0, 220.0, 1100.0, 1, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 13', NOW(), NOW()),
-('PGG014', 'Phiếu giảm giá 14', 30, 18.0, 1, 180.0, 900.0, 0, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 14', NOW(), NOW()),
-('PGG015', 'Phiếu giảm giá 15', 70, 24.0, 0, 240.0, 1200.0, 1, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 15', NOW(), NOW()),
-('PGG016', 'Phiếu giảm giá 16', 25, 26.0, 1, 260.0, 1300.0, 0, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 16', NOW(), NOW()),
-('PGG017', 'Phiếu giảm giá 17', 35, 32.0, 0, 320.0, 1600.0, 1, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 17', NOW(), NOW()),
-('PGG018', 'Phiếu giảm giá 18', 60, 14.0, 1, 140.0, 700.0, 0, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 18', NOW(), NOW()),
-('PGG019', 'Phiếu giảm giá 19', 50, 8.0, 0, 80.0, 400.0, 1, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 19', NOW(), NOW()),
-('PGG020', 'Phiếu giảm giá 20', 65, 27.0, 1, 270.0, 1350.0, 0, NOW(), NOW() + INTERVAL 30 DAY, 'Ghi chú 20', NOW(), NOW());
 
-
-INSERT INTO phieu_giam_gia_chi_tiet (id_khach_hang, id_phieu_giam_gia, trang_thai, created_at, updated_at, deleted_at)
-VALUES
-(1, 1, 1, NOW(), NOW(), 0),
-(2, 2, 0, NOW(), NOW(), 0),
-(3, 3, 1, NOW(), NOW(), 0),
-(4, 4, 1, NOW(), NOW(), 0),
-(5, 5, 0, NOW(), NOW(), 0),
-(1, 6, 1, NOW(), NOW(), 0),
-(2, 7, 0, NOW(), NOW(), 0),
-(3, 8, 1, NOW(), NOW(), 0),
-(4, 9, 0, NOW(), NOW(), 0),
-(5, 10, 1, NOW(), NOW(), 0),
-(1, 11, 1, NOW(), NOW(), 0),
-(2, 12, 0, NOW(), NOW(), 0),
-(3, 13, 1, NOW(), NOW(), 0),
-(4, 14, 0, NOW(), NOW(), 0),
-(5, 15, 1, NOW(), NOW(), 0),
-(1, 16, 0, NOW(), NOW(), 0),
-(2, 17, 1, NOW(), NOW(), 0),
-(3, 18, 0, NOW(), NOW(), 0),
-(4, 19, 1, NOW(), NOW(), 0),
-(5, 20, 0, NOW(), NOW(), 0);
-
-
-INSERT INTO hoa_don (id_nhan_vien, id_khach_hang, ma_hoa_don, ngay_tao, loai, tong_tien_san, tien_coc, tong_tien, ghi_chu, trang_thai, created_at, updated_at, deleted_at)
-VALUES
-(1, 1, 'HD001', NOW(), 1, 500000, 250000, 500000, 'Ghi chú HD001', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 2, 'HD002', NOW() + INTERVAL 1 DAY, 1, 600000, 300000, 600000, 'Ghi chú HD002', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 3, 'HD003', NOW() + INTERVAL 2 DAY, 0, 550000, 275000, 550000, 'Ghi chú HD003', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 4, 'HD004', NOW() + INTERVAL 3 DAY, 0, 650000, 325000, 650000, 'Ghi chú HD004', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 1, 'HD005', NOW() + INTERVAL 4 DAY, 1, 700000, 350000, 700000, 'Ghi chú HD005', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 2, 'HD006', NOW() + INTERVAL 5 DAY, 1, 750000, 375000, 750000, 'Ghi chú HD006', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 3, 'HD007', NOW() + INTERVAL 6 DAY, 0, 800000, 400000, 800000, 'Ghi chú HD007', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 4, 'HD008', NOW() + INTERVAL 7 DAY, 0, 850000, 425000, 850000, 'Ghi chú HD008', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 5, 'HD009', NOW() + INTERVAL 8 DAY, 1, 900000, 450000, 900000, 'Ghi chú HD009', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 1, 'HD010', NOW() + INTERVAL 9 DAY, 1, 950000, 475000, 950000, 'Ghi chú HD010', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 2, 'HD011', NOW() + INTERVAL 10 DAY, 1, 500000, 250000, 500000, 'Ghi chú HD011', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 3, 'HD012', NOW() + INTERVAL 11 DAY, 1, 600000, 300000, 600000, 'Ghi chú HD012', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 4, 'HD013', NOW() + INTERVAL 12 DAY, 0, 550000, 275000, 550000, 'Ghi chú HD013', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 5, 'HD014', NOW() + INTERVAL 13 DAY, 0, 650000, 325000, 650000, 'Ghi chú HD014', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 1, 'HD015', NOW() + INTERVAL 14 DAY, 1, 700000, 350000, 700000, 'Ghi chú HD015', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 2, 'HD016', NOW() + INTERVAL 15 DAY, 1, 750000, 375000, 750000, 'Ghi chú HD016', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 3, 'HD017', NOW() + INTERVAL 16 DAY, 0, 800000, 400000, 800000, 'Ghi chú HD017', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 4, 'HD018', NOW() + INTERVAL 17 DAY, 0, 850000, 425000, 850000, 'Ghi chú HD018', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 5, 'HD019', NOW() + INTERVAL 18 DAY, 1, 900000, 450000, 900000, 'Ghi chú HD019', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 1, 'HD020', NOW() + INTERVAL 19 DAY, 1, 950000, 475000, 950000, 'Ghi chú HD020', 'Chờ thanh toán', NOW(), NOW(), 0),
-
--- Các hóa đơn đã thanh toán
-(1, 1, 'HD021', NOW(), 1, 500000, 250000, 500000, 'Ghi chú HD021', 'Đã thanh toán', NOW(), NOW(), 0),
-(1, 2, 'HD022', NOW() + INTERVAL 1 DAY, 1, 600000, 300000, 600000, 'Ghi chú HD022', 'Đã thanh toán', NOW(), NOW(), 0),
-(2, 3, 'HD023', NOW() + INTERVAL 2 DAY, 0, 550000, 275000, 550000, 'Ghi chú HD023', 'Đã thanh toán', NOW(), NOW(), 0),
-(2, 4, 'HD024', NOW() + INTERVAL 3 DAY, 0, 650000, 325000, 650000, 'Ghi chú HD024', 'Đã thanh toán', NOW(), NOW(), 0),
-(3, 1, 'HD025', NOW() + INTERVAL 4 DAY, 1, 700000, 350000, 700000, 'Ghi chú HD025', 'Đã thanh toán', NOW(), NOW(), 0),
-(3, 2, 'HD026', NOW() + INTERVAL 5 DAY, 1, 750000, 375000, 750000, 'Ghi chú HD026', 'Đã thanh toán', NOW(), NOW(), 0),
-(4, 3, 'HD027', NOW() + INTERVAL 6 DAY, 0, 800000, 400000, 800000, 'Ghi chú HD027', 'Đã thanh toán', NOW(), NOW(), 0),
-(4, 4, 'HD028', NOW() + INTERVAL 7 DAY, 0, 850000, 425000, 850000, 'Ghi chú HD028', 'Đã thanh toán', NOW(), NOW(), 0),
-(5, 5, 'HD029', NOW() + INTERVAL 8 DAY, 1, 900000, 450000, 900000, 'Ghi chú HD029', 'Đã thanh toán', NOW(), NOW(), 0),
-(5, 1, 'HD030', NOW() + INTERVAL 9 DAY, 1, 950000, 475000, 950000, 'Ghi chú HD030', 'Đã thanh toán', NOW(), NOW(), 0),
-(1, 3, 'HD061', NOW() + INTERVAL 20 DAY, 1, 520000, 260000, 520000, 'Ghi chú HD061', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 4, 'HD062', NOW() + INTERVAL 21 DAY, 0, 530000, 265000, 530000, 'Ghi chú HD062', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 5, 'HD063', NOW() + INTERVAL 22 DAY, 1, 540000, 270000, 540000, 'Ghi chú HD063', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 1, 'HD064', NOW() + INTERVAL 23 DAY, 0, 550000, 275000, 550000, 'Ghi chú HD064', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 2, 'HD065', NOW() + INTERVAL 24 DAY, 1, 560000, 280000, 560000, 'Ghi chú HD065', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 3, 'HD066', NOW() + INTERVAL 25 DAY, 0, 570000, 285000, 570000, 'Ghi chú HD066', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 4, 'HD067', NOW() + INTERVAL 26 DAY, 1, 580000, 290000, 580000, 'Ghi chú HD067', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 5, 'HD068', NOW() + INTERVAL 27 DAY, 0, 590000, 295000, 590000, 'Ghi chú HD068', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 1, 'HD069', NOW() + INTERVAL 28 DAY, 1, 600000, 300000, 600000, 'Ghi chú HD069', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 2, 'HD070', NOW() + INTERVAL 29 DAY, 0, 610000, 305000, 610000, 'Ghi chú HD070', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 3, 'HD071', NOW() + INTERVAL 30 DAY, 1, 620000, 310000, 620000, 'Ghi chú HD071', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 4, 'HD072', NOW() + INTERVAL 31 DAY, 0, 630000, 315000, 630000, 'Ghi chú HD072', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 5, 'HD073', NOW() + INTERVAL 32 DAY, 1, 640000, 320000, 640000, 'Ghi chú HD073', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 1, 'HD074', NOW() + INTERVAL 33 DAY, 0, 650000, 325000, 650000, 'Ghi chú HD074', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 2, 'HD075', NOW() + INTERVAL 34 DAY, 1, 660000, 330000, 660000, 'Ghi chú HD075', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 3, 'HD076', NOW() + INTERVAL 35 DAY, 0, 670000, 335000, 670000, 'Ghi chú HD076', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 4, 'HD077', NOW() + INTERVAL 36 DAY, 1, 680000, 340000, 680000, 'Ghi chú HD077', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 5, 'HD078', NOW() + INTERVAL 37 DAY, 0, 690000, 345000, 690000, 'Ghi chú HD078', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 1, 'HD079', NOW() + INTERVAL 38 DAY, 1, 700000, 350000, 700000, 'Ghi chú HD079', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 2, 'HD080', NOW() + INTERVAL 39 DAY, 0, 710000, 355000, 710000, 'Ghi chú HD080', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 3, 'HD081', NOW() + INTERVAL 40 DAY, 1, 720000, 360000, 720000, 'Ghi chú HD081', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 4, 'HD082', NOW() + INTERVAL 41 DAY, 0, 730000, 365000, 730000, 'Ghi chú HD082', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 5, 'HD083', NOW() + INTERVAL 42 DAY, 1, 740000, 370000, 740000, 'Ghi chú HD083', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 1, 'HD084', NOW() + INTERVAL 43 DAY, 0, 750000, 375000, 750000, 'Ghi chú HD084', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 2, 'HD085', NOW() + INTERVAL 44 DAY, 1, 760000, 380000, 760000, 'Ghi chú HD085', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 3, 'HD086', NOW() + INTERVAL 45 DAY, 0, 770000, 385000, 770000, 'Ghi chú HD086', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 4, 'HD087', NOW() + INTERVAL 46 DAY, 1, 780000, 390000, 780000, 'Ghi chú HD087', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 5, 'HD088', NOW() + INTERVAL 47 DAY, 0, 790000, 395000, 790000, 'Ghi chú HD088', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 1, 'HD089', NOW() + INTERVAL 48 DAY, 1, 800000, 400000, 800000, 'Ghi chú HD089', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 2, 'HD090', NOW() + INTERVAL 49 DAY, 0, 810000, 405000, 810000, 'Ghi chú HD090', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 3, 'HD091', NOW() + INTERVAL 50 DAY, 1, 820000, 410000, 820000, 'Ghi chú HD091', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 4, 'HD092', NOW() + INTERVAL 51 DAY, 0, 830000, 415000, 830000, 'Ghi chú HD092', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 5, 'HD093', NOW() + INTERVAL 52 DAY, 1, 840000, 420000, 840000, 'Ghi chú HD093', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 1, 'HD094', NOW() + INTERVAL 53 DAY, 0, 850000, 425000, 850000, 'Ghi chú HD094', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 2, 'HD095', NOW() + INTERVAL 54 DAY, 1, 860000, 430000, 860000, 'Ghi chú HD095', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 3, 'HD096', NOW() + INTERVAL 55 DAY, 0, 870000, 435000, 870000, 'Ghi chú HD096', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 4, 'HD097', NOW() + INTERVAL 56 DAY, 1, 880000, 440000, 880000, 'Ghi chú HD097', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 5, 'HD098', NOW() + INTERVAL 57 DAY, 0, 890000, 445000, 890000, 'Ghi chú HD098', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 1, 'HD099', NOW() + INTERVAL 58 DAY, 1, 900000, 450000, 900000, 'Ghi chú HD099', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 2, 'HD100', NOW() + INTERVAL 59 DAY, 0, 910000, 455000, 910000, 'Ghi chú HD100', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 3, 'HD101', NOW() + INTERVAL 60 DAY, 1, 920000, 460000, 920000, 'Ghi chú HD101', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 4, 'HD102', NOW() + INTERVAL 61 DAY, 0, 930000, 465000, 930000, 'Ghi chú HD102', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 5, 'HD103', NOW() + INTERVAL 62 DAY, 1, 940000, 470000, 940000, 'Ghi chú HD103', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 1, 'HD104', NOW() + INTERVAL 63 DAY, 0, 950000, 475000, 950000, 'Ghi chú HD104', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 2, 'HD105', NOW() + INTERVAL 64 DAY, 1, 960000, 480000, 960000, 'Ghi chú HD105', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 3, 'HD106', NOW() + INTERVAL 65 DAY, 0, 970000, 485000, 970000, 'Ghi chú HD106', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 4, 'HD107', NOW() + INTERVAL 66 DAY, 1, 980000, 490000, 980000, 'Ghi chú HD107', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 5, 'HD108', NOW() + INTERVAL 67 DAY, 0, 990000, 495000, 990000, 'Ghi chú HD108', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 1, 'HD109', NOW() + INTERVAL 68 DAY, 1, 1000000, 500000, 1000000, 'Ghi chú HD109', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 2, 'HD110', NOW() + INTERVAL 69 DAY, 0, 1010000, 505000, 1010000, 'Ghi chú HD110', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 3, 'HD111', NOW() + INTERVAL 70 DAY, 1, 1020000, 510000, 1020000, 'Ghi chú HD111', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 4, 'HD112', NOW() + INTERVAL 71 DAY, 0, 1030000, 515000, 1030000, 'Ghi chú HD112', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 5, 'HD113', NOW() + INTERVAL 72 DAY, 1, 1040000, 520000, 1040000, 'Ghi chú HD113', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 1, 'HD114', NOW() + INTERVAL 73 DAY, 0, 1050000, 525000, 1050000, 'Ghi chú HD114', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 2, 'HD115', NOW() + INTERVAL 74 DAY, 1, 1060000, 530000, 1060000, 'Ghi chú HD115', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 3, 'HD116', NOW() + INTERVAL 75 DAY, 0, 1070000, 535000, 1070000, 'Ghi chú HD116', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 4, 'HD117', NOW() + INTERVAL 76 DAY, 1, 1080000, 540000, 1080000, 'Ghi chú HD117', 'Chờ thanh toán', NOW(), NOW(), 0),
-(4, 5, 'HD118', NOW() + INTERVAL 77 DAY, 0, 1090000, 545000, 1090000, 'Ghi chú HD118', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 1, 'HD119', NOW() + INTERVAL 78 DAY, 1, 1100000, 550000, 1100000, 'Ghi chú HD119', 'Chờ thanh toán', NOW(), NOW(), 0),
-(5, 2, 'HD120', NOW() + INTERVAL 79 DAY, 0, 1110000, 555000, 1110000, 'Ghi chú HD120', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 3, 'HD121', NOW() + INTERVAL 80 DAY, 1, 1120000, 560000, 1120000, 'Ghi chú HD121', 'Chờ thanh toán', NOW(), NOW(), 0),
-(1, 4, 'HD122', NOW() + INTERVAL 81 DAY, 0, 1130000, 565000, 1130000, 'Ghi chú HD122', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 5, 'HD123', NOW() + INTERVAL 82 DAY, 1, 1140000, 570000, 1140000, 'Ghi chú HD123', 'Chờ thanh toán', NOW(), NOW(), 0),
-(2, 1, 'HD124', NOW() + INTERVAL 83 DAY, 0, 1150000, 575000, 1150000, 'Ghi chú HD124', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 2, 'HD125', NOW() + INTERVAL 84 DAY, 1, 1160000, 580000, 1160000, 'Ghi chú HD125', 'Chờ thanh toán', NOW(), NOW(), 0),
-(3, 3, 'HD126', NOW() + INTERVAL 85 DAY, 0, 1170000, 585000, 1170000, 'Ghi chú HD126', 'Chờ thanh toán', NOW(), NOW(), 0);
-
-
-
-  
 INSERT INTO loai_san (ten_loai_san, trang_thai, created_at, updated_at, deleted_at) VALUES
 ('Sân 5', 'Hoạt động', Now(), Now(), 0),
 ('Sân 7', 'Hoạt động', Now(),Now(), 0),
@@ -2139,94 +1603,6 @@ VALUES
 
 
 
-INSERT INTO hoa_don_chi_tiet (id_hoa_don, id_san_ca, id_phieu_giam_gia, ma_hoa_don_chi_tiet, tong_tien, tien_giam_gia, tong_tien_thuc_te, ngay_den_san, ghi_chu, trang_thai, kieu_ngay_dat, created_at, updated_at, deleted_at)
-VALUES
-(61, 1, 1, 'HDCT061-1', 500000, 50000, 450000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD061-1', 'Chờ nhận sân', 'Theo ngày', NOW(), NOW(), 0),
-(62, 2, 2, 'HDCT062-1', 600000, 60000, 540000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD062-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(63, 3, 3, 'HDCT063-1', 550000, 55000, 495000, NOW(), 'Ghi chú HD063-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(64, 4, 4, 'HDCT064-1', 650000, 65000, 585000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD064-1', 'Chờ nhận sân', 'Theo ngày', NOW(), NOW(), 0),
-(65, 5, 5, 'HDCT065-1', 700000, 70000, 630000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD065-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(66, 6, 6, 'HDCT066-1', 750000, 75000, 675000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD066-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(67, 7, 7, 'HDCT067-1', 800000, 80000, 720000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD067-1', 'Chờ nhận sân', 'Theo ngày', NOW(), NOW(), 0),
-(68, 8, 8, 'HDCT068-1', 850000, 85000, 765000, NOW(), 'Ghi chú HD068-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(69, 9, 9, 'HDCT069-1', 900000, 90000, 810000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD069-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(70, 10, 10, 'HDCT070-1', 950000, 95000, 855000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD070-1', 'Chờ nhận sân', 'Theo ngày', NOW(), NOW(), 0),
-(71, 11, 11, 'HDCT071-1', 500000, 50000, 450000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD071-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(72, 12, 12, 'HDCT072-1', 600000, 60000, 540000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD072-1', 'Chờ nhận sân', 'Theo ngày', NOW(), NOW(), 0),
-(73, 13, 13, 'HDCT073-1', 550000, 55000, 495000, NOW(), 'Ghi chú HD073-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(74, 14, 14, 'HDCT074-1', 650000, 65000, 585000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD074-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(75, 15, 15, 'HDCT075-1', 700000, 70000, 630000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD075-1', 'Chờ nhận sân', 'Theo ngày', NOW(), NOW(), 0),
-(76, 16, 16, 'HDCT076-1', 750000, 75000, 675000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD076-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(77, 17, 17, 'HDCT077-1', 800000, 80000, 720000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD077-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(78, 18, 18, 'HDCT078-1', 850000, 85000, 765000, NOW(), 'Ghi chú HD078-1', 'Chờ nhận sân', 'Theo ngày', NOW(), NOW(), 0),
-(79, 19, 19, 'HDCT079-1', 900000, 90000, 810000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD079-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(80, 20, 20, 'HDCT080-1', 950000, 95000, 855000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD080-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(21, 21, 1, 'HDCT021-1', 500000, 50000, 450000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD021-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(22, 22, 2, 'HDCT022-1', 600000, 60000, 540000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD022-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(23, 23, 3, 'HDCT023-1', 550000, 55000, 495000, NOW(), 'Ghi chú HD023-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(24, 24, 4, 'HDCT024-1', 650000, 65000, 585000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD024-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(25, 25, 5, 'HDCT025-1', 700000, 70000, 630000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD025-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(26, 26, 6, 'HDCT026-1', 750000, 75000, 675000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD026-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(27, 27, 7, 'HDCT027-1', 800000, 80000, 720000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD027-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(28, 28, 8, 'HDCT028-1', 850000, 85000, 765000, NOW(), 'Ghi chú HD028-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(29, 29, 9, 'HDCT029-1', 900000, 90000, 810000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD029-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(30, 30, 10, 'HDCT030-1', 950000, 95000, 855000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD030-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(31, 1, 11, 'HDCT031-1', 500000, 50000, 450000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD031-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(32, 2, 12, 'HDCT032-1', 600000, 60000, 540000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD032-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(33, 3, 13, 'HDCT033-1', 550000, 55000, 495000, NOW(), 'Ghi chú HD033-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(34, 4, 14, 'HDCT034-1', 650000, 65000, 585000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD034-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(35, 5, 15, 'HDCT035-1', 700000, 70000, 630000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD035-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(36, 6, 16, 'HDCT036-1', 750000, 75000, 675000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD036-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(37, 7, 17, 'HDCT037-1', 800000, 80000, 720000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD037-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(38, 8, 18, 'HDCT038-1', 850000, 85000, 765000, NOW(), 'Ghi chú HD038-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(39, 9, 19, 'HDCT039-1', 900000, 90000, 810000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD039-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(40, 10, 20, 'HDCT040-1', 950000, 95000, 855000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD040-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(41, 1, 1, 'HDCT041-1', 500000, 50000, 450000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD041-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(42, 2, 2, 'HDCT042-1', 600000, 60000, 540000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD042-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(43, 3, 3, 'HDCT043-1', 550000, 55000, 495000, NOW(), 'Ghi chú HD043-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(44, 4, 4, 'HDCT044-1', 650000, 65000, 585000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD044-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(45, 5, 5, 'HDCT045-1', 700000, 70000, 630000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD045-1', 'Đã thanh toán', 'Theo tuần', NOW(), NOW(), 0),
-(46, 6, 6, 'HDCT046-1', 750000, 75000, 675000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD046-1', 'Đã thanh toán', 'Nhiều ngày', NOW(), NOW(), 0),
-(47, 7, 7, 'HDCT047-1', 800000, 80000, 720000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD047-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(48, 8, 8, 'HDCT048-1', 850000, 85000, 765000, NOW(), 'Ghi chú HD048-1', 'Đã thanh toán', 'Theo tuần', NOW(), NOW(), 0),
-(49, 9, 9, 'HDCT049-1', 900000, 90000, 810000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD049-1', 'Đã thanh toán', 'Nhiều ngày', NOW(), NOW(), 0),
-(50, 10, 10, 'HDCT050-1', 950000, 95000, 855000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD050-1', 'Đã thanh toán', 'Theo ngày', NOW(), NOW(), 0),
-(51, 1, 11, 'HDCT051-1', 500000, 50000, 450000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD051-1', 'Đã thanh toán', 'Theo tuần', NOW(), NOW(), 0),
-(52, 2, 12, 'HDCT052-1', 600000, 60000, 540000, NOW(), 'Ghi chú HD052-1', 'Chờ nhận sân', 'Nhiều ngày', NOW(), NOW(), 0),
-(53, 3, 13, 'HDCT053-1', 550000, 55000, 495000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD053-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(54, 4, 14, 'HDCT054-1', 650000, 65000, 585000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD054-1', 'Chờ nhận sân', 'Theo tuần', NOW(), NOW(), 0),
-(55, 5, 15, 'HDCT055-1', 700000, 70000, 630000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD055-1', 'Đang hoạt động', 'Nhiều ngày', NOW(), NOW(), 0),
-(56, 6, 16, 'HDCT056-1', 750000, 75000, 675000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD056-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(57, 7, 17, 'HDCT057-1', 800000, 80000, 720000, NOW(), 'Ghi chú HD057-1', 'Chờ nhận sân', 'Theo tuần', NOW(), NOW(), 0),
-(58, 8, 18, 'HDCT058-1', 850000, 85000, 765000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD058-1', 'Chờ nhận sân', 'Nhiều ngày', NOW(), NOW(), 0),
-(59, 9, 19, 'HDCT059-1', 900000, 90000, 810000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD059-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(60, 10, 20, 'HDCT060-1', 950000, 95000, 855000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD060-1', 'Đang hoạt động', 'Theo tuần', NOW(), NOW(), 0),
-(61, 1, 1, 'HDCT061-1', 500000, 50000, 450000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD061-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(62, 2, 2, 'HDCT062-1', 600000, 60000, 540000, NOW(), 'Ghi chú HD062-1', 'Chờ nhận sân', 'Theo tuần', NOW(), NOW(), 0),
-(63, 3, 3, 'HDCT063-1', 550000, 55000, 495000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD063-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(64, 4, 4, 'HDCT064-1', 650000, 65000, 585000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD064-1', 'Chờ nhận sân', 'Theo tuần', NOW(), NOW(), 0),
-(65, 5, 5, 'HDCT065-1', 700000, 70000, 630000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD065-1', 'Đang hoạt động', 'Nhiều ngày', NOW(), NOW(), 0),
-(66, 6, 6, 'HDCT066-1', 750000, 75000, 675000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD066-1', 'Chờ nhận sân', 'Theo ngày', NOW(), NOW(), 0),
-(67, 7, 7, 'HDCT067-1', 800000, 80000, 720000, NOW(), 'Ghi chú HD067-1', 'Đang hoạt động', 'Theo tuần', NOW(), NOW(), 0),
-(68, 8, 8, 'HDCT068-1', 850000, 85000, 765000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD068-1', 'Chờ nhận sân', 'Nhiều ngày', NOW(), NOW(), 0),
-(69, 9, 9, 'HDCT069-1', 900000, 90000, 810000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD069-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(70, 10, 10, 'HDCT070-1', 950000, 95000, 855000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD070-1', 'Chờ nhận sân', 'Theo tuần', NOW(), NOW(), 0),
-(71, 1, 11, 'HDCT071-1', 500000, 50000, 450000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD071-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(72, 2, 12, 'HDCT072-1', 600000, 60000, 540000, NOW(), 'Ghi chú HD072-1', 'Chờ nhận sân', 'Theo tuần', NOW(), NOW(), 0),
-(73, 3, 13, 'HDCT073-1', 550000, 55000, 495000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD073-1', 'Đang hoạt động', 'Nhiều ngày', NOW(), NOW(), 0),
-(74, 4, 14, 'HDCT074-1', 650000, 65000, 585000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD074-1', 'Chờ nhận sân', 'Theo ngày', NOW(), NOW(), 0),
-(75, 5, 15, 'HDCT075-1', 700000, 70000, 630000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD075-1', 'Chờ nhận sân', 'Theo tuần', NOW(), NOW(), 0),
-(76, 6, 16, 'HDCT076-1', 750000, 75000, 675000, NOW() - INTERVAL 1 DAY, 'Ghi chú HD076-1', 'Đang hoạt động', 'Nhiều ngày', NOW(), NOW(), 0),
-(77, 7, 17, 'HDCT077-1', 800000, 80000, 720000, NOW(), 'Ghi chú HD077-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(78, 8, 18, 'HDCT078-1', 850000, 85000, 765000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD078-1', 'Chờ nhận sân', 'Theo tuần', NOW(), NOW(), 0),
-(79, 9, 19, 'HDCT079-1', 900000, 90000, 810000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD079-1', 'Chờ nhận sân', 'Nhiều ngày', NOW(), NOW(), 0),
-(80, 10, 20, 'HDCT080-1', 950000, 95000, 855000, NOW() - INTERVAL 2 DAY, 'Ghi chú HD080-1', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(53, 1, 10, 'HDCT053-2', 550000, 55000, 495000, NOW() + INTERVAL 1 DAY, 'Ghi chú HD053-2', 'Đang hoạt động', 'Theo tuần', NOW(), NOW(), 0),
-(53, 2, 11, 'HDCT053-3', 600000, 60000, 540000, NOW() + INTERVAL 2 DAY, 'Ghi chú HD053-3', 'Đang hoạt động', 'Theo ngày', NOW(), NOW(), 0),
-(53, 3, 12, 'HDCT053-4', 650000, 65000, 585000, NOW() + INTERVAL 3 DAY, 'Ghi chú HD053-4', 'Chờ nhận sân', 'Nhiều ngày', NOW(), NOW(), 0),
-(53, 4, 13, 'HDCT053-5', 700000, 70000, 630000, NOW() + INTERVAL 4 DAY, 'Ghi chú HD053-5', 'Chờ nhận sân', 'Theo ngày', NOW(), NOW(), 0),
-(53, 5, 14, 'HDCT053-6', 750000, 75000, 675000, NOW() + INTERVAL 5 DAY, 'Ghi chú HD053-6', 'Đang hoạt động', 'Theo tuần', NOW(), NOW(), 0);
-
 
 
 INSERT INTO hinh_thuc_thanh_toan (hinh_thuc_thanh_toan, trang_thai, created_at, updated_at, deleted_at)
@@ -2235,13 +1611,6 @@ VALUES
   ( 'Tiền mặt', 'active', NOW(), NOW(), 0);
   
 
-INSERT INTO lich_su_hoa_don (id_hoa_don, hanh_dong, loai_hanh_dong, ngay_tao, ngay_cap_nhat, ten_nguoi_tao, ten_nguoi_cap_nhat, so_lan_thay_doi, trang_thai, created_at, updated_at, deleted_at)
-VALUES
-  (1, 'Tao hoa don', 'Tao', NOW(), NOW(), 'Nguyen Van A', 'Nguyen Van A', 1, 'active', NOW(), NOW(), 1),
-  (2, 'Cap nhat hoa don', 'Cap nhat', NOW(), NOW(), 'Nguyen Van B', 'Nguyen Van B', 2, 'active', NOW(), NOW(), 1),
-  (3, 'Xoa hoa don', 'Xoa', NOW(), NOW(), 'Nguyen Van C', 'Nguyen Van C', 3, 'inactive', NOW(), NOW(), 1),
-  (4, 'Tao hoa don', 'Tao', NOW(), NOW(), 'Nguyen Van D', 'Nguyen Van D', 4, 'active', NOW(), NOW(), 0),
-  (5, 'Cap nhat hoa don', 'Cap nhat', NOW(), NOW(), 'Nguyen Van E', 'Nguyen Van E', 5, 'active', NOW(), NOW(), 0);
 
 INSERT INTO do_thue (don_gia, so_luong, ten_do_thue, trang_thai, created_at, updated_at, deleted_at, image_data)
 VALUES
@@ -2282,112 +1651,8 @@ VALUES
 (20000, 100, 'Warrior', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/fsvne0ghubuvnbowgzs1.jpg'),
 (13000, 100, 'Lon String vàng', 'Còn', NOW(), NOW(), 'https://res.cloudinary.com/dsuehugin/image/upload/v1728557487/nhtnwvsvnyarpp2yqw9v.jpg');
 
-INSERT INTO phu_phi_hoa_don (id_hoa_don_chi_tiet, ma, ten, tien_phu_phi, ghi_chu, trang_thai, created_at, updated_at, deleted_at)
-VALUES (1, 'PP001', 'Phí giao hàng', 50000.00, 'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
-       (2, 'PP002', 'Phí đóng gói', 20000.00, 'Đóng gói cẩn thận', 'Hoàn tất', NOW(), NOW(), 0),
-       (3, 'PP003', 'Phí giao hàng', 45000.00, 'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
-       (4, 'PP004', 'Phí dịch vụ', 10000.00,'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
-       (5, 'PP005', 'Phí giao hàng', 30000.00,  'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
-       (6, 'PP006', 'Phí bảo hiểm', 15000.00, 'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
-       (7, 'PP007', 'Phí giao hàng', 25000.00, 'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
-       (8, 'PP008', 'Phí dịch vụ', 12000.00,  'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
-       (9, 'PP009', 'Phí giao hàng', 40000.00,  'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
-       (10, 'PP010', 'Phí bảo hiểm', 17000.00,'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
-       (11, 'PP011', 'Phí giao hàng', 35000.00,  'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
-       (12, 'PP012', 'Phí dịch vụ', 13000.00, 'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
-       (13, 'PP013', 'Phí giao hàng', 48000.00,  'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
-       (14, 'PP014', 'Phí bảo hiểm', 18000.00, 'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
-       (15, 'PP015', 'Phí giao hàng', 32000.00,  'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
-       (16, 'PP016', 'Phí dịch vụ', 14000.00, 'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
-       (17, 'PP017', 'Phí giao hàng', 50000.00,  'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
-       (18, 'PP018', 'Phí bảo hiểm', 19000.00, 'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
-       (19, 'PP019', 'Phí giao hàng', 38000.00, 'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
-       (20, 'PP020', 'Phí dịch vụ', 15000.00,  'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
-       (21, 'PP021', 'Phí giao hàng', 51000.00,'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
-       (22, 'PP022', 'Phí bảo hiểm', 16000.00,  'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
-       (23, 'PP023', 'Phí giao hàng', 40000.00, 'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
-       (24, 'PP024', 'Phí dịch vụ', 17000.00, 'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
-       (25, 'PP025', 'Phí giao hàng', 52000.00,  'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
-       (26, 'PP026', 'Phí bảo hiểm', 18000.00,  'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
-       (27, 'PP027', 'Phí giao hàng', 33000.00,  'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
-       (28, 'PP028', 'Phí dịch vụ', 19000.00, 'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
-       (29, 'PP029', 'Phí giao hàng', 47000.00,  'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
-       (30, 'PP030', 'Phí bảo hiểm', 20000.00,  'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
-       (31, 'PP031', 'Phí giao hàng', 36000.00,  'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
-       (32, 'PP032', 'Phí dịch vụ', 21000.00,  'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
-       (33, 'PP033', 'Phí giao hàng', 55000.00,  'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
-       (34, 'PP034', 'Phí bảo hiểm', 22000.00,  'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
-       (35, 'PP035', 'Phí giao hàng', 39000.00,  'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
-       (36, 'PP036', 'Phí dịch vụ', 23000.00, 'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0),
-       (37, 'PP037', 'Phí giao hàng', 56000.00, 'Giao hàng nhanh', 'Hoàn tất', NOW(), NOW(), 0),
-       (38, 'PP038', 'Phí bảo hiểm', 24000.00,  'Bảo hiểm hàng hóa', 'Hoàn tất', NOW(), NOW(), 0),
-       (39, 'PP039', 'Phí giao hàng', 42000.00,  'Giao hàng tiêu chuẩn', 'Đang xử lý', NOW(), NOW(), 0),
-       (40, 'PP040', 'Phí dịch vụ', 25000.00,  'Dịch vụ thêm', 'Hoàn tất', NOW(), NOW(), 0);
 
-
-
-
-INSERT INTO giao_ca (id_nhan_vien, tien_mat_ca_truoc, tien_mat_trong_ca, tien_ck_trong_ca, tong_tien_trong_ca, tong_tien_mat_thuc_te, tong_tien_phat_sinh, ghi_chu,trang_thai)
-VALUES 
-    (1, 1000000, 500000, 200000, 1700000, 1700000, 50000, 'Giao ca buổi sáng',0),
-    (2, 1500000, 600000, 300000, 2400000, 2400000, 60000, 'Giao ca buổi chiều',0),
-    (3, 1200000, 700000, 400000, 2300000, 2300000, 40000, 'Giao ca tối',0),
-    (4, 1300000, 800000, 350000, 2450000, 2450000, 70000, 'Giao ca buổi sáng ngày 2',0),
-    (5, 1100000, 400000, 250000, 1750000, 1750000, 30000, 'Giao ca buổi chiều ngày 2',0);
-
-INSERT INTO lich_su_checkin (id_hoa_don_chi_tiet, thoi_gian_checkin, mo_ta)
-VALUES
-  (21, '2024-08-25 08:30:00', 'Khách hàng check-in vào sáng sớm'),
-  (22, '2024-08-25 09:45:00', 'Khách hàng check-in vào buổi sáng'),
-  (23, '2024-08-25 10:15:00', 'Khách hàng check-in trước giờ trưa'),
-  (24, '2024-08-25 12:00:00', 'Khách hàng check-in vào trưa'),
-  (25, '2024-08-25 13:30:00', 'Khách hàng check-in sau bữa trưa'),
-  (26, '2024-08-25 15:00:00', 'Khách hàng check-in vào giữa chiều'),
-  (27, '2024-08-25 16:00:00', 'Khách hàng check-in vào cuối chiều'),
-  (28, '2024-08-25 17:30:00', 'Khách hàng check-in vào buổi tối sớm'),
-  (29, '2024-08-25 18:45:00', 'Khách hàng check-in gần giờ đóng cửa'),
-  (30, '2024-08-25 19:15:00', 'Khách hàng check-in vào tối muộn');
-
-INSERT INTO tham_so (ma, ten, gia_tri, type_gia_tri, mo_ta, trang_thai, deleted_at, is_active)
-VALUES
-('TS_Thoi_Gian_Dat_Truoc', 'Thời Gian Đặt Trước', '06:00', 'Giờ', 'Thời gian tối thiểu người dùng phải đặt sân trước giờ thi đấu', 1, 0, 1),
-('TS_Gio_Dong_Cua', 'Giờ Đóng Cửa', '22:00', 'Giờ', 'Thời gian sân bóng ngừng hoạt động trong ngày', 1, 0, 1),
-('TS_Thoi_Gian_Huy_Dat_San', 'Thời Gian Hủy Đặt Sân', '2', 'Giờ', 'Thời gian tối thiểu trước giờ thi đấu để hủy đặt sân mà không mất phí', 1, 0, 1),
-('TS_Gio_Mo_Cua', 'Giờ Mở Cửa', '06:00', 'Giờ', 'Thời gian sân bóng bắt đầu hoạt động trong ngày', 1, 0, 1),
-('TSTIEN_COC', 'Tiền Cọc', '40', '%', 'Phần trăm tiền cọc cần thanh toán khi đặt sân', 1, 0, 1),
-('TS_Tien_Qua_Tai', 'Tiền Quá Giờ', '100000', 'VND', 'Khoản phí bổ sung cho mỗi giờ sử dụng vượt quá thời gian đặt trước', 1, 0, 1);
-
-
-
-
-CREATE TABLE `user` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
-    `username` VARCHAR(255) NOT NULL,
-    `email` VARCHAR(255) NOT NULL,
-    `password` VARCHAR(255) NOT NULL,
-    `enabled` BOOLEAN NOT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE (`username`),
-    UNIQUE (`email`)
-);
-
-
-CREATE TABLE `roles` (
-    `id` INT NOT NULL AUTO_INCREMENT,
-    `name` ENUM('ROLE_USER', 'ROLE_ADMIN', 'ROLE_MANAGER','ROLE_EMPLOYEE') NOT NULL, -- Thay 'ROLE_OTHER' bằng các vai trò khác nếu cần
-    PRIMARY KEY (`id`)
-);
-CREATE TABLE `user_roles` (
-    `user_id` BIGINT NOT NULL,
-    `role_id` INT NOT NULL,
-    PRIMARY KEY (`user_id`, `role_id`),
-    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`role_id`) REFERENCES `roles`(`id`) ON DELETE CASCADE
-);
-
-
-
-INSERT INTO `duantotnghiep`.`user`
+INSERT INTO DuAnTotNghiep.`user`
 (`id`,
 `email`,
 `enabled`,
@@ -2406,7 +1671,7 @@ VALUES
 (10,'nguyenvane@gmail.com',1,'$2a$10$nT0lmazwNrz9DwCcb3HUgejJ8/hC43FIOmYkRLKwCTZTN31E0KDMO','nguyenVanE');
 
 
-INSERT INTO `duantotnghiep`.`roles`
+INSERT INTO `DuAnTotNghiep`.`roles`
 (`id`,
 `name`)
 VALUES
@@ -2415,8 +1680,60 @@ VALUES
 (3,'ROLE_MANAGER'),
 (4,'ROLE_ADMIN');
 
-INSERT INTO `duantotnghiep`.`user_roles`
+INSERT INTO `DuAnTotNghiep`.`user_roles`
 (`user_id`,
 `role_id`)
 VALUES
 (1,1),(1,2),(2,1),(2,4),(3,1),(3,4),(4,1),(4,4),(5,1),(5,4),(6,1),(7,1),(8,1),(9,1),(10,1);
+
+-- Insert data into `hoa_don` and `hoa_don_chi_tiet`
+INSERT INTO hoa_don (id, id_nhan_vien, id_khach_hang, ma_hoa_don, ngay_tao, loai, tong_tien_san, tien_coc, tong_tien, ghi_chu, trang_thai, created_at, updated_at, deleted_at)
+VALUES
+(1, 1, 1, 'HD001', UTC_TIMESTAMP(), 0, 500000, 250000, 500000, 'Hóa đơn 1', 'Chờ thanh toán', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(2, 1, 1, 'HD002', UTC_TIMESTAMP(), 0, 700000, 350000, 700000, 'Hóa đơn 2', 'Chờ thanh toán', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(3, 1, 1, 'HD003', UTC_TIMESTAMP(), 0, 600000, 300000, 600000, 'Hóa đơn 3', 'Chờ thanh toán', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(4, 1, 1, 'HD004', UTC_TIMESTAMP(), 0, 800000, 400000, 800000, 'Hóa đơn 4', 'Chờ thanh toán', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(5, 1, 1, 'HD005', UTC_TIMESTAMP(), 0, 550000, 275000, 550000, 'Hóa đơn 5', 'Chờ thanh toán', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(6, 1, 1, 'HD006', UTC_TIMESTAMP(), 0, 650000, 325000, 650000, 'Hóa đơn 6', 'Chờ thanh toán', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(7, 1, 1, 'HD007', UTC_TIMESTAMP(), 0, 900000, 450000, 900000, 'Hóa đơn 7', 'Chờ thanh toán', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(8, 1, 3, 'HD008', UTC_TIMESTAMP(), 0, 750000, 375000, 750000, 'Hóa đơn 8', 'Chờ thanh toán', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(9, 1, 4, 'HD009', UTC_TIMESTAMP(), 0, 850000, 425000, 850000, 'Hóa đơn 9', 'Chờ thanh toán', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(10, 1, 5, 'HD010', UTC_TIMESTAMP(), 0, 700000, 350000, 700000, 'Hóa đơn 10', 'Chờ thanh toán', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0);
+
+INSERT INTO hoa_don_chi_tiet (id, id_hoa_don, id_san_ca, id_nhan_vien, id_phieu_giam_gia, ma_hoa_don_chi_tiet, tong_tien, tien_coc_hdct, tien_giam_gia, tong_tien_thuc_te, ngay_den_san, ghi_chu, trang_thai, kieu_ngay_dat, created_at, updated_at, deleted_at)
+VALUES
+(1, 1, 1, 1, NULL, 'HDCT001', 500000, 250000, 0, 500000, UTC_DATE(), 'Chi tiết hóa đơn 1', 'Chờ nhận sân', 'Ngày thường', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(2, 2, 2, 1, NULL, 'HDCT002', 700000, 350000, 0, 700000, UTC_DATE(), 'Chi tiết hóa đơn 2', 'Đang hoạt động', 'Ngày thường', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(3, 3, 3, 1, NULL, 'HDCT003', 600000, 300000, 0, 600000, UTC_DATE(), 'Chi tiết hóa đơn 3', 'Chờ nhận sân', 'Ngày thường', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(4, 4, 4, 1, NULL, 'HDCT004', 800000, 400000, 0, 800000, UTC_DATE(), 'Chi tiết hóa đơn 4', 'Đang hoạt động', 'Ngày thường', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(5, 5, 5, 1, NULL, 'HDCT005', 550000, 275000, 0, 550000, UTC_DATE(), 'Chi tiết hóa đơn 5', 'Chờ nhận sân', 'Ngày thường', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(6, 6, 1, 1, NULL, 'HDCT006', 650000, 325000, 0, 650000, UTC_DATE(), 'Chi tiết hóa đơn 6', 'Đang hoạt động', 'Ngày thường', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(7, 7, 2, 1, NULL, 'HDCT007', 900000, 450000, 0, 900000, UTC_DATE(), 'Chi tiết hóa đơn 7', 'Chờ nhận sân', 'Ngày thường', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(8, 8, 3, 1, NULL, 'HDCT008', 750000, 375000, 0, 750000, UTC_DATE(), 'Chi tiết hóa đơn 8', 'Đang hoạt động', 'Ngày thường', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(9, 9, 4, 1, NULL, 'HDCT009', 850000, 425000, 0, 850000, UTC_DATE(), 'Chi tiết hóa đơn 9', 'Chờ nhận sân', 'Ngày thường', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0),
+(10, 10, 5, 1, NULL, 'HDCT010', 700000, 350000, 0, 700000, UTC_DATE(), 'Chi tiết hóa đơn 10', 'Đang hoạt động', 'Ngày thường', UTC_TIMESTAMP(), UTC_TIMESTAMP(), 0);
+
+
+
+
+INSERT INTO giao_ca (id_nhan_vien, tien_mat_ca_truoc, tien_mat_trong_ca, tien_ck_trong_ca, tong_tien_trong_ca, tong_tien_mat_thuc_te, tong_tien_phat_sinh, ghi_chu,trang_thai)
+VALUES 
+    (1, 1000000, 500000, 200000, 1700000, 1700000, 50000, 'Giao ca buổi sáng',0),
+    (2, 1500000, 600000, 300000, 2400000, 2400000, 60000, 'Giao ca buổi chiều',0),
+    (3, 1200000, 700000, 400000, 2300000, 2300000, 40000, 'Giao ca tối',0),
+    (4, 1300000, 800000, 350000, 2450000, 2450000, 70000, 'Giao ca buổi sáng ngày 2',0),
+    (5, 1100000, 400000, 250000, 1750000, 1750000, 30000, 'Giao ca buổi chiều ngày 2',0);
+
+
+INSERT INTO tham_so (ma, ten, gia_tri, type_gia_tri, mo_ta, trang_thai, deleted_at, is_active)
+VALUES
+('TS_Thoi_Gian_Dat_Truoc', 'Thời Gian Đặt Trước', '06:00', 'Giờ', 'Thời gian tối thiểu người dùng phải đặt sân trước giờ thi đấu', 1, 0, 1),
+('TS_Gio_Dong_Cua', 'Giờ Đóng Cửa', '22:00', 'Giờ', 'Thời gian sân bóng ngừng hoạt động trong ngày', 1, 0, 1),
+('TS_Thoi_Gian_Huy_Dat_San', 'Thời Gian Hủy Đặt Sân', '2', 'Giờ', 'Thời gian tối thiểu trước giờ thi đấu để hủy đặt sân mà không mất phí', 1, 0, 1),
+('TS_Gio_Mo_Cua', 'Giờ Mở Cửa', '06:00', 'Giờ', 'Thời gian sân bóng bắt đầu hoạt động trong ngày', 1, 0, 1),
+('TSTIEN_COC', 'Tiền Cọc', '40', '%', 'Phần trăm tiền cọc cần thanh toán khi đặt sân', 1, 0, 1),
+('TS_Tien_Qua_Tai', 'Tiền Quá Giờ', '100000', 'VND', 'Khoản phí bổ sung cho mỗi giờ sử dụng vượt quá thời gian đặt trước', 1, 0, 1),
+('TS_Gio_Check_In', 'Giờ Check In', '30', 'Phút', 'Thời gian tối đa cho phép check in sau khi sân bắt đầu hoạt động', 1, 0, 1),
+('TS_Gio_Huy', 'Giờ Hủy', '30', 'Phút', 'Thời gian tối đa cho phép hủy trước sân bắt đầu hoạt động', 1, 0, 1);
+
+

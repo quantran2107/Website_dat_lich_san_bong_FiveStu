@@ -150,6 +150,11 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
     }
 
     @Override
+    public boolean isDuplicateMaPhieuGiamGia(String maPhieuGiamGia) {
+        return phieuGiamGiaRepository.existsByMaPhieuGiamGia(maPhieuGiamGia);
+    }
+
+    @Override
     public PhieuGiamGiaDTO update2(Integer id, PhieuGiamGiaDTO phieuGiamGiaDTO) {
         PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu giảm giá với id " + id));

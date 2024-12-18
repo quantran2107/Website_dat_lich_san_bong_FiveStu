@@ -509,7 +509,6 @@
                     startDate = convertDateToAPIFormat(selectedSingleDate); // Chuyển đổi định dạng cho API
                     endDate = startDate; // Ngày bắt đầu và ngày kết thúc là giống nhau
                 } else {
-                    console.error('Ngày chưa được chọn');
                     return;
                 }
             } else if (selection === 'Nhiều ngày') {
@@ -520,7 +519,6 @@
                     startDate = convertDateToAPIFormat(startDate); // Chuyển đổi định dạng cho API
                     endDate = convertDateToAPIFormat(endDate); // Chuyển đổi định dạng cho API
                 } else {
-                    console.error('Ngày bắt đầu hoặc ngày kết thúc chưa được chọn');
                     return;
                 }
             }
@@ -588,7 +586,7 @@
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.error('Lỗi khi gọi API:', error);
+                        // console.error('Lỗi khi gọi API:', error);
                     }
                 });
             }
@@ -633,7 +631,7 @@
                     });
                 },
                 error: function (error) {
-                    console.error('Error fetching loai san bong:', error);
+                    // console.error('Error fetching loai san bong:', error);
                 }
             });
         }
@@ -717,20 +715,20 @@
                                             className: className // Thêm lớp CSS vào sự kiện
                                         });
                                     } else {
-                                        console.warn('Item is undefined or null:', item);
+                                        // console.warn('Item is undefined or null:', item);
                                     }
                                 });
                             } else {
-                                console.warn('Không có dữ liệu:', response);
+                                // console.warn('Không có dữ liệu:', response);
                             }
                         });
                         successCallback(events);
                     })
                     .catch(error => {
                         if (error && error.message) {
-                            console.error('Error :', error.message);
+                            // console.error('Error :', error.message);
                         } else {
-                            console.error('Error :', error);
+                            // console.error('Error :', error);
                         }
                         failureCallback();
                     });
@@ -762,7 +760,7 @@
                         $('#eventModal').modal('show');
                     },
                     error: function (xhr, status, error) {
-                        console.error('Error fetching event details:', error);
+                        // console.error('Error fetching event details:', error);
                     }
                 });
 
