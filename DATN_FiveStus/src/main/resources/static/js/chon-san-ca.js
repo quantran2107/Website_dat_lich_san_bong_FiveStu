@@ -69,7 +69,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Hàm hiển thị lỗi cho người dùng
     function showError(message, error) {
         console.error(message, error);
-        alert("Đã xảy ra lỗi, vui lòng thử lại sau.");
     }
 
     // Lấy danh sách sân bóng
@@ -407,6 +406,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Xử lý phần ngày dựa vào loại ngày đã chọn
         let ngayQuery = '';
+        const fetchPromises = [];
         let totalAvailableDays = 0; // Biến đếm số ngày còn trống
 
         if (selectedDayType === 'Theo ngày') {
@@ -415,38 +415,44 @@ document.addEventListener("DOMContentLoaded", function () {
                 ngayQuery = formattedDate;
 
                 // Lấy thời gian hiện tại
-                const currentTime = new Date();
+                const currentTime = new Date(); // Thời gian hiện tại
+                const sanCaStartTime = new Date(sanCa.thoiGianBatDauCa); // Thời gian sân ca bắt đầu
 
-                // Kết hợp ngày đã chọn với thời gian bắt đầu của sân ca
-                const sanCaStartTime = new Date(`${formattedDate}T${sanCa.thoiGianBatDau}`);
+                // Lấy giờ và phút
+                const currentHour = currentTime.getHours();
+                const currentMinute = currentTime.getMinutes();
 
-                // Kiểm tra nếu đã quá giờ
-                if (sanCaStartTime < currentTime) {
-                    statusParagraph.classList.add('custom-2');
-                    statusParagraph.textContent = 'Quá giờ đặt';
-                } else {
-                    // Kiểm tra trạng thái của sân ca theo ngày
-                    fetch(`http://localhost:8080/hoa-don-chi-tiet/kiem-tra-dat?idSanCa=${sanCa.id}&ngayDenSan=${ngayQuery}`)
-                        .then(response => response.text())
-                        .then(status => {
-                            if (status === 'Còn trống') {
-                                statusParagraph.classList.add('custom-1');
-                                statusParagraph.textContent = 'Còn trống';
-                            } else if (status === 'Đã được đặt') {
-                                statusParagraph.classList.add('custom-3');
-                                statusParagraph.textContent = 'Đã được đặt';
-                            } else {
-                                // Xử lý trạng thái không xác định
-                                statusParagraph.classList.add('custom-1');
-                                statusParagraph.textContent = 'Trạng thái không xác định';
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Lỗi khi kiểm tra trạng thái:', error);
+                const sanCaHour = sanCaStartTime.getHours();
+                const sanCaMinute = sanCaStartTime.getMinutes();
+
+                // So sánh thời gian
+                const isPast =
+                    sanCaHour < currentHour || (sanCaHour === currentHour && sanCaMinute < currentMinute);
+
+                // Kiểm tra trạng thái của sân ca theo ngày
+                fetch(`http://localhost:8080/hoa-don-chi-tiet/kiem-tra-dat?idSanCa=${sanCa.id}&ngayDenSan=${ngayQuery}`)
+                    .then(response => response.text())
+                    .then(status => {
+                        if (isPast) {
+                            statusParagraph.classList.add('custom-3');
+                            statusParagraph.textContent = 'Quá giờ đặt';
+                        } else if (status === 'Còn trống') {
                             statusParagraph.classList.add('custom-1');
-                            statusParagraph.textContent = 'Lỗi khi kiểm tra trạng thái';
-                        });
-                }
+                            statusParagraph.textContent = 'Còn trống';
+                        } else if (status === 'Đã được đặt') {
+                            statusParagraph.classList.add('custom-3');
+                            statusParagraph.textContent = 'Đã được đặt';
+                        } else {
+                            // Xử lý trạng thái không xác định
+                            statusParagraph.classList.add('custom-1');
+                            statusParagraph.textContent = 'Trạng thái không xác định';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi khi kiểm tra trạng thái:', error);
+                        statusParagraph.classList.add('custom-1');
+                        statusParagraph.textContent = 'Lỗi khi kiểm tra trạng thái';
+                    });
             }
         } else if (selectedDayType === 'Nhiều ngày') {
             if (ngayBatDauInput.value && ngayKetThucInput.value) {
@@ -484,6 +490,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 content.appendChild(totalAvailableDaysParagraph);
 
+                const currentTime = new Date(); // Thời gian hiện tại
+                const sanCaStartTime = new Date(sanCa.thoiGianBatDauCa); // Thời gian sân ca bắt đầu
+
+                // Lấy giờ và phút
+                const currentHour = currentTime.getHours();
+                const currentMinute = currentTime.getMinutes();
+
+                const sanCaHour = sanCaStartTime.getHours();
+                const sanCaMinute = sanCaStartTime.getMinutes();
+
+                // So sánh thời gian
+                const isPast =
+                    sanCaHour < currentHour || (sanCaHour === currentHour && sanCaMinute < currentMinute);
+
                 for (let i = 0; i < totalDays; i++) {
                     const currentDay = addDays(ngayBatDau, i);
                     const formattedDate = formatDate(currentDay); // Định dạng ngày thành yyyy-mm-dd
@@ -510,6 +530,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     fetchPromises.push(fetchPromise);
                 }
+
+                // Đợi tất cả các fetch hoàn tất
+                Promise.all(fetchPromises).then(() => {
+                    if (isPast && totalAvailableDays > 0) {
+                        totalAvailableDays--;
+                    }
+                    console.log('Tổng số ngày có sẵn:', totalAvailableDays);
+                });
 
                 // Đợi tất cả các lệnh fetch hoàn thành
                 Promise.all(fetchPromises).then(() => {
@@ -622,7 +650,10 @@ document.addEventListener("DOMContentLoaded", function () {
                                 })
                                 .then(response => response.text())
                                 .then(status => {
-                                    if (status === 'Còn trống') {
+                                    if (isPast && i === 0){
+                                        trangThaiCell.classList.add('custom-3');
+                                        trangThaiCell.textContent = 'Quá giờ đặt';
+                                    } else if (status === 'Còn trống') {
                                         trangThaiCell.classList.add('custom-1');
                                         trangThaiCell.textContent = 'Còn trống';
                                     } else if (status === 'Đã được đặt') {
@@ -679,8 +710,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             // Thêm dòng vào bảng
                             sanCaTableBody.appendChild(row);
                         }
+                        paginateTable('sanCaTableBody', 0, 5);
                         calculateTotalPrice();
-
                         // Hiển thị modal sau khi thêm dữ liệu mới
                         $('#book-modal').modal('show');
                     };
@@ -700,11 +731,19 @@ document.addEventListener("DOMContentLoaded", function () {
         header.classList.add('san-ca-header');
 
         const formattedDate = formatDateToDDMMYYYY(ngayDenSanInput.value); // Định dạng ngày
-        const currentTime = new Date(); // Thời gian hiện tại (ngày và giờ)
+        const currentTime = new Date(); // Thời gian hiện tại
+        const sanCaStartTime = new Date(sanCa.thoiGianBatDauCa); // Thời gian sân ca bắt đầu
 
-        // Kết hợp ngày chọn với thời gian bắt đầu của sân ca
-        const sanCaStartTime = new Date(`${formattedDate}T${sanCa.thoiGianBatDau}`); // Định dạng ISO 8601
-        const isPast = sanCaStartTime < currentTime; // Kiểm tra thời gian đã qua
+// Lấy giờ và phút
+        const currentHour = currentTime.getHours();
+        const currentMinute = currentTime.getMinutes();
+
+        const sanCaHour = sanCaStartTime.getHours();
+        const sanCaMinute = sanCaStartTime.getMinutes();
+
+// So sánh thời gian
+        const isPast =
+            sanCaHour < currentHour || (sanCaHour === currentHour && sanCaMinute < currentMinute);
 
         fetch(`http://localhost:8080/hoa-don-chi-tiet/kiem-tra-dat?idSanCa=${sanCa.id}&ngayDenSan=${formattedDate}`)
             .then(response => response.text())
@@ -1141,13 +1180,16 @@ document.querySelector('#datLich').addEventListener('click', async function () {
             if (trangThaiCell.textContent.trim() === 'Đã được đặt') {
                 hasBookedSlot = true;
             }
+            if (trangThaiCell.textContent.trim() === 'Quá giờ đặt') {
+                hasBookedSlot = true;
+            }
         } else {
             console.log("Không tìm thấy ô trạng thái trong dòng này.");
         }
     });
 
     if (hasBookedSlot) {
-        showWarningToast('Có sân đã được đặt, vui lòng chọn sân khác.');
+        showWarningToast('Có sân đã được đặt hoặc quá giờ đặt, vui lòng chọn sân khác.');
         return;
     }
 

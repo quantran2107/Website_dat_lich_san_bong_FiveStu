@@ -208,10 +208,8 @@ public class SanCaServiceImp implements SanCaService {
             throw new ResourceNotfound("Không tìm thấy sân bóng nào với idLoaiSan: " + idLoaiSan);
         }
 
-        LoaiSan loaiSan = loaiSanRepository.findById(idLoaiSan).get();
-//        if (sanBongs.isEmpty()) {
-//            throw new ResourceNotfound("Không tìm thấy sân bóng nào với idLoaiSan: " + idLoaiSan);
-//        }
+        LoaiSan loaiSan = loaiSanRepository.findById(idLoaiSan)
+                .orElseThrow(() -> new ResourceNotfound("Không tìm thấy loại sân với id: " + idLoaiSan));
 
         // Kiểm tra tồn tại các ca
         List<Ca> cas = caRepository.findAllById(sanCaDTO.getIdCaList());
@@ -229,11 +227,13 @@ public class SanCaServiceImp implements SanCaService {
         for (SanBong sanBong : sanBongs) {
             for (NgayTrongTuan ngayTrongTuan : ngayTrongTuans) {
                 for (Ca ca : cas) {
-//                     Kiểm tra xem SanCa đã tồn tại chưa
-                    List<SanCaDTO> existingSanCaList = getListSanCaExits(sanBong.getLoaiSan().getId(), List.of(sanBong.getId()), List.of(ngayTrongTuan.getId()), List.of(ca.getId()));
+                    // Kiểm tra xem SanCa đã tồn tại chưa
+                    List<SanCaDTO> existingSanCaList = getListSanCaExits(sanBong.getLoaiSan().getId(),
+                            List.of(sanBong.getId()),
+                            List.of(ngayTrongTuan.getId()),
+                            List.of(ca.getId()));
 
                     if (!existingSanCaList.isEmpty()) {
-                        System.out.println("Trống nha");
                         // Nếu đã tồn tại, cập nhật giá cho tất cả các bản ghi
                         for (SanCaDTO existingSanCa : existingSanCaList) {
                             SanCa sanCaToUpdate = modelMapper.map(existingSanCa, SanCa.class);
@@ -243,8 +243,7 @@ public class SanCaServiceImp implements SanCaService {
                             sanCaRepository.save(sanCaToUpdate);
                         }
                     } else {
-                        System.out.println("Mới nha");
-//                         Nếu chưa tồn tại, tạo mới
+                        // Nếu chưa tồn tại, tạo mới
                         SanCa newSanCa = new SanCa();
                         newSanCa.setSanBong(sanBong);
                         newSanCa.setNgayTrongTuan(ngayTrongTuan);
@@ -252,7 +251,6 @@ public class SanCaServiceImp implements SanCaService {
                         newSanCa.setGia(sanCaDTO.getGia());
                         newSanCa.setTrangThai("Hoạt động");
                         newSanCa.setDeletedAt(false);
-                        System.out.println("Sân ca new: "+newSanCa);
 
                         // Lưu sanCa vào cơ sở dữ liệu
                         sanCaRepository.save(newSanCa);
