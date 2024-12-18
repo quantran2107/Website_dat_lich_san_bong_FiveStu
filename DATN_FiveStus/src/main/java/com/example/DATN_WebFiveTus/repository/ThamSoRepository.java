@@ -41,7 +41,7 @@ public interface ThamSoRepository extends JpaRepository<ThamSo, Integer> {
     @Query("SELECT ts FROM ThamSo ts where ts.ten like '%:keyword%' or ts.ma like '%:keyword%' ")
     Page<ThamSo> searchThamSo(@Param("keyword") String keyword, Pageable pageable);
 
-    @Query("SELECT ts FROM ThamSo ts where ts.isActive=true and ts.deletedAt=false ")
+    @Query("SELECT ts FROM ThamSo ts where ts.isActive=true ")
     List<ThamSo> getAll2();
 
     @Modifying
