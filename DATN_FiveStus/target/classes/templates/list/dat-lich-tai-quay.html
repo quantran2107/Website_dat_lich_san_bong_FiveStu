@@ -2292,21 +2292,15 @@
                     button.addEventListener('click', function () {
                         // Xác định dòng chứa nút "Chọn" đang được nhấn
                         // Lấy dữ liệu từ thuộc tính data
-<<<<<<< HEAD
                         let tienGiam = 0;
                         const tongTien = parseCurrency(document.getElementById('tongTien').value.trim()) || 0;
                         const tenPhieu = this.getAttribute('data-ma');
                         const mucGiam = parseFloat(this.getAttribute('data-muc-giam')) || 0 ;
                         const giaTriToiDa = parseFloat(this.getAttribute('data-gia-tri-toi-da')) || 0;
-=======
-                        const tenPhieu = this.getAttribute('data-ma');
-                        const mucGiam = parseInt(this.getAttribute('data-muc-giam')).toLocaleString() + ' VND';
->>>>>>> 952b209d39274f462500c9fda79174b901c2685b
                         const idPhieuGiamGia = this.getAttribute('data-id-pgg');
                         const idPhieuGiamGiaChiTiet = this.getAttribute('data-id');
                         const soLuongPhieuGiamGia = this.getAttribute('data-gia-so-luong');
                         const trangThaiPhieuGiamGia = this.getAttribute('data-trang-thai');
-<<<<<<< HEAD
                         const hinhThucGiamGiaPhieuGiamGia = this.getAttribute('data-hinh-thuc');
                         // Kiểm tra lại giá trị kiểu Boolean của hinhThucGiamGiaPhieuGiamGia
                         const isDiscountPercentage = hinhThucGiamGiaPhieuGiamGia === true || hinhThucGiamGiaPhieuGiamGia === 'true' || hinhThucGiamGiaPhieuGiamGia === 1;
@@ -2325,12 +2319,6 @@
                         // Đặt dữ liệu vào các ô input
                         document.getElementById('phieuGiamGia').value = tenPhieu;
                         document.getElementById('tienGiam').value = tienGiam.toLocaleString() + 'VND';
-=======
-
-                        // Đặt dữ liệu vào các ô input
-                        document.getElementById('phieuGiamGia').value = tenPhieu;
-                        document.getElementById('tienGiam').value = mucGiam;
->>>>>>> 952b209d39274f462500c9fda79174b901c2685b
                         document.getElementById('idPhieuGiamGia').value = idPhieuGiamGia;
                         document.getElementById('idPhieuGiamGiaChiTiet').value = idPhieuGiamGiaChiTiet;
                         document.getElementById('soLuongPhieuGiamGia').value = soLuongPhieuGiamGia;

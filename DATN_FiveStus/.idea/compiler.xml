@@ -8,12 +8,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="DATN_WebFiveTus" />
+        <module name="DATN_FiveStus" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="DATN_FiveStus" options="-parameters --add-modules java.sql" />
+      <module name="DATN_FiveStus" options="-parameters" />
       <module name="DATN_WebFiveTus" options="-parameters" />
     </option>
   </component>
