@@ -68,7 +68,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Hàm hiển thị lỗi cho người dùng
     function showError(message, error) {
-        console.error(message, error);
     }
 
     // Lấy danh sách sân bóng
@@ -176,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Giá của sân ca
         const gia = document.createElement('p');
-        gia.innerHTML = `<i class="bi bi-currency-dollar"></i> ${sanCa.gia.toLocaleString()} VNĐ`;
+        gia.innerHTML = `<i class="bi bi-currency-dollar"></i> ${sanCa.gia.toLocaleString()} VND`;
 
         // Thêm thông tin thời gian và giá vào content
         const infoContainer = document.createElement('div');
@@ -203,7 +202,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             })
             .catch(error => {
-                console.error('Lỗi khi kiểm tra trạng thái:', error);
                 statusParagraph.textContent = 'Lỗi khi kiểm tra trạng thái';
             });
 
@@ -214,7 +212,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Gán sự kiện cho nút "Đổi lịch"
         doiLichButton.addEventListener('click', function () {
-            console.log('Đổi lịch cho sân ca:', sanCa.id);
 
             // Lấy thông tin của sân ca hiện tại
             const row = doiLichButton.closest('tr'); // Tìm dòng <tr> chứa nút
@@ -229,7 +226,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (rowId.endsWith(ngayChon)) {
                     // Nếu id kết thúc bằng suffixToRemove, xóa dòng
                     sanCaTableBody.removeChild(row);
-                    console.log(`Đã xóa dòng với id: ${rowId}`);
                 }
             });
 
@@ -262,7 +258,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     newRow.appendChild(thoiGianCell);
 
                     const giaCell = document.createElement('td');
-                    giaCell.innerHTML = `${data.gia.toLocaleString()} VNĐ`; // Giá mới
+                    giaCell.innerHTML = `${data.gia.toLocaleString()} VND`; // Giá mới
                     newRow.appendChild(giaCell);
 
                     const trangThaiCell = document.createElement('td');
@@ -303,14 +299,13 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         })
                         .catch(error => {
-                            console.error('Lỗi khi kiểm tra trạng thái:', error);
                             trangThaiCell.textContent = 'Lỗi';
                         });
 
                     sanCaTableBody.appendChild(newRow);
                 })
                 .catch(error => {
-                    console.error('Lỗi khi lấy thông tin sân ca mới:', error);
+                    // console.error('Lỗi khi lấy thông tin sân ca mới:', error);
                 });
         });
 
@@ -398,7 +393,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Giá của sân ca
         const gia = document.createElement('p');
-        gia.innerHTML = `<i class="bi bi-currency-dollar"></i> ${sanCa.gia.toLocaleString()} VNĐ`;
+        gia.innerHTML = `<i class="bi bi-currency-dollar"></i> ${sanCa.gia.toLocaleString()} VND`;
 
         // Tạo phần tử hiển thị tổng số ngày còn trống
         const totalAvailableDaysParagraph = document.createElement('p');
@@ -449,7 +444,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     })
                     .catch(error => {
-                        console.error('Lỗi khi kiểm tra trạng thái:', error);
+                        // console.error('Lỗi khi kiểm tra trạng thái:', error);
                         statusParagraph.classList.add('custom-1');
                         statusParagraph.textContent = 'Lỗi khi kiểm tra trạng thái';
                     });
@@ -525,7 +520,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         })
                         .catch(error => {
-                            console.error('Lỗi khi kiểm tra trạng thái:', error);
+                            // console.error('Lỗi khi kiểm tra trạng thái:', error);
                         });
 
                     fetchPromises.push(fetchPromise);
@@ -536,7 +531,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (isPast && totalAvailableDays > 0) {
                         totalAvailableDays--;
                     }
-                    console.log('Tổng số ngày có sẵn:', totalAvailableDays);
+                    // console.log('Tổng số ngày có sẵn:', totalAvailableDays);
                 });
 
                 // Đợi tất cả các lệnh fetch hoàn thành
@@ -609,7 +604,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             row.appendChild(thoiGianCell);
 
                             const giaCell = document.createElement('td');
-                            giaCell.innerHTML = `${sanCa.gia.toLocaleString()} VNĐ`;
+                            giaCell.innerHTML = `${sanCa.gia.toLocaleString()} VND`;
                             row.appendChild(giaCell);
 
                             // Tạo cột Trạng thái và thêm vào dòng ngay lập tức
@@ -691,7 +686,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                                         // displayDoiSan(sanCaList); // Hàm để hiển thị danh sách sân ca
                                                     })
                                                     .catch(error => {
-                                                        console.error('Lỗi khi lấy danh sách sân ca:', error);
+                                                        // console.error('Lỗi khi lấy danh sách sân ca:', error);
                                                     });
                                             }
 
@@ -704,7 +699,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                     }
                                 })
                                 .catch(error => {
-                                    console.error('Lỗi khi kiểm tra trạng thái:', error);
+                                    // console.error('Lỗi khi kiểm tra trạng thái:', error);
                                     trangThaiCell.textContent = 'Lỗi';
                                 });
                             // Thêm dòng vào bảng
@@ -789,7 +784,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 header.appendChild(textContainer);
             })
             .catch(error => {
-                console.error('Lỗi khi lấy dữ liệu sân ca:', error);
+                // console.error('Lỗi khi lấy dữ liệu sân ca:', error);
             });
 
         return header;
@@ -851,7 +846,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     row.appendChild(thoiGianCell);
 
                     const giaCell = document.createElement('td');
-                    giaCell.innerHTML = `${data.gia.toLocaleString()} VNĐ`;
+                    giaCell.innerHTML = `${data.gia.toLocaleString()} VND`;
                     row.appendChild(giaCell);
 
                     // Thêm cột Trạng thái mặc định là "Còn trống"
@@ -906,7 +901,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const formattedDate = formatDateToDDMMYYYY(ngayDenSan);
 
         // Debug để kiểm tra giá trị ngày
-        console.log(`Calling API with sanCaId: ${sanCaId} and ngayDenSan: ${formattedDate}`);
+        // console.log(`Calling API with sanCaId: ${sanCaId} and ngayDenSan: ${formattedDate}`);
 
         fetch(`http://localhost:8080/hoa-don-chi-tiet/kiem-tra-dat?idSanCa=${sanCaId}&ngayDenSan=${formattedDate}`)
             .then(response => response.json())
@@ -931,7 +926,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 }
             })
-            .catch(error => console.error('Error fetching status:', error));
+            // .catch(error => console.error('Error fetching status:', error));
     }
 
     function formatDateToDDMMYYYY(dateString) {
@@ -999,7 +994,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     loaiSanDropdown.appendChild(aTag);
                 });
             })
-            .catch(error => console.error('Lỗi khi tải loại sân:', error));
+            // .catch(error => console.error('Lỗi khi tải loại sân:', error));
     }
 
     // Hàm hiển thị các sân bóng theo loại sân
@@ -1013,7 +1008,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const selectedLoaiSan = sanBongs.length > 0 ? sanBongs[0].tenLoaiSan : 'Chọn loại sân';
                 document.getElementById('actionMenuButton1').textContent = selectedLoaiSan;
             })
-            .catch(error => console.error('Lỗi khi tải sân bóng theo loại sân:', error));
+            // .catch(error => console.error('Lỗi khi tải sân bóng theo loại sân:', error));
     }
 
     let customers = []; // Biến lưu danh sách khách hàng từ API
@@ -1046,7 +1041,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Hiển thị phân trang
             displayPagination();
         } catch (error) {
-            console.error('Lỗi khi gọi API:', error);
+            // console.error('Lỗi khi gọi API:', error);
         }
     }
 
@@ -1149,7 +1144,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.querySelector('#datLich').addEventListener('click', async function () {
-    console.log("Button Đặt Lịch đã được nhấn."); // Để xác nhận rằng hàm đã được gọi
+    // console.log("Button Đặt Lịch đã được nhấn."); // Để xác nhận rằng hàm đã được gọi
 
     // Hiển thị hộp thoại xác nhận
     const result = await Swal.fire({
@@ -1164,11 +1159,11 @@ document.querySelector('#datLich').addEventListener('click', async function () {
     });
 
     if (!result.isConfirmed) {
-        console.log('Người dùng đã hủy thanh toán.');
+        // console.log('Người dùng đã hủy thanh toán.');
         return; // Dừng thực hiện nếu người dùng chọn "Hủy"
     }
 
-    console.log('Người dùng xác nhận thanh toán.');
+    // console.log('Người dùng xác nhận thanh toán.');
 
     // Lấy danh sách các dòng sân ca từ bảng
     const rows = document.querySelectorAll("#sanCaTable tbody tr");
@@ -1184,7 +1179,7 @@ document.querySelector('#datLich').addEventListener('click', async function () {
                 hasBookedSlot = true;
             }
         } else {
-            console.log("Không tìm thấy ô trạng thái trong dòng này.");
+            // console.log("Không tìm thấy ô trạng thái trong dòng này.");
         }
     });
 
@@ -1267,19 +1262,15 @@ document.querySelector('#datLich').addEventListener('click', async function () {
         const hoaDonData = await responseHoaDon.json();
         var idHoaDon = hoaDonData.id;
 
-        console.log('Thêm hóa đơn thành công:', hoaDonData);
-
         // Gọi hàm thêm hóa đơn chi tiết sau khi thêm hóa đơn thành công
         await themHoaDonChiTiet(idHoaDon);
 
     } catch (error) {
-        console.error('Lỗi khi thêm hóa đơn:', error);
         showErrorToast('Lỗi khi thêm hóa đơn: ' + error.message);
     }
 });
 
 async function themHoaDonChiTiet(idHoaDon) {
-    console.log("idHoaDon:", idHoaDon); // Kiểm tra idHoaDon
 
     // Lấy danh sách các dòng sân ca từ bảng
     const rows = document.querySelectorAll("#sanCaTable tbody tr");
@@ -1300,29 +1291,25 @@ async function themHoaDonChiTiet(idHoaDon) {
         // Lấy idSanBong từ API dựa trên tên sân bóng
         const idSanBong = await getSanBongId(tenSanBong);
         if (!idSanBong) {
-            // console.error("Không thể lấy idSanBong từ tên sân bóng:", tenSanBong);
             return null; // Bỏ qua nếu không lấy được idSanBong
         }
 
         // Gọi API để lấy danh sách sân ca dựa trên idSanBong, idNgayTrongTuan, idCa
         const sanCa = await fetchSanCa(idSanBong, idNgayTrongTuan, idCa);
         if (!sanCa) {
-            // console.error("Không thể lấy sân ca cho idSanBong:", idSanBong);
             return null; // Bỏ qua nếu không lấy được sân ca
         }
 
         const idSanCa = sanCa.id; // Giả sử bạn nhận được idSanCa từ API
 
         const gia = row.cells[5].textContent.trim();
-        // console.log("Giá trị trong cột giá:", gia); // Kiểm tra giá trị gốc
 
-        const tongTien = gia.replace(/\./g, '').replace(/,/g, '').replace(' VNĐ', '');
+        const tongTien = gia.replace(/\./g, '').replace(/,/g, '').replace(' VND', '');
 
         const tongTienSo = Number(tongTien); // Chuyển đổi chuỗi sang số
         const tienCocHdct = await calculateDeposit(tongTienSo || 0);
         // Kiểm tra nếu idSanCa hoặc idHoaDon bị null
         if (!idHoaDon || !idSanCa) {
-            // console.error("Lỗi: idHoaDon hoặc idSanCa bị null");
             return null;
         }
 
@@ -1343,7 +1330,6 @@ async function themHoaDonChiTiet(idHoaDon) {
             tienCocHdct: Number(tienCocHdct)
         };
 
-        console.log("Dữ liệu payload gửi đi:", JSON.stringify(chiTietPayload));
 
         // Gọi API để thêm hóa đơn chi tiết
         return fetch("http://localhost:8080/hoa-don-chi-tiet/save2", {
@@ -1360,10 +1346,10 @@ async function themHoaDonChiTiet(idHoaDon) {
                 return response.json();
             })
             .then(data => {
-                console.log('Thêm hóa đơn chi tiết thành công:', data);
+                // console.log('Thêm hóa đơn chi tiết thành công:', data);
             })
             .catch(error => {
-                console.error('Lỗi khi thêm hóa đơn chi tiết:', error);
+                // console.error('Lỗi khi thêm hóa đơn chi tiết:', error);
             });
     });
 
@@ -1380,7 +1366,6 @@ async function themHoaDonChiTiet(idHoaDon) {
 async function getSanBongId(tenSanBong) {
     const response = await fetch(`http://localhost:8080/san-bong/findByName?tenSanBong=${encodeURIComponent(tenSanBong)}`);
     if (!response.ok) {
-        console.error(`Không thể lấy idSanBong cho sân bóng: ${tenSanBong}`);
         return null;
     }
     const sanBong = await response.json();
@@ -1391,7 +1376,6 @@ async function getSanBongId(tenSanBong) {
 async function fetchSanCa(idSanBong, idNgayTrongTuan, idCa) {
     const response = await fetch(`http://localhost:8080/san-ca/danh-sach-san-ca/${idSanBong}/${idNgayTrongTuan}/${idCa}`);
     if (!response.ok) {
-        console.error(`Không thể lấy sanCa cho idSanBong: ${idSanBong}, idNgayTrongTuan: ${idNgayTrongTuan}, idCa: ${idCa}`);
         return null;
     }
     return await response.json();
@@ -1400,7 +1384,6 @@ async function fetchSanCa(idSanBong, idNgayTrongTuan, idCa) {
 function getLastCharacterAsNumber(str) {
     // Kiểm tra nếu chuỗi không rỗng
     if (str.length === 0) {
-        console.error("Chuỗi không được rỗng");
         return null; // Hoặc bạn có thể trả về một giá trị khác để xử lý trường hợp này
     }
 
@@ -1412,7 +1395,6 @@ function getLastCharacterAsNumber(str) {
 
     // Kiểm tra xem việc chuyển đổi có thành công không
     if (isNaN(number)) {
-        console.error("Ký tự cuối cùng không phải là số");
         return null; // Hoặc xử lý theo cách khác
     }
 
@@ -1508,7 +1490,7 @@ async function calculateTotalPrice() {
     });
 
     // Cập nhật tổng tiền trong modal footer
-    document.getElementById('tongTien').textContent = `${total.toLocaleString()} VNĐ`;
+    document.getElementById('tongTien').textContent = `${total.toLocaleString()} VND`;
 
     try {
         // Gọi API để lấy giá trị tiền cọc
@@ -1521,11 +1503,10 @@ async function calculateTotalPrice() {
             const depositAmount = (total * depositRate) / 100;
 
             // Cập nhật tiền cọc trong modal
-            document.getElementById('tienCoc').textContent = `${depositAmount.toLocaleString()} VNĐ`;
+            document.getElementById('tienCoc').textContent = `${depositAmount.toLocaleString()} VND`;
         }
     } catch (error) {
-        console.error("Lỗi khi gọi API:", error);
-        document.getElementById('tienCoc').textContent = '0 VNĐ'; // Hiển thị giá trị mặc định nếu API lỗi
+        document.getElementById('tienCoc').textContent = '0 VND'; // Hiển thị giá trị mặc định nếu API lỗi
     }
 }
 
@@ -1546,7 +1527,6 @@ async function fetchDepositRate() {
             type: data.typeGiaTri // Loại tỷ lệ (% hoặc giá trị cố định)
         };
     } catch (error) {
-        // console.error('Lỗi khi lấy tham số TSTIEN_COC:', error);
         // Trả về giá trị mặc định nếu không tìm thấy hoặc gặp lỗi
         return {
             value: 0,  // Giá trị mặc định = 0
@@ -1572,7 +1552,6 @@ async function calculateDeposit(giaSan) {
 function paginateTable(tableBodyId, currentPage, rowsPerPage) {
     const tableBody = document.getElementById(tableBodyId);
     if (!tableBody) {
-        console.error(`Table body with ID "${tableBodyId}" not found.`);
         return;
     }
 
@@ -1580,7 +1559,6 @@ function paginateTable(tableBodyId, currentPage, rowsPerPage) {
     const totalRows = rows.length;
     const totalPages = Math.ceil(totalRows / rowsPerPage);
 
-    console.log(`Total rows: ${totalRows}, Rows per page: ${rowsPerPage}, Total pages: ${totalPages}`);
 
     // Ẩn tất cả các hàng
     rows.forEach((row, index) => {
@@ -1596,7 +1574,6 @@ function paginateTable(tableBodyId, currentPage, rowsPerPage) {
 function updatePagination(currentPage, totalPages, keyWord, trangThai, tableBodyId, paginationContainerId, isModal) {
     const paginationContainer = document.getElementById(paginationContainerId);
     if (!paginationContainer) {
-        console.error(`Pagination container with ID "${paginationContainerId}" not found.`);
         return;
     }
 

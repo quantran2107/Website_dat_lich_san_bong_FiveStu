@@ -68,7 +68,6 @@ async function fetchData(apiUrl) {
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error('Error fetching data:', error);
         return null;
     }
 }
@@ -409,10 +408,8 @@ async function exportToExcel(serviceType) {
             // Xuất file Excel
             XLSX.writeFile(wb, serviceType === 'do_thue' ? 'do_thue_data.xlsx' : 'nuoc_uong_data.xlsx');
         } else {
-            console.error("Dữ liệu trả về không phải là mảng hoặc dữ liệu không hợp lệ.");
         }
     } catch (error) {
-        console.error("Có lỗi xảy ra khi xuất dữ liệu:", error);
     }
 }
 
@@ -650,7 +647,6 @@ function submitAddFormDoThue(event) {
                     });
                 },
                 error: function (xhr, status, error) {
-                    console.error('Có lỗi xảy ra:', error);
                     // Hiển thị thông báo lỗi
                     Swal.fire({
                         title: 'Lỗi',
@@ -751,7 +747,6 @@ function submitAddFormNuocUong(event) {
                     });
                 },
                 error: function (xhr, status, error) {
-                    console.error('Có lỗi xảy ra:', error);
                     // Hiển thị thông báo lỗi
                     Swal.fire({
                         title: 'Lỗi',

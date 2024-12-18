@@ -96,7 +96,7 @@ $(document).ready(function () {
             showFogotPass()
             $('#btnLogin').text('Đăng nhập');
             $('#checkboxForm').empty()
-            $('#checkboxForm').append(`<input name="rememberme" type="checkbox" id="remember-me" value="forever"> Ghi nhớ đăng nhập`);
+            // $('#checkboxForm').append(`<!--<input name="rememberme" type="checkbox" id="remember-me" value="forever"> Ghi nhớ đăng nhập-->`);
             $('#userNameCustomer').hide()
             $('#confirm-password').hide()
             $('#customerName').hide();
