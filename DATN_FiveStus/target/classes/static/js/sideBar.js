@@ -53,24 +53,30 @@ $(document).ready(function () {
     }
 
     function nhanCa(giaoCa) {
+        console.log(giaoCa)
         if (giaoCa !== null) {
             $('#checkBox').prop('disabled', true)
         }
-        if (parseFloat($('#tienMatDauCa').val()) < 0 || parseFloat($('#tienChuyenKhoanDauCa').val()) < 0) {
-            Swal.fire({
-                title: "Cảnh báo!",
-                text: `Số tiền bạn nhập vào không được âm!`,
-                icon: "warning",
-                showConfirmButton: false,
-                showCancelButton: true,
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                cancelButtonText: 'Thoát!'
-            });
-            return;
-        }
+
         $('#modaltoggleNC').modal('show');
         $('#btnNhanCa').click(function () {
+
+            const tienMat = $('#tienMatDauCa').val();
+            const tienChuyenKhoan = $('#tienChuyenKhoanDauCa').val();
+
+            if (!tienMat || !tienChuyenKhoan || parseFloat(tienMat) < 0 || parseFloat(tienChuyenKhoan) < 0) {
+                Swal.fire({
+                    title: "Cảnh báo!",
+                    text: `Số tiền bạn nhập vào không được rỗng hoặc âm!`,
+                    icon: "warning",
+                    showConfirmButton: false,
+                    showCancelButton: true,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    cancelButtonText: 'Thoát!'
+                });
+                return;
+            }
 
             let formNC = {
                 tienMatDauCa: null,
@@ -82,11 +88,23 @@ $(document).ready(function () {
                 formNC.tienChuyenKhoanDauCa = $('#tienChuyenKhoanDauCa').val();
                 formNC.tienMatCaTruoc = 0;
             } else if (giaoCa === null) {
+                if (!$('#checkBox').is(':checked')){
+                    Swal.fire({
+                        title: "Cảnh báo!",
+                        text: `Số tiền bạn nhập vào không khớp với dữ liệu ca trước!`,
+                        icon: "warning",
+                        showConfirmButton: false,
+                        showCancelButton: true,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        cancelButtonText: 'Thoát!'
+                    });
+                    return;
+                }
                 formNC.tienMatDauCa = $('#tienMatDauCa').val();
                 formNC.tienChuyenKhoanDauCa = $('#tienChuyenKhoanDauCa').val();
                 formNC.tienMatCaTruoc = 0;
             } else if (giaoCa["tienMatTrongCa"].toString() !== ($('#tienMatDauCa').val()) || giaoCa["tienChuyenKhoanTrongCa"].toString() !== ($('#tienChuyenKhoanDauCa').val())) {
-                console.log(giaoCa)
                 Swal.fire({
                     title: "Cảnh báo!",
                     text: `Số tiền bạn nhập vào không khớp với dữ liệu ca trước!`,

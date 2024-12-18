@@ -34,7 +34,7 @@ public interface ChiTietHinhThucThanhToanRepository extends JpaRepository<ChiTie
             DuAnTotNghiep.nhan_vien nv ON cthd.id_nhan_vien = nv.id
         WHERE
             nv.id = :id
-             AND DATE(ctht.created_at) = CURDATE()- INTERVAL 1 DAY
+             AND DATE(ctht.created_at) = CURDATE()
         GROUP BY
             ht.hinh_thuc_thanh_toan;
 """, nativeQuery = true)

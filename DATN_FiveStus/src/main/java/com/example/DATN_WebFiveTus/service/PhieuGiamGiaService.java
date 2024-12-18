@@ -18,23 +18,19 @@ public interface PhieuGiamGiaService {
 
     PhieuGiamGiaDTO getOne(Integer id);
 
-    //
     PhieuGiamGiaDTO save(PhieuGiamGiaDTO phieuGiamGiaDTO);
 
     PhieuGiamGiaDTO update(Integer id, PhieuGiamGiaDTO phieuGiamGiaDTO);
 
+    PhieuGiamGiaDTO update2(Integer id, PhieuGiamGiaDTO phieuGiamGiaDTO);
 
-    //    void delete(Integer id);
-//
     void updateStatus(Integer id, String newStatus);
-//
-//    void deleteMultiple(List<Integer> ids);
-//
-//    public List<PhieuGiamGiaDTO> search(String query);
-//
-//    public List<PhieuGiamGiaDTO> filter(String status);
 
     Page<PhieuGiamGiaDTO> searchPhieuGiamGia(
             String keyword, Boolean doiTuongApDung, Boolean hinhThucGiamGia,
             String trangThai, Date ngayBatDau, Date ngayKetThuc, Pageable pageable);
+
+    boolean isDuplicateMaPhieuGiamGia(String maPhieuGiamGia);
+
+
 }

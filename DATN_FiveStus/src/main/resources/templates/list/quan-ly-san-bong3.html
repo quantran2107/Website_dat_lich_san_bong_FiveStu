@@ -153,7 +153,7 @@
                                                         <tr th:each="sanBong, stat : ${listSB}"
                                                             th:if="${loaiSan.id == sanBong.idLoaiSan}"
                                                             th:data-id-loai-san="${sanBong.id}">
-                                                            <td th:text="${stat.count}"></td>
+                                                            <td> </td>
                                                             <td>
                                                                 <span th:text="${sanBong.tenSanBong}"></span>
                                                             </td>
@@ -176,6 +176,7 @@
                                                         </tr>
                                                         </tbody>
                                                     </table>
+
 
 
                                                 </div>
@@ -372,7 +373,24 @@
 
 <script>
 
+    function loadTable(){
+        const tables = document.querySelectorAll('#parameterTable');
+        console.log(tables)
+        tables.forEach(function (table) {
+            console.log("ahihi")
+            const rows = table.querySelectorAll('tbody tr'); // Lấy tất cả các hàng trong tbody
+            let stt = 1; // Bắt đầu từ 1
+            rows.forEach(function (row) {
+                const sttCell = row.querySelector('td:first-child');
+                if (sttCell) {
+                    sttCell.textContent = stt++; // Gán và tăng chỉ số
+                }
+            });
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
+        loadTable();
         document.querySelectorAll('.status-switch').forEach(switchElement => {
             switchElement.addEventListener('change', function() {
                 const id = $(this).closest('tr').data('id-loai-san');
@@ -782,7 +800,7 @@
                                             error: function (xhr) {
                                                 Swal.fire({
                                                     icon: "error",
-                                                    title: "Đã xảy ra lỗi",
+                                                    title: "Đã xảy ra lỗi0",
                                                     text: xhr.responseText
                                                 });
                                             }
@@ -817,7 +835,7 @@
                                     error: function (xhr) {
                                         Swal.fire({
                                             icon: "error",
-                                            title: "Đã xảy ra lỗi",
+                                            title: "Đã xảy ra lỗi1",
                                             text: xhr.responseText
                                         });
                                     }
@@ -827,7 +845,7 @@
                         error: function (err) {
                             Swal.fire({
                                 icon: "error",
-                                title: "Đã xảy ra lỗi",
+                                title: "Đã xảy ra lỗi2",
                                 text: err.responseText
                             });
                         }
@@ -836,7 +854,7 @@
                 error: function (err) {
                     Swal.fire({
                         icon: "error",
-                        title: "Đã xảy ra lỗi",
+                        title: "Đã xảy ra lỗi3",
                         text: err.responseText
                     });
                 }
@@ -854,6 +872,7 @@
         var activeTabContentId = activeTab.attr('href');
         var idLoaiSan = activeTabContentId.replace('#loaiSan-', '');
         $('#idLoaiSanInput').val(idLoaiSan);
+        // location.reload();
     }
 
 
@@ -866,6 +885,8 @@
         $('#formAddNgayTrongTuan .dayCheckbox, #formSanCa .caCheckboxs').prop('checked', false);
 
         $('#selectedDays').text('');
+
+        location.reload();
     }
 
 

@@ -4,164 +4,56 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8ee037a0-9ff2-44a4-823b-30bdbca692a2" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="331bba4b-2a38-4c11-9793-f27eaffa39fe" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/AsyncConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/AsyncConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/VNPay/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/VNPay/EmailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/ChiTietHinhThucThanhToanRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/ChiTietHinhThucThanhToanRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/GiaoCaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/GiaoCaRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/PhieuGiamGiaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/PhieuGiamGiaRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaChiTietRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaChiTietRest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/ThamSoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/ThamSoRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaRest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaChiTietServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaChiTietServiceImp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/PhieuGiamGiaChiTietService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/PhieuGiamGiaChiTietService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/SanCaServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/SanCaServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/PhieuGiamGiaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/PhieuGiamGiaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/main - Shortcut.lnk" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/chon-san-ca.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/chon-san-ca.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/pgg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/pgg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/sideBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/sideBar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/dat-lich-tai-quay.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/dat-lich-tai-quay.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-hoa-don.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-hoa-don.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-san-bong3.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-san-bong3.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/ChiTietHinhThucThanhToanRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/ChiTietHinhThucThanhToanRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/GiaoCaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/GiaoCaRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/ThamSoRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/ThamSoRepository.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaRest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaRest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaChiTietServiceImp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaChiTietServiceImp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaServiceImp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaServiceImp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/SanCaServiceImp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/SanCaServiceImp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/PhieuGiamGiaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/PhieuGiamGiaService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/js/chon-san-ca.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/js/chon-san-ca.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/static/js/pgg.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/js/pgg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/js/sideBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/js/sideBar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/dat-lich-tai-quay.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/dat-lich-tai-quay.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-hoa-don.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-hoa-don.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-san-bong3.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-san-bong3.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="JavaScript File" />
-        <option value="HTML File" />
-        <option value="package.json" />
-        <option value="Class" />
-      </list>
-    </option>
-  </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
-  </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;quantran2107&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/quantran2107/Website_dat_lich_san_bong_FiveStu.git&quot;,
-    &quot;accountId&quot;: &quot;13571d64-4f95-4b0c-a530-0304fd31ceb1&quot;
-  }
-}</component>
-  <component name="KubernetesApiPersistence">{}</component>
-  <component name="KubernetesApiProvider">{
-  &quot;isMigrated&quot;: true
-}</component>
-  <component name="MarkdownSettingsMigration">
-    <option name="stateVersion" value="1" />
-  </component>
-  <component name="ProjectColorInfo">{
-        &quot;associatedIndex&quot;: 3
-        }</component>
-  <component name="ProjectId" id="2pAcEtyO8bzVt9G6c3pQyBqs9o6" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
-  <component name="ProjectViewState">
-    <option name="showLibraryContents" value="true" />
-  </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.GenerateInvoicePDFWithSaveDialog.executor&quot;: &quot;Run&quot;,
-    &quot;Application.GenerateInvoicePDFWithTimesFont.executor&quot;: &quot;Run&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;HTTP Request.generated-requests | #17.executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.DatnWebFiveTusApplication (1).executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.DatnWebFiveTusApplication.executor&quot;: &quot;Run&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Merging nhanhQuan&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;F:/Website_dat_lich_san_bong_FiveStu/DATN_FiveStus&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMConfigurable&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;51bacb21f12ffedca17bf8180959173a&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-  },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
-    ]
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75"
   }
-}</component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\puddi\Desktop\Clontest 2\Website_dat_lich_san_bong_FiveStu\DATN_FiveStus\src\main\resources\templates" />
-    </key>
-  </component>
-  <component name="RunAnythingCache">
-    <option name="myCommands">
-      <command value="mvn install" />
-      <command value="mvn compile" />
-      <command value="mvn clean" />
-      <command value="mvn deploy" />
-    </option>
-  </component>
-  <component name="RunManager" selected="Spring Boot.DatnWebFiveTusApplication (1)">
-    <configuration name="GenerateInvoicePDFWithSaveDialog" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.example.DATN_WebFiveTus.config.PDF.GenerateInvoicePDFWithSaveDialog" />
-      <module name="DATN_WebFiveTus" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.example.DATN_WebFiveTus.config.PDF.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="GenerateInvoicePDFWithTimesFont" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.example.DATN_WebFiveTus.config.PDF.GenerateInvoicePDFWithTimesFont" />
-      <module name="DATN_WebFiveTus" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.example.DATN_WebFiveTus.config.PDF.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="generated-requests | #17" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/generated-requests.http" index="17" requestIdentifier="#17" runType="Run single request">
-      <method v="2" />
-    </configuration>
-    <configuration name="DatnWebFiveTusApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
-      <module name="DATN_FiveStus" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.DATN_WebFiveTus.DatnWebFiveTusApplication" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.example.DATN_WebFiveTus.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+}]]></component>
+  <component name="RunManager">
     <configuration name="DatnWebFiveTusApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
-      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
-      <module name="DATN_WebFiveTus" />
+      <module name="DATN_FiveStus" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.DATN_WebFiveTus.DatnWebFiveTusApplication" />
       <extension name="coverage">
         <pattern>
@@ -175,243 +67,12 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.DatnWebFiveTusApplication (1)" />
         <item itemvalue="Spring Boot.DatnWebFiveTusApplication" />
-        <item itemvalue="Application.GenerateInvoicePDFWithTimesFont" />
-        <item itemvalue="Application.GenerateInvoicePDFWithSaveDialog" />
-        <item itemvalue="HTTP Request.generated-requests | #17" />
       </list>
     </recent_temporary>
   </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.142" />
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.142" />
-      </set>
-    </attachedChunks>
-  </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
-    <task active="true" id="Default" summary="Default task">
-      <changelist id="8ee037a0-9ff2-44a4-823b-30bdbca692a2" name="Changes" comment="" />
-      <created>1721639258822</created>
-      <option name="number" value="Default" />
-      <option name="presentableId" value="Default" />
-      <updated>1721639258822</updated>
-      <workItem from="1721639260036" duration="1257000" />
-      <workItem from="1721640531381" duration="9000" />
-      <workItem from="1721640543111" duration="349000" />
-      <workItem from="1721640908725" duration="20570000" />
-      <workItem from="1721705131070" duration="31356000" />
-      <workItem from="1721803256856" duration="596000" />
-      <workItem from="1721837290158" duration="614000" />
-      <workItem from="1721923219158" duration="5684000" />
-      <workItem from="1722172769746" duration="644000" />
-      <workItem from="1722305849330" duration="21179000" />
-      <workItem from="1722399471616" duration="1052000" />
-      <workItem from="1722411649925" duration="10226000" />
-      <workItem from="1722701517258" duration="2803000" />
-      <workItem from="1722704946293" duration="338000" />
-      <workItem from="1722705391374" duration="5850000" />
-      <workItem from="1722768867870" duration="333000" />
-      <workItem from="1722769208765" duration="4896000" />
-      <workItem from="1723043173297" duration="3635000" />
-      <workItem from="1723709362592" duration="13702000" />
-      <workItem from="1723798927339" duration="18013000" />
-      <workItem from="1723870507734" duration="315000" />
-      <workItem from="1723878110946" duration="1733000" />
-      <workItem from="1723967566616" duration="10858000" />
-      <workItem from="1724125048567" duration="1619000" />
-      <workItem from="1724249787891" duration="3254000" />
-      <workItem from="1724294115905" duration="25600000" />
-      <workItem from="1724387704413" duration="245000" />
-      <workItem from="1724572133408" duration="1301000" />
-      <workItem from="1725355412041" duration="4623000" />
-      <workItem from="1725416058844" duration="2569000" />
-      <workItem from="1725503943103" duration="18355000" />
-      <workItem from="1725546249660" duration="1205000" />
-      <workItem from="1725855636999" duration="595000" />
-      <workItem from="1725867857701" duration="6914000" />
-      <workItem from="1725936716652" duration="9317000" />
-      <workItem from="1725960469414" duration="4388000" />
-      <workItem from="1725975860532" duration="13865000" />
-      <workItem from="1726024562503" duration="6569000" />
-      <workItem from="1726039670825" duration="10670000" />
-      <workItem from="1726213182900" duration="5798000" />
-      <workItem from="1726222480663" duration="5447000" />
-      <workItem from="1726243329045" duration="4728000" />
-      <workItem from="1726286344122" duration="1172000" />
-      <workItem from="1726498281037" duration="596000" />
-      <workItem from="1726563765291" duration="648000" />
-      <workItem from="1727062431230" duration="4585000" />
-      <workItem from="1727087628362" duration="5796000" />
-      <workItem from="1727107505719" duration="36000" />
-      <workItem from="1727156050909" duration="2327000" />
-      <workItem from="1727246494131" duration="123000" />
-      <workItem from="1727246630237" duration="1427000" />
-      <workItem from="1727323006424" duration="55000" />
-      <workItem from="1727502632737" duration="649000" />
-      <workItem from="1727528717104" duration="23897000" />
-      <workItem from="1727553117370" duration="60000" />
-      <workItem from="1727580258511" duration="3680000" />
-      <workItem from="1727600878289" duration="1698000" />
-      <workItem from="1727664849876" duration="12231000" />
-      <workItem from="1727767518348" duration="1012000" />
-      <workItem from="1727769062339" duration="2187000" />
-      <workItem from="1727777510154" duration="190000" />
-      <workItem from="1727788681688" duration="185000" />
-      <workItem from="1727846939370" duration="7170000" />
-      <workItem from="1727931545904" duration="2967000" />
-      <workItem from="1727952830920" duration="9854000" />
-      <workItem from="1728013471775" duration="3323000" />
-      <workItem from="1728046958279" duration="654000" />
-      <workItem from="1728106593535" duration="4804000" />
-      <workItem from="1728199288198" duration="93000" />
-      <workItem from="1728199401628" duration="222000" />
-      <workItem from="1728278933887" duration="240000" />
-      <workItem from="1728315290624" duration="688000" />
-      <workItem from="1728355175607" duration="4585000" />
-      <workItem from="1728368868816" duration="25000" />
-      <workItem from="1728375541781" duration="294000" />
-      <workItem from="1728398292339" duration="820000" />
-      <workItem from="1728401328167" duration="14000" />
-      <workItem from="1728528857281" duration="652000" />
-      <workItem from="1728529532956" duration="8582000" />
-      <workItem from="1728543972686" duration="6676000" />
-      <workItem from="1728552450661" duration="8440000" />
-      <workItem from="1728875363336" duration="18000" />
-      <workItem from="1728875844780" duration="13739000" />
-      <workItem from="1728968509236" duration="247000" />
-      <workItem from="1728991608740" duration="17213000" />
-      <workItem from="1729011251953" duration="2116000" />
-      <workItem from="1729013636421" duration="89000" />
-      <workItem from="1729013927939" duration="85000" />
-      <workItem from="1729014168760" duration="9000" />
-      <workItem from="1729229597169" duration="10684000" />
-      <workItem from="1729243578865" duration="5021000" />
-      <workItem from="1729250243394" duration="12972000" />
-      <workItem from="1729396387700" duration="4000" />
-      <workItem from="1729396674142" duration="3000" />
-      <workItem from="1729396686357" duration="273000" />
-      <workItem from="1729396985425" duration="62000" />
-      <workItem from="1729398003909" duration="5188000" />
-      <workItem from="1729566591547" duration="9671000" />
-      <workItem from="1729586746220" duration="101000" />
-      <workItem from="1729588552683" duration="370000" />
-      <workItem from="1729605207097" duration="5008000" />
-      <workItem from="1729612022058" duration="192000" />
-      <workItem from="1729612244677" duration="122000" />
-      <workItem from="1729653446022" duration="925000" />
-      <workItem from="1729660910961" duration="621000" />
-      <workItem from="1729663580290" duration="9000" />
-      <workItem from="1729737550068" duration="17164000" />
-      <workItem from="1729758543482" duration="122000" />
-      <workItem from="1729758797371" duration="23000" />
-      <workItem from="1729761433560" duration="9577000" />
-      <workItem from="1729771317051" duration="120000" />
-      <workItem from="1729771577618" duration="1012000" />
-      <workItem from="1729823240072" duration="7426000" />
-      <workItem from="1730179498059" duration="2118000" />
-      <workItem from="1730179498059" duration="1510000" />
-      <workItem from="1730263704880" duration="5038000" />
-      <workItem from="1730274899956" duration="2431000" />
-      <workItem from="1730277463127" duration="16871000" />
-      <workItem from="1730296505706" duration="50000" />
-      <workItem from="1730296635556" duration="208000" />
-      <workItem from="1730296944810" duration="133000" />
-      <workItem from="1730297158476" duration="153000" />
-      <workItem from="1730297337193" duration="338000" />
-      <workItem from="1730297708331" duration="99000" />
-      <workItem from="1730297876124" duration="672000" />
-      <workItem from="1730298663199" duration="4000" />
-      <workItem from="1730298672745" duration="213000" />
-      <workItem from="1730298912395" duration="46000" />
-      <workItem from="1730298968190" duration="24000" />
-      <workItem from="1730299015876" duration="23146000" />
-      <workItem from="1730322334680" duration="2382000" />
-      <workItem from="1730367913690" duration="10512000" />
-      <workItem from="1730444873783" duration="378000" />
-      <workItem from="1730699875126" duration="2692000" />
-      <workItem from="1730789102333" duration="9007000" />
-      <workItem from="1730799718231" duration="71000" />
-      <workItem from="1730818090112" duration="429000" />
-      <workItem from="1730818931011" duration="427000" />
-      <workItem from="1730977831132" duration="12895000" />
-      <workItem from="1731236967949" duration="35000" />
-      <workItem from="1731237699415" duration="10000" />
-      <workItem from="1731238855906" duration="674000" />
-      <workItem from="1731326692396" duration="40000" />
-      <workItem from="1731333836833" duration="819000" />
-      <workItem from="1731429332486" duration="338000" />
-      <workItem from="1731472006038" duration="6230000" />
-      <workItem from="1731635880267" duration="2787000" />
-      <workItem from="1731833283957" duration="1051000" />
-      <workItem from="1731845194129" duration="527000" />
-      <workItem from="1731993656113" duration="318000" />
-      <workItem from="1732086164958" duration="1049000" />
-      <workItem from="1732110093506" duration="9163000" />
-      <workItem from="1732179735034" duration="14945000" />
-      <workItem from="1732233779073" duration="230000" />
-      <workItem from="1732243281464" duration="1240000" />
-      <workItem from="1732245444197" duration="390000" />
-      <workItem from="1732589538257" duration="5754000" />
-      <workItem from="1732606823743" duration="11644000" />
-      <workItem from="1732720691564" duration="9159000" />
-      <workItem from="1732862645325" duration="2185000" />
-      <workItem from="1732983678430" duration="600000" />
-      <workItem from="1732992320656" duration="595000" />
-      <workItem from="1732996810688" duration="595000" />
-      <workItem from="1733045491447" duration="597000" />
-      <workItem from="1733153222343" duration="10716000" />
-      <workItem from="1733203296980" duration="15936000" />
-      <workItem from="1733223722939" duration="1444000" />
-      <workItem from="1733231641167" duration="148000" />
-      <workItem from="1733232416838" duration="335000" />
-      <workItem from="1733236524006" duration="11110000" />
-      <workItem from="1733294584537" duration="151000" />
-      <workItem from="1733300993649" duration="692000" />
-      <workItem from="1733308050786" duration="5555000" />
-      <workItem from="1733315786487" duration="886000" />
-      <workItem from="1733460050803" duration="2053000" />
-      <workItem from="1733474332958" duration="2727000" />
-      <workItem from="1733481249828" duration="2551000" />
-      <workItem from="1733483922434" duration="8352000" />
-      <workItem from="1733501465277" duration="573000" />
-      <workItem from="1733547931989" duration="13439000" />
-      <workItem from="1733564450597" duration="2240000" />
-      <workItem from="1733644065244" duration="643000" />
-      <workItem from="1733645052288" duration="174000" />
-      <workItem from="1733744795748" duration="24691000" />
-      <workItem from="1733772233794" duration="694000" />
-      <workItem from="1733811274525" duration="5441000" />
-      <workItem from="1733819523152" duration="4422000" />
-      <workItem from="1733929925415" duration="6539000" />
-      <workItem from="1733974899157" duration="3904000" />
-      <workItem from="1733981080040" duration="1502000" />
-      <workItem from="1733993228325" duration="612000" />
-      <workItem from="1734089097891" duration="599000" />
-      <workItem from="1734096259229" duration="15650000" />
-      <workItem from="1734164573723" duration="4638000" />
-      <workItem from="1734197722778" duration="599000" />
-      <workItem from="1734263658189" duration="20553000" />
-      <workItem from="1734315609504" duration="1967000" />
-      <workItem from="1734318033182" duration="835000" />
-      <workItem from="1734320803332" duration="5010000" />
-      <workItem from="1734344042118" duration="5297000" />
-      <workItem from="1734425918504" duration="14127000" />
-      <workItem from="1734452358853" duration="375000" />
-      <workItem from="1734453463364" duration="2791000" />
-      <workItem from="1734462512492" duration="406000" />
-      <workItem from="1734463939105" duration="15303000" />
-      <workItem from="1734494408778" duration="3267000" />
-      <workItem from="1734501071631" duration="6274000" />
-      <workItem from="1734529695139" duration="10248000" />
-    </task>
     <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -423,10 +84,6 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XSLT-Support.FileAssociations.UIState">
-    <expand />
-    <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/DATN_WebFiveTus$DatnWebFiveTusApplication.ic" NAME="DatnWebFiveTusApplication Coverage Results" MODIFIED="1733491147928" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">

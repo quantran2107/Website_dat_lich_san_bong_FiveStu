@@ -93,6 +93,12 @@ public class PhieuGiamGiaRest {
         return ResponseEntity.status(HttpStatus.CREATED).body(phieuGiamGiaDTODetail);
     }
 
+    @PutMapping("update2/{id}")
+    public ResponseEntity<PhieuGiamGiaDTO> update2(@PathVariable("id") Integer id, @RequestBody PhieuGiamGiaDTO phieuGiamGiaDTO) {
+        PhieuGiamGiaDTO phieuGiamGiaDTODetail = phieuGiamGiaService.update2(id,phieuGiamGiaDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(phieuGiamGiaDTODetail);
+    }
+
     @PutMapping("/trang-thai/{id}")
     public ResponseEntity<?> toggleStatus(@PathVariable Integer id, @RequestBody Map<String, String> requestBody) {
         String newStatus = requestBody.get("trangThai");
@@ -129,36 +135,10 @@ public class PhieuGiamGiaRest {
         return ResponseEntity.ok(phieuGiamGiaPage);
     }
 
-
-
-//    @DeleteMapping("/delete-soft") //
-//    public ResponseEntity<Void> deleteSoft(@RequestBody List<Integer> ids) {
-//        try {
-//            for (Integer id : ids) {
-//                PhieuGiamGiaDTO phieuGiamGia = phieuGiamGiaService.getOne(id);
-//                if (phieuGiamGia != null) {
-//                    phieuGiamGia.setDeletedAt(true); // Đặt cờ deletedAt thành true
-//                    phieuGiamGiaService.save(phieuGiamGia); // Lưu entity đã cập nhật
-//                } else {
-//                    // Xử lý trường hợp không tìm thấy entity với ID tương ứng
-//                }
-//            }
-//            return ResponseEntity.noContent().build(); // Trả về thành công
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//        }
-//    }
-//
-//    @GetMapping("/search")
-//    public ResponseEntity<List<PhieuGiamGiaDTO>> search(@RequestParam String query) {
-//        List<PhieuGiamGiaDTO> results = phieuGiamGiaService.search(query);
-//        return ResponseEntity.ok(results);
-//    }
-//
-//    @GetMapping("/filter")
-//    public ResponseEntity<List<PhieuGiamGiaDTO>> filter(@RequestParam String status) {
-//        return ResponseEntity.ok(phieuGiamGiaService.filter(status));
-//    }
-
+    @GetMapping("/check-duplicate/{maPhieuGiamGia}")
+    public ResponseEntity<Boolean> checkDuplicate(@PathVariable String maPhieuGiamGia) {
+        boolean isDuplicate = phieuGiamGiaService.isDuplicateMaPhieuGiamGia(maPhieuGiamGia);
+        return ResponseEntity.ok(isDuplicate);
+    }
 
 }

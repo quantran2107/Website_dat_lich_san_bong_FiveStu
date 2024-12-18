@@ -537,7 +537,7 @@
 
             fetch(`http://localhost:8080/hoa-don-chi-tiet/hien-thi/${id}`)
                 .then(response => response.json())
-                .then(data => {
+                .then(async data => {
                     const tableBody = document.getElementById('tableBody');
                     tableBody.innerHTML = '';
 
@@ -546,41 +546,40 @@
                     let tongTienPhuPhi = 0;
                     let tongTienGiam = 0;
 
-                    // Tạo mảng các promises cho các fetch con để tính tổng tiền dịch vụ
-                    const dichVuPromises = [];
-                    const phuPhiPromises = [];
+                    // Tạo mảng các promises
+                    const allPromises = [];
 
-                    data.forEach(async (chiTiet, index) => {
+                    for (const [index, chiTiet] of data.entries()) {
                         const actionHTML = await renderCancellationActions(chiTiet);
 
                         const startTime = new Date(chiTiet.thoiGianBatDauCa);
                         const endTime = new Date(chiTiet.thoiGianKetThucCa);
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                                <td>${index + 1}</td>
-                                <td>${chiTiet.maHoaDonChiTiet}</td>
-                                <td>${chiTiet.tenSanBong}</td>
-                                <td>${startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
-                                <td>${chiTiet.ngayDenSan}</td>
-                                <td>${chiTiet.tongTien.toLocaleString()} VND</td>
-                                <td>
-                                    <span style="width: 90%"
-                                        class="${chiTiet.trangThai === 'Đã hủy' ? 'custom-3' : chiTiet.trangThai === 'Chờ nhận sân' ? 'custom-5' : 'custom-4'}">
-                                        ${chiTiet.trangThai}
-                                    </span>
-                                </td>
-                                <td>
-                                    ${chiTiet.trangThai === 'Chờ nhận sân' ? actionHTML : ''}
-                                </td>
-                            `;
+                <td>${index + 1}</td>
+                <td>${chiTiet.maHoaDonChiTiet}</td>
+                <td>${chiTiet.tenSanBong}</td>
+                <td>${startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                <td>${chiTiet.ngayDenSan}</td>
+                <td>${chiTiet.tongTien.toLocaleString()} VND</td>
+                <td>
+                    <span style="width: 90%"
+                        class="${chiTiet.trangThai === 'Đã hủy' ? 'custom-3' : chiTiet.trangThai === 'Chờ nhận sân' ? 'custom-5' : 'custom-4'}">
+                        ${chiTiet.trangThai}
+                    </span>
+                </td>
+                <td>
+                    ${chiTiet.trangThai === 'Chờ nhận sân' ? actionHTML : ''}
+                </td>
+            `;
                         tableBody.appendChild(row);
 
-                        // Cộng dồn các loại tiền theo từng mục
+                        // Cộng dồn các loại tiền
                         tongTienSan += chiTiet.giaSanCa || 0;
                         tongTienGiam += chiTiet.tienGiamGia || 0;
 
-                        // Đẩy promise của fetch dịch vụ vào mảng
-                        dichVuPromises.push(
+                        // Push các fetch promises vào mảng allPromises
+                        allPromises.push(
                             fetch(`http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${chiTiet.id}`)
                                 .then(response => response.json())
                                 .then(dichVuData => {
@@ -590,7 +589,7 @@
                                 })
                         );
 
-                        phuPhiPromises.push(
+                        allPromises.push(
                             fetch(`http://localhost:8080/api/phu-phi-hoa-don/${chiTiet.id}`)
                                 .then(response => response.json())
                                 .then(phuPhiData => {
@@ -599,20 +598,20 @@
                                     });
                                 })
                         );
-                    });
+                    }
 
-                    // Chờ tất cả các fetch dịch vụ hoàn thành trước khi cập nhật giao diện
-                    Promise.all(dichVuPromises, phuPhiPromises).then(() => {
-                        // Cập nhật các giá trị tổng tiền vào giao diện
-                        document.getElementById('tongTienSan').textContent = tongTienSan.toLocaleString() + " VND";
-                        document.getElementById('tongTienDichVu').textContent = tongTienDichVu.toLocaleString() + " VND";
-                        document.getElementById('tongTienPhuPhi').textContent = tongTienPhuPhi.toLocaleString() + " VND";
-                        document.getElementById('tongTienGiam').textContent = tongTienGiam.toLocaleString() + " VND";
+                    // Chờ tất cả các fetch hoàn tất
+                    await Promise.all(allPromises);
 
-                        // Tính tổng tiền thanh toán
-                        const tongTienThanhToan = tongTienSan + tongTienDichVu + tongTienPhuPhi - tongTienGiam;
-                        document.getElementById('tongTienThanhToan').textContent = tongTienThanhToan.toLocaleString() + " VND";
-                    });
+                    // Cập nhật các giá trị tổng tiền vào giao diện
+                    document.getElementById('tongTienSan').textContent = tongTienSan.toLocaleString() + " VND";
+                    document.getElementById('tongTienDichVu').textContent = tongTienDichVu.toLocaleString() + " VND";
+                    document.getElementById('tongTienPhuPhi').textContent = tongTienPhuPhi.toLocaleString() + " VND";
+                    document.getElementById('tongTienGiam').textContent = tongTienGiam.toLocaleString() + " VND";
+
+                    // Tính tổng tiền thanh toán
+                    const tongTienThanhToan = tongTienSan + tongTienDichVu + tongTienPhuPhi - tongTienGiam;
+                    document.getElementById('tongTienThanhToan').textContent = tongTienThanhToan.toLocaleString() + " VND";
                 })
                 .catch(error => console.error('Error:', error));
         };
