@@ -93,6 +93,12 @@ public class PhieuGiamGiaRest {
         return ResponseEntity.status(HttpStatus.CREATED).body(phieuGiamGiaDTODetail);
     }
 
+    @PutMapping("update2/{id}")
+    public ResponseEntity<PhieuGiamGiaDTO> update2(@PathVariable("id") Integer id, @RequestBody PhieuGiamGiaDTO phieuGiamGiaDTO) {
+        PhieuGiamGiaDTO phieuGiamGiaDTODetail = phieuGiamGiaService.update2(id,phieuGiamGiaDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(phieuGiamGiaDTODetail);
+    }
+
     @PutMapping("/trang-thai/{id}")
     public ResponseEntity<?> toggleStatus(@PathVariable Integer id, @RequestBody Map<String, String> requestBody) {
         String newStatus = requestBody.get("trangThai");

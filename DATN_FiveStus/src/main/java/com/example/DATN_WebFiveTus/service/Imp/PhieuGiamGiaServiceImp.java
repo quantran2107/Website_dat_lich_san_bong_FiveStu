@@ -149,5 +149,19 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
         return new PageImpl<>(phieuGiamGiaDTOList, pageable, phieuGiamGiaRepository.count());
     }
 
+    @Override
+    public PhieuGiamGiaDTO update2(Integer id, PhieuGiamGiaDTO phieuGiamGiaDTO) {
+        PhieuGiamGia phieuGiamGia = phieuGiamGiaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu giảm giá với id " + id));
+        // Save updated entity
+        phieuGiamGia.setSoLuong(phieuGiamGiaDTO.getSoLuong());
+        phieuGiamGia.setTrangThai(phieuGiamGiaDTO.getTrangThai());
+        phieuGiamGia.setDeletedAt(phieuGiamGiaDTO.getDeletedAt());
+        PhieuGiamGia updatedEntity = phieuGiamGiaRepository.save(phieuGiamGia);
+
+        // Convert updated entity back to DTO
+        return modelMapper.map(updatedEntity, PhieuGiamGiaDTO.class);
+    }
+
 }
 

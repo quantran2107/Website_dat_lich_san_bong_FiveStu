@@ -23,6 +23,7 @@ public interface PhieuGiamGiaService {
 
     PhieuGiamGiaDTO update(Integer id, PhieuGiamGiaDTO phieuGiamGiaDTO);
 
+    PhieuGiamGiaDTO update2(Integer id, PhieuGiamGiaDTO phieuGiamGiaDTO);
 
     //    void delete(Integer id);
 //
