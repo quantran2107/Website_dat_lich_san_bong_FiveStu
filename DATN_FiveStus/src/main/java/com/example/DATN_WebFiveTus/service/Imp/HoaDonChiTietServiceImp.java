@@ -385,7 +385,66 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
     public HoaDonChiTietDTO huyLichDat(Integer id) {
         HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn với id " + id));
+        HoaDon hoaDon = hoaDonRepository.findById(hoaDonChiTiet.getHoaDon().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn với id " + hoaDonChiTiet.getHoaDon().getId()));
+
         hoaDonChiTiet.setTrangThai("Đã hủy");
+        hoaDonChiTiet.setHoaDon(hoaDon);
+        // Kiểm tra tất cả các hóa đơn chi tiết của hóa đơn này
+        List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietRepository.searchFromHoaDon(hoaDon.getId());
+        boolean allCompletedOrCancelled = true;
+
+        // Kiểm tra trạng thái của các hóa đơn chi tiết
+        for (HoaDonChiTiet chiTiet : hoaDonChiTietList) {
+            if (!"Đã thanh toán".equals(chiTiet.getTrangThai()) && !"Đã hủy".equals(chiTiet.getTrangThai()) && !"Đã hoàn tiền cọc".equals(chiTiet.getTrangThai()) ){
+                allCompletedOrCancelled = false;
+                break;
+            }
+        }
+
+        // Cập nhật trạng thái của hóa đơn
+        if (allCompletedOrCancelled) {
+            hoaDon.setTrangThai("Đã hoàn thành");
+        } else {
+            hoaDon.setTrangThai("Đã hoàn thành một phần");
+        }
+
+        // Lưu lại hóa đơn với trạng thái cập nhật
+        hoaDonRepository.save(hoaDon);
+        hoaDonChiTietRepository.save(hoaDonChiTiet);
+        return modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class);
+    }
+
+    @Override
+    public HoaDonChiTietDTO hoanTienCoc(Integer id) {
+        HoaDonChiTiet hoaDonChiTiet = hoaDonChiTietRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn với id " + id));
+        HoaDon hoaDon = hoaDonRepository.findById(hoaDonChiTiet.getHoaDon().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn với id " + hoaDonChiTiet.getHoaDon().getId()));
+
+        hoaDonChiTiet.setTrangThai("Đã hoàn tiền cọc");
+        hoaDonChiTiet.setHoaDon(hoaDon);
+        // Kiểm tra tất cả các hóa đơn chi tiết của hóa đơn này
+        List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietRepository.searchFromHoaDon(hoaDon.getId());
+        boolean allCompletedOrCancelled = true;
+
+        // Kiểm tra trạng thái của các hóa đơn chi tiết
+        for (HoaDonChiTiet chiTiet : hoaDonChiTietList) {
+            if (!"Đã thanh toán".equals(chiTiet.getTrangThai()) && !"Đã hủy".equals(chiTiet.getTrangThai()) && !"Đã hoàn tiền cọc".equals(chiTiet.getTrangThai()) ){
+                allCompletedOrCancelled = false;
+                break;
+            }
+        }
+
+        // Cập nhật trạng thái của hóa đơn
+        if (allCompletedOrCancelled) {
+            hoaDon.setTrangThai("Đã hoàn thành");
+        } else {
+            hoaDon.setTrangThai("Đã hoàn thành một phần");
+        }
+
+        // Lưu lại hóa đơn với trạng thái cập nhật
+        hoaDonRepository.save(hoaDon);
         hoaDonChiTietRepository.save(hoaDonChiTiet);
         return modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class);
     }
@@ -398,7 +457,9 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
         SanCa sanCa = sanCaRepository.findById(hoaDonChiTietDTO.getIdSanCa()).orElseThrow();
         NhanVien nhanVien = nhanVienReposity.findById(hoaDonChiTietDTO.getIdNhanVien()).orElseThrow();
-        HoaDon hoaDon = hoaDonRepository.findById(hoaDonChiTietDTO.getIdHoaDon()).orElseThrow();
+        HoaDon hoaDon = hoaDonRepository.findById(hoaDonChiTiet.getHoaDon().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy hóa đơn với id " + hoaDonChiTiet.getHoaDon().getId()));
+
 
         // Cập nhật trạng thái của hóa đơn chi tiết hiện tại
         hoaDonChiTiet.setSanCa(sanCa);
@@ -429,7 +490,7 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
         // Kiểm tra trạng thái của các hóa đơn chi tiết
         for (HoaDonChiTiet chiTiet : hoaDonChiTietList) {
-            if (!"Đã thanh toán".equals(chiTiet.getTrangThai()) && !"Đã hủy".equals(chiTiet.getTrangThai())) {
+            if (!"Đã thanh toán".equals(chiTiet.getTrangThai()) && !"Đã hủy".equals(chiTiet.getTrangThai())&& !"Đã hoàn tiền cọc".equals(chiTiet.getTrangThai())) {
                 allCompletedOrCancelled = false;
                 break;
             }

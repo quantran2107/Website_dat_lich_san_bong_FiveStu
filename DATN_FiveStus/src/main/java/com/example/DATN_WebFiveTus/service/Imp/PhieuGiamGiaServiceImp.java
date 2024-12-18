@@ -111,7 +111,17 @@ public class PhieuGiamGiaServiceImp implements PhieuGiamGiaService {
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy phiếu giảm giá với id " + id));
         // Save updated entity
         phieuGiamGia.setSoLuong(phieuGiamGiaDTO.getSoLuong());
+        phieuGiamGia.setTenPhieuGiamGia(phieuGiamGiaDTO.getTenPhieuGiamGia());
+        phieuGiamGia.setMaPhieuGiamGia(phieuGiamGiaDTO.getMaPhieuGiamGia());
+        phieuGiamGia.setMucGiam(phieuGiamGiaDTO.getMucGiam());
+        phieuGiamGia.setGiaTriToiDa(phieuGiamGiaDTO.getGiaTriToiDa());
+        phieuGiamGia.setDieuKienSuDung(phieuGiamGiaDTO.getDieuKienSuDung());
+        phieuGiamGia.setDoiTuongApDung(phieuGiamGiaDTO.getDoiTuongApDung());
+        phieuGiamGia.setNgayBatDau(phieuGiamGiaDTO.getNgayBatDau());
+        phieuGiamGia.setNgayKetThuc(phieuGiamGiaDTO.getNgayKetThuc());
         phieuGiamGia.setTrangThai(phieuGiamGiaDTO.getTrangThai());
+        phieuGiamGia.setHinhThucGiamGia(phieuGiamGiaDTO.getHinhThucGiamGia());
+        phieuGiamGia.setGhiChu(phieuGiamGiaDTO.getGhiChu());
         phieuGiamGia.setDeletedAt(phieuGiamGiaDTO.getDeletedAt());
         PhieuGiamGia updatedEntity = phieuGiamGiaRepository.save(phieuGiamGia);
 
