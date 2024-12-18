@@ -320,7 +320,7 @@
             // Duyệt qua từng hóa đơn trong dữ liệu
             data.forEach(item => {
                 if(item.trangThai === "Đã thanh toán"){
-                    tongDanhThuNgay += item.tongTienThucTe || 0;
+                    tongDanhThuNgay += item.tongTienThucTe;
                 }
 
                 // Gọi API dịch vụ cho từng hóa đơn
@@ -389,7 +389,7 @@
 
             data.forEach(item => {
                 if(item.trangThai === "Đã thanh toán"){
-                    tongDanhThuTuan += item.tongTienThucTe || 0;
+                    tongDanhThuTuan += item.tongTienThucTe;
                 }
                 weekDichVuPromises.push(
                     fetch(`http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${item.id}`)
@@ -451,7 +451,7 @@
 
             data.forEach(item => {
                 if(item.trangThai === "Đã thanh toán"){
-                    tongDanhThuThang += item.tongTienThucTe || 0;
+                    tongDanhThuThang += item.tongTienThucTe;
                 }
                 monthDichVuPromises.push(
                     fetch(`http://localhost:8080/dich-vu-san-bong/dichVuSanBongTheoHoaDon/${item.id}`)
@@ -505,7 +505,7 @@
 
             // Duyệt qua từng hóa đơn trong dữ liệu
             data.forEach(item => {
-                tongDanhThuNgayCustom += item.tongTienThucTe || 0;
+                tongDanhThuNgayCustom += item.tongTienThucTe;
 
                 // Gọi API dịch vụ cho từng hóa đơn
                 dailyDichVuPromisesCustom.push(
@@ -676,11 +676,16 @@
                 data.forEach(item => {
                     if (item.trangThai === "Đã thanh toán") {
                         successfulOrdersCount++;
-                        tongDanhThuNgay += item.tongTienThucTe || 0;
+                        tongDanhThuNgay += item.tongTienThucTe;
                     }
 
                     if (item.trangThai === "Đã hủy") {
                         cancelOrdersCount++;
+                        tongDanhThuNgay += item.tienCocHdct;
+                    }
+
+                    if (item.trangThai === "Đang hoạt động") {
+                        tongDanhThuNgay += item.tienCocHdct;
                     }
 
                     dichVuPromises.push(
@@ -721,11 +726,16 @@
                 data.forEach(item => {
                     if (item.trangThai === "Đã thanh toán") {
                         successfulOrdersCountTuan++;
-                        tongDanhThuTuan += item.tongTienThucTe || 0;
+                        tongDanhThuTuan += item.tongTienThucTe;
                     }
 
                     if (item.trangThai === "Đã hủy") {
                         cancelOrdersCountTuan++;
+                        tongDanhThuTuan += item.tienCocHdct;
+                    }
+
+                    if (item.trangThai === "Đang hoạt động") {
+                        tongDanhThuTuan += item.tienCocHdct;
                     }
 
                     dichVuPromisesTuan.push(
@@ -766,11 +776,16 @@
                 data.forEach(item => {
                     if (item.trangThai === "Đã thanh toán") {
                         successfulOrdersCountThang++;
-                        tongDanhThuThang += item.tongTienThucTe || 0;
+                        tongDanhThuThang += item.tongTienThucTe;
                     }
 
                     if (item.trangThai === "Đã hủy") {
                         cancelOrdersCountThang++;
+                        tongDanhThuThang += item.tienCocHdct;
+                    }
+
+                    if (item.trangThai === "Đang hoạt động") {
+                        tongDanhThuThang += item.tienCocHdct;
                     }
 
                     dichVuPromisesThang.push(
@@ -813,11 +828,16 @@
                 data.forEach(item => {
                     if (item.trangThai === "Đã thanh toán") {
                         successfulOrdersCountNam++;
-                        tongDanhThuNam += item.tongTienThucTe || 0;
+                        tongDanhThuNam += item.tongTienThucTe;
                     }
 
                     if (item.trangThai === "Đã hủy") {
                         cancelOrdersCountNam++;
+                        tongDanhThuNam += item.tienCocHdct;
+                    }
+
+                    if (item.trangThai === "Đang hoạt động") {
+                        tongDanhThuNam += item.tienCocHdct;
                     }
 
                     dichVuPromisesNam.push(
@@ -864,7 +884,7 @@
                 data.forEach(item => {
                     if (item.trangThai === "Đã thanh toán") {
                         successfulOrdersCountCustom++;
-                        tongDanhThuCustom += item.tongTienThucTe || 0;
+                        tongDanhThuCustom += item.tongTienThucTe;
                     }
 
                     if (item.trangThai === "Đã hủy") {

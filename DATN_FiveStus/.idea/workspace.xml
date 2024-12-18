@@ -4,22 +4,74 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="331bba4b-2a38-4c11-9793-f27eaffa39fe" name="Changes" comment="">
+    <list default="true" id="8ee037a0-9ff2-44a4-823b-30bdbca692a2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/datn.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DB_DATN_Final.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DBSACH.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/AsyncConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/AsyncConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/PDF/PdfGeneratorRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/PDF/PdfGeneratorRunner.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/VNPay/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/VNPay/EmailService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/VNPay/VNPAYController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/VNPay/VNPAYController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/security/jwt/AuthEntryPointJwt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/security/jwt/AuthEntryPointJwt.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/security/jwt/AuthTokenFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/config/security/jwt/AuthTokenFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/controller/CaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/controller/CaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/PhieuGiamGiaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/PhieuGiamGiaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaChiTietRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaChiTietRest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaRest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaChiTietServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaChiTietServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaServiceImp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaServiceImp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/PhieuGiamGiaChiTietService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/PhieuGiamGiaChiTietService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/PhieuGiamGiaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/service/PhieuGiamGiaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/main - Shortcut.lnk" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/client/js/customerLogin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/client/js/customerLogin.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/chon-san-ca.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/chon-san-ca.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/dich-vu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/dich-vu.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/pgg.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/pgg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/client/khach-hang-dat-lich.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/client/khach-hang-dat-lich.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/client/khach-hang-index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/client/khach-hang-index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/client/khach-hang-noi-quy3.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/client/khach-hang-noi-quy3.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/dat-lich-tai-quay.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/dat-lich-tai-quay.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/lich-dat.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/lich-dat.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/nhan-vien/lich-lam-viec.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/nhan-vien/lich-lam-viec.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-san-bong3.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/thong-ke.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/thong-ke.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/AsyncConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/AsyncConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/PDF/PdfGeneratorRunner.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/PDF/PdfGeneratorRunner.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/VNPay/EmailService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/VNPay/EmailService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/VNPay/VNPAYController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/VNPay/VNPAYController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/security/jwt/AuthEntryPointJwt.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/security/jwt/AuthEntryPointJwt.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/security/jwt/AuthTokenFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/config/security/jwt/AuthTokenFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/PhieuGiamGiaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/repository/PhieuGiamGiaRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaChiTietRest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaChiTietRest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaRest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/rest/PhieuGiamGiaRest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaChiTietServiceImp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaChiTietServiceImp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaServiceImp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/Imp/PhieuGiamGiaServiceImp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/PhieuGiamGiaChiTietService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/PhieuGiamGiaChiTietService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/PhieuGiamGiaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/DATN_WebFiveTus/service/PhieuGiamGiaService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/main - Shortcut.lnk" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/client/js/customerLogin.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/client/js/customerLogin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/js/chon-san-ca.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/js/chon-san-ca.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/js/dich-vu.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/js/dich-vu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/static/js/pgg.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/js/pgg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/client/khach-hang-dat-lich.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/client/khach-hang-dat-lich.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/client/khach-hang-index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/client/khach-hang-index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/client/khach-hang-noi-quy3.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/client/khach-hang-noi-quy3.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/dat-lich-tai-quay.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/dat-lich-tai-quay.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/lich-dat.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/lich-dat.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/nhan-vien/lich-lam-viec.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/nhan-vien/lich-lam-viec.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-san-bong3.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/thong-ke.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/thong-ke.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -29,10 +81,27 @@
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75"
+    "RequestMappingsPanelWidth1": "75",
+    "Spring Boot.DatnWebFiveTusApplication (1).executor": "Run",
+    "git-widget-placeholder": "Merging nhanhQuan",
+    "node.js.selected.package.tslint": "(autodetect)"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Spring Boot.DatnWebFiveTusApplication (1)">
+    <configuration name="DatnWebFiveTusApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="DATN_WebFiveTus" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.DATN_WebFiveTus.DatnWebFiveTusApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.DATN_WebFiveTus.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="DatnWebFiveTusApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <module name="DATN_FiveStus" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.DATN_WebFiveTus.DatnWebFiveTusApplication" />
@@ -48,6 +117,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Spring Boot.DatnWebFiveTusApplication (1)" />
         <item itemvalue="Spring Boot.DatnWebFiveTusApplication" />
       </list>
     </recent_temporary>

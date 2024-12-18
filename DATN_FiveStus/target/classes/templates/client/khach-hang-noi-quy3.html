@@ -213,7 +213,6 @@
             success: function (data) {
                 const container = $('#tham-so-container');
                 container.empty(); // Xóa nội dung cũ
-                console.log("data API: ", data);
 
                 data.forEach(function (item) {
                     const itemHtml = `
@@ -276,7 +275,7 @@
                 });
             },
             error: function (xhr, status, error) {
-                console.error('Có lỗi xảy ra:', error);
+                // console.error('Có lỗi xảy ra:', error);
             }
         });
     });
@@ -303,7 +302,7 @@
                 $('#modallogin').modal('show');
             }
         } catch (error) {
-            console.error('Lỗi khi kiểm tra khách hàng:', error);
+            // console.error('Lỗi khi kiểm tra khách hàng:', error);
             // Nếu gặp lỗi, bạn có thể mở modal hoặc xử lý lỗi ở đây
             $('#modallogin').modal('show');
         }
