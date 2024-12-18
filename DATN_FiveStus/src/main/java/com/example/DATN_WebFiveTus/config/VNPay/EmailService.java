@@ -47,7 +47,7 @@ public class EmailService {
             // Gửi email
             javaMailSender.send(message);
         } catch (MessagingException e) {
-            System.err.println("Lỗi khi gửi email: " + e.getMessage());
+//            System.err.println("Lỗi khi gửi email: " + e.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class EmailService {
             // Gửi email
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            System.err.println("Lỗi khi gửi email: " + e.getMessage());
+//            System.err.println("Lỗi khi gửi email: " + e.getMessage());
         }
     }
 }

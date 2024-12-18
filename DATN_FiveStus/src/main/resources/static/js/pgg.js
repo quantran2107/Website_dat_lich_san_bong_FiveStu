@@ -49,13 +49,11 @@ function fetchDataAndRenderTable(page = 0, size = 10) {
         .then(data => {
             renderTable(data, page, size);
         })
-        .catch(error => console.error('Error fetching data:', error));
 }
 
 function renderTable(data) {
     const tableData = data.content || data;
     if (!Array.isArray(tableData)) {
-        console.error('Invalid data format:', tableData);
         return;
     }
     initialTableData = tableData;

@@ -335,7 +335,6 @@
                     gioKetThuc: document.getElementById('gioKetThuc').value,
                     ngay: dateStr
                 };
-                console.log(extendedProps.gioBatDau)
                 let lichNew = {
                     nhanVien: JSON.parse(document.getElementById('nhanVienSel').value),
                     viTri: document.getElementById('viTri').value,
@@ -349,7 +348,6 @@
                     contentType: 'application/json',
                     data: JSON.stringify(lichNew),
                     success: function (response) {
-                        console.log(lichNew)
                         document.getElementById('event-title').value = '';
                         document.getElementById('nhanVienSel').value = '';
                         document.getElementById('gioBatDau').value = '';

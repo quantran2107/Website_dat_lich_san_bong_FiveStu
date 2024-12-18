@@ -951,13 +951,7 @@
                         timeUnit === 'Phút' ? maxTime :
                             timeUnit === 'Giờ' ? maxTime * 60 :
                                 timeUnit === 'Ngày' ? maxTime * 24 * 60 : 0;
-                    // console.log(`max time ${maxTime}`)
-                    // console.log(`timeUnit ${timeUnit}`)
-                    // console.log(`- Thời gian đã vượt quá: ${timeDifference} phút`);
-                    // console.log(maxTimeInMinutes)
-                    // Nếu vượt quá giới hạn thời gian check-in
                     if (item.trangThai === 'Chờ nhận sân' && isModal && timeDifference > maxTimeInMinutes) {
-                        // console.log(`Hóa đơn chi tiết ID: ${item.id} vượt quá thời gian, cập nhật trạng thái thành 'Đã hủy'.`);
                         try {
                             const response = await fetch(`http://localhost:8080/hoa-don-chi-tiet/huy/${item.id}`, {
                                 method: 'PUT',
@@ -967,14 +961,9 @@
                                 body: JSON.stringify({trangThai: 'Đã hủy'}),
                             });
 
-                            if (!response.ok) {
-                                // const errorMessage = await response.text();
-                                // console.error(`Failed to update status for ID ${item.id}: ${errorMessage}`);
-                            } else {
-                                // console.log(`Successfully updated status for ID ${item.id} to 'Đã hủy'`);
-                            }
+
                         } catch (error) {
-                            // console.error(`Error updating status for ID ${item.id}:`, error);
+
                         }
                         continue; // Bỏ qua các hóa đơn đã hủy
                     }
@@ -1021,7 +1010,6 @@
             }
 
         } catch (error) {
-            console.error('Error fetching data:', error);
         }
     }
 
@@ -2127,7 +2115,7 @@
             document.getElementById(`giaDichVu`).value = totalCost.toLocaleString() + ' VND';
 
         } catch (error) {
-            console.error('Lỗi khi tính tổng tiền:', error);
+            // console.error('Lỗi khi tính tổng tiền:', error);
             // Đặt giá trị tiền dịch vụ về 0 trong trường hợp lỗi
             document.getElementById(`giaDichVu`).value = '0 VND';
         }
@@ -2429,7 +2417,7 @@
                 document.getElementById('tienGiam').value = '0 VND';
             }
         } catch (error) {
-            console.error('Lỗi khi tính toán phiếu giảm giá tốt nhất:', error);
+            // console.error('Lỗi khi tính toán phiếu giảm giá tốt nhất:', error);
         }
     }
 
@@ -2804,7 +2792,7 @@
             const data = await response.json();
             return {value: parseInt(data.giaTri, 10), type: data.typeGiaTri};
         } catch (error) {
-            console.error('Error fetching check-in parameter:', error);
+            // console.error('Error fetching check-in parameter:', error);
             return {value: 0, type: 'phút'}; // Giá trị mặc định nếu lỗi
         }
     }

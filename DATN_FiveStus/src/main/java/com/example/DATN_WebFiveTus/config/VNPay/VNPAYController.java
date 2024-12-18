@@ -65,13 +65,13 @@ public class VNPAYController {
                 idHoaDon = Integer.parseInt(parts[parts.length - 1]); // Lấy phần cuối cùng
             }
         } catch (NumberFormatException e) {
-            System.err.println("Error parsing idHoaDon from vnp_OrderInfo: " + e.getMessage());
+//            System.err.println("Error parsing idHoaDon from vnp_OrderInfo: " + e.getMessage());
         }
-        System.out.println(idHoaDon);
+//        System.out.println(idHoaDon);
 
         // Nếu không lấy được id hóa đơn, trả về lỗi
         if (idHoaDon == null) {
-            System.err.println("Invalid vnp_OrderInfo format: " + orderInfoRaw);
+//            System.err.println("Invalid vnp_OrderInfo format: " + orderInfoRaw);
             return "/orderFail";
         }
 
@@ -86,7 +86,7 @@ public class VNPAYController {
                 totalAmount = Long.parseLong(totalPrice) / 100; // Chia để đưa về đơn vị "đồng"
             }
         } catch (NumberFormatException e) {
-            System.err.println("Error parsing totalPrice: " + e.getMessage());
+//            System.err.println("Error parsing totalPrice: " + e.getMessage());
         }
 
         String formattedDate = "";
@@ -98,7 +98,7 @@ public class VNPAYController {
                 formattedDate = outputFormat.format(date);
             }
         } catch (ParseException e) {
-            System.err.println("Error parsing paymentTime: " + e.getMessage());
+//            System.err.println("Error parsing paymentTime: " + e.getMessage());
         }
 
         // Cập nhật trạng thái hóa đơn và hóa đơn chi tiết
