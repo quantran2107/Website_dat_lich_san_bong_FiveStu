@@ -258,7 +258,6 @@
                     dropdownLoaiSan.appendChild(option);
                 });
             })
-            .catch(error => console.error('Lỗi khi gọi API:', error));
 
     }
 
@@ -268,7 +267,6 @@
         const idNgayTrongTuan = await getIdByNgayTrongTuan(ngayTrongTuan);
         const response = await fetch(`http://localhost:8080/san-ca/danh-sach-san-ca/${idSanBong}/${idNgayTrongTuan}/${idCa}`);
         if (!response.ok) {
-            console.error(`Không thể lấy sanCa cho idSanBong: ${idSanBong}, idNgayTrongTuan: ${idNgayTrongTuan}, idCa: ${idCa}`);
             return null;
         }
         return await response.json();
@@ -278,7 +276,6 @@
     async function getIdByNgayTrongTuan(tenNgay) {
         const response = await fetch(`http://localhost:8080/ngay-trong-tuan/tim-kiem-ngay-trong-tuan?thuTrongTuan=${tenNgay}`);
         if (!response.ok) {
-            console.error(`Không thể lấy id ngày cho: ${tenNgay}`);
             return null;
         }
         const data = await response.json();
@@ -287,7 +284,6 @@
 
     function formatDateToDDMMYYYY(date) {
         if (!(date instanceof Date)) {
-            console.error('Nguyên liệu không phải là đối tượng Date:', date);
             return '';
         }
         const day = String(date.getDate()).padStart(2, '0');
@@ -317,18 +313,15 @@
                 const customerDetails = await response.json();
                 return customerDetails; // Trả về chi tiết khách hàng
             } else {
-                console.error('Customer ID is undefined');
                 return null;
             }
         } catch (error) {
-            console.error('Error:', error);
         }
     }
 
     async function checkAvailability(sanCaId, ngayDenSan) {
         // Kiểm tra kiểu dữ liệu của ngayDenSan
         if (!(ngayDenSan instanceof Date)) {
-            console.error('ngayDenSan không phải là đối tượng Date:', ngayDenSan);
             return null;
         }
 
@@ -336,7 +329,6 @@
         const response = await fetch(`http://localhost:8080/hoa-don-chi-tiet/kiem-tra-dat?idSanCa=${sanCaId}&ngayDenSan=${formattedDate}`);
 
         if (!response.ok) {
-            console.error(`Không thể kiểm tra đặt sân ca với id: ${sanCaId} và ngày: ${formattedDate}`);
             return null;
         }
 
@@ -465,7 +457,6 @@
 
             hideLoading(); // Ẩn loading sau khi hoàn tất
         } catch (error) {
-            console.error('Error loading table data:', error);
             hideLoading();
         }
     }
@@ -783,8 +774,6 @@
             const depositCell = document.getElementById(`deposit-${index}`);
             if (depositCell) { // Kiểm tra xem phần tử có tồn tại không
                 depositCell.textContent = formatCurrencyVND(deposit);
-            } else {
-                console.warn(`Không tìm thấy phần tử deposit-${index} trong DOM`);
             }
 
             // Cộng dồn tổng giá và tổng tiền cọc
@@ -798,14 +787,10 @@
 
         if (totalPriceCell) {
             totalPriceCell.textContent = formatCurrencyVND(totalPrice);
-        } else {
-            console.warn('Không tìm thấy phần tử total-price trong DOM');
         }
 
         if (totalDepositCell) {
             totalDepositCell.textContent = formatCurrencyVND(totalDeposit);
-        } else {
-            console.warn('Không tìm thấy phần tử total-deposit trong DOM');
         }
     }
 
@@ -903,7 +888,6 @@
             // Lưu chi tiết hóa đơn
             const detailPromises = selectedBookings.map(async (booking) => {
                 const deposit = calculateDeposit(booking.price);
-                console.log(deposit)
                 const formattedDate = formatDateToDDMMYYYY(parseDateString(booking.date));
                 const detailResponse = await fetch('http://localhost:8080/hoa-don-chi-tiet/save2', {
                     method: 'POST',
@@ -943,7 +927,6 @@
                 Swal.fire('Lỗi', 'Không thể tạo URL thanh toán.', 'error');
             }
         } catch (error) {
-            console.error('Lỗi khi xử lý đặt lịch:', error);
             Swal.fire('Lỗi', 'Có lỗi xảy ra trong quá trình xử lý.', 'error');
         }
     }

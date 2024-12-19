@@ -15,9 +15,4 @@ public class HTTTDto {
     private int idHttt;
     private BigDecimal soTien;
 
-//    public HTTTDto(ChiTietHinhThucThanhToan ctHttt) {
-//        this.idHttt = ctHttt.getHinhThucThanhToan().getId();
-//        this.idHD = ctHttt.getHoaDonChiTiet().getId();
-//        this.soTien = ctHttt.getSoTien();
-//    }
 }
