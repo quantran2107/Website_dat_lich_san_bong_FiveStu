@@ -1843,6 +1843,13 @@
                     if (!response.ok) throw new Error('Error processing service.');
                     // console.log('Xử lý dịch vụ thành công!');
                     fillDichVuChoHoaDon(selectedInvoiceId);
+                    const modalElement = document.getElementById('serviceModal');
+
+                    // Đóng modal nếu nó đang mở
+                    const bootstrapModal = bootstrap.Modal.getInstance(modalElement);
+                    if (bootstrapModal) {
+                        bootstrapModal.hide();
+                    }
 
                     // Tính toán số lượng tồn kho còn lại
                     const soLuongConLai = soLuongTonKho - soLuong;
@@ -1860,7 +1867,7 @@
                 .then(response => {
                     if (!response.ok) throw new Error('Error updating stock.');
                     // console.log('Cập nhật tồn kho thành công!');
-                    // showSuccessToast('Thêm dịch vụ và cập nhật tồn kho thành công!');
+                    showSuccessToast('Thêm dịch vụ và cập nhật tồn kho thành công!');
 
                     // Cập nhật UI
                     const khoConElement = button.closest('.product-card').querySelector('.kho-con');
