@@ -4,14 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8ee037a0-9ff2-44a4-823b-30bdbca692a2" name="Changes" comment="">
+    <list default="true" id="331bba4b-2a38-4c11-9793-f27eaffa39fe" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-san-bong3.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/static/js/chon-san-ca.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/js/chon-san-ca.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/dat-lich-tai-quay.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/dat-lich-tai-quay.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-san-bong3.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/quan-ly-san-bong3.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/static/js/chon-san-ca.js" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/static/js/chon-san-ca.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/dat-lich-tai-quay.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/dat-lich-tai-quay.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/dto/CaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/dto/CaDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/PhieuGiamGiaChiTietRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/DATN_WebFiveTus/repository/PhieuGiamGiaChiTietRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/list/thong-ke.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/list/thong-ke.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-san-bong3.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/quan-ly-san-bong3.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/list/thong-ke.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/list/thong-ke.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,22 +28,29 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2qPrS8CSW4NQxxmBwaVHmgnKRPn" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "Spring Boot.DatnWebFiveTusApplication (1).executor": "Run",
-    "git-widget-placeholder": "nhanhQuan",
-    "node.js.selected.package.tslint": "(autodetect)"
-  }
-}]]></component>
-  <component name="RunManager" selected="Spring Boot.DatnWebFiveTusApplication (1)">
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;51bacb21f12ffedca17bf8180959173a&quot;
+}
+}</component>
+  <component name="RunManager" selected="Spring Boot.DatnWebFiveTusApplication">
     <configuration name="DatnWebFiveTusApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="DATN_WebFiveTus" />
@@ -73,13 +80,25 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Spring Boot.DatnWebFiveTusApplication (1)" />
         <item itemvalue="Spring Boot.DatnWebFiveTusApplication" />
+        <item itemvalue="Spring Boot.DatnWebFiveTusApplication (1)" />
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="331bba4b-2a38-4c11-9793-f27eaffa39fe" name="Changes" comment="" />
+      <created>1734575058917</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1734575058917</updated>
+      <workItem from="1734575066148" duration="644000" />
+    </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

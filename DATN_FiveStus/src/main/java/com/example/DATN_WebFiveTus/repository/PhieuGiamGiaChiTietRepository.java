@@ -39,16 +39,19 @@ public interface PhieuGiamGiaChiTietRepository extends JpaRepository<PhieuGiamGi
 
     @Query("SELECT pggct FROM PhieuGiamGiaChiTiet pggct " +
             "JOIN FETCH pggct.phieuGiamGia pgg " +
+            "LEFT JOIN FETCH pggct.khachHang kh " + // Thêm join với bảng khachHang
             "WHERE pggct.deletedAt = false " +
             "AND pgg.deletedAt = false " +
             "AND pgg.doiTuongApDung = false " +
             "AND pgg.trangThai = 'Đang diễn ra' " +
             "AND pgg.dieuKienSuDung <= :tongTien " +
+            "AND kh.id IS NULL " + // Điều kiện id khách hàng null
             "AND (:keyWord IS NULL OR :keyWord = '' OR " +
             "     LOWER(pgg.maPhieuGiamGia) LIKE LOWER(CONCAT('%', :keyWord, '%')) OR " +
             "     LOWER(pgg.tenPhieuGiamGia) LIKE LOWER(CONCAT('%', :keyWord, '%')))")
     List<PhieuGiamGiaChiTiet> getAllPGGCongKhai(@Param("tongTien") Double tongTien,
                                                 @Param("keyWord") String keyWord);
+
 
 
     @Query("SELECT pggct FROM PhieuGiamGiaChiTiet pggct " +

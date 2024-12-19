@@ -84,7 +84,7 @@ services:
     build:
       context: DATN_FiveStus
       dockerfile: Dockerfile
-    image: datn_five_stus:0.0.1
+    image: datn_five_stus:0.0.3
     depends_on:
       - db
     networks:

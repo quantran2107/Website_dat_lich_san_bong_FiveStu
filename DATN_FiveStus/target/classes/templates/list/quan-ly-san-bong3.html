@@ -246,7 +246,8 @@
                                                  id="caCheckboxs-${ca.id}"
                                                  name="cas">
                                           <label th:for="'caCheckboxs-' + ${ca.id}"
-                                                 th:text="${ca.tenCa}"></label>
+                                                 th:text="${ca.formattedThoiGianBatDau} + ' - ' + ${ca.formattedThoiGianKetThuc}"></label>
+
                                         </div>
                                       </div>
                                     </div>
@@ -375,9 +376,7 @@
 
   function loadTable(){
     const tables = document.querySelectorAll('#parameterTable');
-    console.log(tables)
     tables.forEach(function (table) {
-      console.log("ahihi")
       const rows = table.querySelectorAll('tbody tr'); // Lấy tất cả các hàng trong tbody
       let stt = 1; // Bắt đầu từ 1
       rows.forEach(function (row) {
@@ -570,7 +569,6 @@
               data: JSON.stringify(sanBong),
               contentType: 'application/json',
               success: function (data) {
-                console.log('Cập nhật sân bóng thành công:', data);
 
                 $('#myModalEdit').modal('hide');
 
@@ -583,14 +581,11 @@
 
                   const statusSwitch = updatedRow.find('.status-switch');
                   statusSwitch.prop('checked', data.trangThai === 'Hoạt động');
-                } else {
-                  console.log("Không tìm thấy sân bóng với id-loai-san:", id);
                 }
 
                 Swal.fire('Thành công!', 'Cập nhật sân bóng thành công!', 'success');
               },
               error: function (xhr, status, error) {
-                console.error('Lỗi khi cập nhật sân bóng:', error);
 
                 Swal.fire('Lỗi!', 'Có lỗi xảy ra khi cập nhật sân bóng.', 'error');
               }

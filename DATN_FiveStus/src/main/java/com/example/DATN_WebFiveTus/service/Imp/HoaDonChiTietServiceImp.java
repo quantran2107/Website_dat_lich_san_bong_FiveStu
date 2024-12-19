@@ -390,30 +390,40 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
         hoaDonChiTiet.setTrangThai("Đã hủy");
         hoaDonChiTiet.setHoaDon(hoaDon);
-        // Kiểm tra tất cả các hóa đơn chi tiết của hóa đơn này
-        List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietRepository.searchFromHoaDon(hoaDon.getId());
-        boolean allCompletedOrCancelled = true;
 
-        // Kiểm tra trạng thái của các hóa đơn chi tiết
+        // Lấy danh sách tất cả hóa đơn chi tiết của hóa đơn
+        List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietRepository.searchFromHoaDon(hoaDon.getId());
+
+        // Kiểm tra trạng thái của tất cả hóa đơn chi tiết
+        boolean allCancelled = true; // Kiểm tra tất cả là "Đã hủy"
+        boolean allCompletedOrCancelled = true; // Kiểm tra tất cả là "Đã thanh toán", "Đã hủy", hoặc "Đã hoàn tiền cọc"
+
         for (HoaDonChiTiet chiTiet : hoaDonChiTietList) {
-            if (!"Đã thanh toán".equals(chiTiet.getTrangThai()) && !"Đã hủy".equals(chiTiet.getTrangThai()) && !"Đã hoàn tiền cọc".equals(chiTiet.getTrangThai()) ){
+            String trangThai = chiTiet.getTrangThai();
+            if (!"Đã thanh toán".equals(trangThai) && !"Đã hủy".equals(trangThai) && !"Đã hoàn tiền cọc".equals(trangThai)) {
                 allCompletedOrCancelled = false;
-                break;
+            }
+            if (!"Đã hủy".equals(trangThai)) {
+                allCancelled = false;
             }
         }
 
-        // Cập nhật trạng thái của hóa đơn
-        if (allCompletedOrCancelled) {
+        // Cập nhật trạng thái hóa đơn
+        if (allCancelled) {
+            hoaDon.setTrangThai("Đã hủy");
+        } else if (allCompletedOrCancelled) {
             hoaDon.setTrangThai("Đã hoàn thành");
         } else {
             hoaDon.setTrangThai("Đã hoàn thành một phần");
         }
 
-        // Lưu lại hóa đơn với trạng thái cập nhật
+        // Lưu lại hóa đơn và hóa đơn chi tiết
         hoaDonRepository.save(hoaDon);
         hoaDonChiTietRepository.save(hoaDonChiTiet);
+
         return modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class);
     }
+
 
     @Override
     public HoaDonChiTietDTO hoanTienCoc(Integer id) {
@@ -424,30 +434,40 @@ public class HoaDonChiTietServiceImp implements HoaDonChiTietService {
 
         hoaDonChiTiet.setTrangThai("Đã hoàn tiền cọc");
         hoaDonChiTiet.setHoaDon(hoaDon);
-        // Kiểm tra tất cả các hóa đơn chi tiết của hóa đơn này
-        List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietRepository.searchFromHoaDon(hoaDon.getId());
-        boolean allCompletedOrCancelled = true;
 
-        // Kiểm tra trạng thái của các hóa đơn chi tiết
+        // Lấy danh sách tất cả hóa đơn chi tiết của hóa đơn
+        List<HoaDonChiTiet> hoaDonChiTietList = hoaDonChiTietRepository.searchFromHoaDon(hoaDon.getId());
+
+        // Kiểm tra trạng thái của tất cả hóa đơn chi tiết
+        boolean allCancelled = true; // Kiểm tra tất cả là "Đã hủy"
+        boolean allCompletedOrCancelled = true; // Kiểm tra tất cả là "Đã thanh toán", "Đã hủy", hoặc "Đã hoàn tiền cọc"
+
         for (HoaDonChiTiet chiTiet : hoaDonChiTietList) {
-            if (!"Đã thanh toán".equals(chiTiet.getTrangThai()) && !"Đã hủy".equals(chiTiet.getTrangThai()) && !"Đã hoàn tiền cọc".equals(chiTiet.getTrangThai()) ){
+            String trangThai = chiTiet.getTrangThai();
+            if (!"Đã thanh toán".equals(trangThai) && !"Đã hủy".equals(trangThai) && !"Đã hoàn tiền cọc".equals(trangThai)) {
                 allCompletedOrCancelled = false;
-                break;
+            }
+            if (!"Đã hủy".equals(trangThai)) {
+                allCancelled = false;
             }
         }
 
-        // Cập nhật trạng thái của hóa đơn
-        if (allCompletedOrCancelled) {
+        // Cập nhật trạng thái hóa đơn
+        if (allCancelled) {
+            hoaDon.setTrangThai("Đã hủy");
+        } else if (allCompletedOrCancelled) {
             hoaDon.setTrangThai("Đã hoàn thành");
         } else {
             hoaDon.setTrangThai("Đã hoàn thành một phần");
         }
 
-        // Lưu lại hóa đơn với trạng thái cập nhật
+        // Lưu lại hóa đơn và hóa đơn chi tiết
         hoaDonRepository.save(hoaDon);
         hoaDonChiTietRepository.save(hoaDonChiTiet);
+
         return modelMapper.map(hoaDonChiTiet, HoaDonChiTietDTO.class);
     }
+
 
     @Override
     public HoaDonChiTietDTO thanhToan(Integer id, HoaDonChiTietDTO hoaDonChiTietDTO) {

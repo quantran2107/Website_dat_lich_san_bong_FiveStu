@@ -276,10 +276,6 @@
                     timeUnit === 'Ngày' ? maxTime * 24 * 60 : 0;
 
         // Log đầy đủ thông tin
-        console.log(`Thời gian hiện tại: ${currentTime}`);
-        console.log(`Thời gian bắt đầu ca: ${thoiGianBatDau}`);
-        console.log(`Thời gian chênh lệch: ${timeDifference} phút`);
-        console.log(`Thời gian tối thiểu để hoàn tiền: ${maxTimeInMinutes} phút`);
 
         // Cờ để kiểm tra auto-cancel đã xử lý hay chưa
         if (chiTiet.trangThai === 'Đã hủy') {
@@ -299,10 +295,6 @@
         }
         // Nếu chênh lệch nhỏ hơn giới hạn → Trả về trống và xử lý auto-cancel
         else {
-            // Chỉ gọi autoCancelDetailInvoice nếu chưa hủy
-            if (chiTiet.trangThai !== 'Đã hủy') {
-                await autoCancelDetailInvoice(chiTiet.id);
-            }
             return '';
         }
     }
@@ -354,43 +346,6 @@
                 }
             });
     }
-
-
-    async function autoCancelDetailInvoice(id) {
-        try {
-            // Gọi API để hủy lịch đặt
-            const response = await fetch(`http://localhost:8080/hoa-don-chi-tiet/huy-lich-dat/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Có lỗi xảy ra khi tự động hủy.');
-            }
-
-            console.log(`Hủy lịch đặt ID ${id} thành công.`);
-
-            // Gọi lại API để lấy thông tin chi tiết hóa đơn và cập nhật giao diện
-            const detailResponse = await fetch(`http://localhost:8080/hoa-don-chi-tiet/${id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!detailResponse.ok) {
-                throw new Error('Không thể lấy thông tin hóa đơn chi tiết.');
-            }
-
-            const data = await detailResponse.json();
-            showDetailContent(data.idHoaDon); // Gọi lại giao diện
-        } catch (error) {
-            console.error('Error auto-canceling booking:', error);
-        }
-    }
-
 
     //End Ly viết
 

@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,6 +27,13 @@ public class CaDTO {
     private LocalDateTime thoiGianBatDau;
 
     private LocalDateTime thoiGianKetThuc;
+    // Getter và Setter
+    public String getFormattedThoiGianBatDau() {
+        return thoiGianBatDau.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
 
+    public String getFormattedThoiGianKetThuc() {
+        return thoiGianKetThuc.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
     private String trangThai;
 }
