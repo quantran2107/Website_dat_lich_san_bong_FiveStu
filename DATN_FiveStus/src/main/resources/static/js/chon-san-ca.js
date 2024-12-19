@@ -1148,8 +1148,8 @@ document.querySelector('#datLich').addEventListener('click', async function () {
 
     // Hiển thị hộp thoại xác nhận
     const result = await Swal.fire({
-        title: 'Xác nhận thanh toán',
-        text: 'Bạn có chắc chắn muốn thanh toán không?',
+        title: 'Xác nhận đặt lịch',
+        text: 'Bạn có chắc chắn muốn đặt lịch không?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6', // Đổi màu confirmButton
